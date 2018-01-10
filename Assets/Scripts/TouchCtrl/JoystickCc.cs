@@ -6,20 +6,20 @@ public class JoystickCc : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 {
     public float outerCircleRadius = 50;
     public float activeMoveDistance = 15;
-    Transform innerCircleTrans;
+    RectTransform innerCircleTrans;
 
     Vector2 outerCircleStartWorldPos = Vector2.zero;
     private bool _sendMoveEvent;
 
     void Awake()
     {
-        innerCircleTrans = transform.GetChild(0);
+        innerCircleTrans = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
         _sendMoveEvent = false;
     }
 
     void Start()
     {
-        outerCircleStartWorldPos = transform.position;
+        outerCircleStartWorldPos = gameObject.GetComponent<RectTransform>().anchoredPosition;
     }
   
     /// <summary>
@@ -27,7 +27,7 @@ public class JoystickCc : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
-        innerCircleTrans.position = eventData.position;
+        innerCircleTrans.anchoredPosition = (eventData.position - outerCircleStartWorldPos);
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class JoystickCc : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     /// </summary>
     public void OnPointerUp(PointerEventData eventData)
     {
-        innerCircleTrans.localPosition = Vector3.zero;
+        innerCircleTrans.anchoredPosition = Vector2.zero;
         if (_sendMoveEvent)
         {
             TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.NONE));
@@ -49,18 +49,18 @@ public class JoystickCc : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 touchPos = eventData.position - outerCircleStartWorldPos;
-        if (Vector3.Distance(touchPos, Vector2.zero) < outerCircleRadius)
-            innerCircleTrans.localPosition = touchPos;
+        if (Vector2.Distance(touchPos, Vector2.zero) < outerCircleRadius)
+            innerCircleTrans.anchoredPosition = touchPos;
         else
-            innerCircleTrans.localPosition = touchPos.normalized * outerCircleRadius;
+            innerCircleTrans.anchoredPosition = touchPos.normalized * outerCircleRadius;
         DispatchDirEvent();
     }
 
 
     void DispatchDirEvent()
     {
-        Vector3 curPos = innerCircleTrans.localPosition;
-        if (Vector3.Distance(outerCircleStartWorldPos, curPos) >= activeMoveDistance)
+        Vector2 curPos = innerCircleTrans.anchoredPosition;
+        if (Vector2.Distance(curPos, Vector2.zero) >= activeMoveDistance)
         {
             float angle = Mathf.Atan2(curPos.y, curPos.x) * Mathf.Rad2Deg;
             if (angle >= -22.5 && angle < 22.5)

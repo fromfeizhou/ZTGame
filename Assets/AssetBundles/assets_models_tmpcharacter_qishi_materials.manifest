@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 2154974499
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 280287d29b56a1bd09b231ac35f1f75e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0520077050483de6babb9bd310d40764
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Qishi/Materials/qishi_4.mat
+- Assets/Models/TmpCharacter/Qishi/Materials/qishi_6.mat
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_qishi_@qishi_1.fbm
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_qishi_@qishi_2.fbm

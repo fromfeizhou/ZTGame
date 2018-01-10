@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 3738477913
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a916338f09b84c1b9ab9e590d586bcf5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0520077050483de6babb9bd310d40764
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Zhanshi/Materials/lieshou_7.mat
+- 'Assets/Models/TmpCharacter/Zhanshi/Materials/Material #823.mat'
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_zhanshi_@lieshou_zhanshi.fbm

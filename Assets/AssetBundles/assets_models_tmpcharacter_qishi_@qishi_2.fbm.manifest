@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 4256817169
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1af7927a145dc5973ddca9507b4d5993
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Qishi/@qishi_2.fbm/qishi_6.png
+Dependencies: []

@@ -117,7 +117,7 @@ public class SkillArea : MonoBehaviour {
         CreateSkillArea();
     }
 
-    void OnJoystickUpEvent()
+    void OnJoystickUpEvent(Vector2 deltaVec)
     {
         isPressed = false;
         HideElements();

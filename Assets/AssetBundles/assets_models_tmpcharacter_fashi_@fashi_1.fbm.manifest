@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2822532500
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9aa2ffc6e9d06979c317cf4d701af967
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Fashi/@fashi_1.fbm/fashi_1.png
+Dependencies: []

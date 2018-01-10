@@ -1,0 +1,60 @@
+ManifestFileVersion: 0
+CRC: 1718093623
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e0738b34943add796e0bda4e76e4f699
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/ResourcesLib/Map/Textures/22.png
+- Assets/ResourcesLib/Map/Textures/13.png
+- Assets/ResourcesLib/Map/Textures/35.png
+- Assets/ResourcesLib/Map/Textures/19.png
+- Assets/ResourcesLib/Map/Textures/40.png
+- Assets/ResourcesLib/Map/Textures/11.png
+- Assets/ResourcesLib/Map/Textures/17.png
+- Assets/ResourcesLib/Map/Textures/41.png
+- Assets/ResourcesLib/Map/Textures/20.png
+- Assets/ResourcesLib/Map/Textures/08.png
+- Assets/ResourcesLib/Map/Textures/36.png
+- Assets/ResourcesLib/Map/Textures/03.png
+- Assets/ResourcesLib/Map/Textures/07.png
+- Assets/ResourcesLib/Map/Textures/24.png
+- Assets/ResourcesLib/Map/Textures/16.png
+- Assets/ResourcesLib/Map/Textures/39.png
+- Assets/ResourcesLib/Map/Textures/21.png
+- Assets/ResourcesLib/Map/Textures/43.png
+- Assets/ResourcesLib/Map/Textures/45.png
+- Assets/ResourcesLib/Map/Textures/06.png
+- Assets/ResourcesLib/Map/Textures/23.png
+- Assets/ResourcesLib/Map/Textures/29.png
+- Assets/ResourcesLib/Map/Textures/33.png
+- Assets/ResourcesLib/Map/Textures/42.png
+- Assets/ResourcesLib/Map/Textures/04.png
+- Assets/ResourcesLib/Map/Textures/34.png
+- Assets/ResourcesLib/Map/Textures/01.png
+- Assets/ResourcesLib/Map/Textures/32.png
+- Assets/ResourcesLib/Map/Textures/37.png
+- Assets/ResourcesLib/Map/Textures/15.png
+- Assets/ResourcesLib/Map/Textures/18.png
+- Assets/ResourcesLib/Map/Textures/12.png
+- Assets/ResourcesLib/Map/Textures/25.png
+- Assets/ResourcesLib/Map/Textures/26.png
+- Assets/ResourcesLib/Map/Textures/10.png
+- Assets/ResourcesLib/Map/Textures/44.png
+- Assets/ResourcesLib/Map/Textures/27.png
+- Assets/ResourcesLib/Map/Textures/02.png
+- Assets/ResourcesLib/Map/Textures/31.png
+- Assets/ResourcesLib/Map/Textures/14.png
+- Assets/ResourcesLib/Map/Textures/38.png
+- Assets/ResourcesLib/Map/Textures/09.png
+- Assets/ResourcesLib/Map/Textures/30.png
+- Assets/ResourcesLib/Map/Textures/05.png
+- Assets/ResourcesLib/Map/Textures/28.png
+Dependencies: []

@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 496840256
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cefacffef55cf81acebe9cc4843b8de0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: db8568728cd3a34e8c8b3c7618bb4a80
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 882513000e62ca74e884f45e2ea85d5f, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ea5bd73409bfb25438248a04f1f5a76a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 82002759be570c1488d0d38d4d6247a1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/SkillJoystick.prefab
+- Assets/Prefabs/JoyStick.prefab
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_resourceslib_spriteout_touch

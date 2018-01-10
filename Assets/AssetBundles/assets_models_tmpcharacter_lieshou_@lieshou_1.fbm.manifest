@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1680911394
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e04c29a4682562de977eb0ade0de8f78
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Lieshou/@lieshou_1.fbm/lieshou_1.png
+Dependencies: []

@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 4174450839
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 50f8c8e11b30bb710c8d73e674b62928
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 4774d6da9b606debf00b5a5d61c4487c
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/ResourcesLib/SpriteOut/Touch/item_027_2.png
+- Assets/ResourcesLib/SpriteOut/Touch/yujing60du.png
+- Assets/ResourcesLib/SpriteOut/Touch/item_0281.png
+- Assets/ResourcesLib/SpriteOut/Touch/yujing120du.png
+- Assets/ResourcesLib/SpriteOut/Touch/item_0282.png
+- Assets/ResourcesLib/SpriteOut/Touch/item_027_1.png
+- Assets/ResourcesLib/SpriteOut/Touch/RadialJoy_Touch.png
+- Assets/ResourcesLib/SpriteOut/Touch/EasyButton.png
+Dependencies: []

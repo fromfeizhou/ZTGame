@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 2221401337
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ddc7a20d84ff87374844f5320f8bd186
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 466546f774697fbc141279ea1a933bbe
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Fashi/@fashi_1.txt
+- Assets/Models/TmpCharacter/Fashi/@fashi_1.FBX
+- Assets/Models/TmpCharacter/Fashi/@fashi_2.txt
+- Assets/Models/TmpCharacter/Fashi/@fashi_2.FBX
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_fashi_materials

@@ -1,0 +1,111 @@
+ManifestFileVersion: 0
+CRC: 3995840667
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: assets_resourceslib_config_skillconfig
+      Dependencies: {}
+    Info_1:
+      Name: assets_resourceslib_config
+      Dependencies: {}
+    Info_2:
+      Name: assets_resourceslib_map_textures
+      Dependencies: {}
+    Info_3:
+      Name: assets_resourceslib_map
+      Dependencies: {}
+    Info_4:
+      Name: assets_resourceslib_particle_materials
+      Dependencies:
+        Dependency_0: assets_resourceslib_particle_texture
+    Info_5:
+      Name: assets_resourceslib_particle_prefabs
+      Dependencies:
+        Dependency_0: assets_resourceslib_particle_materials
+    Info_6:
+      Name: assets_resourceslib_particle_texture
+      Dependencies: {}
+    Info_7:
+      Name: assets_resourceslib_skill_prefabs
+      Dependencies:
+        Dependency_0: assets_resourceslib_skill
+    Info_8:
+      Name: assets_resourceslib_skill_shader
+      Dependencies: {}
+    Info_9:
+      Name: assets_resourceslib_skill
+      Dependencies:
+        Dependency_0: assets_resourceslib_skill_shader
+        Dependency_1: assets_resourceslib_spriteout_touch
+    Info_10:
+      Name: assets_resourceslib_spriteout_touch
+      Dependencies: {}
+    Info_11:
+      Name: assets_models_tmpcharacter_fashi_@fashi_1.fbm
+      Dependencies: {}
+    Info_12:
+      Name: assets_models_tmpcharacter_fashi_@fashi_2.fbm
+      Dependencies: {}
+    Info_13:
+      Name: assets_models_tmpcharacter_fashi_materials
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_fashi_@fashi_1.fbm
+        Dependency_1: assets_models_tmpcharacter_fashi_@fashi_2.fbm
+    Info_14:
+      Name: assets_models_tmpcharacter_fashi
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_fashi_materials
+    Info_15:
+      Name: assets_models_tmpcharacter_lieshou_@lieshou_1.fbm
+      Dependencies: {}
+    Info_16:
+      Name: assets_models_tmpcharacter_lieshou_@lieshou_2.fbm
+      Dependencies: {}
+    Info_17:
+      Name: assets_models_tmpcharacter_lieshou_materials
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_lieshou_@lieshou_1.fbm
+        Dependency_1: assets_models_tmpcharacter_lieshou_@lieshou_2.fbm
+    Info_18:
+      Name: assets_models_tmpcharacter_lieshou
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_lieshou_materials
+    Info_19:
+      Name: assets_models_tmpcharacter_qishi_@qishi_1.fbm
+      Dependencies: {}
+    Info_20:
+      Name: assets_models_tmpcharacter_qishi_@qishi_2.fbm
+      Dependencies: {}
+    Info_21:
+      Name: assets_models_tmpcharacter_qishi_materials
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_qishi_@qishi_1.fbm
+        Dependency_1: assets_models_tmpcharacter_qishi_@qishi_2.fbm
+    Info_22:
+      Name: assets_models_tmpcharacter_qishi
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_qishi_materials
+    Info_23:
+      Name: assets_models_tmpcharacter_zhanshi_@lieshou_zhanshi.fbm
+      Dependencies: {}
+    Info_24:
+      Name: assets_models_tmpcharacter_zhanshi_materials
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_zhanshi_@lieshou_zhanshi.fbm
+    Info_25:
+      Name: assets_models_tmpcharacter_zhanshi
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_zhanshi_materials
+    Info_26:
+      Name: assets_models_tmpcharacter
+      Dependencies:
+        Dependency_0: assets_models_tmpcharacter_fashi_materials
+        Dependency_1: assets_models_tmpcharacter_fashi
+    Info_27:
+      Name: assets_prefabs_map
+      Dependencies:
+        Dependency_0: assets_resourceslib_map
+    Info_28:
+      Name: assets_prefabs
+      Dependencies:
+        Dependency_0: assets_resourceslib_spriteout_touch

@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+CRC: 2526017622
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6a590f441f734cb36913a0dac32c9ff4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: d37abd05a2b56ea279db2cbbbc38bdf1
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Qishi/@qishi_2.txt
+- Assets/Models/TmpCharacter/Qishi/@qishi_1.txt
+- Assets/Models/TmpCharacter/Qishi/@qishi_1.FBX
+- Assets/Models/TmpCharacter/Qishi/@qishi_2.FBX
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_qishi_materials

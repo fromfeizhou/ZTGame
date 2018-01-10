@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 393833816
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cce463a2968a2b8b7d3c0f8c357f3bb2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 02bb1a4f827934bc9f9224f61c0f3e4c
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/ResourcesLib/Map/Floor.mat
+Dependencies: []

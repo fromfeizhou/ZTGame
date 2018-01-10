@@ -31,6 +31,8 @@ public class SceneManager{
         PlayerViewDic = new Dictionary<int, GameObject>();
         PlayerList = new List<PlayerBase>();
         SceneFrame = 0;
+
+        OwnerControl.GetInstance().Init();
         InitEvent();
     }
 
@@ -42,6 +44,8 @@ public class SceneManager{
             SceneFrame = 0;
         }
         SceneFrame++;
+        //刷新玩家虚拟摇杆
+        OwnerControl.GetInstance().Update();
 
         UpdatePlayer();
     }
@@ -49,6 +53,7 @@ public class SceneManager{
 
     public void Destroy()
     {
+        OwnerControl.GetInstance().Destroy();
         RemoveEvent();
     }
 

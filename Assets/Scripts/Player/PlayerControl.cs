@@ -6,9 +6,7 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     public PlayerBase _playerBase = null;
-
     public Animation _playerAnimation = null;
-    private bool _sendMove = false;
     void Awake()
     {
         //_playerBase = new PlayerBase();
@@ -44,10 +42,7 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //_playerBase.Update();通过场景刷新
-#if UNITY_EDITOR
-        KeyboardControl();
-#endif
+
 
     }
 
@@ -72,56 +67,5 @@ public class PlayerControl : MonoBehaviour
         _playerBase.StartMove(dir);
     }
 
-    private void KeyboardControl()
-    {
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP_RIGHT);
-        }
-        else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP_LEFT);
-        }
-        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN_LEFT);
-        }
-        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN_RIGHT);
-        }
-        else if (Input.GetKey(KeyCode.W))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP);
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.LEFT);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.RIGHT);
-        }
-        else if (_sendMove)
-        {
-            DispatchDirEvent(FightDefine.PLAYERDIR.NONE);
-        }
-    }
 
-    private void DispatchDirEvent(FightDefine.PLAYERDIR moveDir)
-    {
-        if (moveDir == FightDefine.PLAYERDIR.NONE)
-        {
-            _sendMove = false;
-        }
-        else
-        {
-            _sendMove = true;
-        }
-        TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(moveDir));
-    }
 }

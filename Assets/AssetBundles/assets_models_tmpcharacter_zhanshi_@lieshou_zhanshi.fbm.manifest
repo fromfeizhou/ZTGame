@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3016600519
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3fad4eb25c24741e00991330be439f76
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c1642440719609290a7e09a50a7286f4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/Zhanshi/@lieshou_zhanshi.fbm/lieshou_7.tga
+Dependencies: []

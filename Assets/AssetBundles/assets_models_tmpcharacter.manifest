@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+CRC: 2302260732
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 42aa3132f15aca170e20d9718625dd48
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f3cbc3feef18a0ae1bae9eca8adadc03
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3c42ec46519c29b43a7d1a4f1e682be2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 62e32c483d5e2f444a7bcd75130bcf64, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/TmpCharacter/@fashi_1.prefab
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_fashi_materials
+- E:/ZTGame/Assets/AssetBundles/assets_models_tmpcharacter_fashi

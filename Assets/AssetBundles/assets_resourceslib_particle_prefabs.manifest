@@ -1,0 +1,111 @@
+ManifestFileVersion: 0
+CRC: 3524178701
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6da10c84be31b1eabf52efc6147121e5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9987ac4675aca568ea51b7650e54ce31
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 12
+  Script: {instanceID: 0}
+- Class: 15
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 26
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 760e21c6793f79a4ea96b659e2823eb6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5adaa9a4c3fdef840a58462d041416de, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f3be6197e56a23b40a90baf2a24d646a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+Assets:
+- Assets/ResourcesLib/Particle/Prefabs/38_RFX_Nature_Snowyfield1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/4_RFX_HitBlood4.prefab
+- Assets/ResourcesLib/Particle/Prefabs/54_RFX_TinkerbellLight1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/19_RFX_Cannon1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/52_RFX_TinkerbellLight1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/46_RFX_Straight_IceWall1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/43_RFX_Fire_Muzzle1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/47_RFX_Magic_Skill1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/12_RFX_Bomb2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/42_RFX_Blood_Puddle1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/9_RFX_HitSplat3.prefab
+- Assets/ResourcesLib/Particle/Prefabs/35_RFX_MuzzleFlash3.prefab
+- Assets/ResourcesLib/Particle/Prefabs/15_RFX_Magic_Buff2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/7_RFX_HitSplat1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/25_RFX_Fire_HeavyFlame1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/45_RFX_Straight_RockWall1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/13_RFX_Bomb3.prefab
+- Assets/ResourcesLib/Particle/Prefabs/41_RFX_Magic_FxSword1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/16_RFX_Magic_Buff3.prefab
+- Assets/ResourcesLib/Particle/Prefabs/37_RFX_Nature_Rain2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/39_RFX_Trajectory_Electro1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/26_RFX_Magic_DarkSwirl1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/21_RFX_Spark2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/10_RFX_HitSplat4.prefab
+- Assets/ResourcesLib/Particle/Prefabs/32_RFX_Magic_Rock1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/27_RFX_Magic_FlameSwirl1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/22_RFX_Fire_Campfire1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/40_RFX_Trajectory_Flame1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/18_RFX_Bomb5.prefab
+- Assets/ResourcesLib/Particle/Prefabs/5_RFX_HitBlood5.prefab
+- Assets/ResourcesLib/Particle/Prefabs/23_RFX_Fire_FlameThrower1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/51_RFX_Tonado_Toon1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/55_RFX_Shock_Bomb1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/11_RFX_Bomb1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/2_RFX_HitBlood2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/17_RFX_Bomb4.prefab
+- Assets/ResourcesLib/Particle/Prefabs/30_RFX_Magic_LightTeleport1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/36_RFX_Nature_Rain1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/49_RFX_Tonado_Flame1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/34_RFX_MuzzleFlash2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/44_RFX_Fire_HitSplat1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/50_RFX_Tonado_Electro1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/20_RFX_Spark1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/53_RFX_TinkerbellLight1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/3_RFX_HitBlood3.prefab
+- Assets/ResourcesLib/Particle/Prefabs/14_RFX_Magic_Buff1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/28_RFX_Magic_GreenLava1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/33_RFX_MuzzleFlash1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/29_RFX_Magic_IceArea1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/6_RFX_HitBlood6.prefab
+- Assets/ResourcesLib/Particle/Prefabs/8_RFX_HitSplat2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/48_RFX_Tonado_Flame1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/31_RFX_Magic_Pulse1.prefab
+- Assets/ResourcesLib/Particle/Prefabs/24_RFX_Fire_FlameThrower2.prefab
+- Assets/ResourcesLib/Particle/Prefabs/1_RFX_HitBlood1.prefab
+Dependencies:
+- E:/ZTGame/Assets/AssetBundles/assets_resourceslib_particle_materials

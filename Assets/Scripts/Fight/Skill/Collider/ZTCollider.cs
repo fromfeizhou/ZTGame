@@ -233,7 +233,7 @@ public class ZTCollider
 {
     public static bool CheckCollision(CollBase CollA, CollBase CollB)
     {
-        GameTool.Log("ZTCollider:CheckCollision",CollA.GetV2Pos(), CollB.GetV2Pos());
+        //GameTool.Log("ZTCollider:CheckCollision",CollA.GetV2Pos(), CollB.GetV2Pos());
         if (CollA.ColliderType == CollBase.ColType.CIRCLE && CollB.ColliderType == CollBase.ColType.CIRCLE)
         {
             return RadiusToRadius(CollA as CollRadius, CollB as CollRadius);

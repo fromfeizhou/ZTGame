@@ -198,6 +198,6 @@ public class SkillActionParser
             _skillActionDic = null;
         }
         IsComplete = true;
-        GameTool.Log("SkillActionParser Destory");
+        //GameTool.Log("SkillActionParser Destory");
     }
 }
