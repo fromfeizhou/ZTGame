@@ -1,0 +1,33 @@
+﻿//待机
+idle_import 1140 1200
+//待机1
+idle_1_import 270 357
+//待机2
+idle_2_import 810 870
+//受击
+hit_import 120 135
+//死亡
+die_import 150 230
+//跑
+run_import 240 260
+//攻击1
+attack_1_import 440 450
+//攻击2
+attack_2_import 450 465
+//攻击3
+attack_3_import 465 499
+//技能1
+skill_1_import 575 606 冲刺
+//技能2
+skill_2_import 610 666 半月斩
+//技能3
+skill_3_import 710 788  呐喊
+//晕眩
+stun_import 370 430
+//闪躲
+dodge_import 510 539
+//击退
+repel_import 880 970
+//胜利
+win_import 980 1033
+

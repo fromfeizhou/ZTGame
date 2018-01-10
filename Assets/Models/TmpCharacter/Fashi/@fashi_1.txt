@@ -1,0 +1,32 @@
+﻿//待机
+idle_import 10 90
+//随机待机
+idle_1_import 430 525
+//跑
+run_import 190 210
+//攻击1
+attack_1_import 1160 1174
+//攻击2
+attack_2_import 1174 1189
+//攻击3
+attack_3_import 1189 1211
+//受击
+hit_import 260 272
+//死亡
+die_import 340 420
+//技能3
+skill_3_import 543 616 龙卷风
+//技能1
+skill_1_import 990 1077  冰霜射线
+//技能2
+skill_2_import 777 816  冲击波
+//晕眩
+stun_import 290 330
+//闪躲
+dodge_import 220 250
+//击退
+repel_import 820 890
+//胜利
+win_import 930 980  
+
+

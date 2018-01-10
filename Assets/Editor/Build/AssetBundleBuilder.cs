@@ -1,0 +1,145 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using System.IO;
+
+public class AssetBundleBuilder : MonoBehaviour
+{
+
+
+    static BuildTarget target = BuildTarget.Android;
+    [MenuItem("CYH_Tools/AB_Packager/BuildAbName")]
+    public static void BuildAssetBundleName()
+    {
+        //清除所有的AssetBundleName
+        ClearAssetBundlesName();
+        //设置指定路径下所有需要打包的assetbundlename
+        SetAssetBundlesName(assetsDir);
+        SetAssetBundlesName(modelsDir);
+        SetAssetBundlesName(prefabsDir);
+        //SetAssetBundlesName(scenesDir);
+    }
+
+    [MenuItem("CYH_Tools/AB_Packager/Build_2_IPhone")]
+    public static void BuildiPhoneResource()
+    {
+        target = BuildTarget.iOS;
+        if (EditorUserBuildSettings.activeBuildTarget != target)
+        {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, target);
+        }
+        BuildAssetResource();
+    }
+
+    [MenuItem("CYH_Tools/AB_Packager/Build_2_Android")]
+    public static void BuildAndroidResource()
+    {
+        target = BuildTarget.Android;
+        if (EditorUserBuildSettings.activeBuildTarget != target)
+        {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, target);
+        }
+        BuildAssetResource();
+    }
+
+    [MenuItem("CYH_Tools/AB_Packager/Build_2_Windows")]
+    public static void BuildWindowsResource()
+    {
+        target = BuildTarget.StandaloneWindows;
+        if (EditorUserBuildSettings.activeBuildTarget != target)
+        {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, target);
+        }
+        BuildAssetResource();
+    }
+
+    //资源存放路径
+    static string assetsDir = Application.dataPath + "/ResourcesLib";
+    static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
+    static string prefabsDir = Application.dataPath + "/Prefabs";
+    //static string scenesDir = Application.dataPath + "/Scences";
+    //打包后存放路径
+    const string assetBundlesPath = "Assets/AssetBundles";
+
+    static void BuildAssetResource()
+    {
+       
+        //文件已经存在就删除  
+        if (Directory.Exists(assetBundlesPath))
+        {
+            Directory.Delete(assetBundlesPath, true);
+        }
+        //文件不存在就创建  
+        if (!Directory.Exists(assetBundlesPath))
+        {
+            Directory.CreateDirectory(assetBundlesPath);
+        }
+
+        BuildPipeline.BuildAssetBundles(assetBundlesPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        Debug.Log("BuildAssetResource Finish!");
+    }
+
+
+
+    /// <summary>
+    /// 清除所有的AssetBundleName，由于打包方法会将所有设置过AssetBundleName的资源打包，所以自动打包前需要清理
+    /// </summary>
+    static void ClearAssetBundlesName()
+    {
+        //获取所有的AssetBundle名称
+        string[] abNames = AssetDatabase.GetAllAssetBundleNames();
+
+        //强制删除所有AssetBundle名称
+        for (int i = 0; i < abNames.Length; i++)
+        {
+            AssetDatabase.RemoveAssetBundleName(abNames[i], true);
+        }
+    }
+
+    /** 需要过滤的文件 */
+    private static List<string> _filteredAssets = new List<string> { ".meta", ".xlsx", ".DS_Store" };
+
+    /// <summary>
+    /// 设置所有在指定路径下的AssetBundleName
+    /// </summary>
+    static void SetAssetBundlesName(string _assetsPath)
+    {
+        //先获取指定路径下的所有Asset，包括子文件夹下的资源
+        DirectoryInfo dir = new DirectoryInfo(_assetsPath);
+        FileSystemInfo[] files = dir.GetFileSystemInfos(); //GetFileSystemInfos方法可以获取到指定目录下的所有文件以及子文件夹
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (files[i] is DirectoryInfo)  //如果是文件夹则递归处理(过滤png)
+            {
+                if (!files[i].Name.Contains("SpritePng"))
+                {
+                    SetAssetBundlesName(files[i].FullName);
+                }
+            }
+            else if (!_filteredAssets.Exists(a => files[i].Name.EndsWith(a))) //如果是文件的话，则设置AssetBundleName，并排除掉.meta文件
+            {
+                string abName = dir.FullName.Remove(0, dir.FullName.IndexOf("Assets")).Replace('\\', '_').Replace('/', '_');
+                SetABName(files[i].FullName, abName);     //逐个设置AssetBundleName
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 设置单个AssetBundle的Name
+    /// </summary>
+    ///<param name="filePath">
+    static void SetABName(string assetPath, string abName)
+    {
+        string importerPath = "Assets" + assetPath.Substring(Application.dataPath.Length);  //这个路径必须是以Assets开始的路径
+        AssetImporter assetImporter = AssetImporter.GetAtPath(importerPath);  //得到Asset
+        if (assetImporter == null)
+        {
+            Debug.LogErrorFormat("[{0}]found out Asset. assetPath:{1}, abName:{2}", "AssetBundleBuilder", assetPath, abName);
+            return;
+        }
+        assetImporter.assetBundleName = abName;    //最终设置assetBundleName
+    }
+}

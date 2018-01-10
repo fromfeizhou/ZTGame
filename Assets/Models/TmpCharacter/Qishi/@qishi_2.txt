@@ -1,0 +1,32 @@
+﻿//待机
+idle_import 1050 1100
+//待机1
+idle_1_import 270 357
+//待机2
+idle_2_import 770 830
+//受击
+hit_import 935 950
+//死亡
+die_import 150 230
+//跑
+run_import 90 110
+//攻击1
+attack_1_import 420 438
+//攻击2
+attack_2_import 438 453
+//攻击3
+attack_3_import 453 482
+//技能1
+skill_1_import 490 541 跳跃劈斩
+//技能2
+skill_2_import 570 600 践踏
+//技能3
+skill_3_import 650 753  连砍
+//晕眩
+stun_import 370 417
+//闪躲
+dodge_import 610 539
+//击退
+repel_import 840 930
+//胜利
+win_import 960 1013

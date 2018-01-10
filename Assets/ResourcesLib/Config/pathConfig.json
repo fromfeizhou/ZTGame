@@ -1,0 +1,12 @@
+﻿{
+  "infoList": [
+    {
+      "key": "SkillAsset",
+      "path": "Config/SkillConfig"
+    },
+	{
+      "key": "Map",
+      "path": "Map"
+    }
+  ]
+}

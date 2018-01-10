@@ -1,0 +1,5 @@
+﻿//待机
+idle_import 10 60
+//展示
+show_import 160 227
+
