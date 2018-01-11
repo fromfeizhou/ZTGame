@@ -554,8 +554,7 @@ public class AssetUpdater : MonoBehaviour
         Debug.Log("AssetUpdater:Done");
         IsDone = true;
         OnDoneEvent();
-
-        Application.LoadLevel(1);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
     /// <summary>

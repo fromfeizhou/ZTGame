@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_COM);
 
         MapManager.GetInstance().InitMap();
-        SceneManager.GetInstance().Init();
+        ZTSceneManager.GetInstance().Init();
 
         //测试
         Test();
@@ -79,14 +79,14 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        SceneManager.GetInstance().Update();
+        ZTSceneManager.GetInstance().Update();
     }
 
     void OnDestroy()
     {
         LocalString.Destroy();
         PathManager.Destroy();
-        SceneManager.GetInstance().Destroy();
+        ZTSceneManager.GetInstance().Destroy();
         //SpriteFaceCache.Destory();
         AssetManager.Destroy();
         GameManager.GameInit = false;

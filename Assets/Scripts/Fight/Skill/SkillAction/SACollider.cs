@@ -95,7 +95,7 @@ public class SACollider : SkillActionBase
             return;
         }
 
-        List<PlayerBase> list = SceneManager.GetInstance().PlayerList;
+        List<PlayerBase> list = ZTSceneManager.GetInstance().PlayerList;
         for (int i = 0; i < list.Count; i++)
         {
             switch (_colliderTarget)
@@ -138,7 +138,7 @@ public class SACollider : SkillActionBase
             for (int i = 0; i < _collider.TargetActions.Count; i++)
             {
                 int actionId = _collider.TargetActions[i];
-                SceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, SceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
+                ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
             }
         }
     }
