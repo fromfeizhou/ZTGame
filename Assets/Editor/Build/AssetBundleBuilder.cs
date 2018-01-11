@@ -29,7 +29,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, target);
         }
-        BuildAssetResource();
+        BuildAssetResource(assetBundlesPath + "IPhone/AssetBundle");
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_Android")]
@@ -40,7 +40,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, target);
         }
-        BuildAssetResource();
+        BuildAssetResource(assetBundlesPath + "Android/AssetBundle");
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_Windows")]
@@ -51,7 +51,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, target);
         }
-        BuildAssetResource();
+        BuildAssetResource(assetBundlesPath + "Wins/AssetBundle");
     }
 
     //资源存放路径
@@ -60,23 +60,23 @@ public class AssetBundleBuilder : MonoBehaviour
     static string prefabsDir = Application.dataPath + "/Prefabs";
     //static string scenesDir = Application.dataPath + "/Scences";
     //打包后存放路径
-    const string assetBundlesPath = "Assets/AssetBundles";
+    const string assetBundlesPath = "../../";
 
-    static void BuildAssetResource()
+    static void BuildAssetResource(string assetPath)
     {
        
         //文件已经存在就删除  
-        if (Directory.Exists(assetBundlesPath))
+        if (Directory.Exists(assetPath))
         {
-            Directory.Delete(assetBundlesPath, true);
+            Directory.Delete(assetPath, true);
         }
         //文件不存在就创建  
-        if (!Directory.Exists(assetBundlesPath))
+        if (!Directory.Exists(assetPath))
         {
-            Directory.CreateDirectory(assetBundlesPath);
+            Directory.CreateDirectory(assetPath);
         }
 
-        BuildPipeline.BuildAssetBundles(assetBundlesPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        BuildPipeline.BuildAssetBundles(assetPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
         Debug.Log("BuildAssetResource Finish!");
     }
 

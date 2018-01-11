@@ -17,24 +17,24 @@ public class AssetManager
         {
             path = path.Replace('\\', '/');
         }
-       
-//#if UNITY_EDITOR
-//        //编辑器模式下 资源获取
-//        Object obj = null;
-//        if (null != type)
-//        {
-//            obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path,type);
-//        }
-//        else
-//        {
-//            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
-//        }
-//        if (null != callback)
-//        {
-//            callback(obj, path);
-//        }
-//        return;
-//#endif
+
+#if UNITY_EDITOR
+        //编辑器模式下 资源获取
+        Object obj = null;
+        if (null != type)
+        {
+            obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
+        }
+        else
+        {
+            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
+        }
+        if (null != callback)
+        {
+            callback(obj, path);
+        }
+        return;
+#endif
 
         string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
