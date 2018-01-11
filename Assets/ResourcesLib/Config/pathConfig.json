@@ -5,6 +5,11 @@
       "path": "Config/SkillConfig"
     },
 	{
+      "key": "ImgBtnSprite",
+      "path": "SpriteOut/BtnSrc"
+    },
+	
+	{
       "key": "Map",
       "path": "Map"
     }
