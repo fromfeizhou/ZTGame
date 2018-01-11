@@ -10,7 +10,6 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public float outerCircleRadius = 100;
     public float activeMoveDistance = 20;
     RectTransform innerCircleTrans;
-    Vector2 outerCircleStartWorldPos = Vector2.zero;
 
     public Action<Vector2> onJoystickDownEvent;     // 按下事件
     public Action<Vector2> onJoystickUpEvent;     // 抬起事件
@@ -23,7 +22,6 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         innerCircleTrans = transform.GetChild(0) as RectTransform;
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        outerCircleStartWorldPos = Vector2.zero;
         _isDownTouch = false;
     }
 
@@ -72,7 +70,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
             return;
         }
         Vector2 pos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out pos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
         if (Vector3.Distance(pos, Vector2.zero) < outerCircleRadius)
             innerCircleTrans.anchoredPosition = pos;
         else

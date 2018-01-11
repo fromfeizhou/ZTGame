@@ -675,7 +675,7 @@ public class AssetUpdater : MonoBehaviour
     private void StartAssetUpdater()
     {
         List<string> url_group = new List<string>();
-        url_group.Add("http://192.168.0.188:80/");
+        url_group.Add("http://192.168.0.188:80");
         this.StartUpdate(url_group);
     }
     #endregion

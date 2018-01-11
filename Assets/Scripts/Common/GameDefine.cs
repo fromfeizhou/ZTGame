@@ -1,9 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameDefine{
 
+    public static bool IsPointerOverUIObject(Vector2 screenPosition)
+    {
+        //判断是否点击的是UI，有效应对安卓没有反应的情况，true为UI  
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(screenPosition.x, screenPosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }  
     
 }
 /// <summary>

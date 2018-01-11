@@ -136,7 +136,7 @@ public class CameraFollow : MonoBehaviour
     /// </summary>
     public void SwipeScreen()
     {
-        if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && !GameDefine.IsPointerOverUIObject(Input.mousePosition))//!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
         {
             oldMousePos = Vector2.zero;
             isMousePress = true;

@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        Application.targetFrameRate = 45;
+
         Debug.Log("GameManager LoadStart");
         _loadIndex = 0;
 

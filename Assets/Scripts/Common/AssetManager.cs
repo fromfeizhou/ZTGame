@@ -3,8 +3,6 @@ using UnityEngine;
 using UnityEngine.Events;
 public class AssetManager
 {
-    private static AssetBundle _assetBundleManifest;
-    private static Dictionary<string,AssetBundle> _assetBundleDic;
     /* 
      * @brief 加载资源
      * @param path 资源路径
@@ -68,32 +66,7 @@ public class AssetManager
 #endif
     }
 
-    public static AssetBundle GetAssetBundle(string abName)
-    {
-        if (null == _assetBundleDic)
-        {
-            _assetBundleDic = new Dictionary<string, AssetBundle>();
-        }
-
-        if (!_assetBundleDic.ContainsKey(abName))
-        {
-            _assetBundleDic[abName] = AssetBundle.LoadFromFile(Application.dataPath + "/AssetBundles/" + abName);
-        }
-        return _assetBundleDic[abName];
-    }
-
     public static void Destroy()
     {
-        if(null != _assetBundleManifest){
-            _assetBundleManifest.Unload(true);
-            _assetBundleManifest = null;
-        }
-        if (null != _assetBundleDic)
-        {
-            foreach(string abName in _assetBundleDic.Keys){
-                _assetBundleDic[abName].Unload(true);
-            }
-            _assetBundleDic = null;
-        }
     }
 }

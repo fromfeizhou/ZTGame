@@ -64,7 +64,7 @@ public static class DownLoadCommon
     /// <summary>
     ///   主Manifest文件名称（必须存在）
     /// </summary>
-    public const string MAIN_MANIFEST_FILE_NAME = "AssetBundles";
+    public const string MAIN_MANIFEST_FILE_NAME = "AssetBundle";
 
     /// <summary>
     ///   获得资源全局路径
