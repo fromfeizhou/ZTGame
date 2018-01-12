@@ -17,26 +17,25 @@ public class MapTileView : MonoBehaviour {
 
     private void UpdateTileView()
     {
-        string loadTerrainPath = "MapItem/" + string.Format("Terrain_{0}_{1}", _mapTileData.Row, _mapTileData.Column);
-        GameObject go = Resources.Load<GameObject>(loadTerrainPath);
+        string path = MapDefine.TERRAIN_PREFAB_PATH + string.Format("Terrain_{0}_{1}.prefab", _mapTileData.Row, _mapTileData.Column);
+        AssetManager.LoadAsset(path, MapTextureCom);
+
+    }
+
+    private void MapTextureCom(Object target, string path)
+    {
+
+        GameObject go = target as GameObject;
         if (go == null)
-            Debug.Log("loadTerrainPath:" + loadTerrainPath);
+        {
+            Debug.Log("loadTerrainPath:" + path);
+            return;
+        }
 
         Transform terrain = GameObject.Instantiate(go).transform;
         terrain.SetParent(transform);
         terrain.localPosition = Vector3.zero;
         terrain.localEulerAngles = Vector3.zero;
         terrain.localScale = Vector3.one;
-
-        //string path = MapDefine.MapTexturePath + string.Format("{0:D2}", _mapId) + ".png";
-        //AssetManager.LoadAsset(path, MapTextureCom);
-
-    }
-
-    private void MapTextureCom(Object target, string path)
-    {
-        Renderer render = gameObject.GetComponent<Renderer>();
-        render.material.mainTexture =target as Texture;
-
     }
 }

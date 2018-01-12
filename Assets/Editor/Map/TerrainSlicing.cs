@@ -6,7 +6,7 @@ using System.IO;
 
 public class TerrainSlicing : Editor
 {
-	public const string TerrainSavePath = "Assets/" + MapDefine.TERRAIN_PATH;
+    public const string TerrainSavePath = MapDefine.TERRAIN_ASSET_PATH;
 	//分割数量
 
 	//开始分割地形
@@ -130,7 +130,7 @@ public class TerrainSlicing : Editor
 
 
 		/** CreateMapBlock Prefab */
-		string prefabPath = "Assets/Prefabs/Map/MapItem/";
+        string prefabPath = MapDefine.TERRAIN_PREFAB_PATH;
 		if (Directory.Exists(prefabPath))
 			Directory.Delete(prefabPath, true);
 		Directory.CreateDirectory(prefabPath);

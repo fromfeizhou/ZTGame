@@ -5,7 +5,8 @@ using UnityEngine;
 public class MapDefine
 {
 
-    public const string TERRAIN_PATH = "ResourcesLib/Map/TerrainRes/";
+    public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
+    public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
     public const string TERRAIN_NAME = "Terrain_{0}_{1}";
     public const string EXTENSION = ".asset";
     public const int MAPITEMSIZE = 128;
@@ -18,7 +19,6 @@ public class MapDefine
 
     public static int MaxViewRowNum = 4;     //创建最大行数
     public static int MaxViewColumnNum = 5;  //创建最大列数
-    public static string MapTexturePath = "Assets/ResourcesLib/Map/Textures/";
 
 }
 

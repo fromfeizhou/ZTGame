@@ -15,8 +15,28 @@ public class MTextFormat : MonoBehaviour
     [HideInInspector]
     public string style = "";
 
-    public void Start()
+    private string _textStr = "";
+    public string TextStr
     {
-        //gameObject.GetComponent<Text>().text = LocalString.GetWord(textKey);
+        get { return _textStr; }
+        set
+        {
+            _textStr = value;
+            if (null != _text)
+            {
+                _text.text = _textStr;
+            }
+        }
     }
+
+    private Text _text;
+
+    public void Awake()
+    {
+
+        _text = gameObject.GetComponent<Text>();
+        _textStr = _text.text;
+    }
+
+
 }

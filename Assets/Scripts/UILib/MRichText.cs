@@ -4,12 +4,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine.UI;
 using System.Text;
-using UnityEditor;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-
-
-
 
 public class MRichText : Text,IPointerClickHandler
 {
@@ -73,8 +69,8 @@ public class MRichText : Text,IPointerClickHandler
     {
         if (_prefabObj == null)
         {
-            _faceAction = transform.Find("FaceActionCon");
-            _prefabObj = AssetDatabase.LoadMainAssetAtPath(PathManager.GetResPathByName("Prefabs", "FaceActoin.prefab", "UILib"));
+            AssetManager.LoadAsset(PathManager.GetResPathByName("Prefabs", "FaceActoin.prefab", "UILib"),FaceActionLoadCom);
+            return;
         }
         for (int i = 0; i < _imagesTagInfoList.Count; i++)
         {
@@ -111,6 +107,13 @@ public class MRichText : Text,IPointerClickHandler
                 _imagesPool[i].SetActive(false);
             }
         }
+    }
+
+    private void FaceActionLoadCom(Object target, string path)
+    {
+        _faceAction = transform.Find("FaceActionCon");
+        _prefabObj = target as GameObject;
+        UpdateQuadImage();
     }
 
 

@@ -32,9 +32,9 @@ public class CameraFollow : MonoBehaviour
     [Range(1, 100)]
     float zoomSpeed = 50;       // 缩放速度
 
-    [SerializeField]
-    [Range(1f, 200)]
-    float swipeSpeed = 50;      // 左右滑动速度
+    //[SerializeField]
+    //[Range(1f, 200)]
+    //float swipeSpeed = 50;      // 左右滑动速度
 
     float scrollWheel;        // 记录滚轮数值
     float tempAngle;          // 临时存储摄像机的初始角度
@@ -177,12 +177,12 @@ public class CameraFollow : MonoBehaviour
         return zoomValue;
     }
 
-    float xVelocity = 0;
+    //float xVelocity = 0;
     /// <summary>
     /// 旋转相机
     /// </summary>
     void RotateCamera()
     {
-        horizontalAngle = Mathf.SmoothDamp(horizontalAngle, horizontalAngle + mousePosOffset.x * Time.deltaTime * swipeSpeed, ref xVelocity, 0.1f);
+        //horizontalAngle = Mathf.SmoothDamp(horizontalAngle, horizontalAngle + mousePosOffset.x * Time.deltaTime * swipeSpeed, ref xVelocity, 0.1f);
     }
 }
