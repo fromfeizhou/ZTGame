@@ -5,8 +5,13 @@ using UnityEngine;
 public class MapDefine
 {
 
-    public static int MapWidth = 10;
-    public static int MapHeight = 10;
+    public const string TERRAIN_PATH = "ResourcesLib/Map/TerrainRes/";
+    public const string TERRAIN_NAME = "Terrain_{0}_{1}";
+    public const string EXTENSION = ".asset";
+    public const int MAPITEMSIZE = 128;
+
+    public static int MapWidth = MAPITEMSIZE;
+    public static int MapHeight = MAPITEMSIZE;
 
     public static int MapViewRow = 1;       //单屏行数
     public static int MapViewColumn = 1;    //单屏列数
@@ -14,7 +19,9 @@ public class MapDefine
     public static int MaxViewRowNum = 4;     //创建最大行数
     public static int MaxViewColumnNum = 5;  //创建最大列数
     public static string MapTexturePath = "Assets/ResourcesLib/Map/Textures/";
+
 }
+
 //地图 格子位置
 public class MapTilePos
 {
@@ -122,7 +129,7 @@ public class MapManager
             for (int i = 0; i < MapDefine.MaxViewRowNum * MapDefine.MaxViewColumnNum; i++)
             {
                 GameObject gameObject = GameObject.Instantiate(_floorPrefab);
-                gameObject.transform.localPosition = new Vector3((i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth + MapDefine.MapWidth / 2, 0, Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight + MapDefine.MapHeight / 2);
+                gameObject.transform.localPosition = new Vector3(Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight,0, (i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth);
                 gameObject.transform.parent = _sceneLayer.transform;
                 _mapViewList.Add(gameObject);
             }

@@ -17,9 +17,19 @@ public class MapTileView : MonoBehaviour {
 
     private void UpdateTileView()
     {
-       
-        string path = MapDefine.MapTexturePath + string.Format("{0:D2}", _mapId) + ".png";
-        AssetManager.LoadAsset(path, MapTextureCom);
+        string loadTerrainPath = "MapItem/" + string.Format("Terrain_{0}_{1}", _mapTileData.Row, _mapTileData.Column);
+        GameObject go = Resources.Load<GameObject>(loadTerrainPath);
+        if (go == null)
+            Debug.Log("loadTerrainPath:" + loadTerrainPath);
+
+        Transform terrain = GameObject.Instantiate(go).transform;
+        terrain.SetParent(transform);
+        terrain.localPosition = Vector3.zero;
+        terrain.localEulerAngles = Vector3.zero;
+        terrain.localScale = Vector3.one;
+
+        //string path = MapDefine.MapTexturePath + string.Format("{0:D2}", _mapId) + ".png";
+        //AssetManager.LoadAsset(path, MapTextureCom);
 
     }
 
