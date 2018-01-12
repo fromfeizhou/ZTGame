@@ -17,8 +17,8 @@ public class MapDefine
     public static int MapViewRow = 1;       //单屏行数
     public static int MapViewColumn = 1;    //单屏列数
 
-    public static int MaxViewRowNum = 4;     //创建最大行数
-    public static int MaxViewColumnNum = 5;  //创建最大列数
+    public static int MaxViewRowNum = 3;     //创建最大行数
+    public static int MaxViewColumnNum = 3;  //创建最大列数
 
 }
 
@@ -38,9 +38,9 @@ public class MapTilePos
 public class MapManager
 {
 
-
     private static MapManager _instance = null;
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
+    private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<GameObject> _mapViewList = null;
     private MapTilePos _mapTilePosCenter = new MapTilePos();    //地图中心
     private int _maxDataRow;    //地图数据最大行数
@@ -65,6 +65,7 @@ public class MapManager
     public void InitMap()
     {
         _sceneLayer = GameObject.Find("SceneMap");
+        _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
         _maxDataRow = 5;
         _maxDataColumn = 9;
@@ -82,8 +83,23 @@ public class MapManager
             }
             _mapDataDic[tileData.Row][tileData.Column] = tileData;
         }
-
         AssetManager.LoadAsset("Assets/Prefabs/Map/Floor.prefab", LoadFloorCom);
+
+
+    }
+
+    public void AddTrrainPrefab(string key,GameObject prefab)
+    {
+        _mapTerrainPrefabDic.Add(key, prefab);
+    }
+
+    public GameObject GetTrrainPrefab(string key)
+    {
+        if (_mapTerrainPrefabDic.ContainsKey(key))
+        {
+            return _mapTerrainPrefabDic[key];
+        }
+        return null;
     }
 
     private void LoadFloorCom(Object target, string path)
@@ -129,7 +145,8 @@ public class MapManager
             for (int i = 0; i < MapDefine.MaxViewRowNum * MapDefine.MaxViewColumnNum; i++)
             {
                 GameObject gameObject = GameObject.Instantiate(_floorPrefab);
-                gameObject.transform.localPosition = new Vector3(Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight,0, (i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth);
+                gameObject.transform.localPosition = new Vector3((i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth, 0, Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight);
+                //gameObject.transform.localPosition = new Vector3(Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight, 0, (i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth);
                 gameObject.transform.parent = _sceneLayer.transform;
                 _mapViewList.Add(gameObject);
             }
@@ -241,8 +258,8 @@ public class MapManager
                     floor.GetComponent<MapTileView>().setMapData(_mapDataDic[dataRow][dataColumn]);
                     //更新位置 
                     float tz =  MapDefine.MapHeight * MapDefine.MaxViewRowNum ;
-                    //x旋转90度 平移改为对y处理
-                    floor.transform.Translate(new Vector3(0, tz, 0));
+                    //x旋转90度 平移改为对y处理（旧版 quad）
+                    floor.transform.Translate(new Vector3(0, 0, tz));
                 }
                 _mapTilePos.Row = _mapTilePos.Row + 1;
             }
@@ -267,8 +284,8 @@ public class MapManager
 
                     //更新位置
                     float tz = -MapDefine.MapHeight * MapDefine.MaxViewRowNum;
-                    //x旋转90度 平移改为对y处理
-                    floor.transform.Translate(new Vector3(0, tz, 0));
+                    //x旋转90度 平移改为对y处理(旧版 quad)
+                    floor.transform.Translate(new Vector3(0, 0, tz));
                 }
                 _mapTilePos.Row = _mapTilePos.Row - 1;
             }

@@ -53,12 +53,12 @@ public class TerrainSlicing : Editor
 		Vector3 size = new Vector3(terrainData.size.x / SlicingBlockCnt, terrainData.size.y,  terrainData.size.z / SlicingBlockCnt);
 
 		SplatPrototype[] splatProtos = terrainData.splatPrototypes;
-		for (int x = 0; x < SlicingBlockCnt; ++x)
-		{
+        for (int x = 0; x < SlicingBlockCnt; ++x)
+        {
 			for (int y = 0; y < SlicingBlockCnt; ++y)
 			{
 				TerrainData newData = new TerrainData();
-				string terrainName = string.Format (MapDefine.TERRAIN_NAME, x, y);
+				string terrainName = string.Format (MapDefine.TERRAIN_NAME, y, x);
 				AssetDatabase.CreateAsset(newData, TerrainSavePath + terrainName + MapDefine.EXTENSION);
 
 				EditorUtility.DisplayProgressBar("正在分割地形", terrainName, (float)(x * SlicingBlockCnt + y) / (float)(SlicingBlockCnt * SlicingBlockCnt));

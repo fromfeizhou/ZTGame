@@ -6,6 +6,7 @@ public class MapTileView : MonoBehaviour {
 
 	private int _mapId;
     private MapTileData _mapTileData = null;
+    private GameObject _terrain = null;
     public void setMapData(MapTileData data)
     {
         if (_mapId == data.MapId)
@@ -17,9 +18,33 @@ public class MapTileView : MonoBehaviour {
 
     private void UpdateTileView()
     {
-        string path = MapDefine.TERRAIN_PREFAB_PATH + string.Format("Terrain_{0}_{1}.prefab", _mapTileData.Row, _mapTileData.Column);
-        AssetManager.LoadAsset(path, MapTextureCom);
+        ClearTrrain();
 
+        string path = MapDefine.TERRAIN_PREFAB_PATH + string.Format("Terrain_{0}_{1}.prefab", _mapTileData.Row, _mapTileData.Column);
+        GameObject go = MapManager.GetInstance().GetTrrainPrefab(path);
+        if (null != go)
+        {
+           CreateTrrain(go);
+        }
+        else
+        {
+            AssetManager.LoadAsset(path, MapTextureCom);
+        }
+    }
+
+    private void CreateTrrain(GameObject go)
+    {
+        _terrain = GameObject.Instantiate(go);
+        UpdateTrrain();
+    }
+
+    private void ClearTrrain()
+    {
+        if (null != _terrain)
+        {
+            GameObject.DestroyObject(_terrain);
+            _terrain = null;
+        }
     }
 
     private void MapTextureCom(Object target, string path)
@@ -31,11 +56,15 @@ public class MapTileView : MonoBehaviour {
             Debug.Log("loadTerrainPath:" + path);
             return;
         }
+        MapManager.GetInstance().AddTrrainPrefab(path, go);
+        CreateTrrain(go);
+    }
 
-        Transform terrain = GameObject.Instantiate(go).transform;
-        terrain.SetParent(transform);
-        terrain.localPosition = Vector3.zero;
-        terrain.localEulerAngles = Vector3.zero;
-        terrain.localScale = Vector3.one;
+    private void UpdateTrrain()
+    {
+        _terrain.transform.SetParent(transform);
+        _terrain.transform.localPosition = Vector3.zero;
+        _terrain.transform.localEulerAngles = Vector3.zero;
+        _terrain.transform.localScale = Vector3.one;
     }
 }

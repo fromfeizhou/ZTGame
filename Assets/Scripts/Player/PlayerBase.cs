@@ -36,7 +36,7 @@ public class PlayerBaseData
 //英雄基础类，保存英雄基础属性，并进行基础操作
 public class PlayerBase : NotificationDelegate, IMove
 {
-    public static float PLAYER_SPEED = 0.05f;      //移动速度
+    public static float PLAYER_SPEED = 1f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
     //----------------------------------------------------------------------------------------------------------------------//
     //------------------------------------------------基本属性Begin-----------------------------------------------------------//
