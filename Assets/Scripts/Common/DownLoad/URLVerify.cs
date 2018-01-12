@@ -93,6 +93,7 @@ public class URLVerifier
             for (int i = 0; i < url_group_.Count; ++i)
             {
                 string url = url_group_[i];
+                Debug.Log(url);
                 if (Verify(url))
                 {
                     URL = url;

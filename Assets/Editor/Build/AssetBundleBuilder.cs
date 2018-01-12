@@ -6,7 +6,13 @@ using System.IO;
 
 public class AssetBundleBuilder : MonoBehaviour
 {
-
+    //资源存放路径
+    static string assetsDir = Application.dataPath + "/ResourcesLib";
+    static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
+    static string prefabsDir = Application.dataPath + "/Prefabs";
+    static string scenesDir = Application.dataPath + "/Environment";
+    //打包后存放路径
+    const string assetBundlesPath = "../../";
 
     static BuildTarget target = BuildTarget.Android;
     [MenuItem("CYH_Tools/AB_Packager/BuildAbName")]
@@ -18,7 +24,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(assetsDir);
         SetAssetBundlesName(modelsDir);
         SetAssetBundlesName(prefabsDir);
-        //SetAssetBundlesName(scenesDir);
+        SetAssetBundlesName(scenesDir);
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_IPhone")]
@@ -54,13 +60,7 @@ public class AssetBundleBuilder : MonoBehaviour
         BuildAssetResource(assetBundlesPath + "Wins/AssetBundle");
     }
 
-    //资源存放路径
-    static string assetsDir = Application.dataPath + "/ResourcesLib";
-    static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
-    static string prefabsDir = Application.dataPath + "/Prefabs";
-    //static string scenesDir = Application.dataPath + "/Scences";
-    //打包后存放路径
-    const string assetBundlesPath = "../../";
+    
 
     static void BuildAssetResource(string assetPath)
     {
