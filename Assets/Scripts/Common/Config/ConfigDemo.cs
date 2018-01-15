@@ -7,6 +7,7 @@ public class ConfigDemo : MonoBehaviour
     void Start()
     {
         configMgr = ConfigManager.GetInstance();
+        configMgr.Init();
     }
 
     public void Update()
@@ -15,9 +16,10 @@ public class ConfigDemo : MonoBehaviour
         {
             configMgr.CfgForeach(eCfgName.test, (row, col, value) =>
             {
-                Debug.Log(string.Format("row:{0},col:{1},value:{2}.", row, col, value));
+                Debug.Log(string.Format("row:{0},col:{1},v:{2}.", row, col, value));
             });
         }
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             configMgr.ReLoadHotCfg();

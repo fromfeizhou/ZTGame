@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eCfgName
-{
+public enum eCfgName{
     test = 0,
     count,
 }
 
-public class ConfigManager : Singleton<ConfigManager> {
-  
+public class ConfigManager : Singleton<ConfigManager>
+{
     public delegate void dCfgForeach(int row, int col, string value);
-
     private Dictionary<eCfgName, ConfigAsset> _cfgDic = new Dictionary<eCfgName, ConfigAsset>();
     private ConfigHoter cfgHoter = new ConfigHoter();
 
-    public void Init()
+    public override void Init()
     {
         int cfgCnt = (int)eCfgName.count;
         for (int i = 0; i < cfgCnt; i++)
@@ -24,6 +22,7 @@ public class ConfigManager : Singleton<ConfigManager> {
             string configPath = ConfigConst.ConfigResPath + tmpCfgName + ".asset";
             AssetManager.LoadAsset(configPath, (obj, str) => _cfgDic[tmpCfgName] = obj as ConfigAsset);
         }
+
 #if UNITY_EDITOR
         ReLoadHotCfg();
 #endif
