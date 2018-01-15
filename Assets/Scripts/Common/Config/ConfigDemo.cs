@@ -6,16 +6,21 @@ using UnityEngine;
 public class ConfigDemo : MonoBehaviour {
     void Start()
     {
-        AssetManager.LoadAsset(ConfigConst.ConfigResPath + "test.asset" , (obj, str) =>
+        ConfigManager.Instance.Init();
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            ConfigAsset config = obj as ConfigAsset;
-            for (int row = 0; row < config.MaxRow; row++)
+            ConfigManager.Instance.CfgForeach(eCfgName.test, (row, col, value) =>
             {
-                for (int col = 0; col < config.MaxCol; col++)
-                {
-                    Debug.Log(string.Format("{0}:{1} =>{2}", row, col, config[row, col]));
-                }
-            }
-        });
+                Debug.Log(string.Format("row:{0},col:{1},value:{2}.", row, col, value));
+            });
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ConfigManager.Instance.ReLoadHotCfg();
+        }
     }
 }

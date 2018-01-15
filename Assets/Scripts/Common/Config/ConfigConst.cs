@@ -9,7 +9,5 @@ public class ConfigConst
     public const string ExcelResPath = "GameExcel/";
 #endif
 
-    public const string ConfigResPath = "Assets/ResourcesLib/Config/";
-
-
+    public const string ConfigResPath = "Assets/ResourcesLib/Config/ExcelConfig/";
 }
