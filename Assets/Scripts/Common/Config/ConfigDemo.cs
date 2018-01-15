@@ -1,26 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ConfigDemo : MonoBehaviour {
+public class ConfigDemo : MonoBehaviour
+{
+    private ConfigManager configMgr;
+
     void Start()
     {
-        ConfigManager.Instance.Init();
+        configMgr = ConfigManager.GetInstance();
     }
 
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            ConfigManager.Instance.CfgForeach(eCfgName.test, (row, col, value) =>
+            configMgr.CfgForeach(eCfgName.test, (row, col, value) =>
             {
                 Debug.Log(string.Format("row:{0},col:{1},value:{2}.", row, col, value));
             });
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            ConfigManager.Instance.ReLoadHotCfg();
+            configMgr.ReLoadHotCfg();
         }
     }
 }

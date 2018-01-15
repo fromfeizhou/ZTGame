@@ -8,15 +8,8 @@ public enum eCfgName
     count,
 }
 
-public class ConfigManager {
-    private static ConfigManager _instance;
-    public static ConfigManager Instance {
-        get {
-            if (_instance == null)
-                _instance = new ConfigManager();
-            return _instance;
-        }
-    }
+public class ConfigManager : Singleton<ConfigManager> {
+  
     public delegate void dCfgForeach(int row, int col, string value);
 
     private Dictionary<eCfgName, ConfigAsset> _cfgDic = new Dictionary<eCfgName, ConfigAsset>();
