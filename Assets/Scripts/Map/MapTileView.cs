@@ -13,24 +13,50 @@ public class MapTileView : MonoBehaviour {
             return;
         _mapTileData = data;
         _mapId = _mapTileData.MapId;
+        name = data.Row + "_" + data.Column;
         UpdateTileView();
     }
 
     private void UpdateTileView()
     {
         ClearTrrain();
+        MapManager.GetInstance().SafeGetTrrainPrefab(_mapTileData.Row, _mapTileData.Column, go =>
+        {
+            if(_terrain == null)
+                CreateTrrain(go);
+            UpdateMapItem();
+        });
+    }
 
-        string path = MapDefine.TERRAIN_PREFAB_PATH + string.Format("Terrain_{0}_{1}.prefab", _mapTileData.Row, _mapTileData.Column);
-        GameObject go = MapManager.GetInstance().GetTrrainPrefab(path);
-        if (null != go)
+    private void UpdateMapItem()
+    {
+        Transform treeParent = _terrain.transform.Find("[Tree]");
+        _mapInfo = MapManager.GetInstance().GetMapInfiByPos(_mapTileData.Row, _mapTileData.Column);
+        if (_mapInfo == null)
         {
-           CreateTrrain(go);
+            return;
         }
-        else
+
+        for (int i = 0; i < _mapInfo.MapItemList.Count; i++)
         {
-            AssetManager.LoadAsset(path, MapTextureCom);
+            for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
+            {
+                AssetManager.LoadAsset(MapItemAsset.MAPITEM_TREE, (obj, str) =>
+                {
+                    GameObject assetTree = obj as GameObject;
+                    Transform tree = Instantiate(assetTree).transform;
+                    tree.SetParent(treeParent);
+                    tree.localPosition = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
+                    tree.localEulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
+                    tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
+                    trees.Add(tree.gameObject);
+                });
+            }
         }
     }
+
+    private MapInfo _mapInfo;
+
 
     private void CreateTrrain(GameObject go)
     {
@@ -45,11 +71,19 @@ public class MapTileView : MonoBehaviour {
             GameObject.DestroyObject(_terrain);
             _terrain = null;
         }
+
+
+        for(int i = 0;i< trees.Count;i++)
+            GameObject.DestroyObject(trees[i]);
+        trees.Clear();
+
+
     }
+
+    private List<GameObject> trees = new List<GameObject>();
 
     private void MapTextureCom(Object target, string path)
     {
-
         GameObject go = target as GameObject;
         if (go == null)
         {

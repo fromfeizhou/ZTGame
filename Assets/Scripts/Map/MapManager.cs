@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class MapDefine
 {
-
+    public const string MAPITEMINFOASSET = "Assets/ResourcesLib/Config/MapAsset.asset";
     public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
-    public const string TERRAIN_NAME = "Terrain_{0}_{1}";
+    public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
     public const int MAPITEMSIZE = 128;
 
@@ -19,8 +19,13 @@ public class MapDefine
 
     public static int MaxViewRowNum = 3;     //创建最大行数
     public static int MaxViewColumnNum = 3;  //创建最大列数
-
 }
+
+public class MapItemAsset
+{
+    public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
+}
+
 
 //地图 格子位置
 public class MapTilePos
@@ -83,9 +88,20 @@ public class MapManager
             }
             _mapDataDic[tileData.Row][tileData.Column] = tileData;
         }
+
+        AssetManager.LoadAsset(MapDefine.MAPITEMINFOASSET, (obj, str) => mapAsset = obj as MapAsset);
         AssetManager.LoadAsset("Assets/Prefabs/Map/Floor.prefab", LoadFloorCom);
+    }
 
+    private MapAsset mapAsset;
 
+    public MapInfo GetMapInfiByPos(int row,int col)
+    {
+        string mapKey = row + "_" + col;
+        int index = mapAsset.MapList.FindIndex(a => a.mapKey.Equals(mapKey));
+        if (index >= 0)
+            return mapAsset.MapList[index];
+        return null;
     }
 
     public void AddTrrainPrefab(string key,GameObject prefab)
@@ -100,6 +116,25 @@ public class MapManager
             return _mapTerrainPrefabDic[key];
         }
         return null;
+    }
+
+    public void SafeGetTrrainPrefab(int row,int col, System.Action<GameObject> callback)
+    {
+        string mapKey = string.Format("{0}_{1}", row, col);
+        if (_mapTerrainPrefabDic.ContainsKey(mapKey))
+        {
+            if (callback != null)
+                callback(_mapTerrainPrefabDic[mapKey]);
+           return;
+        }
+        string assetPath = MapDefine.TERRAIN_PREFAB_PATH + mapKey + ".prefab";
+        AssetManager.LoadAsset(assetPath, (obj, str) =>
+        {
+            GameObject mapGo = obj as GameObject;
+            AddTrrainPrefab(mapKey, mapGo);
+            if (callback != null)
+                callback(_mapTerrainPrefabDic[mapKey]);
+        });
     }
 
     private void LoadFloorCom(Object target, string path)
