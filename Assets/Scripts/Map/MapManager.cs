@@ -98,7 +98,7 @@ public class MapManager
     public MapInfo GetMapInfiByPos(int row,int col)
     {
         string mapKey = row + "_" + col;
-        int index = mapAsset.MapList.FindIndex(a => a.mapKey.Equals(mapKey));
+        int index = mapAsset.MapList.FindIndex(a => a.MapKey.Equals(mapKey));
         if (index >= 0)
             return mapAsset.MapList[index];
         return null;
