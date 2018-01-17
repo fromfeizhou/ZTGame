@@ -394,7 +394,17 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
     {
         //拷贝所有配置文件
         yield return DownLoadCommon.StartCopyInitialFile(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
+
+		string initial_full_name = DownLoadCommon.GetFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
+        AssetBundleManifest initial = DownLoadCommon.LoadMainManifestByPath(initial_full_name);
         //拷贝AssetBundle文件
+        string[] all_assetbundle = initial.GetAllAssetBundles();
+        for (int i = 0; i < all_assetbundle.Length; ++i)
+        {
+            string name = all_assetbundle[i];
+            yield return DownLoadCommon.StartCopyInitialFile(name);
+        }
+
         //ResourcesManifest resources_manifest = DownLoadCommon.LoadResourcesManifest();
         //if (resources_manifest == null)
         //{
