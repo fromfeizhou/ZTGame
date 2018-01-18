@@ -4,6 +4,12 @@
       "key": "SkillAsset",
       "path": "Config/SkillConfig"
     },
+
+	{
+      "key": "LuaConfig",
+      "path": "Config/LuaConfig"
+    },
+
 	{
       "key": "ImgBtnSprite",
       "path": "SpriteOut/BtnSrc"

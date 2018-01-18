@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
         MapManager.GetInstance().InitMap();
         ZTSceneManager.GetInstance().Init();
-
+        ZTXLuaEnv.GetInstance().Init();
         //测试
         Test();
     }
@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour
         ZTSceneManager.GetInstance().Destroy();
         //SpriteFaceCache.Destory();
         AssetManager.Destroy();
+        ZTXLuaEnv.GetInstance().Destroy();
         GameManager.GameInit = false;
     }
 
