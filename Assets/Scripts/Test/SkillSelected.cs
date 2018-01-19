@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillSelected : MonoBehaviour {
-    public static int SelectIndex = 10001;
+    public static int SelectIndex = 1001;
 
     private GameObject _btnCut;
     private GameObject _btnAdd;
@@ -13,8 +13,8 @@ public class SkillSelected : MonoBehaviour {
     private int _maxIndex;
     void Start()
     {
-        _startIndex = 10001;
-        _maxIndex = 10002;
+        _startIndex = 1001;
+        _maxIndex = 1001;
         _btnCut = GameObject.Find("BtnCut");
         _btnCut.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click);
 

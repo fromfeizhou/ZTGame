@@ -16,7 +16,17 @@ public class SkillActionBase
     }
 
     public bool IsComplete = false; //是否完成
-    public bool IsStart = false;
+
+    protected bool _isStart;
+    public virtual bool IsStart
+    {
+        get { return _isStart; }
+        set
+        {
+            _isStart = value;
+        }
+    }
+    
 
     protected SkillActionParser _actionParser = null;
     protected PlayerBase _skillPlayer = null;
@@ -53,11 +63,18 @@ public class SkillActionBase
     //刷新对象
     public virtual void UpdateActoin(int curFrame = 0)
     {
-        _dtFrame = curFrame - _curFrame;
-        _curFrame = curFrame;
+        if (ActionType == SkillDefine.SkillActionType.NONE)
+        {
+            Complete();
+        }
+        else
+        {
+            _dtFrame = curFrame - _curFrame;
+            _curFrame = curFrame;
 
-        //有最大帧限制
-        CheckMaxFrame();
+            //有最大帧限制
+            CheckMaxFrame();
+        }
     }
 
     private void CheckMaxFrame()

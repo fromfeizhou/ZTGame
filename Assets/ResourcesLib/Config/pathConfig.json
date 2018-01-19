@@ -11,6 +11,11 @@
     },
 
 	{
+      "key": "EffectPrefab",
+      "path": "Particle/Prefabs"
+    },
+
+	{
       "key": "ImgBtnSprite",
       "path": "SpriteOut/BtnSrc"
     },

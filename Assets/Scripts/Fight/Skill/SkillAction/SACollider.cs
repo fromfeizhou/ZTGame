@@ -29,6 +29,18 @@ public class SACollider : SkillActionBase
         }
     }
 
+    public override bool IsStart
+    {
+        get { return _isStart; }
+        set
+        {
+            _isStart = value;
+#if UNITY_EDITOR
+            CreateColliderView();
+#endif
+        }
+    }
+
     public SACollider(SkillDefine.ColliderTarget colliderTarget, ColliderData collider, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
@@ -39,9 +51,7 @@ public class SACollider : SkillActionBase
         _frameMax = ActFrame + _collider.LifeTime;
         CheckTargetList();
 
-#if UNITY_EDITOR
-        CreateColliderView();
-#endif
+
     }
     //刷新对象
     public override void UpdateActoin(int curFrame = 0)
@@ -56,13 +66,12 @@ public class SACollider : SkillActionBase
 
     protected void CheckCollider(int curFrame)
     {
+        if (_dtFrame < 0)
+            return;
+
         for (int i = 0; i < _targetList.Count; i++)
         {
             //碰撞结束 （碰撞次数已满）
-            if (IsComplete)
-            {
-                return;
-            }
            bool isCollider = ZTCollider.CheckCollision(_targetList[i].Collider, _collider.Collider);
            if (isCollider)
            {

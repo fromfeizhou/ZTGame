@@ -10,22 +10,40 @@ public class SkillJoystick : JoystickBase
     public int SkillId;
     private int SkillDis;
 
+    private bool _skillDownState;
+
     public override void Start()
     {
         base.Start();
         SkillId = 10001;
+        this.onJoystickDownEvent += OnJoystickDownEvent;
         this.onJoystickUpEvent += OnJoystickUpEvent;
+
+        _skillDownState = false;
     }
 
     public override void OnDestroy()
     {
-        this.onJoystickDownEvent -= OnJoystickUpEvent;
+        this.onJoystickDownEvent -= OnJoystickDownEvent;
+        this.onJoystickUpEvent += OnJoystickUpEvent;
         base.OnDestroy();
     }
 
+    void OnJoystickDownEvent(Vector2 deltaVec)
+    {
+        if (ZTSceneManager.GetInstance().MyPlayer.PlayerState == PLAYERSTATE.NONE || ZTSceneManager.GetInstance().MyPlayer.PlayerState == PLAYERSTATE.MOVE)
+        {
+            _skillDownState = true;
+        }
+    }
 
     void OnJoystickUpEvent(Vector2 deltaVec)
     {
+        if (!_skillDownState)
+        {
+            return;
+        }
+        _skillDownState = false;
         //记录操作
         int frame = ZTSceneManager.GetInstance().SceneFrame;
 

@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
         MapManager.GetInstance().InitMap();
         ZTSceneManager.GetInstance().Init();
-        ZTXLuaEnv.GetInstance().Init();
+        //ZTXLuaEnv.GetInstance().Init();
         //测试
         Test();
     }
@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        //战斗刷新 场景刷新 统一通过ZTSceneManager update内部调用
         ZTSceneManager.GetInstance().Update();
     }
 
@@ -89,7 +90,7 @@ public class GameManager : MonoBehaviour
         ZTSceneManager.GetInstance().Destroy();
         //SpriteFaceCache.Destory();
         AssetManager.Destroy();
-        ZTXLuaEnv.GetInstance().Destroy();
+        //ZTXLuaEnv.GetInstance().Destroy();
         GameManager.GameInit = false;
     }
 

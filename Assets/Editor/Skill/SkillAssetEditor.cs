@@ -354,7 +354,7 @@ public class SkillAssetEditor : Editor
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("EffectId:", GUILayout.Width(100));
-        effectInfo.Id = EditorGUILayout.IntField( effectInfo.Id);
+        effectInfo.Id = EditorGUILayout.TextField(effectInfo.Id);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();

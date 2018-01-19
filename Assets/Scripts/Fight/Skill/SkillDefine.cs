@@ -86,13 +86,13 @@ public class ColliderData
     }
 
 }
-
+[System.Serializable]
 public class EffectInfo
 {
-    public int Id;
+    public string Id;
     public Vector3 Offset = Vector3.zero;
     public float Scale = 1.0f;
-    public EffectInfo(int id = 0, float scale = 1.0f, Vector3 offset = default(Vector3))
+    public EffectInfo(string id = "", float scale = 1.0f, Vector3 offset = default(Vector3))
     {
         Id = id;
         Scale = scale;
