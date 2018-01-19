@@ -25,6 +25,7 @@ public struct PlayerAnimEvents
 {
     public static readonly string PLAY = "PlayerAnimEvents_PlayActoin";
     public static readonly string UPDATE_POS = "PlayerAnimEvents_UpdatePos";
+    public static readonly string CHANGE_ROTATE = "PlayerAnimEvents_ChangeRotate";
     public static readonly string ADD_EFFECT = "PlayerAnimEvents_AddEffect";
     public static readonly string REMOVE_EFFECT = "PlayerAnimEvents_RemoveEffect";
 }

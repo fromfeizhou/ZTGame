@@ -50,6 +50,7 @@ public class PlayerAnimCtrl : MonoBehaviour
     {
         _playerBase.addEventListener(PlayerAnimEvents.PLAY, OnPlayHandler);
         _playerBase.addEventListener(PlayerAnimEvents.UPDATE_POS, OnUpdatePos);
+        _playerBase.addEventListener(PlayerAnimEvents.CHANGE_ROTATE, OnChangeRotation);
         _playerBase.addEventListener(PlayerAnimEvents.ADD_EFFECT, OnAddEffect);
         _playerBase.addEventListener(PlayerAnimEvents.REMOVE_EFFECT, OnRemoveEffect);
     }
@@ -58,6 +59,7 @@ public class PlayerAnimCtrl : MonoBehaviour
     {
         _playerBase.removeEventListener(PlayerAnimEvents.PLAY, OnPlayHandler);
         _playerBase.removeEventListener(PlayerAnimEvents.UPDATE_POS, OnUpdatePos);
+        _playerBase.removeEventListener(PlayerAnimEvents.CHANGE_ROTATE, OnChangeRotation);
         _playerBase.removeEventListener(PlayerAnimEvents.ADD_EFFECT, OnAddEffect);
         _playerBase.removeEventListener(PlayerAnimEvents.REMOVE_EFFECT, OnRemoveEffect);
     }
@@ -116,10 +118,20 @@ public class PlayerAnimCtrl : MonoBehaviour
         }
     }
 
+    private void OnChangeRotation(Notification data)
+    {
+        Vector3 dir = (Vector3)data.param;
+        float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        this.gameObject.transform.localRotation = Quaternion.Euler(Vector3.up * angle);
+    }
+
+
     private void UpdatePlayerRotation()
     {
         this.gameObject.transform.localRotation = FightDefine.GetDirEuler(_playerBase.MoveDir);
     }
+
+   
 
     private void CreateColliderView()
     {
