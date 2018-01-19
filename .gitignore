@@ -4,7 +4,8 @@
 /[Bb]uild/
 /[Bb]uilds/
 /Assets/AssetStoreTools*
-
+/Assets/Prefabs/Map/MapItem/
+/Assets/ResourcesLib/Map/TerrainRes/
 # Visual Studio 2015 cache directory
 /.vs/
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZTSceneManager{
-    private static ZTSceneManager _instance = null;
+public class ZTSceneManager : Singleton<ZTSceneManager>
+{
 
     public  Dictionary<int,PlayerBase> PlayerDic = null;
     public Dictionary<int,GameObject> PlayerViewDic = null;
@@ -13,19 +13,9 @@ public class ZTSceneManager{
 
     private GameObject _playerPrefab = null;
     public int SceneFrame = 0;
-    //Single 
-    public static ZTSceneManager GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new ZTSceneManager();
-            return _instance;
-        }
-        return _instance;
-    }
 
     //初始化
-    public void Init()
+    public override void Init()
     {
         PlayerDic = new Dictionary<int, PlayerBase>();
         PlayerViewDic = new Dictionary<int, GameObject>();
@@ -51,7 +41,7 @@ public class ZTSceneManager{
     }
 
 
-    public void Destroy()
+    public override void Destroy()
     {
         OwnerControl.GetInstance().Destroy();
         RemoveEvent();
