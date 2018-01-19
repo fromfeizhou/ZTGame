@@ -128,26 +128,6 @@ public class SkillAssetEditor : Editor
                         case SkillDefine.SkillActionType.COLLIDER_MOVE:
                             UpdateColliderItem(skillInfo);
                             UpdatePlayerMoveItem(skillInfo);
-                            GUILayout.BeginVertical("HelpBox");
-                            if (GUILayout.Button("AddEffectInfo", GUILayout.Width(100)))
-                            {
-                                EffectInfo effectInfo = new EffectInfo();
-                                skillInfo.collMoveEffList.Add(effectInfo);
-                                EditorUtility.SetDirty(skillAsset);
-                            }
-
-                            for (int effId = 0; effId < skillInfo.collMoveEffList.Count;effId++)
-                            {
-                                GUILayout.BeginVertical("HelpBox");
-                                UpdateEffectItem(skillInfo.collMoveEffList[i]);
-                                if (GUILayout.Button("Clear Effect", GUILayout.Width(100)))
-                                {
-                                    skillInfo.collMoveEffList.RemoveAt(effId);
-                                    EditorUtility.SetDirty(skillAsset);
-                                }
-                                GUILayout.EndVertical();
-                            }
-                            GUILayout.EndVertical();
                             break;
                         case SkillDefine.SkillActionType.ADD_EFFECT:
                             UpdateEffectItem(skillInfo.effectInfo);
@@ -275,6 +255,11 @@ public class SkillAssetEditor : Editor
         GUILayout.BeginHorizontal();
         GUILayout.Label("PosType:", GUILayout.Width(100));
         skillInfo.collPosType = (CollBase.PosType)EditorGUILayout.EnumPopup("", skillInfo.collPosType);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("EffectId:", GUILayout.Width(100));
+        skillInfo.collEffect = EditorGUILayout.TextField("", skillInfo.collEffect);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();

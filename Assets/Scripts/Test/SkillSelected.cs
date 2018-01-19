@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillSelected : MonoBehaviour {
+public class SkillSelected : MonoBehaviour
+{
     public static int SelectIndex = 1001;
 
     private GameObject _btnCut;
@@ -14,7 +15,9 @@ public class SkillSelected : MonoBehaviour {
     void Start()
     {
         _startIndex = 1001;
-        _maxIndex = 1001;
+        _maxIndex = 2001;
+        SelectIndex = 2001;
+
         _btnCut = GameObject.Find("BtnCut");
         _btnCut.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click);
 
@@ -22,13 +25,13 @@ public class SkillSelected : MonoBehaviour {
         _btnAdd.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click2);
 
         _textFormat = GameObject.Find("MText").GetComponent<MTextFormat>();
-        _textFormat.TextStr = "10001";
+        _textFormat.TextStr = SelectIndex.ToString();
     }
 
     private void Click(string val)
     {
         int index = int.Parse(_textFormat.TextStr);
-        index--;
+        index -= 1000;
         index = index < _startIndex ? _maxIndex : index;
         SelectIndex = index;
         _textFormat.TextStr = index.ToString();
@@ -37,7 +40,7 @@ public class SkillSelected : MonoBehaviour {
     private void Click2(string val)
     {
         int index = int.Parse(_textFormat.TextStr);
-        index++;
+        index += 1000;
         index = index > _maxIndex ? _startIndex : index;
         SelectIndex = index;
         _textFormat.TextStr = index.ToString();

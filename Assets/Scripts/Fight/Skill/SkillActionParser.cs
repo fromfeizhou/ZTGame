@@ -56,85 +56,61 @@ public class SkillActionParser
     {
         switch (skillInfo.actionType)
         {
-
             case SkillDefine.SkillActionType.PLAY_ANIM:
                 return new SAPlayAnim(skillInfo.animName, this, frame);
             case SkillDefine.SkillActionType.PLAY_MOVE:
                 MoveInfo moveInfo = new MoveInfo(skillInfo.moveType, 0, skillInfo.frameCount, skillInfo.speedX);
                 return new SAPlayerMove(moveInfo, this, frame);
             case SkillDefine.SkillActionType.COLLIDER:
-                CollBase collider;
-                float startX = SkillPlayer.PlayerPos.x + skillInfo.csX;
-                float startZ = SkillPlayer.PlayerPos.z + skillInfo.csZ;
-                float angle = skillInfo.csA;
-                if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
-                {
-                    startX = Operate.TargetPos.x + skillInfo.csX;
-                    startZ = Operate.TargetPos.z + skillInfo.csZ;
-                    angle = skillInfo.csA;
-                    //附加操作旋转
-                    if (skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
-                    {
-                        // 方向盘角度 与场景角度差异修正 修正符号(场景y轴 逆时针旋转 与方向盘顺时针旋转 一致)
-                        angle = Mathf.Atan2(-Operate.SkillDir.z, Operate.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
-                    }
-                }
-
-                switch (skillInfo.colliderType)
-                {
-                    case CollBase.ColType.RECTANGLE:
-                        collider = new CollRectange(startX, startZ, angle, skillInfo.width, skillInfo.height);
-                        break;
-                    case CollBase.ColType.SECTOR:
-                        collider = new CollSector(startX, startZ, angle, skillInfo.inCircle, skillInfo.outCircle, skillInfo.cAngle);
-                        break;
-                    default:
-                        collider = new CollRadius(startX, startZ, angle, skillInfo.radius);
-                        break;
-                }
-
-                ColliderData data = new ColliderData(collider, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.colliderActions);
+                CollBase collider = GetOperaColliderInfo(skillInfo);
+                ColliderData data = new ColliderData(collider, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.collEffect, skillInfo.colliderActions);
                 return new SACollider(skillInfo.colliderTarget, data, this, frame);
 
             case SkillDefine.SkillActionType.COLLIDER_MOVE:
-                startX = SkillPlayer.PlayerPos.x + skillInfo.csX;
-                startZ = SkillPlayer.PlayerPos.z + skillInfo.csZ;
-                angle = skillInfo.csA;
-                if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
-                {
-                    startX = Operate.TargetPos.x + skillInfo.csX;
-                    startZ = Operate.TargetPos.z + skillInfo.csZ;
-                    angle = skillInfo.csA;
-                    //附加操作旋转
-                    if (skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
-                    {
-                        // 方向盘角度 与场景角度差异修正 修正符号(场景y轴 逆时针旋转 与方向盘顺时针旋转 一致)
-                        angle = Mathf.Atan2(-Operate.SkillDir.z, Operate.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
-                    }
-                }
-
-                switch (skillInfo.colliderType)
-                {
-                    case CollBase.ColType.RECTANGLE:
-                        collider = new CollRectange(startX, startZ, angle, skillInfo.width, skillInfo.height);
-                        break;
-                    case CollBase.ColType.SECTOR:
-                        collider = new CollSector(startX, startZ, angle, skillInfo.inCircle, skillInfo.outCircle, skillInfo.cAngle);
-                        break;
-                    default:
-                        collider = new CollRadius(startX, startZ, angle, skillInfo.radius);
-                        break;
-                }
+                CollBase colliderMove = GetOperaColliderInfo(skillInfo);
                 moveInfo = new MoveInfo(skillInfo.moveType, 0, skillInfo.frameCount, skillInfo.speedX);
-                data = new ColliderData(collider, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.colliderActions);
+                data = new ColliderData(colliderMove, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.collEffect, skillInfo.colliderActions);
                 return new SAColliderMove(moveInfo, skillInfo.colliderTarget, data, this, frame);
             case SkillDefine.SkillActionType.ADD_EFFECT:
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 
         }
-        return new SkillActionBase(this,frame);
+        return new SkillActionBase(this, frame);
     }
 
+    private CollBase GetOperaColliderInfo(SkillAssetInfo skillInfo)
+    {
+        CollBase collider = null;
+        float startX = SkillPlayer.PlayerPos.x + skillInfo.csX;
+        float startZ = SkillPlayer.PlayerPos.z + skillInfo.csZ;
+        float angle = skillInfo.csA;
+        if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
+        {
+            startX = Operate.TargetPos.x + skillInfo.csX;
+            startZ = Operate.TargetPos.z + skillInfo.csZ;
+            angle = skillInfo.csA;
+            //附加操作旋转
+            if (skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
+            {
+                // 方向盘角度 与场景角度差异修正 修正符号(场景y轴 逆时针旋转 与方向盘顺时针旋转 一致)
+                angle = Mathf.Atan2(-Operate.SkillDir.z, Operate.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
+            }
+        }
+        switch (skillInfo.colliderType)
+        {
+            case CollBase.ColType.RECTANGLE:
+                collider = new CollRectange(startX, startZ, angle, skillInfo.width, skillInfo.height);
+                break;
+            case CollBase.ColType.SECTOR:
+                collider = new CollSector(startX, startZ, angle, skillInfo.inCircle, skillInfo.outCircle, skillInfo.cAngle);
+                break;
+            default:
+                collider = new CollRadius(startX, startZ, angle, skillInfo.radius);
+                break;
+        }
+
+        return collider;
+    }
 
 
     public void UpdateAction()
@@ -142,7 +118,7 @@ public class SkillActionParser
         bool allIsDone = true;
         if (null != _skillActionDic)
         {
-            
+
             int curFrame = ZTSceneManager.GetInstance().SceneFrame;
             //帧率溢出 补足
             if (curFrame < Operate.StartFrame)
@@ -162,8 +138,8 @@ public class SkillActionParser
                     {
                         skillActoin.UpdateActoin(curFrame);
                     }
-                   
-                    if (!skillActoin.IsComplete)
+
+                    if (skillActoin.ActFrame > 0 && !skillActoin.IsComplete)
                     {
                         allIsDone = false;
                     }

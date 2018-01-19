@@ -9,9 +9,10 @@ public class SkillActionBase
     public virtual int ActFrame
     {
         get { return _actFrame; }
-        set { _actFrame = value;
-            _frameMax = value;
+        set {
             _curFrame = value;
+            _actFrame = value;
+            _frameMax = value;
         }
     }
 
@@ -44,10 +45,12 @@ public class SkillActionBase
     {
         _actionParser = actionParser;
         _skillPlayer = _actionParser.SkillPlayer;
+        
+        ActionType = SkillDefine.SkillActionType.NONE;
+
+        _curFrame = actFrame;
         _actFrame = actFrame;
         _frameMax = actFrame;
-        _curFrame = actFrame;
-        ActionType = SkillDefine.SkillActionType.NONE;
     }
     //处理对象
     protected virtual void DoAction()

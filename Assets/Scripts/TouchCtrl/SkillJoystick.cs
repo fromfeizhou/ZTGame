@@ -54,7 +54,7 @@ public class SkillJoystick : JoystickBase
         SkillId = SkillSelected.SelectIndex;
         //---------------test------------------------//
 
-        Vector3 targetPos = new Vector3(myPos.x + distance * deltaVec.x / outerCircleRadius, 0, myPos.z + distance * deltaVec.y / outerCircleRadius);
+        Vector3 targetPos = new Vector3(myPos.x + distance * deltaVec.x, 0, myPos.z + distance * deltaVec.y);
         ZTSceneManager.GetInstance().PlayerUseSkill(1, new SkillOpera(SkillId, frame, new Vector3(deltaVec.x, 0, deltaVec.y).normalized, targetPos));
     }
 }

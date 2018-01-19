@@ -17,17 +17,7 @@ public class SACollider : SkillActionBase
     private Dictionary<int, int> _colliderDic = null; //已碰撞队列
 
     private GameObject _colliderView;
-
-    public override int ActFrame
-    {
-        get { return _actFrame; }
-        set
-        {
-            _actFrame = value;
-            _curFrame = value;
-            _frameMax = ActFrame + _collider.LifeTime;
-        }
-    }
+    private GameObject _colliderEffect;
 
     public override bool IsStart
     {
@@ -38,17 +28,30 @@ public class SACollider : SkillActionBase
 #if UNITY_EDITOR
             CreateColliderView();
 #endif
+            CreateColliderEffect();
+        }
+    }
+
+    public override int ActFrame
+    {
+        get { return _actFrame; }
+        set
+        {
+            _curFrame = value;
+            _actFrame = value;
+            _frameMax = _actFrame + _collider.LifeTime;
         }
     }
 
     public SACollider(SkillDefine.ColliderTarget colliderTarget, ColliderData collider, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
-        ActionType = SkillDefine.SkillActionType.COLLIDER;
         _colliderTarget = colliderTarget;
         _collider = collider;
 
-        _frameMax = ActFrame + _collider.LifeTime;
+        ActionType = SkillDefine.SkillActionType.COLLIDER;
+        _frameMax = _actFrame + _collider.LifeTime;
+
         CheckTargetList();
 
 
@@ -62,6 +65,7 @@ public class SACollider : SkillActionBase
         UpdateColliderView();
 #endif
         CheckCollider(curFrame);
+        UpdateColliderEffect();
     }
 
     protected void CheckCollider(int curFrame)
@@ -72,24 +76,28 @@ public class SACollider : SkillActionBase
         for (int i = 0; i < _targetList.Count; i++)
         {
             //碰撞结束 （碰撞次数已满）
-           bool isCollider = ZTCollider.CheckCollision(_targetList[i].Collider, _collider.Collider);
-           if (isCollider)
-           {
-               if(_colliderDic.ContainsKey(_targetList[i].Id)){
-                   if((curFrame -  _colliderDic[_targetList[i].Id]) >Interval) {
-                       DoAction(_targetList[i]);
-                       _colliderDic[_targetList[i].Id] = curFrame;
-                   }
-               }else{
+            bool isCollider = ZTCollider.CheckCollision(_targetList[i].Collider, _collider.Collider);
+            if (isCollider)
+            {
+                if (_colliderDic.ContainsKey(_targetList[i].Id))
+                {
+                    if (Interval > 0 && (curFrame - _colliderDic[_targetList[i].Id]) > Interval)
+                    {
+                        DoAction(_targetList[i]);
+                        _colliderDic[_targetList[i].Id] = curFrame;
+                    }
+                }
+                else
+                {
                     DoAction(_targetList[i]);
                     _colliderDic[_targetList[i].Id] = curFrame;
-               }
-              
-               if (ColliderDestroy)
-               {
-                   Complete();
-               }
-           }
+                }
+
+                if (ColliderDestroy)
+                {
+                    Complete();
+                }
+            }
         }
     }
 
@@ -137,7 +145,8 @@ public class SACollider : SkillActionBase
         }
         if (null != _collider.SelfActoins && _collider.SelfActoins.Count > 0)
         {
-            for(int i =0; i < _collider.SelfActoins.Count;i++){
+            for (int i = 0; i < _collider.SelfActoins.Count; i++)
+            {
                 int actionId = _collider.SelfActoins[i];
                 _actionParser.ActionActivatebyId(actionId);
             }
@@ -147,6 +156,7 @@ public class SACollider : SkillActionBase
             for (int i = 0; i < _collider.TargetActions.Count; i++)
             {
                 int actionId = _collider.TargetActions[i];
+                Debug.Log(actionId);
                 ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
             }
         }
@@ -164,6 +174,37 @@ public class SACollider : SkillActionBase
 #endif
     }
 
+    private void CreateColliderEffect()
+    {
+        if (_collider.EffectId == null) return;
+
+        FightEffectLib.GetEffectByName(_collider.EffectId, (Object target, string path) =>
+       {
+           GameObject go = target as GameObject;
+           if (null != go)
+           {
+               Transform effect = GameObject.Instantiate(go).transform;
+               effect.transform.parent = GameObject.Find("PlayerLayer").transform;
+               effect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.Collider.rotate);
+               effect.transform.localPosition = new Vector3(_collider.Collider.x, 0.1f, _collider.Collider.y);
+               ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
+               if (null != pds)
+               {
+                   return;
+               }
+               _colliderEffect = effect.gameObject;
+           }
+       });
+    }
+
+    private void UpdateColliderEffect()
+    {
+        if (_collider.EffectId == null || _colliderEffect == null) return;
+        if (null != _colliderEffect)
+        {
+            _colliderEffect.transform.localPosition = new Vector3(_collider.Collider.x, 0.1f, _collider.Collider.y);
+        }
+    }
 
     private void CreateColliderView()
     {
@@ -180,5 +221,5 @@ public class SACollider : SkillActionBase
             _colliderView.transform.localPosition = new Vector3(_collider.Collider.x, 0.1f, _collider.Collider.y);
         }
     }
-    
+
 }
