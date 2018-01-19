@@ -128,7 +128,10 @@ public class PlayerAnimCtrl : MonoBehaviour
 
     private void UpdatePlayerRotation()
     {
-        this.gameObject.transform.localRotation = FightDefine.GetDirEuler(_playerBase.MoveDir);
+        if (_playerBase.PlayerState == PLAYERSTATE.MOVE)
+        {
+            this.gameObject.transform.localRotation = FightDefine.GetDirEuler(_playerBase.MoveDir);
+        }
     }
 
    

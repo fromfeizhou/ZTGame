@@ -15,8 +15,8 @@ public class SkillSelected : MonoBehaviour
     void Start()
     {
         _startIndex = 1001;
-        _maxIndex = 3001;
-        SelectIndex = 3001;
+        _maxIndex = 4001;
+        SelectIndex = 4001;
 
         _btnCut = GameObject.Find("BtnCut");
         _btnCut.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click);
