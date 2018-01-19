@@ -156,7 +156,6 @@ public class SACollider : SkillActionBase
             for (int i = 0; i < _collider.TargetActions.Count; i++)
             {
                 int actionId = _collider.TargetActions[i];
-                Debug.Log(actionId);
                 ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
             }
         }
@@ -165,6 +164,11 @@ public class SACollider : SkillActionBase
     protected override void Complete()
     {
         base.Complete();
+        if (null != _colliderEffect)
+        {
+            GameObject.Destroy(_colliderEffect);
+            _colliderEffect = null;
+        }
 #if UNITY_EDITOR
         if (null != _colliderView)
         {
