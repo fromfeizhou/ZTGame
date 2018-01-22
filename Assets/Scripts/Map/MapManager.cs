@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MapDefine
@@ -7,9 +8,14 @@ public class MapDefine
     public const string MAPITEMINFOASSET = "Assets/ResourcesLib/Config/MapAsset.asset";
     public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
+
+    public const string MapDataSavePath = "Assets/MapData.txt";
+
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
     public const int MAPITEMSIZE = 128;
+
+    public const float GridSize = 1280 / 32;
 
     public static int MapWidth = MAPITEMSIZE;
     public static int MapHeight = MAPITEMSIZE;
@@ -26,6 +32,35 @@ public class MapItemAsset
     public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
 }
 
+public enum eMapBlockType
+{
+    None,   //无
+    Collect,//碰撞区域
+    Hide,   //隐藏区域
+    Event,  //事件
+}
+
+[System.Serializable]
+public class MapBlockData
+{
+    public int row;
+    public int col;
+    public eMapBlockType type;
+    public override string ToString()
+    {
+        return string.Format("{0}:{1}:{2}", row, col, (int) type);
+    }
+
+    public static MapBlockData Parse(string content)
+    {
+        string[] contents = content.Split(':');
+        MapBlockData tmpData = new MapBlockData();
+        tmpData.row = int.Parse(contents[0]);
+        tmpData.col = int.Parse(contents[1]);
+        tmpData.type = (eMapBlockType)System.Enum.Parse(typeof(eMapBlockType), contents[2]);
+        return tmpData;
+    }
+}
 
 //地图 格子位置
 public class MapTilePos
@@ -42,7 +77,6 @@ public class MapTilePos
 
 public class MapManager
 {
-
     private static MapManager _instance = null;
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
@@ -55,6 +89,7 @@ public class MapManager
     private bool _isInit = false;
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
+
     //Single 
     public static MapManager GetInstance()
     {
@@ -66,9 +101,28 @@ public class MapManager
         }
         return _instance;
     }
+    private List<MapBlockData> _mapBlockData;
+
+    private void InitMapData()
+    {
+        if (File.Exists(MapDefine.MapDataSavePath))
+        {
+            _mapBlockData = new List<MapBlockData>();
+            string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(contents[i]))
+                {
+                    _mapBlockData.Add(MapBlockData.Parse(contents[i]));
+                }
+            }
+
+        }
+    }
 
     public void InitMap()
     {
+        InitMapData();
         _sceneLayer = GameObject.Find("SceneMap");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
@@ -94,6 +148,23 @@ public class MapManager
     }
 
     private MapAsset mapAsset;
+
+    
+    private PlayerBase playerBase;
+
+    public eMapBlockType GetFloorColl(Vector3 pos)
+    {
+        int row = (int)(pos.x / 1280 * 5120);
+        int col = (int)(pos.z / 1280 * 5120);
+
+        if (_mapBlockData != null && _mapBlockData.Count > 0)
+        {
+            int index = _mapBlockData.FindIndex(a => a.row == row && a.col == col);
+            if (index >= 0)
+                return _mapBlockData[index].type;
+        }
+        return eMapBlockType.None;
+    }
 
     public MapInfo GetMapInfiByPos(int row,int col)
     {
@@ -154,7 +225,6 @@ public class MapManager
             MapManager._instance = null;
         }
     }
-
 
 
     public void SetMapCenterPos(Vector3 pos)

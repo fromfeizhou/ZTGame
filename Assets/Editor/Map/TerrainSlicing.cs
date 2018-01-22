@@ -133,7 +133,6 @@ public class TerrainSlicing : Editor
 
 
     //地形转换为Mesh
-    //[MenuItem("Terrain/TerrainToMesh")]
     private static void TerrainToMesh(GameObject terrainObj,Material mat, string mapKey)
     {
         var terrain = terrainObj.GetComponent<Terrain>();
@@ -238,4 +237,7 @@ public class TerrainSlicing : Editor
 
         AssetDatabase.Refresh();
     }
+
+
+   
 }
