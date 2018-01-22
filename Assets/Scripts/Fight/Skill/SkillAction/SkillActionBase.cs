@@ -9,14 +9,25 @@ public class SkillActionBase
     public virtual int ActFrame
     {
         get { return _actFrame; }
-        set { _actFrame = value;
-            _frameMax = value;
+        set {
             _curFrame = value;
+            _actFrame = value;
+            _frameMax = value;
         }
     }
 
     public bool IsComplete = false; //是否完成
-    public bool IsStart = false;
+
+    protected bool _isStart;
+    public virtual bool IsStart
+    {
+        get { return _isStart; }
+        set
+        {
+            _isStart = value;
+        }
+    }
+    
 
     protected SkillActionParser _actionParser = null;
     protected PlayerBase _skillPlayer = null;
@@ -34,10 +45,12 @@ public class SkillActionBase
     {
         _actionParser = actionParser;
         _skillPlayer = _actionParser.SkillPlayer;
+        
+        ActionType = SkillDefine.SkillActionType.NONE;
+
+        _curFrame = actFrame;
         _actFrame = actFrame;
         _frameMax = actFrame;
-        _curFrame = actFrame;
-        ActionType = SkillDefine.SkillActionType.NONE;
     }
     //处理对象
     protected virtual void DoAction()
@@ -53,11 +66,18 @@ public class SkillActionBase
     //刷新对象
     public virtual void UpdateActoin(int curFrame = 0)
     {
-        _dtFrame = curFrame - _curFrame;
-        _curFrame = curFrame;
+        if (ActionType == SkillDefine.SkillActionType.NONE)
+        {
+            Complete();
+        }
+        else
+        {
+            _dtFrame = curFrame - _curFrame;
+            _curFrame = curFrame;
 
-        //有最大帧限制
-        CheckMaxFrame();
+            //有最大帧限制
+            CheckMaxFrame();
+        }
     }
 
     private void CheckMaxFrame()

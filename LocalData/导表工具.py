@@ -76,42 +76,19 @@ def writeLua(fname):
 			excel_data_dict[cell_id.value] = row_data_list
 
  		# # export to lua file
- 		lua_export_file = open(booksheet.name + '.lua', 'w')
+ 		lua_export_file = open('../Assets/ResourcesLib/Config/LuaConfig/' + booksheet.name + '.lua.txt', 'w')
  		lua_export_file.write('%s = {\n' % booksheet.name)
  		# 遍历excel数据字典 按格式写入
  		for k, v in excel_data_dict.items():
- 			lua_export_file.write('  [%d] = {\n' % k)
+ 			lua_export_file.write('  id_%d = {\n' % k)
  			for row_data in v:
  				lua_export_file.write('   {0} = {1},\n'.format(row_data[0], row_data[1]))
  			lua_export_file.write('  },\n')
 
  		lua_export_file.write('}\n')
- 		lua_export_file.write('}\n')
  		lua_export_file.close()
 	except Exception,e:
 		print str(e)
-
-
-
-	# # export to lua file
- #    lua_export_file = open(tgt_lua_path, 'w')
- #    lua_export_file.write(lua_file_head_desc)
- #    lua_export_file.write('%s = {\n' % booksheet.name)
-
- #    # 遍历excel数据字典 按格式写入
- #    for k, v in excel_data_dict.items():
- #        lua_export_file.write('  [%d] = {\n' % k)
- #        for row_data in v:
- #            lua_export_file.write('   {0} = {1},\n'.format(row_data[0], row_data[1]))
- #        lua_export_file.write('  },\n')
-
- #    lua_export_file.write('}\n')
-
- #    lua_export_file.close()
-
-	# # except Exception,e:
-	# # 	print str(e)
-	
 
 def main():
     #dir = raw_input('please input the path:')

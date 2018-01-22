@@ -36,7 +36,7 @@ public class PlayerBaseData
 //英雄基础类，保存英雄基础属性，并进行基础操作
 public class PlayerBase : NotificationDelegate, IMove
 {
-    public static float PLAYER_SPEED = 1f;      //移动速度
+    public static float PLAYER_SPEED = 0.3f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
     //----------------------------------------------------------------------------------------------------------------------//
     //------------------------------------------------基本属性Begin-----------------------------------------------------------//
@@ -81,6 +81,9 @@ public class PlayerBase : NotificationDelegate, IMove
                 else if (value == PLAYERSTATE.ATTACK)
                 {
                     this.dispatchEvent(PlayerAnimEvents.PLAY, new Notification(PlayerActionName.ATTACK_1));
+                }
+                else if (value == PLAYERSTATE.SKILL)
+                {
                 }
                 else
                 {
@@ -141,6 +144,7 @@ public class PlayerBase : NotificationDelegate, IMove
         {
             SkillActionParser skillParser = new SkillActionParser(this, opera);
             _skillParserList.Add(skillParser);
+            PlayerState = PLAYERSTATE.SKILL;
         }
     }
 
@@ -157,9 +161,16 @@ public class PlayerBase : NotificationDelegate, IMove
             UpdatePos();
         }
 
-        for (int i = 0; i < _skillParserList.Count; i++)
+        for (int i = _skillParserList.Count - 1; i >= 0 ; i--)
         {
             _skillParserList[i].UpdateAction();
+            if (_skillParserList[i].IsComplete)
+            {
+                _skillParserList.RemoveAt(i);
+                if (_skillParserList.Count == 0) {
+                    PlayerState = PLAYERSTATE.NONE;
+                }
+            }
         }
 
     }

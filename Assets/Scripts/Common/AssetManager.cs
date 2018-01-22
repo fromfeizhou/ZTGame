@@ -32,8 +32,7 @@ public class AssetManager
             callback(obj, path);
         }
         return;
-#endif
-
+#else
         string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         string abName = path.Replace(fileName, "").Replace('/', '_');
@@ -46,8 +45,8 @@ public class AssetManager
             callback(obj2, path);
             return;
         }
-
         callback(null, path);
+#endif
     }
 
 

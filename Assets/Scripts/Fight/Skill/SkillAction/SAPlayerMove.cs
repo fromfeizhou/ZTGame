@@ -7,23 +7,23 @@ using UnityEngine;
 public class SAPlayerMove : SkillActionBase
 {
     private MoveInfo _moveInfo;
-
     public override int ActFrame
     {
         get { return _actFrame; }
         set
         {
-            _actFrame = value;
             _curFrame = value;
+            _actFrame = value;
             _frameMax = _actFrame + _moveInfo.FrameCount;
         }
     }
+  
     public SAPlayerMove(MoveInfo moveInfo, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
         _moveInfo = moveInfo;
-        _frameMax = ActFrame + _moveInfo.FrameCount;
         ActionType = SkillDefine.SkillActionType.PLAY_ANIM;
+        _frameMax = _actFrame + _moveInfo.FrameCount;
     }
 
     //移动

@@ -4,6 +4,17 @@
       "key": "SkillAsset",
       "path": "Config/SkillConfig"
     },
+
+	{
+      "key": "LuaConfig",
+      "path": "Config/LuaConfig"
+    },
+
+	{
+      "key": "EffectPrefab",
+      "path": "Particle/Prefabs"
+    },
+
 	{
       "key": "ImgBtnSprite",
       "path": "SpriteOut/BtnSrc"

@@ -8,11 +8,14 @@ public class SAColliderMove : SACollider
 {
     private MoveInfo _moveInfo;
     private int _moveCount;
+    
     public SAColliderMove(MoveInfo moveInfo, SkillDefine.ColliderTarget colliderTarget, ColliderData collider, SkillActionParser actionParser, int actFrame)
         : base(colliderTarget, collider, actionParser,actFrame)
     {
         _moveInfo = moveInfo;
         _moveCount = 0;
+
+        ActionType = SkillDefine.SkillActionType.COLLIDER_MOVE;
     }
 
     //刷新对象
@@ -31,7 +34,6 @@ public class SAColliderMove : SACollider
             //减去溢出部分 
             dtFrame -= _moveCount - _moveInfo.FrameCount;
         }
-
         if (dtFrame > 0)
         {
             bool moveDone = SkillMethod.MoveAction(_collider.Collider, _moveInfo, _actionParser.Operate, dtFrame);

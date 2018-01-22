@@ -35,6 +35,7 @@ public class SkillAssetInfo
 
     public CollBase.ColType colliderType = CollBase.ColType.CIRCLE;
     public CollBase.PosType collPosType = CollBase.PosType.SKILL;
+    public string collEffect = "";
     public float csX = 0;
     public float csZ = 0;
     public float csA = 0;

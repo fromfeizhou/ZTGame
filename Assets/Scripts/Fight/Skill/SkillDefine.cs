@@ -46,10 +46,11 @@ public class ColliderData
     public bool IsPenetrate;    //穿透障碍
     public int ColliderMax; //最大碰撞个数
     public string ColliderActions; //碰撞执行
+    public string EffectId;     //特效
 
     public List<int> SelfActoins;
     public List<int> TargetActions;
-    public ColliderData(CollBase collBase, int interval, int lifeTime, int colliderMax, bool isPenetrate, string colliderActions)
+    public ColliderData(CollBase collBase, int interval, int lifeTime, int colliderMax, bool isPenetrate, string effectId, string colliderActions)
     {
         Collider = collBase;
         Interval = interval;
@@ -57,7 +58,7 @@ public class ColliderData
         ColliderMax = colliderMax;
         IsPenetrate = isPenetrate;
         ColliderActions = colliderActions;
-
+        EffectId = effectId;
 
         if (colliderActions == "")
             return;
@@ -86,13 +87,13 @@ public class ColliderData
     }
 
 }
-
+[System.Serializable]
 public class EffectInfo
 {
-    public int Id;
+    public string Id;
     public Vector3 Offset = Vector3.zero;
     public float Scale = 1.0f;
-    public EffectInfo(int id = 0, float scale = 1.0f, Vector3 offset = default(Vector3))
+    public EffectInfo(string id = "", float scale = 1.0f, Vector3 offset = default(Vector3))
     {
         Id = id;
         Scale = scale;

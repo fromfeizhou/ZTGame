@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillSelected : MonoBehaviour {
-    public static int SelectIndex = 10001;
+public class SkillSelected : MonoBehaviour
+{
+    public static int SelectIndex = 1001;
 
     private GameObject _btnCut;
     private GameObject _btnAdd;
@@ -13,8 +14,10 @@ public class SkillSelected : MonoBehaviour {
     private int _maxIndex;
     void Start()
     {
-        _startIndex = 10001;
-        _maxIndex = 10002;
+        _startIndex = 1001;
+        _maxIndex = 4001;
+        SelectIndex = 4001;
+
         _btnCut = GameObject.Find("BtnCut");
         _btnCut.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click);
 
@@ -22,13 +25,13 @@ public class SkillSelected : MonoBehaviour {
         _btnAdd.GetComponent<MBaseBtnFormat>().OnBtnClick.AddListener(Click2);
 
         _textFormat = GameObject.Find("MText").GetComponent<MTextFormat>();
-        _textFormat.TextStr = "10001";
+        _textFormat.TextStr = SelectIndex.ToString();
     }
 
     private void Click(string val)
     {
         int index = int.Parse(_textFormat.TextStr);
-        index--;
+        index -= 1000;
         index = index < _startIndex ? _maxIndex : index;
         SelectIndex = index;
         _textFormat.TextStr = index.ToString();
@@ -37,7 +40,7 @@ public class SkillSelected : MonoBehaviour {
     private void Click2(string val)
     {
         int index = int.Parse(_textFormat.TextStr);
-        index++;
+        index += 1000;
         index = index > _maxIndex ? _startIndex : index;
         SelectIndex = index;
         _textFormat.TextStr = index.ToString();
