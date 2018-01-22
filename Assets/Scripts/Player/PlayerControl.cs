@@ -58,6 +58,7 @@ public class PlayerControl : MonoBehaviour
         TouchEvent.GetInstance().removeEventListener(GameTouchEvents.JOY_MOVE, OnJoveMoveHandler);
     }
 
+    public eMapBlockType MapBlockType;
 
     private void OnJoveMoveHandler(Notification data)
     {
@@ -65,7 +66,7 @@ public class PlayerControl : MonoBehaviour
 
         FightDefine.PLAYERDIR dir = (FightDefine.PLAYERDIR)data.param;
         _playerBase.StartMove(dir);
+        MapBlockType = MapManager.GetInstance().GetFloorColl(_playerBase.PlayerPos);
     }
-
 
 }
