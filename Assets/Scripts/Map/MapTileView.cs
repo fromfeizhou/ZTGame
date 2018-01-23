@@ -28,6 +28,32 @@ public class MapTileView : MonoBehaviour {
         });
     }
 
+    private int _gridCnt = MapDefine.MAPITEMSIZE * 4;
+    private Vector3 baseSize = new Vector3(0.25f,0,0.25f);
+    private List<MapBlockData> mapBlock;
+    void OnDrawGizmos()
+    {
+        if (mapBlock == null)
+        {
+            float minRow = _mapTileData.Row * _gridCnt;
+            float maxRow = minRow + _gridCnt;
+            float minCol = _mapTileData.Column;
+            float maxCol = minCol+ _gridCnt * _gridCnt;
+            mapBlock = MapManager.GetInstance().GetMapBlock(minRow, maxRow, minCol, maxCol);
+        }
+        if (mapBlock.Count > 0)
+        {
+            for (int i = 0; i < mapBlock.Count; i++)
+            {
+                Vector3 pos = transform.position + new Vector3(mapBlock[i].row * 0.25f, 0, mapBlock[i].col * 0.25f);
+                if (MapManager.GetInstance().GetFloorColl(pos) != eMapBlockType.None)
+                {
+                    Gizmos.DrawWireCube(pos, baseSize);
+                }
+            }
+        }
+    }
+
     private void UpdateMapItem()
     {
         Transform treeParent = _terrain.transform.Find("[Tree]");

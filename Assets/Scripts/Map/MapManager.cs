@@ -152,6 +152,11 @@ public class MapManager
     
     private PlayerBase playerBase;
 
+    public List<MapBlockData> GetMapBlock(float minRow, float maxRow, float minCol, float maxCol)
+    {
+        return _mapBlockData.FindAll(a => a.row >= minRow && a.row < maxRow && a.col >= minCol && a.col < maxCol);
+    }
+
     public eMapBlockType GetFloorColl(Vector3 pos)
     {
         int row = (int)(pos.x / 1280 * 5120);
