@@ -8,28 +8,34 @@ public class MapDefine
     public const string MAPITEMINFOASSET = "Assets/ResourcesLib/Config/MapAsset.asset";
     public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
-
+    public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
     public const string MapDataSavePath = "Assets/MapData.txt";
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
+    public const int MAPITEMTOTALSIZE = 1280;
     public const int MAPITEMSIZE = 128;
 
-    public const float GridSize = 1280 / 32;
+    //格子大小
+    public const float GridSize_Main = 40;
+    public const float GridSize_Port = 40;
+    public const float GridSize_Edit = 32;
 
     public static int MapWidth = MAPITEMSIZE;
     public static int MapHeight = MAPITEMSIZE;
 
-    public static int MapViewRow = 1;       //单屏行数
-    public static int MapViewColumn = 1;    //单屏列数
+    public static int MapViewRow = 1; //单屏行数
+    public static int MapViewColumn = 1; //单屏列数
 
-    public static int MaxViewRowNum = 3;     //创建最大行数
-    public static int MaxViewColumnNum = 3;  //创建最大列数
-}
+    public static int MaxViewRowNum = 3; //创建最大行数
+    public static int MaxViewColumnNum = 3; //创建最大列数
 
-public class MapItemAsset
-{
-    public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
+    public static Color[] MapBlockTypeColor = {
+        new Color(1, 0, 0, 0.2f),
+        new Color(0, 1, 0, 0.2f),
+        new Color(1, 1, 1, 0.2f),
+        new Color(0, 0, 1, 0.2f)
+    };
 }
 
 public enum eMapBlockType
@@ -38,7 +44,10 @@ public enum eMapBlockType
     Collect,//碰撞区域
     Hide,   //隐藏区域
     Event,  //事件
+
+    Count,  //总数
 }
+
 
 [System.Serializable]
 public class MapBlockData

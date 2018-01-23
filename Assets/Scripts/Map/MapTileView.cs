@@ -67,7 +67,7 @@ public class MapTileView : MonoBehaviour {
         {
             for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
             {
-                AssetManager.LoadAsset(MapItemAsset.MAPITEM_TREE, (obj, str) =>
+                AssetManager.LoadAsset(MapDefine.MAPITEM_TREE, (obj, str) =>
                 {
                     GameObject assetTree = obj as GameObject;
                     Transform tree = Instantiate(assetTree).transform;
