@@ -36,7 +36,7 @@ public class SAColliderMove : SACollider
         }
         if (dtFrame > 0)
         {
-            bool moveDone = SkillMethod.MoveAction(_collider.Collider, _moveInfo, _actionParser.Operate, dtFrame);
+            bool moveDone = SkillMethod.MoveAction(_collider.Collider, _moveInfo, _actionParser.Command, dtFrame);
             if (moveDone)
             {
                 Complete();

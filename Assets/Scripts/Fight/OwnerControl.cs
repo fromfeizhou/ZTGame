@@ -114,9 +114,8 @@ public class OwnerControl : Singleton<OwnerControl>
         if (battleId > 0)
         {
             MoveCommand command = FightDefine.GetMoveCommand(battleId, dir);
-            SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND, new Notification(command));
+            SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_COMMAND, new Notification(command));
         }
-        
     }
   
     private void KeyboardControl()

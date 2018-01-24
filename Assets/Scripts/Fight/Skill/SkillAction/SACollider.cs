@@ -112,7 +112,7 @@ public class SACollider : SkillActionBase
             return;
         }
 
-        List<PlayerBattleInfo> list = ZTSceneManager.GetInstance().CharaList;
+        List<PlayerBattleInfo> list = ZTSceneManager.GetInstance().GetCharaList();
         for (int i = 0; i < list.Count; i++)
         {
             switch (_colliderTarget)
@@ -155,12 +155,12 @@ public class SACollider : SkillActionBase
         {
             for (int i = 0; i < _collider.TargetActions.Count; i++)
             {
-                int actionId = _collider.TargetActions[i];
+                int skillId = _collider.TargetActions[i];
                 //ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
                 Vector3 dir = new Vector3( _collider.Collider.x,0,_collider.Collider.y);
                 dir = (dir - player.MovePos).normalized;
-                SkillCommand command = FightDefine.GetSkillCommand(player.BattleId,dir,player.MovePos);
-                SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND,new Notification(command));
+                SkillCommand command = FightDefine.GetSkillCommand(player.BattleId, skillId, dir, player.MovePos);
+                SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_COMMAND,new Notification(command));
             }
         }
     }

@@ -54,8 +54,8 @@ public class SkillJoystick : JoystickBase
 
         Vector3 targetPos = new Vector3(myPos.x + distance * deltaVec.x, 0, myPos.z + distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
-        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,dir,targetPos);
-        SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND, new Notification(command));
+        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,SkillId,dir,targetPos);
+        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_COMMAND, new Notification(command));
         //ZTSceneManager.GetInstance().MyPlayer.dispatchEvent(PlayerAnimEvents.CHANGE_ROTATE, new Notification(dir));
         //ZTSceneManager.GetInstance().PlayerUseSkill(1, new SkillOpera(SkillId, frame, dir, targetPos));
     }

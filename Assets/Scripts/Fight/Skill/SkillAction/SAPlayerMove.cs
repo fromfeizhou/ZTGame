@@ -32,7 +32,7 @@ public class SAPlayerMove : SkillActionBase
         base.UpdateActoin(curFrame);
         if (_dtFrame > 0)
         {
-            bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Operate, _dtFrame);
+            bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Command, _dtFrame);
             if (moveDone)
             {
                 Complete();

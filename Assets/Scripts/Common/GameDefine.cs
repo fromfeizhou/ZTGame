@@ -38,8 +38,9 @@ public struct GameTouchEvents
 /// <summary>
 /// 控制事件
 /// </summary>
-public struct ScenePlayerEvents
+public struct SceneEvents
 {
-    public static readonly string ADD_PLAYER = "ScenePlayerEvents_AddPlayer";       //添加玩家
-    public static readonly string ADD_COMMAND = "ScenePlayerEvents_AddCommand";     //命令刷新
+    public static readonly string ADD_PLAYER = "SceneEvents_AddPlayer";       //添加玩家
+    public static readonly string ADD_COMMAND = "SceneEvents_AddCommand";     //命令刷新
+    public static readonly string ADD_SKILL_PARSER = "SceneEvents_AddSkillParser";  //添加技能解析 
 }

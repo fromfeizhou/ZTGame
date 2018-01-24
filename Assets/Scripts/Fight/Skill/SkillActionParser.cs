@@ -7,14 +7,14 @@ using UnityEngine;
 public class SkillActionParser
 {
     public PlayerBattleInfo SkillPlayer;     //使用技能者
-    public SkillOpera Operate;      //操作
+    public SkillCommand Command;      //操作
     public bool IsComplete = false;
     private Dictionary<int, List<SkillActionBase>> _skillActionDic;     //技能action列表
 
-    public SkillActionParser(PlayerBattleInfo playerBase, SkillOpera opera)
+    public SkillActionParser(PlayerBattleInfo playerBase, SkillCommand command)
     {
         SkillPlayer = playerBase;
-        Operate = opera;
+        Command = command;
         _skillActionDic = new Dictionary<int, List<SkillActionBase>>();
         IsComplete = false;
         ParseSkillAction();
@@ -23,7 +23,7 @@ public class SkillActionParser
     //解析配置
     private void ParseSkillAction()
     {
-        AssetManager.LoadAsset(PathManager.GetResPathByName("SkillAsset", Operate.ActionId.ToString() + ".asset"), LoadAssetHandler);
+        AssetManager.LoadAsset(PathManager.GetResPathByName("SkillAsset", Command.SkillId.ToString() + ".asset"), LoadAssetHandler);
     }
 
     private void LoadAssetHandler(Object target, string path)
@@ -35,7 +35,7 @@ public class SkillActionParser
             {
                 for (int k = 0; k < skillAsset.ListSkillGroup[i].ListSkillInfo.Count; k++)
                 {
-                    int frame = Operate.StartFrame + skillAsset.ListSkillGroup[i].FrameTime;
+                    int frame = Command.StartFrame + skillAsset.ListSkillGroup[i].FrameTime;
                     if (skillAsset.ListSkillGroup[i].FrameTime < 0)
                     {
                         frame = skillAsset.ListSkillGroup[i].FrameTime;
@@ -86,14 +86,14 @@ public class SkillActionParser
         float angle = skillInfo.csA;
         if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
         {
-            startX = Operate.TargetPos.x + skillInfo.csX;
-            startZ = Operate.TargetPos.z + skillInfo.csZ;
+            startX = Command.TargetPos.x + skillInfo.csX;
+            startZ = Command.TargetPos.z + skillInfo.csZ;
             angle = skillInfo.csA;
             //附加操作旋转
             if (skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
             {
                 // 方向盘角度 与场景角度差异修正 修正符号(场景y轴 逆时针旋转 与方向盘顺时针旋转 一致)
-                angle = Mathf.Atan2(-Operate.SkillDir.z, Operate.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
+                angle = Mathf.Atan2(-Command.SkillDir.z, Command.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
             }
         }
         switch (skillInfo.colliderType)
@@ -121,9 +121,9 @@ public class SkillActionParser
 
             int curFrame = ZTSceneManager.GetInstance().SceneFrame;
             //帧率溢出 补足
-            if (curFrame < Operate.StartFrame)
+            if (curFrame < Command.StartFrame)
             {
-                curFrame += int.MaxValue - Operate.StartFrame;
+                curFrame += int.MaxValue - Command.StartFrame;
             }
             foreach (int key in _skillActionDic.Keys)
             {

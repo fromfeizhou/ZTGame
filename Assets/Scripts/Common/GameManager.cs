@@ -96,8 +96,8 @@ public class GameManager : MonoBehaviour
 
     private void Test()
     {
-        SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_PLAYER,new Notification(1,this.gameObject));
-        SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_PLAYER, new Notification(2, this.gameObject));
+        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_PLAYER,new Notification(1,this.gameObject));
+        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_PLAYER, new Notification(2, this.gameObject));
     }
 
 }
