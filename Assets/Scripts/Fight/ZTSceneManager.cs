@@ -5,41 +5,31 @@ using UnityEngine;
 public class ZTSceneManager : Singleton<ZTSceneManager>
 {
 
-    public  Dictionary<int,PlayerBase> PlayerDic = null;
-    public Dictionary<int,GameObject> PlayerViewDic = null;
+    public Dictionary<int,PlayerBattleInfo> CharaDic = null;
+    public List<PlayerBattleInfo> CharaList = null;
+    public Dictionary<int,GameObject> CharaViewDic = null;
 
-    public List<PlayerBase> PlayerList = null;
-    public PlayerBase MyPlayer = null;
+    public PlayerBattleInfo MyPlayer = null;
 
     private GameObject _playerPrefab = null;
     public int SceneFrame = 0;
+    //操作指令集合
+    public Dictionary<int, List<FightCommandBase>> CommandDic;
 
     //初始化
     public override void Init()
     {
-        PlayerDic = new Dictionary<int, PlayerBase>();
-        PlayerViewDic = new Dictionary<int, GameObject>();
-        PlayerList = new List<PlayerBase>();
+        CharaDic = new Dictionary<int, PlayerBattleInfo>();
+        CharaViewDic = new Dictionary<int, GameObject>();
+        CharaList = new List<PlayerBattleInfo>();
         SceneFrame = 0;
 
         OwnerControl.GetInstance().Init();
+        //操作集合初始化
+        CommandDic = new Dictionary<int, List<FightCommandBase>>();
+
         InitEvent();
     }
-
-    //刷新对象
-    public void Update()
-    {
-        if (SceneFrame > int.MaxValue)
-        {
-            SceneFrame = 0;
-        }
-        SceneFrame++;
-        //刷新玩家虚拟摇杆
-        OwnerControl.GetInstance().Update();
-
-        UpdatePlayer();
-    }
-
 
     public override void Destroy()
     {
@@ -47,29 +37,76 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         RemoveEvent();
     }
 
-    //使用技能
-    public void PlayerUseSkill(int playerId = -1, SkillOpera opera = null)
+    //刷新对象
+    public void Update()
     {
-        PlayerBase player = null;
-        if (PlayerDic.ContainsKey(playerId))
+        if (SceneFrame > FightDefine.MaxFrame)
         {
-            player = PlayerDic[playerId];
-        }else{
-            player = MyPlayer;
+            SceneFrame = 0;
         }
+        SceneFrame++;
+        //刷新玩家虚拟摇杆
+        OwnerControl.GetInstance().Update();
+        UpdateCommand();
+        UpdatePlayer();
+    }
 
-        player.dispatchEvent(FightDefine.FightOperaEvents.PLAY_SKILL, new Notification(opera));
+    //命令刷新
+    private void UpdateCommand()
+    {
+        foreach(int frame in CommandDic.Keys){
+            if (FightDefine.CompareFrame(frame))
+            {
+                List<FightCommandBase> list = CommandDic[frame];
+                for (int i = 0; i < list.Count; i++)
+                {
+                    DoCommand(list[i]);
+                }
+                list.Clear();
+            }
+        }
+    }
+
+    private void DoCommand(FightCommandBase command)
+    {
+        int battleId = command.BattleId;
+        if (CharaDic.ContainsKey(battleId))
+        {
+            PlayerBattleInfo info = CharaDic[battleId] as PlayerBattleInfo;
+            switch (command.CommandType)
+            {
+                case COMMAND_TYPE.MOVE:
+                    info.MoveCommand(command as MoveCommand);
+                    break;
+                case COMMAND_TYPE.SKILL:
+                    info.SkillCommand(command as SkillCommand);
+                    break;
+            }
+        }
     }
 
     private void InitEvent()
     {
         SceneEvent.GetInstance().addEventListener(ScenePlayerEvents.ADD_PLAYER, OnAddPlayer);
+        SceneEvent.GetInstance().addEventListener(ScenePlayerEvents.ADD_COMMAND, OnAddCommand);
     }
 
     private void RemoveEvent()
     {
         SceneEvent.GetInstance().removeEventListener(ScenePlayerEvents.ADD_PLAYER, OnAddPlayer);
+        SceneEvent.GetInstance().removeEventListener(ScenePlayerEvents.ADD_COMMAND, OnAddCommand);
     }
+
+    private void OnAddCommand(Notification data)
+    {
+        FightCommandBase command = data.param as FightCommandBase;
+        int frame = command.Frame;
+        if (!CommandDic.ContainsKey(frame)) CommandDic.Add(frame, new List<FightCommandBase>());
+        CommandDic[frame].Add(command);
+    }
+
+   
+
 
     private void OnAddPlayer(Notification note)
     {
@@ -78,35 +115,34 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     }
 
     //创建玩家s
-    private void CreatePlayer(int playerId)
+    private void CreatePlayer(int battleId)
     {
         //test
-        Dictionary<int, PlayerBaseData> dataDic = new Dictionary<int, PlayerBaseData>();
-        dataDic.Add(1, new PlayerBaseData(1,1,new Vector3(0,0,0)));
-        dataDic.Add(2, new PlayerBaseData(2, 2, new Vector3(5, 0, 5)));
-
-        if (!PlayerDic.ContainsKey(playerId))
+        if (!CharaDic.ContainsKey(battleId))
         {
-            PlayerBase player = new PlayerBase(playerId);
+            PlayerBattleInfo playerInfo = new PlayerBattleInfo(1,CHARA_TYPE.PLAYER);
+            playerInfo.SetFightInfo(100);
+            playerInfo.SetPlayerInfo();
+            playerInfo.SetBattleInfo(battleId, battleId, new Vector3(CharaList.Count * 10, 0, CharaList.Count * 10));
             //test
-            player.SetPlayerBaseData(dataDic[playerId]);
-            PlayerDic.Add(playerId, player);
-            PlayerList.Add(player);
+            CharaDic.Add(battleId, playerInfo);
+            CharaList.Add(playerInfo);
         }
       
 
         if (null != _playerPrefab)
         {
+            PlayerBattleInfo info = CharaDic[battleId];
             GameObject gameObject = GameObject.Instantiate(_playerPrefab);
-            gameObject.transform.localPosition = PlayerDic[playerId].PlayerPos;
+            gameObject.transform.localPosition = info.MovePos;
             gameObject.transform.parent = GameObject.Find("PlayerLayer").transform;
-            PlayerViewDic.Add(playerId, gameObject);
+            CharaViewDic.Add(battleId, gameObject);
+            gameObject.AddComponent<PlayerBattleActor>();
+            gameObject.GetComponent<PlayerBattleActor>().SetInfo(info);
 
-            gameObject.GetComponent<PlayerControl>().SetPlayerData(PlayerDic[playerId]);
-
-            if (playerId == 1)
+            if (battleId == 1)
             {
-                MyPlayer = PlayerDic[playerId];
+                MyPlayer = info;
                 GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
                 GameObject.Find("SkillJoystick").GetComponent<SkillArea>().player = gameObject;
             }
@@ -125,9 +161,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     //延后创建玩家
     private void LaterCreatePlayer(){
-        foreach (int key in PlayerDic.Keys)
+        foreach (int key in CharaDic.Keys)
         {
-            if (!PlayerViewDic.ContainsKey(key))
+            if (!CharaViewDic.ContainsKey(key))
             {
                 CreatePlayer(key);
             }
@@ -135,27 +171,27 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     }
 
     //移除玩家
-    private void RemovePlayerById(int playerId)
+    private void RemovePlayerById(int battleId)
     {
-        int index = PlayerList.FindIndex(delegate(PlayerBase player)
+        int index = CharaList.FindIndex(delegate(PlayerBattleInfo player)
         {
-            return player.Id == playerId;
+            return player.BattleId == battleId;
         });
 
         //移除数据对象
         if (index != -1)
         {
-            PlayerList.RemoveAt(index);
+            CharaList.RemoveAt(index);
         }
-        if (PlayerDic.ContainsKey(playerId))
+        if (CharaDic.ContainsKey(battleId))
         {
-            PlayerDic.Remove(playerId);
+            CharaDic.Remove(battleId);
         }
         //移除场景对象
-        if (PlayerDic.ContainsKey(playerId))
+        if (CharaDic.ContainsKey(battleId))
         {
-            GameObject.Destroy(PlayerViewDic[playerId]);
-            PlayerViewDic.Remove(playerId);
+            GameObject.Destroy(CharaViewDic[battleId]);
+            CharaViewDic.Remove(battleId);
         }
     }
 
@@ -163,9 +199,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     private void UpdatePlayer()
     {
         //所有对象刷新
-        for (int i = 0; i < PlayerList.Count; i++)
+        for (int i = 0; i < CharaList.Count; i++)
         {
-            PlayerList[i].Update();
+            CharaList[i].UpdateFrame();
         }
     }
 

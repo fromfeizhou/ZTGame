@@ -149,9 +149,6 @@ public class MapManager
 
     private MapAsset mapAsset;
 
-    
-    private PlayerBase playerBase;
-
     public List<MapBlockData> GetMapBlock(float minRow, float maxRow, float minCol, float maxCol)
     {
         return _mapBlockData.FindAll(a => a.row >= minRow && a.row < maxRow && a.col >= minCol && a.col < maxCol);

@@ -40,5 +40,6 @@ public struct GameTouchEvents
 /// </summary>
 public struct ScenePlayerEvents
 {
-    public static string ADD_PLAYER = "GameSceneEvent_AddPlayer";       //添加玩家
+    public static readonly string ADD_PLAYER = "ScenePlayerEvents_AddPlayer";       //添加玩家
+    public static readonly string ADD_COMMAND = "ScenePlayerEvents_AddCommand";     //命令刷新
 }

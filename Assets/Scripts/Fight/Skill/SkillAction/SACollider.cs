@@ -13,7 +13,7 @@ public class SACollider : SkillActionBase
 
     protected ColliderData _collider = null;    //碰撞信息
     private SkillDefine.ColliderTarget _colliderTarget = SkillDefine.ColliderTarget.SELF;     //碰撞对象
-    private List<PlayerBase> _targetList = null;
+    private List<PlayerBattleInfo> _targetList = null;
     private Dictionary<int, int> _colliderDic = null; //已碰撞队列
 
     private GameObject _colliderView;
@@ -79,18 +79,18 @@ public class SACollider : SkillActionBase
             bool isCollider = ZTCollider.CheckCollision(_targetList[i].Collider, _collider.Collider);
             if (isCollider)
             {
-                if (_colliderDic.ContainsKey(_targetList[i].Id))
+                if (_colliderDic.ContainsKey(_targetList[i].BattleId))
                 {
-                    if (Interval > 0 && (curFrame - _colliderDic[_targetList[i].Id]) > Interval)
+                    if (Interval > 0 && (curFrame - _colliderDic[_targetList[i].BattleId]) > Interval)
                     {
                         DoAction(_targetList[i]);
-                        _colliderDic[_targetList[i].Id] = curFrame;
+                        _colliderDic[_targetList[i].BattleId] = curFrame;
                     }
                 }
                 else
                 {
                     DoAction(_targetList[i]);
-                    _colliderDic[_targetList[i].Id] = curFrame;
+                    _colliderDic[_targetList[i].BattleId] = curFrame;
                 }
 
                 if (ColliderDestroy)
@@ -105,14 +105,14 @@ public class SACollider : SkillActionBase
     private void CheckTargetList()
     {
         _colliderDic = new Dictionary<int, int>();
-        _targetList = new List<PlayerBase>();
+        _targetList = new List<PlayerBattleInfo>();
         if (_colliderTarget == SkillDefine.ColliderTarget.SELF)
         {
             _targetList.Add(_skillPlayer);
             return;
         }
 
-        List<PlayerBase> list = ZTSceneManager.GetInstance().PlayerList;
+        List<PlayerBattleInfo> list = ZTSceneManager.GetInstance().CharaList;
         for (int i = 0; i < list.Count; i++)
         {
             switch (_colliderTarget)
@@ -136,7 +136,7 @@ public class SACollider : SkillActionBase
         }
     }
 
-    protected void DoAction(PlayerBase player)
+    protected void DoAction(PlayerBattleInfo player)
     {
         _colliderCount++;
         if (ColliderMax != -1 && _colliderCount >= ColliderMax)
@@ -156,7 +156,11 @@ public class SACollider : SkillActionBase
             for (int i = 0; i < _collider.TargetActions.Count; i++)
             {
                 int actionId = _collider.TargetActions[i];
-                ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
+                //ZTSceneManager.GetInstance().PlayerUseSkill(player.Id, new SkillOpera(actionId, ZTSceneManager.GetInstance().SceneFrame, FightDefine.GetDirVec(_skillPlayer.MoveDir)));
+                Vector3 dir = new Vector3( _collider.Collider.x,0,_collider.Collider.y);
+                dir = (dir - player.MovePos).normalized;
+                SkillCommand command = FightDefine.GetSkillCommand(player.BattleId,dir,player.MovePos);
+                SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND,new Notification(command));
             }
         }
     }

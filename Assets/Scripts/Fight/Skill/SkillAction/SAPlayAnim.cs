@@ -26,7 +26,7 @@ public class SAPlayAnim : SkillActionBase
     {
         if (AnimName != "" && null != _skillPlayer)
         {
-            _skillPlayer.dispatchEvent(PlayerAnimEvents.PLAY, new Notification(AnimName));
+            _skillPlayer.PlayAction(AnimName);
         }
         Complete();
     }

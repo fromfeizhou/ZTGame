@@ -65,35 +65,35 @@ public class OwnerControl : Singleton<OwnerControl>
         float angle = Mathf.Atan2(deltaVec.y, deltaVec.x) * Mathf.Rad2Deg;
         if (angle >= -22.5 && angle < 22.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.RIGHT));
+            SendMoveCommond(MOVE_DIR.RIGHT);
         }
         else if (angle >= 22.5 && angle < 67.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.UP_RIGHT));
+            SendMoveCommond(MOVE_DIR.UP_RIGHT);
         }
         else if (angle >= 67.5 && angle < 112.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.UP));
+            SendMoveCommond(MOVE_DIR.UP);
         }
         else if (angle >= 112.5 && angle < 157.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.UP_LEFT));
+            SendMoveCommond(MOVE_DIR.UP_LEFT);
         }
         else if (angle >= -157.5 && angle < -112.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.DOWN_LEFT));
+            SendMoveCommond(MOVE_DIR.DOWN_LEFT);
         }
         else if (angle >= -112.5 && angle < -67.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.DOWN));
+            SendMoveCommond(MOVE_DIR.DOWN);
         }
         else if (angle >= -67.5 && angle < -22.5)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.DOWN_RIGHT));
+            SendMoveCommond(MOVE_DIR.DOWN_RIGHT);
         }
         else
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.LEFT));
+            SendMoveCommond(MOVE_DIR.LEFT);
         }
         _sendMoveEvent = true;
     }
@@ -102,10 +102,20 @@ public class OwnerControl : Singleton<OwnerControl>
     {
         if (_sendMoveEvent)
         {
-            TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(FightDefine.PLAYERDIR.NONE));
+            SendMoveCommond(MOVE_DIR.NONE);
             _sendMoveEvent = false;
         }
+    }
 
+    //发送操作指令
+    private void SendMoveCommond(MOVE_DIR dir)
+    {
+        int battleId = ZTSceneManager.GetInstance().MyPlayer.BattleId;
+        if (battleId > 0)
+        {
+            MoveCommand command = FightDefine.GetMoveCommand(battleId, dir);
+            SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND, new Notification(command));
+        }
         
     }
   
@@ -113,52 +123,48 @@ public class OwnerControl : Singleton<OwnerControl>
     {
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.D))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP_RIGHT);
+            SendMoveCommond(MOVE_DIR.UP_RIGHT);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP_LEFT);
+            SendMoveCommond(MOVE_DIR.UP_LEFT);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.A))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN_LEFT);
+            SendMoveCommond(MOVE_DIR.DOWN_LEFT);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.D))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN_RIGHT);
+            SendMoveCommond(MOVE_DIR.DOWN_RIGHT);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.W))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.UP);
+            SendMoveCommond(MOVE_DIR.UP);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.DOWN);
+            SendMoveCommond(MOVE_DIR.DOWN);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.LEFT);
+            SendMoveCommond(MOVE_DIR.LEFT);
+            _sendMove = true;
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.RIGHT);
+            SendMoveCommond(MOVE_DIR.RIGHT);
+            _sendMove = true;
         }
         else if (_sendMove)
         {
-            DispatchDirEvent(FightDefine.PLAYERDIR.NONE);
-        }
-    }
-
-    private void DispatchDirEvent(FightDefine.PLAYERDIR moveDir)
-    {
-        if (moveDir == FightDefine.PLAYERDIR.NONE)
-        {
+            SendMoveCommond(MOVE_DIR.NONE);
             _sendMove = false;
         }
-        else
-        {
-            _sendMove = true;
-        }
-        TouchEvent.GetInstance().dispatchEvent(GameTouchEvents.JOY_MOVE, new Notification(moveDir));
     }
 }

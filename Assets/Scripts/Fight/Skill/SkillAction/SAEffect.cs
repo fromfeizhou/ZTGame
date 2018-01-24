@@ -25,7 +25,7 @@ public class SAEffect : SkillActionBase
     {
         if (EffectData.Id != "" && null != _skillPlayer)
         {
-            _skillPlayer.dispatchEvent(PlayerAnimEvents.ADD_EFFECT, new Notification(EffectData.Id));
+            _skillPlayer.UpdateEffect(EffectData);
         }
         Complete();
     }

@@ -6,12 +6,12 @@ using UnityEngine;
 /// </summary>
 public class SkillActionParser
 {
-    public PlayerBase SkillPlayer;     //使用技能者
+    public PlayerBattleInfo SkillPlayer;     //使用技能者
     public SkillOpera Operate;      //操作
     public bool IsComplete = false;
     private Dictionary<int, List<SkillActionBase>> _skillActionDic;     //技能action列表
 
-    public SkillActionParser(PlayerBase playerBase, SkillOpera opera)
+    public SkillActionParser(PlayerBattleInfo playerBase, SkillOpera opera)
     {
         SkillPlayer = playerBase;
         Operate = opera;
@@ -81,8 +81,8 @@ public class SkillActionParser
     private CollBase GetOperaColliderInfo(SkillAssetInfo skillInfo)
     {
         CollBase collider = null;
-        float startX = SkillPlayer.PlayerPos.x + skillInfo.csX;
-        float startZ = SkillPlayer.PlayerPos.z + skillInfo.csZ;
+        float startX = SkillPlayer.MovePos.x + skillInfo.csX;
+        float startZ = SkillPlayer.MovePos.z + skillInfo.csZ;
         float angle = skillInfo.csA;
         if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
         {

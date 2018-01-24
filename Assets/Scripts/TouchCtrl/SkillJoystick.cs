@@ -31,7 +31,7 @@ public class SkillJoystick : JoystickBase
 
     void OnJoystickDownEvent(Vector2 deltaVec)
     {
-        if (ZTSceneManager.GetInstance().MyPlayer.PlayerState == PLAYERSTATE.NONE || ZTSceneManager.GetInstance().MyPlayer.PlayerState == PLAYERSTATE.MOVE)
+        if (ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.NONE || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.MOVE)
         {
             _skillDownState = true;
         }
@@ -44,10 +44,8 @@ public class SkillJoystick : JoystickBase
             return;
         }
         _skillDownState = false;
-        //记录操作
-        int frame = ZTSceneManager.GetInstance().SceneFrame;
 
-        Vector3 myPos = ZTSceneManager.GetInstance().MyPlayer.PlayerPos;
+        Vector3 myPos = ZTSceneManager.GetInstance().MyPlayer.MovePos;
         int distance = 10;
 
         //---------------test------------------------//
@@ -56,7 +54,9 @@ public class SkillJoystick : JoystickBase
 
         Vector3 targetPos = new Vector3(myPos.x + distance * deltaVec.x, 0, myPos.z + distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
-        ZTSceneManager.GetInstance().MyPlayer.dispatchEvent(PlayerAnimEvents.CHANGE_ROTATE, new Notification(dir));
-        ZTSceneManager.GetInstance().PlayerUseSkill(1, new SkillOpera(SkillId, frame, dir, targetPos));
+        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,dir,targetPos);
+        SceneEvent.GetInstance().dispatchEvent(ScenePlayerEvents.ADD_COMMAND, new Notification(command));
+        //ZTSceneManager.GetInstance().MyPlayer.dispatchEvent(PlayerAnimEvents.CHANGE_ROTATE, new Notification(dir));
+        //ZTSceneManager.GetInstance().PlayerUseSkill(1, new SkillOpera(SkillId, frame, dir, targetPos));
     }
 }
