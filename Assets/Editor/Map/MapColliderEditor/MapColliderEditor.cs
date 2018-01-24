@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -7,64 +6,182 @@ using UnityEngine;
 
 public class MapColliderEditor : EditorWindow
 {
-    private Camera _cameraEditorPort;
-    private Camera _cameraMain;
-    private Camera _cameraEditor;
     [MenuItem("Window/MyWindow")]//在unity菜单Window下有MyWindow选项
     private static void MyWindow()
     {
         MapColliderEditor myWindow = GetWindowWithRect<MapColliderEditor>(new Rect(0,0,1920,800),false,"地图热区编辑器");
-        myWindow.Init();
         myWindow.Show();//展示
     }
+    private Vector2 MapViewSize = new Vector2(640, 640);
 
-    private void Init()
+    private Camera _cameraMain;
+    private Camera _cameraPort;
+    private Camera _cameraEdit;
+
+    private Vector2 _curSelectGridPos_Main;
+    private Vector2 _curSelectGridPos_Port;
+    private Vector2 _curSelectGridPos_Edit;
+
+    private Color _curSelectGridColor_Main
     {
-        if (_cameraEditorPort == null)
+        get { return new Color(1, 0, 0, 0.2f); }
+    }
+    private Color _curSelectGridColor_Port
+    {
+        get { return new Color(1, 0, 0, 0.2f); }
+    }
+    private Color _curSelectGridColor_Edit
+    {
+        get { return MapDefine.MapBlockTypeColor[(int)MapBlockType]; }
+    }
+
+    private Vector3 _cameraPos_Port;
+    private Vector3 _cameraPos_Edit;
+
+    private float _cameraGridPort_Size
+    {
+        get { return MapDefine.MAPITEMTOTALSIZE / (MapViewSize.x / MapDefine.GridSize_Main); }
+    }
+    private float _cameraGridEdit_Size
+    {
+        get { return _cameraGridPort_Size / (MapViewSize.x / MapDefine.GridSize_Port); }
+    }
+
+    private int _gridCnt_Main
+    {
+        get { return (int)(MapViewSize.x / MapDefine.GridSize_Main); }
+    }
+    private int _gridCnt_Port
+    {
+        get { return (int)(MapViewSize.x / MapDefine.GridSize_Port); }
+    }
+    private int _gridCnt_Edit
+    {
+        get { return (int)(MapViewSize.x / MapDefine.GridSize_Edit); }
+    }
+
+    private List<MapBlockData> _mapBlockData;
+    private eMapBlockType MapBlockType = eMapBlockType.None;
+
+    void OnEnable()
+    {
+        if (_cameraPort == null)
         {
-            _cameraEditorPort = GameObject.Find("CameraEditorPort").GetComponent<Camera>();
-            _cameraEditorPort.targetTexture = new RenderTexture(4096, 4096, 0);
+            _cameraPort = GameObject.Find("CameraPort").GetComponent<Camera>();
+            _cameraPort.targetTexture = new RenderTexture(4096, 4096, 0);
         }
         if (_cameraMain == null)
         {
-            _cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>(); 
+            _cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>();
             _cameraMain.targetTexture = new RenderTexture(4096, 4096, 0);
         }
-        if (_cameraEditor == null)
+        if (_cameraEdit == null)
         {
-            _cameraEditor = GameObject.Find("CameraEditor").GetComponent<Camera>();
-            _cameraEditor.targetTexture = new RenderTexture(4096, 4096, 0);
+            _cameraEdit = GameObject.Find("CameraEdit").GetComponent<Camera>();
+            _cameraEdit.targetTexture = new RenderTexture(4096, 4096, 0);
         }
 
-        InitMapData();
-    }
-
-    private const float MaxScale = 640;
-    private const float MinScale = 1.0f;
-
-    private float _viewPortPosX = 0.0f;
-    private float _viewPortPosY = 0.0f;
-
-    private float _progress;
-
-    private void InitMapData()
-    {
-        if (File.Exists(MapDefine.MapDataSavePath))
+        if (_mapBlockData == null || _mapBlockData.Count == 0)
         {
-            _mapBlockData = new List<MapBlockData>();
-            string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
-            for (int i = 0; i < contents.Length; i++)
+            if (File.Exists(MapDefine.MapDataSavePath))
             {
-                if (!string.IsNullOrEmpty(contents[i]))
+                _mapBlockData = new List<MapBlockData>();
+                string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
+                for (int i = 0; i < contents.Length; i++)
                 {
-                    _mapBlockData.Add(MapBlockData.Parse(contents[i]));
+                    if (!string.IsNullOrEmpty(contents[i]))
+                    {
+                        _mapBlockData.Add(MapBlockData.Parse(contents[i]));
+                    }
                 }
             }
+        }
 
+    }
+    void OnGUI()
+    {
+        UserInput();
+        MenuInput();
+        DrawMap();
+        UpdateCameraPos();
+        DrawData();
+        Repaint();
+    }
+
+    void UserInput()
+    {
+        Event e = Event.current;
+        /*
+        if (e.isKey)
+        {
+            if (e.keyCode >= KeyCode.Alpha1 && (int)e.keyCode < (int)KeyCode.Alpha1 + (int)eMapBlockType.Count)
+            {
+                eMapBlockType tmpMapBlockType = (eMapBlockType)(e.keyCode - KeyCode.Alpha1);
+                if (MapBlockType != tmpMapBlockType)
+                    MapBlockType = tmpMapBlockType;
+            }
+
+            if (e.control && _mapBlockData != null)
+            {
+                int index = _mapBlockData.FindIndex(a => a.row == lastRow && a.col == lastCol);
+                if (index >= 0)
+                    _mapBlockData[index].type = MapBlockType;
+                else
+                    _mapBlockData.Add(new MapBlockData { row = lastRow, col = lastCol, type = MapBlockType });
+            }
+        }*/
+
+        if (e.isMouse)
+        {
+            if (e.button == 1)
+            {
+                if (e.mousePosition.x >= 0 && e.mousePosition.y >= 0)
+                {
+                    if (e.mousePosition.x < MapViewSize.x && e.mousePosition.y < MapViewSize.y)
+                    {
+                        _cameraPos_Port.x = (int)(e.mousePosition.x / MapDefine.GridSize_Main);
+                        _cameraPos_Port.y = (int)(e.mousePosition.y / MapDefine.GridSize_Main);
+                        _curSelectGridPos_Main = _cameraPos_Port * MapDefine.GridSize_Main;
+                    }
+                }
+                if (e.mousePosition.x >= MapViewSize.x && e.mousePosition.y >= 0)
+                {
+                    if (e.mousePosition.x < MapViewSize.x * 2 && e.mousePosition.y < MapViewSize.y)
+                    {
+                        _cameraPos_Edit.x = (int)(e.mousePosition.x / MapDefine.GridSize_Port);
+                        _cameraPos_Edit.y = (int)(e.mousePosition.y / MapDefine.GridSize_Port);
+                        _curSelectGridPos_Port = _cameraPos_Edit * MapDefine.GridSize_Port;
+                    }
+                }
+                if (e.mousePosition.x >= MapViewSize.x * 2 && e.mousePosition.y >= 0)
+                {
+                    if (e.mousePosition.x < MapViewSize.x * 3 && e.mousePosition.y < MapViewSize.y)
+                    {
+                        _curSelectGridPos_Edit.x = (int)(e.mousePosition.x / MapDefine.GridSize_Edit) * MapDefine.GridSize_Edit;
+                        _curSelectGridPos_Edit.y = (int)(e.mousePosition.y / MapDefine.GridSize_Edit) * MapDefine.GridSize_Edit;
+                    }
+                }
+            }
         }
     }
 
-    void OnGUI()
+    private void UpdateCameraPos()
+    {
+        Vector3 localPos_Port;
+        localPos_Port.x = _cameraPos_Port.x * _cameraGridPort_Size + _cameraGridPort_Size * 0.5f;
+        localPos_Port.y = 200;
+        localPos_Port.z = (15 - _cameraPos_Port.y) * _cameraGridPort_Size + _cameraGridPort_Size * 0.5f;
+        _cameraPort.transform.localPosition = localPos_Port;
+
+
+        Vector3 localPos_Edit;
+        localPos_Edit.x = (_cameraPos_Edit.x + 0.5f) * _cameraGridEdit_Size - _cameraGridPort_Size * 1.5f;
+        localPos_Edit.y = 200;
+        localPos_Edit.z = (15 - _cameraPos_Edit.y + 0.5f) * _cameraGridEdit_Size - _cameraGridPort_Size * 0.5f;
+        _cameraEdit.transform.localPosition = localPos_Edit + localPos_Port;
+    }
+
+    void MenuInput()
     {
         if (GUI.Button(new Rect(0, 670, 100, 20), "保存"))
         {
@@ -73,12 +190,12 @@ public class MapColliderEditor : EditorWindow
                 string mapData = string.Empty;
                 for (int i = 0; i < _mapBlockData.Count; i++)
                 {
-                    if(_mapBlockData[i].type == eMapBlockType.None)
+                    if (_mapBlockData[i].type == eMapBlockType.None)
                         continue;
 
                     mapData += _mapBlockData[i] + "\n";
                 }
-                if(File.Exists(MapDefine.MapDataSavePath))
+                if (File.Exists(MapDefine.MapDataSavePath))
                     File.Delete(MapDefine.MapDataSavePath);
                 File.WriteAllText(MapDefine.MapDataSavePath, mapData.Trim());
                 AssetDatabase.Refresh();
@@ -89,331 +206,56 @@ public class MapColliderEditor : EditorWindow
             }
         }
 
-        EditorGUI.LabelField(new Rect(0, 690, 400, 20), "curMousePos:" + curMousePos.x + ", " + (15- curMousePos.y));
-        EditorGUI.LabelField(new Rect(0, 710, 400, 20), "curSelectMapBlockPos:" + curSelectMapBlockPos);
-        EditorGUI.LabelField(new Rect(0, 730, 400, 20), "curMousePosGrid:" + curSelectMapBlockPos.x / 40 + ", " + (15- curSelectMapBlockPos.y / 40));
-        EditorGUI.LabelField(new Rect(0, 750, 400, 20), "editorGridPortPos:" + editorGridPortPos);
-
-        EditorGUI.LabelField(new Rect(640, 690, 400, 20), "editorGridPortPo1s:" + (editorGridPortPos.x - 640) / 40 + ", " + (15 - editorGridPortPos.y / 40));
-        EditorGUI.LabelField(new Rect(1280, 690, 400, 20), "editosdfsdfrGridPortPos2:" + (editorGridPortPos2.x - 1280) / 32 + ", " + (19 - editorGridPortPos2.y / 32));
-
-        float dddddx = (editorGridPortPos.x - 640) / 40 + curSelectMapBlockPos.x / 40 * 16;
-        float dddddy = 15 - editorGridPortPos.y / 40 + (15 - curSelectMapBlockPos.y / 40) * 16;
-
-        EditorGUI.LabelField(new Rect(640, 710, 400, 20), "editorGridP2ortPos:" + dddddx + ", " + dddddy);
-
-        lastRow = (int)((editorGridPortPos2.x - 1280) / 32 + dddddx * 20);
-        lastCol = (int)(19 - editorGridPortPos2.y / 32 + dddddy * 20);
-        EditorGUI.LabelField(new Rect(1280, 710, 400, 20), "editorGridPortPos22:" + lastRow + ", " + lastCol);
-        if (keyCodeColor == null)
-            InitKeyCodeColor();
-        EditorGUI.DrawRect(new Rect(1280, 730, 16, 16), keyCodeColor[MapBlockType]);
-        EditorGUI.LabelField(new Rect(1280 + 18, 730, 400, 20), "MapBlockType:" + MapBlockType);
-
-        EditorGUI.LabelField(new Rect(1280, 750, 400, 20), "DSRow:" + DSRow + ",  DSCol:" + DSCol);
-
-
-        //MapBlockType
-        UserInput();
-        DrawMapTex();
-        DrawGridPrev();
-        Repaint();
     }
 
-    private int lastRow;
-    private int lastCol;
-
-    private Vector2 MapViewPos = new Vector2(0,0);
-    private Vector2 MapViewSize = new Vector2(640, 640);
-
-
-    private Vector2 oldPos;
-    private float tmpCameraSize;
-
-    private Vector2 MoveOldPos;
-    private float MoveOldPos_X;
-    private float MoveOldPos_Y;
-
-    private Dictionary<KeyCode, eMapBlockType> keyCodeDic;
-    private Dictionary<eMapBlockType, Color> keyCodeColor;
-
-    private void InitKeyCodeDic()
+    void DrawMap()
     {
-        keyCodeDic = new Dictionary<KeyCode, eMapBlockType>();
-        keyCodeDic[KeyCode.Alpha1] = eMapBlockType.None;
-        keyCodeDic[KeyCode.Alpha2] = eMapBlockType.Collect;
-        keyCodeDic[KeyCode.Alpha3] = eMapBlockType.Hide;
-        keyCodeDic[KeyCode.Alpha4] = eMapBlockType.Event;
+        GUI.DrawTexture(new Rect(Vector2.zero, MapViewSize), _cameraMain.targetTexture);
+        GUI.DrawTexture(new Rect(new Vector2(MapViewSize.x, 0), MapViewSize), _cameraPort.targetTexture);
+        GUI.DrawTexture(new Rect(new Vector2(MapViewSize.x * 2, 0), MapViewSize), _cameraEdit.targetTexture);
 
-    }
+        Handles.DrawSolidRectangleWithOutline(new Rect(_curSelectGridPos_Main, MapDefine.GridSize_Main * Vector2.one), _curSelectGridColor_Main, _curSelectGridColor_Main);
+        Handles.DrawSolidRectangleWithOutline(new Rect(_curSelectGridPos_Port, MapDefine.GridSize_Port * Vector2.one), _curSelectGridColor_Port, _curSelectGridColor_Port);
+        Handles.DrawSolidRectangleWithOutline(new Rect(_curSelectGridPos_Edit, MapDefine.GridSize_Edit * Vector2.one), _curSelectGridColor_Edit, _curSelectGridColor_Edit);
 
-    private void InitKeyCodeColor()
-    {
-        keyCodeColor = new Dictionary<eMapBlockType, Color>();
-        keyCodeColor[eMapBlockType.None] = new Color(1, 0, 0, 0.2f);
-        keyCodeColor[eMapBlockType.Collect] = new Color(0, 1, 0, 0.2f);
-        keyCodeColor[eMapBlockType.Hide] = new Color(1, 1, 1, 0.2f);
-        keyCodeColor[eMapBlockType.Event] = new Color(0, 0, 1, 0.2f);
-
-    }
-
-    private void UserInput()
-    {
-        if(keyCodeDic == null)
-            InitKeyCodeDic();
-        Event e = Event.current;
-        if (e.mousePosition.x < MapViewSize.x && e.mousePosition.y < MapViewSize.y)
+        for (int row = 0; row <= _gridCnt_Main; row++)
         {
-            if (e.alt && e.button == 1)
-            {
-                switch (e.type)
-                {
-                    case EventType.MouseDown:
-                    {
-                        tmpCameraSize = _cameraEditor.orthographicSize;
-                        oldPos = e.mousePosition;
-                        break;
-                    }
-                    case EventType.MouseDrag:
-                    {
-                        Vector2 tmpValue = e.mousePosition - oldPos;
-
-                        if (_editorModel)
-                            tmpValue *= 0.01f;
-                        _cameraEditor.orthographicSize = tmpCameraSize + tmpValue.x + tmpValue.y;
-                        break;
-                    }
-                }
-            }
-
+            Handles.DrawLine(new Vector2(0, MapDefine.GridSize_Main * row), new Vector2(MapDefine.GridSize_Main * _gridCnt_Main, MapDefine.GridSize_Main * row));
+            Handles.DrawLine(new Vector2(MapDefine.GridSize_Main * row, 0), new Vector2(MapDefine.GridSize_Main * row, MapDefine.GridSize_Main * _gridCnt_Main));
         }
-    }
 
-    private float _editorModel_MinSize = 2.0f;
-    private float _editorModel_ManSize = 16.0f;
-
-    private bool _editorModel;
-
-    private eMapBlockType MapBlockType = eMapBlockType.None;
-    private void DrawMapTex()
-    {
-        Vector2 startPos = new Vector2(MapViewSize.x, 0);
-        Vector2 endPos = startPos + MapViewSize;
-
-        Vector2 editorStartPos = new Vector2(startPos.x + MapViewSize.x, 0);
-        Vector2 editorEndPos = editorStartPos + MapViewSize;
-
-        GUI.DrawTexture(new Rect(Vector2.zero, MapViewSize), _cameraMain.targetTexture); 
-        GUI.DrawTexture(new Rect(startPos, MapViewSize ), _cameraEditorPort.targetTexture);
-        GUI.DrawTexture(new Rect(new Vector2(MapViewSize.x * 2.0f,0), MapViewSize), _cameraEditor.targetTexture);
-      
-        Event e = Event.current;
-        if (e.mousePosition.x > startPos.x && e.mousePosition.y > startPos.y)
+        for (int row = 0; row <= _gridCnt_Port; row++)
         {
-            if (e.mousePosition.x < endPos.x && e.mousePosition.y < endPos.y)
-            {
-                if (e.button == 1)
-                    editorPortPos = e.mousePosition;
-            }
+            Handles.DrawLine(new Vector2(MapViewSize.x + 0, MapDefine.GridSize_Port * row), new Vector2(MapViewSize.x + MapDefine.GridSize_Port * _gridCnt_Port, MapDefine.GridSize_Port * row));
+            Handles.DrawLine(new Vector2(MapViewSize.x + MapDefine.GridSize_Port * row, 0), new Vector2(MapViewSize.x + MapDefine.GridSize_Port * row, MapDefine.GridSize_Port * _gridCnt_Port));
         }
 
-        if (e.mousePosition.x > editorStartPos.x && e.mousePosition.y > editorStartPos.y)
+        for (int row = 0; row <= _gridCnt_Edit; row++)
         {
-            if (e.mousePosition.x < editorEndPos.x && e.mousePosition.y < editorEndPos.y)
-            {
-                if (e.button == 1)
-                    editorPos = e.mousePosition;
-
-                if (e.isKey)
-                {
-                    if (keyCodeDic.ContainsKey(e.keyCode))
-                    {
-                        if(MapBlockType != keyCodeDic[e.keyCode])
-                            MapBlockType = keyCodeDic[e.keyCode];
-                    }
-
-                    if (e.control)
-                    {
-                        if (_mapBlockData != null)
-                        {
-                            int index = _mapBlockData.FindIndex(a => a.row == lastRow && a.col == lastCol);
-                            if (index >= 0)
-                                _mapBlockData[index].type = MapBlockType;
-                            else
-                            {
-                                _mapBlockData.Add(new MapBlockData { row = lastRow, col = lastCol, type = MapBlockType });
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        Color color = new Color(1, 0, 0, 0.2f);
-        float editorGridSize = 40f;
-        int row = (int) (editorPortPos.x / editorGridSize);
-        int col = (int) (editorPortPos.y / editorGridSize);
-        editorGridPortPos = new Vector2(row, col) * editorGridSize;
-        Handles.DrawSolidRectangleWithOutline(new Rect(editorGridPortPos, editorGridSize * Vector2.one), color, color);
-        _cameraEditor.transform.localPosition =
-            new Vector3(row * 5 + 2.5f - editorGridSize * 2, 200, (15 - col) * 5 + 2.5f) +
-            _cameraEditorPort.transform.localPosition - _cameraGridSize * 0.5f;
-
-        int eerow = (int)(editorPos.x / editorGridSize2);
-        int eecol = (int)(editorPos.y / editorGridSize2);
-        editorGridPortPos2 = new Vector2(eerow, eecol) * editorGridSize2;
-        Handles.DrawSolidRectangleWithOutline(new Rect(editorGridPortPos2, editorGridSize2 * Vector2.one), keyCodeColor[MapBlockType], keyCodeColor[MapBlockType]);
-    }
-        float editorGridSize2 = 32;
-
-    private Vector2 editorGridPortPos;
-    private Vector2 editorGridPortPos2;
-
-    private Vector2 editorPortPos;
-    private Vector2 editorPos;
-
-    private float GridSize
-    {
-        get { return MapDefine.GridSize;}
-    }
-
-    private Vector2 curMousePos;
-    private Vector2 CameraEditorPos;
-
-    private void DrawGridEditor()
-    {
-        int gridCnt = (int)(640.0f / 32);
-        for (int row = 0; row <= gridCnt; row++)
-        {
-            Handles.DrawLine(new Vector2(1280 + 0, 32 * row), new Vector2(1280 + 32 * gridCnt, 32 * row));//row
-            Handles.DrawLine(new Vector2(1280 + 32 * row, 0), new Vector2(1280 + 32 * row, 32 * gridCnt));//col
-        }
-    }
-    private void DrawGridEditorPort()
-    {
-        int gridCnt = (int)(640.0f / 40);
-        for (int row = 0; row <= gridCnt; row++){
-            Handles.DrawLine(new Vector2(640 + 0, 40 * row), new Vector2(640 + 40 * gridCnt, 40 * row));//row
-            Handles.DrawLine(new Vector2(640 + 40 * row, 0), new Vector2(640 + 40 * row, 40 * gridCnt));//col
+            Handles.DrawLine(new Vector2(MapViewSize.x * 2 + 0, MapDefine.GridSize_Edit * row), new Vector2(MapViewSize.x * 2 + MapDefine.GridSize_Edit * _gridCnt_Edit, MapDefine.GridSize_Edit * row));//row
+            Handles.DrawLine(new Vector2(MapViewSize.x * 2 + MapDefine.GridSize_Edit * row, 0), new Vector2(MapViewSize.x * 2 + MapDefine.GridSize_Edit * row, MapDefine.GridSize_Edit * _gridCnt_Edit));//col
         }
     }
 
-    private void DrawGridPrev()
+    void DrawData()
     {
-        int gridCnt = (int)(640.0f / GridSize);
+        float gridIndex_Main_X = _curSelectGridPos_Main.x / MapDefine.GridSize_Main * _gridCnt_Main;
+        float gridIndex_Main_Y = (_gridCnt_Main - 1 - _curSelectGridPos_Main.y / MapDefine.GridSize_Main) * _gridCnt_Main;
 
-        Handles.color = Color.red;
-        Handles.BeginGUI();
-        for (int row = 0; row <= gridCnt; row++)
-        {
-            Handles.DrawLine(new Vector2(0, GridSize * row), new Vector2(GridSize * gridCnt, GridSize * row));//row
-            Handles.DrawLine(new Vector2(GridSize * row, 0), new Vector2(GridSize * row, GridSize * gridCnt));//col
-        }
+        float gridIndex_Port_X = (_curSelectGridPos_Port.x - MapViewSize.x) / MapDefine.GridSize_Port;
+        float gridIndex_Port_Y = _gridCnt_Port - 1 - _curSelectGridPos_Port.y / MapDefine.GridSize_Port;
 
-        Event e = Event.current;
-        DrawSelectGrid();
-        if (Event.current.mousePosition.x < 640 && Event.current.mousePosition.y < 640)
-        {
-            if (Event.current.mousePosition.x >= 0 && Event.current.mousePosition.y >= 0)
-            {
-                curMousePos.x = (int) (Event.current.mousePosition.x / GridSize);
-                curMousePos.y = (int) (Event.current.mousePosition.y / GridSize);
+        int DSRow = (int)((gridIndex_Port_X + gridIndex_Main_X) * _gridCnt_Edit);
+        int DSCol = (int)((gridIndex_Port_Y + gridIndex_Main_Y) * _gridCnt_Edit);
 
-                Handles.color = Color.blue;
-
-                Vector3[] points =
-                {
-                    curMousePos * GridSize,
-                    curMousePos * GridSize + new Vector2(GridSize, 0),
-                    curMousePos * GridSize + new Vector2(GridSize, GridSize),
-                    curMousePos * GridSize + new Vector2(0, GridSize),
-                    curMousePos * GridSize
-                };
-
-                Handles.DrawAAPolyLine(4.0f, points.Length, points);
-
-                if (e.button == 1)
-                {
-                    CurSelectMapBlockPos = curMousePos * GridSize;
-                }
-            }
-        }
-        DrawGridEditor();
-        DrawGridEditorPort();
-        DrawData();
-        Handles.EndGUI();
-    }
-
-    private int DSRow;
-    private int DSCol;
-    private List<MapBlockData> _mapBlockData;
-    private void DrawData()
-    {
-        DSRow = (int)(((editorGridPortPos.x - 640) / 40 + curSelectMapBlockPos.x / 40 * 16) * 20);
-        DSCol = (int)((15 - editorGridPortPos.y / 40 + (15 - curSelectMapBlockPos.y / 40) * 16) * 20);
-
-        int maxDSRow = DSRow + 20;
-        int maxDSCol = DSCol + 20;
-
-        List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.row >= DSRow && a.row < maxDSRow && a.col >= DSCol && a.col < maxDSCol);
+        List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.row >= DSRow && a.row < DSRow + _gridCnt_Edit && a.col >= DSCol && a.col < DSCol + _gridCnt_Edit);
         for (int i = 0; i < tmpBlockData.Count; i++)
         {
             if (tmpBlockData[i].type != eMapBlockType.None)
             {
-                Vector2 pos = new Vector2(tmpBlockData[i].row%20 * editorGridSize2 + MapViewSize.x * 2, (19- tmpBlockData[i].col % 20) * editorGridSize2);
-                Handles.DrawSolidRectangleWithOutline(new Rect(pos, editorGridSize2 * Vector2.one), keyCodeColor[tmpBlockData[i].type], keyCodeColor[tmpBlockData[i].type]);
+                Vector2 pos = new Vector2(tmpBlockData[i].row % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit-1 - tmpBlockData[i].col % _gridCnt_Edit) * MapDefine.GridSize_Edit);
+                Handles.DrawSolidRectangleWithOutline(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one), MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type], MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type]);
             }
         }
-    }
-
-    private Vector2 curSelectMapBlockPos;
-
-    private Vector2 CurSelectMapBlockPos
-    {
-        get { return curSelectMapBlockPos; }
-        set
-        {
-            if (curSelectMapBlockPos != value)
-                UpdateEditorCameraPos();
-            curSelectMapBlockPos = value;
-        }
-    }
-
-    private Vector3 _cameraGridSize = new Vector3(80,0,80);
-    private void UpdateEditorCameraPos()
-    {
-        float cameraPosX = curMousePos.x * _cameraGridSize.x;
-        float cameraPosY = (15- curMousePos.y) * _cameraGridSize.z;
-        _cameraEditorPort.transform.localPosition = new Vector3(cameraPosX,200, cameraPosY) + _cameraGridSize * 0.5f;
-    }
-
-    private void DrawSelectGrid()
-    {
-        Color color = new Color(1, 0, 0, 0.2f);
-        Handles.DrawSolidRectangleWithOutline(new Rect(CurSelectMapBlockPos, GridSize * Vector2.one), color, color);
-    }
-    
-    
-
-    //将RenderTexture保存成一张png图片  
-    public bool SaveRenderTextureToPNG(RenderTexture rt, string contents, string pngName)
-    {
-        RenderTexture prev = RenderTexture.active;
-        RenderTexture.active = rt;
-        Texture2D png = new Texture2D(rt.width, rt.height, TextureFormat.ARGB32, false);
-        png.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
-        byte[] bytes = png.EncodeToPNG();
-        if (!Directory.Exists(contents))
-            Directory.CreateDirectory(contents);
-        FileStream file = File.Open(contents + "/" + pngName + ".png", FileMode.Create);
-        BinaryWriter writer = new BinaryWriter(file);
-        writer.Write(bytes);
-        file.Close();
-        Texture2D.DestroyImmediate(png);
-        png = null;
-        RenderTexture.active = prev;
-        return true;
-
     }
 }
