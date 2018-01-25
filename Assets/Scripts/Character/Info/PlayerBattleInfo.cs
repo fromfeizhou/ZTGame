@@ -99,10 +99,17 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         if (BattleState == BATTLE_STATE.MOVE && MoveDir != MOVE_DIR.NONE)
         {
             this.ChangeRotate(CharaDefine.GetDirVec(MoveDir));
-            _hitPos = MovePos + CharaDefine.GetDirVec(MoveDir) * Speed;
-            _mapBlockType = MapManager.GetInstance().GetFloorColl(_hitPos);
-            if (_mapBlockType == eMapBlockType.Collect) return;
-            MovePos = _hitPos;
+            List<Vector3> list = CharaDefine.GetDirMoveVecs(MoveDir);
+            for (int i = 0; i < list.Count; i++)
+            {
+                _hitPos = MovePos + list[i] * Speed;
+                _mapBlockType = MapManager.GetInstance().GetFloorColl(_hitPos);
+                if (_mapBlockType != eMapBlockType.Collect)
+                {
+                    MovePos = _hitPos;
+                    return;
+                }
+            }
         }
     }
 
@@ -152,7 +159,6 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         Speed = CharaDefine.PLAYER_SPEED;
         Collider = new CollRadius(0, 0, 0, CharaDefine.PLAYER_RADIUS);
         MovePos = pos;
-        Debug.Log(MovePos);
         ChangeState(BATTLE_STATE.NONE);
     }
 

@@ -67,7 +67,11 @@ public class CharaDefine
 {
     public static float PLAYER_SPEED = 0.1f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
-    
+
+    public static Vector3 VecUpLeft = new Vector3(-1, 0, 1);
+    public static Vector3 VecUpRight = new Vector3(1, 0, 1);
+    public static Vector3 VecDownLeft = new Vector3(-1, 0, -1);
+    public static Vector3 VecDownRight = new Vector3(1, 0, -1);
     //获取方向 单位向量
     public static Vector3 GetDirVec(MOVE_DIR dir)
     {
@@ -82,14 +86,55 @@ public class CharaDefine
             case MOVE_DIR.RIGHT:
                 return Vector3.right;
             case MOVE_DIR.UP_LEFT:
-                return new Vector3(-1, 0, 1);
+                return VecUpLeft;
             case MOVE_DIR.UP_RIGHT:
-                return new Vector3(1, 0, 1);
+                return VecUpRight;
             case MOVE_DIR.DOWN_LEFT:
-                return new Vector3(-1, 0, -1);
+                return VecDownLeft;
             case MOVE_DIR.DOWN_RIGHT:
-                return new Vector3(1, 0, -1);
+                return VecDownRight;
         }
         return Vector3.zero;
+    }
+
+    public static List<Vector3> GetDirMoveVecs(MOVE_DIR dir)
+    {
+        List<Vector3> list = new List<Vector3>();
+        switch (dir)
+        {
+            case MOVE_DIR.UP:
+                list.Add(Vector3.forward);
+                list.Add(Vector3.right);
+                break;
+            case MOVE_DIR.DOWN:
+                list.Add(Vector3.back);
+                list.Add(Vector3.left);
+                break;
+            case MOVE_DIR.LEFT:
+                list.Add(Vector3.left);
+                list.Add(Vector3.forward);
+                break;
+            case MOVE_DIR.RIGHT:
+                list.Add(Vector3.right);
+                list.Add(Vector3.back);
+                break;
+            case MOVE_DIR.UP_LEFT:
+                list.Add(VecUpLeft);
+                list.Add(VecUpRight);
+                break;
+            case MOVE_DIR.UP_RIGHT:
+                list.Add(VecUpRight);
+                list.Add(VecUpLeft);
+                break;
+            case MOVE_DIR.DOWN_LEFT:
+                list.Add(VecDownLeft);
+                list.Add(VecDownRight);
+                break;
+            case MOVE_DIR.DOWN_RIGHT:
+                list.Add(VecDownRight);
+                list.Add(VecDownLeft);
+                break;
+        }
+        return list;
     }
 }
