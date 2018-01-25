@@ -53,7 +53,6 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         switch (state)
         {
             case BATTLE_STATE.NONE:
-                this.PlayAction(PlayerActionName.IDLE);
                 _battleState = state;
                 break;
             case BATTLE_STATE.SKILL:
@@ -105,6 +104,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         if (CanUseSkill())
         {
             //BattleState = BATTLE_STATE.SKILL;
+            SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_SKILL_PARSER, new Notification(command));
         }
     }
 
@@ -115,6 +115,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             MoveDir = command.MoveDir;
             if (MoveDir == MOVE_DIR.NONE)
             {
+                this.PlayAction(PlayerActionName.IDLE);
                 ChangeState(BATTLE_STATE.NONE);
             }
             else

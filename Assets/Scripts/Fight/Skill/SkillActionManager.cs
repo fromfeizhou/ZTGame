@@ -9,7 +9,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
     {
         base.Init();
         _skillParserDic = new Dictionary<int, List<SkillActionParser>>();
-
+        InitEvent();
     }
 
     public override void Destroy()
@@ -27,6 +27,8 @@ public class SkillActionManager : Singleton<SkillActionManager>
             }
             _skillParserDic.Clear();
             _skillParserDic = null;
+
+            RemoveEvent();
         }
         base.Destroy();
     }

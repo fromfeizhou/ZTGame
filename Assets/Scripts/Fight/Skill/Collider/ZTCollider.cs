@@ -6,9 +6,9 @@ public class CollBase : IMove
 {
     public enum PosType
     {
-        SKILL,
-        SKILL_ROTATE,   //附加操作旋转
-        PLAYER,
+        SKILL,          //技能目标点
+        SKILL_ROTATE,   //技能目标点 + 技能旋转旋转
+        PLAYER,         //玩家
     }
     public enum ColType
     {

@@ -33,7 +33,6 @@ public class SkillActionBase
     protected PlayerBattleInfo _skillPlayer = null;
     protected int _curFrame = -1; //当前已执行的帧数
     protected int _frameMax = 0;
-    protected int _dtFrame = 0;//执行间隔
 
     /// <summary>
     /// 行为基类 构造函数
@@ -72,7 +71,6 @@ public class SkillActionBase
         }
         else
         {
-            _dtFrame = curFrame - _curFrame;
             _curFrame = curFrame;
 
             //有最大帧限制
@@ -88,7 +86,6 @@ public class SkillActionBase
             if (_curFrame >= _frameMax)
             {
                 //减去溢出部分 
-                _dtFrame = _dtFrame -  (_curFrame - _frameMax);
                 _curFrame = _frameMax;
                 isDone = true;
             }

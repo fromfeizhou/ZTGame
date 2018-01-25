@@ -65,7 +65,7 @@ public struct PlayerActionName
 
 public class CharaDefine
 {
-    public static float PLAYER_SPEED = 0.1f;      //移动速度
+    public static float PLAYER_SPEED = 0.05f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
 
     public static Vector3 VecUpLeft = new Vector3(-1, 0, 1);

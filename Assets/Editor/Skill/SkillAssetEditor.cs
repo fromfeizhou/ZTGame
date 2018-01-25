@@ -15,10 +15,11 @@ public class SkillAssetEditor : Editor
     private int addTagFrame;
 
     private int index;
-    private SkillDefine.SkillActionType skillActionType;
+
     public void OnEnable()
     {
         skillAsset = (SkillAsset)target;
+        skillAsset.ListSkillGroup.Sort((x, y) => { return x.FrameTime < y.FrameTime ?-1:1; });
         addTagFrame = 0;
         Init();
     }
@@ -116,18 +117,21 @@ public class SkillAssetEditor : Editor
 
                     switch (skillInfo.actionType)
                     {
+                        case SkillDefine.SkillActionType.PLAY_CONTROL:
+                            UpdatePlayerControl(skillInfo);
+                            break;
                         case SkillDefine.SkillActionType.PLAY_ANIM:
                             UpdatePlayerAnimItem(skillInfo);
                             break;
                         case SkillDefine.SkillActionType.PLAY_MOVE:
-                            UpdatePlayerMoveItem(skillInfo);
+                            UpdatePlayerMoveItem(skillInfo.moveInfo);
                             break;
                         case SkillDefine.SkillActionType.COLLIDER:
-                            UpdateColliderItem(skillInfo);
+                            UpdateColliderItem(skillInfo.colliderInfo);
                             break;
                         case SkillDefine.SkillActionType.COLLIDER_MOVE:
-                            UpdateColliderItem(skillInfo);
-                            UpdatePlayerMoveItem(skillInfo);
+                            UpdateColliderItem(skillInfo.colliderInfo);
+                            UpdatePlayerMoveItem(skillInfo.moveInfo);
                             break;
                         case SkillDefine.SkillActionType.ADD_EFFECT:
                             UpdateEffectItem(skillInfo.effectInfo);
@@ -178,6 +182,7 @@ public class SkillAssetEditor : Editor
     private void AddSubTagSure(int index)
     {
         SkillAssetInfo skillInfo = new SkillAssetInfo();
+        skillInfo.colliderInfo = ScriptableObject.CreateInstance<ColliderInfo>();
         skillAsset.ListSkillGroup[index].ListSkillInfo.Add(skillInfo);
         EditorUtility.SetDirty(skillAsset);
     }
@@ -188,6 +193,15 @@ public class SkillAssetEditor : Editor
     private void ClearSubTagByIndex(int i, int j)
     {
         skillAsset.ListSkillGroup[i].ListSkillInfo.RemoveAt(j);
+    }
+    //播放动作
+    private void UpdatePlayerControl(SkillAssetInfo skillInfo)
+    {
+
+        GUILayout.BeginHorizontal();
+        skillInfo.isCtrl = EditorGUILayout.Toggle("IsControl", skillInfo.isCtrl);
+        GUILayout.EndHorizontal();
+
     }
 
     //播放动作
@@ -202,45 +216,45 @@ public class SkillAssetEditor : Editor
     }
 
     //移动位置
-    private void UpdatePlayerMoveItem(SkillAssetInfo skillInfo)
+    private void UpdatePlayerMoveItem(MoveInfo moveInfo)
     {
         GUILayout.BeginVertical();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("MoveType:", GUILayout.Width(100));
-        skillInfo.moveType = (SkillDefine.MoveType)EditorGUILayout.EnumPopup("", skillInfo.moveType);
+        moveInfo.MoveType = (SkillDefine.MoveType)EditorGUILayout.EnumPopup("", moveInfo.MoveType);
         GUILayout.EndHorizontal();
-        switch (skillInfo.moveType)
+        switch (moveInfo.MoveType)
         {
             case SkillDefine.MoveType.LINE:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("FrameCount:", GUILayout.Width(100));
-                skillInfo.frameCount = EditorGUILayout.IntField(skillInfo.frameCount);
+                moveInfo.FrameCount = EditorGUILayout.IntField(moveInfo.FrameCount);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Speed:", GUILayout.Width(100));
-                skillInfo.speedX = EditorGUILayout.FloatField(skillInfo.speedX);
+                moveInfo.SpeedX = EditorGUILayout.FloatField(moveInfo.SpeedX);
                 GUILayout.EndHorizontal();
                 break;
             case SkillDefine.MoveType.LINE_TARGET:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Speed:", GUILayout.Width(100));
-                skillInfo.speedX = EditorGUILayout.FloatField(skillInfo.speedX);
+                moveInfo.SpeedX = EditorGUILayout.FloatField(moveInfo.SpeedX);
                 GUILayout.EndHorizontal();
                 break;
             case SkillDefine.MoveType.ROTATE:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("FrameCount:", GUILayout.Width(100));
-                skillInfo.frameCount = EditorGUILayout.IntField(skillInfo.frameCount);
+                moveInfo.FrameCount = EditorGUILayout.IntField(moveInfo.FrameCount);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("StartAngle:", GUILayout.Width(100));
-                skillInfo.angle = EditorGUILayout.FloatField(skillInfo.angle);
+                moveInfo.Angle = EditorGUILayout.FloatField(moveInfo.Angle);
 
                 GUILayout.Label("Rotate:", GUILayout.Width(100));
-                skillInfo.rotate = EditorGUILayout.FloatField(skillInfo.rotate);
+                moveInfo.Rotate = EditorGUILayout.FloatField(moveInfo.Rotate);
                 GUILayout.EndHorizontal();
                 break;
         }
@@ -248,88 +262,113 @@ public class SkillAssetEditor : Editor
 
     }
 
-    private void UpdateColliderItem(SkillAssetInfo skillInfo)
+    private void UpdateColliderItem(ColliderInfo colliderInfo)
     {
         GUILayout.BeginVertical();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("PosType:", GUILayout.Width(100));
-        skillInfo.collPosType = (CollBase.PosType)EditorGUILayout.EnumPopup("", skillInfo.collPosType);
+        colliderInfo.CollPosType = (CollBase.PosType)EditorGUILayout.EnumPopup("", colliderInfo.CollPosType);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("EffectId:", GUILayout.Width(100));
-        skillInfo.collEffect = EditorGUILayout.TextField("", skillInfo.collEffect);
+        colliderInfo.EffectId = EditorGUILayout.TextField("", colliderInfo.EffectId);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("ColliderType:", GUILayout.Width(100));
-        skillInfo.colliderType = (CollBase.ColType)EditorGUILayout.EnumPopup("", skillInfo.colliderType);
+        colliderInfo.ColliderType = (CollBase.ColType)EditorGUILayout.EnumPopup("", colliderInfo.ColliderType);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("TargetType:", GUILayout.Width(100));
-        skillInfo.colliderTarget = (SkillDefine.ColliderTarget)EditorGUILayout.EnumPopup("", skillInfo.colliderTarget);
+        colliderInfo.ColliderTarget = (SkillDefine.ColliderTarget)EditorGUILayout.EnumPopup("", colliderInfo.ColliderTarget);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("startX:", GUILayout.Width(50));
-        skillInfo.csX = EditorGUILayout.FloatField(skillInfo.csX);
+        colliderInfo.StartX = EditorGUILayout.FloatField(colliderInfo.StartX);
         GUILayout.Label("startY:", GUILayout.Width(50));
-        skillInfo.csZ = EditorGUILayout.FloatField(skillInfo.csZ);
+        colliderInfo.StartZ = EditorGUILayout.FloatField(colliderInfo.StartZ);
         GUILayout.Label("startAngle:", GUILayout.Width(100));
-        skillInfo.csA = EditorGUILayout.FloatField(skillInfo.csA);
+        colliderInfo.StartAngle = EditorGUILayout.FloatField(colliderInfo.StartAngle);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Interval:", GUILayout.Width(100));
-        skillInfo.interval = EditorGUILayout.IntField(skillInfo.interval);
+        colliderInfo.Interval = EditorGUILayout.IntField(colliderInfo.Interval);
         GUILayout.Label("ColliderMax:", GUILayout.Width(100));
-        skillInfo.colliderMax = EditorGUILayout.IntField(skillInfo.colliderMax);
+        colliderInfo.ColliderMax = EditorGUILayout.IntField(colliderInfo.ColliderMax);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("LifeTime:", GUILayout.Width(100));
-        skillInfo.colliderTime = EditorGUILayout.IntField(skillInfo.colliderTime);
+        colliderInfo.LifeTime = EditorGUILayout.IntField(colliderInfo.LifeTime);
         GUILayout.FlexibleSpace();
-        skillInfo.isPenetrate = EditorGUILayout.Toggle("IsPenetrate:", skillInfo.isPenetrate);
+        colliderInfo.IsPenetrate = EditorGUILayout.Toggle("IsPenetrate:", colliderInfo.IsPenetrate);
         GUILayout.EndHorizontal();
 
-        switch (skillInfo.colliderType)
+        switch (colliderInfo.ColliderType)
         {
             case CollBase.ColType.CIRCLE:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Radius:", GUILayout.Width(100));
-                skillInfo.radius = EditorGUILayout.FloatField(skillInfo.radius);
+                colliderInfo.Radius = EditorGUILayout.FloatField(colliderInfo.Radius);
                 GUILayout.EndHorizontal();
                 break;
             case CollBase.ColType.RECTANGLE:
                 GUILayout.BeginHorizontal();
 
                 GUILayout.Label("Width:", GUILayout.Width(100));
-                skillInfo.width = EditorGUILayout.FloatField(skillInfo.width);
+                colliderInfo.Width = EditorGUILayout.FloatField(colliderInfo.Width);
 
                 GUILayout.Label("Heigh:", GUILayout.Width(100));
-                skillInfo.height = EditorGUILayout.FloatField(skillInfo.height);
+                colliderInfo.Height = EditorGUILayout.FloatField(colliderInfo.Height);
                 GUILayout.EndHorizontal();
                 break;
             case CollBase.ColType.SECTOR:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Angle:", GUILayout.Width(40));
-                skillInfo.cAngle = EditorGUILayout.FloatField(skillInfo.cAngle);
+                colliderInfo.Angle = EditorGUILayout.FloatField(colliderInfo.Angle);
 
                 GUILayout.Label("InCircle:", GUILayout.Width(50));
-                skillInfo.inCircle = EditorGUILayout.FloatField(skillInfo.inCircle);
+                colliderInfo.InCircle = EditorGUILayout.FloatField(colliderInfo.InCircle);
 
                 GUILayout.Label("OutCircle:", GUILayout.Width(50));
-                skillInfo.outCircle = EditorGUILayout.FloatField(skillInfo.outCircle);
+                colliderInfo.OutCircle = EditorGUILayout.FloatField(colliderInfo.OutCircle);
                 GUILayout.EndHorizontal();
                 break;
         }
+        //GUILayout.BeginHorizontal();
+        ////GUILayout.Label("ColliderActions:", GUILayout.Width(100));
+        ////colliderInfo.colliderActions = EditorGUILayout.TextField(colliderInfo.colliderActions);
+        ////使用当前类初始化
+        SerializedObject _serializedObject = new SerializedObject(colliderInfo);
+        ////获取当前类中可序列话的属性
+        SerializedProperty assetListProperty = _serializedObject.FindProperty("SelfActions");
+        SerializedProperty assetListProperty2 = _serializedObject.FindProperty("TargetActions");
+        ////更新
+        _serializedObject.Update();
+        ////开始检查是否有修改
+        EditorGUI.BeginChangeCheck();
+
+        ////显示属性
+        ////第二个参数必须为true，否则无法显示子节点即List内容
         GUILayout.BeginHorizontal();
-        GUILayout.Label("ColliderActions:", GUILayout.Width(100));
-        skillInfo.colliderActions = EditorGUILayout.TextField(skillInfo.colliderActions);
+        GUILayout.Label("SelfActions:", GUILayout.Width(100));
+        EditorGUILayout.PropertyField(assetListProperty, true);
         GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("TargetActions:", GUILayout.Width(100));
+        EditorGUILayout.PropertyField(assetListProperty2, true);
+        GUILayout.EndHorizontal();
+        ////结束检查是否有修改
+        if (EditorGUI.EndChangeCheck())
+        {//提交修改
+            _serializedObject.ApplyModifiedProperties();
+        }
+        //GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
     }

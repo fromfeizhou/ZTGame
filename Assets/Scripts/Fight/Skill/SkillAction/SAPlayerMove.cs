@@ -7,6 +7,8 @@ using UnityEngine;
 public class SAPlayerMove : SkillActionBase
 {
     private MoveInfo _moveInfo;
+    private int _moveCount;
+
     public override int ActFrame
     {
         get { return _actFrame; }
@@ -24,19 +26,22 @@ public class SAPlayerMove : SkillActionBase
         _moveInfo = moveInfo;
         ActionType = SkillDefine.SkillActionType.PLAY_ANIM;
         _frameMax = _actFrame + _moveInfo.FrameCount;
+        _moveCount = 0;
     }
 
     //移动
     public override void UpdateActoin(int curFrame = 0)
     {
         base.UpdateActoin(curFrame);
-        if (_dtFrame > 0)
+        if (_moveCount > _moveInfo.FrameCount)
         {
-            bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Command, _dtFrame);
-            if (moveDone)
-            {
-                Complete();
-            }
+            return;
+        }
+        _moveCount++;
+        bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Command);
+        if (moveDone)
+        {
+            Complete();
         }
     }
 

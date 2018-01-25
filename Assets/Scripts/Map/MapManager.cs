@@ -93,9 +93,8 @@ public class MapTilePos
     }
 }
 
-public class MapManager
+public class MapManager:Singleton<MapManager>
 {
-    private static MapManager _instance = null;
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<GameObject> _mapViewList = null;
@@ -108,17 +107,7 @@ public class MapManager
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
 
-    //Single 
-    public static MapManager GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new MapManager();
-            _instance._isInit = false;
-            return _instance;
-        }
-        return _instance;
-    }
+   
     private List<MapBlockData> _mapBlockData;
 
     private void InitMapData()
@@ -236,15 +225,21 @@ public class MapManager
         InitMapView();
     }
 
-    public void Destroy()
+    public override void Destroy()
     {
-        if (null != MapManager._instance)
+        base.Destroy();
+        if (null != _mapViewList)
         {
+            for (int i = 0; i < _mapViewList.Count; i++)
+            {
+                GameObject.Destroy(_mapViewList[i]);
+            }
+            _mapViewList.Clear();
 
             _mapDataDic = null;
             _mapViewList = null;
-            MapManager._instance = null;
         }
+        _mapDataDic = null;
     }
 
 

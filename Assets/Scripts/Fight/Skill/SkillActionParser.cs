@@ -59,18 +59,16 @@ public class SkillActionParser
             case SkillDefine.SkillActionType.PLAY_ANIM:
                 return new SAPlayAnim(skillInfo.animName, this, frame);
             case SkillDefine.SkillActionType.PLAY_MOVE:
-                MoveInfo moveInfo = new MoveInfo(skillInfo.moveType, 0, skillInfo.frameCount, skillInfo.speedX);
+                MoveInfo moveInfo = skillInfo.moveInfo;
                 return new SAPlayerMove(moveInfo, this, frame);
             case SkillDefine.SkillActionType.COLLIDER:
-                CollBase collider = GetOperaColliderInfo(skillInfo);
-                ColliderData data = new ColliderData(collider, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.collEffect, skillInfo.colliderActions);
-                return new SACollider(skillInfo.colliderTarget, data, this, frame);
+                CollBase collider = GetOperaColliderInfo(skillInfo.colliderInfo);
+                return new SACollider(collider,skillInfo.colliderInfo, this, frame);
 
             case SkillDefine.SkillActionType.COLLIDER_MOVE:
-                CollBase colliderMove = GetOperaColliderInfo(skillInfo);
-                moveInfo = new MoveInfo(skillInfo.moveType, 0, skillInfo.frameCount, skillInfo.speedX);
-                data = new ColliderData(colliderMove, skillInfo.interval, skillInfo.colliderTime, skillInfo.colliderMax, skillInfo.isPenetrate, skillInfo.collEffect, skillInfo.colliderActions);
-                return new SAColliderMove(moveInfo, skillInfo.colliderTarget, data, this, frame);
+                CollBase colliderMove = GetOperaColliderInfo(skillInfo.colliderInfo);
+                moveInfo = skillInfo.moveInfo;
+                return new SAColliderMove(moveInfo,colliderMove, skillInfo.colliderInfo, this, frame);
             case SkillDefine.SkillActionType.ADD_EFFECT:
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 
@@ -78,34 +76,33 @@ public class SkillActionParser
         return new SkillActionBase(this, frame);
     }
 
-    private CollBase GetOperaColliderInfo(SkillAssetInfo skillInfo)
+    private CollBase GetOperaColliderInfo(ColliderInfo colliderInfo)
     {
         CollBase collider = null;
-        float startX = SkillPlayer.MovePos.x + skillInfo.csX;
-        float startZ = SkillPlayer.MovePos.z + skillInfo.csZ;
-        float angle = skillInfo.csA;
-        if (skillInfo.collPosType == CollBase.PosType.SKILL || skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
+        float startX = SkillPlayer.MovePos.x + colliderInfo.StartX;
+        float startZ = SkillPlayer.MovePos.z + colliderInfo.StartZ;
+        float angle = colliderInfo.StartAngle;
+        if (colliderInfo.CollPosType == CollBase.PosType.SKILL || colliderInfo.CollPosType == CollBase.PosType.SKILL_ROTATE)
         {
-            startX = Command.TargetPos.x + skillInfo.csX;
-            startZ = Command.TargetPos.z + skillInfo.csZ;
-            angle = skillInfo.csA;
+            startX += Command.TargetPos.x;
+            startZ += Command.TargetPos.z;
             //附加操作旋转
-            if (skillInfo.collPosType == CollBase.PosType.SKILL_ROTATE)
+            if (colliderInfo.CollPosType == CollBase.PosType.SKILL_ROTATE)
             {
                 // 方向盘角度 与场景角度差异修正 修正符号(场景y轴 逆时针旋转 与方向盘顺时针旋转 一致)
-                angle = Mathf.Atan2(-Command.SkillDir.z, Command.SkillDir.x) * Mathf.Rad2Deg + skillInfo.csA;
+                angle = Mathf.Atan2(-Command.SkillDir.z, Command.SkillDir.x) * Mathf.Rad2Deg + colliderInfo.StartAngle;
             }
         }
-        switch (skillInfo.colliderType)
+        switch (colliderInfo.ColliderType)
         {
             case CollBase.ColType.RECTANGLE:
-                collider = new CollRectange(startX, startZ, angle, skillInfo.width, skillInfo.height);
+                collider = new CollRectange(startX, startZ, angle, colliderInfo.Width, colliderInfo.Height);
                 break;
             case CollBase.ColType.SECTOR:
-                collider = new CollSector(startX, startZ, angle, skillInfo.inCircle, skillInfo.outCircle, skillInfo.cAngle);
+                collider = new CollSector(startX, startZ, angle, colliderInfo.InCircle, colliderInfo.OutCircle, colliderInfo.Angle);
                 break;
             default:
-                collider = new CollRadius(startX, startZ, angle, skillInfo.radius);
+                collider = new CollRadius(startX, startZ, angle, colliderInfo.Radius);
                 break;
         }
 
