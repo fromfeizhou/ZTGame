@@ -120,19 +120,23 @@ public class CharaDefine
                 break;
             case MOVE_DIR.UP_LEFT:
                 list.Add(VecUpLeft);
-                list.Add(VecUpRight);
+                list.Add(Vector3.forward);
+                list.Add(Vector3.left);
                 break;
             case MOVE_DIR.UP_RIGHT:
                 list.Add(VecUpRight);
-                list.Add(VecUpLeft);
+                list.Add(Vector3.forward);
+                list.Add(Vector3.right);
                 break;
             case MOVE_DIR.DOWN_LEFT:
                 list.Add(VecDownLeft);
-                list.Add(VecDownRight);
+                list.Add(Vector3.back);
+                list.Add(Vector3.left);
                 break;
             case MOVE_DIR.DOWN_RIGHT:
                 list.Add(VecDownRight);
-                list.Add(VecDownLeft);
+                list.Add(Vector3.back);
+                list.Add(Vector3.right);
                 break;
         }
         return list;
