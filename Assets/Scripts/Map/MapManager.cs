@@ -31,10 +31,10 @@ public class MapDefine
     public static int MaxViewColumnNum = 3; //创建最大列数
 
     public static Color[] MapBlockTypeColor = {
-        new Color(1, 0, 0, 0.2f),
-        new Color(0, 1, 0, 0.2f),
-        new Color(1, 1, 1, 0.2f),
-        new Color(0, 0, 1, 0.2f)
+        new Color(0, 0, 0, 0.0f),
+        new Color(0, 1, 0, 0.4f),
+        new Color(1, 1, 1, 0.4f),
+        new Color(0, 0, 1, 0.4f)
     };
 }
 
@@ -44,8 +44,7 @@ public enum eMapBlockType
     Collect,//碰撞区域
     Hide,   //隐藏区域
     Event,  //事件
-
-    Count,  //总数
+    //Count,  //总数
 }
 
 
@@ -55,8 +54,11 @@ public class MapBlockData
     public int row;
     public int col;
     public eMapBlockType type;
+    public string param;
     public override string ToString()
     {
+        if (type == eMapBlockType.Event)
+            return string.Format("{0}:{1}:{2}:{3}", row, col, (int)type, param);
         return string.Format("{0}:{1}:{2}", row, col, (int)type);
     }
 
@@ -69,6 +71,13 @@ public class MapBlockData
         tmpData.type = (eMapBlockType)System.Enum.Parse(typeof(eMapBlockType), contents[2]);
         return tmpData;
     }
+
+#if UNITY_EDITOR
+    public bool IsInBlock(int rand, int scrRow, int scrCol)
+    {
+        return row >= scrRow && row < scrRow + rand && col >= scrCol && col < scrCol + rand;
+    }
+#endif
 }
 
 //地图 格子位置
@@ -84,8 +93,9 @@ public class MapTilePos
     }
 }
 
-public class MapManager : Singleton<MapManager>
+public class MapManager
 {
+    private static MapManager _instance = null;
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<GameObject> _mapViewList = null;
@@ -98,6 +108,17 @@ public class MapManager : Singleton<MapManager>
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
 
+    //Single 
+    public static MapManager GetInstance()
+    {
+        if (_instance == null)
+        {
+            _instance = new MapManager();
+            _instance._isInit = false;
+            return _instance;
+        }
+        return _instance;
+    }
     private List<MapBlockData> _mapBlockData;
 
     private void InitMapData()
@@ -145,6 +166,7 @@ public class MapManager : Singleton<MapManager>
     }
 
     private MapAsset mapAsset;
+
 
     public List<MapBlockData> GetMapBlock(float minRow, float maxRow, float minCol, float maxCol)
     {
@@ -214,21 +236,16 @@ public class MapManager : Singleton<MapManager>
         InitMapView();
     }
 
-    public override void Destroy()
+    public void Destroy()
     {
-        base.Destroy();
-        if (null != _mapViewList)
+        if (null != MapManager._instance)
         {
-            for (int i = 0; i < _mapViewList.Count; i++)
-            {
-                GameObject.Destroy(_mapViewList[i]);
-            }
-            _mapViewList.Clear();
-            _mapViewList = null;
-        }
-        _mapDataDic = null;
-    }
 
+            _mapDataDic = null;
+            _mapViewList = null;
+            MapManager._instance = null;
+        }
+    }
 
 
     public void SetMapCenterPos(Vector3 pos)
