@@ -57,7 +57,7 @@ public class MapBlockData
     public eMapBlockType type;
     public override string ToString()
     {
-        return string.Format("{0}:{1}:{2}", row, col, (int) type);
+        return string.Format("{0}:{1}:{2}", row, col, (int)type);
     }
 
     public static MapBlockData Parse(string content)
@@ -84,9 +84,8 @@ public class MapTilePos
     }
 }
 
-public class MapManager
+public class MapManager : Singleton<MapManager>
 {
-    private static MapManager _instance = null;
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<GameObject> _mapViewList = null;
@@ -99,17 +98,6 @@ public class MapManager
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
 
-    //Single 
-    public static MapManager GetInstance()
-    {
-        if (_instance == null)
-        {
-            _instance = new MapManager();
-            _instance._isInit = false;
-            return _instance;
-        }
-        return _instance;
-    }
     private List<MapBlockData> _mapBlockData;
 
     private void InitMapData()
@@ -177,7 +165,7 @@ public class MapManager
         return eMapBlockType.None;
     }
 
-    public MapInfo GetMapInfiByPos(int row,int col)
+    public MapInfo GetMapInfiByPos(int row, int col)
     {
         string mapKey = row + "_" + col;
         int index = mapAsset.MapList.FindIndex(a => a.MapKey.Equals(mapKey));
@@ -186,7 +174,7 @@ public class MapManager
         return null;
     }
 
-    public void AddTrrainPrefab(string key,GameObject prefab)
+    public void AddTrrainPrefab(string key, GameObject prefab)
     {
         _mapTerrainPrefabDic.Add(key, prefab);
     }
@@ -200,14 +188,14 @@ public class MapManager
         return null;
     }
 
-    public void SafeGetTrrainPrefab(int row,int col, System.Action<GameObject> callback)
+    public void SafeGetTrrainPrefab(int row, int col, System.Action<GameObject> callback)
     {
         string mapKey = string.Format("{0}_{1}", row, col);
         if (_mapTerrainPrefabDic.ContainsKey(mapKey))
         {
             if (callback != null)
                 callback(_mapTerrainPrefabDic[mapKey]);
-           return;
+            return;
         }
         string assetPath = MapDefine.TERRAIN_PREFAB_PATH + mapKey + ".prefab";
         AssetManager.LoadAsset(assetPath, (obj, str) =>
@@ -226,16 +214,21 @@ public class MapManager
         InitMapView();
     }
 
-    public void Destroy()
+    public override void Destroy()
     {
-        if (null != MapManager._instance)
+        base.Destroy();
+        if (null != _mapViewList)
         {
-
-            _mapDataDic = null;
+            for (int i = 0; i < _mapViewList.Count; i++)
+            {
+                GameObject.Destroy(_mapViewList[i]);
+            }
+            _mapViewList.Clear();
             _mapViewList = null;
-            MapManager._instance = null;
         }
+        _mapDataDic = null;
     }
+
 
 
     public void SetMapCenterPos(Vector3 pos)
@@ -322,7 +315,7 @@ public class MapManager
                     int dataRow = _mapTilePos.Row + k;
                     floor.GetComponent<MapTileView>().setMapData(_mapDataDic[dataRow][dataColumn]);
                     //更新位置
-                    float tx = MapDefine.MapWidth * MapDefine.MaxViewColumnNum ;
+                    float tx = MapDefine.MapWidth * MapDefine.MaxViewColumnNum;
                     floor.transform.Translate(new Vector3(tx, 0, 0));
                 }
                 _mapTilePos.Column = _mapTilePos.Column + 1;
@@ -373,7 +366,7 @@ public class MapManager
                     int dataColumn = _mapTilePos.Column + k;
                     floor.GetComponent<MapTileView>().setMapData(_mapDataDic[dataRow][dataColumn]);
                     //更新位置 
-                    float tz =  MapDefine.MapHeight * MapDefine.MaxViewRowNum ;
+                    float tz = MapDefine.MapHeight * MapDefine.MaxViewRowNum;
                     //x旋转90度 平移改为对y处理（旧版 quad）
                     floor.transform.Translate(new Vector3(0, 0, tz));
                 }

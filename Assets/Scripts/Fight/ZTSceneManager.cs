@@ -28,6 +28,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //操作集合初始化
         CommandDic = new Dictionary<int, List<FightCommandBase>>();
 
+        //地图初始化
+        MapManager.GetInstance().InitMap();
+
         //技能解析管理器初始化
         SkillActionManager.GetInstance().Init();
 
@@ -39,8 +42,39 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         OwnerControl.GetInstance().Destroy();
         //技能解析管理器移除
         SkillActionManager.GetInstance().Destroy();
-
+        //地图移除
+        MapManager.GetInstance().Destroy();
+        ClearChara();
         RemoveEvent();
+    }
+
+    private void ClearChara()
+    {
+        //显示清除
+        if (null != _charaViewDic)
+        {
+            foreach(int key in _charaViewDic.Keys)
+            {
+                GameObject.Destroy(_charaViewDic[key]);
+            }
+            _charaViewDic.Clear();
+            _charaViewDic = null;
+        }
+        if (_charaDic != null)
+        {
+            _charaDic.Clear();
+            _charaDic = null;
+        }
+        //数据清除
+        if (_charaList != null)
+        {
+            for (int i = 0; i < _charaList.Count; i++)
+            {
+                _charaList[i].Destroy();
+            }
+            _charaList.Clear();
+            _charaList = null;
+        }
     }
 
     //刷新对象( 场景相关计算 唯一更新接口)

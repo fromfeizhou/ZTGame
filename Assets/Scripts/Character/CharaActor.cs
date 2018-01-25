@@ -16,8 +16,10 @@ public class CharaActor : MonoBehaviour {
         if (null != _charaInfo && null != info && _charaInfo.AnimaId == info.AnimaId) return false;
         RemoveEvent();
         this.ClearEffect();
-        _anima = this.gameObject.GetComponent<Animation>();
         _charaInfo = info;
+
+        if (null == _charaInfo) return true;
+        
         _effectPool = new Dictionary<string, List<GameObject>>();
         InitEvent();
         return true;

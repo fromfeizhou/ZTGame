@@ -64,7 +64,6 @@ public class GameManager : MonoBehaviour
         GameManager.GameInit = true;
         GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_COM);
 
-        MapManager.GetInstance().InitMap();
         ZTSceneManager.GetInstance().Init();
         //ZTXLuaEnv.GetInstance().Init();
         //测试
@@ -89,7 +88,7 @@ public class GameManager : MonoBehaviour
         PathManager.Destroy();
         ZTSceneManager.GetInstance().Destroy();
         //SpriteFaceCache.Destory();
-        AssetManager.Destroy();
+        //AssetManager.Destroy();
         //ZTXLuaEnv.GetInstance().Destroy();
         GameManager.GameInit = false;
     }

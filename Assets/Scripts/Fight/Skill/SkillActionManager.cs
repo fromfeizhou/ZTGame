@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillActionManager : MonoSingleton<SkillActionManager>
+public class SkillActionManager : Singleton<SkillActionManager>
 {
     private Dictionary<int, List<SkillActionParser>> _skillParserDic;
     public override void Init()
@@ -70,7 +70,7 @@ public class SkillActionManager : MonoSingleton<SkillActionManager>
                     if (list.Count == 0)
                     {
                         PlayerBattleInfo battleInfo = ZTSceneManager.GetInstance().GetCharaById(key);
-                        if (null != battleInfo) battleInfo.BattleState = BATTLE_STATE.NONE;
+                        if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
                     }
                 }
             }

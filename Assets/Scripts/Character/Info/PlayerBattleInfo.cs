@@ -11,29 +11,9 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
 
     //角色状态
     private BATTLE_STATE _battleState;
-    public BATTLE_STATE BattleState {
-        set
-        {
-            if (_battleState == value) return;
-            switch(value)
-            {
-                case BATTLE_STATE.NONE:
-                    this.PlayAction(PlayerActionName.IDLE);
-                    _battleState = value;
-                    break;
-                case BATTLE_STATE.SKILL:
-                    if(CanUseSkill()) _battleState = value;
-                    break;
-                case BATTLE_STATE.MOVE:
-                    if(CanMove()) _battleState = value;
-                    this.PlayAction(PlayerActionName.RUN);
-                    break;
-                default:
-                    _battleState = value;
-                    break;
-            }
+    public BATTLE_STATE BattleState
+    {
 
-        }
         get { return _battleState; }
     }
 
@@ -69,19 +49,25 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     //状态改变
     public void ChangeState(BATTLE_STATE state)
     {
-        _battleState = state;
+        if (_battleState == state) return;
         switch (state)
         {
-            case BATTLE_STATE.MOVE:
-                this.PlayAction(PlayerActionName.RUN);
-                break;
-            case BATTLE_STATE.DIE:
-                this.PlayAction(PlayerActionName.DIE);
-                break;
             case BATTLE_STATE.NONE:
                 this.PlayAction(PlayerActionName.IDLE);
+                _battleState = state;
+                break;
+            case BATTLE_STATE.SKILL:
+                if (CanUseSkill()) _battleState = state;
+                break;
+            case BATTLE_STATE.MOVE:
+                if (CanMove()) _battleState = state;
+                this.PlayAction(PlayerActionName.RUN);
+                break;
+            default:
+                _battleState = state;
                 break;
         }
+
     }
 
     //每帧更新
@@ -129,11 +115,11 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             MoveDir = command.MoveDir;
             if (MoveDir == MOVE_DIR.NONE)
             {
-                BattleState = BATTLE_STATE.NONE;
+                ChangeState(BATTLE_STATE.NONE);
             }
             else
             {
-                BattleState = BATTLE_STATE.MOVE;
+                ChangeState(BATTLE_STATE.MOVE);
             }
         }
     }
@@ -151,7 +137,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         return false;
     }
 
-    public void SetBattleInfo(int battleId = 0, int camp = 0,Vector3 pos = default(Vector3))
+    public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
         BattleId = battleId;
         Camp = camp;
