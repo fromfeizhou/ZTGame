@@ -8,6 +8,7 @@ public class EffectInfo
     public string Id;
     public Vector3 Offset = Vector3.zero;
     public float Scale = 1.0f;
+    public float Rotate = 0;
     public bool IsAdd = true;
     public EffectInfo(string id = "", float scale = 1.0f, bool isAdd = true, Vector3 offset = default(Vector3))
     {
@@ -48,6 +49,7 @@ public class ColliderInfo : ScriptableObject
 
     public List<int> SelfActions = new List<int>();
     public List<int> TargetActions = new List<int>();
+    public List<EffectInfo> EffectInfos = new List<EffectInfo>();
 
 
     // 碰撞框 参数

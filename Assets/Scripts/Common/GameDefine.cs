@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class GameDefine{
-
+    //是否点击在ui上
     public static bool IsPointerOverUIObject(Vector2 screenPosition)
     {
         //判断是否点击的是UI，有效应对安卓没有反应的情况，true为UI  
@@ -13,7 +13,13 @@ public class GameDefine{
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
-    }  
+    }
+
+    //是否已经释放了
+    public static bool IsDestroyed(GameObject gameObject)
+    {
+        return gameObject == null && !ReferenceEquals(gameObject, null);
+    }
     
 }
 /// <summary>

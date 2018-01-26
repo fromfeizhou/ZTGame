@@ -128,7 +128,6 @@ public class SkillAssetEditor : Editor
                             break;
                         case SkillDefine.SkillActionType.COLLIDER:
                             UpdateColliderItem(skillInfo.colliderInfo);
-                            UpdateEffectItem(skillInfo.colliderEffect);
                             break;
                         case SkillDefine.SkillActionType.COLLIDER_MOVE:
                             UpdateColliderItem(skillInfo.colliderInfo);
@@ -349,6 +348,7 @@ public class SkillAssetEditor : Editor
         ////获取当前类中可序列话的属性
         SerializedProperty assetListProperty = _serializedObject.FindProperty("SelfActions");
         SerializedProperty assetListProperty2 = _serializedObject.FindProperty("TargetActions");
+        SerializedProperty assetListProperty3 = _serializedObject.FindProperty("EffectInfos");
         ////更新
         _serializedObject.Update();
         ////开始检查是否有修改
@@ -363,6 +363,11 @@ public class SkillAssetEditor : Editor
         GUILayout.BeginHorizontal();
         GUILayout.Label("TargetActions:", GUILayout.Width(100));
         EditorGUILayout.PropertyField(assetListProperty2, true);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("EffectInfos:", GUILayout.Width(100));
+        EditorGUILayout.PropertyField(assetListProperty3, true);
         GUILayout.EndHorizontal();
         ////结束检查是否有修改
         if (EditorGUI.EndChangeCheck())

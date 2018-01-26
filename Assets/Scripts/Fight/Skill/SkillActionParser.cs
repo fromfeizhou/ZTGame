@@ -56,6 +56,8 @@ public class SkillActionParser
     {
         switch (skillInfo.actionType)
         {
+            case SkillDefine.SkillActionType.PLAY_CONTROL:
+                return new SAPlayerControl(skillInfo.isCtrl, this, frame);
             case SkillDefine.SkillActionType.PLAY_ANIM:
                 return new SAPlayAnim(skillInfo.animName, this, frame);
             case SkillDefine.SkillActionType.PLAY_MOVE:
@@ -63,12 +65,12 @@ public class SkillActionParser
                 return new SAPlayerMove(moveInfo, this, frame);
             case SkillDefine.SkillActionType.COLLIDER:
                 CollBase collider = GetOperaColliderInfo(skillInfo.colliderInfo);
-                return new SACollider(collider, skillInfo.colliderInfo, skillInfo.colliderEffect, this, frame);
+                return new SACollider(collider, skillInfo.colliderInfo, this, frame);
 
             case SkillDefine.SkillActionType.COLLIDER_MOVE:
                 CollBase colliderMove = GetOperaColliderInfo(skillInfo.colliderInfo);
                 moveInfo = skillInfo.moveInfo;
-                return new SAColliderMove(moveInfo, colliderMove, skillInfo.colliderInfo, skillInfo.colliderEffect, this, frame);
+                return new SAColliderMove(moveInfo, colliderMove, skillInfo.colliderInfo, this, frame);
             case SkillDefine.SkillActionType.ADD_EFFECT:
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 

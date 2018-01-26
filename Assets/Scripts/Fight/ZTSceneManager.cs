@@ -24,15 +24,16 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         _charaList = new List<PlayerBattleInfo>();
         SceneFrame = 0;
 
-        OwnerControl.GetInstance().Init();
         //操作集合初始化
         CommandDic = new Dictionary<int, List<FightCommandBase>>();
 
+        OwnerControl.GetInstance().Init();
         //地图初始化
         MapManager.GetInstance().InitMap();
-
         //技能解析管理器初始化
         SkillActionManager.GetInstance().Init();
+        //特效管理器
+        FightEffectManager.GetInstance().Init();
 
         InitEvent();
     }
@@ -40,10 +41,13 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     public override void Destroy()
     {
         OwnerControl.GetInstance().Destroy();
-        //技能解析管理器移除
-        SkillActionManager.GetInstance().Destroy();
         //地图移除
         MapManager.GetInstance().Destroy();
+        //技能解析管理器移除
+        SkillActionManager.GetInstance().Destroy();
+        //特效管理器
+        FightEffectManager.GetInstance().Destroy();
+
         ClearChara();
         RemoveEvent();
     }

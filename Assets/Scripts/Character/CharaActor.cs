@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animation))]
-public class CharaActor : MonoBehaviour {
+public class CharaActor : MonoBehaviour
+{
     //动画数据
     protected CharaActorInfo _charaInfo;
     //动画
     private Animation _anima;
 
-    private Dictionary<string, List<GameObject>> _effectPool;
+    private Dictionary<string, List<int>> _effectKeys;
 
 
-    public virtual bool SetInfo(CharaActorInfo info){
+    public virtual bool SetInfo(CharaActorInfo info)
+    {
         if (null != _charaInfo && null != info && _charaInfo.AnimaId == info.AnimaId) return false;
         RemoveEvent();
         this.ClearEffect();
         _charaInfo = info;
 
         if (null == _charaInfo) return true;
-        
-        _effectPool = new Dictionary<string, List<GameObject>>();
+
+        _effectKeys = new Dictionary<string, List<int>>();
         InitEvent();
         return true;
     }
 
-    public virtual void InitEvent(){
+    public virtual void InitEvent()
+    {
         if (null == _charaInfo) return;
 
         _charaInfo.addEventListener(CharaEvents.PLAY, OnPlayHandler);
@@ -35,7 +38,8 @@ public class CharaActor : MonoBehaviour {
         _charaInfo.addEventListener(CharaEvents.CHANGE_ANIM, OnChangeAnim);
     }
 
-    public virtual void RemoveEvent(){
+    public virtual void RemoveEvent()
+    {
         if (null == _charaInfo) return;
 
         _charaInfo.removeEventListener(CharaEvents.PLAY, OnPlayHandler);
@@ -62,41 +66,47 @@ public class CharaActor : MonoBehaviour {
     private void OnUpdateEffect(Notification data)
     {
         EffectInfo info = (EffectInfo)data.param;
+
         if (info.IsAdd)
         {
-            FightEffectLib.GetEffectByName(info.Id, (Object target, string path) =>
+            //特效已经存在(过滤)
+            if (_effectKeys.ContainsKey(info.Id))
             {
-                GameObject go = target as GameObject;
-                if (null != go)
-                {
-                    Transform effect = Instantiate(go).transform;
-                    effect.SetParent(this.gameObject.transform);
-                    effect.transform.localPosition = Vector3.zero;
+                _effectKeys[info.Id].Add(_effectKeys[info.Id][0]);
+                return;
+            }
 
-                    ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
-                    if (null != pds)
-                    {
-                        return;
-                    }
-                    //加入特效队列(非自动消亡)
-                    if (!_effectPool.ContainsKey(info.Id))
-                    {
-                        _effectPool[info.Id] = new List<GameObject>();
-                    }
-                    _effectPool[info.Id].Add(effect.gameObject);
+            int effectKey = FightEffectManager.GetInstance().AddEffectByInfo(info, this.gameObject.transform);
+            if (effectKey > 0)
+            {
+                if (!_effectKeys.ContainsKey(info.Id))
+                {
+                    _effectKeys.Add(info.Id, new List<int>());
                 }
-            });
+
+                _effectKeys[info.Id].Add(effectKey);
+            }
         }
         else
         {
-            if (_effectPool.ContainsKey(info.Id) && _effectPool[info.Id].Count > 0)
+            if (_effectKeys.ContainsKey(info.Id))
             {
-                GameObject go = _effectPool[info.Id][0];
-                Destroy(go);
-                _effectPool[info.Id].RemoveAt(0);
+                //计数-1
+                if (_effectKeys[info.Id].Count > 1)
+                {
+                    _effectKeys[info.Id].RemoveAt(0);
+                }
+                else
+                {
+                    //清理特效
+                    int effectKey = _effectKeys[info.Id][0];
+                    FightEffectManager.GetInstance().RemoveEffectInfo(effectKey);
+                    _effectKeys[info.Id].Clear();
+                    _effectKeys.Remove(info.Id);
+                }
             }
         }
-       
+
     }
 
     //更新角度
@@ -116,7 +126,7 @@ public class CharaActor : MonoBehaviour {
     public virtual void Awake()
     {
         _anima = this.gameObject.GetComponent<Animation>();
-        
+
     }
 
     public virtual void OnDestroy()
@@ -127,19 +137,21 @@ public class CharaActor : MonoBehaviour {
 
     private void ClearEffect()
     {
-        if (null != _effectPool)
+        if (null != _effectKeys)
         {
-            foreach (List<GameObject> val in _effectPool.Values)
+            foreach (List<int> val in _effectKeys.Values)
             {
-                for (int i = val.Count - 1; i >= 0; i--)
+                if (val.Count > 0)
                 {
-                    Destroy(val[i]);
+                    int effectKey = val[0];
+                    FightEffectManager.GetInstance().RemoveEffectInfo(effectKey);
                 }
+                val.Clear();
             }
-            _effectPool.Clear();
-            _effectPool = null;
+            _effectKeys.Clear();
+            _effectKeys = null;
         }
-       
+
     }
     #endregion
 }

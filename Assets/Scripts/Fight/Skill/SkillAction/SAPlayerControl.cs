@@ -25,12 +25,14 @@ public class SAPlayerControl : SkillActionBase {
         if (IsControl)
         {
             _skillPlayer.ChangeState(BATTLE_STATE.SKILL);
+            Debug.Log("SAPlayerControl-1");
         }
         else
         {
             if (_skillPlayer.BattleState == BATTLE_STATE.SKILL)
             {
                 _skillPlayer.ChangeState(BATTLE_STATE.NONE);
+                Debug.Log("SAPlayerControl-2");
             }
         }
         Complete();

@@ -8,7 +8,6 @@ public class SACollider : SkillActionBase
 {
     protected ColliderInfo _colliderInfo = null;    //碰撞信息
     protected CollBase _collider = null;    //碰撞结构
-    protected EffectInfo _effectInfo = null;    //碰撞特效
 
     public bool ColliderDestroy = false;    //碰撞消失
     private int _colliderCount = 0; //碰撞次数
@@ -16,8 +15,9 @@ public class SACollider : SkillActionBase
     private List<PlayerBattleInfo> _targetList = null;
     private Dictionary<int, int> _colliderDic = null; //已碰撞队列
 
-    private GameObject _colliderView;
-    private GameObject _colliderEffect;
+    private GameObject _colliderView;     //碰撞显示
+    private GameObject _colliderEffect;     //特效容器
+    private List<int> _effectKeys;      //非主动清理特效 记录 销毁时候清理
 
     public override bool IsStart
     {
@@ -43,12 +43,12 @@ public class SACollider : SkillActionBase
         }
     }
 
-    public SACollider(CollBase collider, ColliderInfo collidInfo,EffectInfo effectInfo, SkillActionParser actionParser, int actFrame)
+    public SACollider(CollBase collider, ColliderInfo collidInfo, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
         _collider = collider;
         _colliderInfo = collidInfo;
-        _effectInfo = effectInfo;
+        _effectKeys = new List<int>() ;
 
         _colliderCount = 0;
         ColliderDestroy = false;
@@ -168,6 +168,12 @@ public class SACollider : SkillActionBase
     protected override void Complete()
     {
         base.Complete();
+        if (null != _effectKeys)
+        {
+            FightEffectManager.GetInstance().RemoveEffectInfo(_effectKeys);
+            _effectKeys.Clear();
+            _effectKeys = null;
+        }
         if (null != _colliderEffect)
         {
             GameObject.Destroy(_colliderEffect);
@@ -182,38 +188,37 @@ public class SACollider : SkillActionBase
 #endif
     }
 
+    //特效创建
     private void CreateColliderEffect()
     {
-        if (_effectInfo.Id == "") return;
-
-        FightEffectLib.GetEffectByName(_effectInfo.Id, (Object target, string path) =>
-       {
-           GameObject go = target as GameObject;
-           if (null != go)
-           {
-               Transform effect = GameObject.Instantiate(go).transform;
-               effect.transform.parent = GameObject.Find("PlayerLayer").transform;
-               effect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
-               effect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
-               ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
-               if (null != pds)
-               {
-                   return;
-               }
-               _colliderEffect = effect.gameObject;
-           }
-       });
+        if (null == _colliderEffect)
+        {
+            _colliderEffect = new GameObject();
+            _colliderEffect.transform.parent = GameObject.Find("PlayerLayer").transform;
+            _colliderEffect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
+            _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
+        }
+        if(null !=_colliderInfo.EffectInfos && _colliderInfo.EffectInfos.Count > 0){
+            for (int i = 0; i < _colliderInfo.EffectInfos.Count; i++)
+            {
+                EffectInfo effectInfo = _colliderInfo.EffectInfos[i];
+                int effectKey = FightEffectManager.GetInstance().AddEffectByInfo(effectInfo, _colliderEffect.transform);
+                if (effectKey > 0)
+                {
+                    _effectKeys.Add(effectKey);
+                }
+            }
+        }
     }
-
+    //特效刷新
     private void UpdateColliderEffect()
     {
-        if (_effectInfo.Id == null || _colliderEffect == null) return;
         if (null != _colliderEffect)
         {
             _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
         }
     }
-
+    //碰撞创建 debug
     private void CreateColliderView()
     {
         _colliderView = ZColliderView.CreateColliderView(_collider);
@@ -221,7 +226,7 @@ public class SACollider : SkillActionBase
         _colliderView.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
         UpdateColliderView();
     }
-
+    //碰撞刷新 debug
     private void UpdateColliderView()
     {
         if (null != _colliderView)
