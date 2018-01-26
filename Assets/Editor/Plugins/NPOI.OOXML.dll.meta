@@ -1,5 +1,7 @@
 fileFormatVersion: 2
-guid: a0a90eb6f33f648fbbadd1d35297e42b
+guid: d8b6394b702ddf14da7b30f809dcf427
+timeCreated: 1516955906
+licenseType: Free
 PluginImporter:
   serializedVersion: 2
   iconMap: {}
@@ -11,13 +13,13 @@ PluginImporter:
       first:
         Any: 
       second:
-        enabled: 1
+        enabled: 0
         settings: {}
     data:
       first:
         Editor: Editor
       second:
-        enabled: 0
+        enabled: 1
         settings:
           DefaultValueInitialized: true
     data:

@@ -1,48 +1,61 @@
-﻿
-using System.Data;
+﻿using System.Collections.Generic;
 using System.IO;
-using Excel;
+using NPOI.SS.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.XSSF.UserModel;
 using UnityEditor;
 using UnityEngine;
-
 
 public class ExcelParse
 {
     [MenuItem("MyTool/ConfigParse")]
     private static void ConfigParse()
     {
+        IWorkbook workbook = null;  
+        List<string> tmpDataList = new List<string>();
         string[] excelFiles = Directory.GetFiles(ConfigConst.ExcelResPath,"*.xlsx");
-
-        ConfigAsset configAsset = new ConfigAsset();
+        ConfigAsset configAsset = ScriptableObject.CreateInstance<ConfigAsset>();
         
         for (int i = 0; i < excelFiles.Length; i++)
         {
-            FileStream stream = File.Open(excelFiles[i], FileMode.Open, FileAccess.Read);
-            IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-
-            DataSet result = excelReader.AsDataSet();
-
-
-            configAsset.Name = Path.GetFileNameWithoutExtension(excelFiles[i]);
-            configAsset.MaxRow = result.Tables[0].Rows.Count;
-            configAsset.MaxCol = result.Tables[0].Columns.Count;
-            configAsset.Datas = new string[configAsset.MaxRow * configAsset.MaxCol];
-
-            for (int row = 0; row < configAsset.MaxRow; row++)
+            string fileName = excelFiles[i];
+            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            if (fileName.IndexOf(".xlsx") > 0) // 2007版本  
             {
-                for (int col = 0; col < configAsset.MaxCol; col++)
+                workbook = new XSSFWorkbook(fileStream);  //xlsx数据读入workbook  
+            }
+            else if (fileName.IndexOf(".xls") > 0) // 2003版本  
+            {
+                workbook = new HSSFWorkbook(fileStream);  //xls数据读入workbook  
+            }
+
+            ISheet sheet = workbook.GetSheetAt(0);  //获取第一个工作表  
+            int rowNum = sheet.LastRowNum + 1;
+            IRow iRow;
+            for (int row = 0; row < rowNum; row++)  //对工作表每一行  
+            {
+                iRow = sheet.GetRow(row);   //row读入第i行数据  
+                if (iRow != null)
                 {
-                    configAsset.Datas[row * configAsset.MaxCol + col] = result.Tables[0].Rows[row][col].ToString();
-                    Debug.Log(string.Format("{0} - {1}:{2} =>{3}", row * configAsset.MaxCol + col, row,col, configAsset[row, col]));
+                    for (int col = 0; col < iRow.LastCellNum; col++)  //对工作表每一列  
+                    {
+                        tmpDataList.Add(iRow.GetCell(col).ToString());
+                    }
                 }
             }
+
+            configAsset.Name = sheet.SheetName;
+            configAsset.MaxRow = rowNum;
+            configAsset.MaxCol = tmpDataList.Count / rowNum;
+            configAsset.Datas = tmpDataList.ToArray();
 
             if (File.Exists(ConfigConst.ExcelResPath))
                 File.Delete(ConfigConst.ExcelResPath);
 
             AssetDatabase.CreateAsset(configAsset, ConfigConst.ConfigResPath + configAsset.Name + ".asset");
+            fileStream.Close();
+            workbook.Close();
         }
-
         AssetDatabase.Refresh();
     }
 }
