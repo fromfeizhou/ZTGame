@@ -128,6 +128,7 @@ public class SkillAssetEditor : Editor
                             break;
                         case SkillDefine.SkillActionType.COLLIDER:
                             UpdateColliderItem(skillInfo.colliderInfo);
+                            UpdateEffectItem(skillInfo.colliderEffect);
                             break;
                         case SkillDefine.SkillActionType.COLLIDER_MOVE:
                             UpdateColliderItem(skillInfo.colliderInfo);
@@ -271,10 +272,10 @@ public class SkillAssetEditor : Editor
         colliderInfo.CollPosType = (CollBase.PosType)EditorGUILayout.EnumPopup("", colliderInfo.CollPosType);
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("EffectId:", GUILayout.Width(100));
-        colliderInfo.EffectId = EditorGUILayout.TextField("", colliderInfo.EffectId);
-        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("EffectId:", GUILayout.Width(100));
+        //colliderInfo.EffectId = EditorGUILayout.TextField("", colliderInfo.EffectId);
+        //GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("ColliderType:", GUILayout.Width(100));

@@ -63,12 +63,12 @@ public class SkillActionParser
                 return new SAPlayerMove(moveInfo, this, frame);
             case SkillDefine.SkillActionType.COLLIDER:
                 CollBase collider = GetOperaColliderInfo(skillInfo.colliderInfo);
-                return new SACollider(collider,skillInfo.colliderInfo, this, frame);
+                return new SACollider(collider, skillInfo.colliderInfo, skillInfo.colliderEffect, this, frame);
 
             case SkillDefine.SkillActionType.COLLIDER_MOVE:
                 CollBase colliderMove = GetOperaColliderInfo(skillInfo.colliderInfo);
                 moveInfo = skillInfo.moveInfo;
-                return new SAColliderMove(moveInfo,colliderMove, skillInfo.colliderInfo, this, frame);
+                return new SAColliderMove(moveInfo, colliderMove, skillInfo.colliderInfo, skillInfo.colliderEffect, this, frame);
             case SkillDefine.SkillActionType.ADD_EFFECT:
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 

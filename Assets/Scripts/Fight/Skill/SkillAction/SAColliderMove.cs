@@ -9,8 +9,8 @@ public class SAColliderMove : SACollider
     private MoveInfo _moveInfo;
     private int _moveCount;
     
-    public SAColliderMove(MoveInfo moveInfo, CollBase collider, ColliderInfo collidInfo, SkillActionParser actionParser, int actFrame)
-        : base( collider,collidInfo, actionParser,actFrame)
+    public SAColliderMove(MoveInfo moveInfo, CollBase collider, ColliderInfo collidInfo,EffectInfo effectInfo, SkillActionParser actionParser, int actFrame)
+        : base(collider, collidInfo, effectInfo,actionParser, actFrame)
     {
         _moveInfo = moveInfo;
         _moveCount = 0;

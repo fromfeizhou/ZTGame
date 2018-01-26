@@ -46,8 +46,6 @@ public class ColliderInfo : ScriptableObject
     public bool IsPenetrate;    //穿透障碍
     public int ColliderMax; //最大碰撞个数
 
-    public string EffectId;     //特效
-
     public List<int> SelfActions = new List<int>();
     public List<int> TargetActions = new List<int>();
 

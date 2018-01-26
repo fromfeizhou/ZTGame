@@ -8,6 +8,8 @@ public class SACollider : SkillActionBase
 {
     protected ColliderInfo _colliderInfo = null;    //碰撞信息
     protected CollBase _collider = null;    //碰撞结构
+    protected EffectInfo _effectInfo = null;    //碰撞特效
+
     public bool ColliderDestroy = false;    //碰撞消失
     private int _colliderCount = 0; //碰撞次数
 
@@ -41,11 +43,13 @@ public class SACollider : SkillActionBase
         }
     }
 
-    public SACollider(CollBase collider, ColliderInfo collidInfo, SkillActionParser actionParser, int actFrame)
+    public SACollider(CollBase collider, ColliderInfo collidInfo,EffectInfo effectInfo, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
         _collider = collider;
         _colliderInfo = collidInfo;
+        _effectInfo = effectInfo;
+
         _colliderCount = 0;
         ColliderDestroy = false;
 
@@ -180,9 +184,9 @@ public class SACollider : SkillActionBase
 
     private void CreateColliderEffect()
     {
-        if (_colliderInfo.EffectId == null) return;
+        if (_effectInfo.Id == "") return;
 
-        FightEffectLib.GetEffectByName(_colliderInfo.EffectId, (Object target, string path) =>
+        FightEffectLib.GetEffectByName(_effectInfo.Id, (Object target, string path) =>
        {
            GameObject go = target as GameObject;
            if (null != go)
@@ -203,7 +207,7 @@ public class SACollider : SkillActionBase
 
     private void UpdateColliderEffect()
     {
-        if (_colliderInfo.EffectId == null || _colliderEffect == null) return;
+        if (_effectInfo.Id == null || _colliderEffect == null) return;
         if (null != _colliderEffect)
         {
             _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);

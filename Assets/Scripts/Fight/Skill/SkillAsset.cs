@@ -24,6 +24,7 @@ public class SkillAssetInfo
 
     //碰撞 参数
     public ColliderInfo colliderInfo;
+    public EffectInfo colliderEffect = new EffectInfo();
 
 }
 
