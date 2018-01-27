@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ConfigConst
 {
-
 #if UNITY_EDITOR
     public const string ExcelResPath = "GameExcel/";
 #endif
 
-    public const string ConfigResPath = "Assets/ResourcesLib/Config/ExcelConfig/";
+    public const string ConfigResPath = "Assets/ResourcesLib/Config/Excel/";
+
 }
