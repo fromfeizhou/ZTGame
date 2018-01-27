@@ -44,6 +44,7 @@ public class CharaActorInfo : NotificationDelegate, ICharaActor
     public virtual void Destroy()
     {
         this.dispatchEvent(CharaEvents.DESTROY);
+        Debug.Log("CharaActorInfo Destroy");
     }
 
 

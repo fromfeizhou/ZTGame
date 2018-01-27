@@ -12,7 +12,7 @@ public class SACollider : SkillActionBase
     public bool ColliderDestroy = false;    //碰撞消失
     private int _colliderCount = 0; //碰撞次数
 
-    private List<PlayerBattleInfo> _targetList = null;
+    private List<ICharaBattle> _targetList = null;
     private Dictionary<int, int> _colliderDic = null; //已碰撞队列
 
     private GameObject _colliderView;     //碰撞显示
@@ -106,38 +106,42 @@ public class SACollider : SkillActionBase
     private void CheckTargetList()
     {
         _colliderDic = new Dictionary<int, int>();
-        _targetList = new List<PlayerBattleInfo>();
+        _targetList = new List<ICharaBattle>();
         if (_colliderInfo.ColliderTarget == SkillDefine.ColliderTarget.SELF)
         {
-            _targetList.Add(_skillPlayer);
+            _targetList.Add(_skillPlayer as ICharaBattle);
             return;
         }
 
-        List<PlayerBattleInfo> list = ZTSceneManager.GetInstance().GetCharaList();
+        List<CharaActorInfo> list = ZTSceneManager.GetInstance().GetCharaList();
         for (int i = 0; i < list.Count; i++)
         {
-            switch (_colliderInfo.ColliderTarget)
+            ICharaBattle info = list[i] as ICharaBattle;
+            if (null != info)
             {
-                case SkillDefine.ColliderTarget.TEAM:
-                    if (_skillPlayer.Camp == list[i].Camp)
-                    {
-                        _targetList.Add(list[i]);
-                    }
-                    break;
-                case SkillDefine.ColliderTarget.ENEMY:
-                    if (_skillPlayer.Camp != list[i].Camp)
-                    {
-                        _targetList.Add(list[i]);
-                    }
-                    break;
-                case SkillDefine.ColliderTarget.ALL:
-                    _targetList.Add(list[i]);
-                    break;
+                switch (_colliderInfo.ColliderTarget)
+                {
+                    case SkillDefine.ColliderTarget.TEAM:
+                        if (_skillPlayer.Camp == info.Camp)
+                        {
+                            _targetList.Add(info);
+                        }
+                        break;
+                    case SkillDefine.ColliderTarget.ENEMY:
+                        if (_skillPlayer.Camp != info.Camp)
+                        {
+                            _targetList.Add(info);
+                        }
+                        break;
+                    case SkillDefine.ColliderTarget.ALL:
+                        _targetList.Add(info);
+                        break;
+                }
             }
         }
     }
 
-    protected void DoAction(PlayerBattleInfo player)
+    protected void DoAction(ICharaBattle player)
     {
         _colliderCount++;
         if (_colliderInfo.ColliderMax != -1 && _colliderCount >= _colliderInfo.ColliderMax)

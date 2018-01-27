@@ -25,7 +25,11 @@ public class SAEffect : SkillActionBase
     {
         if (EffectData.Id != "" && null != _skillPlayer)
         {
-            _skillPlayer.UpdateEffect(EffectData);
+            ICharaActor chara = _skillPlayer as ICharaActor;
+            if (null != chara)
+            {
+                chara.UpdateEffect(EffectData);
+            }
         }
         Complete();
     }

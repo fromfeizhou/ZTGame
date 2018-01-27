@@ -26,7 +26,11 @@ public class SAPlayAnim : SkillActionBase
     {
         if (AnimName != "" && null != _skillPlayer)
         {
-            _skillPlayer.PlayAction(AnimName);
+            ICharaActor chara = _skillPlayer as ICharaActor;
+            if (null != chara)
+            {
+                chara.PlayAction(AnimName);
+            }
         }
         Complete();
     }

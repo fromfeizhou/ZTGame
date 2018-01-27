@@ -6,12 +6,12 @@ using UnityEngine;
 /// </summary>
 public class SkillActionParser
 {
-    public PlayerBattleInfo SkillPlayer;     //使用技能者
+    public ICharaBattle SkillPlayer;     //使用技能者
     public SkillCommand Command;      //操作
     public bool IsComplete = false;
     private Dictionary<int, List<SkillActionBase>> _skillActionDic;     //技能action列表
 
-    public SkillActionParser(PlayerBattleInfo playerBase, SkillCommand command)
+    public SkillActionParser(ICharaBattle playerBase, SkillCommand command)
     {
         SkillPlayer = playerBase;
         Command = command;

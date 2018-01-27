@@ -30,7 +30,7 @@ public class SkillActionBase
     
 
     protected SkillActionParser _actionParser = null;
-    protected PlayerBattleInfo _skillPlayer = null;
+    protected ICharaBattle _skillPlayer = null;
     protected int _curFrame = -1; //当前已执行的帧数
     protected int _frameMax = 0;
 

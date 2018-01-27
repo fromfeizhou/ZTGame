@@ -75,6 +75,9 @@ public class CharaDefine
     //获取方向 单位向量
     public static Vector3 GetDirVec(MOVE_DIR dir)
     {
+        if (MOVE_DIR.NONE == 0)
+        {
+        }
         switch (dir)
         {
             case MOVE_DIR.UP:

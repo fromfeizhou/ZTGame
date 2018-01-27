@@ -131,6 +131,7 @@ public class CharaActor : MonoBehaviour
 
     public virtual void OnDestroy()
     {
+        Debug.Log("CharaActor OnDestroy");
         this.SetInfo(null);
         this.ClearEffect();
     }

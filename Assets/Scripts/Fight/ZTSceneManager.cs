@@ -5,8 +5,8 @@ using UnityEngine;
 public class ZTSceneManager : Singleton<ZTSceneManager>
 {
 
-    private Dictionary<int,PlayerBattleInfo> _charaDic = null;
-    private List<PlayerBattleInfo> _charaList = null;
+    private Dictionary<int,CharaActorInfo> _charaDic = null;
+    private List<CharaActorInfo> _charaList = null;
     private Dictionary<int, GameObject> _charaViewDic = null;
 
     public PlayerBattleInfo MyPlayer = null;
@@ -19,9 +19,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     //初始化
     public override void Init()
     {
-        _charaDic = new Dictionary<int, PlayerBattleInfo>();
+        _charaDic = new Dictionary<int, CharaActorInfo>();
         _charaViewDic = new Dictionary<int, GameObject>();
-        _charaList = new List<PlayerBattleInfo>();
+        _charaList = new List<CharaActorInfo>();
         SceneFrame = 0;
 
         //操作集合初始化
@@ -74,7 +74,11 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         {
             for (int i = 0; i < _charaList.Count; i++)
             {
-                _charaList[i].Destroy();
+                CharaActorInfo actorInfo = _charaList[i] as CharaActorInfo;
+                if (null != actorInfo)
+                {
+                    actorInfo.Destroy();
+                }
             }
             _charaList.Clear();
             _charaList = null;
@@ -118,7 +122,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         int battleId = command.BattleId;
         if (_charaDic.ContainsKey(battleId))
         {
-            PlayerBattleInfo info = GetCharaById(battleId);
+            ICharaBattle info = GetCharaById(battleId) as ICharaBattle;
             if (null == info) return;
 
             switch (command.CommandType)
@@ -168,7 +172,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //test
         if (!_charaDic.ContainsKey(battleId))
         {
-            PlayerBattleInfo playerInfo = new PlayerBattleInfo(1,CHARA_TYPE.PLAYER);
+            PlayerBattleInfo playerInfo = new PlayerBattleInfo(1, CHARA_TYPE.PLAYER);
             playerInfo.SetFightInfo(100);
             playerInfo.SetPlayerInfo();
             playerInfo.SetBattleInfo(battleId, battleId, new Vector3(_charaList.Count * 10, 0, _charaList.Count * 10));
@@ -180,7 +184,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
         if (null != _playerPrefab)
         {
-            PlayerBattleInfo info = GetCharaById(battleId);
+            PlayerBattleInfo info = GetCharaById(battleId) as PlayerBattleInfo;
 
             if (null == info) return;
 
@@ -224,9 +228,14 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     //移除玩家
     private void RemovePlayerById(int battleId)
     {
-        int index = _charaList.FindIndex(delegate(PlayerBattleInfo player)
+        int index = _charaList.FindIndex(delegate(CharaActorInfo player)
         {
-            return player.BattleId == battleId;
+            ICharaBattle info = player as ICharaBattle;
+            if (null != info)
+            {
+                return info.BattleId == battleId;
+            }
+            return false;
         });
 
         //移除数据对象
@@ -246,13 +255,13 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         }
     }
 
-    public PlayerBattleInfo GetCharaById(int battleId)
+    public CharaActorInfo GetCharaById(int battleId)
     {
         if (_charaDic.ContainsKey(battleId)) return _charaDic[battleId];
         return null;
     }
 
-    public List<PlayerBattleInfo> GetCharaList()
+    public List<CharaActorInfo> GetCharaList()
     {
         return _charaList;
     }
