@@ -77,7 +77,6 @@ public class SkillActionParser
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 
         }
-        Debug.Log(skillInfo.effectInfo.Id);
         return new SkillActionBase(this, frame);
     }
 
