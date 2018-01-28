@@ -4,26 +4,37 @@ using UnityEngine;
 
 public class Buff
 {
-
     private BuffInfo _buffInfo;
     private Transform _layer;
     private int _effectKey;
-    public Buff(Transform layer = null)
+    /// <summary>
+    /// buff 施法者
+    /// buffId
+    /// buff挂钩位置
+    /// </summary>
+    /// <param name="battleId"></param>
+    /// <param name="buffId"></param>
+    /// <param name="layer"></param>
+    public Buff(int userId,int targetId,int buffId,int frame,Transform layer = null)
     {
         _layer = layer;
-    }
-
-    public void SetInfo(BuffInfo buffInfo)
-    {
-        _buffInfo = buffInfo;
+        _buffInfo = new BuffInfo(buffId, frame);
         UpdateBuffEffect();
     }
 
-    public void UpdateBuffEffect()
+    public void Update()
+    {
+        if (null != _buffInfo)
+        {
+            _buffInfo.Update();
+        }
+    }
+
+    private void UpdateBuffEffect()
     {
         if (null == _layer || null == _buffInfo.EffectInfo || _buffInfo.EffectInfo.Id == "")
             return;
-        _effectKey = FightEffectManager.GetInstance().AddEffectByInfo(_buffInfo.EffectInfo,_layer);
+        //_effectKey = FightEffectManager.GetInstance().AddEffectByInfo(_buffInfo.EffectInfo,_layer);
     }
 
     public void Destroy()

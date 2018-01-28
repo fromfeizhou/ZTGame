@@ -10,23 +10,28 @@ public class CharaActorInfo : NotificationDelegate, ICharaActor
     
     public virtual void PlayAction(string actionName)
     {
-        this.dispatchEvent(CharaEvents.PLAY, new Notification(actionName));
+        this.dispatchEvent(CHARA_EVENT.PLAY, new Notification(actionName));
     }
     //更新角度
     public void ChangeRotate(Vector3 dir)
     {
-        this.dispatchEvent(CharaEvents.CHANGE_ROTATE, new Notification(dir));
+        this.dispatchEvent(CHARA_EVENT.CHANGE_ROTATE, new Notification(dir));
     }
     //更新位置
     public void UpdatePos(Vector3 pos)
     {
-        this.dispatchEvent(CharaEvents.UPDATE_POS, new Notification(pos));
+        this.dispatchEvent(CHARA_EVENT.UPDATE_POS, new Notification(pos));
     }
     //更新特效
-    public void UpdateEffect(EffectInfo info)
+    public void AddEffect(EffectInfo info)
     {
-        this.dispatchEvent(CharaEvents.UPDATE_EFFECT, new Notification(info));
+        this.dispatchEvent(CHARA_EVENT.ADD_EFFECT, new Notification(info));
     }
+    public void RemoveEffect(int assetId)
+    {
+        this.dispatchEvent(CHARA_EVENT.REMOVE_EFFECT, new Notification(assetId));
+    }
+
 
     //每帧刷新
     public virtual void UpdateFrame()
@@ -43,7 +48,7 @@ public class CharaActorInfo : NotificationDelegate, ICharaActor
 
     public virtual void Destroy()
     {
-        this.dispatchEvent(CharaEvents.DESTROY);
+        this.dispatchEvent(CHARA_EVENT.DESTROY);
         Debug.Log("CharaActorInfo Destroy");
     }
 

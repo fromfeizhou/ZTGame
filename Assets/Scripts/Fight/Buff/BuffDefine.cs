@@ -8,5 +8,6 @@ public enum BUFF_TYPE
     NORMAL,       //常规
 }
 
+
 public class BuffDefine{
 }

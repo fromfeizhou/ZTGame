@@ -5,17 +5,18 @@ using UnityEngine;
 [System.Serializable]
 public class EffectInfo
 {
+    public int AssetKey = -1;//资源管理id 用于自动清理
     public string Id;
     public Vector3 Offset = Vector3.zero;
     public float Scale = 1.0f;
     public float Rotate = 0;
-    public bool IsAdd = true;
-    public EffectInfo(string id = "", float scale = 1.0f, bool isAdd = true, Vector3 offset = default(Vector3))
+    public int LifeTime = -1;
+    public EffectInfo(string id = "", float scale = 1.0f, int lifeTime = -1, Vector3 offset = default(Vector3))
     {
         Id = id;
         Scale = scale;
         Offset = offset;
-        IsAdd = isAdd;
+        LifeTime = lifeTime;
     }
 
 }
@@ -39,87 +40,67 @@ public class MoveInfo
         Rotate = rotate;
     }
 }
-
-public class ColliderInfo : ScriptableObject
+[System.Serializable]
+public class ColliderInfo
 {
     public int Interval;    //触发间隔
     public int LifeTime;    //存在时间
     public bool IsPenetrate;    //穿透障碍
     public int ColliderMax; //最大碰撞个数
 
-    public List<int> SelfActions = new List<int>();
-    public List<int> TargetActions = new List<int>();
-    public List<EffectInfo> EffectInfos = new List<EffectInfo>();
+    public List<int> SelfActions;
+    public List<int> TargetActions;
+    public List<EffectInfo> EffectInfos;
 
 
     // 碰撞框 参数
-    public SkillDefine.ColliderTarget ColliderTarget = SkillDefine.ColliderTarget.SELF;     //碰撞对象
+    public SkillDefine.ColliderTarget ColliderTarget;     //碰撞对象
 
-    public CollBase.ColType ColliderType = CollBase.ColType.CIRCLE; //碰撞类型
-    public CollBase.PosType CollPosType = CollBase.PosType.SKILL;   //挂扣形式
-    public float StartX = 0;
-    public float StartZ = 0;
-    public float StartAngle = 0;
+    public CollBase.ColType ColliderType; //碰撞类型
+    public CollBase.PosType CollPosType;   //挂扣形式
+    public float StartX;
+    public float StartZ;
+    public float StartAngle;
     //矩形
-    public float Width = 0;
-    public float Height = 0;
+    public float Width;
+    public float Height;
     //扇形
-    public float InCircle = 0;
-    public float OutCircle = 0;
-    public float Angle = 1;
+    public float InCircle;
+    public float OutCircle;
+    public float Angle;
     //圆半径
-    public float Radius = 0;
+    public float Radius;
+
+    public ColliderInfo()
+    {
+        Interval = 0;
+        LifeTime = 10;
+        IsPenetrate = false;
+        ColliderMax = -1;
+
+        SelfActions = new List<int>();
+        TargetActions = new List<int>();
+        EffectInfos = new List<EffectInfo>();
+
+        ColliderTarget = SkillDefine.ColliderTarget.SELF;
+
+        ColliderType = CollBase.ColType.CIRCLE;
+        CollPosType = CollBase.PosType.SKILL;
+
+        StartX = 0;
+        StartZ = 0;
+        StartAngle = 0;
+        //矩形
+        Width = 0;
+        Height = 0;
+        //扇形
+        InCircle = 0;
+        OutCircle = 0;
+        Angle = 1;
+        //圆半径
+        Radius = 0;
+    }
 }
-
-//public class ColliderData
-//{
-//    public CollBase Collider;
-//    public int Interval;    //触发间隔
-//    public int LifeTime;    //存在时间
-//    public bool IsPenetrate;    //穿透障碍
-//    public int ColliderMax; //最大碰撞个数
-//    public string ColliderActions; //碰撞执行
-//    public string EffectId;     //特效
-
-//    public List<int> SelfActoins;
-//    public List<int> TargetActions;
-//    public ColliderData(CollBase collBase, int interval, int lifeTime, int colliderMax, bool isPenetrate, string effectId, string colliderActions)
-//    {
-//        Collider = collBase;
-//        Interval = interval;
-//        LifeTime = lifeTime;
-//        ColliderMax = colliderMax;
-//        IsPenetrate = isPenetrate;
-//        ColliderActions = colliderActions;
-//        EffectId = effectId;
-
-//        if (colliderActions == "")
-//            return;
-
-//        string[] split = colliderActions.Split(',');
-//        for (int i = 0; i < split.Length; i++)
-//        {
-//            int actionId = int.Parse(split[i]);
-//            if (actionId > 0)
-//            {
-//                if (null == TargetActions)
-//                {
-//                    TargetActions = new List<int>();
-//                }
-//                TargetActions.Add(actionId);
-//            }
-//            else
-//            {
-//                if (null == SelfActoins)
-//                {
-//                    SelfActoins = new List<int>();
-//                }
-//                SelfActoins.Add(actionId);
-//            }
-//        }
-//    }
-
-//}
 
 
 public class SkillDefine

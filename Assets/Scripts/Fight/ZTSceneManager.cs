@@ -40,6 +40,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     public override void Destroy()
     {
+        RemoveEvent();
+        ClearChara();
+
         OwnerControl.GetInstance().Destroy();
         //地图移除
         MapManager.GetInstance().Destroy();
@@ -47,9 +50,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         SkillActionManager.GetInstance().Destroy();
         //特效管理器
         FightEffectManager.GetInstance().Destroy();
-
-        ClearChara();
-        RemoveEvent();
+       
     }
 
     private void ClearChara()
@@ -139,14 +140,14 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     private void InitEvent()
     {
-        SceneEvent.GetInstance().addEventListener(SceneEvents.ADD_PLAYER, OnAddPlayer);
-        SceneEvent.GetInstance().addEventListener(SceneEvents.ADD_COMMAND, OnAddCommand);
+        SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_PLAYER, OnAddPlayer);
+        SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_COMMAND, OnAddCommand);
     }
 
     private void RemoveEvent()
     {
-        SceneEvent.GetInstance().removeEventListener(SceneEvents.ADD_PLAYER, OnAddPlayer);
-        SceneEvent.GetInstance().removeEventListener(SceneEvents.ADD_COMMAND, OnAddCommand);
+        SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_PLAYER, OnAddPlayer);
+        SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_COMMAND, OnAddCommand);
     }
 
     private void OnAddCommand(Notification data)

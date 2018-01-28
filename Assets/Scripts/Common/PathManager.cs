@@ -73,7 +73,7 @@ public class PathManager
             pathDic.Add(info.key, info.path);
         }
 
-        GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_PATH);
+        GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_PATH);
     }
 
     //获取地址配置文件 地址

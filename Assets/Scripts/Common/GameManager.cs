@@ -22,14 +22,14 @@ public class GameManager : MonoBehaviour
         _loadFuncList = new List<UnityAction>();
 
         //加载地址文件
-        _stateList.Add(GameLoadStepEvents.LOAD_PATH);
+        _stateList.Add(GAME_LOAD_SETP_EVENT.LOAD_PATH);
         _loadFuncList.Add(PathManager.ParsePath);
         //加载本地化文本
-        _stateList.Add(GameLoadStepEvents.LOAD_WORD);
+        _stateList.Add(GAME_LOAD_SETP_EVENT.LOAD_WORD);
         _loadFuncList.Add(LocalString.ParseWord);
 
         //加载表情资源
-        //_stateList.Add(GameLoadStepEvents.LOAD_FACE_ASSET);
+        //_stateList.Add(GAME_LOAD_SETP_EVENT.LOAD_FACE_ASSET);
         //_loadFuncList.Add(SpriteFaceCache.ParseAsset);
 
         LoadDataIndex();
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GameManager GameStart");
         GameManager.GameInit = true;
-        GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_COM);
+        GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_COM);
 
         ZTSceneManager.GetInstance().Init();
         //ZTXLuaEnv.GetInstance().Init();
@@ -95,8 +95,8 @@ public class GameManager : MonoBehaviour
 
     private void Test()
     {
-        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_PLAYER,new Notification(1,this.gameObject));
-        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_PLAYER, new Notification(2, this.gameObject));
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER,new Notification(1,this.gameObject));
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
     }
 
 }

@@ -25,7 +25,7 @@ public class LocalString
             return;
         }
         TextAsset txt = target as TextAsset;
-        string[] lines = txt.text.Split("\n"[0]);
+        string[] lines = txt.text.Split(";"[0]);
         for (int i = 0; i < lines.Length; i++) {
             string strLine = lines[i];
             if (strLine != "")
@@ -33,7 +33,7 @@ public class LocalString
                 string[] keyValue = strLine.Split(':');
                 if (keyValue.Length >= 2)
                 {
-                    m_localWord[keyValue[0]] = keyValue[1].Replace("\\n", "\n").Replace("\\t", "\t");
+                    m_localWord[keyValue[0]] = keyValue[1].Replace("\n", ";").Replace("\\t", "\t");
                 }
                 else
                 {
@@ -42,7 +42,7 @@ public class LocalString
             }
         }
 
-        GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_WORD);
+        GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_WORD);
     }
     
     /**

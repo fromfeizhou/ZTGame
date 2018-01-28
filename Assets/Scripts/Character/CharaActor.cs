@@ -9,8 +9,8 @@ public class CharaActor : MonoBehaviour
     protected CharaActorInfo _charaInfo;
     //动画
     private Animation _anima;
-
-    private Dictionary<string, List<int>> _effectKeys;
+    //特效资源记录(一般为 技能特殊添加特效)
+    private List<int> _effectAsset;
 
 
     public virtual bool SetInfo(CharaActorInfo info)
@@ -22,7 +22,7 @@ public class CharaActor : MonoBehaviour
 
         if (null == _charaInfo) return true;
 
-        _effectKeys = new Dictionary<string, List<int>>();
+        _effectAsset = new List<int>();
         InitEvent();
         return true;
     }
@@ -31,22 +31,24 @@ public class CharaActor : MonoBehaviour
     {
         if (null == _charaInfo) return;
 
-        _charaInfo.addEventListener(CharaEvents.PLAY, OnPlayHandler);
-        _charaInfo.addEventListener(CharaEvents.UPDATE_POS, OnUpdatePos);
-        _charaInfo.addEventListener(CharaEvents.CHANGE_ROTATE, OnChangeRotation);
-        _charaInfo.addEventListener(CharaEvents.UPDATE_EFFECT, OnUpdateEffect);
-        _charaInfo.addEventListener(CharaEvents.CHANGE_ANIM, OnChangeAnim);
+        _charaInfo.addEventListener(CHARA_EVENT.PLAY, OnPlayHandler);
+        _charaInfo.addEventListener(CHARA_EVENT.UPDATE_POS, OnUpdatePos);
+        _charaInfo.addEventListener(CHARA_EVENT.CHANGE_ROTATE, OnChangeRotation);
+        _charaInfo.addEventListener(CHARA_EVENT.ADD_EFFECT, OnAddEffect);
+        _charaInfo.addEventListener(CHARA_EVENT.REMOVE_EFFECT, OnRemoveEffect);
+        _charaInfo.addEventListener(CHARA_EVENT.CHANGE_ANIM, OnChangeAnim);
     }
 
     public virtual void RemoveEvent()
     {
         if (null == _charaInfo) return;
 
-        _charaInfo.removeEventListener(CharaEvents.PLAY, OnPlayHandler);
-        _charaInfo.removeEventListener(CharaEvents.UPDATE_POS, OnUpdatePos);
-        _charaInfo.removeEventListener(CharaEvents.CHANGE_ROTATE, OnChangeRotation);
-        _charaInfo.removeEventListener(CharaEvents.UPDATE_EFFECT, OnUpdateEffect);
-        _charaInfo.removeEventListener(CharaEvents.CHANGE_ANIM, OnChangeAnim);
+        _charaInfo.removeEventListener(CHARA_EVENT.PLAY, OnPlayHandler);
+        _charaInfo.removeEventListener(CHARA_EVENT.UPDATE_POS, OnUpdatePos);
+        _charaInfo.removeEventListener(CHARA_EVENT.CHANGE_ROTATE, OnChangeRotation);
+        _charaInfo.removeEventListener(CHARA_EVENT.ADD_EFFECT, OnAddEffect);
+        _charaInfo.removeEventListener(CHARA_EVENT.REMOVE_EFFECT, OnRemoveEffect);
+        _charaInfo.removeEventListener(CHARA_EVENT.CHANGE_ANIM, OnChangeAnim);
     }
     //操作回调
     private void OnPlayHandler(Notification data)
@@ -63,50 +65,29 @@ public class CharaActor : MonoBehaviour
     }
 
     //添加移除特效
-    private void OnUpdateEffect(Notification data)
+    private void OnAddEffect(Notification data)
     {
         EffectInfo info = (EffectInfo)data.param;
 
-        if (info.IsAdd)
+        FightEffectManager.GetInstance().AddEffectByInfo(info, this.gameObject.transform);
+        if (info.AssetKey > 0)
         {
-            //特效已经存在(过滤)
-            if (_effectKeys.ContainsKey(info.Id))
-            {
-                _effectKeys[info.Id].Add(_effectKeys[info.Id][0]);
-                return;
-            }
+            _effectAsset.Add(info.AssetKey);
+        }
+    }
 
-            int effectKey = FightEffectManager.GetInstance().AddEffectByInfo(info, this.gameObject.transform);
-            if (effectKey > 0)
+    private void OnRemoveEffect(Notification data)
+    {
+        int assetId = (int)data.param;
+        if (assetId > 0)
+        {
+            int index = _effectAsset.IndexOf(assetId);
+            if (index >= 0)
             {
-                if (!_effectKeys.ContainsKey(info.Id))
-                {
-                    _effectKeys.Add(info.Id, new List<int>());
-                }
-
-                _effectKeys[info.Id].Add(effectKey);
+                _effectAsset.RemoveAt(index);
+                FightEffectManager.GetInstance().RemoveEffectInfo(assetId);
             }
         }
-        else
-        {
-            if (_effectKeys.ContainsKey(info.Id))
-            {
-                //计数-1
-                if (_effectKeys[info.Id].Count > 1)
-                {
-                    _effectKeys[info.Id].RemoveAt(0);
-                }
-                else
-                {
-                    //清理特效
-                    int effectKey = _effectKeys[info.Id][0];
-                    FightEffectManager.GetInstance().RemoveEffectInfo(effectKey);
-                    _effectKeys[info.Id].Clear();
-                    _effectKeys.Remove(info.Id);
-                }
-            }
-        }
-
     }
 
     //更新角度
@@ -138,19 +119,11 @@ public class CharaActor : MonoBehaviour
 
     private void ClearEffect()
     {
-        if (null != _effectKeys)
+        if (null != _effectAsset)
         {
-            foreach (List<int> val in _effectKeys.Values)
-            {
-                if (val.Count > 0)
-                {
-                    int effectKey = val[0];
-                    FightEffectManager.GetInstance().RemoveEffectInfo(effectKey);
-                }
-                val.Clear();
-            }
-            _effectKeys.Clear();
-            _effectKeys = null;
+            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
+            _effectAsset.Clear();
+            _effectAsset = null;
         }
 
     }

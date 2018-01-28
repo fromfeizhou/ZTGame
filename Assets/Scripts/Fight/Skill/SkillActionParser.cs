@@ -20,7 +20,7 @@ public class SkillActionParser
         ParseSkillAction();
     }
 
-    //解析配置
+    //解析配置(技能配置 必需预加载好，立即返回，当前创建帧执行 第一帧)
     private void ParseSkillAction()
     {
         AssetManager.LoadAsset(PathManager.GetResPathByName("SkillAsset", Command.SkillId.ToString() + ".asset"), LoadAssetHandler);
@@ -28,7 +28,9 @@ public class SkillActionParser
 
     private void LoadAssetHandler(Object target, string path)
     {
-        SkillAsset skillAsset = target as SkillAsset;
+        SkillAsset gameObject = target as SkillAsset;
+        if (null == gameObject) return;
+        SkillAsset skillAsset = GameObject.Instantiate(gameObject);
         if (null != skillAsset)
         {
             for (int i = 0; i < skillAsset.ListSkillGroup.Count; i++)
@@ -75,6 +77,7 @@ public class SkillActionParser
                 return new SAEffect(skillInfo.effectInfo, this, frame);
 
         }
+        Debug.Log(skillInfo.effectInfo.Id);
         return new SkillActionBase(this, frame);
     }
 

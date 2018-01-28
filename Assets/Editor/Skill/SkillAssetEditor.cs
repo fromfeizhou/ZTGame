@@ -182,7 +182,6 @@ public class SkillAssetEditor : Editor
     private void AddSubTagSure(int index)
     {
         SkillAssetInfo skillInfo = new SkillAssetInfo();
-        skillInfo.colliderInfo = ScriptableObject.CreateInstance<ColliderInfo>();
         skillAsset.ListSkillGroup[index].ListSkillInfo.Add(skillInfo);
         EditorUtility.SetDirty(skillAsset);
     }
@@ -344,37 +343,58 @@ public class SkillAssetEditor : Editor
         ////GUILayout.Label("ColliderActions:", GUILayout.Width(100));
         ////colliderInfo.colliderActions = EditorGUILayout.TextField(colliderInfo.colliderActions);
         ////使用当前类初始化
-        SerializedObject _serializedObject = new SerializedObject(colliderInfo);
-        ////获取当前类中可序列话的属性
-        SerializedProperty assetListProperty = _serializedObject.FindProperty("SelfActions");
-        SerializedProperty assetListProperty2 = _serializedObject.FindProperty("TargetActions");
-        SerializedProperty assetListProperty3 = _serializedObject.FindProperty("EffectInfos");
-        ////更新
-        _serializedObject.Update();
-        ////开始检查是否有修改
-        EditorGUI.BeginChangeCheck();
+        //SerializedObject _serializedObject = new SerializedObject(colliderInfo);
+        //////获取当前类中可序列话的属性
+        //SerializedProperty assetListProperty = _serializedObject.FindProperty("SelfActions");
+        //SerializedProperty assetListProperty2 = _serializedObject.FindProperty("TargetActions");
+        //SerializedProperty assetListProperty3 = _serializedObject.FindProperty("EffectInfos");
+        //////更新
+        //_serializedObject.Update();
+        //////开始检查是否有修改
+        //EditorGUI.BeginChangeCheck();
 
-        ////显示属性
-        ////第二个参数必须为true，否则无法显示子节点即List内容
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("SelfActions:", GUILayout.Width(100));
-        EditorGUILayout.PropertyField(assetListProperty, true);
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("TargetActions:", GUILayout.Width(100));
-        EditorGUILayout.PropertyField(assetListProperty2, true);
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("EffectInfos:", GUILayout.Width(100));
-        EditorGUILayout.PropertyField(assetListProperty3, true);
-        GUILayout.EndHorizontal();
-        ////结束检查是否有修改
-        if (EditorGUI.EndChangeCheck())
-        {//提交修改
-            _serializedObject.ApplyModifiedProperties();
-        }
+        //////显示属性
+        //////第二个参数必须为true，否则无法显示子节点即List内容
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("SelfActions:", GUILayout.Width(100));
+        //EditorGUILayout.PropertyField(assetListProperty, true);
         //GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("TargetActions:", GUILayout.Width(100));
+        //EditorGUILayout.PropertyField(assetListProperty2, true);
+        //GUILayout.EndHorizontal();
+
+        //GUILayout.BeginHorizontal();
+        //GUILayout.Label("EffectInfos:", GUILayout.Width(100));
+        //EditorGUILayout.PropertyField(assetListProperty3, true);
+        //GUILayout.EndHorizontal();
+        //////结束检查是否有修改
+        //if (EditorGUI.EndChangeCheck())
+        //{//提交修改
+        //    _serializedObject.ApplyModifiedProperties();
+        //}
+        ////GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Add Effect", GUILayout.Width(100), GUILayout.Height(30)))
+        {
+
+            colliderInfo.EffectInfos.Add(new EffectInfo());
+        }
+        
+        for (int i = 0; i < colliderInfo.EffectInfos.Count; i++)
+        {
+            GUILayout.BeginHorizontal("Effect" + i, "window");
+            GUILayout.BeginVertical();
+            UpdateEffectItem(colliderInfo.EffectInfos[i]);
+            if (GUILayout.Button("Clear Effect", GUILayout.Width(100)))
+            {
+                colliderInfo.EffectInfos.RemoveAt(i);
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+           
+        }
+
 
         GUILayout.EndVertical();
     }
@@ -395,6 +415,11 @@ public class SkillAssetEditor : Editor
         effectInfo.Offset.x = EditorGUILayout.FloatField(effectInfo.Offset.x);
         effectInfo.Offset.y = EditorGUILayout.FloatField(effectInfo.Offset.y);
         effectInfo.Offset.z = EditorGUILayout.FloatField(effectInfo.Offset.z);
+        GUILayout.EndHorizontal();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("LifeTime:", GUILayout.Width(100));
+        effectInfo.LifeTime = EditorGUILayout.IntField(effectInfo.LifeTime);
         GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();

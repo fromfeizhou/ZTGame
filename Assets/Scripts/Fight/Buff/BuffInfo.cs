@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuffInfo{
+public class BuffInfo:NotificationDelegate{
 
     public int BuffId;      //buffId
     public BUFF_TYPE BuffType;    //buff类型
@@ -10,8 +10,8 @@ public class BuffInfo{
     
     public int StartTime;          //创建时间
     public int IntervalTime;        //触发间隔
-    public int LifeTime;            //总时间
-    public int CountTime;           //存在时间
+    public int MaxTime;             //总时间
+    public int LifeTime;            //存在时间
 
     public BuffInfo(int buffId,int frame)
     {
@@ -19,23 +19,35 @@ public class BuffInfo{
         BuffType = BUFF_TYPE.NORMAL;
         
         StartTime = frame;
+        LifeTime = frame;
         IntervalTime = 30;
-        LifeTime = frame + 300;
-        CountTime = 0;
+        MaxTime = frame + 300;
     }
 
     //创建
     public virtual void Start()
     {
+
     }
 
     //过程
-    public virtual void Process()
+    public virtual void Update()
     {
+        if (MaxTime == -1) return;
+        LifeTime++;
+        if (LifeTime > MaxTime)
+        {
+            return;
+        }
+
     }
 
     //处理buff 事件
     public virtual void DoActoin()
+    {
+    }
+
+    public virtual void Destroy()
     {
     }
 }

@@ -25,28 +25,29 @@ public class GameDefine{
 /// <summary>
 /// 加载事件
 /// </summary>
-public struct GameLoadStepEvents
+public struct GAME_LOAD_SETP_EVENT
 {
-    public static string LOAD_COM = "GameLoadStepEvents_LoadCom";
-    public static string LOAD_PATH = "GameLoadStepEvents_LoadPath";
-    public static string LOAD_WORD = "GameLoadStepEventsp_LoadWord";
-    public static string LOAD_FACE_ASSET = "GameLoadStepEvents_LoadFaceAsset";
+    public static string LOAD_COM = "GAME_LOAD_SETP_EVENT_LOAD_COM";
+    public static string LOAD_PATH = "GAME_LOAD_SETP_EVENT_LOAD_PATH";
+    public static string LOAD_WORD = "GAME_LOAD_SETP_EVENT_LOAD_WORD";
+    public static string LOAD_FACE_ASSET = "GAME_LOAD_SETP_EVENT_LOAD_FACE_ASSET";
 }
 
 /// <summary>
 /// 控制事件
 /// </summary>
-public struct GameTouchEvents
+public struct GAME_TOUCH_EVENT
 {
-    public static string JOY_MOVE = "GameTouchEvents_JoyMove";       //摇杆移动
+    public static string JOY_MOVE = "GAME_TOUCH_EVENT_JOY_MOVE";       //摇杆移动
 }
 
 /// <summary>
 /// 控制事件
 /// </summary>
-public struct SceneEvents
+public struct SCENE_EVENT
 {
-    public static readonly string ADD_PLAYER = "SceneEvents_AddPlayer";       //添加玩家
-    public static readonly string ADD_COMMAND = "SceneEvents_AddCommand";     //命令刷新
-    public static readonly string ADD_SKILL_PARSER = "SceneEvents_AddSkillParser";  //添加技能解析 
+    public static readonly string ADD_PLAYER = "SCENE_EVENT_ADD_PLAYER";       //添加玩家
+    public static readonly string ADD_COMMAND = "SCENE_EVENT_ADD_COMMAND";     //命令刷新
+    public static readonly string ADD_SKILL_PARSER = "SCENE_EVENT_ADD_SKILL_PARSER";  //添加技能解析 
+    public static readonly string UPDATE_BUFF = "SCENE_EVENT_UPDATE_BUFF";      //buff更新
 }
