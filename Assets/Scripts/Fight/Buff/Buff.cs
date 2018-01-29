@@ -6,7 +6,7 @@ public class Buff
 {
     private BuffInfo _buffInfo;
     private Transform _layer;
-    private int _effectKey;
+    private FightEffectCounter _effectCounter;
     /// <summary>
     /// buff 施法者
     /// buffId
@@ -19,6 +19,7 @@ public class Buff
     {
         _layer = layer;
         _buffInfo = new BuffInfo(buffId, frame);
+        _effectCounter = new FightEffectCounter();
         UpdateBuffEffect();
     }
 
@@ -34,15 +35,15 @@ public class Buff
     {
         if (null == _layer || null == _buffInfo.EffectInfo || _buffInfo.EffectInfo.Id == "")
             return;
-        //_effectKey = FightEffectManager.GetInstance().AddEffectByInfo(_buffInfo.EffectInfo,_layer);
+        _effectCounter.AddEffect(_buffInfo.EffectInfo, _layer);
     }
 
     public void Destroy()
     {
-        if (_effectKey > 0)
+        if (null != _effectCounter)
         {
-            FightEffectManager.GetInstance().RemoveEffectInfo(_effectKey);
-            _effectKey = 0;
+            _effectCounter.Destroy();
+            _effectCounter = null;
         }
     }
 }

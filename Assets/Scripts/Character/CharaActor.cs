@@ -10,7 +10,7 @@ public class CharaActor : MonoBehaviour
     //动画
     private Animation _anima;
     //特效资源记录(一般为 技能特殊添加特效)
-    private List<int> _effectAsset;
+    private FightEffectCounter _effectCounter;
 
 
     public virtual bool SetInfo(CharaActorInfo info)
@@ -22,7 +22,7 @@ public class CharaActor : MonoBehaviour
 
         if (null == _charaInfo) return true;
 
-        _effectAsset = new List<int>();
+        _effectCounter = new FightEffectCounter();
         InitEvent();
         return true;
     }
@@ -68,26 +68,13 @@ public class CharaActor : MonoBehaviour
     private void OnAddEffect(Notification data)
     {
         EffectInfo info = (EffectInfo)data.param;
-
-        FightEffectManager.GetInstance().AddEffectByInfo(info, this.gameObject.transform);
-        if (info.AssetKey > 0)
-        {
-            _effectAsset.Add(info.AssetKey);
-        }
+        _effectCounter.AddEffect(info, this.gameObject.transform);
     }
 
     private void OnRemoveEffect(Notification data)
     {
         int assetId = (int)data.param;
-        if (assetId > 0)
-        {
-            int index = _effectAsset.IndexOf(assetId);
-            if (index >= 0)
-            {
-                _effectAsset.RemoveAt(index);
-                FightEffectManager.GetInstance().RemoveEffectInfo(assetId);
-            }
-        }
+        _effectCounter.RemoveEffectByKey(assetId);
     }
 
     //更新角度
@@ -119,11 +106,10 @@ public class CharaActor : MonoBehaviour
 
     private void ClearEffect()
     {
-        if (null != _effectAsset)
+        if (null != _effectCounter)
         {
-            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
-            _effectAsset.Clear();
-            _effectAsset = null;
+            _effectCounter.Destroy();
+            _effectCounter = null;
         }
 
     }

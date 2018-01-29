@@ -17,7 +17,7 @@ public class SACollider : SkillActionBase
 
     private GameObject _colliderView;     //碰撞显示
     private GameObject _colliderEffect;     //特效容器
-    private List<int> _effectAsset;      //非主动清理特效 记录 销毁时候清理
+    private FightEffectCounter _effectCounter;      //非主动清理特效 记录 销毁时候清理
 
     public override bool IsStart
     {
@@ -48,7 +48,7 @@ public class SACollider : SkillActionBase
     {
         _collider = collider;
         _colliderInfo = collidInfo;
-        _effectAsset = new List<int>();
+        _effectCounter = new FightEffectCounter();
 
         _colliderCount = 0;
         ColliderDestroy = false;
@@ -173,11 +173,10 @@ public class SACollider : SkillActionBase
     protected override void Complete()
     {
         base.Complete();
-        if (null != _effectAsset)
+        if (null != _effectCounter)
         {
-            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
-            _effectAsset.Clear();
-            _effectAsset = null;
+            _effectCounter.Destroy();
+            _effectCounter = null;
         }
         if (null != _colliderEffect)
         {
@@ -207,11 +206,7 @@ public class SACollider : SkillActionBase
             for (int i = 0; i < _colliderInfo.EffectInfos.Count; i++)
             {
                 EffectInfo effectInfo = _colliderInfo.EffectInfos[i];
-                FightEffectManager.GetInstance().AddEffectByInfo(effectInfo, _colliderEffect.transform);
-                if (effectInfo.AssetKey > 0)
-                {
-                    _effectAsset.Add(effectInfo.AssetKey);
-                }
+                _effectCounter.AddEffect(effectInfo, _colliderEffect.transform);
             }
         }
     }

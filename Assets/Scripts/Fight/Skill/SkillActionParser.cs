@@ -68,7 +68,6 @@ public class SkillActionParser
             case SkillDefine.SkillActionType.COLLIDER:
                 CollBase collider = GetOperaColliderInfo(skillInfo.colliderInfo);
                 return new SACollider(collider, skillInfo.colliderInfo, this, frame);
-
             case SkillDefine.SkillActionType.COLLIDER_MOVE:
                 CollBase colliderMove = GetOperaColliderInfo(skillInfo.colliderInfo);
                 moveInfo = skillInfo.moveInfo;

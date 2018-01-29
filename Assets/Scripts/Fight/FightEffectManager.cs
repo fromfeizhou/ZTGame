@@ -2,6 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//特效计数器
+public class FightEffectCounter
+{
+    private List<int> _effectAsset;
+
+    public FightEffectCounter()
+    {
+        _effectAsset = new List<int>();
+    }
+
+    public void AddEffect(EffectInfo info, Transform layer = null)
+    {
+        if (null != _effectAsset)
+        {
+            FightEffectManager.GetInstance().AddEffectByInfo(info, layer);
+            if (info.AssetKey > 0)
+            {
+                _effectAsset.Add(info.AssetKey);
+            };
+        }
+    }
+
+    public void RemoveEffectByKey(int key)
+    {
+        FightEffectManager.GetInstance().RemoveEffectInfo(key);
+    }
+
+    public void ClearEffect()
+    {
+        if (null != _effectAsset)
+        {
+            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
+            _effectAsset.Clear();
+        }
+    }
+
+    public void Destroy()
+    {
+        ClearEffect();
+        _effectAsset = null;
+    }
+}
+
 public class FightEffectManager : Singleton<FightEffectManager>
 {
     private Dictionary<int, GameObject> _effectDic;
