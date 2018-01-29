@@ -26,7 +26,7 @@ public enum ATT_ALTER_TYPE
     HURT_PREC,           //伤害百分比
 }
 
-//buff修改类型
+//buff修改类型(按id 、类型 添加移除)
 public enum BUFF_ALTER_TYPE
 {
     ID = 0,      //id

@@ -43,6 +43,8 @@ public struct CHARA_EVENT
     public static readonly string CHANGE_ROTATE = "CHARA_EVENT_CHANGE_ROTATE";
     public static readonly string ADD_EFFECT = "CHARA_EVENT_ADD_EFFECT";
     public static readonly string REMOVE_EFFECT = "CHARA_EVENT_REMOVE_EFFECT";
+    public static readonly string ADD_BUFF = "CHARA_EVENTADD_BUFF";
+    public static readonly string REMOVE_BUFF = "CHARA_EVENT_REMOVE_BUFF";
 }
 
 public struct PLAYER_AC_NAME

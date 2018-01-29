@@ -50,7 +50,6 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         SkillActionManager.GetInstance().Destroy();
         //特效管理器
         FightEffectManager.GetInstance().Destroy();
-       
     }
 
     private void ClearChara()
@@ -157,9 +156,6 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         if (!CommandDic.ContainsKey(frame)) CommandDic.Add(frame, new List<FightCommandBase>());
         CommandDic[frame].Add(command);
     }
-
-   
-
 
     private void OnAddPlayer(Notification note)
     {

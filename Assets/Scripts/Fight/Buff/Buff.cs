@@ -2,48 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Buff
+
+//带形象的buff
+public class Buff :BuffBase
 {
-    private BuffInfo _buffInfo;
     private Transform _layer;
+    public EffectInfo BuffEffectInfo;   //特效
     private FightEffectCounter _effectCounter;
-    /// <summary>
-    /// buff 施法者
-    /// buffId
-    /// buff挂钩位置
-    /// </summary>
-    /// <param name="battleId"></param>
-    /// <param name="buffId"></param>
-    /// <param name="layer"></param>
-    public Buff(int userId,int targetId,int buffId,int frame,Transform layer = null)
+
+    public Buff(int buffId,int frame,int userId = -1,Transform layer = null):base(buffId,frame,userId)
     {
         _layer = layer;
-        _buffInfo = new BuffInfo(buffId, frame);
-        _effectCounter = new FightEffectCounter();
-        UpdateBuffEffect();
+
+        BuffEffectInfo = new EffectInfo("27_RFX_Magic_FlameSwirl1");
     }
 
-    public void Update()
+    public override void Start()
     {
-        if (null != _buffInfo)
-        {
-            _buffInfo.Update();
-        }
-    }
-
-    private void UpdateBuffEffect()
-    {
-        if (null == _layer || null == _buffInfo.EffectInfo || _buffInfo.EffectInfo.Id == "")
+        base.Start();
+        if (null == _layer || null == BuffEffectInfo || BuffEffectInfo.Id == "")
             return;
-        _effectCounter.AddEffect(_buffInfo.EffectInfo, _layer);
+        _effectCounter = new FightEffectCounter();
+        _effectCounter.AddEffect(BuffEffectInfo, _layer);
     }
 
-    public void Destroy()
+    public override void Update()
+    {
+        base.Update();
+    }
+
+
+    public override void Destroy()
     {
         if (null != _effectCounter)
         {
             _effectCounter.Destroy();
             _effectCounter = null;
         }
+        base.Destroy();
     }
+  
 }

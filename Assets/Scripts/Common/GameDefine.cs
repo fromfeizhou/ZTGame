@@ -49,5 +49,4 @@ public struct SCENE_EVENT
     public static readonly string ADD_PLAYER = "SCENE_EVENT_ADD_PLAYER";       //添加玩家
     public static readonly string ADD_COMMAND = "SCENE_EVENT_ADD_COMMAND";     //命令刷新
     public static readonly string ADD_SKILL_PARSER = "SCENE_EVENT_ADD_SKILL_PARSER";  //添加技能解析 
-    public static readonly string UPDATE_BUFF = "SCENE_EVENT_UPDATE_BUFF";      //buff更新
 }

@@ -138,6 +138,13 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         return false;
     }
 
+    //添加buff
+    public void AddBuff(BuffBase buffInfo)
+    {
+        this.dispatchEvent(CHARA_EVENT.ADD_BUFF,new Notification(buffInfo);
+    }
+    //移除buff
+
     public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
         BattleId = battleId;
