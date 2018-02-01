@@ -17,7 +17,7 @@ public class SACollider : SkillActionBase
 
     private GameObject _colliderView;     //碰撞显示
     private GameObject _colliderEffect;     //特效容器
-    private List<int> _effectKeys;      //非主动清理特效 记录 销毁时候清理
+    private FightEffectCounter _effectCounter;      //非主动清理特效 记录 销毁时候清理
 
     public override bool IsStart
     {
@@ -48,7 +48,7 @@ public class SACollider : SkillActionBase
     {
         _collider = collider;
         _colliderInfo = collidInfo;
-        _effectKeys = new List<int>() ;
+        _effectCounter = new FightEffectCounter();
 
         _colliderCount = 0;
         ColliderDestroy = false;
@@ -147,6 +147,7 @@ public class SACollider : SkillActionBase
         if (_colliderInfo.ColliderMax != -1 && _colliderCount >= _colliderInfo.ColliderMax)
         {
             Complete();
+            return;
         }
         if (null != _colliderInfo.SelfActions && _colliderInfo.SelfActions.Count > 0)
         {
@@ -164,7 +165,7 @@ public class SACollider : SkillActionBase
                 Vector3 dir = new Vector3(_collider.x, 0, _collider.y);
                 dir = (dir - player.MovePos).normalized;
                 SkillCommand command = FightDefine.GetSkillCommand(player.BattleId, skillId, dir, player.MovePos);
-                SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_COMMAND,new Notification(command));
+                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND,new Notification(command));
             }
         }
     }
@@ -172,11 +173,10 @@ public class SACollider : SkillActionBase
     protected override void Complete()
     {
         base.Complete();
-        if (null != _effectKeys)
+        if (null != _effectCounter)
         {
-            FightEffectManager.GetInstance().RemoveEffectInfo(_effectKeys);
-            _effectKeys.Clear();
-            _effectKeys = null;
+            _effectCounter.Destroy();
+            _effectCounter = null;
         }
         if (null != _colliderEffect)
         {
@@ -198,19 +198,15 @@ public class SACollider : SkillActionBase
         if (null == _colliderEffect)
         {
             _colliderEffect = new GameObject();
-            _colliderEffect.transform.parent = GameObject.Find("PlayerLayer").transform;
             _colliderEffect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
             _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
+            _colliderEffect.transform.SetParent(GameObject.Find("PlayerLayer").transform,false);
         }
         if(null !=_colliderInfo.EffectInfos && _colliderInfo.EffectInfos.Count > 0){
             for (int i = 0; i < _colliderInfo.EffectInfos.Count; i++)
             {
                 EffectInfo effectInfo = _colliderInfo.EffectInfos[i];
-                int effectKey = FightEffectManager.GetInstance().AddEffectByInfo(effectInfo, _colliderEffect.transform);
-                if (effectKey > 0)
-                {
-                    _effectKeys.Add(effectKey);
-                }
+                _effectCounter.AddEffect(effectInfo, _colliderEffect.transform);
             }
         }
     }
@@ -226,8 +222,8 @@ public class SACollider : SkillActionBase
     private void CreateColliderView()
     {
         _colliderView = ZColliderView.CreateColliderView(_collider);
-        _colliderView.transform.parent = GameObject.Find("PlayerLayer").transform;
         _colliderView.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
+        _colliderView.transform.transform.SetParent(GameObject.Find("PlayerLayer").transform, false);
         UpdateColliderView();
     }
     //碰撞刷新 debug

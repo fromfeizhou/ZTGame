@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SkillAsset : ScriptableObject
 {
-
     public List<SkillAssetInforGroup> ListSkillGroup;
 }
 
@@ -13,17 +12,27 @@ public class SkillAssetInfo
 {
     public SkillDefine.SkillActionType actionType = SkillDefine.SkillActionType.NONE;
     //动作播放
-    public string animName = "";
+    public string animName;
     //控制器
-    public bool isCtrl = false;
+    public bool isCtrl;
 
     //移动参数
-    public MoveInfo moveInfo = new MoveInfo();
+    public MoveInfo moveInfo;
     //特效
-    public EffectInfo effectInfo = new EffectInfo();
+    public EffectInfo effectInfo;
 
     //碰撞 参数
     public ColliderInfo colliderInfo;
+
+    public SkillAssetInfo()
+    {
+        isCtrl = false;
+        animName = "";
+        moveInfo = new MoveInfo();
+        effectInfo = new EffectInfo();
+        colliderInfo = new ColliderInfo() ;
+
+    }
 }
 
 [System.Serializable]

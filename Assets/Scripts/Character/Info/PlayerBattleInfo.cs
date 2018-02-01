@@ -60,7 +60,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
                 break;
             case BATTLE_STATE.MOVE:
                 if (CanMove()) _battleState = state;
-                this.PlayAction(PlayerActionName.RUN);
+                this.PlayAction(PLAYER_AC_NAME.RUN);
                 break;
             default:
                 _battleState = state;
@@ -104,7 +104,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         if (CanUseSkill())
         {
             //BattleState = BATTLE_STATE.SKILL;
-            SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_SKILL_PARSER, new Notification(command));
+            SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_SKILL_PARSER, new Notification(command));
         }
     }
 
@@ -115,7 +115,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             MoveDir = command.MoveDir;
             if (MoveDir == MOVE_DIR.NONE)
             {
-                this.PlayAction(PlayerActionName.IDLE);
+                this.PlayAction(PLAYER_AC_NAME.IDLE);
                 ChangeState(BATTLE_STATE.NONE);
             }
             else

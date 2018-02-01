@@ -2,7 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightEffectManager:Singleton<FightEffectManager>
+//特效计数器
+public class FightEffectCounter
+{
+    private List<int> _effectAsset;
+
+    public FightEffectCounter()
+    {
+        _effectAsset = new List<int>();
+    }
+
+    public void AddEffect(EffectInfo info, Transform layer = null)
+    {
+        if (null != _effectAsset)
+        {
+            FightEffectManager.GetInstance().AddEffectByInfo(info, layer);
+            if (info.AssetKey > 0)
+            {
+                _effectAsset.Add(info.AssetKey);
+            };
+        }
+    }
+
+    public void RemoveEffectByKey(int key)
+    {
+        FightEffectManager.GetInstance().RemoveEffectInfo(key);
+    }
+
+    public void ClearEffect()
+    {
+        if (null != _effectAsset)
+        {
+            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
+            _effectAsset.Clear();
+        }
+    }
+
+    public void Destroy()
+    {
+        ClearEffect();
+        _effectAsset = null;
+    }
+}
+
+public class FightEffectManager : Singleton<FightEffectManager>
 {
     private Dictionary<int, GameObject> _effectDic;
     private int _effectKey;
@@ -29,16 +72,22 @@ public class FightEffectManager:Singleton<FightEffectManager>
     }
 
     //获取特效预设
-    public int AddEffectByInfo(EffectInfo info, Transform layer = null)
+    public void AddEffectByInfo(EffectInfo info, Transform layer = null)
     {
-        if (info.Id == "") return -1;
+        if (info.Id == "") return;
 
         if (null == layer)
         {
             layer = GameObject.Find("PlayerLayer").transform;
         }
         string effectPath = GetEffectName(info.Id);
-        int effectKey = GetEffectDicKey();
+        int effectKey = -1;
+        //存在声明周期的特效
+        if (info.LifeTime > 0)
+        {
+            effectKey = GetEffectDicKey();
+            info.AssetKey = effectKey;
+        }
         AssetManager.LoadAsset(effectPath, (Object target, string path) =>
         {
             GameObject go = target as GameObject;
@@ -46,18 +95,22 @@ public class FightEffectManager:Singleton<FightEffectManager>
             if (null != go && null != layer)
             {
                 Transform effect = GameObject.Instantiate(go).transform;
-                effect.transform.parent = GameObject.Find("PlayerLayer").transform;
-                effect.transform.localRotation = Quaternion.Euler(Vector3.up * info.Rotate);
                 effect.transform.localPosition = new Vector3(info.Offset.x, 0.1f, info.Offset.y);
-                ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
-                if (null != pds)
+                effect.transform.localRotation = Quaternion.Euler(Vector3.up * info.Rotate);
+                effect.transform.SetParent(layer, false);
+                if (info.AssetKey > 0)
                 {
+                    ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
+                    if (null == pds)
+                    {
+                        pds = go.AddComponent<ParticleDestroy>();
+                    }
+                    pds.lifetime = info.LifeTime;
                     _effectDic[effectKey] = effect.gameObject;
                 }
+               
             }
         });
-
-        return effectKey;
     }
 
     /// <summary>
@@ -78,13 +131,15 @@ public class FightEffectManager:Singleton<FightEffectManager>
     /// <param name="key"></param>
     public void RemoveEffectInfo(int key)
     {
-        if(_effectDic.ContainsKey(key)){
+        if (null != _effectDic && _effectDic.ContainsKey(key))
+        {
             GameObject.Destroy(_effectDic[key]);
             _effectDic.Remove(key);
         }
     }
 
-    private int GetEffectDicKey(){
+    private int GetEffectDicKey()
+    {
         _effectKey++;
         if (_effectKey > FightDefine.MaxFrame) _effectKey = 0;
         return _effectKey;

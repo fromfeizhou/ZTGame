@@ -51,7 +51,7 @@ public class MRichText : Text,IPointerClickHandler
         }
         else
         {
-            GameStartEvent.GetInstance().addEventListener(GameLoadStepEvents.LOAD_COM, LoadDataCom);
+            GameStartEvent.GetInstance().addEventListener(GAME_LOAD_SETP_EVENT.LOAD_COM, LoadDataCom);
         }
         //重新设置高度
         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, preferredHeight);
@@ -61,7 +61,7 @@ public class MRichText : Text,IPointerClickHandler
     private void LoadDataCom(Notification note)
     {
 
-        GameStartEvent.GetInstance().removeEventListener(GameLoadStepEvents.LOAD_COM, LoadDataCom);
+        GameStartEvent.GetInstance().removeEventListener(GAME_LOAD_SETP_EVENT.LOAD_COM, LoadDataCom);
         UpdateQuadImage();
     }
 
@@ -198,7 +198,7 @@ public class MRichText : Text,IPointerClickHandler
         // Apply the offset to the vertices
         IList<UIVertex> verts = cachedTextGenerator.verts;
         float unitsPerPixel = 1 / pixelsPerUnit;
-        //Last 4 verts are always a new line... (\n)
+        //Last 4 verts are always a new line... (;)
         int vertCount = verts.Count - 4;
         Vector2 roundingOffset = new Vector2(verts[0].position.x, verts[0].position.y) * unitsPerPixel;
         roundingOffset = PixelAdjustPoint(roundingOffset) - roundingOffset;

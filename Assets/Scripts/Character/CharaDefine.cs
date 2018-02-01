@@ -34,17 +34,18 @@ public enum MOVE_DIR
 
 
 //角色事件
-public struct CharaEvents
+public struct CHARA_EVENT
 {
-    public static readonly string DESTROY = "CharaEvents_Destroy";
-    public static readonly string PLAY = "CharaEvents_PlayActoin";
-    public static readonly string CHANGE_ANIM = "CharaEvents_ChangeAnim";
-    public static readonly string UPDATE_POS = "CharaEvents_UpdatePos";
-    public static readonly string CHANGE_ROTATE = "CharaEvents_ChangeRotate";
-    public static readonly string UPDATE_EFFECT = "CharaEvents_UpdateEffect";
+    public static readonly string DESTROY = "CHARA_EVENT_DESTROY";
+    public static readonly string PLAY = "CHARA_EVENTPLAY";
+    public static readonly string CHANGE_ANIM = "CHARA_EVENT_CHANGE_ANIM";
+    public static readonly string UPDATE_POS = "CHARA_EVENT_UPDATE_POS";
+    public static readonly string CHANGE_ROTATE = "CHARA_EVENT_CHANGE_ROTATE";
+    public static readonly string ADD_EFFECT = "CHARA_EVENT_ADD_EFFECT";
+    public static readonly string REMOVE_EFFECT = "CHARA_EVENT_REMOVE_EFFECT";
 }
 
-public struct PlayerActionName
+public struct PLAYER_AC_NAME
 {
     public static string IDLE = "idle";             //待机
     public static string IDLE_1 = "idle_1";         //随机待机

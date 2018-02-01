@@ -36,7 +36,7 @@ public class SpriteFaceCache
         _loadIndex++;
         if (_loadIndex >= _pathList.Count)
         {
-            GameStartEvent.GetInstance().dispatchEvent(GameLoadStepEvents.LOAD_FACE_ASSET);
+            GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_FACE_ASSET);
             return;
         }
         LoadAsset();

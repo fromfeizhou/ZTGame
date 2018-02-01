@@ -35,12 +35,12 @@ public class SkillActionManager : Singleton<SkillActionManager>
 
     private void InitEvent()
     {
-        SceneEvent.GetInstance().addEventListener(SceneEvents.ADD_SKILL_PARSER, OnAddSkillParser);
+        SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_SKILL_PARSER, OnAddSkillParser);
     }
 
     private void RemoveEvent()
     {
-        SceneEvent.GetInstance().removeEventListener(SceneEvents.ADD_SKILL_PARSER, OnAddSkillParser);
+        SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_SKILL_PARSER, OnAddSkillParser);
     }
 
     private void OnAddSkillParser(Notification data)

@@ -44,16 +44,14 @@ public class SkillJoystick : JoystickBase
         }
         _skillDownState = false;
 
-        Vector3 myPos = ZTSceneManager.GetInstance().MyPlayer.MovePos;
         int distance = 10;
 
         //---------------test------------------------//
         SkillId = SkillSelected.SelectIndex;
         //---------------test------------------------//
-
-        Vector3 targetPos = new Vector3(myPos.x + distance * deltaVec.x, 0, myPos.z + distance * deltaVec.y);
+        Vector3 targetPos = new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
         SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,SkillId,dir,targetPos);
-        SceneEvent.GetInstance().dispatchEvent(SceneEvents.ADD_COMMAND, new Notification(command));
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 }

@@ -16,7 +16,8 @@ public interface ICharaActor{
     //更新坐标
     void UpdatePos(Vector3 pos);
     //更新特效
-    void UpdateEffect(EffectInfo info);
+    void AddEffect(EffectInfo info);
+    void RemoveEffect(int assetId);
 
     void UpdateFrame();
 
