@@ -4,12 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 
-[System.Serializable]
-public class Injection
-{
-    public string name;
-    public GameObject value;
-}
+
 
 
 public class ZTXLuaEnv : MonoSingleton<ZTXLuaEnv>
