@@ -18,13 +18,14 @@ public class BuffCounter
     {
         int buffId = buffInfo.BuffId;
         if(!_buffListDic.ContainsKey(buffId)){
-            _buffListDic.Add(buffId, new List<Buff>());   
+            _buffListDic.Add(buffId, new List<Buff>());
+            if (null != buffInfo.BuffEffectInfo && null != _chara)
+            {
+                _chara.AddEffect(buffInfo.BuffEffectInfo);
+            }
         }
         _buffListDic[buffId].Add(buffInfo);
-        if (null != buffInfo.BuffEffectInfo && null != _chara)
-        {
-            _chara.AddEffect(buffInfo.BuffEffectInfo);
-        }
+        
     }
 
     //按id移除buff

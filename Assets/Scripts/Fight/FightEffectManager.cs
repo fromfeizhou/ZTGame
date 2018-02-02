@@ -108,6 +108,9 @@ public class FightEffectManager : Singleton<FightEffectManager>
                         pds = go.AddComponent<ParticleDestroy>();
                     }
                     pds.lifetime = info.LifeTime;
+                }
+                else
+                {
                     _effectDic[effectKey] = effect.gameObject;
                 }
                
