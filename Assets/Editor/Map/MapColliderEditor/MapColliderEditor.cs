@@ -15,6 +15,9 @@ public class MapColliderEditor : EditorWindow
 
     private Vector2 MapViewSize = new Vector2(640, 640);
     private Vector2 MenuViewPort_Size = new Vector2(640, 200);
+    private float terrainWidth = 1000f;
+
+    private TerrainCollider _mapCollider;
 
     private Camera _cameraMain;
     private Camera _cameraPort;
@@ -35,9 +38,12 @@ public class MapColliderEditor : EditorWindow
     private Vector3 _cameraPos_Port;
     private Vector3 _cameraPos_Edit;
 
+    private float GridSize_Port = 40f;
+    
+
     private enum eMapViewType
     {
-        None,Main,Port,Edit
+        None, Main, Port, Edit
     }
     private eMapViewType MapViewType;
 
@@ -51,27 +57,29 @@ public class MapColliderEditor : EditorWindow
 
     private float _cameraGridPort_Size
     {
-        get { return MapDefine.MAPITEMTOTALSIZE / (MapViewSize.x / MapDefine.GridSize_Main); }
+        get { return terrainWidth / (MapViewSize.x / MapDefine.GridSize_Main); }
     }
 
     private float _cameraGridEdit_Size
     {
-        get { return _cameraGridPort_Size / (MapViewSize.x / MapDefine.GridSize_Port); }
+        get { return _cameraGridPort_Size / (MapViewSize.x / GridSize_Port); }
     }
 
     private int _gridCnt_Main
     {
-        get { return (int) (MapViewSize.x / MapDefine.GridSize_Main); }
+        get { return (int)(MapViewSize.x / MapDefine.GridSize_Main); }
     }
 
     private int _gridCnt_Port
     {
-        get { return (int) (MapViewSize.x / MapDefine.GridSize_Port); }
+        get { 
+            float  aa = MapViewSize.x / GridSize_Port;
+            return (int)(aa); }
     }
 
     private int _gridCnt_Edit
     {
-        get { return (int) (MapViewSize.x / MapDefine.GridSize_Edit); }
+        get { return Mathf.RoundToInt(MapViewSize.x / MapDefine.GridSize_Edit); }
     }
 
     private List<MapBlockData> _mapBlockData = new List<MapBlockData>();
@@ -81,21 +89,7 @@ public class MapColliderEditor : EditorWindow
 
     void OnEnable()
     {
-        if (_cameraPort == null)
-        {
-            _cameraPort = GameObject.Find("CameraPort").GetComponent<Camera>();
-            _cameraPort.targetTexture = new RenderTexture(4096, 4096, 0);
-        }
-        if (_cameraMain == null)
-        {
-            _cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>();
-            _cameraMain.targetTexture = new RenderTexture(4096, 4096, 0);
-        }
-        if (_cameraEdit == null)
-        {
-            _cameraEdit = GameObject.Find("CameraEdit").GetComponent<Camera>();
-            _cameraEdit.targetTexture = new RenderTexture(4096, 4096, 0);
-        }
+        InitCamera();
 
         if (_mapBlockData == null || _mapBlockData.Count == 0)
         {
@@ -130,6 +124,50 @@ public class MapColliderEditor : EditorWindow
         Repaint();
     }
 
+    private void InitCamera()
+    {
+        if (_cameraPort == null)
+        {
+            _cameraPort = GameObject.Find("CameraPort").GetComponent<Camera>();
+            _cameraPort.targetTexture = new RenderTexture(4096, 4096, 0);
+        }
+        if (_cameraMain == null)
+        {
+            _cameraMain = GameObject.Find("CameraMain").GetComponent<Camera>();
+            _cameraMain.targetTexture = new RenderTexture(4096, 4096, 0);
+        }
+        if (_cameraEdit == null)
+        {
+            _cameraEdit = GameObject.Find("CameraEdit").GetComponent<Camera>();
+            _cameraEdit.targetTexture = new RenderTexture(4096, 4096, 0);
+        }
+
+        if (_mapCollider == null)
+            _mapCollider = GameObject.Find("MainTerrain").GetComponent<TerrainCollider>();
+        terrainWidth = _mapCollider.bounds.size.x;
+        float tempWidth = _mapCollider.bounds.size.x / 2;
+        float tempHeight = _mapCollider.bounds.size.z / 2;
+        _cameraMain.orthographicSize = tempWidth;
+        _cameraMain.transform.localPosition = new Vector3(tempWidth, 100, tempHeight);
+        //float portViewItemCount = MapViewSize.x / MapDefine.GridSize_Port;
+        //float portCameraOrz = terrainWidth / portViewItemCount;
+        //_cameraPort.orthographicSize = portCameraOrz * 0.5f;
+
+        //float editViewItemCount = MapViewSize.x / MapDefine.GridSize_Edit;
+        //float editCameraOrz = portCameraOrz / editViewItemCount;
+        //_cameraEdit.orthographicSize = editCameraOrz * 0.5f;
+
+        float mainViewItemCount = MapViewSize.x / MapDefine.GridSize_Main;
+        float portCameraOrz = terrainWidth / mainViewItemCount;
+        _cameraPort.orthographicSize = portCameraOrz * 0.5f;
+
+       int tempPortCount = (int)portCameraOrz / 5;//editView 编辑为5米
+       GridSize_Port = MapViewSize.x / tempPortCount;
+        float portViewItemCount = MapViewSize.x / GridSize_Port;
+        float editCameraOrz = portCameraOrz / portViewItemCount;
+        _cameraEdit.orthographicSize = editCameraOrz * 0.5f;
+    }
+
     private void UserInput()
     {
         Event e = Event.current;
@@ -154,13 +192,14 @@ public class MapColliderEditor : EditorWindow
         else if (e.mousePosition.x >= MapViewSize.x && e.mousePosition.y >= 0 && e.mousePosition.x < MapViewSize.x * 2 && e.mousePosition.y < MapViewSize.y)
         {
             MapViewType = eMapViewType.Port;
-            curMouseGridWidth = MapDefine.GridSize_Port;
-            tmpPosPort.x = (int)(e.mousePosition.x / MapDefine.GridSize_Port);
-            tmpPosPort.y = (int)(e.mousePosition.y / MapDefine.GridSize_Port);
-            curMouseGridPos = tmpPosPort * MapDefine.GridSize_Port;
+            curMouseGridWidth = GridSize_Port;
+            tmpPosPort.x = (int)(e.mousePosition.x / GridSize_Port);
+            tmpPosPort.y = (int)(e.mousePosition.y / GridSize_Port);
+            curMouseGridPos = tmpPosPort * GridSize_Port;
 
-            _curMouseGridPos_Port = (curMouseGridPos - MapViewSize.x * Vector2.right) / MapDefine.GridSize_Port;
-            _curMouseGridPos_Port.y = _gridCnt_Port - 1 - _curMouseGridPos_Port.y;
+            _curMouseGridPos_Port = (curMouseGridPos - MapViewSize.x * Vector2.right) / GridSize_Port;
+            _curMouseGridPos_Port.x = Mathf.RoundToInt(_curMouseGridPos_Port.x);
+            _curMouseGridPos_Port.y = _gridCnt_Port - 1 - (int)_curMouseGridPos_Port.y;
 
             if (e.button == 0 && e.isMouse)
             {
@@ -191,8 +230,8 @@ public class MapColliderEditor : EditorWindow
             MapViewType = eMapViewType.None;
         }
 
-        int row = (int)(_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + _selectGridPos_Port.x * _gridCnt_Edit + _selectGridPos_Edit.x);
-        int col = (int)(_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + _selectGridPos_Port.y * _gridCnt_Edit + _selectGridPos_Edit.y);
+        int row = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit + (int)_selectGridPos_Edit.x);
+        int col = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit + (int)_selectGridPos_Edit.y);
 
         if (_isControl && (e.type == EventType.MouseDown || e.type == EventType.MouseDrag))
         {
@@ -201,12 +240,16 @@ public class MapColliderEditor : EditorWindow
 
         if (e.type == EventType.MouseDown && e.button == 0)
         {
+            int tmpaaRolw  = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit + (int)_selectGridPos_Edit.x);
+            int tmpaaColw = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit + (int)_selectGridPos_Edit.y);
+
             curSelectMapBlockData = GetCollider(row, col);
             isEditMapEvent = curSelectMapBlockData != null;
         }
     }
 
-    private bool _isControl {
+    private bool _isControl
+    {
         get
         {
             return Event.current.control;
@@ -219,14 +262,17 @@ public class MapColliderEditor : EditorWindow
         Vector3 localPos_Port;
         localPos_Port.x = _cameraPos_Port.x * _cameraGridPort_Size + _cameraGridPort_Size * 0.5f;
         localPos_Port.y = 200;
-        localPos_Port.z = (15 - _cameraPos_Port.y) * _cameraGridPort_Size + _cameraGridPort_Size * 0.5f;
+        int tempRow = (int)(MapViewSize.x / MapDefine.GridSize_Main) - 1;
+        localPos_Port.z = (tempRow - _cameraPos_Port.y) * _cameraGridPort_Size + _cameraGridPort_Size * 0.5f;
         _cameraPort.transform.localPosition = localPos_Port;
 
 
         Vector3 localPos_Edit;
         localPos_Edit.x = (_cameraPos_Edit.x + 0.5f) * _cameraGridEdit_Size - _cameraGridPort_Size * 1.5f;
         localPos_Edit.y = 200;
-        localPos_Edit.z = (15 - _cameraPos_Edit.y + 0.5f) * _cameraGridEdit_Size - _cameraGridPort_Size * 0.5f;
+        float aaaaaRow = MapViewSize.x / GridSize_Port;
+        tempRow = (int)(aaaaaRow) - 1;
+        localPos_Edit.z = (tempRow - _cameraPos_Edit.y + 0.5f) * _cameraGridEdit_Size - _cameraGridPort_Size * 0.5f;
         _cameraEdit.transform.localPosition = localPos_Edit + localPos_Port;
     }
 
@@ -255,16 +301,16 @@ public class MapColliderEditor : EditorWindow
         switch (_mapEditHelper)
         {
             case MapColliderHelper.eMapEditHelper.SaveMapBlockFile:
-            {
-                MapColliderHelper.SaveMapBlockFile(_mapBlockData);
-                break;
-            }
+                {
+                    MapColliderHelper.SaveMapBlockFile(_mapBlockData);
+                    break;
+                }
         }
         _mapEditHelper = MapColliderHelper.eMapEditHelper.None;
     }
 
     private MapBlockData curSelectMapBlockData;
-  
+
     private void DrawMap()
     {
         GUI.DrawTexture(new Rect(Vector2.zero, MapViewSize), _cameraMain.targetTexture);
@@ -275,7 +321,7 @@ public class MapColliderEditor : EditorWindow
     private void DrawGrid()
     {
         Handles.color = Color.white;
-        for (int row = 0; row <= _gridCnt_Main; row++)
+        for (int row = 0; row <= _gridCnt_Main; row++)//16
         {
             Handles.DrawLine(new Vector2(0, MapDefine.GridSize_Main * row), new Vector2(MapDefine.GridSize_Main * _gridCnt_Main, MapDefine.GridSize_Main * row));
             Handles.DrawLine(new Vector2(MapDefine.GridSize_Main * row, 0), new Vector2(MapDefine.GridSize_Main * row, MapDefine.GridSize_Main * _gridCnt_Main));
@@ -283,8 +329,8 @@ public class MapColliderEditor : EditorWindow
 
         for (int row = 0; row <= _gridCnt_Port; row++)
         {
-            Handles.DrawLine(new Vector2(MapViewSize.x + 0, MapDefine.GridSize_Port * row), new Vector2(MapViewSize.x + MapDefine.GridSize_Port * _gridCnt_Port, MapDefine.GridSize_Port * row));
-            Handles.DrawLine(new Vector2(MapViewSize.x + MapDefine.GridSize_Port * row, 0), new Vector2(MapViewSize.x + MapDefine.GridSize_Port * row, MapDefine.GridSize_Port * _gridCnt_Port));
+            Handles.DrawLine(new Vector2(MapViewSize.x + 0, GridSize_Port * row), new Vector2(MapViewSize.x + GridSize_Port * _gridCnt_Port, GridSize_Port * row));
+            Handles.DrawLine(new Vector2(MapViewSize.x + GridSize_Port * row, 0), new Vector2(MapViewSize.x + GridSize_Port * row, GridSize_Port * _gridCnt_Port));
         }
 
         for (int row = 0; row <= _gridCnt_Edit; row++)
@@ -297,7 +343,7 @@ public class MapColliderEditor : EditorWindow
     private void DrawCurState()
     {
         EditorGUI.DrawRect(new Rect(_selectPos_Main, MapDefine.GridSize_Main * Vector2.one), new Color(1, 0, 0, 0.4f));
-        EditorGUI.DrawRect(new Rect(_selectPos_Port, MapDefine.GridSize_Port * Vector2.one), new Color(1, 0, 1, 0.4f));
+        EditorGUI.DrawRect(new Rect(_selectPos_Port, GridSize_Port * Vector2.one), new Color(1, 0, 1, 0.4f));
 
         if (MapViewType != eMapViewType.None)
         {
@@ -305,20 +351,20 @@ public class MapColliderEditor : EditorWindow
             switch (MapViewType)
             {
                 case eMapViewType.Main:
-                {
-                    mouseLabelNotice = _curMouseGridPos_Main;
-                    break;
-                }
+                    {
+                        mouseLabelNotice = _curMouseGridPos_Main;
+                        break;
+                    }
                 case eMapViewType.Port:
-                {
-                    mouseLabelNotice = _curMouseGridPos_Port;
-                    break;
-                }
+                    {
+                        mouseLabelNotice = _curMouseGridPos_Port;
+                        break;
+                    }
                 case eMapViewType.Edit:
-                {
-                    mouseLabelNotice = _curMouseGridPos_Edit;
-                    break;
-                }
+                    {
+                        mouseLabelNotice = _curMouseGridPos_Edit;
+                        break;
+                    }
             }
 
             if (_isControl)
@@ -348,21 +394,22 @@ public class MapColliderEditor : EditorWindow
                 EditorGUI.LabelField(new Rect(mousePos - labelSize, labelSize), labelStr);
             }
 
-           
+
         }
     }
 
     private void DrawData()
     {
-        float gridIndex_Main_X = _selectPos_Main.x / MapDefine.GridSize_Main * _gridCnt_Main;
+        float gridIndex_Main_X = _selectPos_Main.x / MapDefine.GridSize_Main * _gridCnt_Port;//_gridCnt_Main;
         float gridIndex_Main_Y = (_gridCnt_Main - 1 - _selectPos_Main.y / MapDefine.GridSize_Main) * _gridCnt_Main;
 
-        float gridIndex_Port_X = (_selectPos_Port.x - MapViewSize.x) / MapDefine.GridSize_Port;
-        float gridIndex_Port_Y = _gridCnt_Port - 1 - _selectPos_Port.y / MapDefine.GridSize_Port;
+        float gridIndex_Port_X = (_selectPos_Port.x - MapViewSize.x) / GridSize_Port;
+        float gridIndex_Port_Y = _gridCnt_Port - 1 - _selectPos_Port.y / GridSize_Port;
 
-        int ScrRow = (int) ((gridIndex_Port_X + gridIndex_Main_X) * _gridCnt_Edit);
-        int ScrCol = (int) ((gridIndex_Port_Y + gridIndex_Main_Y) * _gridCnt_Edit);
+        int ScrRow = (Mathf.RoundToInt(gridIndex_Port_X + gridIndex_Main_X) * _gridCnt_Edit);
+        int ScrCol = (Mathf.RoundToInt(gridIndex_Port_Y + gridIndex_Main_Y) * _gridCnt_Edit);
 
+       
         List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.IsInBlock(_gridCnt_Edit, ScrRow, ScrCol));
         for (int i = 0; i < tmpBlockData.Count; i++)
         {
@@ -370,7 +417,7 @@ public class MapColliderEditor : EditorWindow
             {
                 Vector2 pos = new Vector2(tmpBlockData[i].row % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - tmpBlockData[i].col % _gridCnt_Edit) * MapDefine.GridSize_Edit);
                 EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
-                    MapDefine.MapBlockTypeColor[(int) tmpBlockData[i].type]);
+                    MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type]);
             }
         }
     }
@@ -384,7 +431,7 @@ public class MapColliderEditor : EditorWindow
             _mapBlockData.Add(new MapBlockData { row = row, col = col, type = mapBlockType });
     }
 
-    private MapBlockData GetCollider(int row,int col)
+    private MapBlockData GetCollider(int row, int col)
     {
         int index = _mapBlockData.FindIndex(a => a.row == row && a.col == col);
         if (index >= 0 && _mapBlockData[index].type == eMapBlockType.Event)

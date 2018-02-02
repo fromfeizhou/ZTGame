@@ -13,12 +13,12 @@ public class MapDefine
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
-    public const int MAPITEMTOTALSIZE = 1280;
-    public const int MAPITEMSIZE = 128;
+    public const int MAPITEMTOTALSIZE = 2000;
+    public const int MAPITEMSIZE = 200;
 
     //格子大小
     public const float GridSize_Main = 40;
-    public const float GridSize_Port = 40;
+    public const float GridSize_Port = 32;
     public const float GridSize_Edit = 32;
 
     public static int MapWidth = MAPITEMSIZE;
@@ -34,7 +34,8 @@ public class MapDefine
         new Color(0, 0, 0, 0.0f),
         new Color(0, 1, 0, 0.4f),
         new Color(1, 1, 1, 0.4f),
-        new Color(0, 0, 1, 0.4f)
+        new Color(0, 0, 1, 0.4f),
+        new Color(0.5f, 0,0.5f , 0.6f)
     };
 }
 
@@ -44,6 +45,7 @@ public enum eMapBlockType
     Collect,//碰撞区域
     Hide,   //隐藏区域
     Event,  //事件
+    playerPoint
     //Count,  //总数
 }
 
@@ -93,7 +95,7 @@ public class MapTilePos
     }
 }
 
-public class MapManager:Singleton<MapManager>
+public class MapManager : Singleton<MapManager>
 {
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
@@ -107,7 +109,7 @@ public class MapManager:Singleton<MapManager>
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
 
-   
+
     private List<MapBlockData> _mapBlockData;
 
     private void InitMapData()
