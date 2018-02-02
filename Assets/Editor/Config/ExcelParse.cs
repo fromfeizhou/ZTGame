@@ -45,32 +45,48 @@ public class ExcelParse
                 {
                     string rowData = string.Empty;
                     string dataFormat = string.Empty;
+
                     for (int col = 0; col < colNum; col++)  //对工作表每一列  
                     {
+                        var obj = iRow.GetCell(col);
+                        string value = obj != null ? obj.ToString() : string.Empty;
                         switch (dataType[col])
                         {
                             case "int":
                                 {
+                                    if (string.IsNullOrEmpty(value))
+                                        value = "0";
+
                                     dataFormat = "    {0} = {1},\n";
                                     break;
                                 }
                             case "float":
                                 {
+                                    if (string.IsNullOrEmpty(value))
+                                        value = "0.0";
+
                                     dataFormat = "    {0} = {1:0.0000},\n";
                                     break;
                                 }
                             case "string":
                                 {
+                                    if (string.IsNullOrEmpty(value))
+                                        value = "";
+
                                     dataFormat = "    {0} = '{1}',\n";
                                     break;
                                 }
                             case "table":
                                 {
-                                    dataFormat = "    {0} = {{{1}}},\n";
+                                    if (string.IsNullOrEmpty(value))
+                                        value = "{}";
+
+                                    dataFormat = "    {0} = {1},\n";
                                     break;
                                 }
                         }
-                        rowData += String.Format(dataFormat, dataName[col], iRow.GetCell(col));
+
+                        rowData += String.Format(dataFormat, dataName[col], value);
                     }
                     rowDataStr += string.Format(rowKey, dataName[0], iRow.GetCell(0), rowData);
                 }
