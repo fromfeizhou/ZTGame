@@ -138,12 +138,32 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         return false;
     }
 
-    //添加buff
-    public void AddBuff(BuffBase buffInfo)
+    //buff计数器 管理buff
+    public BuffCounter BattleBuffCouner { get; set; }
+
+    public void AddBuff(BuffData buffData)
     {
-        this.dispatchEvent(CHARA_EVENT.ADD_BUFF,new Notification(buffInfo);
+        if (null == buffData) return;
+
+        Buff buffInfo = BuffDefine.GetBuffInfo(buffData);
+        BattleBuffCouner.AddBuff(buffInfo);
+        buffInfo.Start();
     }
     //移除buff
+    public void RemoveBuff(int buffId)
+    {
+        BattleBuffCouner.RemoveBuffById(buffId);
+    }
+    public void RemoveBuffByType(int type)
+    {
+        BattleBuffCouner.RemoveBuffByType(type);
+    }
+
+
+    public void AddHurt(HurtInfo info)
+    {
+        this.dispatchEvent(CHARA_EVENT.ADD_HURT, new Notification(info));
+    }
 
     public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
@@ -153,6 +173,8 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         Speed = CharaDefine.PLAYER_SPEED;
         Collider = new CollRadius(0, 0, 0, CharaDefine.PLAYER_RADIUS);
         MovePos = pos;
+        BattleBuffCouner = new BuffCounter(this);
+
         ChangeState(BATTLE_STATE.NONE);
     }
 
@@ -165,5 +187,10 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     public override void Destroy()
     {
         base.Destroy();
+        if (null != BattleBuffCouner)
+        {
+            BattleBuffCouner.Destroy();
+            BattleBuffCouner = null;
+        }
     }
 }

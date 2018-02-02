@@ -33,6 +33,8 @@ public enum MOVE_DIR
 }
 
 
+
+
 //角色事件
 public struct CHARA_EVENT
 {
@@ -45,6 +47,7 @@ public struct CHARA_EVENT
     public static readonly string REMOVE_EFFECT = "CHARA_EVENT_REMOVE_EFFECT";
     public static readonly string ADD_BUFF = "CHARA_EVENTADD_BUFF";
     public static readonly string REMOVE_BUFF = "CHARA_EVENT_REMOVE_BUFF";
+    public static readonly string ADD_HURT = "CHARA_EVENT_ADD_HURT";
 }
 
 public struct PLAYER_AC_NAME
@@ -147,4 +150,17 @@ public class CharaDefine
         }
         return list;
     }
+}
+
+public enum HURT_TYPE
+{
+    NORMAL = 0, //普通
+    CRIT,       //暴击
+    PARRY,      //格挡
+}
+//伤害结构
+public struct HurtInfo
+{
+    public HURT_TYPE Type;
+    public float Value;
 }

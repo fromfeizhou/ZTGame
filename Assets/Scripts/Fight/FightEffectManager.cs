@@ -83,16 +83,18 @@ public class FightEffectManager : Singleton<FightEffectManager>
         string effectPath = GetEffectName(info.Id);
         int effectKey = -1;
         //存在声明周期的特效
-        if (info.LifeTime > 0)
+        if (info.LifeTime == -1)
         {
             effectKey = GetEffectDicKey();
             info.AssetKey = effectKey;
+            //数据层启动 占位 资源加载完毕 覆盖
+            _effectDic[effectKey] = null;
         }
         AssetManager.LoadAsset(effectPath, (Object target, string path) =>
         {
             GameObject go = target as GameObject;
-
-            if (null != go && null != layer)
+            //管理器清除 或者占位符 已经移除 特效已经不存在 不需要创建
+            if (null != go && null != layer && null != _effectDic && _effectDic.ContainsKey(effectKey))
             {
                 Transform effect = GameObject.Instantiate(go).transform;
                 effect.transform.localPosition = new Vector3(info.Offset.x, 0.1f, info.Offset.y);
@@ -133,15 +135,22 @@ public class FightEffectManager : Singleton<FightEffectManager>
     {
         if (null != _effectDic && _effectDic.ContainsKey(key))
         {
-            GameObject.Destroy(_effectDic[key]);
+            //排除占位符号
+            if (null != _effectDic[key])
+            {
+                GameObject.Destroy(_effectDic[key]);
+            }
             _effectDic.Remove(key);
         }
     }
 
     private int GetEffectDicKey()
     {
-        _effectKey++;
-        if (_effectKey > FightDefine.MaxFrame) _effectKey = 0;
+        while (_effectDic.ContainsKey(_effectKey))
+        {
+            _effectKey++;
+            if (_effectKey > FightDefine.MaxFrame) _effectKey = 0;
+        }
         return _effectKey;
     }
 

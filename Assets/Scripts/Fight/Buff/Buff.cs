@@ -2,44 +2,73 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class Buff{
 
-//带形象的buff
-public class Buff :BuffBase
-{
-    private Transform _layer;
+    public int BuffId;      //buffId
     public EffectInfo BuffEffectInfo;   //特效
-    private FightEffectCounter _effectCounter;
 
-    public Buff(int buffId,int frame,int userId = -1,Transform layer = null):base(buffId,frame,userId)
+    public int BuffType;    //buff类型
+    
+    public int StartTime;          //创建时间
+    public int IntervalTime;        //触发间隔
+    public int MaxTime;             //总时间 -1 无上限
+    public int LifeTime;            //存在时间
+
+    public int UserId;
+    public int MixMax;          //叠加上限 -1:无上限，1一次
+
+    public bool IsStart;        //buff启动
+    public bool IsExit;         //是否结束效果
+
+    public Buff(BuffData buffData)
     {
-        _layer = layer;
+        BuffId = buffData.BuffId;
 
         BuffEffectInfo = new EffectInfo("27_RFX_Magic_FlameSwirl1");
+        
+        BuffType = (int)BUFF_TYPE.NORMAL;
+
+        StartTime = buffData.Frame;
+        LifeTime = buffData.Frame;
+        IntervalTime = 30;
+        MaxTime = buffData.Frame + 300;
+
+        UserId = buffData.UserId;
+        MixMax = 1;
+
+
+        IsExit = false;
     }
 
-    public override void Start()
+    //创建
+    public virtual void Start()
     {
-        base.Start();
-        if (null == _layer || null == BuffEffectInfo || BuffEffectInfo.Id == "")
-            return;
-        _effectCounter = new FightEffectCounter();
-        _effectCounter.AddEffect(BuffEffectInfo, _layer);
+        IsStart = true;
     }
 
-    public override void Update()
+    //过程
+    public virtual void Update()
     {
-        base.Update();
-    }
-
-
-    public override void Destroy()
-    {
-        if (null != _effectCounter)
+        if (!IsStart || IsExit) return;
+        LifeTime++;
+        //持续时间 计时判断
+        if (MaxTime != -1 && LifeTime > MaxTime)
         {
-            _effectCounter.Destroy();
-            _effectCounter = null;
+            IsExit = true;
         }
-        base.Destroy();
+        if (!IsExit && LifeTime > 0 && LifeTime % IntervalTime == 0)
+        {
+            DoActoin();
+        }
+
     }
-  
+
+    //处理buff 事件
+    public virtual void DoActoin()
+    {
+    }
+
+    public virtual void Destroy()
+    {
+    }
 }
