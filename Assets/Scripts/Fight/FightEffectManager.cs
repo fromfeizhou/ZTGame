@@ -83,7 +83,7 @@ public class FightEffectManager : Singleton<FightEffectManager>
         string effectPath = GetEffectName(info.Id);
         int effectKey = -1;
         //存在声明周期的特效
-        if (info.LifeTime == -1)
+        if (info.LifeTime <= 0)
         {
             effectKey = GetEffectDicKey();
             info.AssetKey = effectKey;
@@ -100,7 +100,7 @@ public class FightEffectManager : Singleton<FightEffectManager>
                 effect.transform.localPosition = new Vector3(info.Offset.x, 0.1f, info.Offset.y);
                 effect.transform.localRotation = Quaternion.Euler(Vector3.up * info.Rotate);
                 effect.transform.SetParent(layer, false);
-                if (info.AssetKey > 0)
+                if (info.LifeTime > 0)
                 {
                     ParticleDestroy pds = go.GetComponent<ParticleDestroy>();
                     if (null == pds)
