@@ -172,7 +172,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
             PlayerBattleInfo playerInfo = new PlayerBattleInfo(1, CHARA_TYPE.PLAYER);
             playerInfo.SetFightInfo(100);
             playerInfo.SetPlayerInfo();
-            playerInfo.SetBattleInfo(battleId, battleId, new Vector3(_charaList.Count * 10, 0, _charaList.Count * 10));
+            playerInfo.SetBattleInfo(battleId, battleId, new Vector3(_charaList.Count * 10 + 200f, 0, _charaList.Count * 10 + 200f));
             //test
             _charaDic.Add(battleId, playerInfo);
             _charaList.Add(playerInfo);

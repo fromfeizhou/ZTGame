@@ -5,6 +5,13 @@ using UnityEngine;
 public enum eMapItemType
 {
     Tree,
+    Wall01,
+    Wall03,
+    JiTan01,
+    JiTan02,
+    RockGroup01,
+    RockGroup02,
+    Cao
 }
 
 [System.Serializable]
@@ -50,10 +57,10 @@ public class MapAsset : ScriptableObject
         }
 
         MapItemInfo mapItemInfo;
-        int indexMapItemInfo = mapInfo.MapItemList.FindIndex(a => a.MapItemType == eMapItemType.Tree);
+        int indexMapItemInfo = mapInfo.MapItemList.FindIndex(a => a.MapItemType == mapType);
         if (indexMapItemInfo < 0)
         {
-            mapItemInfo = new MapItemInfo() { MapItemType = eMapItemType.Tree };
+            mapItemInfo = new MapItemInfo() { MapItemType = mapType };
             mapInfo.MapItemList.Add(mapItemInfo);
         }
         else
