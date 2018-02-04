@@ -161,7 +161,7 @@ public class MapColliderEditor : EditorWindow
         float portCameraOrz = terrainWidth / mainViewItemCount;
         _cameraPort.orthographicSize = portCameraOrz * 0.5f;
 
-       int tempPortCount = (int)portCameraOrz / 5;//editView 编辑为5米
+       int tempPortCount = (int)portCameraOrz / 4;//editView 编辑为5米
        GridSize_Port = MapViewSize.x / tempPortCount;
         float portViewItemCount = MapViewSize.x / GridSize_Port;
         float editCameraOrz = portCameraOrz / portViewItemCount;
@@ -401,7 +401,7 @@ public class MapColliderEditor : EditorWindow
     private void DrawData()
     {
         float gridIndex_Main_X = _selectPos_Main.x / MapDefine.GridSize_Main * _gridCnt_Port;//_gridCnt_Main;
-        float gridIndex_Main_Y = (_gridCnt_Main - 1 - _selectPos_Main.y / MapDefine.GridSize_Main) * _gridCnt_Main;
+        float gridIndex_Main_Y = (_gridCnt_Main - 1 - _selectPos_Main.y / MapDefine.GridSize_Main) * _gridCnt_Port;
 
         float gridIndex_Port_X = (_selectPos_Port.x - MapViewSize.x) / GridSize_Port;
         float gridIndex_Port_Y = _gridCnt_Port - 1 - _selectPos_Port.y / GridSize_Port;
@@ -437,5 +437,6 @@ public class MapColliderEditor : EditorWindow
         if (index >= 0 && _mapBlockData[index].type == eMapBlockType.Event)
             return _mapBlockData[index];
         return null;
+
     }
 }

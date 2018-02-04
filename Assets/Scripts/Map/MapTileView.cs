@@ -7,6 +7,7 @@ public class MapTileView : MonoBehaviour {
 	private int _mapId;
     private MapTileData _mapTileData = null;
     private GameObject _terrain = null;
+    public bool isShow = false;
     public void setMapData(MapTileData data)
     {
         if (_mapId == data.MapId)
@@ -29,31 +30,31 @@ public class MapTileView : MonoBehaviour {
     }
 
     private int _gridCnt = MapDefine.MAPITEMSIZE * 4;
-    private Vector3 baseSize = new Vector3(0.25f,0,0.25f);
     private List<MapBlockData> mapBlock;
     void OnDrawGizmos()
     {
+        if (!isShow) return;
         if (mapBlock == null)
         {
             float minRow = _mapTileData.Row * _gridCnt;
             float maxRow = minRow + _gridCnt;
-            float minCol = _mapTileData.Column;
-            float maxCol = minCol+ _gridCnt * _gridCnt;
+            float minCol = _mapTileData.Column * _gridCnt;
+            float maxCol = minCol + _gridCnt;
             mapBlock = MapManager.GetInstance().GetMapBlock(minRow, maxRow, minCol, maxCol);
         }
         if (mapBlock.Count > 0)
         {
             for (int i = 0; i < mapBlock.Count; i++)
             {
-                Vector3 pos = transform.position + new Vector3(mapBlock[i].row * 0.25f, 0, mapBlock[i].col * 0.25f);
+                Vector3 pos =  new Vector3(mapBlock[i].row * 0.2f, 0, mapBlock[i].col * 0.2f);
                 if (MapManager.GetInstance().GetFloorColl(pos) != eMapBlockType.None)
                 {
-                    Gizmos.DrawWireCube(pos, baseSize);
+                    Gizmos.DrawWireCube(pos + aaa * 0.5f, aaa);
                 }
             }
         }
     }
-
+    private Vector3 aaa = new Vector3(0.2f, 0.0f, 0.2f);
     private void UpdateMapItem()
     {
         Transform tempParent = null;

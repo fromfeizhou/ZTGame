@@ -11,17 +11,20 @@ public class MapDefine
     public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
     public const string MAPITEM_Wall01 = "Assets/Prefabs/Map/wall01.prefab";
     public const string MapDataSavePath = "Assets/MapData.txt";
+    public const string MapRoleCreatePointSavePath = "Assets/RoleCreatePosData.txt";
     public const string MapItemPath = "Assets/Prefabs/Map/{0}.prefab";
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
-    public const int MAPITEMTOTALSIZE = 2000;
+    public const int MAPITEMTOTALSIZE = 2048;
     public const int MAPITEMSIZE = 256;
 
     //格子大小
-    public const float GridSize_Main = 40;
-    public const float GridSize_Port = 32;
+    public const float GridSize_Main = 20;
+    public const float GridSize_Port = 40;
     public const float GridSize_Edit = 32;
+
+    public const float MinEditMapRange = 4f;//地图编辑的最小范围4米（编辑器MapEditView）
 
     public static int MapWidth = MAPITEMSIZE;
     public static int MapHeight = MAPITEMSIZE;
@@ -39,6 +42,15 @@ public class MapDefine
         new Color(0, 0, 1, 0.4f),
         new Color(0.5f, 0,0.5f , 0.6f)
     };
+
+    //最小格子的宽
+    public static float GetMinInterval
+    {
+        get
+        {
+            return MinEditMapRange / (640f / GridSize_Edit);
+        }
+    }
 }
 
 public enum eMapBlockType
@@ -97,6 +109,32 @@ public class MapTilePos
     }
 }
 
+public class RoleTilePos
+{
+    public int row = 0;
+    public int col = 0;
+    public Vector3 pos = Vector3.zero;
+
+    public static RoleTilePos Parse(string data)
+    {
+        RoleTilePos roleData = new RoleTilePos();
+        string[] datas = data.Split(':');
+        if (datas.Length > 1)
+        {
+            roleData.row = int.Parse(datas[0]);
+            roleData.col = int.Parse(datas[1]);
+            float offest = MapDefine.GetMinInterval * 0.5f;
+            roleData.pos = new Vector3(roleData.row * MapDefine.GetMinInterval + offest, 0, roleData.col * MapDefine.GetMinInterval + offest);
+        }
+        else
+            Debug.LogError("data is error!");
+
+        return roleData;
+
+    }
+
+}
+
 public class MapManager : Singleton<MapManager>
 {
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
@@ -113,6 +151,42 @@ public class MapManager : Singleton<MapManager>
 
 
     private List<MapBlockData> _mapBlockData;
+    private List<RoleTilePos> _roleTilePosList;
+
+    #region 角色创建坐标
+    private void InitRoleCreatPosData()
+    {
+        if (File.Exists(MapDefine.MapRoleCreatePointSavePath))
+        {
+            _roleTilePosList = new List<RoleTilePos>();
+            string[] contents = File.ReadAllLines(MapDefine.MapRoleCreatePointSavePath);
+            for (int i = 0; i < contents.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(contents[i]))
+                {
+                    _roleTilePosList.Add(RoleTilePos.Parse(contents[i]));
+                }
+            }
+        }
+    }
+    //获取角色创建坐标
+    public Vector3 GetRoleCreatePoint(string posData)
+    {
+        string[] pos = posData.Split(':');
+        if (pos.Length > 0)
+        {
+            int row = int.Parse(pos[0]);
+            int col = int.Parse(pos[1]);
+            int index = _roleTilePosList.FindIndex(a => a.row == row && a.col == col);
+            if (index >= 0)
+                return _roleTilePosList[index].pos;
+        }
+        return Vector3.zero;
+        
+    }
+
+    #endregion
+  
 
     private void InitMapData()
     {
@@ -134,6 +208,7 @@ public class MapManager : Singleton<MapManager>
     public void InitMap()
     {
         InitMapData();
+        InitRoleCreatPosData();
         _sceneLayer = GameObject.Find("SceneMap");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
@@ -168,8 +243,8 @@ public class MapManager : Singleton<MapManager>
 
     public eMapBlockType GetFloorColl(Vector3 pos)
     {
-        int row = (int)(pos.x / 1280 * 5120);
-        int col = (int)(pos.z / 1280 * 5120);
+        int row = Mathf.RoundToInt(pos.x / MapDefine.GetMinInterval);
+        int col = Mathf.RoundToInt(pos.z / MapDefine.GetMinInterval);//1280 * 5120);
 
         if (_mapBlockData != null && _mapBlockData.Count > 0)
         {
