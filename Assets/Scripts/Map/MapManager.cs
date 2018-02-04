@@ -9,12 +9,14 @@ public class MapDefine
     public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
     public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
+    public const string MAPITEM_Wall01 = "Assets/Prefabs/Map/wall01.prefab";
     public const string MapDataSavePath = "Assets/MapData.txt";
+    public const string MapItemPath = "Assets/Prefabs/Map/{0}.prefab";
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
     public const int MAPITEMTOTALSIZE = 2000;
-    public const int MAPITEMSIZE = 200;
+    public const int MAPITEMSIZE = 256;
 
     //格子大小
     public const float GridSize_Main = 40;
