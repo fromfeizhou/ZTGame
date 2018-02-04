@@ -1,6 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[System.Serializable]
+public class FightEffectInfo
+{
+    public FIGHT_EF_TPYE EffectType;
+    public int Param1;  //表演id; buff id/类型; 改变属性参数;
+    public int Param2;
+    public int Param3;
+    public int Param4;
+}
 
 [System.Serializable]
 public class EffectInfo

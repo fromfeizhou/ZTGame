@@ -32,7 +32,19 @@ public enum MOVE_DIR
     UP_RIGHT = 8
 }
 
+public enum ATTRIBUTE
+{
+    HP = 0,     //血量
+    ATTACK,     //攻击
+}
 
+
+//属性改变类型
+public enum ATT_ALTER_TYPE
+{
+    VALUE = 0,      //绝对值
+    PRECENT,        //基础值百分比
+}
 
 
 //角色事件

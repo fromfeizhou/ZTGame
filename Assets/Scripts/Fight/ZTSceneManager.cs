@@ -33,7 +33,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //技能解析管理器初始化
         SkillActionManager.GetInstance().Init();
         //特效管理器
-        FightEffectManager.GetInstance().Init();
+        EffectManager.GetInstance().Init();
 
         InitEvent();
     }
@@ -49,7 +49,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //技能解析管理器移除
         SkillActionManager.GetInstance().Destroy();
         //特效管理器
-        FightEffectManager.GetInstance().Destroy();
+        EffectManager.GetInstance().Destroy();
     }
 
     private void ClearChara()

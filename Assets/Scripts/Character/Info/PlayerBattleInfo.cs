@@ -101,7 +101,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     //使用技能
     public void SkillCommand(SkillCommand command)
     {
-        if (CanUseSkill())
+        if (CanUseSkill() && null!= command)
         {
             //BattleState = BATTLE_STATE.SKILL;
             SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_SKILL_PARSER, new Notification(command));
@@ -110,7 +110,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
 
     public void MoveCommand(MoveCommand command)
     {
-        if (CanMove())
+        if (CanMove() && null != command)
         {
             MoveDir = command.MoveDir;
             if (MoveDir == MOVE_DIR.NONE)

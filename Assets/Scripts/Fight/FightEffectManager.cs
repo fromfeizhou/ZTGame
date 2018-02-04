@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //特效计数器
-public class FightEffectCounter
+public class EffectCounter
 {
     private List<int> _effectAsset;
 
-    public FightEffectCounter()
+    public EffectCounter()
     {
         _effectAsset = new List<int>();
     }
@@ -16,7 +16,7 @@ public class FightEffectCounter
     {
         if (null != _effectAsset)
         {
-            FightEffectManager.GetInstance().AddEffectByInfo(info, layer);
+            EffectManager.GetInstance().AddEffectByInfo(info, layer);
             if (info.AssetKey > 0)
             {
                 _effectAsset.Add(info.AssetKey);
@@ -26,14 +26,14 @@ public class FightEffectCounter
 
     public void RemoveEffectByKey(int key)
     {
-        FightEffectManager.GetInstance().RemoveEffectInfo(key);
+        EffectManager.GetInstance().RemoveEffectInfo(key);
     }
 
     public void ClearEffect()
     {
         if (null != _effectAsset)
         {
-            FightEffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
+            EffectManager.GetInstance().RemoveEffectInfo(_effectAsset);
             _effectAsset.Clear();
         }
     }
@@ -45,7 +45,7 @@ public class FightEffectCounter
     }
 }
 
-public class FightEffectManager : Singleton<FightEffectManager>
+public class EffectManager : Singleton<EffectManager>
 {
     private Dictionary<int, GameObject> _effectDic;
     private int _effectKey;

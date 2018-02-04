@@ -17,7 +17,7 @@ public class SACollider : SkillActionBase
 
     private GameObject _colliderView;     //碰撞显示
     private GameObject _colliderEffect;     //特效容器
-    private FightEffectCounter _effectCounter;      //非主动清理特效 记录 销毁时候清理
+    private EffectCounter _effectCounter;      //非主动清理特效 记录 销毁时候清理
 
     public override bool IsStart
     {
@@ -48,7 +48,7 @@ public class SACollider : SkillActionBase
     {
         _collider = collider;
         _colliderInfo = collidInfo;
-        _effectCounter = new FightEffectCounter();
+        _effectCounter = new EffectCounter();
 
         _colliderCount = 0;
         ColliderDestroy = false;

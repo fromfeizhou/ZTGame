@@ -44,7 +44,7 @@ public class SkillJoystick : JoystickBase
         }
         _skillDownState = false;
 
-        int distance = 10;
+        int distance = 6;
 
         //---------------test------------------------//
         SkillId = SkillSelected.SelectIndex;
