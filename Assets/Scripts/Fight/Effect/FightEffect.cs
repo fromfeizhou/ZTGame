@@ -7,10 +7,10 @@ public class FightEffect{
     public int UserId;              //施法者 外部传递
     public object TakeParam;        //外部传递参数
 
-    public void FightEffect(FightEffectInfo info,int userId = -1,object takeParam = null)
+    public FightEffect(FightEffectInfo info, int userId = -1, object take = null)
     {
         Info = info;
         UserId = userId;
-        TakeParam = takeParam;
+        TakeParam = take;
     }
 }

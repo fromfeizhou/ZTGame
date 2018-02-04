@@ -10,7 +10,7 @@ public class CharaActor : MonoBehaviour
     //动画
     private Animation _anima;
     //特效资源记录(一般为 技能特殊添加特效)
-    private FightEffectCounter _effectCounter;
+    private EffectCounter _effectCounter;
 
 
     public virtual bool SetInfo(CharaActorInfo info)
@@ -22,7 +22,7 @@ public class CharaActor : MonoBehaviour
 
         if (null == _charaInfo) return true;
 
-        _effectCounter = new FightEffectCounter();
+        _effectCounter = new EffectCounter();
         InitEvent();
         return true;
     }
