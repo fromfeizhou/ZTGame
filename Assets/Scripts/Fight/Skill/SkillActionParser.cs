@@ -74,7 +74,8 @@ public class SkillActionParser
                 return new SAColliderMove(moveInfo, colliderMove, skillInfo.colliderInfo, this, frame);
             case SkillDefine.SkillActionType.ADD_EFFECT:
                 return new SAEffect(skillInfo.effectInfo, this, frame);
-
+            case SkillDefine.SkillActionType.FIGHT_EFFECT:
+                return new SAFightEffect(skillInfo.fightEffects,this,frame);
         }
         return new SkillActionBase(this, frame);
     }

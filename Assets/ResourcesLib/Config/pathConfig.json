@@ -19,7 +19,20 @@
       "key": "ImgBtnSprite",
       "path": "SpriteOut/BtnSrc"
     },
-	
+
+	{
+      "key": "BattleUIPrefab",
+      "path": "Prefabs/UI/Battle"
+    },
+
+	{
+      "key": "UIPrefabs",
+      "path": "Prefabs/UI"
+    },
+	{
+      "key": "FaceSpAsset",
+      "path": "Images/Face"
+    },
 	{
       "key": "Map",
       "path": "Map"

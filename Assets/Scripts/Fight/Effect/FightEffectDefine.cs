@@ -15,7 +15,7 @@ public enum FIGHT_EF_TPYE
 
 public class FightEffectDefine
 {
-    public static void DoEffect(ICharaBattle battleInfo, FightEffect effect)
+    public static void ParseEffect(ICharaBattle battleInfo, FightEffect effect)
     {
         if (null == battleInfo)
             return;
@@ -42,7 +42,7 @@ public class FightEffectDefine
         }
     }
 
-    public static void ChangeAttribute(ICharaBattle battleInfo, FightEffect effect)
+    private static void ChangeAttribute(ICharaBattle battleInfo, FightEffect effect)
     {
         //改变的属性选择
         switch ((ATTRIBUTE)effect.Info.Param1)
@@ -63,7 +63,7 @@ public class FightEffectDefine
         }
     }
 
-    public static void DoAction(ICharaBattle battleInfo, FightEffect effect)
+    private static void DoAction(ICharaBattle battleInfo, FightEffect effect)
     {
       
         ICharaBattle user = ZTSceneManager.GetInstance().GetCharaById(effect.UserId) as ICharaBattle;
@@ -74,31 +74,33 @@ public class FightEffectDefine
         }
     }
 
-    public static void CalculateHurt(ICharaBattle battleInfo, FightEffect effect)
+    private static void CalculateHurt(ICharaBattle battleInfo, FightEffect effect)
     {
         ICharaFight target = battleInfo as ICharaFight;
         ICharaFight user = ZTSceneManager.GetInstance().GetCharaById(effect.UserId) as ICharaFight;
         if (null == target || null == user) return;
         HurtInfo hurtInfo = new HurtInfo();
         hurtInfo.Type = HURT_TYPE.NORMAL;
+        hurtInfo.BattleId = battleInfo.BattleId;
+        hurtInfo.Pos = battleInfo.MovePos;
         hurtInfo.Value = user.Attack;
         battleInfo.AddHurt(hurtInfo);
     }
 
-    public static void AddBuff(ICharaBattle battleInfo, FightEffect effect)
+    private static void AddBuff(ICharaBattle battleInfo, FightEffect effect)
     {
         if (effect.UserId <= 0) return;
         battleInfo.AddBuff(new BuffData(effect.Info.Param1, ZTSceneManager.GetInstance().SceneFrame, effect.UserId));
     }
 
-    public static void RemoveBuff(ICharaBattle battleInfo, FightEffect effect)
+    private static void RemoveBuff(ICharaBattle battleInfo, FightEffect effect)
     {
-        switch (effect.Info.Param1)
+        switch ((BUFF_REMOVE_TYPE)effect.Info.Param1)
         {
-            case 0:
+            case BUFF_REMOVE_TYPE.ID:
                 battleInfo.RemoveBuff(effect.Info.Param2);
                 break;
-            case 1:
+            case BUFF_REMOVE_TYPE.TYPE:
                 battleInfo.RemoveBuffByType(effect.Info.Param2);
                 break;
         }

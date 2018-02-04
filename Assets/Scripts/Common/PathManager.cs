@@ -20,20 +20,21 @@ public class PathManager
     public static Dictionary<string, string> pathDic;
     public static string ConfigPath = "Assets/ResourcesLib/Config";
     public static string ResoucePath = "Assets/ResourcesLib";
-    //获取resourceLib下的目录
-    public static string GetResPath(string key = "ImgShopItem", string rootKey = "")
+
+
+    private static string GetRootPath(string key = "ImgShopItem", bool isResoucePath = true)
     {
         string path = "";
-        string root = PathManager.ResoucePath;
+        string root = "Assets";
+        if (isResoucePath)
+        {
+            root = PathManager.ResoucePath;
+        }
         if (pathDic == null)
         {
             ParsePath();
+            return "";
         }
-        if (pathDic.ContainsKey(rootKey))
-         {
-             root = pathDic[rootKey];
-         }
-
         if (pathDic.ContainsKey(key))
         {
             path = System.IO.Path.Combine(root, pathDic[key]);
@@ -41,10 +42,26 @@ public class PathManager
          
         return path;
     }
-
-    public static string GetResPathByName(string key = "ImgShopItem", string name = "10001.png", string rootKey = "")
+    /// <summary>
+    /// resourcesLib目录下的资源
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public static string GetResPathByName(string key = "ImgShopItem", string name = "10001.png")
     {
-        string dic = GetResPath(key, rootKey);
+        string dic = GetRootPath(key);
+        return CombinePath(dic, name);
+    }
+    /// <summary>
+    /// 全路径
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public static string GetFullPathByName(string key = "ImgShopItem", string name = "10001.png")
+    {
+        string dic = GetRootPath(key,false);
         return CombinePath(dic, name);
     }
 

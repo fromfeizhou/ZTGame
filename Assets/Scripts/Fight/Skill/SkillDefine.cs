@@ -140,6 +140,7 @@ public class SkillDefine
         COLLIDER,      //碰撞
         COLLIDER_MOVE,  //碰撞移动
         ADD_EFFECT,     //添加特效
+        FIGHT_EFFECT,   //战斗效果
     }
 
     public enum MoveType

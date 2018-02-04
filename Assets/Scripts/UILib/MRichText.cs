@@ -69,7 +69,7 @@ public class MRichText : Text,IPointerClickHandler
     {
         if (_prefabObj == null)
         {
-            AssetManager.LoadAsset(PathManager.GetResPathByName("Prefabs", "FaceActoin.prefab", "UILib"),FaceActionLoadCom);
+            AssetManager.LoadAsset(PathManager.GetFullPathByName("UIPrefabs", "FaceActoin.prefab"), FaceActionLoadCom);
             return;
         }
         for (int i = 0; i < _imagesTagInfoList.Count; i++)

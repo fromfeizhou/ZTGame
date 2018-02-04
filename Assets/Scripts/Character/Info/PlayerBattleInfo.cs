@@ -159,10 +159,10 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         BattleBuffCouner.RemoveBuffByType(type);
     }
 
-
+    //添加伤害 显示
     public void AddHurt(HurtInfo info)
     {
-        this.dispatchEvent(CHARA_EVENT.ADD_HURT, new Notification(info));
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_UI_HURT_VALUE, new Notification(info));
     }
 
     public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))

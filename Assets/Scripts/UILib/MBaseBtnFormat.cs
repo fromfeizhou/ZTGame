@@ -159,14 +159,14 @@ public class MBaseBtnFormat : MonoBehaviour,IPointerDownHandler,IPointerUpHandle
     //返回按钮资源 普通状态
     public string GetBtnComResPath()
     {
-        string path = System.IO.Path.Combine(PathManager.GetResPath("ImgBtnSprite"), "btnStyle_" + btnType + ".png");
+        string path = PathManager.GetResPathByName("ImgBtnSprite", "btnStyle_" + btnType + ".png");
         return path;
     }
 
     //返回按钮资源 选中状态
     public string GetBtnSelResPath()
     {
-        string path = System.IO.Path.Combine(PathManager.GetResPath("ImgBtnSprite"), "btnStyle_" + btnType + "s.png");
+        string path = PathManager.GetResPathByName("ImgBtnSprite", "btnStyle_" + btnType + "s.png");
         return path;
     }
 

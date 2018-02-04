@@ -16,6 +16,7 @@
 
     public virtual void Destroy()
     {
+        _instance = default(T);
     }
 }
 

@@ -136,6 +136,9 @@ public class SkillAssetEditor : Editor
                         case SkillDefine.SkillActionType.ADD_EFFECT:
                             UpdateEffectItem(skillInfo.effectInfo);
                             break;
+                        case SkillDefine.SkillActionType.FIGHT_EFFECT:
+                            UpdateFightEffect(skillInfo.fightEffects);
+                            break;
                     }
                     GUILayout.EndVertical();
 
@@ -375,7 +378,7 @@ public class SkillAssetEditor : Editor
         //}
         ////GUILayout.EndHorizontal();
 
-        if (GUILayout.Button("Add Effect", GUILayout.Width(100), GUILayout.Height(30)))
+        if (GUILayout.Button("Add Effect", GUILayout.Width(100)))
         {
 
             colliderInfo.EffectInfos.Add(new EffectInfo());
@@ -421,6 +424,84 @@ public class SkillAssetEditor : Editor
         GUILayout.Label("LifeTime:", GUILayout.Width(100));
         effectInfo.LifeTime = EditorGUILayout.IntField(effectInfo.LifeTime);
         GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+    }
+
+    private void UpdateFightEffect(List<FightEffectInfo> list)
+    {
+        if (GUILayout.Button("Add FightEffect", GUILayout.Width(100)))
+        {
+
+            list.Add(new FightEffectInfo());
+        }
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            GUILayout.BeginHorizontal("FightEffect" + i, "window");
+            GUILayout.BeginVertical();
+            UpdateFightEffectItem(list[i]);
+            if (GUILayout.Button("Clear FightEffect", GUILayout.Width(120)))
+            {
+                list.RemoveAt(i);
+            }
+            GUILayout.EndVertical();
+            GUILayout.EndHorizontal();
+
+        }
+    }
+
+    private void UpdateFightEffectItem(FightEffectInfo effectInfo)
+    {
+        GUILayout.BeginVertical();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("EffectType:", GUILayout.Width(100));
+        effectInfo.EffectType = (FIGHT_EF_TPYE)EditorGUILayout.EnumPopup("", effectInfo.EffectType);
+        GUILayout.EndHorizontal();
+
+        if (effectInfo.EffectType == FIGHT_EF_TPYE.ARRTIBUTE)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("ATTRIBUTE:", GUILayout.Width(100));
+            effectInfo.Param1 = (int)(ATTRIBUTE)EditorGUILayout.EnumPopup("", ((ATTRIBUTE)effectInfo.Param1));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("ATT_ALTER_TYPE:", GUILayout.Width(150));
+            effectInfo.Param2 = (int)(ATT_ALTER_TYPE)EditorGUILayout.EnumPopup("", ((ATT_ALTER_TYPE)effectInfo.Param2));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Param:", GUILayout.Width(100));
+            effectInfo.Param3 = EditorGUILayout.IntField(effectInfo.Param3);
+            GUILayout.EndHorizontal();
+        }
+        else if (effectInfo.EffectType == FIGHT_EF_TPYE.RE_BUFF)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("RemoveType:", GUILayout.Width(100));
+            effectInfo.Param1 = (int)(BUFF_REMOVE_TYPE)EditorGUILayout.EnumPopup("", ((BUFF_REMOVE_TYPE)effectInfo.Param2));
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            string label = "BuffId:";
+            if ((BUFF_REMOVE_TYPE)effectInfo.Param1 == BUFF_REMOVE_TYPE.TYPE)
+            {
+                label = "BuffType:";
+            }
+
+            GUILayout.Label(label, GUILayout.Width(100));
+            effectInfo.Param2 = EditorGUILayout.IntField(effectInfo.Param2);
+            GUILayout.EndHorizontal();
+        }
+        else if (effectInfo.EffectType == FIGHT_EF_TPYE.ACTION || effectInfo.EffectType == FIGHT_EF_TPYE.ADD_BUFF)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Param:", GUILayout.Width(100));
+            effectInfo.Param1 = EditorGUILayout.IntField(effectInfo.Param1);
+            GUILayout.EndHorizontal();
+        }
 
         GUILayout.EndVertical();
     }

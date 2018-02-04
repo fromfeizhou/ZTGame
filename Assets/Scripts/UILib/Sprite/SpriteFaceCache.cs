@@ -11,8 +11,8 @@ public class SpriteFaceCache
     public static void ParseAsset()
     {
         _spAssetDic = new Dictionary<int, SpriteAsset>();
-        string path = System.IO.Path.Combine(PathManager.GetResPath("FaceSpAsset"), "emoji.asset");
-        string path2 = System.IO.Path.Combine(PathManager.GetResPath("FaceSpAsset"), "emoji_lxh.asset");
+        string path = PathManager.GetResPathByName("FaceSpAsset", "emoji.asset");
+        string path2 = PathManager.GetResPathByName("FaceSpAsset", "emoji_lxh.asset");
         _pathList = new List<string>();
         _pathList.Add(path);
         _pathList.Add(path2);

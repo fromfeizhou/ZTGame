@@ -46,6 +46,12 @@ public enum ATT_ALTER_TYPE
     PRECENT,        //基础值百分比
 }
 
+public enum BUFF_REMOVE_TYPE
+{
+    ID = 0,
+    TYPE,
+}
+
 
 //角色事件
 public struct CHARA_EVENT
@@ -174,5 +180,7 @@ public enum HURT_TYPE
 public struct HurtInfo
 {
     public HURT_TYPE Type;
+    public int BattleId;
+    public Vector3 Pos;
     public float Value;
 }

@@ -15,7 +15,6 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     public int SceneFrame = 0;
     //操作指令集合
     public Dictionary<int, List<FightCommandBase>> CommandDic;
-
     //初始化
     public override void Init()
     {
@@ -34,7 +33,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         SkillActionManager.GetInstance().Init();
         //特效管理器
         EffectManager.GetInstance().Init();
-
+        //战斗ui
+        ZTSceneUI.GetInstance().Init();
         InitEvent();
     }
 
@@ -50,6 +50,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         SkillActionManager.GetInstance().Destroy();
         //特效管理器
         EffectManager.GetInstance().Destroy();
+        //战斗ui
+        ZTSceneUI.GetInstance().Destroy();
     }
 
     private void ClearChara()
@@ -99,6 +101,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         UpdatePlayer();
 
         SkillActionManager.GetInstance().Update();
+        //战斗ui
+        ZTSceneUI.GetInstance().Update();
     }
 
     //命令刷新
