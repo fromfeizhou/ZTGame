@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ZTSceneManager : Singleton<ZTSceneManager>
 {
+    private CameraFollow _cameraManager;
 
     private Dictionary<int,CharaActorInfo> _charaDic = null;
     private List<CharaActorInfo> _charaList = null;
@@ -15,9 +16,12 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     public int SceneFrame = 0;
     //操作指令集合
     public Dictionary<int, List<FightCommandBase>> CommandDic;
+
     //初始化
     public override void Init()
     {
+        _cameraManager = Camera.main.GetComponent<CameraFollow>();
+
         _charaDic = new Dictionary<int, CharaActorInfo>();
         _charaViewDic = new Dictionary<int, GameObject>();
         _charaList = new List<CharaActorInfo>();
@@ -277,4 +281,10 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         }
     }
 
+    
+    //震屏
+    public void SharkScreen(int time,float offset)
+    {
+        _cameraManager.Shark(time,offset);
+    }
 }

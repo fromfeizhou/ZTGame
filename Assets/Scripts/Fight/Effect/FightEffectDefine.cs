@@ -6,6 +6,7 @@ using UnityEngine;
 public enum FIGHT_EF_TPYE
 {
     NONE = 0,
+    SHARK,         //震屏
     ACTION,      //触发表演
     HURT,       //伤害
     ADD_BUFF,       //添加buff
@@ -15,6 +16,7 @@ public enum FIGHT_EF_TPYE
 
 public class FightEffectDefine
 {
+    public static float IntToFloat = 100.0f;
     public static void ParseEffect(ICharaBattle battleInfo, FightEffect effect)
     {
         if (null == battleInfo)
@@ -23,6 +25,9 @@ public class FightEffectDefine
         switch (effect.Info.EffectType)
         {
             case FIGHT_EF_TPYE.NONE:
+                break;
+            case FIGHT_EF_TPYE.SHARK:
+                SharkScreen(battleInfo,effect);
                 break;
             case FIGHT_EF_TPYE.HURT:
                 CalculateHurt(battleInfo, effect);
@@ -40,6 +45,15 @@ public class FightEffectDefine
                 ChangeAttribute(battleInfo, effect);
                 break;
         }
+    }
+
+    private static void SharkScreen(ICharaBattle battleInfo,FightEffect effect){
+        //非玩家自己 不需要震动
+        if (battleInfo.BattleId != ZTSceneManager.GetInstance().MyPlayer.BattleId) return;
+        
+        int time = effect.Info.Param1;
+        float offset = effect.Info.Param2 / IntToFloat;
+        ZTSceneManager.GetInstance().SharkScreen(time, offset);
     }
 
     private static void ChangeAttribute(ICharaBattle battleInfo, FightEffect effect)

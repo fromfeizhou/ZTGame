@@ -141,6 +141,7 @@ public class MapManager : Singleton<MapManager>
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<GameObject> _mapViewList = null;
     private MapTilePos _mapTilePosCenter = new MapTilePos();    //地图中心
+    private Vector3 _mapPosCenter = Vector3.zero;   //地图中心点
     private int _maxDataRow;    //地图数据最大行数
     private int _maxDataColumn;     //地图数据最大列数
     private MapTilePos _mapTilePos;
@@ -328,8 +329,14 @@ public class MapManager : Singleton<MapManager>
         {
             _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / MapDefine.MapWidth);
             _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / MapDefine.MapHeight);
+            _mapPosCenter = pos;
             UpdateMapView();
         }
+    }
+    //获得地图中心坐标
+    public Vector3 GetCenterPos()
+    {
+        return _mapPosCenter;
     }
 
     //初始化地图块

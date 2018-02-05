@@ -47,6 +47,10 @@ public class CameraFollow : MonoBehaviour
 
     void Update()
     {
+        if(_isShark){
+            UpdateShark();
+            return;
+        }
         if (null != target)
         {
             ZoomCamera();
@@ -56,6 +60,10 @@ public class CameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
+        if (_isShark)
+        {
+            return;
+        }
         if (null != target)
         {
             FollowPlayer();
@@ -185,4 +193,45 @@ public class CameraFollow : MonoBehaviour
     {
         //horizontalAngle = Mathf.SmoothDamp(horizontalAngle, horizontalAngle + mousePosOffset.x * Time.deltaTime * swipeSpeed, ref xVelocity, 0.1f);
     }
+
+    // 震屏
+    private int _sharkIndex;
+    private bool _isShark;
+    private Vector3 _sharkOrgPos;
+    private int _indexMax = 10;
+    private float _offset = 0.3f;
+
+    public void Shark(int time = 10,float offset = 0.3f)
+    {
+        _isShark = true;
+        _sharkIndex = 0;
+        _sharkOrgPos = this.transform.position;
+        _indexMax = time;
+        _offset = offset;
+    }
+   
+    private void UpdateShark()
+    {
+        if (!_isShark)
+            return;
+
+        if (_offset == 0)
+            return;
+        float posx = UnityEngine.Random.Range(-_offset, _offset);
+        float posy = UnityEngine.Random.Range(-_offset, _offset);
+        Vector3 pos = _sharkOrgPos;
+        pos.x += posx;
+        pos.y += posy;
+        SetPos(pos);
+        _sharkIndex++;
+        if (_sharkIndex >= _indexMax)
+        {
+            _isShark = false;
+        }
+    }
+    private void SetPos(Vector3 pos)
+    {
+        this.transform.position = pos;
+    }
+
 }

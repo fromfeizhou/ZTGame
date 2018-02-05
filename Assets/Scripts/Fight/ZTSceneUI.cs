@@ -32,6 +32,7 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
         base.Init();
         _hpTransform = GameObject.Find("HpPanel").transform;
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        Debug.Log(_canvas.worldCamera.name);
         _hurtTs = new List<TextInfo>();
         LoadHurtGo();
         InitEvent();
@@ -39,12 +40,12 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
 
     //控制伤害值动画的字段
     private float _tiTime = 0.9f;//消失时间
-    private float _tiHeight = 0.8f;//弹得高度
+    //private float _tiHeight = 0.8f;//弹得高度
     private float _tiSpeed = 1.2f;//抛物线速度
     private float _tiHorSpeedMin = 0.8f;//水平速度随机值的最小值
     private float _tiHorSpeedMax = 1.3f;//水平速度随机值的最大值
     private float _tiHorSpeedReduce = 0.007f;//水平减速度
-    private float _tiVerSpeed = 3;//垂直速度
+    //private float _tiVerSpeed = 3;//垂直速度
     private float _tiExtent = 4;//抛物线系数
     public void Update()
     {

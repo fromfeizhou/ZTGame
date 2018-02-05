@@ -477,11 +477,22 @@ public class SkillAssetEditor : Editor
             effectInfo.Param3 = EditorGUILayout.IntField(effectInfo.Param3);
             GUILayout.EndHorizontal();
         }
+        else if (effectInfo.EffectType == FIGHT_EF_TPYE.SHARK)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("SharkTime:", GUILayout.Width(100));
+            effectInfo.Param1 = EditorGUILayout.IntField(effectInfo.Param1);
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Offset:", GUILayout.Width(100));
+            effectInfo.Param2 = EditorGUILayout.IntField(effectInfo.Param2);
+            GUILayout.EndHorizontal();
+        }
         else if (effectInfo.EffectType == FIGHT_EF_TPYE.RE_BUFF)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("RemoveType:", GUILayout.Width(100));
-            effectInfo.Param1 = (int)(BUFF_REMOVE_TYPE)EditorGUILayout.EnumPopup("", ((BUFF_REMOVE_TYPE)effectInfo.Param2));
+            effectInfo.Param1 = (int)(BUFF_REMOVE_TYPE)EditorGUILayout.EnumPopup("", ((BUFF_REMOVE_TYPE)effectInfo.Param1));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
