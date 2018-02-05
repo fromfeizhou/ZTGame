@@ -36,6 +36,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             if (!_charaPos.Equals(value))
             {
                 _charaPos = value;
+                Collider.MovePos = _charaPos;
                 this.UpdatePos(_charaPos);
             }
         }

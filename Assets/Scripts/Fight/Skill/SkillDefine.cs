@@ -59,9 +59,8 @@ public class ColliderInfo
     public bool IsPenetrate;    //穿透障碍
     public int ColliderMax; //最大碰撞个数
 
-    public List<int> SelfActions;
-    public List<int> TargetActions;
     public List<EffectInfo> EffectInfos;
+    public List<FightEffectInfo> FightEffectList;
 
 
     // 碰撞框 参数
@@ -89,8 +88,7 @@ public class ColliderInfo
         IsPenetrate = false;
         ColliderMax = -1;
 
-        SelfActions = new List<int>();
-        TargetActions = new List<int>();
+        FightEffectList = new List<FightEffectInfo>();
         EffectInfos = new List<EffectInfo>();
 
         ColliderTarget = SkillDefine.ColliderTarget.SELF;

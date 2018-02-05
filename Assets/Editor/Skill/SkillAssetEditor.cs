@@ -342,6 +342,8 @@ public class SkillAssetEditor : Editor
                 GUILayout.EndHorizontal();
                 break;
         }
+        UpdateFightEffect(colliderInfo.FightEffectList);
+        GUILayout.Space(10);
         //GUILayout.BeginHorizontal();
         ////GUILayout.Label("ColliderActions:", GUILayout.Width(100));
         ////colliderInfo.colliderActions = EditorGUILayout.TextField(colliderInfo.colliderActions);
@@ -397,7 +399,6 @@ public class SkillAssetEditor : Editor
             GUILayout.EndHorizontal();
            
         }
-
 
         GUILayout.EndVertical();
     }

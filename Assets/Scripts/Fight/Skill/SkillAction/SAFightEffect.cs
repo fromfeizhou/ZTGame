@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//自己对自己使用效果(废弃不用 通过碰撞来触发)
 public class SAFightEffect : SkillActionBase
 {
 	public List<FightEffectInfo> EffectList;
@@ -9,6 +10,7 @@ public class SAFightEffect : SkillActionBase
     public SAFightEffect(List<FightEffectInfo> list, SkillActionParser actionParser, int actFrame)
         : base(actionParser, actFrame)
     {
+        Debug.LogError("自己对自己使用效果(废弃不用 通过碰撞来触发)");
         EffectList = list;
     }
 
@@ -23,7 +25,7 @@ public class SAFightEffect : SkillActionBase
     {
         for (int i = 0; i < EffectList.Count; i++)
         {
-            FightEffectDefine.ParseEffect(_skillPlayer, new FightEffect(EffectList[i], _skillPlayer.BattleId));
+            FightEffectDefine.ParseEffect(_skillPlayer, EffectList[i], _skillPlayer.BattleId);
         }
         Complete();
     }

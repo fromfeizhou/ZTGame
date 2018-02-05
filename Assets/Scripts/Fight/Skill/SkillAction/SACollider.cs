@@ -149,25 +149,35 @@ public class SACollider : SkillActionBase
             Complete();
             return;
         }
-        if (null != _colliderInfo.SelfActions && _colliderInfo.SelfActions.Count > 0)
+        if (null != _colliderInfo.FightEffectList && _colliderInfo.FightEffectList.Count > 0)
         {
-            for (int i = 0; i < _colliderInfo.SelfActions.Count; i++)
+            Vector3 dir = new Vector3(_collider.x, 0, _collider.y);
+            dir = (player.MovePos - dir).normalized;
+
+            for (int i = 0; i < _colliderInfo.FightEffectList.Count; i++)
             {
-                int actionId = _colliderInfo.SelfActions[i];
-                _actionParser.ActionActivatebyId(actionId);
+                FightEffectDefine.ParseEffect(player, _colliderInfo.FightEffectList[i], _skillPlayer.BattleId,dir);
             }
         }
-        if (null != _colliderInfo.TargetActions && _colliderInfo.TargetActions.Count > 0)
-        {
-            for (int i = 0; i < _colliderInfo.TargetActions.Count; i++)
-            {
-                int skillId = _colliderInfo.TargetActions[i];
-                Vector3 dir = new Vector3(_collider.x, 0, _collider.y);
-                dir = (dir - player.MovePos).normalized;
-                SkillCommand command = FightDefine.GetSkillCommand(player.BattleId, skillId, dir, player.MovePos);
-                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND,new Notification(command));
-            }
-        }
+        //if (null != _colliderInfo.SelfActions && _colliderInfo.SelfActions.Count > 0)
+        //{
+        //    for (int i = 0; i < _colliderInfo.SelfActions.Count; i++)
+        //    {
+        //        int actionId = _colliderInfo.SelfActions[i];
+        //        _actionParser.ActionActivatebyId(actionId);
+        //    }
+        //}
+        //if (null != _colliderInfo.TargetActions && _colliderInfo.TargetActions.Count > 0)
+        //{
+        //    for (int i = 0; i < _colliderInfo.TargetActions.Count; i++)
+        //    {
+        //        int skillId = _colliderInfo.TargetActions[i];
+        //        Vector3 dir = new Vector3(_collider.x, 0, _collider.y);
+        //        dir = (dir - player.MovePos).normalized;
+        //        SkillCommand command = FightDefine.GetSkillCommand(player.BattleId, skillId, dir, player.MovePos);
+        //        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND,new Notification(command));
+        //    }
+        //}
     }
 
     protected override void Complete()
@@ -198,6 +208,7 @@ public class SACollider : SkillActionBase
         if (null == _colliderEffect)
         {
             _colliderEffect = new GameObject();
+            _colliderEffect.name = "EffectCon";
             _colliderEffect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
             _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
             _colliderEffect.transform.SetParent(GameObject.Find("PlayerLayer").transform,false);
