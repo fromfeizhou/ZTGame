@@ -103,10 +103,23 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         OwnerControl.GetInstance().Update();
         UpdateCommand();
         UpdatePlayer();
-
+        UpdateMap();
         SkillActionManager.GetInstance().Update();
         //战斗ui
         ZTSceneUI.GetInstance().Update();
+    }
+
+    private void UpdateMap()
+    {
+        if (_charaViewDic != null)
+        {
+            GameObject tempPlayer;
+            if (_charaViewDic.TryGetValue(1, out tempPlayer))
+            {
+
+                MapManager.GetInstance().Update(tempPlayer.transform.position);
+            }
+        }
     }
 
     //命令刷新

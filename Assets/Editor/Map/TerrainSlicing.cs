@@ -51,11 +51,9 @@ public class TerrainSlicing : Editor
         Vector3 size = new Vector3(terrainData.size.x / SlicingBlockCnt, terrainData.size.y, terrainData.size.z / SlicingBlockCnt);
 
         Material mat = new Material(Shader.Find(MapShader));
-        Debug.LogError("地形贴图数量：" + terrainData.splatPrototypes.Length);
         for (int i = 0; i < terrainData.splatPrototypes.Length; i++)
         {
             var sp = terrainData.splatPrototypes[i];
-            Debug.LogError("地形贴图Name：" + sp.texture.name);
             mat.SetTexture("_Texture" + i, sp.texture);
         }
         AssetDatabase.CreateAsset(mat, MapMaterialSavePath);
@@ -191,7 +189,7 @@ public class TerrainSlicing : Editor
             return;
         }
 
-        int vertexCountScale = 4;       // [dev] 将顶点数稀释 vertexCountScale*vertexCountScale 倍
+        int vertexCountScale = 1;       // [dev] 将顶点数稀释 vertexCountScale*vertexCountScale 倍
         int w = terrainData.heightmapWidth;
         int h = terrainData.heightmapHeight;
         Vector3 size = terrainData.size;

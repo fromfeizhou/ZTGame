@@ -5,13 +5,20 @@ using UnityEngine;
 public enum eMapItemType
 {
     Tree,
+    Tree08,
     Wall01,
+    Wall02,
     Wall03,
     JiTan01,
     JiTan02,
     RockGroup01,
     RockGroup02,
-    Cao
+    Cao,
+    Cao2,
+    JianYu,
+    JianZhu01,
+    JianZhu02,
+    JianZhu03
 }
 
 [System.Serializable]

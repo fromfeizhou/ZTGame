@@ -187,12 +187,13 @@ public class MapManager : Singleton<MapManager>
     }
 
     #endregion
-  
+
 
     private void InitMapData()
     {
         if (File.Exists(MapDefine.MapDataSavePath))
         {
+            _roleTilePosList = new List<RoleTilePos>();
             _mapBlockData = new List<MapBlockData>();
             string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
             for (int i = 0; i < contents.Length; i++)
@@ -200,21 +201,23 @@ public class MapManager : Singleton<MapManager>
                 if (!string.IsNullOrEmpty(contents[i]))
                 {
                     _mapBlockData.Add(MapBlockData.Parse(contents[i]));
+
+                    RoleTilePos temp = RoleTilePos.Parse(contents[i]);
+                    if (temp != null)
+                        _roleTilePosList.Add(temp);
                 }
             }
-
         }
     }
 
     public void InitMap()
     {
         InitMapData();
-        InitRoleCreatPosData();
         _sceneLayer = GameObject.Find("SceneMap");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
-        _maxDataRow = 5;
-        _maxDataColumn = 9;
+        _maxDataRow = 8;
+        _maxDataColumn = 8;
 
         _mapDataDic = new Dictionary<int, Dictionary<int, MapTileData>>();
         for (int i = 0; i < _maxDataRow * _maxDataColumn; i++)
@@ -515,5 +518,15 @@ public class MapManager : Singleton<MapManager>
         row = row >= 0 ? row : 0;
         row = row >= rowMax ? rowMax : row;
         return new MapTilePos(row, column);
+    }
+
+
+    public void Update(Vector3 pos)
+    {
+        if (_isInit == false)
+        {
+            return;
+        }
+        SetMapCenterPos(pos);
     }
 }
