@@ -22,6 +22,8 @@ public class EffectInfo
     public int LifeTime = -1;
     public EffectInfo(string id = "", float scale = 1.0f, int lifeTime = -1, Vector3 offset = default(Vector3))
     {
+        AssetKey = -1;
+        
         Id = id;
         Scale = scale;
         Offset = offset;

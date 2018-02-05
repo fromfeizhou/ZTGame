@@ -7,23 +7,75 @@ public class BuffCounter
 {
     private Dictionary<int,List<Buff>> _buffListDic;
     private ICharaActor _chara;
+    private Dictionary<int,int> _removeKeys;
 
     public BuffCounter(ICharaActor chara)
     {
         _buffListDic = new Dictionary<int, List<Buff>>();
         _chara = chara;
+        _removeKeys = new Dictionary<int, int>();
+    }
+
+    public void Update()
+    {
+        foreach (int key in _buffListDic.Keys)
+        {
+
+            List<Buff> list = _buffListDic[key];
+            int assetId = -1;
+            for (int i = list.Count - 1; i >=0; i--)
+            {
+                Buff tmp = list[i];
+                tmp.Update();
+                if (tmp.IsExit)
+                {
+                    assetId = tmp.BuffEffectInfo.AssetKey;
+                    tmp.Destroy();
+                    list.RemoveAt(i);
+                }
+            }
+            if (list.Count == 0)
+            {
+                _removeKeys.Add(key, assetId);
+            }
+        }
+        if (_removeKeys.Count > 0)
+        {
+            foreach (int reKey in _removeKeys.Keys)
+            {
+                _buffListDic.Remove(reKey);
+                RemoveBuffEffect(_removeKeys[reKey]);
+            }
+            _removeKeys.Clear();
+        }
+     
     }
 
     public void AddBuff(Buff buffInfo)
     {
         int buffId = buffInfo.BuffId;
+        int assetId = -1;
+
         if(!_buffListDic.ContainsKey(buffId)){
             _buffListDic.Add(buffId, new List<Buff>());
             if (null != buffInfo.BuffEffectInfo && null != _chara)
             {
                 _chara.AddEffect(buffInfo.BuffEffectInfo);
+                assetId = buffInfo.BuffEffectInfo.AssetKey;
             }
         }
+        //叠加buff
+        if ( _buffListDic[buffId].Count > 0 )
+        {
+            assetId = _buffListDic[buffId][0].BuffEffectInfo.AssetKey;
+
+            while(_buffListDic[buffId].Count >= buffInfo.MixMax){
+                Buff tmp = _buffListDic[buffId][0];
+                tmp.Destroy();
+                _buffListDic[buffId].RemoveAt(0);
+            }
+        }
+        buffInfo.BuffEffectInfo.AssetKey = assetId;
         _buffListDic[buffId].Add(buffInfo);
         
     }
@@ -56,16 +108,26 @@ public class BuffCounter
 
     private void RmoveBuffByList(List<Buff> list)
     {
+        int assetId = -1;
         foreach (Buff buff in list)
         {
-            if (null != buff.BuffEffectInfo && buff.BuffEffectInfo.AssetKey > 0 && null != _chara)
+            if (buff.BuffEffectInfo.AssetKey >= 0)
             {
-                _chara.RemoveEffect(buff.BuffEffectInfo.AssetKey);
+                assetId = buff.BuffEffectInfo.AssetKey;
             }
             buff.Destroy();
         }
+        RemoveBuffEffect(assetId);
         list.Clear();
         list = null;
+    }
+
+    private void RemoveBuffEffect(int assetId = -1)
+    {
+        if (assetId >= 0 && null != _chara)
+        {
+            _chara.RemoveEffect(assetId);
+        }
     }
 
     public void Destroy()

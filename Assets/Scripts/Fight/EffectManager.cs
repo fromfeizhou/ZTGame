@@ -17,7 +17,7 @@ public class EffectCounter
         if (null != _effectAsset)
         {
             EffectManager.GetInstance().AddEffectByInfo(info, layer);
-            if (info.AssetKey > 0)
+            if (info.AssetKey >= 0)
             {
                 _effectAsset.Add(info.AssetKey);
             };

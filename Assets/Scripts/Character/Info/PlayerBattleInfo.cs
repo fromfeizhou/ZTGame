@@ -74,6 +74,10 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     {
         base.UpdateFrame();
         this.UpdateMoveState();
+        if (null != BattleBuffCouner)
+        {
+            BattleBuffCouner.Update();
+        }
     }
 
     private eMapBlockType _mapBlockType;

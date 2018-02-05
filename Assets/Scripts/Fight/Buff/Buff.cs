@@ -55,6 +55,7 @@ public class Buff{
         if (MaxTime != -1 && LifeTime > MaxTime)
         {
             IsExit = true;
+            return;
         }
         if (!IsExit && LifeTime > 0 && LifeTime % IntervalTime == 0)
         {
