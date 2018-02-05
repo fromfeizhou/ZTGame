@@ -190,11 +190,12 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
 
     public override void Destroy()
     {
-        base.Destroy();
+        Debug.Log("PlayerBattleInfo Destroy ");
         if (null != BattleBuffCouner)
         {
             BattleBuffCouner.Destroy();
             BattleBuffCouner = null;
         }
+        base.Destroy();
     }
 }

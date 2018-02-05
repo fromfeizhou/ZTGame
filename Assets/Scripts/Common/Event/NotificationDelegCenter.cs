@@ -59,7 +59,10 @@ public class NotificationDelegate
     {
         if (eventListerners.ContainsKey(type))
         {
-            eventListerners[type](note);
+            if (null != eventListerners[type])
+            {
+                eventListerners[type](note);
+            }
         }
     }
 
