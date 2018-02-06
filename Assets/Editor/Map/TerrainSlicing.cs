@@ -189,7 +189,7 @@ public class TerrainSlicing : Editor
             return;
         }
 
-        int vertexCountScale = 1;       // [dev] 将顶点数稀释 vertexCountScale*vertexCountScale 倍
+        int vertexCountScale = 4;       // [dev] 将顶点数稀释 vertexCountScale*vertexCountScale 倍
         int w = terrainData.heightmapWidth;
         int h = terrainData.heightmapHeight;
         Vector3 size = terrainData.size;
