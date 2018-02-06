@@ -1,0 +1,24 @@
+using gprotocol;
+
+namespace com.game.client
+{
+	namespace network.facade
+	{
+		[NetFacadeAttribute(Module.System)]
+		public class SystemFacade
+		{
+			[NetCommand(Command.head)]
+			private void OnReceive_Login(int code, login_heart_s2c vo)
+			{
+				System.DateTime dt = new System.DateTime (vo.server_time);
+				UnityEngine.Debug.Log ("[Client_OnReceive]serverTime:" + dt.ToLongTimeString());
+			}
+
+			[NetCommand(Command.aahead)]
+			private void OnReceive_Login(int code, login_auth_key_s2c vo)
+			{
+				UnityEngine.Debug.Log ("[Client_OnReceive]serverTime:" + vo.ToString());
+			}
+		}
+	}
+}
