@@ -218,6 +218,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
                 MyPlayer = info;
                 GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
                 GameObject.Find("SkillJoystick").GetComponent<SkillArea>().player = gameObject;
+                MapManager.GetInstance().Update(gameObject.transform.position);
+               
             }
         }
         else

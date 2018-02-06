@@ -8,14 +8,27 @@ public class MapTileView : MonoBehaviour {
     private MapTileData _mapTileData = null;
     private GameObject _terrain = null;
     public bool isShow = false;
+
+    public bool IsLoad
+    {
+        get
+        {
+            return _terrain != null;
+        }
+    }
     public void setMapData(MapTileData data)
     {
-        if (_mapId == data.MapId)
+        if (data==_mapTileData&&IsLoad)
             return;
         _mapTileData = data;
         _mapId = _mapTileData.MapId;
         name = data.Row + "_" + data.Column;
         UpdateTileView();
+    }
+
+    public MapTileData GetMapData()
+    {
+        return _mapTileData;
     }
 
     private void UpdateTileView()
@@ -93,6 +106,13 @@ public class MapTileView : MonoBehaviour {
                     tree.localEulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
                     tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
                     trees.Add(tree.gameObject);
+                    BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
+                    if(tempcollider!=null){
+                    ICharaBattle tempBattle=ZTSceneManager.GetInstance().GetCharaById(1) as ICharaBattle;
+                    if (tempBattle != null)
+                        tempcollider.SetTarget(tempBattle.Collider);
+                    }
+                        
                 });
             }
         }
@@ -107,14 +127,23 @@ public class MapTileView : MonoBehaviour {
         UpdateTrrain();
     }
 
-    private void ClearTrrain()
+    public bool IsNeedClear(int minRow,int maxRow,int minCol,int maxCol)
+    {
+        if (_mapTileData == null || !IsLoad ||  (_mapTileData.Row > maxRow || _mapTileData.Row < minRow || _mapTileData.Column > maxCol || _mapTileData.Column < minCol))
+        {
+            ClearTrrain();
+            return true;
+        }
+        return false;
+    }
+
+    public void ClearTrrain()
     {
         if (null != _terrain)
         {
             GameObject.DestroyObject(_terrain);
             _terrain = null;
         }
-
 
         for(int i = 0;i< trees.Count;i++)
             GameObject.DestroyObject(trees[i]);
