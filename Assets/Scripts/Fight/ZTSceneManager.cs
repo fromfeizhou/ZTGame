@@ -208,7 +208,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
             GameObject gameObject = GameObject.Instantiate(_playerPrefab);
             gameObject.transform.localPosition = info.MovePos;
-            gameObject.transform.parent = GameObject.Find("PlayerLayer").transform;
+			gameObject.transform.parent = PlayerLayter.GetInstance().transform;
             _charaViewDic.Add(battleId, gameObject);
             gameObject.AddComponent<PlayerBattleActor>();
             gameObject.GetComponent<PlayerBattleActor>().SetInfo(info);
