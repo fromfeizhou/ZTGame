@@ -139,8 +139,8 @@ public class MapManager : Singleton<MapManager>
 {
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
-    private List<GameObject> _mapViewList = null;
-    private MapTilePos _mapTilePosCenter = new MapTilePos();    //地图中心
+    private List<MapTileView> _mapViewList = null;
+    private MapTilePos _mapTilePosCenter;  //地图中心
     private Vector3 _mapPosCenter = Vector3.zero;   //地图中心点
     private int _maxDataRow;    //地图数据最大行数
     private int _maxDataColumn;     //地图数据最大列数
@@ -315,7 +315,8 @@ public class MapManager : Singleton<MapManager>
         {
             for (int i = 0; i < _mapViewList.Count; i++)
             {
-                GameObject.Destroy(_mapViewList[i]);
+                if (_mapViewList[i] == null) continue;
+                GameObject.Destroy(_mapViewList[i].gameObject);
             }
             _mapViewList.Clear();
 
@@ -328,6 +329,12 @@ public class MapManager : Singleton<MapManager>
 
     public void SetMapCenterPos(Vector3 pos)
     {
+        if (_mapTilePosCenter == null)
+        {
+            _mapTilePosCenter = new MapTilePos();
+            UpdateMapView();
+            return;
+        }
         if (Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
         {
             _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / MapDefine.MapWidth);
@@ -351,18 +358,19 @@ public class MapManager : Singleton<MapManager>
         }
         if (null == _mapViewList)
         {
-            _mapViewList = new List<GameObject>();
+            _mapViewList = new List<MapTileView>();
             for (int i = 0; i < MapDefine.MaxViewRowNum * MapDefine.MaxViewColumnNum; i++)
             {
                 GameObject gameObject = GameObject.Instantiate(_floorPrefab);
                 gameObject.transform.localPosition = new Vector3((i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth, 0, Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight);
                 //gameObject.transform.localPosition = new Vector3(Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight, 0, (i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth);
                 gameObject.transform.parent = _sceneLayer.transform;
-                _mapViewList.Add(gameObject);
+                MapTileView tempTileView = gameObject.GetComponent<MapTileView>();
+                _mapViewList.Add(tempTileView);
             }
         }
         _isInit = true;
-        UpdateMapView();
+       // UpdateMapView();
     }
 
     //刷新地图
@@ -373,26 +381,70 @@ public class MapManager : Singleton<MapManager>
             return;
         }
         MapTilePos tmpTilePos = GetCurMapPosData();
-        if (_mapTilePos == null || Mathf.Abs(_mapTilePos.Row - tmpTilePos.Row) > MapDefine.MaxViewRowNum || Mathf.Abs(_mapTilePos.Column - tmpTilePos.Column) > MapDefine.MaxViewColumnNum)
+
+
+        int beginX = tmpTilePos.Row - 1;
+        int beginY = tmpTilePos.Column - 1;
+        int endX = tmpTilePos.Row + 1;
+        int endY = tmpTilePos.Column + 1;
+        List<MapTileView> tempTileViews = new List<MapTileView>();
+        for (int k = 0; k < _mapViewList.Count; k++)
         {
-            //全部刷新
-            for (int i = 0; i < _mapViewList.Count; i++)
+            MapTileView floor = _mapViewList[k];
+            if (floor.IsNeedClear(beginX, endX, beginY, endY))
+                tempTileViews.Add(floor);
+        }
+        int tempIndex = 0;
+        for (int index = beginX; index <= endX; index++)
+        {
+            if (index < 0) continue;
+            for (int j = beginY; j <= endY; j++)
             {
-                GameObject floor = _mapViewList[i];
-                int row = tmpTilePos.Row + Mathf.FloorToInt(i / MapDefine.MaxViewColumnNum);
-                int column = tmpTilePos.Column + Mathf.FloorToInt(i % MapDefine.MaxViewColumnNum);
-                MapTileData data = _mapDataDic[row][column];
-                floor.GetComponent<MapTileView>().setMapData(data);
+                if (j < 0 ) continue;
+                bool isShow = false;
+                for (int k = 0; k < _mapViewList.Count; k++)
+                {
+                    MapTileView tileView = _mapViewList[k];
+                    MapTileData data = tileView.GetMapData();
+                    if (data != null&&tileView.IsLoad && data.Column == j && data.Row == index)
+                    {
+                        isShow = true;
+                        break;
+                    }
+                }
+                if (isShow) continue;
+                if (tempIndex < tempTileViews.Count)
+                {
+                    MapTileData targetTileData = _mapDataDic[index][j];
+                    tempTileViews[tempIndex].setMapData(targetTileData);
+                    tempTileViews[tempIndex].transform.position = new Vector3(MapDefine.MapWidth * j, 0, MapDefine.MapWidth * index);
+                    tempIndex++;
+                    continue;
+                }
             }
         }
-        else
-        {
-            //滚动刷新
-            int rowNum = tmpTilePos.Row - _mapTilePos.Row;
-            int column = tmpTilePos.Column - _mapTilePos.Column;
-            ScrollMapView(rowNum, column);
-        }
         _mapTilePos = tmpTilePos;
+        //旧逻辑
+        //if (_mapTilePos == null || Mathf.Abs(_mapTilePos.Row - tmpTilePos.Row) > MapDefine.MaxViewRowNum || Mathf.Abs(_mapTilePos.Column - tmpTilePos.Column) > MapDefine.MaxViewColumnNum)
+        //{
+        //    //全部刷新
+        //    for (int i = 0; i < _mapViewList.Count; i++)
+        //    {
+        //        GameObject floor = _mapViewList[i];
+        //        int row = tmpTilePos.Row + Mathf.FloorToInt(i / MapDefine.MaxViewColumnNum);
+        //        int column = tmpTilePos.Column + Mathf.FloorToInt(i % MapDefine.MaxViewColumnNum);
+        //        MapTileData data = _mapDataDic[row][column];
+        //        floor.GetComponent<MapTileView>().setMapData(data);
+        //    }
+        //}
+        //else
+        //{
+        //    //滚动刷新
+        //    int rowNum = tmpTilePos.Row - _mapTilePos.Row;
+        //    int column = tmpTilePos.Column - _mapTilePos.Column;
+        //    ScrollMapView(rowNum, column);
+        //}
+        //_mapTilePos = tmpTilePos;
     }
 
     //滚动地图
@@ -401,10 +453,12 @@ public class MapManager : Singleton<MapManager>
         //水平滚动  列位移
         if (columnNum > 0)
         {
+            if (_mapTilePos.Column == 0) return;
             for (int i = 0; i < columnNum; i++)
             {
+                
                 //数据列数固定 当前列 + 列数
-                int dataColumn = _mapTilePos.Column + MapDefine.MaxViewColumnNum;
+                int dataColumn = _mapTilePos.Column-1 + MapDefine.MaxViewColumnNum;
                 for (int k = 0; k < MapDefine.MaxViewRowNum; k++)
                 {
                     int floorBegin = k * MapDefine.MaxViewColumnNum;
@@ -428,7 +482,8 @@ public class MapManager : Singleton<MapManager>
             for (int i = 0; i < columnNum; i++)
             {
                 //数据列数固定 当前列  - 1
-                int dataColumn = _mapTilePos.Column - 1;
+                int dataColumn = _mapTilePos.Column - 2;
+                if (dataColumn < 0) return;
                 for (int k = 0; k < MapDefine.MaxViewRowNum; k++)
                 {
                     int floorBegin = k * MapDefine.MaxViewColumnNum;
@@ -453,10 +508,11 @@ public class MapManager : Singleton<MapManager>
         //垂直滚动  行位移
         if (rowNum > 0)
         {
+            if (_mapTilePos.Row == 0) return;
             for (int i = 0; i < rowNum; i++)
             {
                 //数据行数固定 当前列  + 总行数
-                int dataRow = _mapTilePos.Row + MapDefine.MaxViewRowNum;
+                int dataRow = _mapTilePos.Row + MapDefine.MaxViewRowNum-1;
                 for (int k = 0; k < MapDefine.MaxViewColumnNum; k++)
                 {
                     int floorBegin = 0;
@@ -480,8 +536,8 @@ public class MapManager : Singleton<MapManager>
             for (int i = 0; i < rowNum; i++)
             {
                 //数据行数固定 当前列  + 总行数 - 1
-                int dataRow = _mapTilePos.Row - 1;
-
+                int dataRow = _mapTilePos.Row - 2;
+                if (dataRow < 0) return;
                 for (int k = 0; k < MapDefine.MaxViewColumnNum; k++)
                 {
                     int floorBegin = (MapDefine.MaxViewRowNum - 1) * MapDefine.MaxViewColumnNum + k;
@@ -508,10 +564,10 @@ public class MapManager : Singleton<MapManager>
 
         //x移动 列位移
         int column = _mapTilePosCenter.Column;
-        int columnMax = _maxDataColumn - MapDefine.MaxViewColumnNum;
+        int columnMax = _maxDataColumn - MapDefine.MaxViewColumnNum+1;
 
         int row = _mapTilePosCenter.Row;
-        int rowMax = _maxDataRow - MapDefine.MaxViewRowNum;
+        int rowMax = _maxDataRow - MapDefine.MaxViewRowNum+1;
 
         column = column >= 0 ? column : 0;
         column = column >= columnMax ? columnMax : column;
@@ -529,4 +585,5 @@ public class MapManager : Singleton<MapManager>
         }
         SetMapCenterPos(pos);
     }
+
 }
