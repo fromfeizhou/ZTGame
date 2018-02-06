@@ -8,10 +8,17 @@ public enum FIGHT_EF_TPYE
     NONE = 0,
     SHARK,         //震屏
     ACTION,      //触发表演
+    ACTIVATE,       //激活技能
     HURT,       //伤害
     ADD_BUFF,       //添加buff
     RE_BUFF,        //移除buff
     ARRTIBUTE,      //属性修改(改变血量等 一次性修改类型)
+}
+
+public enum FIGHT_EF_TARGET
+{
+    SELF = 0,       //自己
+    TARGET,         //目标
 }
 
 public class FightEffectDefine
@@ -47,14 +54,28 @@ public class FightEffectDefine
                 RemoveBuff(battleInfo, effect);
                 break;
             case FIGHT_EF_TPYE.ACTION:
-                DoAction(battleInfo, effect);
+                DoAction(battleInfo, effect,userId,dir,takeParam);
                 break;
             case FIGHT_EF_TPYE.ARRTIBUTE:
                 ChangeAttribute(battleInfo, effect);
                 break;
+            case FIGHT_EF_TPYE.ACTIVATE:
+                ActivateSkill(battleInfo, effect);
+                break;
         }
     }
 
+    //激活技能
+    private static void ActivateSkill(ICharaBattle battleInfo, FightEffectInfo effect)
+    {
+        int skillId = effect.Param1;
+        if (skillId > 0)
+        {
+            battleInfo.ActivateSkillId = skillId;
+        }
+    }
+    
+    //震屏
     private static void SharkScreen(ICharaBattle battleInfo, FightEffectInfo effect, int userId)
     {
         //非玩家自己 不需要震动
@@ -87,15 +108,14 @@ public class FightEffectDefine
         }
     }
 
-    private static void DoAction(ICharaBattle battleInfo, FightEffectInfo effect)
+    private static void DoAction(ICharaBattle battleInfo, FightEffectInfo effect, int userId = -1, Vector3 dir = default(Vector3), object takeParam = null)
     {
 
-        //ICharaBattle user = ZTSceneManager.GetInstance().GetCharaById(effect.UserId) as ICharaBattle;
-        //SkillCommand skill = effect.TakeParam as SkillCommand;
-        //if (null != skill && null != user)
-        //{
-        //    user.SkillCommand(skill);
-        //}
+        SkillCommand skill = takeParam as SkillCommand;
+        if (null != skill && null != battleInfo)
+        {
+            battleInfo.SkillCommand(skill);
+        }
     }
 
     private static void CalculateHurt(ICharaBattle battleInfo, FightEffectInfo effect, int userId)

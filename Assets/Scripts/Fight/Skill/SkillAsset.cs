@@ -24,7 +24,7 @@ public class SkillAssetInfo
     //碰撞 参数
     public ColliderInfo colliderInfo;
 
-    public List<FightEffectInfo> fightEffects;
+    //public List<FightEffectInfo> fightEffects;
 
     public SkillAssetInfo()
     {
@@ -33,7 +33,7 @@ public class SkillAssetInfo
         moveInfo = new MoveInfo();
         effectInfo = new EffectInfo();
         colliderInfo = new ColliderInfo() ;
-        fightEffects = new List<FightEffectInfo>();
+        //fightEffects = new List<FightEffectInfo>();
     }
 }
 

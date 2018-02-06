@@ -170,6 +170,13 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_UI_HURT_VALUE, new Notification(info));
     }
 
+    //临时使用
+    public void ActivateSkill(int skillId)
+    {
+        ActivateSkillId = skillId;
+    }
+    public int ActivateSkillId { get; set; }
+    
     public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
         BattleId = battleId;

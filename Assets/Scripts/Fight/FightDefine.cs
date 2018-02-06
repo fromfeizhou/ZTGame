@@ -51,17 +51,12 @@ public class SkillCommand : FightCommandBase
 
 public class FightDefine
 {
-    public static int MaxFrame = int.MaxValue - 450;
+    public static int MaxFrame = int.MaxValue; //60帧每秒 理论上可以计数400多天
 
     public static bool CompareFrame(int frame)
     {
         int curFrame = ZTSceneManager.GetInstance().SceneFrame;
         if (curFrame >= frame)
-        {
-            return true;
-        }
-        //帧率溢出 补足(10s 的帧数450)
-        if (MaxFrame - frame < 450 && curFrame < 450)
         {
             return true;
         }

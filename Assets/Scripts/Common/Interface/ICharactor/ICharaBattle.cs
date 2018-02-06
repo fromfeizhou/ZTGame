@@ -44,4 +44,8 @@ public interface ICharaBattle:IMove
     void AddBuff(BuffData buffData);
     void RemoveBuff(int buffId);
     void RemoveBuffByType(int type);
+
+    void ActivateSkill(int skillId);
+    //临时使用 ActivateSkillId
+    int ActivateSkillId { get; set; }
 }

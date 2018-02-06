@@ -5,6 +5,7 @@ using UnityEngine;
 public class FightEffectInfo
 {
     public FIGHT_EF_TPYE EffectType;
+    public FIGHT_EF_TARGET EffectTarget;
     public int Param1;  //表演id; buff id/类型; 改变属性参数;
     public int Param2;
     public int Param3;
@@ -140,7 +141,7 @@ public class SkillDefine
         COLLIDER,      //碰撞
         COLLIDER_MOVE,  //碰撞移动
         ADD_EFFECT,     //添加特效
-        FIGHT_EFFECT,   //战斗效果
+        //FIGHT_EFFECT,   //战斗效果
     }
 
     public enum MoveType

@@ -156,7 +156,20 @@ public class SACollider : SkillActionBase
 
             for (int i = 0; i < _colliderInfo.FightEffectList.Count; i++)
             {
-                FightEffectDefine.ParseEffect(player, _colliderInfo.FightEffectList[i], _skillPlayer.BattleId,dir);
+                FightEffectInfo info = _colliderInfo.FightEffectList[i];
+                if (info.EffectTarget == FIGHT_EF_TARGET.SELF)
+                {
+                    FightEffectDefine.ParseEffect(_skillPlayer, info, _skillPlayer.BattleId, dir);
+                }
+                else
+                {
+                    SkillCommand command = null;
+                    if (info.EffectType == FIGHT_EF_TPYE.ACTION)
+                    {
+                        command = FightDefine.GetSkillCommand(player.BattleId, info.Param1, dir, player.MovePos);
+                    }
+                    FightEffectDefine.ParseEffect(player, info, _skillPlayer.BattleId, dir, command);
+                }
             }
         }
         //if (null != _colliderInfo.SelfActions && _colliderInfo.SelfActions.Count > 0)

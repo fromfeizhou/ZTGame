@@ -48,6 +48,11 @@ public class SkillJoystick : JoystickBase
 
         //---------------test------------------------//
         SkillId = SkillSelected.SelectIndex;
+        if (ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
+        {
+            SkillId = ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId;
+            ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
+        }
         //---------------test------------------------//
         Vector3 targetPos = new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;

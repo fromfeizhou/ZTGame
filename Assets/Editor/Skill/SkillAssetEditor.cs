@@ -136,8 +136,8 @@ public class SkillAssetEditor : Editor
                         case SkillDefine.SkillActionType.ADD_EFFECT:
                             UpdateEffectItem(skillInfo.effectInfo);
                             break;
-                        case SkillDefine.SkillActionType.FIGHT_EFFECT:
-                            UpdateFightEffect(skillInfo.fightEffects);
+                        //case SkillDefine.SkillActionType.FIGHT_EFFECT:
+                        //    UpdateFightEffect(skillInfo.fightEffects);
                             break;
                     }
                     GUILayout.EndVertical();
@@ -461,6 +461,11 @@ public class SkillAssetEditor : Editor
         effectInfo.EffectType = (FIGHT_EF_TPYE)EditorGUILayout.EnumPopup("", effectInfo.EffectType);
         GUILayout.EndHorizontal();
 
+         GUILayout.BeginHorizontal();
+        GUILayout.Label("EffectType:", GUILayout.Width(100));
+        effectInfo.EffectTarget = (FIGHT_EF_TARGET)EditorGUILayout.EnumPopup("", effectInfo.EffectTarget);
+        GUILayout.EndHorizontal();
+
         if (effectInfo.EffectType == FIGHT_EF_TPYE.ARRTIBUTE)
         {
             GUILayout.BeginHorizontal();
@@ -507,7 +512,11 @@ public class SkillAssetEditor : Editor
             effectInfo.Param2 = EditorGUILayout.IntField(effectInfo.Param2);
             GUILayout.EndHorizontal();
         }
-        else if (effectInfo.EffectType == FIGHT_EF_TPYE.ACTION || effectInfo.EffectType == FIGHT_EF_TPYE.ADD_BUFF)
+        else if (effectInfo.EffectType == FIGHT_EF_TPYE.NONE || effectInfo.EffectType == FIGHT_EF_TPYE.HURT)
+        {
+           //do nothing
+        }
+        else
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label("Param:", GUILayout.Width(100));
