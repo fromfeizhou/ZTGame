@@ -1,59 +1,69 @@
-﻿
+﻿/************************************************
+ * 拓展方法；RecoveryAll()..回收所有产出对象
+ ************************************************/
+
 using System;
 using System.Collections.Generic;
 
-public class ObjectPool<T> where T : IPoolObject, new()
+namespace com.game.client
 {
-    private readonly Stack<T> _objectStack;
-    private readonly Action<T> _actionReset;
-    private readonly Action<T> _actionInitObj;
+	namespace utility
+	{
+		
+		public class ObjectPool<T> where T: IPoolObject, new()
+		{
+			private readonly Stack<T> _objectStack;
+            private readonly Action<T> _actionReset;
+            private readonly Action<T> _actionInitObj;
 
-    public ObjectPool(
-        int initialBufferSize,
-        Action<T> resetAction = null,
-        Action<T> onetimeInitAction = null)
-    {
-        _objectStack = new Stack<T>(initialBufferSize);
-        _actionReset = resetAction;
-        _actionInitObj = onetimeInitAction;
+			public ObjectPool(
+				int initialBufferSize, 
+				Action<T> resetAction = null, 
+				Action<T> onetimeInitAction = null)
+			{
+			    _objectStack = new Stack<T>(initialBufferSize);
+                _actionReset = resetAction;
+                _actionInitObj = onetimeInitAction;
 
-        for (int i = 0; i < initialBufferSize; i++)
-            _objectStack.Push(new T());
-    }
+				for (int i = 0; i < initialBufferSize; i++)
+				    _objectStack.Push(new T());
+			}
 
-    public int FreeObjCnt
-    {
-        get
-        {
-            if (_objectStack == null)
-                return 0;
-            return _objectStack.Count;
-        }
-    }
+			public int FreeObjCnt
+			{
+				get{
+                    if (_objectStack == null)
+						return 0;
+                    return _objectStack.Count;
+				}
+			}
 
-    public T Talk()
-    {
-        if (_objectStack.Count > 0)
-        {
-            T obj = _objectStack.Pop();
+			public T Talk()
+			{
+                if (_objectStack.Count > 0)
+				{
+                    T obj = _objectStack.Pop();
 
-            return obj;
-        }
-        else
-        {
-            T obj = new T();
-            if (_actionInitObj != null)
-                _actionInitObj(obj);
+                    if (_actionReset != null)
+                        _actionReset(obj);
 
-            return obj;
-        }
-    }
+					return obj;
+				}
+				else
+				{
+					T obj = new T();
+                    if (_actionInitObj != null)
+                        _actionInitObj(obj);
 
-    public void Recovery(T obj)
-    {
-        if (_actionReset != null)
-            _actionReset(obj);
+					return obj;
+				}
+			}
 
-        _objectStack.Push(obj);
-    }
+			public void Recovery(T obj)
+			{
+				obj.Reset();
+			    _objectStack.Push(obj);
+			}
+		}
+	}
 }

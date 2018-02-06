@@ -1,4 +1,10 @@
-﻿public interface IPoolObject
+﻿namespace com.game.client
 {
-    void Reset();
+	namespace utility
+	{
+		public interface IPoolObject
+		{
+			void Reset();	
+		}
+	}
 }
