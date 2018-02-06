@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     public static bool GameInit = false;
 
@@ -11,10 +11,10 @@ public class GameManager : MonoBehaviour
     private List<string> _stateList;
     private List<UnityAction> _loadFuncList;
     // Use this for initialization
-    void Awake()
-    {
-        Application.targetFrameRate = 45;
 
+	public override void Init ()
+	{
+        Application.targetFrameRate = 45;
         Debug.Log("GameManager LoadStart");
         _loadIndex = 0;
 
@@ -35,10 +35,6 @@ public class GameManager : MonoBehaviour
         LoadDataIndex();
     }
 
-    void Start()
-    {
-    }
-
     private void LoadDataIndex()
     {
         Debug.Log("GameManager LoadDataIndex: " + _loadIndex);
@@ -51,16 +47,16 @@ public class GameManager : MonoBehaviour
         _loadIndex++;
         if (_loadIndex >= _stateList.Count)
         {
-            GameStart();
+            //GameStart();
+			Debug.Log("GameManager Init Finish");
             return;
         }
 
         LoadDataIndex();
     }
    
-    private void GameStart()
+	public void GameStart()
     {
-        Debug.Log("GameManager GameStart");
         GameManager.GameInit = true;
         GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_COM);
 
@@ -82,7 +78,7 @@ public class GameManager : MonoBehaviour
         ZTSceneManager.GetInstance().Update();
     }
 
-    void OnDestroy()
+	public override void Destroy()
     {
         LocalString.Destroy();
         PathManager.Destroy();
