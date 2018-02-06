@@ -53,8 +53,8 @@ public class CameraFollow : MonoBehaviour
         }
         if (null != target)
         {
-            ZoomCamera();
-            SwipeScreen();
+            //ZoomCamera();
+            //SwipeScreen();
         }
     }
 
