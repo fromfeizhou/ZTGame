@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: cdb87bdd2320b884abc31e87b06f29dd
-timeCreated: 1512119908
+guid: 90526da89d35fb54591b5baa4483cfe7
+timeCreated: 1517974852
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: assets_models_tmpcharacter_qishi_@qishi_1.fbm
+  assetBundleName: 
   assetBundleVariant: 

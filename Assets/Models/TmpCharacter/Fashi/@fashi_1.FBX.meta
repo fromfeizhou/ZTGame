@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dbdf06935d575f94f8d39bbc89f1e4ba
-timeCreated: 1512372729
+guid: d9ca8f3666f8e8541b3d39edb5e62476
+timeCreated: 1517974767
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -641,5 +641,5 @@ ModelImporter:
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
-  assetBundleName: assets_models_tmpcharacter_fashi
+  assetBundleName: 
   assetBundleVariant: 
