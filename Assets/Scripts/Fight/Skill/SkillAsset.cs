@@ -15,6 +15,7 @@ public class SkillAssetInfo
     public string animName;
     //控制器
     public bool isCtrl;
+    public bool isSkillDir;
 
     //移动参数
     public MoveInfo moveInfo;
@@ -29,6 +30,7 @@ public class SkillAssetInfo
     public SkillAssetInfo()
     {
         isCtrl = false;
+        isSkillDir = false;
         animName = "";
         moveInfo = new MoveInfo();
         effectInfo = new EffectInfo();

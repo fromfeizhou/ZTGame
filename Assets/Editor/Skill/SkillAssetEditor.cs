@@ -202,6 +202,7 @@ public class SkillAssetEditor : Editor
 
         GUILayout.BeginHorizontal();
         skillInfo.isCtrl = EditorGUILayout.Toggle("IsControl", skillInfo.isCtrl);
+        skillInfo.isSkillDir = EditorGUILayout.Toggle("IsSkillDir", skillInfo.isSkillDir);
         GUILayout.EndHorizontal();
 
     }
