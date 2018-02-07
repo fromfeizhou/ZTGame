@@ -852,54 +852,54 @@ namespace gprotocol
       get { return _team; }
       set { _team = value; }
     }
-    private uint _map_id;
-    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"map_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint map_id
-    {
-      get { return _map_id; }
-      set { _map_id = value; }
-    }
     private uint _x;
-    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint x
     {
       get { return _x; }
       set { _x = value; }
     }
     private uint _y;
-    [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint y
     {
       get { return _y; }
       set { _y = value; }
     }
+    private uint _z;
+    [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint z
+    {
+      get { return _z; }
+      set { _z = value; }
+    }
+    private uint _d;
+    [global::ProtoBuf.ProtoMember(11, IsRequired = true, Name=@"d", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint d
+    {
+      get { return _d; }
+      set { _d = value; }
+    }
     private uint _state;
-    [global::ProtoBuf.ProtoMember(11, IsRequired = true, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(12, IsRequired = true, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint state
     {
       get { return _state; }
       set { _state = value; }
     }
     private uint _hp;
-    [global::ProtoBuf.ProtoMember(12, IsRequired = true, Name=@"hp", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(13, IsRequired = true, Name=@"hp", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint hp
     {
       get { return _hp; }
       set { _hp = value; }
     }
     private uint _hp_full;
-    [global::ProtoBuf.ProtoMember(13, IsRequired = true, Name=@"hp_full", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(14, IsRequired = true, Name=@"hp_full", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint hp_full
     {
       get { return _hp_full; }
       set { _hp_full = value; }
-    }
-    private p_dir _dir;
-    [global::ProtoBuf.ProtoMember(14, IsRequired = true, Name=@"dir", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public p_dir dir
-    {
-      get { return _dir; }
-      set { _dir = value; }
     }
     private uint _vip_level;
     [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"vip_level", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
@@ -5445,8 +5445,15 @@ namespace gprotocol
   {
     public role_bc_info_c2s() {}
     
+    private uint _type;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
     private string _data;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string data
     {
       get { return _data; }
@@ -5469,8 +5476,15 @@ namespace gprotocol
       get { return _role_id; }
       set { _role_id = value; }
     }
+    private uint _type;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
     private string _data;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string data
     {
       get { return _data; }

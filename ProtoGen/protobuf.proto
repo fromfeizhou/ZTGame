@@ -155,13 +155,13 @@ message p_map_role{
     required uint32 rank = 5; // 功勋
     required uint32 job = 6; // 职业
     required uint32 team = 7; // 队伍
-    required uint32 map_id = 8; // 地图id
-    required uint32 x = 9; // 掩体ID
-    required uint32 y = 10; // 站立点ID
-    required uint32 state = 11; // 状态
-    required uint32 hp = 12; // 血量
-    required uint32 hp_full = 13; // 血量
-    required p_dir dir = 14; // 方向
+    required uint32 x = 8; // x
+    required uint32 y = 9; // y
+    required uint32 z = 10; // z
+    required uint32 d = 11; // d
+    required uint32 state = 12; // 状态
+    required uint32 hp = 13; // 血量
+    required uint32 hp_full = 14; // 满血量
     required uint32 vip_level = 15; // VIP等级
     required uint32 model = 16; // 外型id
     required uint32 fight_point = 17; // 战斗力
@@ -1060,11 +1060,13 @@ message role_activity_all_info_s2c {
 
 // ##begin##role##role_bc_info##3##55##活动总信息##end##
 message role_bc_info_c2s {
-    required string data = 1; // 数据
+    required uint32 type = 1; // 数据类型
+    required string data = 2; // 数据
 }
 message role_bc_info_s2c {
     required uint32 role_id = 1; // 发送者id
-    required string data = 2; // 数据
+    required uint32 type = 2; // 数据类型
+    required string data = 3; // 数据
 }
 
 
