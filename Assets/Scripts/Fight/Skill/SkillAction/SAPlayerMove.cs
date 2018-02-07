@@ -38,7 +38,7 @@ public class SAPlayerMove : SkillActionBase
             return;
         }
         _moveCount++;
-        bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Command);
+        bool moveDone = SkillMethod.MoveAction(_skillPlayer, _moveInfo, _actionParser.Command.SkillDir, _actionParser.Command.TargetPos);
         if (moveDone)
         {
             Complete();

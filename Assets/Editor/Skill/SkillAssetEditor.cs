@@ -244,6 +244,7 @@ public class SkillAssetEditor : Editor
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Speed:", GUILayout.Width(100));
                 moveInfo.SpeedX = EditorGUILayout.FloatField(moveInfo.SpeedX);
+                moveInfo.FrameCount = int.MaxValue;
                 GUILayout.EndHorizontal();
                 break;
             case SkillDefine.MoveType.ROTATE:

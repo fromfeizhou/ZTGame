@@ -74,6 +74,12 @@ public class SACollider : SkillActionBase
 
     protected void CheckCollider(int curFrame)
     {
+        //指定目标 不需要判断 在运动结束 调用 
+        if (_colliderInfo.ColliderType == CollBase.ColType.TARGET)
+        {
+            return;
+        }
+
         for (int i = 0; i < _targetList.Count; i++)
         {
             //碰撞结束 （碰撞次数已满）
@@ -84,13 +90,13 @@ public class SACollider : SkillActionBase
                 {
                     if (_colliderInfo.Interval > 0 && (curFrame - _colliderDic[_targetList[i].BattleId]) > _colliderInfo.Interval)
                     {
-                        DoAction(_targetList[i]);
+                        DoColliderAction(_targetList[i]);
                         _colliderDic[_targetList[i].BattleId] = curFrame;
                     }
                 }
                 else
                 {
-                    DoAction(_targetList[i]);
+                    DoColliderAction(_targetList[i]);
                     _colliderDic[_targetList[i].BattleId] = curFrame;
                 }
 
@@ -106,42 +112,10 @@ public class SACollider : SkillActionBase
     private void CheckTargetList()
     {
         _colliderDic = new Dictionary<int, int>();
-        _targetList = new List<ICharaBattle>();
-        if (_colliderInfo.ColliderTarget == SkillDefine.ColliderTarget.SELF)
-        {
-            _targetList.Add(_skillPlayer as ICharaBattle);
-            return;
-        }
-
-        List<CharaActorInfo> list = ZTSceneManager.GetInstance().GetCharaList();
-        for (int i = 0; i < list.Count; i++)
-        {
-            ICharaBattle info = list[i] as ICharaBattle;
-            if (null != info)
-            {
-                switch (_colliderInfo.ColliderTarget)
-                {
-                    case SkillDefine.ColliderTarget.TEAM:
-                        if (_skillPlayer.Camp == info.Camp)
-                        {
-                            _targetList.Add(info);
-                        }
-                        break;
-                    case SkillDefine.ColliderTarget.ENEMY:
-                        if (_skillPlayer.Camp != info.Camp)
-                        {
-                            _targetList.Add(info);
-                        }
-                        break;
-                    case SkillDefine.ColliderTarget.ALL:
-                        _targetList.Add(info);
-                        break;
-                }
-            }
-        }
+        _targetList = SkillMethod.GetTargetList(_skillPlayer, _colliderInfo.ColliderTarget);
     }
 
-    protected void DoAction(ICharaBattle player)
+    public void DoColliderAction(ICharaBattle player)
     {
         _colliderCount++;
         if (_colliderInfo.ColliderMax != -1 && _colliderCount >= _colliderInfo.ColliderMax)

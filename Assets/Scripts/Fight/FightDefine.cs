@@ -38,13 +38,15 @@ public class SkillCommand : FightCommandBase
     public int StartFrame = 0;
     public Vector3 SkillDir = Vector3.zero;     //技能方向
     public Vector3 TargetPos = Vector3.zero;    //目标坐标(相对player)
-    public SkillCommand(int battleId, int frame,int actionId, Vector3 dir, Vector3 targetPos)
+    public int TargetId;    //指定目标
+    public SkillCommand(int battleId, int frame,int actionId, Vector3 dir, Vector3 targetPos,int targetId)
         : base(COMMAND_TYPE.SKILL, battleId, frame)
     {
         SkillId = actionId;
         StartFrame = frame;
         SkillDir = dir;
         TargetPos = targetPos;
+        TargetId = targetId;
     }
 }
 
@@ -70,10 +72,10 @@ public class FightDefine
         return new MoveCommand(battleId,frame, dir);
     }
     // 获得操作结构
-    public static SkillCommand GetSkillCommand(int battleId,int actionId,Vector3 dir,Vector3 targetPos)
+    public static SkillCommand GetSkillCommand(int battleId,int actionId,Vector3 dir,Vector3 targetPos,int targetId = -1)
     {
         int frame = ZTSceneManager.GetInstance().SceneFrame;
-        return new SkillCommand(battleId,frame,actionId,dir,targetPos);
+        return new SkillCommand(battleId,frame,actionId,dir,targetPos,targetId);
     }
 
 

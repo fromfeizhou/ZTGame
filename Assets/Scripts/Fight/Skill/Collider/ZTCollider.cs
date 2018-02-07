@@ -15,6 +15,7 @@ public class CollBase : IMove
         CIRCLE,     //圆
         RECTANGLE,       //矩形
         SECTOR,     //扇形
+        TARGET,     //指定目标碰撞
     }
 
     public ColType ColliderType = ColType.CIRCLE;
@@ -224,6 +225,16 @@ public class CollSector : CollBase
         outCircle = tOut;
         angle = tAngle;
         ColliderType = ColType.SECTOR;
+    }
+
+}
+
+public class CollTarget : CollBase
+{
+    public CollTarget(float tx, float ty, float tRotate, int battleId)
+        : base(tx, ty, tRotate)
+    {
+        ColliderType = ColType.TARGET;
     }
 
 }
