@@ -15,14 +15,11 @@ public class UILoginPanel : MonoBehaviour
 	private void Start()
 	{
 		LoginModule.GetInstance ().LoginPanel = this;
-
+		GameManager.GetInstance ().Init ();
 		if (!NetWorkConst.IsOpenNetWork) {
 			LoginModule.GetInstance ().EnterGameScene ();
 			return;
 		}
-		
-		GameManager.GetInstance ().Init ();
-
 		Init ();
 	}
 
