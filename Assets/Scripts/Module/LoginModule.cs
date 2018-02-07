@@ -76,11 +76,12 @@ public class LoginModule : Singleton<LoginModule> {
 
 	private IEnumerator EnterGameScene()
 	{
-		yield return SceneManager.LoadSceneAsync ("SkillTestScene");	
+		AsyncOperation op = SceneManager.LoadSceneAsync ("SkillTestScene");
+		yield return new WaitUntil (()=>op.isDone);
+
 		yield return null;
 		LoginPanel.gameObject.SetActive (false);
 		LoginPanel.transform.parent.Find ("MainPanel").gameObject.SetActive (true);
-		//GameObject.Find ("HpPanel").gameObject.SetActive (true);
 
 		GameManager.GetInstance ().GameStart ();
 	}
