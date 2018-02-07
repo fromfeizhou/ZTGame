@@ -4,6 +4,8 @@
 	{
 		public class NetWorkConst
 		{
+			public const bool IsOpenNetWork = false;
+			
 			#if UNITY_EDITOR
 			public const bool CMDebug = true;
 			#endif

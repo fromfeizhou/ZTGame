@@ -71,18 +71,19 @@ public class LoginModule : Singleton<LoginModule> {
 	{
 		_serverVersion = selectRole.version;
 		PlayerModule.GetInstance ().SetRoleInfo (selectRole.role[0]);
-		LoginPanel.StartCoroutine (EnterGameScene());
+		EnterGameScene ();
 	}
 
-	private IEnumerator EnterGameScene()
+	public void EnterGameScene(){
+		LoginPanel.StartCoroutine (coEnterGameScene());
+	}
+
+	private IEnumerator coEnterGameScene()
 	{
 		AsyncOperation op = SceneManager.LoadSceneAsync ("SkillTestScene");
 		yield return new WaitUntil (()=>op.isDone);
-
-		yield return null;
 		LoginPanel.gameObject.SetActive (false);
 		LoginPanel.transform.parent.Find ("MainPanel").gameObject.SetActive (true);
-
 		GameManager.GetInstance ().GameStart ();
 	}
 

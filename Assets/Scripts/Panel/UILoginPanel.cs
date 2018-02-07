@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using com.game.client.network;
 
 public class UILoginPanel : MonoBehaviour
 {
@@ -13,8 +14,14 @@ public class UILoginPanel : MonoBehaviour
 
 	private void Start()
 	{
-		GameManager.GetInstance ().Init ();
 		LoginModule.GetInstance ().LoginPanel = this;
+
+		if (!NetWorkConst.IsOpenNetWork) {
+			LoginModule.GetInstance ().EnterGameScene ();
+			return;
+		}
+		
+		GameManager.GetInstance ().Init ();
 
 		Init ();
 	}
