@@ -13,6 +13,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     public PlayerBattleInfo MyPlayer = null;
 
     private Dictionary<int,GameObject> _playerPrefab = null;
+    private Transform _playerLayer;
     public int SceneFrame = 0;
     //操作指令集合
     public Dictionary<int, List<FightCommandBase>> CommandDic;
@@ -20,6 +21,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     //初始化
     public override void Init()
     {
+        _playerLayer = GameObject.Find("PlayerLayer").transform;
         _cameraManager = Camera.main.GetComponent<CameraFollow>();
 
         _charaDic = new Dictionary<int, CharaActorInfo>();
@@ -218,7 +220,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
             GameObject gameObject = GameObject.Instantiate(_playerPrefab[charaPlayerInfo.ModelType]);
             gameObject.transform.localPosition = info.MovePos;
-			gameObject.transform.parent = PlayerLayter.GetInstance().transform;
+            gameObject.transform.parent = _playerLayer;
             _charaViewDic.Add(battleId, gameObject);
             gameObject.AddComponent<PlayerBattleActor>();
             gameObject.GetComponent<PlayerBattleActor>().SetInfo(info);
