@@ -14,7 +14,6 @@ public class UILoginPanel : MonoBehaviour
 	private void Start()
 	{
 		GameManager.GetInstance ().Init ();
-
 		LoginModule.GetInstance ().LoginPanel = this;
 
 		Init ();
@@ -29,7 +28,7 @@ public class UILoginPanel : MonoBehaviour
 
 	private void OnBtnClick_Login()
 	{
-		LoginModule.GetInstance ().NetWork_Request_Login ("ssss","");
+		LoginModule.GetInstance ().NetWork_Request_Login (_inputFieldAccount.text,"");
 	}
 
 }
