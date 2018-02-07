@@ -1,0 +1,1 @@
+{"moduleEn":"rank","moduleCn":"排行榜","moduleId":10,"commandList":[{"moduleId":10,"moduleEn":"rank","commandEn":"rank_info","commandCn":"排行榜信息","commandId":1},{"moduleId":10,"moduleEn":"rank","commandEn":"rank_role_rank_info","commandCn":"玩家的排行榜进度","commandId":2}]}

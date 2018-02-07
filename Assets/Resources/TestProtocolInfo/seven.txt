@@ -1,0 +1,1 @@
+{"moduleEn":"seven","moduleCn":"七天","moduleId":13,"commandList":[{"moduleId":13,"moduleEn":"seven","commandEn":"seven_guide_list","commandCn":"七天引导列表","commandId":1},{"moduleId":13,"moduleEn":"seven","commandEn":"seven_guide_award","commandCn":"引导领奖","commandId":2},{"moduleId":13,"moduleEn":"seven","commandEn":"seven_guide_update","commandCn":"引导更新","commandId":3}]}

@@ -1,0 +1,1 @@
+{"moduleEn":"task","moduleCn":"任务","moduleId":14,"commandList":[{"moduleId":14,"moduleEn":"task","commandEn":"task_list","commandCn":"任务列表","commandId":1},{"moduleId":14,"moduleEn":"task","commandEn":"task_reward","commandCn":"领取任务奖励","commandId":2},{"moduleId":14,"moduleEn":"task","commandEn":"task_update","commandCn":"批量更新任务","commandId":3}]}
