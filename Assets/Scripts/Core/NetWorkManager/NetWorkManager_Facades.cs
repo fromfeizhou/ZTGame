@@ -9,15 +9,38 @@ namespace com.game.client
     {
         public partial class NetWorkManager
         {
-            private const string FacadeNameSpace = "com.game.client.network.facade";
+			private static string FacadeNameSpace
+			{
+				get{
+					string facadeNameSpace = "com.game.client.network.facade";
+					#if UNITY_EDITOR
+					if(NetWorkConst.CMDebug)
+						facadeNameSpace += ".tester";
+					#endif
+					return facadeNameSpace;
+				}
+			}
+
+
+
 			private Dictionary<byte, ModuleNetFacadeParam> _moduleNetFacadeDic;
 
             /** 门面参数 */
-            private class ModuleNetFacadeParam
+			public class ModuleNetFacadeParam
             {
                 public object moduleNetFacadeObj;
 				public Dictionary<byte, MethodInfo> methodInfoDic = new Dictionary<byte, MethodInfo>();
             }
+
+			#if UNITY_EDITOR
+			public Dictionary<byte, ModuleNetFacadeParam> ModuleNetFacadeDic{
+				get{ 
+					return _moduleNetFacadeDic;
+				}
+			}
+
+
+			#endif
 
             /** 注册网络门面 */
             public void RegisterFacades()
@@ -27,7 +50,6 @@ namespace com.game.client
                 foreach (string typeName in allFacades)
                 {
                     Type t = Type.GetType(typeName);
-					Debug.Log("typeName:" + typeName);
                     NetFacadeAttribute netFacade = t.GetCustomAttributes(typeof(NetFacadeAttribute), false)[0] as NetFacadeAttribute;
                     if (_moduleNetFacadeDic.ContainsKey(netFacade.moduleId))
                     {
@@ -50,8 +72,7 @@ namespace com.game.client
                             Debug.LogError("重复注册Command. Command:" + netCommand.command);
                             continue;
                         }
-
-                        Debug.Log("成功注册：Module:" + netFacade.moduleId + ", Command:" + netCommand.command);
+                        //Debug.Log("成功注册：Module:" + netFacade.moduleId + ", Command:" + netCommand.command);
                         facadeParam.methodInfoDic[netCommand.command] = mis[i];
                     }
                     _moduleNetFacadeDic[netFacade.moduleId] = facadeParam;
@@ -61,7 +82,6 @@ namespace com.game.client
             /** 调用网络门面 */
 			private void FacadeInvoking(Message message)
             {
-				
 				if (_moduleNetFacadeDic.ContainsKey (message.module)) {
 					ModuleNetFacadeParam facadeParam = _moduleNetFacadeDic [message.module];
 					if (facadeParam.methodInfoDic.ContainsKey (message.command)) {
@@ -78,9 +98,10 @@ namespace com.game.client
 						return;
 					}
 				}
-
 				Debug.LogError("没有找到模块:" + message.module + ", 指令:" + message.command);
             }
+
+
 
             /** 获取命名空间内的所有网络门面类 */
             private List<string> getAllFacades()

@@ -4,7 +4,9 @@
 	{
 		public class NetWorkConst
 		{
-			//public const bool Message_Cryption = false;
+			#if UNITY_EDITOR
+			public const bool CMDebug = true;
+			#endif
 
 			public const string Ip = "120.79.43.54";
 			public const int Port = 92;
