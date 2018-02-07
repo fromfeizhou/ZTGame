@@ -17,7 +17,6 @@ namespace com.game.client
 				info += "Rank:" + vo.role.rank +", ";
 				info += "Sex:" + vo.role.sex;
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Info]角色信息:" + info);
-			
 			}
 
 			[NetCommandAttribute(Command.role_exp_inc)]
@@ -39,33 +38,35 @@ namespace com.game.client
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]体力信息:" + vo.vigour);
 			}
 
-
-
-
-
 			[NetCommandAttribute(Command.role_bc_info)]
 			private void OnReceive_Role_BC_Info(int code, role_bc_info_s2c vo)
 			{
-				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.data + "]");
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
 			}
 
 			[NetCommandAttribute(Command.role_attr)]
-			private void OnReceive_Role_aasdfsdf(int code, role_attr_s2c vo){
+			private void OnReceive_Role_Attr(int code, role_attr_s2c vo){
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]属性更新:当前生命值" + vo.attr.hp_cur + "...");
 			}
 
 
 			[NetCommandAttribute(Command.role_update_fight_point)]
-			private void OnReceive_Role_aasdfsdf(int code, role_update_fight_point_s2c vo){
+			private void OnReceive_Role_Flght_Point(int code, role_update_fight_point_s2c vo){
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]战力更新:" + vo.fight_point);
 			}
 
 
 			[NetCommandAttribute(Command.role_fortune)]
-			private void OnReceive_Role_aasdfsdf(int code, role_fortune_s2c vo){
+			private void OnReceive_Role_Fortune(int code, role_fortune_s2c vo){
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]财富更新:Scoin:" + vo.coin + ", coupon:" + vo.coupon + ", gold:" + vo.gold + ", silver:" + vo.silver);
 			}
 
+
+
+			[NetCommandAttribute(Command.role_error)]
+			private void OnReceive_Role_Error(int code, role_error_s2c vo){
+				UnityEngine.Debug.LogError ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]消息错误:method_id:" + vo.method_id + ", section_id:" + vo.section_id);
+			}
 
 
 
