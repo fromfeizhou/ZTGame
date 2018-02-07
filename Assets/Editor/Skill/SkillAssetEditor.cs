@@ -202,6 +202,7 @@ public class SkillAssetEditor : Editor
 
         GUILayout.BeginHorizontal();
         skillInfo.isCtrl = EditorGUILayout.Toggle("IsControl", skillInfo.isCtrl);
+        skillInfo.isSkillDir = EditorGUILayout.Toggle("IsSkillDir", skillInfo.isSkillDir);
         GUILayout.EndHorizontal();
 
     }
@@ -243,6 +244,7 @@ public class SkillAssetEditor : Editor
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Speed:", GUILayout.Width(100));
                 moveInfo.SpeedX = EditorGUILayout.FloatField(moveInfo.SpeedX);
+                moveInfo.FrameCount = int.MaxValue;
                 GUILayout.EndHorizontal();
                 break;
             case SkillDefine.MoveType.ROTATE:

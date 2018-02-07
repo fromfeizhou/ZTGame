@@ -5,11 +5,13 @@ using UnityEngine;
 public class SAPlayerControl : SkillActionBase {
 
 	public bool IsControl = false;
+    public bool IsSkillDir = false;
 
-    public SAPlayerControl(bool isCtrl, SkillActionParser actionParser, int actFrame)
+    public SAPlayerControl(bool isCtrl, bool isSkillDir,SkillActionParser actionParser, int actFrame)
         : base(actionParser,actFrame)
     {
         IsControl = isCtrl;
+        IsSkillDir = isSkillDir;
         ActionType = SkillDefine.SkillActionType.PLAY_CONTROL;
     }
 
@@ -25,16 +27,23 @@ public class SAPlayerControl : SkillActionBase {
         if (IsControl)
         {
             _skillPlayer.ChangeState(BATTLE_STATE.SKILL);
-            Debug.Log("SAPlayerControl-1");
         }
         else
         {
             if (_skillPlayer.BattleState == BATTLE_STATE.SKILL)
             {
                 _skillPlayer.ChangeState(BATTLE_STATE.NONE);
-                Debug.Log("SAPlayerControl-2");
             }
         }
+        if (IsSkillDir)
+        {
+            ICharaActor chara = _skillPlayer as ICharaActor;
+            if (null != chara)
+            {
+                chara.ChangeRotate(_actionParser.Command.SkillDir);
+            }
+        }
+
         Complete();
     }
 }

@@ -59,7 +59,7 @@ public class SkillActionParser
         switch (skillInfo.actionType)
         {
             case SkillDefine.SkillActionType.PLAY_CONTROL:
-                return new SAPlayerControl(skillInfo.isCtrl, this, frame);
+                return new SAPlayerControl(skillInfo.isCtrl,skillInfo.isSkillDir, this, frame);
             case SkillDefine.SkillActionType.PLAY_ANIM:
                 return new SAPlayAnim(skillInfo.animName, this, frame);
             case SkillDefine.SkillActionType.PLAY_MOVE:

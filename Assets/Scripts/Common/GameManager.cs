@@ -99,6 +99,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER,new Notification(1,this.gameObject));
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
+
+        //BattleProtocol.GetInstance().Init();
+        //BattleProtocol.GetInstance().SendEnterBattle(1, Vector3.zero);
     }
 
 }

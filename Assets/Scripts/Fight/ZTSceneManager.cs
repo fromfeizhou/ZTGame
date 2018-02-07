@@ -12,7 +12,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     public PlayerBattleInfo MyPlayer = null;
 
-    private GameObject _playerPrefab = null;
+    private Dictionary<int,GameObject> _playerPrefab = null;
     public int SceneFrame = 0;
     //操作指令集合
     public Dictionary<int, List<FightCommandBase>> CommandDic;
@@ -26,6 +26,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         _charaViewDic = new Dictionary<int, GameObject>();
         _charaList = new List<CharaActorInfo>();
         SceneFrame = 0;
+
+        _playerPrefab = new Dictionary<int, GameObject>();
 
         //操作集合初始化
         CommandDic = new Dictionary<int, List<FightCommandBase>>();
@@ -185,6 +187,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     }
 
     //创建玩家s
+    private List<string> modelNames = new List<string> { "fashi.prefab", "lieshou.prefab", "modoushi.prefab", "qishi.prefab" };
     private void CreatePlayer(int battleId)
     {
         //test
@@ -194,19 +197,26 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
             playerInfo.SetFightInfo(100);
             playerInfo.SetPlayerInfo();
             playerInfo.SetBattleInfo(battleId, battleId, new Vector3(_charaList.Count * 10 + 200f, 0, _charaList.Count * 10 + 200f));
+
+            playerInfo.ModelType = battleId % 4;
             //test
             _charaDic.Add(battleId, playerInfo);
             _charaList.Add(playerInfo);
         }
-      
 
-        if (null != _playerPrefab)
+        ICharaPlayer charaPlayerInfo = ZTSceneManager.GetInstance().GetCharaById(battleId) as ICharaPlayer;
+        if (null == charaPlayerInfo) return;
+
+        if (_playerPrefab.ContainsKey(charaPlayerInfo.ModelType))
         {
+            //资源加载中 等待回调
+            if (null == _playerPrefab[charaPlayerInfo.ModelType]) return;
+
             PlayerBattleInfo info = GetCharaById(battleId) as PlayerBattleInfo;
 
             if (null == info) return;
 
-            GameObject gameObject = GameObject.Instantiate(_playerPrefab);
+            GameObject gameObject = GameObject.Instantiate(_playerPrefab[charaPlayerInfo.ModelType]);
             gameObject.transform.localPosition = info.MovePos;
 			gameObject.transform.parent = PlayerLayter.GetInstance().transform;
             _charaViewDic.Add(battleId, gameObject);
@@ -224,15 +234,17 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         }
         else
         {
-            AssetManager.LoadAsset("Assets/Models/TmpCharacter/@fashi_1.prefab", LoadPrefabCom);
+            //占位 启动加载
+            _playerPrefab.Add(charaPlayerInfo.ModelType, null);
+            AssetManager.LoadAsset("Assets/Models/TmpCharacter/" + modelNames[charaPlayerInfo.ModelType], (Object target, string path) =>
+            {
+                _playerPrefab[charaPlayerInfo.ModelType] = target as GameObject;
+                LaterCreatePlayer();
+            });
         }
     }
 
-    private void LoadPrefabCom(Object target, string path)
-    {
-        _playerPrefab = target as GameObject;
-        LaterCreatePlayer();
-    }
+   
 
     //延后创建玩家
     private void LaterCreatePlayer(){

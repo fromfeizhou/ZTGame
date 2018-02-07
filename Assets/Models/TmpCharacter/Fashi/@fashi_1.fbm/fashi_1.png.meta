@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 39ec127ae588c8e4b973737015ae4ce7
-timeCreated: 1512205356
+timeCreated: 1517974767
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -64,5 +64,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: assets_models_tmpcharacter_fashi_@fashi_1.fbm
+  assetBundleName: 
   assetBundleVariant: 

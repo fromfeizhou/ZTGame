@@ -53,10 +53,24 @@ public class SkillJoystick : JoystickBase
             SkillId = ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId;
             ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
         }
-        //---------------test------------------------//
+
         Vector3 targetPos = new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
-        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,SkillId,dir,targetPos);
+
+
+        //选择最近目标
+        int targetId = -1;
+        if (SkillId == 1001)
+        {
+            ICharaBattle battleInfo = SkillMethod.GetNearestTarget(ZTSceneManager.GetInstance().MyPlayer, SkillDefine.ColliderTarget.ENEMY);
+            if (null == battleInfo || Vector3.Distance(ZTSceneManager.GetInstance().MyPlayer.MovePos, battleInfo.MovePos) > 6) return;
+
+            targetId = battleInfo.BattleId;
+            dir = (battleInfo.MovePos - ZTSceneManager.GetInstance().MyPlayer.MovePos).normalized;
+        }
+        //---------------test------------------------//
+        
+        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 }

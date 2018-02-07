@@ -5,10 +5,12 @@ using UnityEngine;
 public class SkillActionManager : Singleton<SkillActionManager>
 {
     private Dictionary<int, List<SkillActionParser>> _skillParserDic;
+    private List<SkillCommand> _addSkillCommand;
     public override void Init()
     {
         base.Init();
         _skillParserDic = new Dictionary<int, List<SkillActionParser>>();
+        _addSkillCommand = new List<SkillCommand>();
         InitEvent();
     }
 
@@ -46,16 +48,8 @@ public class SkillActionManager : Singleton<SkillActionManager>
     private void OnAddSkillParser(Notification data)
     {
         SkillCommand command = (data.param) as SkillCommand;
-        if (null != command)
-        {
-            ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(command.BattleId) as ICharaBattle;
-
-            if(null == battleInfo) return;
-
-            if (!_skillParserDic.ContainsKey(command.BattleId)) _skillParserDic.Add(command.BattleId, new List<SkillActionParser>());
-            SkillActionParser skillParser = new SkillActionParser(battleInfo, command);
-            _skillParserDic[battleInfo.BattleId].Add(skillParser);
-        }
+        _addSkillCommand.Add(command);
+       
     }
 	
 	// Update is called once per frame
@@ -77,6 +71,27 @@ public class SkillActionManager : Singleton<SkillActionManager>
                 }
             }
         }
-        
+
+        UpdateLate();
 	}
+
+    public void UpdateLate()
+    {
+        if (null == _addSkillCommand || _addSkillCommand.Count == 0) return;
+        while (_addSkillCommand.Count > 0)
+        {
+            SkillCommand command = _addSkillCommand[0];
+            _addSkillCommand.RemoveAt(0);
+            if (null != command)
+            {
+                ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(command.BattleId) as ICharaBattle;
+
+                if (null == battleInfo) return;
+
+                if (!_skillParserDic.ContainsKey(command.BattleId)) _skillParserDic.Add(command.BattleId, new List<SkillActionParser>());
+                SkillActionParser skillParser = new SkillActionParser(battleInfo, command);
+                _skillParserDic[battleInfo.BattleId].Add(skillParser);
+            }
+        }
+    }
 }
