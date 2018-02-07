@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using com.game.client.network;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -33,6 +34,9 @@ public class GameManager : MonoSingleton<GameManager>
         //_loadFuncList.Add(SpriteFaceCache.ParseAsset);
 
         LoadDataIndex();
+
+		NetWorkManager.Instace.Init (null);
+		NetWorkManager.Instace.Connect ();
     }
 
     private void LoadDataIndex()
@@ -69,6 +73,8 @@ public class GameManager : MonoSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
+		NetWorkManager.Instace.Update ();
+
         if (GameManager.GameInit == false)
         {
             return;
