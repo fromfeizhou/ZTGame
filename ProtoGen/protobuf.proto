@@ -726,7 +726,7 @@ message login_login_s2c {
     required uint32 code = 1; // 错误码
     required string accname = 2; // 用户名
     required string nick_name = 3; // 昵称
-    required uint32 heart_interval = 4; // 心跳间隔，秒
+    required uint32 heart_interval = 4[default=1]; // 心跳间隔，秒
     repeated p_login_info login_info = 5; // 角色登陆信息
 }
 
