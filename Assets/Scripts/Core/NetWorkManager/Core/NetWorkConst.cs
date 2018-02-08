@@ -6,22 +6,16 @@ namespace com.game.client
 		{
 			/** 是否开启前后端通信 */
 			public const bool IsOpenNetWork = true;
-			
-			#if UNITY_EDITOR
-			/** 开启测试用例 */
-			public const bool CMDebug = false;
-			#endif
 
 			public const string Ip = "120.79.43.54";
 			public const int Port = 92;
 		    public const float ConnectTimeOut = 15.0f;
 
 			public const int ReConnectTimes = 3;
-			public const bool HeartSwitch = false;
-            public const float Heart_Time = 1.0f;
 
 		    public const int MxSendMsgNum = 8;
 
+			public const string ErrCodeFilePath = "Assets/ecode_zh.hrl";
 		}
 	}
 }
