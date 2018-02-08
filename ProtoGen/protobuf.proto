@@ -589,7 +589,7 @@ message activity_activity_list_c2s {
 }
 message activity_activity_list_s2c {
     required uint32 code = 1; // 错误码
-    required p_activity_info activity_list = 2; // 活动列表
+    repeated p_activity_info activity_list = 2; // 活动列表
 }
 // ##begin##activity##activity_get_activity_reward##11##2##领奖##end##
 message activity_get_activity_reward_c2s {
@@ -612,11 +612,11 @@ message activity_activity_info_s2c {
 // ##begin##activity##activity_all_open_info##11##4##所有活动开关##end##
 message activity_all_open_info_c2s {}
 message activity_all_open_info_s2c {
-    required p_activity_open activity_opens = 1; // 活动开关详情
+    repeated p_activity_open activity_opens = 1; // 活动开关详情
 }
 // ##begin##activity##activity_update_open_info##11##5##更新活动开关##end##
 message activity_update_open_info_s2c {
-    required p_activity_open activity_opens = 1; // 活动开关详情
+    repeated p_activity_open activity_opens = 1; // 活动开关详情
 }
 // ##begin##activity##activity_update_activity##11##6##更新活动状态##end##
 message activity_update_activity_s2c {

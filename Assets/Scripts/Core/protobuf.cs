@@ -3040,13 +3040,13 @@ namespace gprotocol
       get { return _code; }
       set { _code = value; }
     }
-    private p_activity_info _activity_list;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"activity_list", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public p_activity_info activity_list
+    private readonly global::System.Collections.Generic.List<p_activity_info> _activity_list = new global::System.Collections.Generic.List<p_activity_info>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"activity_list", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<p_activity_info> activity_list
     {
       get { return _activity_list; }
-      set { _activity_list = value; }
     }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -3163,13 +3163,13 @@ namespace gprotocol
   {
     public activity_all_open_info_s2c() {}
     
-    private p_activity_open _activity_opens;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"activity_opens", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public p_activity_open activity_opens
+    private readonly global::System.Collections.Generic.List<p_activity_open> _activity_opens = new global::System.Collections.Generic.List<p_activity_open>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"activity_opens", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<p_activity_open> activity_opens
     {
       get { return _activity_opens; }
-      set { _activity_opens = value; }
     }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -3180,13 +3180,13 @@ namespace gprotocol
   {
     public activity_update_open_info_s2c() {}
     
-    private p_activity_open _activity_opens;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"activity_opens", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public p_activity_open activity_opens
+    private readonly global::System.Collections.Generic.List<p_activity_open> _activity_opens = new global::System.Collections.Generic.List<p_activity_open>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"activity_opens", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<p_activity_open> activity_opens
     {
       get { return _activity_opens; }
-      set { _activity_opens = value; }
     }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
