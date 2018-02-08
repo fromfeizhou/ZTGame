@@ -12,6 +12,14 @@ public class PlayerModule : Singleton<PlayerModule>
 			return _roleInfo.id;
 		}
 	}
+
+	/** 职业，0-战士 1-法师 2-弓箭手 3-道士 */
+	public uint RoleJob{
+		get{ 
+			return _roleInfo.job;
+		}
+	}
+
 	public void SetRoleInfo(gprotocol.p_role roleInf){
 		_roleInfo = roleInf;
 	}
