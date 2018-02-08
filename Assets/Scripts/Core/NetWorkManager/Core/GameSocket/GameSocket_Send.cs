@@ -50,7 +50,6 @@ namespace com.game.client
 					Invoking_CallBack_OnSend();
 				} catch (Exception e) {
 					Invoking_CallBack_OnError(eErrCode.SendMsgFail, e);
-					DisConnect ();
 				}
 			}
 		}

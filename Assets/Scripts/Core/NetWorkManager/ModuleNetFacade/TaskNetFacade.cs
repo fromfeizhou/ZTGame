@@ -10,9 +10,7 @@ namespace com.game.client
 			private void OnReceive_Task_Update(int code, task_update_s2c vo)
 			{
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Task_Update]批量更新任务:" + vo.task_list.Count);
-
 			}
-
 		}
 	}
 }

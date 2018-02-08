@@ -119,7 +119,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         if (_charaViewDic != null)
         {
             GameObject tempPlayer;
-            if (_charaViewDic.TryGetValue(1, out tempPlayer))
+            if (_charaViewDic.TryGetValue(PlayerModule.GetInstance().RoleID, out tempPlayer))
             {
 
                 MapManager.GetInstance().Update(tempPlayer.transform.position);

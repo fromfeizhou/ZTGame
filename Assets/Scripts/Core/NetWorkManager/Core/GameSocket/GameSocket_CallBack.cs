@@ -94,6 +94,7 @@ namespace com.game.client
 		    {
 		        switch (errCode)
 		        {
+					case eErrCode.SendMsgFail:
 		            case eErrCode.ReadBuffLenErr:
 		            {
 		                return true;

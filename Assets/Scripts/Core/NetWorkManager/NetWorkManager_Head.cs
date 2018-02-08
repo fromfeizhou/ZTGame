@@ -8,12 +8,29 @@ namespace com.game.client
     {
         public partial class NetWorkManager
         {
+			private int _ping;
+			public int Ping{
+				get{ 
+					return _ping;
+				}
+			}
+
+
+			private System.DateTime _lastSendTime;
+			private byte[] _heartBytes;
+
             private bool _isHeart = false;
             public bool IsHeart {
                 get { return _isHeart; }
             }
 
+			private float _maxHeartInterval;
             private float curHeartTime;
+
+			public void SetHeartInterval(float interval)
+			{
+				_maxHeartInterval = interval;
+			}
 
 			public void HeartSwitch(bool isActive)
             {
@@ -23,7 +40,7 @@ namespace com.game.client
 
             private void ResetHeartTime()
             {
-				curHeartTime = NetWorkConst.Heart_Time;
+				curHeartTime = _maxHeartInterval;
             }
 
 			private long sendTime;
@@ -33,17 +50,37 @@ namespace com.game.client
                 if (_isHeart)
                 {
 					curHeartTime += Time.deltaTime;
-					if (curHeartTime >= NetWorkConst.Heart_Time) {
-						curHeartTime = 0.0f;
+					if (curHeartTime >= _maxHeartInterval) {
 						SendHeart ();
+						curHeartTime = 0.0f;
 					}
                 }
             }
 
-			gprotocol.login_heart_c2s heartVo = new gprotocol.login_heart_c2s();
 			private void SendHeart()
 			{
-				NetWorkManager.Instace.SendNetMsg(Module.login, Command.login_heart, heartVo);
+				if (_heartBytes == null) {
+					Message message = _msgPool.Talk();
+					message.Seq = _curMsgSeq++;
+					message.module = Module.login;
+					message.command = Command.login_heart;
+
+					using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+					{
+						ProtoBuf.Serializer.Serialize(m, new gprotocol.login_heart_c2s());
+						message.voData = m.ToArray();
+					}
+					_heartBytes = message.AllBytes;
+					_msgPool.Recovery(message);
+				}
+
+				_lastSendTime = System.DateTime.Now;
+				_gameSocket.WriteData(_heartBytes);
+			}
+
+			private void OnReceive_Heart(gprotocol.login_heart_s2c vo)
+			{
+				_ping = (int)(System.DateTime.Now - _lastSendTime).TotalMilliseconds;
 			}
         }
     }
