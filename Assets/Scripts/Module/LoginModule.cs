@@ -62,10 +62,6 @@ public class LoginModule : Singleton<LoginModule> {
 		NetWork_Request_SelectRole (loginInfo.login_info[0].id);
 	}
 
-	public void OnReceive_CreateRole(gprotocol.login_create_role_s2c createRole){
-		NetWork_Request_SelectRole (createRole.id);
-	}
-
 	public void OnReceive_SelectRole(gprotocol.login_select_role_s2c selectRole)
 	{
 		_serverVersion = selectRole.version;
