@@ -231,7 +231,7 @@ public class CollSector : CollBase
 
 public class CollTarget : CollBase
 {
-    public CollTarget(float tx, float ty, float tRotate, int battleId)
+    public CollTarget(float tx, float ty, float tRotate)
         : base(tx, ty, tRotate)
     {
         ColliderType = ColType.TARGET;

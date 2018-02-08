@@ -25,10 +25,12 @@ public class FightCommandBase
 public class MoveCommand : FightCommandBase
 {
     public MOVE_DIR MoveDir;
-    public MoveCommand(uint battleId, uint frame, MOVE_DIR dir)
+    public Vector3 Pos;
+    public MoveCommand(uint battleId, uint frame, Vector3 pos, MOVE_DIR dir)
         : base(COMMAND_TYPE.MOVE, battleId, frame)
     {
         MoveDir = dir;
+        Pos = pos;
     }
 }
 
@@ -66,16 +68,14 @@ public class FightDefine
     }
 
     // 获得操作结构
-    public static MoveCommand GetMoveCommand(uint battleId, MOVE_DIR dir = MOVE_DIR.NONE)
+    public static MoveCommand GetMoveCommand(uint battleId, uint frame, Vector3 pos, MOVE_DIR dir = MOVE_DIR.NONE)
     {
-        uint frame = ZTSceneManager.GetInstance().SceneFrame;
-        return new MoveCommand(battleId,frame, dir);
+        return new MoveCommand(battleId, frame, pos, dir);
     }
     // 获得操作结构
-    public static SkillCommand GetSkillCommand(uint battleId, int actionId, Vector3 dir, Vector3 targetPos, uint targetId = 0)
+    public static SkillCommand GetSkillCommand(uint battleId, uint frame, int actionId, Vector3 dir, Vector3 targetPos, uint targetId = 0)
     {
-        uint frame = ZTSceneManager.GetInstance().SceneFrame;
-        return new SkillCommand(battleId,frame,actionId,dir,targetPos,targetId);
+        return new SkillCommand(battleId, frame, actionId, dir, targetPos, targetId);
     }
 
 

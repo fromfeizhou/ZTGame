@@ -140,7 +140,8 @@ public class SACollider : SkillActionBase
                     SkillCommand command = null;
                     if (info.EffectType == FIGHT_EF_TPYE.ACTION)
                     {
-                        command = FightDefine.GetSkillCommand(player.BattleId, info.Param1, dir, player.MovePos);
+                        uint frame = ZTSceneManager.GetInstance().SceneFrame;
+                        command = FightDefine.GetSkillCommand(player.BattleId, frame,info.Param1, dir, player.MovePos);
                     }
                     FightEffectDefine.ParseEffect(player, info, _skillPlayer.BattleId, dir, command);
                 }

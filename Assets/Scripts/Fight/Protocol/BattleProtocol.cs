@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BP_BATTLE_TYPE{
+public enum BP_BATTLE_TYPE
+{
     ENTER = 0,
     MOVE,
 }
@@ -16,27 +17,28 @@ public class BPBattle
     public Vector3 Pos;
     public uint Frame;
 
-    public BPBattle(uint battleId, Vector3 pos, uint frame)
+    public BPBattle(uint battleId, Vector3 pos)
     {
         BattleId = battleId;
         Pos = pos;
-        Frame = frame;
+        Frame = ZTSceneManager.GetInstance().SceneFrame;
     }
 }
 
-public class BPEnter:BPBattle
+public class BPEnter : BPBattle
 {
-    public BPEnter(uint battleId, Vector3 pos, uint frame)
-        : base(battleId,pos,frame)
+    public BPEnter(uint battleId, Vector3 pos)
+        : base(battleId, pos)
     {
         Type = BP_BATTLE_TYPE.ENTER;
     }
 }
 
-public class BPMove:BPBattle{
+public class BPMove : BPBattle
+{
     public MOVE_DIR Dir;
-    public BPMove(uint battleId, Vector3 pos, uint frame, MOVE_DIR dir)
-        : base(battleId,pos,frame)
+    public BPMove(uint battleId, Vector3 pos, MOVE_DIR dir)
+        : base(battleId, pos)
     {
         Dir = dir;
         Type = BP_BATTLE_TYPE.MOVE;
@@ -45,7 +47,7 @@ public class BPMove:BPBattle{
 
 public class BP_BATTLE_EVENT
 {
-    public  const string COMMAND = "BP_BATTLE_EVENT_COMMAND";
+    public const string COMMAND = "BP_BATTLE_EVENT_COMMAND";
 }
 public class BPBattleEvent : Singleton<NotificationDelegate>
 {
@@ -59,10 +61,34 @@ public class BattleProtocol : Singleton<BattleProtocol>
         InitEvent();
     }
 
-    //进入场景
-    public void SendEnterBattle(uint battleId, Vector3 pos, uint frame)
+    public void SendMsg(object bp)
     {
-        BPBattle bp = new BPBattle(battleId, pos,frame);
+        JsonUtility.ToJson(bp);
+        string bpOut = JsonUtility.ToJson(bp);
+        gprotocol.role_bc_info_c2s vo = new gprotocol.role_bc_info_c2s()
+        {
+            data = bpOut,
+        };
+        NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
+    }
+
+    //进入场景
+    public void SendEnterBattle(uint battleId, Vector3 pos)
+    {
+        BPBattle bp = new BPBattle(battleId, pos);
+        SendMsg(bp);
+    }
+
+    //推帧
+    public void SendFrameCommand(uint battleId, uint frame)
+    {
+
+    }
+
+    //移动
+    public void SendMoveComand(uint battleId, Vector3 pos, MOVE_DIR dir)
+    {
+        BPMove bp = new BPMove(battleId, pos, dir);
         JsonUtility.ToJson(bp);
         string bpOut = JsonUtility.ToJson(bp);
 
@@ -73,19 +99,8 @@ public class BattleProtocol : Singleton<BattleProtocol>
         NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
     }
 
-    //推帧
-    public void SendFrameCommand(int battleId, uint frame)
-    {
-    }
-
-    //移动
-    public void SendMoveComand(int battleId, uint frame, Vector3 pos, MOVE_DIR dir)
-    {
-        
-    }
-
     //技能使用
-    public void SendSkillCommand(int battleId, uint frame, int actionId, Vector3 dir, Vector3 targetPos)
+    public void SendSkillCommand(int battleId, int actionId, Vector3 dir, Vector3 targetPos)
     {
     }
 
@@ -112,7 +127,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
                 ParseMoveComand(JsonUtility.FromJson<BPMove>(bpOut));
                 break;
         }
-      
+
     }
 
     //收到玩家进入场景
@@ -122,8 +137,10 @@ public class BattleProtocol : Singleton<BattleProtocol>
     }
 
     //收到推帧命令
-    public void ParseFrameCommand(int battleId, int frame)
+    public void ParseFrameCommand(BPMove bp)
     {
+        MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId,bp.Frame,bp.Pos,bp.Dir);
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 
     //移动
@@ -132,7 +149,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
     }
 
     //技能使用
-    public void ParseSkillCommand(int battleId, int frame, int actionId, Vector3 dir, Vector3 targetPos)
+    public void ParseSkillCommand(int battleId, int actionId, Vector3 dir, Vector3 targetPos)
     {
     }
 

@@ -70,7 +70,7 @@ public class SkillJoystick : JoystickBase
         }
         //---------------test------------------------//
         
-        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
+        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,ZTSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 }
