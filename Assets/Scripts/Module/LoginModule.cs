@@ -39,7 +39,7 @@ public class LoginModule : Singleton<LoginModule> {
 		gprotocol.login_create_role_c2s roleVO = new gprotocol.login_create_role_c2s()
 		{
 			name = UnityEngine.Random.Range(10000,99999).ToString(),	// 角色名字
-			model = 1,		// 职业
+			job = 1,		// 职业
 			sex = 1,		// 性别 1男 2女
 			serv_id = 0,	// 服务器ID
 		};	
