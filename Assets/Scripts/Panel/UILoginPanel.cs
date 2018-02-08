@@ -25,6 +25,7 @@ public class UILoginPanel : MonoBehaviour
 
 	public void Init()
 	{
+		LoginModule.GetInstance().CreateRolePanel = transform.parent.Find ("UICreateRolePanel").GetComponent<UICreateRolePanel> ();
 		_widget = Widget.Create(gameObject);
 		_widget.BandingBtn_OnClick (OnBtnClick_Login,"ViewPort/Btn_Login");
 		_inputFieldAccount = _widget.GetComponent<InputField> ("ViewPort/Account/InputField");

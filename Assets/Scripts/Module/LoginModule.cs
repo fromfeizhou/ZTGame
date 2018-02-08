@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class LoginModule : Singleton<LoginModule> {
 
 	public UILoginPanel LoginPanel;
+	public UICreateRolePanel CreateRolePanel;
 
 	/** 服务器版本号 */
 	private string _serverVersion;
@@ -35,14 +36,12 @@ public class LoginModule : Singleton<LoginModule> {
 	}
 
 
-	public void NetWork_Request_CreateRole(){
-		gprotocol.login_create_role_c2s roleVO = new gprotocol.login_create_role_c2s()
-		{
-			name = UnityEngine.Random.Range(10000,99999).ToString(),	// 角色名字
-			job = 1,		// 职业
-			sex = 1,		// 性别 1男 2女
-			serv_id = 0,	// 服务器ID
-		};	
+	public void NetWork_Request_CreateRole(string name, uint job){
+		gprotocol.login_create_role_c2s roleVO = new gprotocol.login_create_role_c2s ();
+		roleVO.name = name;	// 角色名字
+		roleVO.job = job;	// 职业
+		roleVO.sex = 1;		// 性别 1男 2女
+		roleVO.serv_id = 0;	// 服务器ID
 		NetWorkManager.Instace.SendNetMsg (Module.login, Command.login_create_role, roleVO);
 	}
 
@@ -71,6 +70,7 @@ public class LoginModule : Singleton<LoginModule> {
 	{
 		_serverVersion = selectRole.version;
 		PlayerModule.GetInstance ().SetRoleInfo (selectRole.role[0]);
+		HidePanel_CreateRole ();
 		EnterGameScene ();
 	}
 
@@ -85,6 +85,14 @@ public class LoginModule : Singleton<LoginModule> {
 		LoginPanel.gameObject.SetActive (false);
 		LoginPanel.transform.parent.Find ("MainPanel").gameObject.SetActive (true);
 		GameManager.GetInstance ().GameStart ();
+	}
+
+	public void ShowPanel_CreateRole(){
+		CreateRolePanel.Show ();
+	}
+
+	public void HidePanel_CreateRole(){
+		CreateRolePanel.Hide ();
 	}
 
 	private void ShowErr(string err)

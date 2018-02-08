@@ -15,23 +15,27 @@ namespace com.game.client
 			[NetCommandAttribute(Command.login_login)]
 			private void OnReceive_Login_Login(int code, login_login_s2c vo)
 			{
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_Login]:code:" + vo.code);
+
 				if (vo.code == 0) {
 					LoginModule.GetInstance ().OnReceive_Login (vo);
 				} else {
 					if (vo.code == 12)//没有角色
 					{
-						LoginModule.GetInstance ().NetWork_Request_CreateRole ();
+						LoginModule.GetInstance ().ShowPanel_CreateRole ();
 					}
 				}
 			}
 
 			[NetCommandAttribute(Command.login_create_role)]
 			private void OnReceive_Login_Create_Role(int code, login_create_role_s2c vo){
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_Create_Role]:roleID" + vo.id);
 				LoginModule.GetInstance ().OnReceive_CreateRole (vo);
 			}
 
 			[NetCommandAttribute(Command.login_select_role)]
 			private void OnReceive_Login_SelectRole(int code, login_select_role_s2c vo){
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_SelectRole]:roleID" + vo.role[0].id);
 				LoginModule.GetInstance ().OnReceive_SelectRole (vo);
 			}
 
