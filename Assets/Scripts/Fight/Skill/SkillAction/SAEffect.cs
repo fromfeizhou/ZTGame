@@ -8,14 +8,14 @@ public class SAEffect : SkillActionBase
 {
     public EffectInfo EffectData;
 
-    public SAEffect(EffectInfo info, SkillActionParser actionParser, int actFrame)
+    public SAEffect(EffectInfo info, SkillActionParser actionParser, uint actFrame)
         : base(actionParser, actFrame)
     {
         EffectData = info;
     }
 
     //播放动作
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
         DoAction();

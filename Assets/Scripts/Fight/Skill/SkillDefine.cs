@@ -35,14 +35,14 @@ public class EffectInfo
 [System.Serializable]
 public class MoveInfo
 {
-    public int FrameCount;
+    public uint FrameCount;
     public float SpeedX;     //速度speed
     public float SpeedZ;
     public float Angle;     //起始角度
     public float Rotate;    //旋转角度
     public SkillDefine.MoveType MoveType;
 
-    public MoveInfo(SkillDefine.MoveType type = SkillDefine.MoveType.LINE, float angle = 0, int count = 0, float speedX = 0, float speedZ = 0, float rotate = 0)
+    public MoveInfo(SkillDefine.MoveType type = SkillDefine.MoveType.LINE, float angle = 0, uint count = 0, float speedX = 0, float speedZ = 0, float rotate = 0)
     {
         MoveType = type;
         FrameCount = count;
@@ -55,8 +55,8 @@ public class MoveInfo
 [System.Serializable]
 public class ColliderInfo
 {
-    public int Interval;    //触发间隔
-    public int LifeTime;    //存在时间
+    public uint Interval;    //触发间隔
+    public uint LifeTime;    //存在时间
     public bool IsPenetrate;    //穿透障碍
     public int ColliderMax; //最大碰撞个数
 

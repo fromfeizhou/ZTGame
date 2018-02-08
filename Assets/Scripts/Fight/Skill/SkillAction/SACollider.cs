@@ -13,7 +13,7 @@ public class SACollider : SkillActionBase
     private int _colliderCount = 0; //碰撞次数
 
     private List<ICharaBattle> _targetList = null;
-    private Dictionary<int, int> _colliderDic = null; //已碰撞队列
+    private Dictionary<uint, uint> _colliderDic = null; //已碰撞队列
 
     private GameObject _colliderView;     //碰撞显示
     private GameObject _colliderEffect;     //特效容器
@@ -32,7 +32,7 @@ public class SACollider : SkillActionBase
         }
     }
 
-    public override int ActFrame
+    public override uint ActFrame
     {
         get { return _actFrame; }
         set
@@ -43,7 +43,7 @@ public class SACollider : SkillActionBase
         }
     }
 
-    public SACollider(CollBase collider, ColliderInfo collidInfo, SkillActionParser actionParser, int actFrame)
+    public SACollider(CollBase collider, ColliderInfo collidInfo, SkillActionParser actionParser, uint actFrame)
         : base(actionParser, actFrame)
     {
         _collider = collider;
@@ -61,7 +61,7 @@ public class SACollider : SkillActionBase
 
     }
     //刷新对象
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
 
@@ -72,7 +72,7 @@ public class SACollider : SkillActionBase
         UpdateColliderEffect();
     }
 
-    protected void CheckCollider(int curFrame)
+    protected void CheckCollider(uint curFrame)
     {
         //指定目标 不需要判断 在运动结束 调用 
         if (_colliderInfo.ColliderType == CollBase.ColType.TARGET)
@@ -111,7 +111,7 @@ public class SACollider : SkillActionBase
     //过滤碰撞对象 
     private void CheckTargetList()
     {
-        _colliderDic = new Dictionary<int, int>();
+        _colliderDic = new Dictionary<uint, uint>();
         _targetList = SkillMethod.GetTargetList(_skillPlayer, _colliderInfo.ColliderTarget);
     }
 

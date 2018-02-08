@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SkillActionManager : Singleton<SkillActionManager>
 {
-    private Dictionary<int, List<SkillActionParser>> _skillParserDic;
+    private Dictionary<uint, List<SkillActionParser>> _skillParserDic;
     private List<SkillCommand> _addSkillCommand;
     public override void Init()
     {
         base.Init();
-        _skillParserDic = new Dictionary<int, List<SkillActionParser>>();
+        _skillParserDic = new Dictionary<uint, List<SkillActionParser>>();
         _addSkillCommand = new List<SkillCommand>();
         InitEvent();
     }
@@ -18,7 +18,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
     {
         if (null != _skillParserDic)
         {
-            foreach (int key in _skillParserDic.Keys)
+            foreach (uint key in _skillParserDic.Keys)
             {
                 List<SkillActionParser> list = _skillParserDic[key];
                 for (int i = list.Count - 1; i >= 0; i--)
@@ -54,7 +54,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
 	
 	// Update is called once per frame
 	public void Update () {
-        foreach (int key in _skillParserDic.Keys)
+        foreach (uint key in _skillParserDic.Keys)
         {
             List<SkillActionParser> list = _skillParserDic[key];
             for (int i = list.Count - 1; i >= 0; i--)

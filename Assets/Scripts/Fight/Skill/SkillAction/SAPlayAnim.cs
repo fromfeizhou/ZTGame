@@ -8,7 +8,7 @@ public class SAPlayAnim : SkillActionBase
 {
     public string AnimName = "";
 
-    public SAPlayAnim(string animName, SkillActionParser actionParser, int actFrame)
+    public SAPlayAnim(string animName, SkillActionParser actionParser, uint actFrame)
         : base(actionParser,actFrame)
     {
         AnimName = animName;
@@ -16,7 +16,7 @@ public class SAPlayAnim : SkillActionBase
     }
 
      //播放动作
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
         DoAction();

@@ -12,9 +12,9 @@ public enum COMMAND_TYPE
 public class FightCommandBase
 {
     public COMMAND_TYPE CommandType;
-    public int Frame;
-    public int BattleId;
-    public FightCommandBase(COMMAND_TYPE type, int battleId, int frame)
+    public uint Frame;
+    public uint BattleId;
+    public FightCommandBase(COMMAND_TYPE type, uint battleId, uint frame)
     {
         CommandType = type;
         BattleId = battleId;
@@ -25,7 +25,7 @@ public class FightCommandBase
 public class MoveCommand : FightCommandBase
 {
     public MOVE_DIR MoveDir;
-    public MoveCommand(int battleId, int frame, MOVE_DIR dir)
+    public MoveCommand(uint battleId, uint frame, MOVE_DIR dir)
         : base(COMMAND_TYPE.MOVE, battleId, frame)
     {
         MoveDir = dir;
@@ -35,11 +35,11 @@ public class MoveCommand : FightCommandBase
 public class SkillCommand : FightCommandBase
 {
     public int SkillId = -1;
-    public int StartFrame = 0;
+    public uint StartFrame = 0;
     public Vector3 SkillDir = Vector3.zero;     //技能方向
     public Vector3 TargetPos = Vector3.zero;    //目标坐标(相对player)
-    public int TargetId;    //指定目标
-    public SkillCommand(int battleId, int frame,int actionId, Vector3 dir, Vector3 targetPos,int targetId)
+    public uint TargetId;    //指定目标
+    public SkillCommand(uint battleId, uint frame, int actionId, Vector3 dir, Vector3 targetPos, uint targetId)
         : base(COMMAND_TYPE.SKILL, battleId, frame)
     {
         SkillId = actionId;
@@ -53,11 +53,11 @@ public class SkillCommand : FightCommandBase
 
 public class FightDefine
 {
-    public static int MaxFrame = int.MaxValue; //60帧每秒 理论上可以计数400多天
+    public static uint MaxFrame = uint.MaxValue; //60帧每秒 理论上可以计数400多天
 
-    public static bool CompareFrame(int frame)
+    public static bool CompareFrame(uint frame)
     {
-        int curFrame = ZTSceneManager.GetInstance().SceneFrame;
+        uint curFrame = ZTSceneManager.GetInstance().SceneFrame;
         if (curFrame >= frame)
         {
             return true;
@@ -66,15 +66,15 @@ public class FightDefine
     }
 
     // 获得操作结构
-    public static MoveCommand GetMoveCommand(int battleId, MOVE_DIR dir = MOVE_DIR.NONE)
+    public static MoveCommand GetMoveCommand(uint battleId, MOVE_DIR dir = MOVE_DIR.NONE)
     {
-        int frame = ZTSceneManager.GetInstance().SceneFrame;
+        uint frame = ZTSceneManager.GetInstance().SceneFrame;
         return new MoveCommand(battleId,frame, dir);
     }
     // 获得操作结构
-    public static SkillCommand GetSkillCommand(int battleId,int actionId,Vector3 dir,Vector3 targetPos,int targetId = -1)
+    public static SkillCommand GetSkillCommand(uint battleId, int actionId, Vector3 dir, Vector3 targetPos, uint targetId = 0)
     {
-        int frame = ZTSceneManager.GetInstance().SceneFrame;
+        uint frame = ZTSceneManager.GetInstance().SceneFrame;
         return new SkillCommand(battleId,frame,actionId,dir,targetPos,targetId);
     }
 

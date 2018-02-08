@@ -9,7 +9,7 @@ public class SAPlayerMove : SkillActionBase
     private MoveInfo _moveInfo;
     private int _moveCount;
 
-    public override int ActFrame
+    public override uint ActFrame
     {
         get { return _actFrame; }
         set
@@ -19,8 +19,8 @@ public class SAPlayerMove : SkillActionBase
             _frameMax = _actFrame + _moveInfo.FrameCount;
         }
     }
-  
-    public SAPlayerMove(MoveInfo moveInfo, SkillActionParser actionParser, int actFrame)
+
+    public SAPlayerMove(MoveInfo moveInfo, SkillActionParser actionParser, uint actFrame)
         : base(actionParser, actFrame)
     {
         _moveInfo = moveInfo;
@@ -30,7 +30,7 @@ public class SAPlayerMove : SkillActionBase
     }
 
     //移动
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
         if (_moveCount > _moveInfo.FrameCount)

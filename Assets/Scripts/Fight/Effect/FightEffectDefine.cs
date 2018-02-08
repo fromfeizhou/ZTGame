@@ -32,7 +32,7 @@ public class FightEffectDefine
     /// <param name="userId">使用者id</param>
     /// <param name="dir">方向（击退 等带方向效果附带参数）</param>
     /// <param name="takeParam">技能 等附带参数</param>
-    public static void ParseEffect(ICharaBattle battleInfo, FightEffectInfo effect, int userId = -1, Vector3 dir = default(Vector3), object takeParam = null)
+    public static void ParseEffect(ICharaBattle battleInfo, FightEffectInfo effect, uint userId = 0, Vector3 dir = default(Vector3), object takeParam = null)
     {
         if (null == battleInfo)
             return;
@@ -76,7 +76,7 @@ public class FightEffectDefine
     }
     
     //震屏
-    private static void SharkScreen(ICharaBattle battleInfo, FightEffectInfo effect, int userId)
+    private static void SharkScreen(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         //非玩家自己 不需要震动
         if (battleInfo.BattleId == ZTSceneManager.GetInstance().MyPlayer.BattleId || userId == ZTSceneManager.GetInstance().MyPlayer.BattleId)
@@ -108,7 +108,7 @@ public class FightEffectDefine
         }
     }
 
-    private static void DoAction(ICharaBattle battleInfo, FightEffectInfo effect, int userId = -1, Vector3 dir = default(Vector3), object takeParam = null)
+    private static void DoAction(ICharaBattle battleInfo, FightEffectInfo effect, uint userId = 0, Vector3 dir = default(Vector3), object takeParam = null)
     {
 
         SkillCommand skill = takeParam as SkillCommand;
@@ -118,7 +118,7 @@ public class FightEffectDefine
         }
     }
 
-    private static void CalculateHurt(ICharaBattle battleInfo, FightEffectInfo effect, int userId)
+    private static void CalculateHurt(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         ICharaFight target = battleInfo as ICharaFight;
         ICharaFight user = ZTSceneManager.GetInstance().GetCharaById(userId) as ICharaFight;
@@ -131,7 +131,7 @@ public class FightEffectDefine
         battleInfo.AddHurt(hurtInfo);
     }
 
-    private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, int userId)
+    private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         if (userId <= 0) return;
         battleInfo.AddBuff(new BuffData(effect.Param1, ZTSceneManager.GetInstance().SceneFrame, userId));

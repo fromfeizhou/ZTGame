@@ -9,13 +9,13 @@ public class SkillActionParser
     public ICharaBattle SkillPlayer;     //使用技能者
     public SkillCommand Command;      //操作
     public bool IsComplete = false;
-    private Dictionary<int, List<SkillActionBase>> _skillActionDic;     //技能action列表
+    private Dictionary<uint, List<SkillActionBase>> _skillActionDic;     //技能action列表
 
     public SkillActionParser(ICharaBattle playerBase, SkillCommand command)
     {
         SkillPlayer = playerBase;
         Command = command;
-        _skillActionDic = new Dictionary<int, List<SkillActionBase>>();
+        _skillActionDic = new Dictionary<uint, List<SkillActionBase>>();
         IsComplete = false;
         ParseSkillAction();
     }
@@ -37,7 +37,7 @@ public class SkillActionParser
             {
                 for (int k = 0; k < skillAsset.ListSkillGroup[i].ListSkillInfo.Count; k++)
                 {
-                    int frame = Command.StartFrame + skillAsset.ListSkillGroup[i].FrameTime;
+                    uint frame = Command.StartFrame + skillAsset.ListSkillGroup[i].FrameTime;
                     if (skillAsset.ListSkillGroup[i].FrameTime < 0)
                     {
                         frame = skillAsset.ListSkillGroup[i].FrameTime;
@@ -54,7 +54,7 @@ public class SkillActionParser
     }
 
     //对应actor类型 创建
-    private SkillActionBase GetSkillActionBase(int frame, SkillAssetInfo skillInfo)
+    private SkillActionBase GetSkillActionBase(uint frame, SkillAssetInfo skillInfo)
     {
         switch (skillInfo.actionType)
         {
@@ -120,13 +120,13 @@ public class SkillActionParser
         if (null != _skillActionDic)
         {
 
-            int curFrame = ZTSceneManager.GetInstance().SceneFrame;
+            uint curFrame = ZTSceneManager.GetInstance().SceneFrame;
             //帧率溢出 补足
             if (curFrame < Command.StartFrame)
             {
-                curFrame += int.MaxValue - Command.StartFrame;
+                curFrame += uint.MaxValue - Command.StartFrame;
             }
-            foreach (int key in _skillActionDic.Keys)
+            foreach (uint key in _skillActionDic.Keys)
             {
                 for (int i = _skillActionDic[key].Count - 1; i >= 0; i--)
                 {
@@ -157,7 +157,7 @@ public class SkillActionParser
 
 
     //激活行为
-    public void ActionActivatebyId(int id)
+    public void ActionActivatebyId(uint id)
     {
         if (_skillActionDic.ContainsKey(id))
         {

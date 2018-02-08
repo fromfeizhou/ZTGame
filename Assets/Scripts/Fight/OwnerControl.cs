@@ -110,7 +110,7 @@ public class OwnerControl : Singleton<OwnerControl>
     //发送操作指令
     private void SendMoveCommond(MOVE_DIR dir)
     {
-        int battleId = ZTSceneManager.GetInstance().MyPlayer.BattleId;
+        uint battleId = ZTSceneManager.GetInstance().MyPlayer.BattleId;
         if (battleId > 0)
         {
             MoveCommand command = FightDefine.GetMoveCommand(battleId, dir);

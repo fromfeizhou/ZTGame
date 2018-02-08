@@ -7,7 +7,7 @@ public class SAFightEffect : SkillActionBase
 {
 	public List<FightEffectInfo> EffectList;
 
-    public SAFightEffect(List<FightEffectInfo> list, SkillActionParser actionParser, int actFrame)
+    public SAFightEffect(List<FightEffectInfo> list, SkillActionParser actionParser, uint actFrame)
         : base(actionParser, actFrame)
     {
         Debug.LogError("自己对自己使用效果(废弃不用 通过碰撞来触发)");
@@ -15,7 +15,7 @@ public class SAFightEffect : SkillActionBase
     }
 
     //播放动作
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
         DoAction();

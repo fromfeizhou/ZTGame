@@ -59,7 +59,7 @@ public class SkillJoystick : JoystickBase
 
 
         //选择最近目标
-        int targetId = -1;
+        uint targetId =0;
         if (SkillId == 1001)
         {
             ICharaBattle battleInfo = SkillMethod.GetNearestTarget(ZTSceneManager.GetInstance().MyPlayer, SkillDefine.ColliderTarget.ENEMY);

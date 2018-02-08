@@ -5,7 +5,7 @@ using UnityEngine;
 public interface ICharaBattle:IMove
 {
     //战斗id
-    int BattleId { get; set; }
+    uint BattleId { get; set; }
 
     //当前状态
     BATTLE_STATE BattleState { get;}
@@ -19,7 +19,7 @@ public interface ICharaBattle:IMove
     //碰撞框
     CollRadius Collider { get; set; }
 
-    void SetBattleInfo(int battleId = 0, int camp = 0,Vector3 pos = default(Vector3));
+    void SetBattleInfo(uint battleId = 0, int camp = 0,Vector3 pos = default(Vector3));
 
     //改变状态
     void ChangeState(BATTLE_STATE state);

@@ -180,7 +180,7 @@ public enum HURT_TYPE
 public struct HurtInfo
 {
     public HURT_TYPE Type;
-    public int BattleId;
+    public uint BattleId;
     public Vector3 Pos;
     public float Value;
 }

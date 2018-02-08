@@ -41,7 +41,8 @@ namespace com.game.client
 			[NetCommandAttribute(Command.role_bc_info)]
 			private void OnReceive_Role_BC_Info(int code, role_bc_info_s2c vo)
 			{
-				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
+                BPBattleEvent.GetInstance().dispatchEvent(BP_BATTLE_EVENT.COMMAND, new Notification(vo.data));
+				//UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
 			}
 
 			[NetCommandAttribute(Command.role_attr)]

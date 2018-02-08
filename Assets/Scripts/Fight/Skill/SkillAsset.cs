@@ -42,6 +42,6 @@ public class SkillAssetInfo
 [System.Serializable]
 public class SkillAssetInforGroup
 {
-    public int FrameTime = 0;
+    public uint FrameTime = 0;
     public List<SkillAssetInfo> ListSkillInfo;
 }

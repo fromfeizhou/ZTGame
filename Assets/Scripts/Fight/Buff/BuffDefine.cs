@@ -153,10 +153,10 @@ public enum BUFF_TYPE
 public class BuffData
 {
     public int BuffId;
-    public int Frame;
-    public int UserId;
+    public uint Frame;
+    public uint UserId;
 
-    public BuffData(int buffId, int frame, int userId = -1)
+    public BuffData(int buffId, uint frame, uint userId = 0)
     {
         BuffId = buffId;
         Frame = frame;

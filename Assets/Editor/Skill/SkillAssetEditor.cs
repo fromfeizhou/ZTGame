@@ -12,9 +12,9 @@ public class SkillAssetEditor : Editor
     private int showIndex;
 
     //添加的标签的名称
-    private int addTagFrame;
+    private uint addTagFrame;
 
-    private int index;
+    private uint index;
 
     public void OnEnable()
     {
@@ -38,7 +38,7 @@ public class SkillAssetEditor : Editor
         GUILayout.BeginVertical("HelpBox");
         GUILayout.BeginHorizontal();
         GUILayout.Label("创建触发帧：", GUILayout.Width(100));
-        addTagFrame = EditorGUILayout.IntField(addTagFrame, GUILayout.Width(50));
+        addTagFrame = (uint)EditorGUILayout.IntField((int)addTagFrame, GUILayout.Width(50));
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("Add Tag", GUILayout.Width(100), GUILayout.Height(30)))
         {
@@ -78,7 +78,7 @@ public class SkillAssetEditor : Editor
             }
             #endregion
 
-            skillAsset.ListSkillGroup[i].FrameTime = EditorGUILayout.IntField(skillAsset.ListSkillGroup[i].FrameTime, GUILayout.Width(50));
+            skillAsset.ListSkillGroup[i].FrameTime = (uint)EditorGUILayout.IntField((int)skillAsset.ListSkillGroup[i].FrameTime, GUILayout.Width(50));
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("AddSKillInfo", GUILayout.Width(100)))
             {
@@ -162,7 +162,7 @@ public class SkillAssetEditor : Editor
     /// <summary>
     /// 新增标签
     /// </summary>
-    private void AddTagSure(int frame)
+    private void AddTagSure(uint frame)
     {
         SkillAssetInforGroup sig = new SkillAssetInforGroup();
         sig.FrameTime = frame;
@@ -232,7 +232,7 @@ public class SkillAssetEditor : Editor
             case SkillDefine.MoveType.LINE:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("FrameCount:", GUILayout.Width(100));
-                moveInfo.FrameCount = EditorGUILayout.IntField(moveInfo.FrameCount);
+                moveInfo.FrameCount = (uint)EditorGUILayout.IntField((int)moveInfo.FrameCount);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
@@ -250,7 +250,7 @@ public class SkillAssetEditor : Editor
             case SkillDefine.MoveType.ROTATE:
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("FrameCount:", GUILayout.Width(100));
-                moveInfo.FrameCount = EditorGUILayout.IntField(moveInfo.FrameCount);
+                moveInfo.FrameCount = (uint)EditorGUILayout.IntField((int)moveInfo.FrameCount);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
@@ -301,14 +301,14 @@ public class SkillAssetEditor : Editor
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("Interval:", GUILayout.Width(100));
-        colliderInfo.Interval = EditorGUILayout.IntField(colliderInfo.Interval);
+        colliderInfo.Interval = (uint)EditorGUILayout.IntField((int)colliderInfo.Interval);
         GUILayout.Label("ColliderMax:", GUILayout.Width(100));
         colliderInfo.ColliderMax = EditorGUILayout.IntField(colliderInfo.ColliderMax);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label("LifeTime:", GUILayout.Width(100));
-        colliderInfo.LifeTime = EditorGUILayout.IntField(colliderInfo.LifeTime);
+        colliderInfo.LifeTime = (uint)EditorGUILayout.IntField((int)colliderInfo.LifeTime);
         GUILayout.FlexibleSpace();
         colliderInfo.IsPenetrate = EditorGUILayout.Toggle("IsPenetrate:", colliderInfo.IsPenetrate);
         GUILayout.EndHorizontal();

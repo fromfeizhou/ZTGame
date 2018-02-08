@@ -8,13 +8,13 @@ public class Buff{
     public EffectInfo BuffEffectInfo;   //特效
 
     public int BuffType;    //buff类型
-    
-    public int StartTime;          //创建时间
-    public int IntervalTime;        //触发间隔
-    public int MaxTime;             //总时间 -1 无上限
-    public int LifeTime;            //存在时间
 
-    public int UserId;
+    public uint StartTime;          //创建时间
+    public uint IntervalTime;        //触发间隔
+    public uint MaxTime;             //总时间 0 无上限
+    public uint LifeTime;            //存在时间
+
+    public uint UserId;
     public int MixMax;          //叠加上限 -1:无上限，1一次
 
     public bool IsStart;        //buff启动
@@ -52,7 +52,7 @@ public class Buff{
         if (!IsStart || IsExit) return;
         LifeTime++;
         //持续时间 计时判断
-        if (MaxTime != -1 && LifeTime > MaxTime)
+        if (MaxTime != 0 && LifeTime > MaxTime)
         {
             IsExit = true;
             return;
