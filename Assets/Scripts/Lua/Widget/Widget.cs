@@ -11,7 +11,6 @@ public class Widget
     private GameObject _panel;
     public static Widget Create(GameObject panel)
     {
-        Debug.Log("CreateWidget:" + panel.name);
         Widget widget = new Widget();
         widget._panel = panel;
         return widget;
