@@ -103,10 +103,10 @@ message p_role_attr{
     required uint32 vigour_full = 19; // 满体力
     required uint32 vip_level = 20; // VIP等级
     required uint32 vip_score = 21; // VIP积分
-    required uint32 model = 25; // 外型id
-    required p_base_attr attr = 26; // 基础属性
-    repeated uint32 title_list = 27; // 称号列表
-    repeated uint32 vip_reward = 28; // 已VIP等级礼包
+    required uint32 shaping = 22; // 角色职业
+    required p_base_attr attr = 23; // 基础属性
+    repeated uint32 title_list = 24; // 称号列表
+    repeated uint32 vip_reward = 25; // 已VIP等级礼包
 }
 
 //buff刷新点信息
@@ -163,7 +163,7 @@ message p_map_role{
     required uint32 hp = 13; // 血量
     required uint32 hp_full = 14; // 满血量
     required uint32 vip_level = 15; // VIP等级
-    required uint32 model = 16; // 外型id
+    required uint32 shaping = 16; // 外型id
     required uint32 fight_point = 17; // 战斗力
     required uint32 defense = 18; // 防御值
     repeated p_buff buffs = 20; // buff列表
@@ -558,6 +558,27 @@ message p_chat_args{
 }
 
 
+// ##model_begin##task##14##任务##model_end##
+// ##begin##task##task_list##14##1##任务列表##end##
+message task_list_c2s {}
+message task_list_s2c {
+    repeated p_task task_list = 1; // 任务列表
+}
+
+// ##begin##task##task_reward##14##2##领取任务奖励##end##
+message task_reward_c2s {
+    required uint32 task_id = 1; // 任务id
+}
+message task_reward_s2c {
+    required uint32 task_id = 1; // 任务id
+    required uint32 code = 2; // 错误码
+}
+
+// ##begin##task##task_update##14##3##批量更新任务##end##
+message task_update_s2c {
+    repeated p_task task_list = 1; // 批量任务列表
+}
+
 // ##model_begin##rank##10##设置##model_end##
 // ##begin##rank##rank_info##10##1##排行榜信息##end##
 message rank_info_c2s {
@@ -579,6 +600,41 @@ message rank_role_rank_info_s2c {
     required uint32 type = 1; // 排行榜ID
     required uint32 cur_rank = 2; // 当前排名
     required uint32 cur_rate = 3; // 当前进度
+}
+
+
+// ##model_begin##achieve##9##设置##model_end##
+// ##begin##achieve##achieve_list##9##1##当前成就列表##end##
+message achieve_list_c2s {}
+message achieve_list_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 done = 2; // 已完成的成就ID列表
+    required uint32 log = 3; // 最近完成的成就ID列表
+    required uint32 reward = 4; // 可领奖的成就ID列表
+    required p_key_value doing = 5; // 正在进行的成就列表 key成就id，value当前点数
+}
+// ##begin##achieve##achieve_reach_condition##9##2##达成条件列表##end##
+message achieve_reach_condition_c2s {
+    required p_key_value conditions = 1; // 达成条件列表
+}
+message achieve_reach_condition_s2c {
+    required uint32 code = 1; // 错误码
+    required p_key_value conditions = 2; // 达成条件列表
+}
+// ##begin##achieve##achieve_reward##9##3##领成就奖励##end##
+message achieve_reward_c2s {
+    required uint32 achieve_id = 1; // 成就id
+}
+message achieve_reward_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 achieve_id = 2; // 成就id
+}
+// ##begin##achieve##achieve_update##9##4##更新通知##end##
+message achieve_update_s2c {
+    required uint32 done = 1; // 新增的完成列表
+    required uint32 log = 2; // 最近完成的成就ID列表
+    required uint32 reward = 3; // 可领奖的成就ID列表
+    required p_key_value doing = 4; // 有变化的正在进行的成就列表 key成就id，value当前点数
 }
 
 
@@ -622,197 +678,118 @@ message activity_update_open_info_s2c {
 message activity_update_activity_s2c {
     required uint32 activity_id = 1; // 活动id
     required uint32 schedule = 2; // 活动进度
-    required p_condition condition_info = 3; // 活动选项
+    repeated p_condition condition_info = 3; // 活动选项
 }
 
 
-// ##model_begin##mission##12##设置##model_end##
-// ##begin##mission##mission_list##12##1##日常任务列表##end##
-message mission_list_c2s {}
-message mission_list_s2c {
+// ##model_begin##goods##5##物品##model_end##
+// ##begin##goods##goods_info##5##1##物品信息##end##
+message goods_info_c2s {
+    required uint32 repos = 1; // 存放类型
+}
+message goods_info_s2c {
+    required uint32 repos = 1; // 存放类型(1:背包，2:装备栏,3:仓库)
+    repeated p_goods goods_info = 2; // 物品信息列表
+}
+
+// ##begin##goods##goods_delete##5##2##删除物品(支持多个)##end##
+message goods_delete_s2c {
+    required uint32 repos = 1; // 存放类型
+    repeated uint32 id = 2; // 物品id列表
+}
+
+// ##begin##goods##goods_use##5##3##使用物品##end##
+message goods_use_c2s {
+    required uint32 id = 1; // 物品唯一id
+}
+message goods_use_s2c {
     required uint32 code = 1; // 错误码
-    required p_mission daily_mission_list = 2; // 任务列表
+    required uint32 goods_id = 2; // 物品类型id
+    repeated p_luck_draw_goods goods = 3; // 使用物品得到的物品
 }
-// ##begin##mission##mission_get_mission_reward##12##2##领取任务奖励##end##
-message mission_get_mission_reward_c2s {
-    required uint32 mission_id = 1; // 任务id
+
+// ##begin##goods##goods_puton##5##4##穿装备##end##
+message goods_puton_c2s {
+    required uint32 id = 1; // 装备唯一id
+    required uint32 pos = 2; // 穿戴位置
+    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
 }
-message mission_get_mission_reward_s2c {
+message goods_puton_s2c {
     required uint32 code = 1; // 错误码
-    required uint32 mission_id = 2; // 任务id
+    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
+    required uint32 pos = 3; // 穿戴位置
+    required uint32 goods_id = 4; // 装备类型ID
 }
-// ##begin##mission##mission_refresh_mission_list##12##3##刷新任务列表##end##
-message mission_refresh_mission_list_c2s {}
-message mission_refresh_mission_list_s2c {
+
+// ##begin##goods##goods_takeoff##5##5##卸装备##end##
+message goods_takeoff_c2s {
+    required uint32 id = 1; // 装备唯一id
+    required uint32 pos = 2; // 背包位置(为0时服务端给定任意一个空格)
+    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
+}
+message goods_takeoff_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
+    required uint32 goods_id = 3; // 装备类型ID
+}
+
+// ##begin##goods##goods_batch_use##5##6##批量使用##end##
+message goods_batch_use_c2s {
+    required uint32 id = 1; // 物品唯一id
+    required uint32 count = 2; // 使用数量
+}
+message goods_batch_use_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 goods_id = 2; // 物品类型id
+}
+
+// ##begin##goods##goods_renew_weapon##5##7##装备续费##end##
+message goods_renew_weapon_c2s {
+    required uint32 weapon_id = 1; // 武器ID(配置里的类型id)
+}
+message goods_renew_weapon_s2c {
     required uint32 code = 1; // 返回码
-    required uint32 cur_free_times = 2; // 当前刷新次数
-    required uint32 total_free_times = 3; // 每日总共刷新次数
-    required p_mission daily_mission_list = 4; // 任务列表
-}
-// ##begin##mission##mission_update_mission##12##4##更新任务##end##
-message mission_update_mission_s2c {
-    required p_mission missions = 1; // 任务信息
 }
 
+// ##begin##goods##goods_outimes_tips##5##8##过期物品提示(前端检测)##end##
+message goods_outimes_tips_c2s {
+    repeated uint32 ids = 1; // 物品的唯一id的列表
+}
 
-// ##model_begin##seven##13##设置##model_end##
-// ##begin##seven##seven_guide_list##13##1##七天引导列表##end##
-message seven_guide_list_c2s {}
-message seven_guide_list_s2c {
+// ##begin##goods##goods_sale_goods##5##9##出售物品##end##
+message goods_sale_goods_c2s {
+    repeated p_sale_goods sale_goods = 1; // 卖出物品
+}
+message goods_sale_goods_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##goods##goods_set_valid##5##10##设置装备生效##end##
+message goods_set_valid_c2s {
+    required uint32 goods_id = 1; // 装备唯一id
+    required uint32 valid_value = 2; // 设置值，0：失效  1：生效
+}
+message goods_set_valid_s2c {
     required uint32 code = 1; // 返回码
-    required uint32 status = 2; // 是否全部完成 0没全部完成 1全部完成
-    required p_seven_guide seven_guide_list = 3; // 引导列表
-}
-// ##begin##seven##seven_guide_award##13##2##引导领奖##end##
-message seven_guide_award_c2s {
-    required uint32 day = 1; // 第几天
-}
-message seven_guide_award_s2c {
-    required uint32 code = 1; // 返回码
-    required uint32 day = 2; // 第几天
-}
-// ##begin##seven##seven_guide_update##13##3##引导更新##end##
-message seven_guide_update_c2s {}
-message seven_guide_update_s2c {
-    required p_seven_guide update_seven_guide_list = 1; // 更新引导列表
+    required uint32 goods_id = 2; // 物品id
+    required uint32 valid_value = 3; // 设置值
 }
 
-
-// ##model_begin##task##14##任务##model_end##
-// ##begin##task##task_list##14##1##任务列表##end##
-message task_list_c2s {}
-message task_list_s2c {
-    repeated p_task task_list = 1; // 任务列表
+// ##begin##goods##goods_look##5##11##查看物品##end##
+message goods_look_c2s {
+    required uint32 weapon_type = 1; // 武器类型
 }
 
-// ##begin##task##task_reward##14##2##领取任务奖励##end##
-message task_reward_c2s {
-    required uint32 task_id = 1; // 任务id
+// ##begin##goods##goods_replace##5##12##装备替换(只限于已经装备的装备互相替换)##end##
+message goods_replace_c2s {
+    required uint32 id = 1; // 装备唯一id
+    required uint32 replace_id = 2; // 替换装备唯一id
+    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
 }
-message task_reward_s2c {
-    required uint32 task_id = 1; // 任务id
-    required uint32 code = 2; // 错误码
-}
-
-// ##begin##task##task_update##14##3##批量更新任务##end##
-message task_update_s2c {
-    repeated p_task task_list = 1; // 批量任务列表
-}
-
-// ##model_begin##login##1##登陆相关##model_end##
-
-// ##begin##login##login_heart##1##0##心跳##end##
-message login_heart_c2s {
-}
-message login_heart_s2c {
-   required uint32 server_time = 1; // 服务器时间(本地时间)
-}
-
-// ##begin##login##login_login##1##1##登陆##end##
-message login_login_c2s {
-    required string accname = 1; // 用户名
-    required string key = 2; // 验证key
-    required uint32 fcm = 3; // 防沉迷信息(暂不使用)
-    required uint32 serv_id = 4; // 服务器ID
-    required uint32 platform = 5; // 平台，为0则为本地开发
-    required string token = 6; // 验证数据串
-    required string device_id = 7; // 设备ID
-    required string device_desc = 8; // 设备描述
-    required string product_code = 9; // quickSDK产品code
-    required string uid = 10; // quickSDK的uid
-    required string nick_name = 11; // 昵称
-}
-message login_login_s2c {
+message goods_replace_s2c {
     required uint32 code = 1; // 错误码
-    required string accname = 2; // 用户名
-    required string nick_name = 3; // 昵称
-    repeated p_login_info login_info = 4; // 角色登陆信息
+    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
 }
-
-// ##begin##login##login_select_role##1##2##选择角色##end##
-message login_select_role_c2s {
-    required uint32 id = 1; // 选择角色
-}
-message login_select_role_s2c {
-    required uint32 code = 2; // 错误码
-    required string version = 3; // 服务端版本号
-    required uint32 time = 4; // 如果错误码108,为锁定时间(秒)
-    repeated p_role role = 5; // 角色信息
-}
-
-// ##begin##login##login_create_role##1##3##创建角色##end##
-message login_create_role_c2s {
-    required string name = 1; // 名字
-    required uint32 model = 2; // 职业
-    required uint32 sex = 3; // 性别 1男 2女
-    required uint32 serv_id = 4; // 服务器ID
-}
-message login_create_role_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 id = 2; // 角色id
-}
-
-// ##begin##login##login_reject##1##4##服务端主动断开链接##end##
-message login_reject_s2c {
-    required uint32 code = 1; // 断开原因
-}
-
-// ##begin##login##login_stop##1##5##通知服务端将要断开##end##
-message login_stop_s2c {
-    required uint32 time = 1; // 剩余时间（多少秒后断开服务）
-}
-
-// ##begin##login##login_auth_key##1##6##加密参数##end##
-message login_auth_key_s2c {
-    required uint32 unique_id = 1; // 协议序列号
-    required uint32 unique_add = 2; // 协议序列号增幅
-    required uint32 max_unique_id = 3; // 最大序列号
-    required uint32 encryption_key = 4; // 协议加密key
-    required string relogin_key = 5; // 重登陆key
-    required uint32 encrypt_type = 6; // 加密模式
-    repeated uint32 mapping_table = 7; // 映射表
-}
-
-// ##begin##login##login_relogin##1##7##重登陆##end##
-message login_relogin_c2s {
-    required uint32 id = 1; // 角色ID
-    required string key = 2; // 重登陆key
-}
-message login_relogin_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##login##login_wait_info##1##8##排队信息##end##
-message login_wait_info_c2s { }
-message login_wait_info_s2c {
-    required uint32 wait_flag = 1; // 排队标识, 0: 不用排队，直接进 1:需要排队
-    required uint32 index = 2; // 当前排在第几位
-    required uint32 total_num = 3; // 当前队列人数
-}
-
-// ##begin##login##login_config##1##9##服务端配置##end##
-message login_config_c2s { }
-message login_config_s2c {
-    required uint32 open_time = 1; // 开服时间
-}
-
-// ##begin##login##login_share_config##1##10##分享的配置##end##
-message login_share_config_c2s { }
-message login_share_config_s2c {
-    required uint32 quick_code = 1; // quickSDK的渠道id
-    required uint32 is_share = 2; // 是否为正常分享
-    required uint32 is_normal = 3; // 是否开启开放
-    required string wechat_appid = 4; // 微信APPID
-    required string wechat_appkey = 5; // 微信APPKEY
-    required string title_url = 6; // QQ空间标题连接
-    required string site = 7; // QQ空间网站名
-    required string site_url = 8; // QQ空间网站链接
-    required string image_url = 9; // 分享图片的链接
-    required string sina_appid = 10; // 新浪微博APPID
-    required string sina_appkey = 11; // 新浪微博APPKEY
-    required string sina_redirecturl = 12; // 新浪分享跳转链接
-}
-
 
 
 // ##model_begin##role##3##角色##model_end##
@@ -1069,6 +1046,346 @@ message role_bc_info_s2c {
     required string data = 3; // 数据
 }
 
+// ##model_begin##mail##8##邮件系统##model_end##
+// ##begin##mail##mail_get_box_list##8##1##获取邮件列表##end##
+message mail_get_box_list_c2s {}
+message mail_get_box_list_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 total_count = 2; // 邮件总数
+    required p_mail_basic_info mail_list = 3; // 邮件列表
+    required p_mail_basic_info send_mail_list = 4; // 发送列表
+}
+
+// ##begin##mail##mail_del_mail##8##2##删除邮件##end##
+message mail_del_mail_c2s {
+    required uint32 mail_type = 1; // 删除的邮件类型 1：收到的邮件  2：发送的邮件
+    required uint32 mail_ids = 2; // 邮件ids
+}
+message mail_del_mail_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 mail_type = 2; // 删除的邮件类型 1：收到的邮件  2：发送的邮件
+    required uint32 mail_ids = 3; // 邮件ids
+}
+
+// ##begin##mail##mail_take_attach##8##3##提取邮件附件##end##
+message mail_take_attach_c2s {
+    required uint32 mail_id = 1; // 邮件id
+}
+message mail_take_attach_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 mail_id = 2; // 邮件id
+}
+
+// ##begin##mail##mail_new_mail_inform##8##4##新邮件通知##end##
+message mail_new_mail_inform_s2c {
+    required p_mail_basic_info new_mail = 1; // 新邮件
+}
+
+// ##begin##mail##mail_send##8##5##发送邮件##end##
+message mail_send_c2s {
+    required uint32 recv_id = 1; // 接受方角色ID，如果不知道则为0
+    required string recv_name = 2; // 接受方角色名
+    required string title = 3; // 邮件标题
+    required string content = 4; // 邮件内容
+    required uint32 silver = 5; // 银币
+    required uint32 gold = 6; // 金币
+}
+message mail_send_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 mail_id = 2; // 邮件ID
+    required p_mail_basic_info mail = 3; // 发出的邮件
+}
+// ##begin##mail##mail_read_mail##8##6##阅读邮件##end##
+message mail_read_mail_c2s {
+    required uint32 mail_id = 1; // 邮件ID
+}
+message mail_read_mail_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 mail_id = 2; // 邮件ID
+}
+// ##begin##mail##mail_take_attach_all##8##7##一键提取附件##end##
+message mail_take_attach_all_c2s {}
+message mail_take_attach_all_s2c {
+    required uint32 ids = 1; // 邮件id列表
+}
+
+
+// ##model_begin##chat##6##聊天##model_end##
+// ##begin##chat##chat_req##6##1##聊天请求，包含世界，场景，家族，队伍##end##
+message chat_req_c2s {
+    required uint32 chat_type = 1; // 聊天类型
+    required string content = 2; // 聊天内容
+    repeated p_chat_goods goods_list = 3; // 展示物品列表
+}
+message chat_req_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 chat_type = 2; // 聊天类型
+}
+
+// ##begin##chat##chat_private_chat##6##2##私聊##end##
+message chat_private_chat_c2s {
+    required uint32 role_id = 1; // 玩家id
+    required string content = 2; // 聊天内容
+    repeated p_chat_goods goods_list = 3; // 展示物品列表
+}
+message chat_private_chat_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 role_id = 2; // 角色Id
+    required string role_name = 3; // 角色名字
+}
+
+// ##begin##chat##chat_content_push##6##3##聊天内容推送##end##
+message chat_content_push_s2c {
+    required uint32 chat_type = 1; // 聊天类型
+    required uint32 sender_id = 2; // 发送者id
+    required uint32 server_id = 3; // 服务器id
+    required string sender_name = 4; // 发送者名字
+    required uint32 sender_sex = 5; // 发送者性别
+    required uint32 sender_lvl = 6; // 发送者等级
+    required uint32 sender_vip = 7; // 发送者vip
+    required uint32 sender_job = 8; // 发送者职业
+    required uint32 fight_point = 9; // 战斗力
+    required string content = 10; // 聊天内容
+    required uint32 min_type = 11; // 聊天子类型(0普通聊天、1军团招募、2pvp全服邀请、3战地全服邀请)
+    required p_chat_args chat_args = 12; // 聊天模板参数
+    repeated p_goods equips = 13; // 玩家装备
+    repeated p_chat_push_goods goods_list = 14; // 展示物品列表
+    repeated p_chat_rank chat_rank_list = 15; // 玩家排行
+}
+
+// ##begin##chat##chat_show_info##6##4##查看玩家展示信息##end##
+message chat_show_info_c2s {
+    required uint32 id = 1; // 物品id
+    required uint32 type = 2; // 物品类型
+}
+message chat_show_info_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 type = 2; // 物品类型
+    repeated p_goods goods_info = 3; // 物品信息列表
+}
+
+// ##begin##chat##chat_horn_length##6##5##请求小喇叭队列长度##end##
+message chat_horn_length_c2s { }
+message chat_horn_length_s2c {
+    required uint32 length = 1; // 喇叭队列长度
+}
+
+
+// ##begin##chat##chat_sys_anounce##6##6##系统公告##end##
+message chat_sys_anounce_s2c {
+    required string content = 1; // 内容
+    required string http_link = 2; // http连接
+}
+
+// ##begin##chat##chat_rumor##6##7##传闻电视广播##end##
+message chat_rumor_s2c {
+    required uint32 channel = 1; // 频道类型
+    required uint32 type_id = 2; // 电视广播类型
+    required uint32 must = 3; // 屏蔽类型
+    required p_rumor content = 4; // 传闻数据
+}
+
+// ##begin##chat##chat_gm_advice##6##8##GM反馈##end##
+message chat_gm_advice_c2s {
+    required string title = 1; // 标题
+    required string content = 2; // 内容
+}
+message chat_gm_advice_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##chat##chat_client_commit_error##6##9##客户端提交错误##end##
+message chat_client_commit_error_c2s {
+    required uint32 err_type = 1; // 错误类型
+    required string desc = 2; // 错误码描述(最多1K)
+}
+message chat_client_commit_error_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##chat##chat_basic_info_req##6##10##请求私聊基本信息##end##
+message chat_basic_info_req_c2s {
+    required uint32 role_id = 1; // 玩家id
+}
+message chat_basic_info_req_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 role_id = 2; // 玩家id
+    required string role_name = 3; // 玩家名字
+    required uint32 role_lvl = 4; // 玩家等级
+    required uint32 role_sex = 5; // 玩家性别
+}
+
+// ##begin##chat##chat_brocast_info##6##11##请求广播内容##end##
+message chat_brocast_info_c2s {}
+message chat_brocast_info_s2c {
+    required uint32 type = 1; // 广播类型（1是跑马灯2是传闻广播）
+    repeated p_brocast brocast_list = 2; // 广播列表
+    repeated p_rumor_brocast rumor_list = 3; // 传闻广播列表
+}
+
+// ##model_begin##login##1##登陆相关##model_end##
+
+// ##begin##login##login_heart##1##0##心跳##end##
+message login_heart_c2s {
+}
+message login_heart_s2c {
+   required uint32 server_time = 1; // 服务器时间(本地时间)
+}
+
+// ##begin##login##login_login##1##1##登陆##end##
+message login_login_c2s {
+    required string accname = 1; // 用户名
+    required string key = 2; // 验证key
+    required uint32 fcm = 3; // 防沉迷信息(暂不使用)
+    required uint32 serv_id = 4; // 服务器ID
+    required uint32 platform = 5; // 平台，为0则为本地开发
+    required string token = 6; // 验证数据串
+    required string device_id = 7; // 设备ID
+    required string device_desc = 8; // 设备描述
+    required string product_code = 9; // quickSDK产品code
+    required string uid = 10; // quickSDK的uid
+    required string nick_name = 11; // 昵称
+}
+message login_login_s2c {
+    required uint32 code = 1; // 错误码
+    required string accname = 2; // 用户名
+    required string nick_name = 3; // 昵称
+    repeated p_login_info login_info = 4; // 角色登陆信息
+}
+
+// ##begin##login##login_select_role##1##2##选择角色##end##
+message login_select_role_c2s {
+    required uint32 id = 1; // 选择角色
+}
+message login_select_role_s2c {
+    required uint32 code = 2; // 错误码
+    required string version = 3; // 服务端版本号
+    required uint32 time = 4; // 如果错误码108,为锁定时间(秒)
+    repeated p_role role = 5; // 角色信息
+}
+
+// ##begin##login##login_create_role##1##3##创建角色##end##
+message login_create_role_c2s {
+    required string name = 1; // 名字
+    required uint32 job = 2; // 职业 0.战士 1.法师 2.射手 3.道士
+    required uint32 sex = 3; // 性别 1男 2女
+    required uint32 serv_id = 4; // 服务器ID
+}
+message login_create_role_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 id = 2; // 角色id
+}
+
+// ##begin##login##login_reject##1##4##服务端主动断开链接##end##
+message login_reject_s2c {
+    required uint32 code = 1; // 断开原因
+}
+
+// ##begin##login##login_stop##1##5##通知服务端将要断开##end##
+message login_stop_s2c {
+    required uint32 time = 1; // 剩余时间（多少秒后断开服务）
+}
+
+// ##begin##login##login_auth_key##1##6##加密参数##end##
+message login_auth_key_s2c {
+    required uint32 unique_id = 1; // 协议序列号
+    required uint32 unique_add = 2; // 协议序列号增幅
+    required uint32 max_unique_id = 3; // 最大序列号
+    required uint32 encryption_key = 4; // 协议加密key
+    required string relogin_key = 5; // 重登陆key
+    required uint32 encrypt_type = 6; // 加密模式
+    repeated uint32 mapping_table = 7; // 映射表
+}
+
+// ##begin##login##login_relogin##1##7##重登陆##end##
+message login_relogin_c2s {
+    required uint32 id = 1; // 角色ID
+    required string key = 2; // 重登陆key
+}
+message login_relogin_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##login##login_wait_info##1##8##排队信息##end##
+message login_wait_info_c2s { }
+message login_wait_info_s2c {
+    required uint32 wait_flag = 1; // 排队标识, 0: 不用排队，直接进 1:需要排队
+    required uint32 index = 2; // 当前排在第几位
+    required uint32 total_num = 3; // 当前队列人数
+}
+
+// ##begin##login##login_config##1##9##服务端配置##end##
+message login_config_c2s { }
+message login_config_s2c {
+    required uint32 open_time = 1; // 开服时间
+}
+
+// ##begin##login##login_share_config##1##10##分享的配置##end##
+message login_share_config_c2s { }
+message login_share_config_s2c {
+    required uint32 quick_code = 1; // quickSDK的渠道id
+    required uint32 is_share = 2; // 是否为正常分享
+    required uint32 is_normal = 3; // 是否开启开放
+    required string wechat_appid = 4; // 微信APPID
+    required string wechat_appkey = 5; // 微信APPKEY
+    required string title_url = 6; // QQ空间标题连接
+    required string site = 7; // QQ空间网站名
+    required string site_url = 8; // QQ空间网站链接
+    required string image_url = 9; // 分享图片的链接
+    required string sina_appid = 10; // 新浪微博APPID
+    required string sina_appkey = 11; // 新浪微博APPKEY
+    required string sina_redirecturl = 12; // 新浪分享跳转链接
+}
+
+
+
+// ##model_begin##seven##13##设置##model_end##
+// ##begin##seven##seven_guide_list##13##1##七天引导列表##end##
+message seven_guide_list_c2s {}
+message seven_guide_list_s2c {
+    required uint32 code = 1; // 返回码
+    required uint32 status = 2; // 是否全部完成 0没全部完成 1全部完成
+    required p_seven_guide seven_guide_list = 3; // 引导列表
+}
+// ##begin##seven##seven_guide_award##13##2##引导领奖##end##
+message seven_guide_award_c2s {
+    required uint32 day = 1; // 第几天
+}
+message seven_guide_award_s2c {
+    required uint32 code = 1; // 返回码
+    required uint32 day = 2; // 第几天
+}
+// ##begin##seven##seven_guide_update##13##3##引导更新##end##
+message seven_guide_update_c2s {}
+message seven_guide_update_s2c {
+    required p_seven_guide update_seven_guide_list = 1; // 更新引导列表
+}
+
+
+// ##model_begin##setting##7##设置##model_end##
+// ##begin##setting##setting_get_all##7##1##获取设置##end##
+message setting_get_all_c2s {}
+message setting_get_all_s2c {
+    repeated uint32 key = 1; // 类型
+    repeated uint32 val = 2; // 数据
+}
+
+// ##begin##setting##setting_set_one_setting##7##2##设置内容##end##
+message setting_set_one_setting_c2s {
+    required uint32 key = 1; // 类型
+    required uint32 value = 2; // 内容
+}
+message setting_set_one_setting_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 key = 2; // 类型
+}
+
+// ##begin##setting##setting_proto_forbid##7##3##禁止协议##end##
+message setting_proto_forbid_s2c {
+    required uint32 section = 1; // id
+    required uint32 method = 2; // id
+}
+
 
 // ##model_begin##map##4##地图##model_end##
 
@@ -1277,350 +1594,32 @@ message map_move_break_s2c {
 }
 
 
-// ##model_begin##goods##5##物品##model_end##
-// ##begin##goods##goods_info##5##1##物品信息##end##
-message goods_info_c2s {
-    required uint32 repos = 1; // 存放类型
-}
-message goods_info_s2c {
-    required uint32 repos = 1; // 存放类型(1:背包，2:装备栏,3:仓库)
-    repeated p_goods goods_info = 2; // 物品信息列表
-}
-
-// ##begin##goods##goods_delete##5##2##删除物品(支持多个)##end##
-message goods_delete_s2c {
-    required uint32 repos = 1; // 存放类型
-    repeated uint32 id = 2; // 物品id列表
-}
-
-// ##begin##goods##goods_use##5##3##使用物品##end##
-message goods_use_c2s {
-    required uint32 id = 1; // 物品唯一id
-}
-message goods_use_s2c {
+// ##model_begin##mission##12##设置##model_end##
+// ##begin##mission##mission_list##12##1##日常任务列表##end##
+message mission_list_c2s {}
+message mission_list_s2c {
     required uint32 code = 1; // 错误码
-    required uint32 goods_id = 2; // 物品类型id
-    repeated p_luck_draw_goods goods = 3; // 使用物品得到的物品
+    required p_mission daily_mission_list = 2; // 任务列表
 }
-
-// ##begin##goods##goods_puton##5##4##穿装备##end##
-message goods_puton_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 pos = 2; // 穿戴位置
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
+// ##begin##mission##mission_get_mission_reward##12##2##领取任务奖励##end##
+message mission_get_mission_reward_c2s {
+    required uint32 mission_id = 1; // 任务id
 }
-message goods_puton_s2c {
+message mission_get_mission_reward_s2c {
     required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-    required uint32 pos = 3; // 穿戴位置
-    required uint32 goods_id = 4; // 装备类型ID
+    required uint32 mission_id = 2; // 任务id
 }
-
-// ##begin##goods##goods_takeoff##5##5##卸装备##end##
-message goods_takeoff_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 pos = 2; // 背包位置(为0时服务端给定任意一个空格)
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
-}
-message goods_takeoff_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-    required uint32 goods_id = 3; // 装备类型ID
-}
-
-// ##begin##goods##goods_batch_use##5##6##批量使用##end##
-message goods_batch_use_c2s {
-    required uint32 id = 1; // 物品唯一id
-    required uint32 count = 2; // 使用数量
-}
-message goods_batch_use_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 goods_id = 2; // 物品类型id
-}
-
-// ##begin##goods##goods_renew_weapon##5##7##装备续费##end##
-message goods_renew_weapon_c2s {
-    required uint32 weapon_id = 1; // 武器ID(配置里的类型id)
-}
-message goods_renew_weapon_s2c {
+// ##begin##mission##mission_refresh_mission_list##12##3##刷新任务列表##end##
+message mission_refresh_mission_list_c2s {}
+message mission_refresh_mission_list_s2c {
     required uint32 code = 1; // 返回码
+    required uint32 cur_free_times = 2; // 当前刷新次数
+    required uint32 total_free_times = 3; // 每日总共刷新次数
+    required p_mission daily_mission_list = 4; // 任务列表
 }
-
-// ##begin##goods##goods_outimes_tips##5##8##过期物品提示(前端检测)##end##
-message goods_outimes_tips_c2s {
-    repeated uint32 ids = 1; // 物品的唯一id的列表
-}
-
-// ##begin##goods##goods_sale_goods##5##9##出售物品##end##
-message goods_sale_goods_c2s {
-    repeated p_sale_goods sale_goods = 1; // 卖出物品
-}
-message goods_sale_goods_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##goods##goods_set_valid##5##10##设置装备生效##end##
-message goods_set_valid_c2s {
-    required uint32 goods_id = 1; // 装备唯一id
-    required uint32 valid_value = 2; // 设置值，0：失效  1：生效
-}
-message goods_set_valid_s2c {
-    required uint32 code = 1; // 返回码
-    required uint32 goods_id = 2; // 物品id
-    required uint32 valid_value = 3; // 设置值
-}
-
-// ##begin##goods##goods_look##5##11##查看物品##end##
-message goods_look_c2s {
-    required uint32 weapon_type = 1; // 武器类型
-}
-
-// ##begin##goods##goods_replace##5##12##装备替换(只限于已经装备的装备互相替换)##end##
-message goods_replace_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 replace_id = 2; // 替换装备唯一id
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
-}
-message goods_replace_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-}
-
-
-// ##model_begin##chat##6##聊天##model_end##
-// ##begin##chat##chat_req##6##1##聊天请求，包含世界，场景，家族，队伍##end##
-message chat_req_c2s {
-    required uint32 chat_type = 1; // 聊天类型
-    required string content = 2; // 聊天内容
-    repeated p_chat_goods goods_list = 3; // 展示物品列表
-}
-message chat_req_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 chat_type = 2; // 聊天类型
-}
-
-// ##begin##chat##chat_private_chat##6##2##私聊##end##
-message chat_private_chat_c2s {
-    required uint32 role_id = 1; // 玩家id
-    required string content = 2; // 聊天内容
-    repeated p_chat_goods goods_list = 3; // 展示物品列表
-}
-message chat_private_chat_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 role_id = 2; // 角色Id
-    required string role_name = 3; // 角色名字
-}
-
-// ##begin##chat##chat_content_push##6##3##聊天内容推送##end##
-message chat_content_push_s2c {
-    required uint32 chat_type = 1; // 聊天类型
-    required uint32 sender_id = 2; // 发送者id
-    required uint32 server_id = 3; // 服务器id
-    required string sender_name = 4; // 发送者名字
-    required uint32 sender_sex = 5; // 发送者性别
-    required uint32 sender_lvl = 6; // 发送者等级
-    required uint32 sender_vip = 7; // 发送者vip
-    required uint32 sende_model = 8; // 发送者模型
-    required uint32 fight_point = 9; // 战斗力
-    required string content = 10; // 聊天内容
-    required uint32 min_type = 11; // 聊天子类型(0普通聊天、1军团招募、2pvp全服邀请、3战地全服邀请)
-    required p_chat_args chat_args = 12; // 聊天模板参数
-    repeated p_goods equips = 13; // 玩家装备
-    repeated p_chat_push_goods goods_list = 14; // 展示物品列表
-    repeated p_chat_rank chat_rank_list = 15; // 玩家排行
-}
-
-// ##begin##chat##chat_show_info##6##4##查看玩家展示信息##end##
-message chat_show_info_c2s {
-    required uint32 id = 1; // 物品id
-    required uint32 type = 2; // 物品类型
-}
-message chat_show_info_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 type = 2; // 物品类型
-    repeated p_goods goods_info = 3; // 物品信息列表
-}
-
-// ##begin##chat##chat_horn_length##6##5##请求小喇叭队列长度##end##
-message chat_horn_length_c2s { }
-message chat_horn_length_s2c {
-    required uint32 length = 1; // 喇叭队列长度
-}
-
-
-// ##begin##chat##chat_sys_anounce##6##6##系统公告##end##
-message chat_sys_anounce_s2c {
-    required string content = 1; // 内容
-    required string http_link = 2; // http连接
-}
-
-// ##begin##chat##chat_rumor##6##7##传闻电视广播##end##
-message chat_rumor_s2c {
-    required uint32 channel = 1; // 频道类型
-    required uint32 type_id = 2; // 电视广播类型
-    required uint32 must = 3; // 屏蔽类型
-    required p_rumor content = 4; // 传闻数据
-}
-
-// ##begin##chat##chat_gm_advice##6##8##GM反馈##end##
-message chat_gm_advice_c2s {
-    required string title = 1; // 标题
-    required string content = 2; // 内容
-}
-message chat_gm_advice_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##chat##chat_client_commit_error##6##9##客户端提交错误##end##
-message chat_client_commit_error_c2s {
-    required uint32 err_type = 1; // 错误类型
-    required string desc = 2; // 错误码描述(最多1K)
-}
-message chat_client_commit_error_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##chat##chat_basic_info_req##6##10##请求私聊基本信息##end##
-message chat_basic_info_req_c2s {
-    required uint32 role_id = 1; // 玩家id
-}
-message chat_basic_info_req_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 role_id = 2; // 玩家id
-    required string role_name = 3; // 玩家名字
-    required uint32 role_lvl = 4; // 玩家等级
-    required uint32 role_sex = 5; // 玩家性别
-}
-
-// ##begin##chat##chat_brocast_info##6##11##请求广播内容##end##
-message chat_brocast_info_c2s {}
-message chat_brocast_info_s2c {
-    required uint32 type = 1; // 广播类型（1是跑马灯2是传闻广播）
-    repeated p_brocast brocast_list = 2; // 广播列表
-    repeated p_rumor_brocast rumor_list = 3; // 传闻广播列表
-}
-
-// ##model_begin##setting##7##设置##model_end##
-// ##begin##setting##setting_get_all##7##1##获取设置##end##
-message setting_get_all_c2s {}
-message setting_get_all_s2c {
-    repeated uint32 key = 1; // 类型
-    repeated uint32 val = 2; // 数据
-}
-
-// ##begin##setting##setting_set_one_setting##7##2##设置内容##end##
-message setting_set_one_setting_c2s {
-    required uint32 key = 1; // 类型
-    required uint32 value = 2; // 内容
-}
-message setting_set_one_setting_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 key = 2; // 类型
-}
-
-// ##begin##setting##setting_proto_forbid##7##3##禁止协议##end##
-message setting_proto_forbid_s2c {
-    required uint32 section = 1; // id
-    required uint32 method = 2; // id
-}
-
-
-// ##model_begin##mail##8##邮件系统##model_end##
-// ##begin##mail##mail_get_box_list##8##1##获取邮件列表##end##
-message mail_get_box_list_c2s {}
-message mail_get_box_list_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 total_count = 2; // 邮件总数
-    required p_mail_basic_info mail_list = 3; // 邮件列表
-    required p_mail_basic_info send_mail_list = 4; // 发送列表
-}
-
-// ##begin##mail##mail_del_mail##8##2##删除邮件##end##
-message mail_del_mail_c2s {
-    required uint32 mail_type = 1; // 删除的邮件类型 1：收到的邮件  2：发送的邮件
-    required uint32 mail_ids = 2; // 邮件ids
-}
-message mail_del_mail_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 mail_type = 2; // 删除的邮件类型 1：收到的邮件  2：发送的邮件
-    required uint32 mail_ids = 3; // 邮件ids
-}
-
-// ##begin##mail##mail_take_attach##8##3##提取邮件附件##end##
-message mail_take_attach_c2s {
-    required uint32 mail_id = 1; // 邮件id
-}
-message mail_take_attach_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 mail_id = 2; // 邮件id
-}
-
-// ##begin##mail##mail_new_mail_inform##8##4##新邮件通知##end##
-message mail_new_mail_inform_s2c {
-    required p_mail_basic_info new_mail = 1; // 新邮件
-}
-
-// ##begin##mail##mail_send##8##5##发送邮件##end##
-message mail_send_c2s {
-    required uint32 recv_id = 1; // 接受方角色ID，如果不知道则为0
-    required string recv_name = 2; // 接受方角色名
-    required string title = 3; // 邮件标题
-    required string content = 4; // 邮件内容
-    required uint32 silver = 5; // 银币
-    required uint32 gold = 6; // 金币
-}
-message mail_send_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 mail_id = 2; // 邮件ID
-    required p_mail_basic_info mail = 3; // 发出的邮件
-}
-// ##begin##mail##mail_read_mail##8##6##阅读邮件##end##
-message mail_read_mail_c2s {
-    required uint32 mail_id = 1; // 邮件ID
-}
-message mail_read_mail_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 mail_id = 2; // 邮件ID
-}
-// ##begin##mail##mail_take_attach_all##8##7##一键提取附件##end##
-message mail_take_attach_all_c2s {}
-message mail_take_attach_all_s2c {
-    required uint32 ids = 1; // 邮件id列表
-}
-
-
-// ##model_begin##achieve##9##设置##model_end##
-// ##begin##achieve##achieve_list##9##1##当前成就列表##end##
-message achieve_list_c2s {}
-message achieve_list_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 done = 2; // 已完成的成就ID列表
-    required uint32 log = 3; // 最近完成的成就ID列表
-    required uint32 reward = 4; // 可领奖的成就ID列表
-    required p_key_value doing = 5; // 正在进行的成就列表 key成就id，value当前点数
-}
-// ##begin##achieve##achieve_reach_condition##9##2##达成条件列表##end##
-message achieve_reach_condition_c2s {
-    required p_key_value conditions = 1; // 达成条件列表
-}
-message achieve_reach_condition_s2c {
-    required uint32 code = 1; // 错误码
-    required p_key_value conditions = 2; // 达成条件列表
-}
-// ##begin##achieve##achieve_reward##9##3##领成就奖励##end##
-message achieve_reward_c2s {
-    required uint32 achieve_id = 1; // 成就id
-}
-message achieve_reward_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 achieve_id = 2; // 成就id
-}
-// ##begin##achieve##achieve_update##9##4##更新通知##end##
-message achieve_update_s2c {
-    required uint32 done = 1; // 新增的完成列表
-    required uint32 log = 2; // 最近完成的成就ID列表
-    required uint32 reward = 3; // 可领奖的成就ID列表
-    required p_key_value doing = 4; // 有变化的正在进行的成就列表 key成就id，value当前点数
+// ##begin##mission##mission_update_mission##12##4##更新任务##end##
+message mission_update_mission_s2c {
+    required p_mission missions = 1; // 任务信息
 }
 
 
