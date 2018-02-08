@@ -84,15 +84,43 @@ namespace com.game.client
 						return;
 					}
 				}
-
-				if (message.module == Module.login && message.command == Command.login_heart) {
-					using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
-					{
-						gprotocol.login_heart_s2c hearVO = ProtoBuf.Serializer.Deserialize<gprotocol.login_heart_s2c>(m);
-						OnReceive_Heart (hearVO);
-						return;
+				   
+				if (message.module == Module.login )
+				{
+					switch (message.command) {
+					case Command.login_heart:
+						{
+							using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
+							{
+								gprotocol.login_heart_s2c hearVO = ProtoBuf.Serializer.Deserialize<gprotocol.login_heart_s2c>(m);
+								OnReceive_Heart (hearVO);
+							}
+							return;
+						}
+					case Command.login_auth_key:
+						{
+							using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
+							{
+								authData = ProtoBuf.Serializer.Deserialize<gprotocol.login_auth_key_s2c>(m);
+								_curMsgSeq = (Int16)authData.unique_id;
+								Debug.Log ("设置网络参数：" + "Start:" + authData.unique_id + ", Add:" + authData.unique_add + ", Max:" + authData.max_unique_id);
+							}
+							return;
+						}
+					case Command.login_relogin:
+						{
+							using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
+							{
+								Debug.Log ("断线重连返回");
+								gprotocol.login_relogin_s2c vo = ProtoBuf.Serializer.Deserialize<gprotocol.login_relogin_s2c>(m);
+								CheckErrCode (vo.code);
+								Debug.Log ("断线重连结果");
+							}
+							return;
+						}
 					}
 				}
+
 				Debug.LogError("没有找到模块:" + message.module + ", 指令:" + message.command);
             }
 

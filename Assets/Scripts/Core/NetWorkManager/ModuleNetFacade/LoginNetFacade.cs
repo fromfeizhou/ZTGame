@@ -27,15 +27,10 @@ namespace com.game.client
 			private void OnReceive_Login_SelectRole(int code, login_select_role_s2c vo){
 
 				NetWorkManager.Instace.CheckErrCode (vo.code);
-				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_SelectRole]:roleID----------------");
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_SelectRole]:roleID--" + vo.role[0].id);
 				LoginModule.GetInstance ().OnReceive_SelectRole (vo);
 			}
 
-			[NetCommandAttribute(Command.login_auth_key)]
-			private void OnReceive_Auth_Key(int code, login_auth_key_s2c vo)
-			{
-
-			}
 
 			[NetCommandAttribute(Command.login_wait_info)]
 			private void OnReceive_Wait_Info(int code, login_wait_info_s2c vo)

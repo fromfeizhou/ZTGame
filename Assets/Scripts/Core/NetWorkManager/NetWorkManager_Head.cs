@@ -17,7 +17,6 @@ namespace com.game.client
 
 
 			private System.DateTime _lastSendTime;
-			private byte[] _heartBytes;
 
             private bool _isHeart = false;
             public bool IsHeart {
@@ -59,23 +58,18 @@ namespace com.game.client
 
 			private void SendHeart()
 			{
-				if (_heartBytes == null) {
-					Message message = _msgPool.Talk();
-					message.Seq = _curMsgSeq++;
-					message.module = Module.login;
-					message.command = Command.login_heart;
-
-					using (System.IO.MemoryStream m = new System.IO.MemoryStream())
-					{
-						ProtoBuf.Serializer.Serialize(m, new gprotocol.login_heart_c2s());
-						message.voData = m.ToArray();
-					}
-					_heartBytes = message.AllBytes;
-					_msgPool.Recovery(message);
+				Message message = _msgPool.Talk();
+				message.Seq = CurMsgSeq;
+				message.module = Module.login;
+				message.command = Command.login_heart;
+				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize(m, new gprotocol.login_heart_c2s());
+					message.voData = m.ToArray();
 				}
-
 				_lastSendTime = System.DateTime.Now;
-				_gameSocket.WriteData(_heartBytes);
+				_gameSocket.WriteData(message.AllBytes);
+				_msgPool.Recovery(message);
 			}
 
 			private void OnReceive_Heart(gprotocol.login_heart_s2c vo)

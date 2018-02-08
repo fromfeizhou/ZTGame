@@ -20,15 +20,25 @@ namespace com.game.client
                 }
             }
 
+			private gprotocol.login_auth_key_s2c authData = new gprotocol.login_auth_key_s2c ();
             private GameSocket _gameSocket;
 			private Int16 _curMsgSeq;
 			public Int16 CurMsgSeq
             {
-                get { return _curMsgSeq; }
+                get
+				{
+					_curMsgSeq += (Int16)authData.unique_add;
+					if (_curMsgSeq > authData.max_unique_id)
+						_curMsgSeq = (Int16)authData.unique_id;
+					Debug.Log ("_curMsgSeq:" + _curMsgSeq);
+					return _curMsgSeq;
+				}
             }
 
             private ObjectPool<Message> _msgPool;
 			private Dictionary<uint,string> errDic;
+
+			private bool _needReConnect = false;
 
 			public void Init(System.Action<bool> _action_LockScreen)
             {
@@ -56,27 +66,30 @@ namespace com.game.client
 				}
             }
 
-
             public void Connect()
             {
                 _gameSocket.Connect();
             }
 
+			private byte[] heartBytes;
 			public void SendNetMsg(byte facade, byte command, global::ProtoBuf.IExtensible vo)
             {
 				Message message = _msgPool.Talk();
-				message.Seq = _curMsgSeq++;
+				message.Seq = CurMsgSeq;
 				message.module = facade;
 				message.command = command;
 
-				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
-				{
-					ProtoBuf.Serializer.Serialize(m, vo);
-					message.voData = m.ToArray();
+				if (heartBytes == null) {
+					using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+					{
+						ProtoBuf.Serializer.Serialize(m, vo);
+						heartBytes = m.ToArray();
+					}
 				}
-
+				message.voData = heartBytes;
                 _gameSocket.WriteData(message.AllBytes);
 
+				Debug.Log ("[SendSocketMsg]Module:" + facade + ", Command:" + command);
 				_msgPool.Recovery(message);
 
             }
@@ -91,13 +104,19 @@ namespace com.game.client
 			}
             public void DisConnect()
             {
-                _gameSocket.DisConnect();
+				_gameSocket.DisConnect(eErrCode.Null);
             }
 
-            private void OnDisConnect()
+			private void OnDisConnect(eErrCode errCode)
             {
-				Debug.Log ("连接断开");
+				Debug.Log ("连接断开:" + errCode);
 				HeartSwitch (false);
+
+				if (errCode == eErrCode.SendMsgFail) {
+					_needReConnect = true;
+				}
+
+				Connect ();
             }
 
             private void OnError(string error)
@@ -114,7 +133,20 @@ namespace com.game.client
             {
 				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]连接IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " 成功. 并发送第一个心跳包。");
 				SendHeart ();
+				if (_needReConnect)
+					OnReConnect ();
             }
+
+
+			private void OnReConnect(){
+				Debug.Log ("断线重连请求");
+				gprotocol.login_relogin_c2s vo = new gprotocol.login_relogin_c2s ()
+				{
+					id = PlayerModule.GetInstance ().RoleID,
+					key = authData.relogin_key,
+				};
+				SendNetMsg(Module.login,Command.login_relogin,vo);
+			}
 
             private void OnSend()
             {
