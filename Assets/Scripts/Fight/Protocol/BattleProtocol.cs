@@ -139,13 +139,14 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //收到推帧命令
     public void ParseFrameCommand(BPMove bp)
     {
-        MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId,bp.Frame,bp.Pos,bp.Dir);
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
+        
     }
 
     //移动
     public void ParseMoveComand(BPMove bp)
     {
+        MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId, bp.Frame, bp.Pos, bp.Dir);
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 
     //技能使用
