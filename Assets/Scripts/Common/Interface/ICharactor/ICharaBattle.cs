@@ -48,4 +48,6 @@ public interface ICharaBattle:IMove
     void ActivateSkill(int skillId);
     //临时使用 ActivateSkillId
     int ActivateSkillId { get; set; }
+
+    int GrassId { get; set; }
 }

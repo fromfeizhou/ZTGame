@@ -141,7 +141,11 @@ public class BattleProtocol : Singleton<BattleProtocol>
     {
         string bpOut = (string)data.param;
         BPBattle bp = JsonUtility.FromJson<BPBattle>(bpOut);
-       
+        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        if (null != info)
+        {
+            info.MovePos = bp.Pos;
+        }
         switch (bp.Type)
         {
             case BP_BATTLE_TYPE.ENTER:
@@ -151,11 +155,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
                 ParseMoveComand(JsonUtility.FromJson<BPMove>(bpOut));
                 break;
             case BP_BATTLE_TYPE.SKILL:
-                ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
-                if (null != info)
-                {
-                    info.MovePos = bp.Pos;
-                }
+                
                 ParseSkillCommand(JsonUtility.FromJson<BPSkill>(bpOut));
                 break;
         }

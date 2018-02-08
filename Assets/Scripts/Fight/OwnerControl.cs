@@ -7,6 +7,7 @@ public class OwnerControl : Singleton<OwnerControl>
     public JoystickBase _moveJoy;
     private bool _sendMove = false;
     private bool _sendMoveEvent = false;
+    private MOVE_DIR _moveDir = MOVE_DIR.NONE;
 
     public override void Init()
     {
@@ -111,8 +112,9 @@ public class OwnerControl : Singleton<OwnerControl>
     private void SendMoveCommond(MOVE_DIR dir)
     {
         uint battleId = ZTSceneManager.GetInstance().MyPlayer.BattleId;
-        if (battleId > 0 && ZTSceneManager.GetInstance().MyPlayer.MoveDir != dir)
+        if ( _moveDir != dir && battleId > 0 && ZTSceneManager.GetInstance().MyPlayer.MoveDir != dir)
         {
+            _moveDir = dir;
             BattleProtocol.GetInstance().SendMoveComand(battleId,dir);
             //MoveCommand command = FightDefine.GetMoveCommand(battleId, dir);
             //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));

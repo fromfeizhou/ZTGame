@@ -50,4 +50,5 @@ public struct SCENE_EVENT
     public static readonly string ADD_COMMAND = "SCENE_EVENT_ADD_COMMAND";     //命令刷新
     public static readonly string ADD_SKILL_PARSER = "SCENE_EVENT_ADD_SKILL_PARSER";  //添加技能解析 
     public static readonly string ADD_UI_HURT_VALUE = "SCENE_EVENT_ADD_UI_HURT_VALUE";  //ui数字
+    public static readonly string UPDATE_GRASS_ID = "SCENE_EVENT_UPDATE_GRASS_ID";  //ui数字
 }

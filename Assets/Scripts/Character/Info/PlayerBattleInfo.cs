@@ -47,6 +47,21 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     //碰撞框
     public CollRadius Collider { get; set; }
 
+    private int _grassId;
+    //草丛id
+    public int GrassId
+    {
+        get { return _grassId; }
+        set
+        {
+            if (_grassId != value)
+            {
+                _grassId = value;
+                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_GRASS_ID);
+            }
+        }
+    }
+
     //状态改变
     public void ChangeState(BATTLE_STATE state)
     {
@@ -94,6 +109,14 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             {
                 _hitPos = MovePos + list[i] * Speed;
                 _mapBlockType = MapManager.GetInstance().GetFloorColl(_hitPos);
+                if (_mapBlockType == eMapBlockType.Hide)
+                {
+                    GrassId = 1;
+                }
+                else
+                {
+                    GrassId = -1;
+                }
                 if (_mapBlockType != eMapBlockType.Collect)
                 {
                     MovePos = _hitPos;

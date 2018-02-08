@@ -168,12 +168,19 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     {
         SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_PLAYER, OnAddPlayer);
         SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_COMMAND, OnAddCommand);
+        SceneEvent.GetInstance().addEventListener(SCENE_EVENT.UPDATE_GRASS_ID, OnUpdateGrassId);
     }
 
     private void RemoveEvent()
     {
         SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_PLAYER, OnAddPlayer);
         SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_COMMAND, OnAddCommand);
+        SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.UPDATE_GRASS_ID, OnUpdateGrassId);
+    }
+
+    //草丛刷新
+    private void OnUpdateGrassId(Notification data)
+    {
     }
 
     private void OnAddCommand(Notification data)
