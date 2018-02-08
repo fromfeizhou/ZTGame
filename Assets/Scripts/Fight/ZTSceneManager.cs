@@ -10,6 +10,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     private List<CharaActorInfo> _charaList = null;
     private Dictionary<uint, GameObject> _charaViewDic = null;
 
+
     public PlayerBattleInfo MyPlayer = null;
 
     private Dictionary<int,GameObject> _playerPrefab = null;
@@ -185,80 +186,82 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     private void OnAddPlayer(Notification note)
     {
-        uint battleId = (uint)note.param;
-        CreatePlayer(battleId);
+        BPEnter bp = (BPEnter)note.param;
+        CreatePlayer(bp);
     }
 
     //创建玩家s
     private List<string> modelNames = new List<string> { "qishi.prefab","fashi.prefab", "lieshou.prefab", "modoushi.prefab"};
-    private void CreatePlayer(uint battleId)
+    private void CreatePlayer(BPEnter bp)
     {
+        if (_charaDic.ContainsKey(bp.BattleId)) return;
+
         //test
-        if (!_charaDic.ContainsKey(battleId))
-        {
-            PlayerBattleInfo playerInfo = new PlayerBattleInfo(1, CHARA_TYPE.PLAYER);
-            playerInfo.SetFightInfo(100);
-            playerInfo.SetPlayerInfo();
-            playerInfo.SetBattleInfo(battleId, (int)battleId, new Vector3(_charaList.Count * 10 + 200f, 0, _charaList.Count * 10 + 200f));
+        PlayerBattleInfo playerInfo = new PlayerBattleInfo(1, CHARA_TYPE.PLAYER);
+        playerInfo.SetFightInfo(100);
+        playerInfo.SetPlayerInfo();
+        playerInfo.SetBattleInfo(bp.BattleId, (int)bp.BattleId, bp.Pos);
 
-            playerInfo.ModelType = (int)battleId % 4;
-            //test
-            _charaDic.Add(battleId, playerInfo);
-            _charaList.Add(playerInfo);
-        }
+        playerInfo.ModelType = (int)bp.BattleId % 4;
+        //test
+        _charaDic.Add(bp.BattleId, playerInfo);
+        _charaList.Add(playerInfo);
 
-        ICharaPlayer charaPlayerInfo = ZTSceneManager.GetInstance().GetCharaById(battleId) as ICharaPlayer;
-        if (null == charaPlayerInfo) return;
 
-        if (_playerPrefab.ContainsKey(charaPlayerInfo.ModelType))
+        if (_playerPrefab.ContainsKey(playerInfo.ModelType))
         {
             //资源加载中 等待回调
-            if (null == _playerPrefab[charaPlayerInfo.ModelType]) return;
-
-            PlayerBattleInfo info = GetCharaById(battleId) as PlayerBattleInfo;
-
-            if (null == info) return;
-
-            GameObject gameObject = GameObject.Instantiate(_playerPrefab[charaPlayerInfo.ModelType]);
-            gameObject.transform.localPosition = info.MovePos;
-            gameObject.transform.parent = _playerLayer;
-            _charaViewDic.Add(battleId, gameObject);
-            gameObject.AddComponent<PlayerBattleActor>();
-            gameObject.GetComponent<PlayerBattleActor>().SetInfo(info);
-
-            if (battleId == PlayerModule.GetInstance().RoleID)
-            {
-                MyPlayer = info;
-                GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
-                GameObject.Find("SkillJoystick").GetComponent<SkillArea>().player = gameObject;
-                MapManager.GetInstance().Update(gameObject.transform.position);
-               
-            }
+            if (null == _playerPrefab[playerInfo.ModelType]) return;
+            CreatePlayerView(playerInfo);
+            
         }
         else
         {
             //占位 启动加载
-            _playerPrefab.Add(charaPlayerInfo.ModelType, null);
-            AssetManager.LoadAsset("Assets/Models/TmpCharacter/" + modelNames[charaPlayerInfo.ModelType], (Object target, string path) =>
+            _playerPrefab.Add(playerInfo.ModelType, null);
+            AssetManager.LoadAsset("Assets/Models/TmpCharacter/" + modelNames[playerInfo.ModelType], (Object target, string path) =>
             {
-                _playerPrefab[charaPlayerInfo.ModelType] = target as GameObject;
+                _playerPrefab[playerInfo.ModelType] = target as GameObject;
                 LaterCreatePlayer();
             });
         }
     }
 
-   
-
     //延后创建玩家
-    private void LaterCreatePlayer(){
+    private void LaterCreatePlayer()
+    {
         foreach (uint key in _charaDic.Keys)
         {
             if (!_charaViewDic.ContainsKey(key))
             {
-                CreatePlayer(key);
+                CreatePlayerView(_charaDic[key] as PlayerBattleInfo);
             }
         }
     }
+
+    private void CreatePlayerView(PlayerBattleInfo playerInfo)
+    {
+        if (null == playerInfo) return;
+
+        GameObject gameObject = GameObject.Instantiate(_playerPrefab[playerInfo.ModelType]);
+        gameObject.transform.localPosition = playerInfo.MovePos;
+        gameObject.transform.parent = _playerLayer;
+        _charaViewDic.Add(playerInfo.BattleId, gameObject);
+        gameObject.AddComponent<PlayerBattleActor>();
+        gameObject.GetComponent<PlayerBattleActor>().SetInfo(playerInfo);
+
+        if (playerInfo.BattleId == PlayerModule.GetInstance().RoleID)
+        {
+            MyPlayer = playerInfo;
+            GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
+            GameObject.Find("SkillJoystick").GetComponent<SkillArea>().player = gameObject;
+            MapManager.GetInstance().Update(gameObject.transform.position);
+        }
+    }
+
+   
+
+   
 
     //移除玩家
     private void RemovePlayerById(uint battleId)

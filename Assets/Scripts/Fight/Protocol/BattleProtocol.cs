@@ -133,7 +133,18 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //收到玩家进入场景
     public void ParseEnterBattle(BPEnter bp)
     {
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(bp.BattleId));
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(bp));
+
+        //通知其他玩家自己位置
+        if (bp.BattleId != PlayerModule.GetInstance().RoleID)
+        {
+            Vector3 pos = new Vector3(400,0,400);
+            if (null != ZTSceneManager.GetInstance().MyPlayer)
+            {
+                pos = ZTSceneManager.GetInstance().MyPlayer.MovePos;
+            }
+            BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID, pos);
+        }
     }
 
     //收到推帧命令
