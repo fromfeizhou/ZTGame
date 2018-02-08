@@ -71,22 +71,17 @@ namespace com.game.client
                 _gameSocket.Connect();
             }
 
-			private byte[] heartBytes;
 			public void SendNetMsg(byte facade, byte command, global::ProtoBuf.IExtensible vo)
             {
 				Message message = _msgPool.Talk();
 				message.Seq = CurMsgSeq;
 				message.module = facade;
 				message.command = command;
-
-				if (heartBytes == null) {
-					using (System.IO.MemoryStream m = new System.IO.MemoryStream())
-					{
-						ProtoBuf.Serializer.Serialize(m, vo);
-						heartBytes = m.ToArray();
-					}
+				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize(m, vo);
+					message.voData = m.ToArray();
 				}
-				message.voData = heartBytes;
                 _gameSocket.WriteData(message.AllBytes);
 
 				Debug.Log ("[SendSocketMsg]Module:" + facade + ", Command:" + command);
