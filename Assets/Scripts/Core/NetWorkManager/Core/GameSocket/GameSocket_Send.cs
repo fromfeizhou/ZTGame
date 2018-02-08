@@ -29,13 +29,14 @@ namespace com.game.client
 		                byte[] data = _sendMsgQue.Pop();
 		                try
 		                {
+							UnityEngine.Debug.Log(GetContent(data) + ", Len:" + data.Length);
                             NetworkStream ns = _socket.GetStream();
                             ns.BeginWrite(data, 0, data.Length, Send_CallBack, _socket);
 		                }
 		                catch (Exception e)
 		                {
 		                    Invoking_CallBack_OnError(eErrCode.SendMsgEx, e);
-		                    DisConnect();
+							DisConnect(eErrCode.SendMsgEx);
 		                }
 		            }
 		        }

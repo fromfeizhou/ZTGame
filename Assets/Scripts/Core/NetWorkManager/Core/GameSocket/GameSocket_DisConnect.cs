@@ -4,10 +4,10 @@
 	{
 		public partial class GameSocket
 		{
-			public void DisConnect ()
+			public void DisConnect (eErrCode errCode)
 			{
 			    Dispose();
-				Invoking_CallBack_OnDisConnect ();
+				Invoking_CallBack_OnDisConnect (errCode);
 			}
 		}
 	}

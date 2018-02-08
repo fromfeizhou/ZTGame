@@ -4,6 +4,9 @@
 	{
 		public enum eErrCode
 		{
+			/** 客戶端主动断线 */
+			Null,
+
 			/** 错误 - 创建Socket */
 			CreateSocket,
 

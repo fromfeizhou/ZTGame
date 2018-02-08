@@ -57,7 +57,7 @@ namespace com.game.client
 						}
 					} catch (Exception e) {
 						Invoking_CallBack_OnError (eErrCode.ReadBuffEx, e);
-						DisConnect ();
+						DisConnect (eErrCode.ReadBuffEx);
 					}
 				}
 			}

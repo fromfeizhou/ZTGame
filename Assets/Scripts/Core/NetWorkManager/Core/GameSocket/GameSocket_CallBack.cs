@@ -10,7 +10,7 @@ namespace com.game.client
 			public Action CallBack_OnConnect;
 			public Action CallBack_OnSend;
 			public Action<byte[]> CallBack_OnReceive;
-			public Action CallBack_OnDisConnect;
+			public Action<eErrCode> CallBack_OnDisConnect;
 			public Action<string> CallBack_OnError;
 
 			/** 回调 连接完成 */
@@ -38,10 +38,10 @@ namespace com.game.client
 			}
 		 
             /** 回调 连接断开 */
-			private void Invoking_CallBack_OnDisConnect()
+			private void Invoking_CallBack_OnDisConnect(eErrCode errCode)
 			{
 				if (CallBack_OnDisConnect != null) {
-					CallBack_OnDisConnect ();
+					CallBack_OnDisConnect (errCode);
 				}
 			}
 
@@ -85,7 +85,7 @@ namespace com.game.client
 				}
 
 				if (IsCloseClient (errCode)) {
-					DisConnect ();
+					DisConnect (errCode);
 				}
 			}
 
@@ -94,7 +94,10 @@ namespace com.game.client
 		    {
 		        switch (errCode)
 		        {
-					case eErrCode.SendMsgFail:
+				case eErrCode.SendMsgFail:
+					{
+						return true;
+					}
 		            case eErrCode.ReadBuffLenErr:
 		            {
 		                return true;
@@ -102,6 +105,7 @@ namespace com.game.client
 		        }
 		        return false;
 		    }
+
         }
 	}
 }
