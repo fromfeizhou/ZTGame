@@ -51,7 +51,7 @@ public class LoginModule : Singleton<LoginModule> {
 		gprotocol.login_select_role_c2s vo = new gprotocol.login_select_role_c2s (){ 
 			id = roleId
 		};
-		NetWorkManager.Instace.SendNetMsg (Module.login, Command.login_create_role, vo);
+		NetWorkManager.Instace.SendNetMsg (Module.login, Command.login_select_role, vo);
 	}
 
 	public void OnReceive_Login(gprotocol.login_login_s2c loginInfo)

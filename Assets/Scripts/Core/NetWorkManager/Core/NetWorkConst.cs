@@ -1,13 +1,15 @@
-﻿namespace com.game.client
+namespace com.game.client
 {
 	namespace network
 	{
 		public class NetWorkConst
 		{
-			public const bool IsOpenNetWork = false;
+			/** 是否开启前后端通信 */
+			public const bool IsOpenNetWork = true;
 			
 			#if UNITY_EDITOR
-			public const bool CMDebug = true;
+			/** 开启测试用例 */
+			public const bool CMDebug = false;
 			#endif
 
 			public const string Ip = "120.79.43.54";
