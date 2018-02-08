@@ -259,6 +259,21 @@ public class MapManager : Singleton<MapManager>
         return eMapBlockType.None;
     }
 
+    public MapBlockData GetCurMapBlock(Vector3 pos)
+    {
+        int row = Mathf.RoundToInt(pos.x / MapDefine.GetMinInterval);
+        int col = Mathf.RoundToInt(pos.z / MapDefine.GetMinInterval);//1280 * 5120);
+
+        if (_mapBlockData != null && _mapBlockData.Count > 0)
+        {
+            int index = _mapBlockData.FindIndex(a => a.row == row && a.col == col);
+            if (index >= 0)
+                return _mapBlockData[index];
+        }
+        return null;
+    }
+
+
     public MapInfo GetMapInfiByPos(int row, int col)
     {
         string mapKey = row + "_" + col;
@@ -329,14 +344,16 @@ public class MapManager : Singleton<MapManager>
 
     public void SetMapCenterPos(Vector3 pos)
     {
-        if (_mapTilePosCenter == null)
+        //if (_mapTilePosCenter == null)
+        //{
+        //    _mapTilePosCenter = new MapTilePos();
+        //    UpdateMapView();
+        //    return;
+        //}
+        if (_mapTilePosCenter==null||Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
         {
-            _mapTilePosCenter = new MapTilePos();
-            UpdateMapView();
-            return;
-        }
-        if (Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
-        {
+            if (_mapTilePosCenter == null)
+                _mapTilePosCenter = new MapTilePos();
             _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / MapDefine.MapWidth);
             _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / MapDefine.MapHeight);
             _mapPosCenter = pos;
