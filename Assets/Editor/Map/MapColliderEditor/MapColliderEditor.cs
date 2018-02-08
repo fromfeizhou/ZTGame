@@ -434,7 +434,7 @@ public class MapColliderEditor : EditorWindow
     private MapBlockData GetCollider(int row, int col)
     {
         int index = _mapBlockData.FindIndex(a => a.row == row && a.col == col);
-        if (index >= 0 && _mapBlockData[index].type == eMapBlockType.Event)
+        if (index >= 0 && (_mapBlockData[index].type == eMapBlockType.Event || _mapBlockData[index].type == eMapBlockType.Hide))
             return _mapBlockData[index];
         return null;
 

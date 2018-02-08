@@ -70,10 +70,25 @@ public class MapBlockData
     public int row;
     public int col;
     public eMapBlockType type;
-    public string param;
+    private string _param;
+    //编辑器不灵活配置 暂时草类型的id统一为1
+    public string param
+    {
+        set
+        {
+            _param = value;
+        }
+        get
+        {
+            if (type == eMapBlockType.Hide)
+                _param = "1";
+            return
+                _param;
+        }
+    }
     public override string ToString()
     {
-        if (type == eMapBlockType.Event)
+        if (type == eMapBlockType.Event||type==eMapBlockType.Hide)
             return string.Format("{0}:{1}:{2}:{3}", row, col, (int)type, param);
         return string.Format("{0}:{1}:{2}", row, col, (int)type);
     }
