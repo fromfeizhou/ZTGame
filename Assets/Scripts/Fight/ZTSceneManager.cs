@@ -189,7 +189,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     }
 
     //创建玩家s
-    private List<string> modelNames = new List<string> { "fashi.prefab", "lieshou.prefab", "modoushi.prefab", "qishi.prefab" };
+    private List<string> modelNames = new List<string> { "qishi.prefab","fashi.prefab", "lieshou.prefab", "modoushi.prefab"};
     private void CreatePlayer(int battleId)
     {
         //test
