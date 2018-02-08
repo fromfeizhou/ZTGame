@@ -13,7 +13,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     public PlayerBattleInfo MyPlayer = null;
 
-    private Dictionary<int,GameObject> _playerPrefab = null;
+    private Dictionary<uint,GameObject> _playerPrefab = null;
     private Transform _playerLayer;
     public uint SceneFrame = 0;
     //操作指令集合
@@ -30,7 +30,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         _charaList = new List<CharaActorInfo>();
         SceneFrame = 0;
 
-        _playerPrefab = new Dictionary<int, GameObject>();
+        _playerPrefab = new Dictionary<uint, GameObject>();
 
         //操作集合初始化
         CommandDic = new Dictionary<uint, List<FightCommandBase>>();
@@ -202,26 +202,31 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         playerInfo.SetPlayerInfo();
         playerInfo.SetBattleInfo(bp.BattleId, (int)bp.BattleId, bp.Pos);
 
-        playerInfo.ModelType = (int)bp.BattleId % 4;
+        playerInfo.CareerType = bp.CareerType;
         //test
         _charaDic.Add(bp.BattleId, playerInfo);
         _charaList.Add(playerInfo);
 
+        if (playerInfo.BattleId == PlayerModule.GetInstance().RoleID)
+        {
+            MyPlayer = playerInfo;
+            MapManager.GetInstance().Update(playerInfo.MovePos);
+        }
 
-        if (_playerPrefab.ContainsKey(playerInfo.ModelType))
+        if (_playerPrefab.ContainsKey(playerInfo.CareerType))
         {
             //资源加载中 等待回调
-            if (null == _playerPrefab[playerInfo.ModelType]) return;
+            if (null == _playerPrefab[playerInfo.CareerType]) return;
             CreatePlayerView(playerInfo);
             
         }
         else
         {
             //占位 启动加载
-            _playerPrefab.Add(playerInfo.ModelType, null);
-            AssetManager.LoadAsset("Assets/Models/TmpCharacter/" + modelNames[playerInfo.ModelType], (Object target, string path) =>
+            _playerPrefab.Add(playerInfo.CareerType, null);
+            AssetManager.LoadAsset("Assets/Models/TmpCharacter/" + modelNames[(int)playerInfo.CareerType], (Object target, string path) =>
             {
-                _playerPrefab[playerInfo.ModelType] = target as GameObject;
+                _playerPrefab[playerInfo.CareerType] = target as GameObject;
                 LaterCreatePlayer();
             });
         }
@@ -243,7 +248,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     {
         if (null == playerInfo) return;
 
-        GameObject gameObject = GameObject.Instantiate(_playerPrefab[playerInfo.ModelType]);
+        GameObject gameObject = GameObject.Instantiate(_playerPrefab[playerInfo.CareerType]);
         gameObject.transform.localPosition = playerInfo.MovePos;
         gameObject.transform.parent = _playerLayer;
         _charaViewDic.Add(playerInfo.BattleId, gameObject);
@@ -252,10 +257,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
         if (playerInfo.BattleId == PlayerModule.GetInstance().RoleID)
         {
-            MyPlayer = playerInfo;
             GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
             GameObject.Find("SkillJoystick").GetComponent<SkillArea>().player = gameObject;
-            MapManager.GetInstance().Update(gameObject.transform.position);
         }
     }
 

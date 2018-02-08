@@ -7,6 +7,7 @@ public enum BP_BATTLE_TYPE
 {
     ENTER = 0,
     MOVE,
+    SKILL,
 }
 
 [System.Serializable]
@@ -17,31 +18,57 @@ public class BPBattle
     public Vector3 Pos;
     public uint Frame;
 
-    public BPBattle(uint battleId, Vector3 pos)
+    public BPBattle(uint battleId)
     {
         BattleId = battleId;
-        Pos = pos;
         Frame = ZTSceneManager.GetInstance().SceneFrame;
+
+        Pos = new Vector3(400, 0, 400);
+        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(battleId) as ICharaBattle;
+        if (null != info)
+        {
+            Pos = info.MovePos;
+        }
     }
 }
 
 public class BPEnter : BPBattle
 {
-    public BPEnter(uint battleId, Vector3 pos)
-        : base(battleId, pos)
+    public uint CareerType;
+    public BPEnter(uint battleId, uint career)
+        : base(battleId)
     {
         Type = BP_BATTLE_TYPE.ENTER;
+        CareerType = career;
     }
 }
 
 public class BPMove : BPBattle
 {
     public MOVE_DIR Dir;
-    public BPMove(uint battleId, Vector3 pos, MOVE_DIR dir)
-        : base(battleId, pos)
+    public BPMove(uint battleId,  MOVE_DIR dir)
+        : base(battleId)
     {
         Dir = dir;
         Type = BP_BATTLE_TYPE.MOVE;
+    }
+}
+
+public class BPSkill : BPBattle
+{
+    public int SkillId;
+    public Vector3 SkillDir;
+    public Vector3 TargetPos;
+    public uint TargetId;
+
+    public BPSkill(uint battleId, int skillId, Vector3 dir, Vector3 targetPos, uint targetId)
+        : base(battleId)
+    {
+        Type = BP_BATTLE_TYPE.SKILL;
+        SkillId = skillId;
+        SkillDir = dir;
+        TargetPos = targetPos;
+        TargetId = targetId;
     }
 }
 
@@ -73,9 +100,9 @@ public class BattleProtocol : Singleton<BattleProtocol>
     }
 
     //进入场景
-    public void SendEnterBattle(uint battleId, Vector3 pos)
+    public void SendEnterBattle(uint battleId, uint careerType)
     {
-        BPBattle bp = new BPBattle(battleId, pos);
+        BPEnter bp = new BPEnter(battleId, careerType);
         SendMsg(bp);
     }
 
@@ -86,22 +113,18 @@ public class BattleProtocol : Singleton<BattleProtocol>
     }
 
     //移动
-    public void SendMoveComand(uint battleId, Vector3 pos, MOVE_DIR dir)
+    public void SendMoveComand(uint battleId,  MOVE_DIR dir)
     {
-        BPMove bp = new BPMove(battleId, pos, dir);
-        JsonUtility.ToJson(bp);
-        string bpOut = JsonUtility.ToJson(bp);
-
-        gprotocol.role_bc_info_c2s vo = new gprotocol.role_bc_info_c2s()
-        {
-            data = bpOut,
-        };
-        NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
+        Debug.Log("SendMoveComand");
+        BPMove bp = new BPMove(battleId, dir);
+        SendMsg(bp);
     }
 
     //技能使用
-    public void SendSkillCommand(int battleId, int actionId, Vector3 dir, Vector3 targetPos)
+    public void SendSkillCommand(uint battleId, int actionId, Vector3 dir, Vector3 targetPos,uint targetId)
     {
+        BPSkill bp = new BPSkill(battleId,actionId,dir,targetPos,targetId);
+        SendMsg(bp);
     }
 
     public void InitEvent()
@@ -118,6 +141,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
     {
         string bpOut = (string)data.param;
         BPBattle bp = JsonUtility.FromJson<BPBattle>(bpOut);
+       
         switch (bp.Type)
         {
             case BP_BATTLE_TYPE.ENTER:
@@ -125,6 +149,14 @@ public class BattleProtocol : Singleton<BattleProtocol>
                 break;
             case BP_BATTLE_TYPE.MOVE:
                 ParseMoveComand(JsonUtility.FromJson<BPMove>(bpOut));
+                break;
+            case BP_BATTLE_TYPE.SKILL:
+                ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+                if (null != info)
+                {
+                    info.MovePos = bp.Pos;
+                }
+                ParseSkillCommand(JsonUtility.FromJson<BPSkill>(bpOut));
                 break;
         }
 
@@ -138,17 +170,12 @@ public class BattleProtocol : Singleton<BattleProtocol>
         //通知其他玩家自己位置
         if (bp.BattleId != PlayerModule.GetInstance().RoleID)
         {
-            Vector3 pos = new Vector3(400,0,400);
-            if (null != ZTSceneManager.GetInstance().MyPlayer)
-            {
-                pos = ZTSceneManager.GetInstance().MyPlayer.MovePos;
-            }
-            BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID, pos);
+            BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID,PlayerModule.GetInstance().RoleJob);
         }
     }
 
     //收到推帧命令
-    public void ParseFrameCommand(BPMove bp)
+    public void ParseFrameCommand(BPBattle bp)
     {
         
     }
@@ -156,13 +183,16 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //移动
     public void ParseMoveComand(BPMove bp)
     {
-        MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId, bp.Frame, bp.Pos, bp.Dir);
+        Debug.Log("ParseMoveComand");
+        MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId, bp.Frame,bp.Dir);
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 
     //技能使用
-    public void ParseSkillCommand(int battleId, int actionId, Vector3 dir, Vector3 targetPos)
+    public void ParseSkillCommand(BPSkill bp)
     {
+        SkillCommand command = FightDefine.GetSkillCommand(bp.BattleId, bp.Frame, bp.SkillId, bp.SkillDir, bp.TargetPos, bp.TargetId);
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 
 

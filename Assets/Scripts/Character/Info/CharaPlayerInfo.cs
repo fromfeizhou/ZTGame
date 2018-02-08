@@ -27,7 +27,7 @@ public class CharaPlayerInfo : CharaFightInfo, ICharaPlayer
     //变身id
     public int TransId { get; set; }
 
-    public int ModelType { get; set; }
+    public uint CareerType { get; set; }
 
 
     public void SetPlayerInfo(int equipId = 0, int wingId = 0, int armetId = 0, int armorId = 0, int shoeId = 0, int petId = 0, int mountId = 0,

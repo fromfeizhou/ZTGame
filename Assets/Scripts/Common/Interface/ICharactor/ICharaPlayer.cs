@@ -26,7 +26,7 @@ public interface ICharaPlayer
     //变身id
     int TransId { get; set; }
 
-    int ModelType { get; set; }
+    uint CareerType { get; set; }
 
     void SetPlayerInfo(int equipId, int wingId, int armetId, int armorId, int shoeId,int petId,int mountId,
         int fasionHead,int fasionCloth,int fasionShoe,int transId);

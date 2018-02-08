@@ -68,9 +68,10 @@ public class SkillJoystick : JoystickBase
             targetId = battleInfo.BattleId;
             dir = (battleInfo.MovePos - ZTSceneManager.GetInstance().MyPlayer.MovePos).normalized;
         }
+        BattleProtocol.GetInstance().SendSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
         //---------------test------------------------//
         
-        SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,ZTSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
+        //SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,ZTSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
+        //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 }

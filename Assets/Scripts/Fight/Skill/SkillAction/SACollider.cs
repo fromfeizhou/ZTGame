@@ -147,25 +147,6 @@ public class SACollider : SkillActionBase
                 }
             }
         }
-        //if (null != _colliderInfo.SelfActions && _colliderInfo.SelfActions.Count > 0)
-        //{
-        //    for (int i = 0; i < _colliderInfo.SelfActions.Count; i++)
-        //    {
-        //        int actionId = _colliderInfo.SelfActions[i];
-        //        _actionParser.ActionActivatebyId(actionId);
-        //    }
-        //}
-        //if (null != _colliderInfo.TargetActions && _colliderInfo.TargetActions.Count > 0)
-        //{
-        //    for (int i = 0; i < _colliderInfo.TargetActions.Count; i++)
-        //    {
-        //        int skillId = _colliderInfo.TargetActions[i];
-        //        Vector3 dir = new Vector3(_collider.x, 0, _collider.y);
-        //        dir = (dir - player.MovePos).normalized;
-        //        SkillCommand command = FightDefine.GetSkillCommand(player.BattleId, skillId, dir, player.MovePos);
-        //        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND,new Notification(command));
-        //    }
-        //}
     }
 
     protected override void Complete()

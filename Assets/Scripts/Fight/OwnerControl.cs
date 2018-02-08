@@ -111,10 +111,9 @@ public class OwnerControl : Singleton<OwnerControl>
     private void SendMoveCommond(MOVE_DIR dir)
     {
         uint battleId = ZTSceneManager.GetInstance().MyPlayer.BattleId;
-        Vector3 pos = ZTSceneManager.GetInstance().MyPlayer.MovePos;
-        if (battleId > 0)
+        if (battleId > 0 && ZTSceneManager.GetInstance().MyPlayer.MoveDir != dir)
         {
-            BattleProtocol.GetInstance().SendMoveComand(battleId,pos,dir);
+            BattleProtocol.GetInstance().SendMoveComand(battleId,dir);
             //MoveCommand command = FightDefine.GetMoveCommand(battleId, dir);
             //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
         }

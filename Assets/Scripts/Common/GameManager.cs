@@ -104,7 +104,8 @@ public class GameManager : MonoSingleton<GameManager>
         //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
 
         BattleProtocol.GetInstance().Init();
-        BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID, new Vector3(400,0,400));
+        PlayerModule model = PlayerModule.GetInstance();
+        BattleProtocol.GetInstance().SendEnterBattle(model.RoleID, model.RoleJob);
     }
 
 }
