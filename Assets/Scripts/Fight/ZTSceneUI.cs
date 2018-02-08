@@ -32,7 +32,6 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
         base.Init();
         _hpTransform = GameObject.Find("HpPanel").transform;
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        Debug.Log(_canvas.worldCamera.name);
         _hurtTs = new List<TextInfo>();
         LoadHurtGo();
         InitEvent();
