@@ -7,7 +7,7 @@ public class SAPlayerControl : SkillActionBase {
 	public bool IsControl = false;
     public bool IsSkillDir = false;
 
-    public SAPlayerControl(bool isCtrl, bool isSkillDir,SkillActionParser actionParser, int actFrame)
+    public SAPlayerControl(bool isCtrl, bool isSkillDir, SkillActionParser actionParser, uint actFrame)
         : base(actionParser,actFrame)
     {
         IsControl = isCtrl;
@@ -16,7 +16,7 @@ public class SAPlayerControl : SkillActionBase {
     }
 
      //播放动作
-    public override void UpdateActoin(int curFrame = 0)
+    public override void UpdateActoin(uint curFrame = 0)
     {
         base.UpdateActoin(curFrame);
         DoAction();

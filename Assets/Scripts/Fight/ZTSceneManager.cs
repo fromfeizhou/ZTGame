@@ -6,17 +6,17 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 {
     private CameraFollow _cameraManager;
 
-    private Dictionary<int,CharaActorInfo> _charaDic = null;
+    private Dictionary<uint,CharaActorInfo> _charaDic = null;
     private List<CharaActorInfo> _charaList = null;
-    private Dictionary<int, GameObject> _charaViewDic = null;
+    private Dictionary<uint, GameObject> _charaViewDic = null;
 
     public PlayerBattleInfo MyPlayer = null;
 
     private Dictionary<int,GameObject> _playerPrefab = null;
     private Transform _playerLayer;
-    public int SceneFrame = 0;
+    public uint SceneFrame = 0;
     //操作指令集合
-    public Dictionary<int, List<FightCommandBase>> CommandDic;
+    public Dictionary<uint, List<FightCommandBase>> CommandDic;
 
     //初始化
     public override void Init()
@@ -24,15 +24,15 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         _playerLayer = GameObject.Find("PlayerLayer").transform;
         _cameraManager = Camera.main.GetComponent<CameraFollow>();
 
-        _charaDic = new Dictionary<int, CharaActorInfo>();
-        _charaViewDic = new Dictionary<int, GameObject>();
+        _charaDic = new Dictionary<uint, CharaActorInfo>();
+        _charaViewDic = new Dictionary<uint, GameObject>();
         _charaList = new List<CharaActorInfo>();
         SceneFrame = 0;
 
         _playerPrefab = new Dictionary<int, GameObject>();
 
         //操作集合初始化
-        CommandDic = new Dictionary<int, List<FightCommandBase>>();
+        CommandDic = new Dictionary<uint, List<FightCommandBase>>();
 
         OwnerControl.GetInstance().Init();
         //地图初始化
@@ -67,7 +67,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //显示清除
         if (null != _charaViewDic)
         {
-            foreach(int key in _charaViewDic.Keys)
+            foreach (uint key in _charaViewDic.Keys)
             {
                 GameObject.Destroy(_charaViewDic[key]);
             }
@@ -129,7 +129,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     //命令刷新
     private void UpdateCommand()
     {
-        foreach(int frame in CommandDic.Keys){
+        foreach (uint frame in CommandDic.Keys)
+        {
             if (FightDefine.CompareFrame(frame))
             {
                 List<FightCommandBase> list = CommandDic[frame];
@@ -144,7 +145,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     private void DoCommand(FightCommandBase command)
     {
-        int battleId = command.BattleId;
+        uint battleId = command.BattleId;
         if (_charaDic.ContainsKey(battleId))
         {
             ICharaBattle info = GetCharaById(battleId) as ICharaBattle;
@@ -177,20 +178,20 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     private void OnAddCommand(Notification data)
     {
         FightCommandBase command = data.param as FightCommandBase;
-        int frame = command.Frame;
+        uint frame = command.Frame;
         if (!CommandDic.ContainsKey(frame)) CommandDic.Add(frame, new List<FightCommandBase>());
         CommandDic[frame].Add(command);
     }
 
     private void OnAddPlayer(Notification note)
     {
-        int playerId = (int)note.param;
-        CreatePlayer(playerId);
+        uint battleId = (uint)note.param;
+        CreatePlayer(battleId);
     }
 
     //创建玩家s
     private List<string> modelNames = new List<string> { "qishi.prefab","fashi.prefab", "lieshou.prefab", "modoushi.prefab"};
-    private void CreatePlayer(int battleId)
+    private void CreatePlayer(uint battleId)
     {
         //test
         if (!_charaDic.ContainsKey(battleId))
@@ -198,9 +199,9 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
             PlayerBattleInfo playerInfo = new PlayerBattleInfo(1, CHARA_TYPE.PLAYER);
             playerInfo.SetFightInfo(100);
             playerInfo.SetPlayerInfo();
-            playerInfo.SetBattleInfo(battleId, battleId, new Vector3(_charaList.Count * 10 + 200f, 0, _charaList.Count * 10 + 200f));
+            playerInfo.SetBattleInfo(battleId, (int)battleId, new Vector3(_charaList.Count * 10 + 200f, 0, _charaList.Count * 10 + 200f));
 
-            playerInfo.ModelType = battleId % 4;
+            playerInfo.ModelType = (int)battleId % 4;
             //test
             _charaDic.Add(battleId, playerInfo);
             _charaList.Add(playerInfo);
@@ -225,7 +226,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
             gameObject.AddComponent<PlayerBattleActor>();
             gameObject.GetComponent<PlayerBattleActor>().SetInfo(info);
 
-            if (battleId == 1)
+            if (battleId == PlayerModule.GetInstance().RoleID)
             {
                 MyPlayer = info;
                 GameObject.Find("Main Camera").GetComponent<CameraFollow>().target = gameObject.transform;
@@ -250,7 +251,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
 
     //延后创建玩家
     private void LaterCreatePlayer(){
-        foreach (int key in _charaDic.Keys)
+        foreach (uint key in _charaDic.Keys)
         {
             if (!_charaViewDic.ContainsKey(key))
             {
@@ -260,7 +261,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     }
 
     //移除玩家
-    private void RemovePlayerById(int battleId)
+    private void RemovePlayerById(uint battleId)
     {
         int index = _charaList.FindIndex(delegate(CharaActorInfo player)
         {
@@ -289,7 +290,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         }
     }
 
-    public CharaActorInfo GetCharaById(int battleId)
+    public CharaActorInfo GetCharaById(uint battleId)
     {
         if (_charaDic.ContainsKey(battleId)) return _charaDic[battleId];
         return null;

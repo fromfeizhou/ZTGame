@@ -7,7 +7,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
 
     //**===================接口实现=======================**//
     //战斗id
-    public int BattleId { get; set; }
+    public uint BattleId { get; set; }
 
     //角色状态
     private BATTLE_STATE _battleState;
@@ -176,8 +176,8 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         ActivateSkillId = skillId;
     }
     public int ActivateSkillId { get; set; }
-    
-    public void SetBattleInfo(int battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
+
+    public void SetBattleInfo(uint battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
         BattleId = battleId;
         Camp = camp;

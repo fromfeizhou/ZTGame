@@ -35,8 +35,11 @@ public class GameManager : MonoSingleton<GameManager>
 
         LoadDataIndex();
 
-		NetWorkManager.Instace.Init (null);
-		NetWorkManager.Instace.Connect ();
+        if (NetWorkConst.IsOpenNetWork)
+        {
+            NetWorkManager.Instace.Init(null);
+            NetWorkManager.Instace.Connect();
+        }
     }
 
     private void LoadDataIndex()
@@ -97,11 +100,11 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Test()
     {
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER,new Notification(1,this.gameObject));
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
+        //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(1, this.gameObject));
+        //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
 
-        //BattleProtocol.GetInstance().Init();
-        //BattleProtocol.GetInstance().SendEnterBattle(1, Vector3.zero);
+        BattleProtocol.GetInstance().Init();
+        BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID, new Vector3(400,0,400),ZTSceneManager.GetInstance().SceneFrame);
     }
 
 }

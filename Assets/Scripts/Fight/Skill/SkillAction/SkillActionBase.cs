@@ -5,8 +5,8 @@ using UnityEngine;
 public class SkillActionBase
 {
     public SkillDefine.SkillActionType ActionType = SkillDefine.SkillActionType.NONE;   //行为类型
-    protected int _actFrame = 0;     //行动帧
-    public virtual int ActFrame
+    protected uint _actFrame = 0;     //行动帧
+    public virtual uint ActFrame
     {
         get { return _actFrame; }
         set {
@@ -31,8 +31,8 @@ public class SkillActionBase
 
     protected SkillActionParser _actionParser = null;
     protected ICharaBattle _skillPlayer = null;
-    protected int _curFrame = -1; //当前已执行的帧数
-    protected int _frameMax = 0;
+    protected uint _curFrame = 0; //当前已执行的帧数
+    protected uint _frameMax = 0;
 
     /// <summary>
     /// 行为基类 构造函数
@@ -40,7 +40,7 @@ public class SkillActionBase
     /// <param name="player">技能使用对象</param>
     /// <param name="actionId">行为编号</param>
     /// <param name="actionType">行为类型</param>
-    public SkillActionBase(SkillActionParser actionParser,int actFrame = 0)
+    public SkillActionBase(SkillActionParser actionParser, uint actFrame = 0)
     {
         _actionParser = actionParser;
         _skillPlayer = _actionParser.SkillPlayer;
@@ -63,7 +63,7 @@ public class SkillActionBase
     }
 
     //刷新对象
-    public virtual void UpdateActoin(int curFrame = 0)
+    public virtual void UpdateActoin(uint curFrame = 0)
     {
         if (ActionType == SkillDefine.SkillActionType.NONE)
         {
