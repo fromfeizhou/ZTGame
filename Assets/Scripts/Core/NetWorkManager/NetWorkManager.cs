@@ -30,7 +30,7 @@ namespace com.game.client
 					_curMsgSeq += (Int16)authData.unique_add;
 					if (_curMsgSeq > authData.max_unique_id)
 						_curMsgSeq = (Int16)authData.unique_id;
-					Debug.Log ("_curMsgSeq:" + _curMsgSeq);
+					//Debug.Log ("_curMsgSeq:" + _curMsgSeq);
 					return _curMsgSeq;
 				}
             }
@@ -84,7 +84,7 @@ namespace com.game.client
 				}
                 _gameSocket.WriteData(message.AllBytes);
 
-				Debug.Log ("[SendSocketMsg]Module:" + facade + ", Command:" + command);
+				//Debug.Log ("[SendSocketMsg]Module:" + facade + ", Command:" + command);
 				_msgPool.Recovery(message);
 
             }
