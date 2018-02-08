@@ -108,7 +108,7 @@ public class MapTileView : MonoBehaviour {
                     trees.Add(tree.gameObject);
                     BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
                     if(tempcollider!=null){
-                    ICharaBattle tempBattle=ZTSceneManager.GetInstance().GetCharaById(1) as ICharaBattle;
+                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
                     if (tempBattle != null)
                         tempcollider.SetTarget(tempBattle.Collider);
                     }
