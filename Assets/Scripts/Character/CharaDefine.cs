@@ -66,6 +66,7 @@ public struct CHARA_EVENT
     public static readonly string ADD_BUFF = "CHARA_EVENTADD_BUFF";
     public static readonly string REMOVE_BUFF = "CHARA_EVENT_REMOVE_BUFF";
     public static readonly string ADD_HURT = "CHARA_EVENT_ADD_HURT";
+    public static readonly string CHANGE_OPACITY = "CHARA_EVENT_CHANGE_OPACITY";
 }
 
 public struct PLAYER_AC_NAME

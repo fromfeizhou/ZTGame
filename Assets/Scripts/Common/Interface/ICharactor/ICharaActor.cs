@@ -21,4 +21,5 @@ public interface ICharaActor{
 
     void UpdateFrame();
 
+    void ChangeOpacity(float opacity);
 }
