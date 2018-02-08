@@ -9,19 +9,7 @@ namespace com.game.client
     {
         public partial class NetWorkManager
         {
-			private static string FacadeNameSpace
-			{
-				get{
-					string facadeNameSpace = "com.game.client.network.facade";
-					#if UNITY_EDITOR
-					if(NetWorkConst.CMDebug)
-						facadeNameSpace += ".tester";
-					#endif
-					return facadeNameSpace;
-				}
-			}
-
-
+			private static string FacadeNameSpace = "com.game.client.network.facade";
 
 			private Dictionary<byte, ModuleNetFacadeParam> _moduleNetFacadeDic;
 
@@ -89,12 +77,19 @@ namespace com.game.client
 						ParameterInfo paramInfo = methodInfo.GetParameters () [1];
 						object[] param = new object[2];
 						param [0] = 0;//预留，错误码
-
-
 						using (System.IO.MemoryStream m = new System.IO.MemoryStream (message.voData)) {
 							param [1] = ProtoBuf.Meta.RuntimeTypeModel.Default.Deserialize (m, null, paramInfo.ParameterType);
 						}
-						methodInfo.Invoke (facadeParam.moduleNetFacadeObj, param);
+						methodInfo.Invoke (facadeParam.moduleNetFacadeObj, param);	
+						return;
+					}
+				}
+
+				if (message.module == Module.login && message.command == Command.login_heart) {
+					using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
+					{
+						gprotocol.login_heart_s2c hearVO = ProtoBuf.Serializer.Deserialize<gprotocol.login_heart_s2c>(m);
+						OnReceive_Heart (hearVO);
 						return;
 					}
 				}
