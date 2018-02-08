@@ -57,7 +57,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             if (_grassId != value)
             {
                 _grassId = value;
-                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_GRASS_ID);
+                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_GRASS_ID,new Notification(BattleId));
             }
         }
     }
@@ -96,7 +96,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         }
     }
 
-    private eMapBlockType _mapBlockType;
+    private MapBlockData _mapBlockData;
     private Vector3 _hitPos;
     //根据状态刷新(位置)
     public void UpdateMoveState()
@@ -108,19 +108,29 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             for (int i = 0; i < list.Count; i++)
             {
                 _hitPos = MovePos + list[i] * Speed;
-                _mapBlockType = MapManager.GetInstance().GetFloorColl(_hitPos);
-                if (_mapBlockType == eMapBlockType.Hide)
+                _mapBlockData = MapManager.GetInstance().GetCurMapBlock(_hitPos);
+                if (null != _mapBlockData)
                 {
-                    GrassId = 1;
+                    //草丛判断
+                    if (_mapBlockData.type == eMapBlockType.Hide)
+                    {
+                        GrassId = int.Parse(_mapBlockData.param);
+                    }
+                    else
+                    {
+                        GrassId = -1;
+                    }
+
+                    //碰撞判断
+                    if (_mapBlockData.type != eMapBlockType.Collect)
+                    {
+                        MovePos = _hitPos;
+                    }
                 }
                 else
                 {
-                    GrassId = -1;
-                }
-                if (_mapBlockType != eMapBlockType.Collect)
-                {
                     MovePos = _hitPos;
-                    return;
+                    GrassId = -1;
                 }
             }
         }

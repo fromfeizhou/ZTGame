@@ -32,6 +32,10 @@ public class CharaActorInfo : NotificationDelegate, ICharaActor
         this.dispatchEvent(CHARA_EVENT.REMOVE_EFFECT, new Notification(assetId));
     }
 
+    public void ChangeOpacity(float opacity)
+    {
+        this.dispatchEvent(CHARA_EVENT.CHANGE_OPACITY, new Notification(opacity));
+    }
 
     //每帧刷新
     public virtual void UpdateFrame()

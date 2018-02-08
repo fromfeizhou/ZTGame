@@ -37,6 +37,7 @@ public class CharaActor : MonoBehaviour
         _charaInfo.addEventListener(CHARA_EVENT.ADD_EFFECT, OnAddEffect);
         _charaInfo.addEventListener(CHARA_EVENT.REMOVE_EFFECT, OnRemoveEffect);
         _charaInfo.addEventListener(CHARA_EVENT.CHANGE_ANIM, OnChangeAnim);
+        _charaInfo.addEventListener(CHARA_EVENT.CHANGE_OPACITY, OnChangeOpacity);
     }
 
     public virtual void RemoveEvent()
@@ -49,7 +50,30 @@ public class CharaActor : MonoBehaviour
         _charaInfo.removeEventListener(CHARA_EVENT.ADD_EFFECT, OnAddEffect);
         _charaInfo.removeEventListener(CHARA_EVENT.REMOVE_EFFECT, OnRemoveEffect);
         _charaInfo.removeEventListener(CHARA_EVENT.CHANGE_ANIM, OnChangeAnim);
+        _charaInfo.removeEventListener(CHARA_EVENT.CHANGE_OPACITY, OnChangeOpacity);
     }
+
+    //改变透明度
+    public void OnChangeOpacity(Notification data)
+    {
+        float opcacity = (float)data.param;
+        Debug.Log(opcacity);
+        if (opcacity > 0)
+        {
+            _anima.gameObject.SetActive(true);
+           SkinnedMeshRenderer render = _anima.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+           Color color = render.material.color;
+           Debug.Log(color.r);
+           Debug.Log(color.g);
+           Debug.Log(color.b);
+           render.material.color = new Color(color.r, color.g, color.b, opcacity);
+        }
+        else
+        {
+            _anima.gameObject.SetActive(false);
+        }
+    }
+
     //操作回调
     private void OnPlayHandler(Notification data)
     {
@@ -88,6 +112,7 @@ public class CharaActor : MonoBehaviour
     //动画改变（变身 换装等）
     private void OnChangeAnim(Notification data)
     {
+       
     }
 
     #region MonoBehaviour

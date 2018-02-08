@@ -119,7 +119,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         if (_charaViewDic != null)
         {
             GameObject tempPlayer;
-            if (_charaViewDic.TryGetValue(1, out tempPlayer))
+            if (_charaViewDic.TryGetValue(PlayerModule.GetInstance().RoleID, out tempPlayer))
             {
 
                 MapManager.GetInstance().Update(tempPlayer.transform.position);
@@ -181,6 +181,26 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     //草丛刷新
     private void OnUpdateGrassId(Notification data)
     {
+        uint battleId = (uint)data.param;
+        CharaActorInfo info = ZTSceneManager.GetInstance().GetCharaById(battleId);
+        ICharaBattle battleInfo = info as ICharaBattle;
+        if (null == info || null == battleInfo) return;
+        int GrassId = MyPlayer.GrassId;
+        if (battleInfo.GrassId > 0)
+        {
+            if (battleInfo.Camp == MyPlayer.Camp ||GrassId == battleInfo.GrassId)
+            {
+                //半透明
+                info.ChangeOpacity(0.5f);
+            }
+            else
+            {
+                info.ChangeOpacity(0);
+                //透明
+            }
+            return;
+        }
+        info.ChangeOpacity(1.0f);
     }
 
     private void OnAddCommand(Notification data)
