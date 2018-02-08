@@ -26,8 +26,7 @@ namespace com.game.client
 				    _socket.NoDelay = true;
 
 					ResetConnectTimeOut ();
-					delegate_TimeOut (true);
-
+					isCheckTimeOut = true;
 					UnityEngine.Debug.Log("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]请求连接服务器. Ip:" + _ip + ", Port:" + _port);
 				    _socket.BeginConnect(_ip, _port, ar =>
                     {
@@ -35,16 +34,16 @@ namespace com.game.client
 						try {
 							client.EndConnect (ar);
 							_state = eConnectState.Connected;
-							delegate_TimeOut (false);
+							isCheckTimeOut = false;
 						    if (_socket.Connected)
                             {
 								Invoking_CallBack_OnConnect();
-								delegate_OnReceiver (true);
-							    delegate_CheckSendQue(true);
-								delegate_CheckReceiveQue (true);
+								isCheckReceiveQue = true;
+								isCheckSendQue = true;
+								isOnReceiver = true;
 							}
 						} catch (System.Exception e) {
-							delegate_TimeOut (false);
+							isCheckTimeOut = false;
 							_state = eConnectState.ConnectionRefused;
 							Invoking_CallBack_OnError(eErrCode.ConnectRefused, e);
 							Dispose ();

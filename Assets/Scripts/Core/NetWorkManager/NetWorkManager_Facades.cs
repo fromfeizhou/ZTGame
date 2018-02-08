@@ -114,6 +114,7 @@ namespace com.game.client
 								Debug.Log ("断线重连返回");
 								gprotocol.login_relogin_s2c vo = ProtoBuf.Serializer.Deserialize<gprotocol.login_relogin_s2c>(m);
 								CheckErrCode (vo.code);
+								HeartSwitch (true);
 								Debug.Log ("断线重连结果");
 							}
 							return;

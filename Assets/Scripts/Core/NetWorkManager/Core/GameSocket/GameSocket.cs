@@ -21,7 +21,6 @@ namespace com.game.client
 			private TcpClient _socket;
 
 			private const int ReceiveBuffSize = 1024 * 8;
-			private event delegate_onUpdate OnUpdate;
 
 			public bool IsDispose ()
 			{
@@ -42,10 +41,24 @@ namespace com.game.client
 
 			public void Update ()
 			{
-                if (OnUpdate != null)
-                    OnUpdate();
+				if (isCheckTimeOut)
+					OnTimeOut ();
+
+				if (isCheckSendQue)
+					OnCheckSendQue ();
+
+				if (isCheckReceiveQue)
+					OnCheckReceiveQue ();
+
+				if (isOnReceiver)
+					onReceive ();
+				
 			}
 
+			bool isCheckTimeOut = false;
+			bool isCheckSendQue = false;
+			bool isCheckReceiveQue = false;
+			bool isOnReceiver = false;
 			public void Init (string ip, int port, float outTime)
 			{
 			    _ip = ip;
@@ -56,11 +69,10 @@ namespace com.game.client
 			public void Dispose ()
 			{
 				_state = eConnectState.None;
-
-				delegate_TimeOut (false);
-				delegate_OnReceiver (false);
-			    delegate_CheckSendQue(false);
-				delegate_CheckReceiveQue (false);
+				isCheckTimeOut = false;
+				isCheckReceiveQue = false;
+				isCheckSendQue = false;
+				isOnReceiver = false;
 
 			    if (_socket != null)
                 {
