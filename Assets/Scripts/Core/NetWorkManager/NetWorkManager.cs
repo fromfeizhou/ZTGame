@@ -63,7 +63,6 @@ namespace com.game.client
 
 			public void SendNetMsg(byte facade, byte command, global::ProtoBuf.IExtensible vo)
             {
-				Debug.Log ("[SendRequest]Module:" + facade + ", Command:" + command);
 				Message message = _msgPool.Talk();
 				message.Seq = _curMsgSeq++;
 				message.module = facade;
