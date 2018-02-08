@@ -29,30 +29,36 @@ namespace com.game.client
 			[NetCommandAttribute(Command.role_gongxun)]
 			private void OnReceive_Role_GongXun(int code, role_gongxun_s2c vo)
 			{
+				
+				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_GongXun]当前功勋:" + vo.rank);
 			}
 
 			[NetCommandAttribute(Command.role_vigour_info)]
 			private void OnReceive_Role_Vigour_Info(int code, role_vigour_info_s2c vo)
 			{
+				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Vigour_Info]体力信息:" + vo.vigour);
 			}
 
 			[NetCommandAttribute(Command.role_bc_info)]
 			private void OnReceive_Role_BC_Info(int code, role_bc_info_s2c vo)
 			{
+				
                 BPBattleEvent.GetInstance().dispatchEvent(BP_BATTLE_EVENT.COMMAND, new Notification(vo.data));
 				//UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
 			}
 
 			[NetCommandAttribute(Command.role_attr)]
 			private void OnReceive_Role_Attr(int code, role_attr_s2c vo){
+				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Attr]属性更新:当前生命值" + vo.attr.hp_cur + "...");
 			}
 
 
 			[NetCommandAttribute(Command.role_update_fight_point)]
 			private void OnReceive_Role_Flght_Point(int code, role_update_fight_point_s2c vo){
+				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Flght_Point]战力更新:" + vo.fight_point);
 			}
 

@@ -27,17 +27,8 @@ namespace com.game.client
                 get { return _curMsgSeq; }
             }
 
-            //private Dictionary<uint, Message> _waitMsgReceive;
-            /*public int WaitMsgCnt {
-                get
-                {
-                    if (_waitMsgReceive == null)
-                        return 0;
-                    return _waitMsgReceive.Count;
-                }
-            }*/
-
             private ObjectPool<Message> _msgPool;
+			private Dictionary<uint,string> errDic;
 
 			public void Init(System.Action<bool> _action_LockScreen)
             {
@@ -45,7 +36,6 @@ namespace com.game.client
                 _gameSocket = new GameSocket();
                 _gameSocket.Init(NetWorkConst.Ip, NetWorkConst.Port, NetWorkConst.ConnectTimeOut);
 
-                //_waitMsgReceive = new Dictionary<uint, Message>();
                 _msgPool = new ObjectPool<Message>(32);
 
                 _gameSocket.CallBack_OnConnect = OnConnect;
@@ -53,6 +43,17 @@ namespace com.game.client
                 _gameSocket.CallBack_OnDisConnect = OnDisConnect;
                 _gameSocket.CallBack_OnReceive = OnReceive;
                 _gameSocket.CallBack_OnError = OnError;
+
+				errDic = new Dictionary<uint, string> ();
+				string[] errorStr = System.IO.File.ReadAllLines (NetWorkConst.ErrCodeFilePath);
+				for (int i = 0; i < errorStr.Length; i++) {
+					string str = errorStr [i];
+					if (str.StartsWith ("-define")) {
+						str = str.Substring (8).Split (',') [1].Trim();
+						string key = str.Split ('%') [0].Trim ();
+						errDic[uint.Parse(key.Substring (0, key.Length - 2))] = str.Split ('%') [1].Trim ();
+					}
+				}
             }
 
 
@@ -74,18 +75,10 @@ namespace com.game.client
 					message.voData = m.ToArray();
 				}
 
-
-				/*
-                if (_waitMsgReceive.ContainsKey(message.Seq))
-                {
-                    Debug.LogError("发送队列重复");
-                }
-                else
-                {
-                    _waitMsgReceive[message.Seq] = message;
-                }*/
-
                 _gameSocket.WriteData(message.AllBytes);
+
+				_msgPool.Recovery(message);
+
             }
 			private string GetContent(byte[] data)
 			{
@@ -101,15 +94,10 @@ namespace com.game.client
                 _gameSocket.DisConnect();
             }
 
-			private int curAutoReConnectTimes;
             private void OnDisConnect()
             {
 				Debug.Log ("连接断开");
 				HeartSwitch (false);
-
-				//if (NetWorkConst.ReConnectTimes == 0 || curAutoReConnectTimes++ < NetWorkConst.ReConnectTimes) {
-				//	Connect ();
-				//}
             }
 
             private void OnError(string error)
@@ -126,24 +114,8 @@ namespace com.game.client
             {
 				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]连接IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " 成功. 并发送第一个心跳包。");
 				SendHeart ();
-                //CheckSendFailMsg();
             }
 
-			/*
-            public void CheckSendFailMsg()
-            {
-                List<Message> waitSendMsgList = new List<Message>();
-                foreach (var msg in _waitMsgReceive)
-                    waitSendMsgList.Add(msg.Value);
-
-                waitSendMsgList.Sort((left, right) => { return right.Seq.CompareTo(left.Seq); });
-
-                for (int i = 0; i < waitSendMsgList.Count; i++)
-                {
-                    _gameSocket.WriteData(waitSendMsgList[i].AllBytes);
-                }
-            }
-*/
             private void OnSend()
             {
 				
@@ -152,21 +124,8 @@ namespace com.game.client
             private void OnReceive(byte[] data)
             {
                 Message message = _msgPool.Talk();
-				//Debug.Log ("[Client]ReceiveData:" + GetContent(data));
                 message.Parse(data);
 				FacadeInvoking(message);
-				/*
-                if (_waitMsgReceive.ContainsKey(message.Seq))
-                {
-                    Message waitReceiveMsg = _waitMsgReceive[message.Seq];
-                    _msgPool.Recovery(waitReceiveMsg);
-                    _waitMsgReceive.Remove(message.Seq);
-                }
-                else
-                {
-                    Debug.LogError("没有找到对应序号：" + message.Seq);
-                }
-				*/
                 _msgPool.Recovery(message);
             }
 
@@ -181,9 +140,14 @@ namespace com.game.client
 
             public void Dispose()
             {
-                //_waitMsgReceive.Clear();
-				curAutoReConnectTimes = 0;
             }
+
+			public void CheckErrCode(uint code)
+			{
+				if (code != 0 && errDic.ContainsKey (code)) {
+					Debug.LogError ("[NetWorkManager][OnReceiveData]ErrCode:" + code + ", Content:" + errDic[code]);
+				}
+			}
         }
     }
 }

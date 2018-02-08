@@ -6,22 +6,18 @@ namespace com.game.client
 		[NetFacadeAttribute(Module.login)]
 		public class LoginNetFacade
 		{
-			[NetCommandAttribute(Command.login_heart)]
-			private void OnReceive_Login_Heart(int code, login_heart_s2c vo)
-			{
-				//UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_Heart]:心跳");
-			}
-
 			[NetCommandAttribute(Command.login_login)]
 			private void OnReceive_Login_Login(int code, login_login_s2c vo)
 			{
-				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_Login]:code:" + vo.code);
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Login_Login]:心跳间隔:" + vo.heart_interval);
+				NetWorkManager.Instace.SetHeartInterval (vo.heart_interval);
+				NetWorkManager.Instace.HeartSwitch (true);
+				NetWorkManager.Instace.CheckErrCode (vo.code);
 
 				if (vo.code == 0) {
 					LoginModule.GetInstance ().OnReceive_Login (vo);
 				} else {
-					if (vo.code == 12)//没有角色
-					{
+					if (vo.code == 12) {//没有角色
 						LoginModule.GetInstance ().ShowPanel_CreateRole ();
 					}
 				}
@@ -29,6 +25,8 @@ namespace com.game.client
 
 			[NetCommandAttribute(Command.login_select_role)]
 			private void OnReceive_Login_SelectRole(int code, login_select_role_s2c vo){
+
+				NetWorkManager.Instace.CheckErrCode (vo.code);
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Login_SelectRole]:roleID----------------");
 				LoginModule.GetInstance ().OnReceive_SelectRole (vo);
 			}
@@ -36,8 +34,7 @@ namespace com.game.client
 			[NetCommandAttribute(Command.login_auth_key)]
 			private void OnReceive_Auth_Key(int code, login_auth_key_s2c vo)
 			{
-				UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Auth_Key]:加密参数, 开启心跳，频率：" + NetWorkConst.Heart_Time + " 秒一次");
-				NetWorkManager.Instace.HeartSwitch (true);
+
 			}
 
 			[NetCommandAttribute(Command.login_wait_info)]

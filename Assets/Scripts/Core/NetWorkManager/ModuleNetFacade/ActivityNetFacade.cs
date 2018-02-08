@@ -9,7 +9,6 @@ namespace com.game.client
 			[NetCommandAttribute(Command.activity_update_activity)]
 			private void OnReceive_Activity_Update_Activity(int code, activity_update_activity_s2c vo)
 			{
-				
 			}
 		}
 	}
