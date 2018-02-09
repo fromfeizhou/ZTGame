@@ -7,7 +7,30 @@ public class CharaFightInfo : CharaActorInfo, ICharaFight
     //**===================接口实现=======================**//
     //生命值
     private int _hp;
-    public int Hp { get; set; }
+    public int Hp
+    {
+        get { return _hp; }
+        set
+        {
+            if (_hp == value) return;
+            _hp = value;
+            this.dispatchEvent(CHARA_EVENT.UPDATE_HP);
+
+            if (_hp <= 0)
+            {
+                _hp = 0;
+                ICharaBattle info = this as ICharaBattle;
+                if (null != info)
+                {
+                    info.SetDead(true);
+                }
+            }
+            else if (_hp > MaxHp)
+            {
+                _hp = MaxHp;
+            }
+        }
+    } 
 
     public int MaxHp { get; set; }
     //攻击力
@@ -26,7 +49,6 @@ public class CharaFightInfo : CharaActorInfo, ICharaFight
     {
         Hp += info.Value;
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_UI_HURT_VALUE, new Notification(info));
-        this.dispatchEvent(CHARA_EVENT.ADD_HURT);
     }
 
 

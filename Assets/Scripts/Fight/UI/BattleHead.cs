@@ -55,18 +55,18 @@ public class BattleHead : MonoBehaviour
     public void InitEvent()
     {
         if (null == _charaActor) return;
-        _charaActor.addEventListener(CHARA_EVENT.ADD_HURT, OnHurt);
+        _charaActor.addEventListener(CHARA_EVENT.UPDATE_HP, OnUpdateHp);
         _charaActor.addEventListener(CHARA_EVENT.UPDATE_POS, OnUpdatePos);
     }
 
     public void RemoveEvent()
     {
         if (null == _charaActor) return;
-        _charaActor.removeEventListener(CHARA_EVENT.ADD_HURT, OnHurt);
+        _charaActor.removeEventListener(CHARA_EVENT.UPDATE_HP, OnUpdateHp);
         _charaActor.removeEventListener(CHARA_EVENT.UPDATE_POS, OnUpdatePos);
     }
 
-    public void OnHurt(Notification data)
+    public void OnUpdateHp(Notification data)
     {
         _slider.value = _fightInfo.Hp;
         _hpText.TextStr = _fightInfo.Hp.ToString() + "/" + _fightInfo.MaxHp.ToString();

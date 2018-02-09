@@ -8,6 +8,7 @@ public enum BP_BATTLE_TYPE
     ENTER = 0,
     MOVE,
     SKILL,
+    REBORN,
 }
 
 [System.Serializable]
@@ -72,6 +73,16 @@ public class BPSkill : BPBattle
     }
 }
 
+public class BPReborn : BPBattle
+{
+    public BPReborn(uint battleId)
+        : base(battleId)
+    {
+       
+        Type = BP_BATTLE_TYPE.REBORN;
+    }
+}
+
 public class BP_BATTLE_EVENT
 {
     public const string COMMAND = "BP_BATTLE_EVENT_COMMAND";
@@ -124,7 +135,6 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //移动
     public void SendMoveComand(uint battleId,  MOVE_DIR dir)
     {
-        Debug.Log("SendMoveComand");
         BPMove bp = new BPMove(battleId, dir);
         SendMsg(bp);
     }
@@ -133,6 +143,13 @@ public class BattleProtocol : Singleton<BattleProtocol>
     public void SendSkillCommand(uint battleId, int actionId, Vector3 dir, Vector3 targetPos,uint targetId)
     {
         BPSkill bp = new BPSkill(battleId,actionId,dir,targetPos,targetId);
+        SendMsg(bp);
+    }
+
+    //进入场景
+    public void SendRebornBattle(uint battleId)
+    {
+        BPReborn bp = new BPReborn(battleId);
         SendMsg(bp);
     }
 
@@ -162,6 +179,10 @@ public class BattleProtocol : Singleton<BattleProtocol>
             case BP_BATTLE_TYPE.SKILL:
                 UpdatePos(bp);
                 ParseSkillCommand(JsonUtility.FromJson<BPSkill>(bpOut));
+                break;
+            case BP_BATTLE_TYPE.REBORN:
+                UpdatePos(bp);
+                ParseReborn(JsonUtility.FromJson<BPReborn>(bpOut));
                 break;
         }
 
@@ -198,7 +219,6 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //移动
     public void ParseMoveComand(BPMove bp)
     {
-        Debug.Log("ParseMoveComand");
         MoveCommand command = FightDefine.GetMoveCommand(bp.BattleId, bp.Frame,bp.Dir);
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
@@ -210,7 +230,15 @@ public class BattleProtocol : Singleton<BattleProtocol>
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 
-
+    //收到玩家进入场景
+    public void ParseReborn(BPReborn bp)
+    {
+        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        if (null != info)
+        {
+            info.Reborn();
+        }
+    }
     public override void Destroy()
     {
     }

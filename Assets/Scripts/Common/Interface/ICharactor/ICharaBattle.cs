@@ -47,4 +47,8 @@ public interface ICharaBattle:IMove
     int ActivateSkillId { get; set; }
 
     int GrassId { get; set; }
+
+    void SetDead(bool isDead);
+    bool IsDead();
+    void Reborn();
 }

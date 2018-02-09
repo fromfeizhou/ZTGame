@@ -30,7 +30,9 @@ public class SkillJoystick : JoystickBase
 
     void OnJoystickDownEvent(Vector2 deltaVec)
     {
-        if (ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.NONE || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.MOVE)
+        if (ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.NONE 
+            || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.MOVE
+            || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.DIE)
         {
             _skillDownState = true;
         }
@@ -47,6 +49,13 @@ public class SkillJoystick : JoystickBase
         int distance = 6;
 
         //---------------test------------------------//
+        if (ZTSceneManager.GetInstance().MyPlayer.IsDead())
+        {
+            BattleProtocol.GetInstance().SendRebornBattle(ZTSceneManager.GetInstance().MyPlayer.BattleId);
+            return;
+        }
+
+
 		SkillId = FightModule.GetInstance().CurSkillId;
         if (ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
         {
@@ -56,7 +65,6 @@ public class SkillJoystick : JoystickBase
 
         Vector3 targetPos = new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
-
 
         //选择最近目标
         uint targetId =0;

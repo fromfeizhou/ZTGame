@@ -23,7 +23,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     public MOVE_DIR MoveDir
     {
         get { return _moveDir; }
-        set { if (_moveDir != value) _moveDir = value; }
+        set { if (_moveDir != value)  _moveDir = value; }
     }
     public float Speed { get; set; }
 
@@ -77,6 +77,10 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             case BATTLE_STATE.MOVE:
                 if (CanMove()) _battleState = state;
                 this.PlayAction(PLAYER_AC_NAME.RUN);
+                break;
+            case BATTLE_STATE.DIE:
+                this.PlayAction(PLAYER_AC_NAME.DIE);
+                _battleState = state;
                 break;
             default:
                 _battleState = state;
@@ -208,6 +212,30 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     }
     public int ActivateSkillId { get; set; }
 
+    public void SetDead(bool isDead) {
+        if (isDead)
+        {
+            ChangeState(BATTLE_STATE.DIE);
+        }
+        else
+        {
+            ChangeState(BATTLE_STATE.NONE);
+        }
+    }
+    //是否死亡 
+    public bool IsDead()
+    {
+        return BattleState == BATTLE_STATE.DIE;
+    }
+
+    //复活
+    public void Reborn()
+    {
+        ChangeState(BATTLE_STATE.NONE);
+        ICharaFight info = this as ICharaFight;
+        if (null != info) { info.Hp = MaxHp; }
+    }
+
     public void SetBattleInfo(uint battleId = 0, int camp = 0, Vector3 pos = default(Vector3))
     {
         BattleId = battleId;
@@ -220,6 +248,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
 
         ChangeState(BATTLE_STATE.NONE);
     }
+
 
     //**===================接口实现=======================**//
     public PlayerBattleInfo(int animaId, CHARA_TYPE type)

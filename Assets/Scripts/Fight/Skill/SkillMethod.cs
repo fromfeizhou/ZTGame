@@ -17,7 +17,8 @@ public class SkillMethod {
         for (int i = 0; i < list.Count; i++)
         {
             ICharaBattle info = list[i] as ICharaBattle;
-            if (null != info)
+            //过滤死亡玩家
+            if (null != info && !info.IsDead())
             {
                 switch (targetType)
                 {

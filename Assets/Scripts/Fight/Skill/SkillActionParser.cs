@@ -11,6 +11,8 @@ public class SkillActionParser
     public bool IsComplete = false;
     private Dictionary<uint, List<SkillActionBase>> _skillActionDic;     //技能action列表
 
+    public BATTLE_STATE OldBattleState = BATTLE_STATE.NONE;
+
     public SkillActionParser(ICharaBattle playerBase, SkillCommand command)
     {
         SkillPlayer = playerBase;

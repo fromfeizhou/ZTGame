@@ -57,7 +57,6 @@ public class CharaActor : MonoBehaviour
     public void OnChangeOpacity(Notification data)
     {
         float opcacity = (float)data.param;
-        Debug.Log(opcacity);
         if (opcacity > 0)
         {
             _anima.gameObject.SetActive(true);

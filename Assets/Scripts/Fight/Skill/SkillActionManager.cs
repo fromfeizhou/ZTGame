@@ -66,7 +66,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
                     if (list.Count == 0)
                     {
                         ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(key) as ICharaBattle;
-                        if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
+                        //if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
                     }
                 }
             }

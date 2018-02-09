@@ -127,7 +127,7 @@ public class FightEffectDefine
         hurtInfo.Type = HURT_TYPE.NORMAL;
         hurtInfo.BattleId = battleInfo.BattleId;
         hurtInfo.Pos = battleInfo.MovePos;
-        hurtInfo.Value = -user.Attack;
+        hurtInfo.Value = -user.Attack * 10;
 
         target.AddHurt(hurtInfo);
     }

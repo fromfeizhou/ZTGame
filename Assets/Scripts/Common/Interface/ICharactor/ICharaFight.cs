@@ -12,4 +12,5 @@ public interface ICharaFight{
     //添加伤害
     void AddHurt(HurtInfo info);
     void SetFightInfo(int hp = 100, int maxHp = 100,int attack = 10);
+
 }

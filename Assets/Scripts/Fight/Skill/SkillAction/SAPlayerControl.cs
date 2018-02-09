@@ -26,6 +26,7 @@ public class SAPlayerControl : SkillActionBase {
     {
         if (IsControl)
         {
+            _actionParser.OldBattleState = _skillPlayer.BattleState;
             _skillPlayer.ChangeState(BATTLE_STATE.SKILL);
         }
         else
@@ -33,8 +34,10 @@ public class SAPlayerControl : SkillActionBase {
             if (_skillPlayer.BattleState == BATTLE_STATE.SKILL)
             {
                 _skillPlayer.ChangeState(BATTLE_STATE.NONE);
+                _skillPlayer.ChangeState(_actionParser.OldBattleState);
             }
         }
+
         if (IsSkillDir)
         {
             ICharaActor chara = _skillPlayer as ICharaActor;

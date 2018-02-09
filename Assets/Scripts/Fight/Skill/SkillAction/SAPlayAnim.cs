@@ -24,7 +24,7 @@ public class SAPlayAnim : SkillActionBase
 
     protected override void DoAction()
     {
-        if (AnimName != "" && null != _skillPlayer)
+        if (AnimName != "" && null != _skillPlayer && !_skillPlayer.IsDead())
         {
             ICharaActor chara = _skillPlayer as ICharaActor;
             if (null != chara)
