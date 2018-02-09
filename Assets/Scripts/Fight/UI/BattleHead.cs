@@ -3,37 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleHead : MonoBehaviour {
+public class BattleHead : MonoBehaviour
+{
     private CharaActorInfo _charaActor;
     private ICharaFight _fightInfo;
     private ICharaBattle _battleInfo;
     private Slider _slider;
     private MTextFormat _name;
     private Canvas _canvas;
-    private bool _rushPos;
-	// Use this for initialization
-	void Awake () {
+
+    void Awake()
+    {
         _slider = this.transform.Find("HpBar").gameObject.GetComponent<Slider>();
         _name = this.transform.Find("Name").gameObject.GetComponent<MTextFormat>();
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        _rushPos = false;
-	}
 
-    void Update()
+        StartCoroutine(EndOfFrameHandler());
+    }
+
+    IEnumerator EndOfFrameHandler()
     {
-        if (!_rushPos)
+        yield return new WaitForEndOfFrame();
+        if (null != _battleInfo)
         {
-            _rushPos = true;
-            if (null != _battleInfo)
-            {
-                this.OnUpdatePos(new Notification(_battleInfo.MovePos));
-            }
+            this.OnUpdatePos(new Notification(_battleInfo.MovePos));
         }
+
     }
 
     public void SetInfo(CharaActorInfo info)
     {
-        if(null == _slider) return;
+        if (null == _slider) return;
         if (null != _charaActor)
         {
             RemoveEvent();
@@ -73,7 +73,7 @@ public class BattleHead : MonoBehaviour {
         Vector3 worldToScreenPoint = Camera.main.WorldToScreenPoint(_battleInfo.MovePos);
         Vector3 screenToWorldPoint = _canvas.worldCamera.ScreenToWorldPoint(worldToScreenPoint);
         this.transform.position = new Vector3(screenToWorldPoint.x, screenToWorldPoint.y + CharaDefine.BATTLE_HEAD_OFFSET, 0);
-     
+
     }
 
     void OnDestroy()
