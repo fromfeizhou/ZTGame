@@ -93,11 +93,19 @@ public class BattleProtocol : Singleton<BattleProtocol>
     {
         JsonUtility.ToJson(bp);
         string bpOut = JsonUtility.ToJson(bp);
-        gprotocol.role_bc_info_c2s vo = new gprotocol.role_bc_info_c2s()
+        if (NetWorkConst.IsOpenNetWork)
         {
-            data = bpOut,
-        };
-        NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
+            gprotocol.role_bc_info_c2s vo = new gprotocol.role_bc_info_c2s()
+            {
+                data = bpOut,
+            };
+            NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
+        }
+        else
+        {
+            BPBattleEvent.GetInstance().dispatchEvent(BP_BATTLE_EVENT.COMMAND, new Notification(bpOut));
+        }
+        
     }
 
     //进入场景

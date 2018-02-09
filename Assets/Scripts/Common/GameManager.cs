@@ -13,8 +13,8 @@ public class GameManager : MonoSingleton<GameManager>
     private List<UnityAction> _loadFuncList;
     // Use this for initialization
 
-	public override void Init ()
-	{
+    public override void Init()
+    {
         Application.targetFrameRate = 45;
         Debug.Log("GameManager LoadStart");
         _loadIndex = 0;
@@ -55,14 +55,14 @@ public class GameManager : MonoSingleton<GameManager>
         if (_loadIndex >= _stateList.Count)
         {
             //GameStart();
-			Debug.Log("GameManager Init Finish");
+            Debug.Log("GameManager Init Finish");
             return;
         }
 
         LoadDataIndex();
     }
-   
-	public void GameStart()
+
+    public void GameStart()
     {
         GameManager.GameInit = true;
         GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_COM);
@@ -76,7 +76,7 @@ public class GameManager : MonoSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-		NetWorkManager.Instace.Update ();
+        NetWorkManager.Instace.Update();
 
         if (GameManager.GameInit == false)
         {
@@ -87,7 +87,7 @@ public class GameManager : MonoSingleton<GameManager>
         ZTSceneManager.GetInstance().Update();
     }
 
-	public override void Destroy()
+    public override void Destroy()
     {
         LocalString.Destroy();
         PathManager.Destroy();
@@ -100,12 +100,24 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Test()
     {
+        BattleProtocol.GetInstance().Init();
         //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(1, this.gameObject));
         //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(2, this.gameObject));
+        if (NetWorkConst.IsOpenNetWork)
+        {
+            BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID, PlayerModule.GetInstance().RoleJob);
+        }
+        else
+        {
+            PlayerModule.GetInstance().SetRoleInfo(new gprotocol.p_role()
+            {
+                id = 1,
+                job = 1
+            });
+            BattleProtocol.GetInstance().SendEnterBattle(1, 1);
+            BattleProtocol.GetInstance().SendEnterBattle(2, 1);
+        }
 
-        BattleProtocol.GetInstance().Init();
-        PlayerModule model = PlayerModule.GetInstance();
-        BattleProtocol.GetInstance().SendEnterBattle(model.RoleID, model.RoleJob);
     }
 
 }
