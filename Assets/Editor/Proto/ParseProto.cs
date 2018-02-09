@@ -5,6 +5,55 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 using UnityEditor;
+[System.Serializable]
+public class cCommand
+{
+	public int moduleId;
+	public string moduleEn = string.Empty;
+
+	public string commandEn = string.Empty;
+	public string commandCn = string.Empty;
+
+	public int commandId;
+
+	public static cCommand Create(string str){
+		cCommand command = new cCommand ();
+		string tmpStr = str;
+		tmpStr = tmpStr.Substring (tmpStr.IndexOf ("#begin#") - 1);
+		tmpStr = tmpStr.Replace ("#begin#",string.Empty);
+		tmpStr = tmpStr.Replace ("#end#",string.Empty);
+		List<string> param = new List<string> (tmpStr.Trim ().Split ('#'));
+		param.RemoveAll(a=>string.IsNullOrEmpty(a));
+		command.moduleEn = param [0];
+		command.commandEn = param [1];
+		command.moduleId = int.Parse(param [2]);
+		command.commandId = int.Parse(param [3]);
+		command.commandCn = param [4];
+		return command;
+	}
+}
+
+[System.Serializable]
+public class cModule
+{
+	public string moduleEn = string.Empty;
+	public string moduleCn = string.Empty;
+	public int moduleId;
+	public List<cCommand> commandList = new List<cCommand>();
+	public static cModule Create(string str){
+		cModule module = new cModule ();
+		string tmpStr = str;
+		tmpStr = tmpStr.Substring (tmpStr.IndexOf ("#model_begin#") - 1);
+		tmpStr = tmpStr.Replace ("#model_begin#",string.Empty);
+		tmpStr = tmpStr.Replace ("#model_end#",string.Empty);
+		List<string> param = new List<string> (tmpStr.Trim ().Split ('#'));
+		param.RemoveAll(a=>string.IsNullOrEmpty(a));
+		module.moduleEn = param [0];
+		module.moduleId = int.Parse(param [1]);
+		module.moduleCn = param [2];
+		return module;
+	}
+}
 
 public class ParseProto{
 
