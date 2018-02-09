@@ -10,6 +10,7 @@ public class CharaActorInfo : NotificationDelegate, ICharaActor
     
     public virtual void PlayAction(string actionName)
     {
+        Debug.Log(actionName);
         this.dispatchEvent(CHARA_EVENT.PLAY, new Notification(actionName));
     }
     //更新角度

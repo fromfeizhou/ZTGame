@@ -24,14 +24,14 @@ public class Buff{
     {
         BuffId = buffData.BuffId;
 
-        BuffEffectInfo = new EffectInfo("27_RFX_Magic_FlameSwirl1");
+        BuffEffectInfo = new EffectInfo("26_RFX_Magic_DarkSwirl1");
         
         BuffType = (int)BUFF_TYPE.NORMAL;
 
         StartTime = buffData.Frame;
         LifeTime = buffData.Frame;
         IntervalTime = 30;
-        MaxTime = buffData.Frame + 300;
+        MaxTime = buffData.Frame + 60;
 
         UserId = buffData.UserId;
         MixMax = 1;

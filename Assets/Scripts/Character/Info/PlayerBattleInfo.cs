@@ -71,6 +71,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
         {
             case BATTLE_STATE.NONE:
                 _battleState = state;
+                this.PlayAction(PLAYER_AC_NAME.IDLE);
                 break;
             case BATTLE_STATE.SKILL:
                 if (CanUseSkill()) _battleState = state;
