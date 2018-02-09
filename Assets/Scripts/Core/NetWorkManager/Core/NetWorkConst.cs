@@ -5,7 +5,7 @@ namespace com.game.client
 		public class NetWorkConst
 		{
 			/** 是否开启前后端通信 */
-			public const bool IsOpenNetWork = false;
+			public static bool IsOpenNetWork = true;
 
 			public const string Ip = "120.79.43.54";
 			public const int Port = 92;

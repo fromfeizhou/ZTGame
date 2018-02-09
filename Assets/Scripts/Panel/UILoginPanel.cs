@@ -15,11 +15,6 @@ public class UILoginPanel : MonoBehaviour
 	private void Start()
 	{
 		LoginModule.GetInstance ().LoginPanel = this;
-		GameManager.GetInstance ().Init ();
-		if (!NetWorkConst.IsOpenNetWork) {
-			LoginModule.GetInstance ().EnterGameScene ();
-			return;
-		}
 		Init ();
 	}
 
@@ -28,12 +23,24 @@ public class UILoginPanel : MonoBehaviour
 		LoginModule.GetInstance().CreateRolePanel = transform.parent.Find ("UICreateRolePanel").GetComponent<UICreateRolePanel> ();
 		_widget = Widget.Create(gameObject);
 		_widget.BandingBtn_OnClick (OnBtnClick_Login,"ViewPort/Btn_Login");
+		_widget.BandingBtn_OnClick (OnBtnClick_LoginWithOutNet,"ViewPort/Btn_LoginWithOutNet");
 		_inputFieldAccount = _widget.GetComponent<InputField> ("ViewPort/Account/InputField");
 	}
 
 	private void OnBtnClick_Login()
 	{
+		NetWorkConst.IsOpenNetWork = true;
+		GameManager.GetInstance ().Init ();
+
 		LoginModule.GetInstance ().NetWork_Request_Login (_inputFieldAccount.text,"");
+	}
+
+	private void OnBtnClick_LoginWithOutNet()
+	{
+		NetWorkConst.IsOpenNetWork = false;
+		GameManager.GetInstance ().Init ();
+
+		LoginModule.GetInstance ().EnterGameScene ();
 	}
 
 }
