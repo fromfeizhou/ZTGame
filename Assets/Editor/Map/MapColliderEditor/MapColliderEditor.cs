@@ -47,6 +47,8 @@ public class MapColliderEditor : EditorWindow
     }
     private eMapViewType MapViewType;
 
+    private eMapViewType CurViewType = eMapViewType.None;
+
 
     Vector2 curMouseGridPos;
     float curMouseGridWidth;
@@ -187,6 +189,7 @@ public class MapColliderEditor : EditorWindow
                 _cameraPos_Port = tmpPosMain;
                 _selectPos_Main = curMouseGridPos;
                 _selectGridPos_Main = _curMouseGridPos_Main;
+                CurViewType = eMapViewType.Main;
             }
         }
         else if (e.mousePosition.x >= MapViewSize.x && e.mousePosition.y >= 0 && e.mousePosition.x < MapViewSize.x * 2 && e.mousePosition.y < MapViewSize.y)
@@ -206,6 +209,8 @@ public class MapColliderEditor : EditorWindow
                 _cameraPos_Edit = tmpPosPort;
                 _selectPos_Port = curMouseGridPos;
                 _selectGridPos_Port = _curMouseGridPos_Port;
+                CurViewType = eMapViewType.Port;
+
             }
         }
         else if (e.mousePosition.x >= MapViewSize.x * 2 && e.mousePosition.y >= 0 && e.mousePosition.x < MapViewSize.x * 3 && e.mousePosition.y < MapViewSize.y)
@@ -223,6 +228,8 @@ public class MapColliderEditor : EditorWindow
             {
                 _selectPos_Edit = curMouseGridPos;
                 _selectGridPos_Edit = _curMouseGridPos_Edit;
+                CurViewType = eMapViewType.Edit;
+
             }
         }
         else
@@ -247,6 +254,30 @@ public class MapColliderEditor : EditorWindow
             isEditMapEvent = curSelectMapBlockData != null;
         }
     }
+
+    private void Test()
+    {
+        if (CurViewType == eMapViewType.Port || CurViewType == eMapViewType.Edit)
+        {
+            int row = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit);// + (int)_selectGridPos_Edit.x);
+            int col = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit );//+ (int)_selectGridPos_Edit.y);
+
+            for (int index = row; index < row + _gridCnt_Edit; index++)
+            {
+                for (int i = col; i < col + _gridCnt_Edit; i++)
+                {
+                    AddCollider(index, i, MapBlockType);
+                    MapBlockData tempBlock = GetCollider(index, i);
+                    if (tempBlock != null && (MapBlockType == eMapBlockType.Hide || MapBlockType == eMapBlockType.Event))
+                    {
+                        tempBlock.param = "1";
+                    }
+                }
+            }
+
+        }
+    }
+
 
     private bool _isControl
     {
@@ -276,12 +307,18 @@ public class MapColliderEditor : EditorWindow
         _cameraEdit.transform.localPosition = localPos_Edit + localPos_Port;
     }
 
+    private string curParm;
     private bool isEditMapEvent;
     private void MenuInput()
     {
         if (GUI.Button(new Rect(10, 650, 50, 18), "保存"))
         {
             _mapEditHelper = MapColliderHelper.eMapEditHelper.SaveMapBlockFile;
+        }
+
+        if (GUI.Button(new Rect(100, 650, 50, 18), "填充全部"))
+        {
+            Test();
         }
 
         MapBlockType = (eMapBlockType)EditorGUI.EnumPopup(new Rect(0, 670, 200, 18), "事件类型选择", MapBlockType);
@@ -291,6 +328,7 @@ public class MapColliderEditor : EditorWindow
             GUI.Label(new Rect(0, 690, 200, 18), labelName);
             curSelectMapBlockData.param = EditorGUI.TextField(new Rect(0, 710, 200, 18), curSelectMapBlockData.param);
         }
+        
     }
 
     void Update()
