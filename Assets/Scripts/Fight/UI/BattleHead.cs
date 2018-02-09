@@ -10,12 +10,14 @@ public class BattleHead : MonoBehaviour
     private ICharaBattle _battleInfo;
     private Slider _slider;
     private MTextFormat _name;
+    private MTextFormat _hpText;
     private Canvas _canvas;
 
     void Awake()
     {
         _slider = this.transform.Find("HpBar").gameObject.GetComponent<Slider>();
         _name = this.transform.Find("Name").gameObject.GetComponent<MTextFormat>();
+        _hpText = this.transform.Find("HpText").gameObject.GetComponent<MTextFormat>();
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 
         StartCoroutine(EndOfFrameHandler());
@@ -45,7 +47,8 @@ public class BattleHead : MonoBehaviour
 
         _slider.maxValue = _fightInfo.MaxHp;
         _slider.value = _fightInfo.Hp;
-        _name.textKey = "测试";
+        _hpText.TextStr = _fightInfo.Hp.ToString() + "/" + _fightInfo.MaxHp.ToString();
+        _name.TextStr = "测试";
         InitEvent();
     }
 
@@ -66,6 +69,7 @@ public class BattleHead : MonoBehaviour
     public void OnHurt(Notification data)
     {
         _slider.value = _fightInfo.Hp;
+        _hpText.TextStr = _fightInfo.Hp.ToString() + "/" + _fightInfo.MaxHp.ToString();
     }
 
     public void OnUpdatePos(Notification data)

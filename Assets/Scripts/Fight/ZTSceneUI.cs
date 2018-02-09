@@ -119,7 +119,7 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
             go.transform.position = new Vector3(screenToWorldPoint.x, screenToWorldPoint.y + 0.2f, 0);
             go.transform.localScale = new Vector3(1, 1, 1);
             Text text = go.GetComponent<Text>();
-            text.text = info.Value.ToString();
+            text.text = Mathf.Abs(info.Value).ToString();
             TextInfo ti = new TextInfo(text, info.Pos, _tiTime, _tiHorSpeedMin, _tiHorSpeedMax, _tiExtent);
             _hurtTs.Add(ti);
         }
