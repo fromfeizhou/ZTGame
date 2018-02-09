@@ -23,4 +23,11 @@ public class PlayerModule : Singleton<PlayerModule>
 	public void SetRoleInfo(gprotocol.p_role roleInf){
 		_roleInfo = roleInf;
 	}
+
+	public string RoleName
+	{
+		get{
+			return _roleInfo.name;
+		}
+	}
 }
