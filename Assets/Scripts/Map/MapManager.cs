@@ -132,14 +132,18 @@ public class RoleTilePos
 
     public static RoleTilePos Parse(string data)
     {
-        RoleTilePos roleData = new RoleTilePos();
+        RoleTilePos roleData = null;
         string[] datas = data.Split(':');
         if (datas.Length > 1)
         {
-            roleData.row = int.Parse(datas[0]);
-            roleData.col = int.Parse(datas[1]);
-            float offest = MapDefine.GetMinInterval * 0.5f;
-            roleData.pos = new Vector3(roleData.row * MapDefine.GetMinInterval + offest, 0, roleData.col * MapDefine.GetMinInterval + offest);
+            if (int.Parse(datas[2]) == (int)eMapBlockType.playerPoint)
+            {
+                roleData = new RoleTilePos();
+                roleData.row = int.Parse(datas[0]);
+                roleData.col = int.Parse(datas[1]);
+                float offest = MapDefine.GetMinInterval * 0.5f;
+                roleData.pos = new Vector3(roleData.row * MapDefine.GetMinInterval + offest, 0, roleData.col * MapDefine.GetMinInterval + offest);
+            }
         }
         else
             Debug.LogError("data is error!");
@@ -169,6 +173,9 @@ public class MapManager : Singleton<MapManager>
     private List<MapBlockData> _mapBlockData;
     private List<RoleTilePos> _roleTilePosList;
 
+    private System.Random rd = new System.Random();
+
+
     #region 角色创建坐标
     private void InitRoleCreatPosData()
     {
@@ -185,6 +192,17 @@ public class MapManager : Singleton<MapManager>
             }
         }
     }
+
+    public Vector3 GetRandomPos()
+    {
+        if(_roleTilePosList!=null&&_roleTilePosList.Count>0){
+            int temp = rd.Next(0, _roleTilePosList.Count);
+
+            return _roleTilePosList[temp].pos;
+        }
+        return new Vector3(400f,0,400f);
+    }
+
     //获取角色创建坐标
     public Vector3 GetRoleCreatePoint(string posData)
     {
