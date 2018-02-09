@@ -96,6 +96,21 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         }
     }
 
+    //地图中心刷新
+    public void UpdateMapCenter()
+    {
+        //血条ui刷新
+        for (int i = 0; i < _charaList.Count; i++)
+        {
+            CharaActorInfo info = _charaList[i];
+            ICharaBattle bInfo = info as ICharaBattle;
+            if (null != bInfo)
+            {
+                info.UpdatePos(bInfo.MovePos);
+            }
+        }
+    }
+
     //刷新对象( 场景相关计算 唯一更新接口)
     public void Update()
     {

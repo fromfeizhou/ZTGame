@@ -142,6 +142,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
         string bpOut = (string)data.param;
         BPBattle bp = JsonUtility.FromJson<BPBattle>(bpOut);
         ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        Debug.Log(bp.BattleId);
         if (null != info)
         {
             info.MovePos = bp.Pos;

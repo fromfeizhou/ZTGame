@@ -77,7 +77,6 @@ public class BattleHead : MonoBehaviour
         Vector3 worldToScreenPoint = Camera.main.WorldToScreenPoint(_battleInfo.MovePos);
         Vector3 screenToWorldPoint = _canvas.worldCamera.ScreenToWorldPoint(worldToScreenPoint);
         this.transform.position = new Vector3(screenToWorldPoint.x, screenToWorldPoint.y + CharaDefine.BATTLE_HEAD_OFFSET, 0);
-
     }
 
     void OnDestroy()
