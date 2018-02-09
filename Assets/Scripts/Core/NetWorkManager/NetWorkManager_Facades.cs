@@ -103,7 +103,7 @@ namespace com.game.client
 							{
 								authData = ProtoBuf.Serializer.Deserialize<gprotocol.login_auth_key_s2c>(m);
 								_curMsgSeq = (Int16)authData.unique_id;
-								Debug.Log ("设置网络参数：" + "Start:" + authData.unique_id + ", Add:" + authData.unique_add + ", Max:" + authData.max_unique_id);
+								Debug.Log ("设置网络参数：" + "Start:" + authData.unique_id + ", Add:" + authData.unique_add + ", Max:" + authData.max_unique_id + ", ReLoginKey:" + authData.relogin_key);
 							}
 							return;
 						}

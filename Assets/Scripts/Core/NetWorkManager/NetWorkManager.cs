@@ -134,12 +134,12 @@ namespace com.game.client
 
 
 			private void OnReConnect(){
-				Debug.Log ("断线重连请求");
 				gprotocol.login_relogin_c2s vo = new gprotocol.login_relogin_c2s ()
 				{
 					id = PlayerModule.GetInstance ().RoleID,
 					key = authData.relogin_key,
 				};
+				Debug.Log ("断线重连请求。ID:" + vo.id + ", reLoginKey:" + vo.key);
 				SendNetMsg(Module.login,Command.login_relogin,vo);
 			}
 
