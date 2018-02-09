@@ -37,7 +37,7 @@ public class SAColliderMove : SACollider
                 targetPos = battleInfo.MovePos;
             }
         }
-        bool moveDone = SkillMethod.MoveAction(_collider, _moveInfo, _actionParser.Command.SkillDir, targetPos);
+        bool moveDone = SkillMethod.MoveAction(_collider, _moveInfo, _actionParser.Command.SkillDir, targetPos,_skillPlayer.MovePos);
         if (moveDone)
         {
             DoneEndMoveAction();

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillMethod {
+public class SkillMethod
+{
     //===================================目标选择=================================================
     public static List<ICharaBattle> GetTargetList(ICharaBattle battleInfo, SkillDefine.ColliderTarget targetType)
     {
-        List<ICharaBattle>  targetList = new List<ICharaBattle>();
+        List<ICharaBattle> targetList = new List<ICharaBattle>();
         if (targetType == SkillDefine.ColliderTarget.SELF)
         {
             targetList.Add(battleInfo as ICharaBattle);
@@ -51,10 +52,13 @@ public class SkillMethod {
         for (int i = 0; i < targetList.Count; i++)
         {
             float tmpDis = Vector3.Distance(battleInfo.MovePos, targetList[i].MovePos);
-            if(dis == -1){
+            if (dis == -1)
+            {
                 dis = tmpDis;
                 target = targetList[i];
-            }else{
+            }
+            else
+            {
                 if (tmpDis < dis)
                 {
                     dis = tmpDis;
@@ -69,7 +73,7 @@ public class SkillMethod {
     //===================================目标选择=================================================
 
     //===================================移动=================================================
-    public static bool MoveAction(IMove target, MoveInfo moveInfo, Vector3 dir, Vector3 targetPos)
+    public static bool MoveAction(IMove target, MoveInfo moveInfo, Vector3 dir, Vector3 targetPos, Vector3 playerPos)
     {
         switch (moveInfo.MoveType)
         {
@@ -78,7 +82,8 @@ public class SkillMethod {
             case SkillDefine.MoveType.LINE_TARGET:
                 return UpdateLineTarget(target, moveInfo, dir, targetPos);
             case SkillDefine.MoveType.PLAYER:
-                break;
+                target.MovePos = playerPos;
+                return false;
             case SkillDefine.MoveType.ROTATE:
                 break;
         }
@@ -93,7 +98,7 @@ public class SkillMethod {
     }
 
     //移动到目标点
-    protected static bool UpdateLineTarget(IMove target, MoveInfo moveInfo,Vector3 dir, Vector3 targetPos)
+    protected static bool UpdateLineTarget(IMove target, MoveInfo moveInfo, Vector3 dir, Vector3 targetPos)
     {
         //速度最大
         if (moveInfo.SpeedX == -1)
