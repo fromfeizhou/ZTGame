@@ -20,7 +20,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public virtual void Start()
     {
-        innerCircleTrans = transform.GetChild(0) as RectTransform;
+		innerCircleTrans = transform.Find("InnerCircle") as RectTransform;
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         _isDownTouch = false;
     }
