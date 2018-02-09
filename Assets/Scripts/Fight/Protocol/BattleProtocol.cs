@@ -82,9 +82,10 @@ public class BPBattleEvent : Singleton<NotificationDelegate>
 
 public class BattleProtocol : Singleton<BattleProtocol>
 {
-
+    private List<uint> _sendList;
     public override void Init()
     {
+        _sendList = new List<uint>();
         InitEvent();
     }
 
@@ -141,26 +142,30 @@ public class BattleProtocol : Singleton<BattleProtocol>
     {
         string bpOut = (string)data.param;
         BPBattle bp = JsonUtility.FromJson<BPBattle>(bpOut);
-        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
-        Debug.Log(bp.BattleId);
-        if (null != info)
-        {
-            info.MovePos = bp.Pos;
-        }
         switch (bp.Type)
         {
             case BP_BATTLE_TYPE.ENTER:
                 ParseEnterBattle(JsonUtility.FromJson<BPEnter>(bpOut));
                 break;
             case BP_BATTLE_TYPE.MOVE:
+                UpdatePos(bp);
                 ParseMoveComand(JsonUtility.FromJson<BPMove>(bpOut));
                 break;
             case BP_BATTLE_TYPE.SKILL:
-                
+                UpdatePos(bp);
                 ParseSkillCommand(JsonUtility.FromJson<BPSkill>(bpOut));
                 break;
         }
 
+    }
+
+    public void UpdatePos(BPBattle bp)
+    {
+        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        if (null != info)
+        {
+            info.MovePos = bp.Pos;
+        }
     }
 
     //收到玩家进入场景
@@ -169,8 +174,9 @@ public class BattleProtocol : Singleton<BattleProtocol>
         SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_PLAYER, new Notification(bp));
 
         //通知其他玩家自己位置
-        if (bp.BattleId != PlayerModule.GetInstance().RoleID)
+        if (bp.BattleId != PlayerModule.GetInstance().RoleID && !_sendList.Contains(bp.BattleId))
         {
+            _sendList.Add(bp.BattleId);
             BattleProtocol.GetInstance().SendEnterBattle(PlayerModule.GetInstance().RoleID,PlayerModule.GetInstance().RoleJob);
         }
     }

@@ -103,6 +103,8 @@ public class CameraFollow : MonoBehaviour
         tempVector.Set(target.position.x, target.position.y + initialHeight, target.position.z);
 
         transform.LookAt(tempVector);
+
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_CAMERA);
     }
 
     /// <summary>

@@ -373,8 +373,6 @@ public class MapManager : Singleton<MapManager>
             _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / MapDefine.MapHeight);
             _mapPosCenter = pos;
             UpdateMapView();
-
-            ZTSceneManager.GetInstance().UpdateMapCenter();
         }
     }
     //获得地图中心坐标
