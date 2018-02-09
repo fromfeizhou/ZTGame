@@ -30,9 +30,7 @@ public class SkillJoystick : JoystickBase
 
     void OnJoystickDownEvent(Vector2 deltaVec)
     {
-        if (ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.NONE 
-            || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.MOVE
-            || ZTSceneManager.GetInstance().MyPlayer.BattleState == BATTLE_STATE.DIE)
+        if (ZTSceneManager.GetInstance().MyPlayer.CanUseSkill())
         {
             _skillDownState = true;
         }
@@ -49,12 +47,6 @@ public class SkillJoystick : JoystickBase
         int distance = 6;
 
         //---------------test------------------------//
-        if (ZTSceneManager.GetInstance().MyPlayer.IsDead())
-        {
-            BattleProtocol.GetInstance().SendRebornBattle(ZTSceneManager.GetInstance().MyPlayer.BattleId);
-            return;
-        }
-
 
 		SkillId = FightModule.GetInstance().CurSkillId;
         if (ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)

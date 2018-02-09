@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +58,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             if (_grassId != value)
             {
                 _grassId = value;
-                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_GRASS_ID,new Notification(BattleId));
+                SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.UPDATE_GRASS_ID, new Notification(BattleId));
             }
         }
     }
@@ -81,12 +82,25 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             case BATTLE_STATE.DIE:
                 this.PlayAction(PLAYER_AC_NAME.DIE);
                 _battleState = state;
+                TimeOutReborn();
                 break;
             default:
                 _battleState = state;
                 break;
         }
 
+    }
+
+    //==测试代码===========
+    private void TimeOutReborn()
+    {
+        GameObject go = new GameObject();
+        go.transform.DOMoveX(0.1f, 3.0f)
+            .OnComplete(new TweenCallback(() =>
+            {
+                GameObject.Destroy(go);
+                BattleProtocol.GetInstance().SendRebornBattle(BattleId); ;
+            }));
     }
 
     //每帧更新
@@ -147,7 +161,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     //使用技能
     public void SkillCommand(SkillCommand command)
     {
-        if (CanUseSkill() && null!= command)
+        if (CanUseSkill() && null != command)
         {
             //BattleState = BATTLE_STATE.SKILL;
             SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_SKILL_PARSER, new Notification(command));
@@ -212,7 +226,8 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     }
     public int ActivateSkillId { get; set; }
 
-    public void SetDead(bool isDead) {
+    public void SetDead(bool isDead)
+    {
         if (isDead)
         {
             ChangeState(BATTLE_STATE.DIE);
