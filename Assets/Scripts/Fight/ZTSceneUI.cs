@@ -26,6 +26,7 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
     private Canvas _canvas;
     private List<TextInfo> _hurtTs = new List<TextInfo>();
     private GameObject _hurtGo;
+    private GameObject _battleHeadGo;
 
     public override void Init()
     {
@@ -73,11 +74,37 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
     private void InitEvent()
     {
         SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_UI_HURT_VALUE, OnAddUIHurtValue);
+        SceneEvent.GetInstance().addEventListener(SCENE_EVENT.ADD_UI_HEAD, OnAddUIHead);
     }
 
     private void RemoveEvent()
     {
         SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_UI_HURT_VALUE, OnAddUIHurtValue);
+        SceneEvent.GetInstance().removeEventListener(SCENE_EVENT.ADD_UI_HEAD, OnAddUIHead);
+    }
+
+    private void OnAddUIHead(Notification data)
+    {
+        CharaActorInfo info = (CharaActorInfo)data.param;
+        if (null != info)
+        {
+            if (null != _battleHeadGo)
+            {
+                CreateBattleHead(info);
+            }
+            else
+            {
+                AssetManager.LoadAsset(PathManager.GetFullPathByName("BattleUIPrefab", "BattleHead.prefab"), (Object target, string path) =>
+                {
+                    _battleHeadGo = target as GameObject;
+                    if (null != _battleHeadGo)
+                    {
+                        CreateBattleHead(info);
+                    }
+                });
+            }
+            
+        }
     }
 
     private void OnAddUIHurtValue(Notification data)
@@ -105,7 +132,17 @@ public class ZTSceneUI : Singleton<ZTSceneUI>
             _hurtGo = target as GameObject;
         });
     }
-    
+
+    private void CreateBattleHead(CharaActorInfo info)
+    {
+        ICharaBattle battleInfo = info as ICharaBattle;
+        if (null == battleInfo) return;
+     
+        GameObject go = GameObject.Instantiate(_battleHeadGo);
+        go.transform.SetParent(_hpTransform, false);
+        go.transform.localScale = new Vector3(1, 1, 1);
+        go.GetComponent<BattleHead>().SetInfo(info);
+    }
 
     public override void Destroy()
     {

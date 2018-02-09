@@ -93,6 +93,8 @@ public class CharaDefine
     public static float PLAYER_SPEED = 0.05f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
 
+    public static float BATTLE_HEAD_OFFSET = 1.0f;
+
     public static Vector3 VecUpLeft = new Vector3(-1, 0, 1);
     public static Vector3 VecUpRight = new Vector3(1, 0, 1);
     public static Vector3 VecDownLeft = new Vector3(-1, 0, -1);
@@ -183,5 +185,5 @@ public struct HurtInfo
     public HURT_TYPE Type;
     public uint BattleId;
     public Vector3 Pos;
-    public float Value;
+    public int Value;
 }

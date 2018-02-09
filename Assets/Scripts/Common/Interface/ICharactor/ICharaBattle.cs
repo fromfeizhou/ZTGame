@@ -36,9 +36,6 @@ public interface ICharaBattle:IMove
     //能否移动
     bool CanMove();
 
-    //添加伤害
-    void AddHurt(HurtInfo info);
-
     BuffCounter BattleBuffCouner { get; set; }
 
     void AddBuff(BuffData buffData);

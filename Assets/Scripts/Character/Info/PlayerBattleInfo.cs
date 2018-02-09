@@ -107,6 +107,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
             List<Vector3> list = CharaDefine.GetDirMoveVecs(MoveDir);
             for (int i = 0; i < list.Count; i++)
             {
+                bool isMove = false;
                 _hitPos = MovePos + list[i] * Speed;
                 _mapBlockData = MapManager.GetInstance().GetCurMapBlock(_hitPos);
                 if (null != _mapBlockData)
@@ -125,13 +126,16 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
                     if (_mapBlockData.type != eMapBlockType.Collect)
                     {
                         MovePos = _hitPos;
+                        isMove = true;
                     }
                 }
                 else
                 {
                     MovePos = _hitPos;
                     GrassId = -1;
+                    isMove = true;
                 }
+                if (isMove) return;
             }
         }
     }
@@ -195,12 +199,6 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
     public void RemoveBuffByType(int type)
     {
         BattleBuffCouner.RemoveBuffByType(type);
-    }
-
-    //添加伤害 显示
-    public void AddHurt(HurtInfo info)
-    {
-        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_UI_HURT_VALUE, new Notification(info));
     }
 
     //临时使用

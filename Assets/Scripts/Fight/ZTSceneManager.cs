@@ -233,6 +233,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         //test
         _charaDic.Add(bp.BattleId, playerInfo);
         _charaList.Add(playerInfo);
+        
 
         if (playerInfo.BattleId == PlayerModule.GetInstance().RoleID)
         {
@@ -281,6 +282,8 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         _charaViewDic.Add(playerInfo.BattleId, gameObject);
         gameObject.AddComponent<PlayerBattleActor>();
         gameObject.GetComponent<PlayerBattleActor>().SetInfo(playerInfo);
+        //通知ui管理器 添加头像 
+        SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_UI_HEAD, new Notification(playerInfo));
 
         if (playerInfo.BattleId == PlayerModule.GetInstance().RoleID)
         {

@@ -128,7 +128,8 @@ public class FightEffectDefine
         hurtInfo.BattleId = battleInfo.BattleId;
         hurtInfo.Pos = battleInfo.MovePos;
         hurtInfo.Value = user.Attack;
-        battleInfo.AddHurt(hurtInfo);
+
+        target.AddHurt(hurtInfo);
     }
 
     private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)

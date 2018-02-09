@@ -63,9 +63,7 @@ public class CharaActor : MonoBehaviour
             _anima.gameObject.SetActive(true);
            SkinnedMeshRenderer render = _anima.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
            Color color = render.material.color;
-           Debug.Log(color.r);
-           Debug.Log(color.g);
-           Debug.Log(color.b);
+         
            render.material.color = new Color(color.r, color.g, color.b, opcacity);
         }
         else
@@ -116,10 +114,10 @@ public class CharaActor : MonoBehaviour
     }
 
     #region MonoBehaviour
+
     public virtual void Awake()
     {
         _anima = this.gameObject.GetComponent<Animation>();
-
     }
 
     public virtual void OnDestroy()
