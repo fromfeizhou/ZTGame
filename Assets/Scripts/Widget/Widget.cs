@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using XLua;
 
-[LuaCallCSharp]
 public class Widget
 {
     private GameObject _panel;
