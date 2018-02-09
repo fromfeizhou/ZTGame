@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-
-<Project Name="LuaScripts.luaprj" Cmd="" Arg="" Dir="" Toggle="false" >
-    <Filter Name="Excel" Directory=".\..\Config\Excel" Toggle="true" >
-        <LuaFile RelativePath=".\..\Config\Excel\playerinfo.lua" />
-        <LuaFile RelativePath=".\..\Config\Excel\tab_skill.lua" />
-    </Filter>
-    <LuaFile RelativePath=".\Panel_Login.lua" />
-</Project>
