@@ -77,7 +77,7 @@ public class BuildingZTCollider : MonoBehaviour
         {
             Color obj_color = tempRenderers[index].material.color;
             obj_color.a = isShow ? 1f : 0.5f;
-            Debug.LogError(obj_color + " " + tempRenderers[index].name);
+            //Debug.LogError(obj_color + " " + tempRenderers[index].name);
             tempRenderers[index].material.SetColor("_Color", obj_color);
         }
     }
