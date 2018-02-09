@@ -47,7 +47,7 @@ public class SkillJoystick : JoystickBase
         int distance = 6;
 
         //---------------test------------------------//
-        SkillId = SkillSelected.SelectIndex;
+		SkillId = FightModule.GetInstance().CurSkillId;
         if (ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
         {
             SkillId = ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId;
