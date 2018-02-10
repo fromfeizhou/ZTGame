@@ -14,7 +14,6 @@ public class CharaFightInfo : CharaActorInfo, ICharaFight
         {
             if (_hp == value) return;
             _hp = value;
-            this.dispatchEvent(CHARA_EVENT.UPDATE_HP);
 
             if (_hp <= 0)
             {
@@ -29,6 +28,9 @@ public class CharaFightInfo : CharaActorInfo, ICharaFight
             {
                 _hp = MaxHp;
             }
+
+            this.dispatchEvent(CHARA_EVENT.UPDATE_HP);
+
         }
     } 
 

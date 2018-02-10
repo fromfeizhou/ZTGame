@@ -55,7 +55,7 @@ public class SkillJoystick : JoystickBase
             ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
         }
 
-        Vector3 targetPos = new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
+        Vector3 targetPos =ZTSceneManager.GetInstance().MyPlayer.MovePos + new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
 
         //选择最近目标

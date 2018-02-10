@@ -54,7 +54,7 @@ public class FightEffectDefine
                 RemoveBuff(battleInfo, effect);
                 break;
             case FIGHT_EF_TPYE.ACTION:
-                DoAction(battleInfo, effect,userId,dir,takeParam);
+                DoAction(battleInfo, effect, userId, dir, takeParam);
                 break;
             case FIGHT_EF_TPYE.ARRTIBUTE:
                 ChangeAttribute(battleInfo, effect);
@@ -74,7 +74,7 @@ public class FightEffectDefine
             battleInfo.ActivateSkillId = skillId;
         }
     }
-    
+
     //震屏
     private static void SharkScreen(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
@@ -89,21 +89,37 @@ public class FightEffectDefine
 
     private static void ChangeAttribute(ICharaBattle battleInfo, FightEffectInfo effect)
     {
-        //改变的属性选择
-        switch ((ATTRIBUTE)effect.Param1)
-        {
-            case ATTRIBUTE.ATTACK:
-                break;
-            case ATTRIBUTE.HP:
-                break;
-        }
+        ICharaFight target = battleInfo as ICharaFight;
+        if (null == target) return;
+
+        float multi = 0;//乘数
+        int value = 0;//值
 
         //按以下选项修改上面属性
         switch ((ATT_ALTER_TYPE)effect.Param2)
         {
             case ATT_ALTER_TYPE.VALUE:
+                value = effect.Param3;
                 break;
             case ATT_ALTER_TYPE.PRECENT:
+                multi = effect.Param3 / 100.0f;
+                break;
+        }
+
+        //改变的属性选择
+        switch ((ATTRIBUTE)effect.Param1)
+        {
+            case ATTRIBUTE.ATTACK:
+                target.Attack += Mathf.CeilToInt(target.Attack * multi) + value;
+                break;
+            case ATTRIBUTE.HP:
+                int result =  Mathf.CeilToInt(target.MaxHp * multi) + value;
+                HurtInfo hurtInfo = new HurtInfo();
+                hurtInfo.Type = HURT_TYPE.NORMAL;
+                hurtInfo.BattleId = battleInfo.BattleId;
+                hurtInfo.Pos = battleInfo.MovePos;
+                hurtInfo.Value = result;
+                target.AddHurt(hurtInfo);
                 break;
         }
     }
@@ -129,7 +145,7 @@ public class FightEffectDefine
         hurtInfo.Pos = battleInfo.MovePos;
         hurtInfo.Value = -user.Attack;
 
-        target.AddHurt(hurtInfo);
+        user.AddHurt(hurtInfo);
     }
 
     private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
