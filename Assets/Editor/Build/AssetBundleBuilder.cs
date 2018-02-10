@@ -25,6 +25,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(modelsDir);
         SetAssetBundlesName(prefabsDir);
         SetAssetBundlesName(scenesDir);
+        Debug.Log("BuildAssetBundleName Finish");
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_IPhone")]
@@ -77,7 +78,7 @@ public class AssetBundleBuilder : MonoBehaviour
         }
 
         BuildPipeline.BuildAssetBundles(assetPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
-        Debug.Log("BuildAssetResource Finish!");
+        Debug.Log(assetPath + "  BuildAssetResource Finish!");
     }
 
 
