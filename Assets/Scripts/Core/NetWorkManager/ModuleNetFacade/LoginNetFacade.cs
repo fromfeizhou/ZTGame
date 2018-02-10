@@ -13,6 +13,7 @@ namespace com.game.client
 				NetWorkManager.Instace.SetHeartInterval (vo.heart_interval);
 				NetWorkManager.Instace.HeartSwitch (true);
 				NetWorkManager.Instace.CheckErrCode (vo.code);
+				LoginModule.GetInstance ().LoginPanel.LockPanel.Hide ();
 
 				if (vo.code == 0) {
 					LoginModule.GetInstance ().OnReceive_Login (vo);
@@ -35,7 +36,7 @@ namespace com.game.client
 			[NetCommandAttribute(Command.login_wait_info)]
 			private void OnReceive_Wait_Info(int code, login_wait_info_s2c vo)
 			{
-				//UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Wait_Info]:排队信息");
+				//UnityEngine.Debug.Log ("[" + System.DateTime.Now +  "]" + "[OnReceive_Wait_Info]:OnReceive_Wait_Info");
 			}
 		}
 	}

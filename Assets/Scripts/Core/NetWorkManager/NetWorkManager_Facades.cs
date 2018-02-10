@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using System;
 using UnityEngine;
+using System.Reflection;
 
 namespace com.game.client
 {
@@ -33,6 +33,7 @@ namespace com.game.client
             /** 注册网络门面 */
             public void RegisterFacades()
             {
+
 				_moduleNetFacadeDic = new Dictionary<byte, ModuleNetFacadeParam>();
                 List<string> allFacades = getAllFacades();
                 foreach (string typeName in allFacades)
@@ -60,7 +61,6 @@ namespace com.game.client
                             Debug.LogError("重复注册Command. Command:" + netCommand.command);
                             continue;
                         }
-                        //Debug.Log("成功注册：Module:" + netFacade.moduleId + ", Command:" + netCommand.command);
                         facadeParam.methodInfoDic[netCommand.command] = mis[i];
                     }
                     _moduleNetFacadeDic[netFacade.moduleId] = facadeParam;
@@ -123,7 +123,10 @@ namespace com.game.client
 					}
 				}
 
+				Debug.Log ("SendTest-----------------3333----------------------");
 				Debug.LogError("没有找到模块:" + message.module + ", 指令:" + message.command);
+				Debug.Log ("SendTest-----------------4444----------------------");
+
             }
 
 

@@ -56,7 +56,6 @@ namespace com.game.client
 
 				errDic = new Dictionary<uint, string> ();
 				TextAsset errCodeStr = Resources.Load<TextAsset> (PathManager.NetWorkErrCodeFilePath);
-				Debug.Log (errCodeStr);
 				string[] errorStr = errCodeStr.text.Trim().Split ('\n');
 				for (int i = 0; i < errorStr.Length; i++) {
 					string str = errorStr [i];
@@ -66,6 +65,17 @@ namespace com.game.client
 						errDic[uint.Parse(key.Substring (0, key.Length - 2))] = str.Split ('%') [1].Trim ();
 					}
 				}
+
+				Message msg = new Message ();
+				msg.module = Module.login;
+				msg.command = Command.login_heart;
+				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize(m, new gprotocol.login_heart_s2c());
+					msg.voData = m.ToArray();
+				}
+				FacadeInvoking (msg);
+
             }
 
             public void Connect()
@@ -129,7 +139,7 @@ namespace com.game.client
 
             private void OnConnect()
             {
-				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]连接IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " 成功. 并发送第一个心跳包。");
+				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]Connect:IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " Success. And SendFirst HeartPackage");
 				SendHeart ();
 				if (_needReConnect)
 					OnReConnect ();

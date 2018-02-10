@@ -27,10 +27,16 @@ public class UILoginPanel : MonoBehaviour
 	{
 		if (string.IsNullOrEmpty (_inputFieldAccount.text))
 			_inputFieldAccount.text = "Test";
-		LockPanel.Show ("用戶:" + _inputFieldAccount.text + " 正在连接中");
+		LockPanel.Show ("正在连接中");
 
 		NetWorkConst.IsOpenNetWork = true;
 		GameManager.GetInstance ().Init ();
+		StartCoroutine (WaitSendLogin());
+	}
+
+	private IEnumerator WaitSendLogin(){
+		LockPanel.Show ("用戶:" + _inputFieldAccount.text + " 正在登陆游戏");
+		yield return new WaitForSeconds (1.0f);
 		LoginModule.GetInstance ().NetWork_Request_Login (_inputFieldAccount.text,"");
 	}
 

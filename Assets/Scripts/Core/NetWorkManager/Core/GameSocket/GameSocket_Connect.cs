@@ -27,7 +27,7 @@ namespace com.game.client
 
 					ResetConnectTimeOut ();
 					isCheckTimeOut = true;
-					UnityEngine.Debug.Log("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]请求连接服务器. Ip:" + _ip + ", Port:" + _port);
+					UnityEngine.Debug.Log("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]RequestServer. Ip:" + _ip + ", Port:" + _port);
 				    _socket.BeginConnect(_ip, _port, ar =>
                     {
 						TcpClient client = (TcpClient)ar.AsyncState;

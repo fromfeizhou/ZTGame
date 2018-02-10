@@ -14,11 +14,11 @@ public class LoginModule : Singleton<LoginModule> {
 	private gprotocol.login_login_s2c _loginInfo;
 
 	/** 请求登录服务器 */
-	public void NetWork_Request_Login(string accName, string passWord)
+	public void NetWork_Request_Login(string mAccName, string passWord)
 	{
 		gprotocol.login_login_c2s vo = new gprotocol.login_login_c2s ()
 		{
-			accname = accName, 		// 用户名
+			accname = mAccName, 		// 用户名
 			key = passWord, 			// 验证key
 			fcm = uint.MinValue, 		// 防沉迷信息(暂不使用)
 			serv_id = uint.MinValue, 	// 服务器ID
@@ -54,6 +54,7 @@ public class LoginModule : Singleton<LoginModule> {
 	public void OnReceive_Login(gprotocol.login_login_s2c loginInfo)
 	{
 		if (loginInfo == null) {
+			Debug.Log ("[Error]OnReceive_Login: loginInfo is Null");
 			return;
 		}
 		_loginInfo = loginInfo;
