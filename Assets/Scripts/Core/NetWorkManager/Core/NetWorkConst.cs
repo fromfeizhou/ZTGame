@@ -15,7 +15,6 @@ namespace com.game.client
 
 		    public const int MxSendMsgNum = 8;
 
-			public const string ErrCodeFilePath = "Assets/ecode_zh.hrl";
 		}
 	}
 }

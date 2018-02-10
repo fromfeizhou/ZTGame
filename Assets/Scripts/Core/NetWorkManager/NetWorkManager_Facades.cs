@@ -99,6 +99,7 @@ namespace com.game.client
 						}
 					case Command.login_auth_key:
 						{
+							LoginModule.GetInstance().LoginPanel.LockPanel.Hide ();
 							using (System.IO.MemoryStream m = new System.IO.MemoryStream(message.voData))
 							{
 								authData = ProtoBuf.Serializer.Deserialize<gprotocol.login_auth_key_s2c>(m);

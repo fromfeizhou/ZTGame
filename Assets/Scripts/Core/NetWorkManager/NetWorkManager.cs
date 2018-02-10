@@ -55,7 +55,9 @@ namespace com.game.client
                 _gameSocket.CallBack_OnError = OnError;
 
 				errDic = new Dictionary<uint, string> ();
-				string[] errorStr = System.IO.File.ReadAllLines (NetWorkConst.ErrCodeFilePath);
+				TextAsset errCodeStr = Resources.Load<TextAsset> (PathManager.NetWorkErrCodeFilePath);
+				Debug.Log (errCodeStr);
+				string[] errorStr = errCodeStr.text.Trim().Split ('\n');
 				for (int i = 0; i < errorStr.Length; i++) {
 					string str = errorStr [i];
 					if (str.StartsWith ("-define")) {
@@ -116,6 +118,7 @@ namespace com.game.client
 
             private void OnError(string error)
             {
+				LoginModule.GetInstance ().LoginPanel.LockPanel.Show ("[网络发生错误],请重启启动客户端");
 				Debug.LogError ("[网络发生错误]"+ error);
             }
 

@@ -20,7 +20,7 @@ public class PathManager
     public static Dictionary<string, string> pathDic;
     public static string ConfigPath = "Assets/ResourcesLib/Config";
     public static string ResoucePath = "Assets/ResourcesLib";
-
+	public const string NetWorkErrCodeFilePath = "ecode_zh";
 
     private static string GetRootPath(string key = "ImgShopItem", bool isResoucePath = true)
     {

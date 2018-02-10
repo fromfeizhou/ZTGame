@@ -16,8 +16,6 @@ public class LoginModule : Singleton<LoginModule> {
 	/** 请求登录服务器 */
 	public void NetWork_Request_Login(string accName, string passWord)
 	{
-		if (string.IsNullOrEmpty (accName))
-			return;
 		gprotocol.login_login_c2s vo = new gprotocol.login_login_c2s ()
 		{
 			accname = accName, 		// 用户名
@@ -71,16 +69,19 @@ public class LoginModule : Singleton<LoginModule> {
 	}
 
 	public void EnterGameScene(){
+		LoginPanel.LockPanel.Show ("加载中");
 		LoginPanel.StartCoroutine (coEnterGameScene());
 	}
 
 	private IEnumerator coEnterGameScene()
 	{
+		yield return new WaitForSeconds (0.5f);
 		AsyncOperation op = SceneManager.LoadSceneAsync ("SkillTestScene");
 		yield return new WaitUntil (()=>op.isDone);
 		LoginPanel.gameObject.SetActive (false);
 		LoginPanel.transform.parent.Find ("MainPanel").gameObject.SetActive (true);
 		GameManager.GetInstance ().GameStart ();
+		LoginPanel.LockPanel.Hide ();
 	}
 
 	public void ShowPanel_CreateRole(){

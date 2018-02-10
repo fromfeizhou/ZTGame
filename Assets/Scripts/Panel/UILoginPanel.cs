@@ -6,20 +6,16 @@ using com.game.client.network;
 
 public class UILoginPanel : MonoBehaviour
 {
+	public UILockPanel LockPanel;
 	private Button _btnLogin;
 
 	private InputField _inputFieldAccount;
 
 	private Widget _widget;
 
-	private void Start()
+	void Start()
 	{
 		LoginModule.GetInstance ().LoginPanel = this;
-		Init ();
-	}
-
-	public void Init()
-	{
 		LoginModule.GetInstance().CreateRolePanel = transform.parent.Find ("UICreateRolePanel").GetComponent<UICreateRolePanel> ();
 		_widget = Widget.Create(gameObject);
 		_widget.BandingBtn_OnClick (OnBtnClick_Login,"ViewPort/Btn_Login");
@@ -29,9 +25,12 @@ public class UILoginPanel : MonoBehaviour
 
 	private void OnBtnClick_Login()
 	{
+		if (string.IsNullOrEmpty (_inputFieldAccount.text))
+			_inputFieldAccount.text = "Test";
+		LockPanel.Show ("用戶:" + _inputFieldAccount.text + " 正在连接中");
+
 		NetWorkConst.IsOpenNetWork = true;
 		GameManager.GetInstance ().Init ();
-
 		LoginModule.GetInstance ().NetWork_Request_Login (_inputFieldAccount.text,"");
 	}
 
@@ -39,8 +38,8 @@ public class UILoginPanel : MonoBehaviour
 	{
 		NetWorkConst.IsOpenNetWork = false;
 		GameManager.GetInstance ().Init ();
-
 		LoginModule.GetInstance ().EnterGameScene ();
+
 	}
 
 }
