@@ -90,8 +90,8 @@ public class SkillActionParser
         float angle = colliderInfo.StartAngle;
         if (colliderInfo.CollPosType == CollBase.PosType.SKILL || colliderInfo.CollPosType == CollBase.PosType.SKILL_ROTATE)
         {
-            startX += Command.TargetPos.x;
-            startZ += Command.TargetPos.z;
+            startX = Command.TargetPos.x + colliderInfo.StartX;
+            startZ = Command.TargetPos.z + colliderInfo.StartZ;
             //附加操作旋转
             if (colliderInfo.CollPosType == CollBase.PosType.SKILL_ROTATE)
             {

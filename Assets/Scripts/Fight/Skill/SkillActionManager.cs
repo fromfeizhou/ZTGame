@@ -63,11 +63,11 @@ public class SkillActionManager : Singleton<SkillActionManager>
                 if (list[i].IsComplete)
                 {
                     list.RemoveAt(i);
-                    if (list.Count == 0)
-                    {
-                        ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(key) as ICharaBattle;
-                        //if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
-                    }
+                    //if (list.Count == 0)
+                    //{
+                    //    ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(key) as ICharaBattle;
+                    //    //if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
+                    //}
                 }
             }
         }
