@@ -145,7 +145,7 @@ public class FightEffectDefine
         hurtInfo.Pos = battleInfo.MovePos;
         hurtInfo.Value = -user.Attack;
 
-        user.AddHurt(hurtInfo);
+        target.AddHurt(hurtInfo);
     }
 
     private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
