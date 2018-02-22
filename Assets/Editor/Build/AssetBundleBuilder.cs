@@ -25,6 +25,9 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(modelsDir);
         SetAssetBundlesName(prefabsDir);
         SetAssetBundlesName(scenesDir);
+
+        EditorUtility.ClearProgressBar();
+
         Debug.Log("BuildAssetBundleName Finish");
     }
 
@@ -88,8 +91,10 @@ public class AssetBundleBuilder : MonoBehaviour
         //强制删除所有AssetBundle名称
         for (int i = 0; i < abNames.Length; i++)
         {
+            EditorUtility.DisplayProgressBar("清除ab名", abNames[i], i*1.0f/abNames.Length);
             AssetDatabase.RemoveAssetBundleName(abNames[i], true);
         }
+        EditorUtility.ClearProgressBar();
     }
 
     /** 需要过滤的文件 */
@@ -116,10 +121,10 @@ public class AssetBundleBuilder : MonoBehaviour
             else if (!_filteredAssets.Exists(a => files[i].Name.EndsWith(a))) //如果是文件的话，则设置AssetBundleName，并排除掉.meta文件
             {
                 string abName = dir.FullName.Remove(0, dir.FullName.IndexOf("Assets")).Replace('\\', '_').Replace('/', '_');
+                EditorUtility.DisplayProgressBar("设置名字", abName,i*1.0f/ files.Length);
                 SetABName(files[i].FullName, abName);     //逐个设置AssetBundleName
             }
         }
-
     }
 
     /// <summary>
