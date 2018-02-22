@@ -65,12 +65,6 @@ public class AssetBundleBuilder : MonoBehaviour
 
     static void BuildAssetResource(string assetPath)
     {
-       
-        //文件已经存在就删除  
-        if (Directory.Exists(assetPath))
-        {
-            Directory.Delete(assetPath, true);
-        }
         //文件不存在就创建  
         if (!Directory.Exists(assetPath))
         {
