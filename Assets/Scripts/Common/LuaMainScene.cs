@@ -32,10 +32,10 @@ public class LuaMainScene : MonoBehaviour
 
         luaEnv.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
 
-        Action luaAwake = scriptEnv.Get<Action>("awake");
-        scriptEnv.Get("start", out luaStart);
-        scriptEnv.Get("update", out luaUpdate);
-        scriptEnv.Get("ondestroy", out luaOnDestroy);
+        Action luaAwake = scriptEnv.Get<Action>("Awake");
+        scriptEnv.Get("Start", out luaStart);
+        scriptEnv.Get("Update", out luaUpdate);
+        scriptEnv.Get("OnDestroy", out luaOnDestroy);
 
         if (luaAwake != null)
         {

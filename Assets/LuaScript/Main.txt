@@ -1,0 +1,17 @@
+--Main.txt
+local util = require 'xlua.util'
+function Awake()
+	print("xlua awake...")
+end
+
+function Start()
+	print("xlua start...")
+end
+
+function Update()
+	
+end
+
+function OnDestroy()
+    print("xlua destroy")
+end
