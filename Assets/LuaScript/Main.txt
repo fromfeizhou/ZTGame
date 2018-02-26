@@ -1,11 +1,13 @@
 --Main.txt
 local util = require 'xlua.util'
+
 function Awake()
-	print("xlua awake...")
+	print("xlua awake")
+	InitPanel()
 end
 
 function Start()
-	print("xlua start...")
+	print("xlua start")
 end
 
 function Update()
@@ -14,4 +16,13 @@ end
 
 function OnDestroy()
     print("xlua destroy")
+end
+
+function InitPanel()
+	print("InitPanel")
+	print(CS.UnityEngine.Vector3(1,1,1))
+	local gameobject = CS.UnityEngine.GameObject('LuaTest')
+	local LuaTest = CS.LuaTest()
+	print(LuaTest)
+	print(LuaTest:DLog())
 end

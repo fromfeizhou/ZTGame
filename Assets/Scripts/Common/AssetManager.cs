@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
 public class AssetManager
 {
     /* 
@@ -67,5 +68,6 @@ public class AssetManager
 
     public static void Destroy()
     {
+        Debug.Log("AssetManager Destroy");
     }
 }
