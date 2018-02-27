@@ -3,7 +3,7 @@
 --@data 2018/2/27
 
 local util = require 'xlua.util'
-require 'PathManager'
+--require 'PathManager'
 function Awake()
 	print("xlua awake")
 	InitPanel()
@@ -27,14 +27,14 @@ function InitPanel()
 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
 
 
-	local gameobject = CS.UnityEngine.GameObject.Instantiate(PathManager.GetUIPrefab(MText))
-	local component = gameobject:GetComponent(typeof(CS.MTextFormat))
-	component.TextStr = "MTextFormat"
-	print(component.TextStr)
+	-- local gameobject = CS.UnityEngine.GameObject.Instantiate(PathManager.GetUIPrefab(MText))
+	-- local component = gameobject:GetComponent(typeof(CS.MTextFormat))
+	-- component.TextStr = "MTextFormat"
+	-- print(component.TextStr)
 
-	gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
-    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
-	gameobject.transform.transform:SetParent(mainPanel,false)
+	-- gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
+ --    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
+	-- gameobject.transform.transform:SetParent(mainPanel,false)
 
 	local LuaTest = CS.LuaTest()
 	print(LuaTest)
