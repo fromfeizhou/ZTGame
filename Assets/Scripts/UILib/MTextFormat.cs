@@ -33,7 +33,6 @@ public class MTextFormat : MonoBehaviour
 
     public void Awake()
     {
-
         _text = gameObject.GetComponent<Text>();
         _textStr = _text.text;
     }

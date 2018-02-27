@@ -1,0 +1,25 @@
+--PathManager.txt
+--@breif 地址管理
+--@data 2018/2/27
+
+PathManager = {
+	g_sAssetPath = "Assets"
+
+	m_sUIPrefab = "Assets/Prefabs/UI/"
+}
+
+--============================================public head===============================================--------
+function PathManager:GetUIPrefab(name)
+	return self.m_sUIPrefab .. name .. ".prefab"
+end
+
+--============================================public end===============================================---------
+
+
+
+--============================================private head===============================================--------
+function PathManager:_getUIPrefab(name)
+	-- body
+end
+
+--============================================private end===============================================---------
