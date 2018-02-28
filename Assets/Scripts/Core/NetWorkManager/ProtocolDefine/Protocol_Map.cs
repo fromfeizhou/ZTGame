@@ -13,8 +13,11 @@ namespace com.game.client
 			/** 请求场景切换(暂时没用) */
 			public const byte map_switch = 1;
 
+			/** 前端开始进入地图 */
+			public const byte map_enter = 2;
+
 			/** 视野信息 */
-			public const byte map_sight = 2;
+			public const byte map_sight = 3;
 
 			/** 玩家进入视野 */
 			public const byte map_role_enter = 4;
@@ -47,37 +50,34 @@ namespace com.game.client
 			public const byte map_role_dead = 13;
 
 			/** 通关 */
-			public const byte map_finish = 15;
-
-			/** 服务器主动请求切图 */
-			public const byte map_enter_req = 16;
+			public const byte map_finish = 14;
 
 			/** 副本时间控制 */
-			public const byte map_time_control = 17;
+			public const byte map_time_control = 15;
 
 			/** 攻击 */
-			public const byte map_attack = 18;
+			public const byte map_attack = 16;
 
 			/** buff点进入场景 */
-			public const byte map_buff_point_enter = 20;
+			public const byte map_buff_point_enter = 17;
 
 			/** buff点离开场景 */
-			public const byte map_buff_point_leave = 21;
+			public const byte map_buff_point_leave = 18;
 
 			/** 获得buff点 */
-			public const byte map_buff_point_get = 22;
+			public const byte map_buff_point_get = 19;
 
 			/** debuff点进入场景 */
-			public const byte map_debuff_point_enter = 23;
+			public const byte map_debuff_point_enter = 20;
 
 			/** debuff点离开场景 */
-			public const byte map_debuff_point_leave = 24;
+			public const byte map_debuff_point_leave = 21;
 
 			/** 获得debuff点 */
-			public const byte map_debuff_point_get = 25;
+			public const byte map_debuff_point_get = 22;
 
-			/** 移动中断 */
-			public const byte map_move_break = 33;
+			/** 活动总信息 */
+			public const byte map_bc_info = 23;
 
 
 		}
