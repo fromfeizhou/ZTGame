@@ -767,37 +767,6 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"p_weapon_acc")]
-  public partial class p_weapon_acc : global::ProtoBuf.IExtensible
-  {
-    public p_weapon_acc() {}
-    
-    private uint _weapon_index;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"weapon_index", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint weapon_index
-    {
-      get { return _weapon_index; }
-      set { _weapon_index = value; }
-    }
-    private uint _pos;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"pos", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint pos
-    {
-      get { return _pos; }
-      set { _pos = value; }
-    }
-    private uint _weapon_acc_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"weapon_acc_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint weapon_acc_id
-    {
-      get { return _weapon_acc_id; }
-      set { _weapon_acc_id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"p_map_role")]
   public partial class p_map_role : global::ProtoBuf.IExtensible
   {
@@ -950,212 +919,6 @@ namespace gprotocol
       get { return _equips; }
     }
   
-    private readonly global::System.Collections.Generic.List<p_weapon_acc> _weapon_acc = new global::System.Collections.Generic.List<p_weapon_acc>();
-    [global::ProtoBuf.ProtoMember(23, Name=@"weapon_acc", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<p_weapon_acc> weapon_acc
-    {
-      get { return _weapon_acc; }
-    }
-  
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"p_mon_ai")]
-  public partial class p_mon_ai : global::ProtoBuf.IExtensible
-  {
-    public p_mon_ai() {}
-    
-    private uint _id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private uint _type;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint type
-    {
-      get { return _type; }
-      set { _type = value; }
-    }
-    private readonly global::System.Collections.Generic.List<uint> _move_await_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"move_await_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> move_await_time
-    {
-      get { return _move_await_time; }
-    }
-  
-    private uint _normal_move_odds;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"normal_move_odds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint normal_move_odds
-    {
-      get { return _normal_move_odds; }
-      set { _normal_move_odds = value; }
-    }
-    private uint _hp_threshold;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"hp_threshold", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint hp_threshold
-    {
-      get { return _hp_threshold; }
-      set { _hp_threshold = value; }
-    }
-    private uint _avoid_odds;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"avoid_odds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint avoid_odds
-    {
-      get { return _avoid_odds; }
-      set { _avoid_odds = value; }
-    }
-    private uint _move_odds;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"move_odds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint move_odds
-    {
-      get { return _move_odds; }
-      set { _move_odds = value; }
-    }
-    private uint _shoot_interval_bullet_count;
-    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"shoot_interval_bullet_count", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint shoot_interval_bullet_count
-    {
-      get { return _shoot_interval_bullet_count; }
-      set { _shoot_interval_bullet_count = value; }
-    }
-    private uint _shoot_cd_behavior;
-    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"shoot_cd_behavior", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint shoot_cd_behavior
-    {
-      get { return _shoot_cd_behavior; }
-      set { _shoot_cd_behavior = value; }
-    }
-    private uint _bazooka_odds;
-    [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"bazooka_odds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint bazooka_odds
-    {
-      get { return _bazooka_odds; }
-      set { _bazooka_odds = value; }
-    }
-    private uint _grenade_odds;
-    [global::ProtoBuf.ProtoMember(11, IsRequired = true, Name=@"grenade_odds", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint grenade_odds
-    {
-      get { return _grenade_odds; }
-      set { _grenade_odds = value; }
-    }
-    private uint _rage_attack;
-    [global::ProtoBuf.ProtoMember(12, IsRequired = true, Name=@"rage_attack", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint rage_attack
-    {
-      get { return _rage_attack; }
-      set { _rage_attack = value; }
-    }
-    private uint _rage_deffend;
-    [global::ProtoBuf.ProtoMember(13, IsRequired = true, Name=@"rage_deffend", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint rage_deffend
-    {
-      get { return _rage_deffend; }
-      set { _rage_deffend = value; }
-    }
-    private uint _rage_time;
-    [global::ProtoBuf.ProtoMember(14, IsRequired = true, Name=@"rage_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint rage_time
-    {
-      get { return _rage_time; }
-      set { _rage_time = value; }
-    }
-    private uint _suicide_time;
-    [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"suicide_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint suicide_time
-    {
-      get { return _suicide_time; }
-      set { _suicide_time = value; }
-    }
-    private readonly global::System.Collections.Generic.List<uint> _hit_rate = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(16, Name=@"hit_rate", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> hit_rate
-    {
-      get { return _hit_rate; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _move_hit_rate = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(17, Name=@"move_hit_rate", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> move_hit_rate
-    {
-      get { return _move_hit_rate; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _shoot_time_range = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(18, Name=@"shoot_time_range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> shoot_time_range
-    {
-      get { return _shoot_time_range; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _shoot_time_interval = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(19, Name=@"shoot_time_interval", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> shoot_time_interval
-    {
-      get { return _shoot_time_interval; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _shoot_cd_range = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(20, Name=@"shoot_cd_range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> shoot_cd_range
-    {
-      get { return _shoot_cd_range; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _props_cd_range = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(21, Name=@"props_cd_range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> props_cd_range
-    {
-      get { return _props_cd_range; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _shoot_prep_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(22, Name=@"shoot_prep_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> shoot_prep_time
-    {
-      get { return _shoot_prep_time; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _missile_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(23, Name=@"missile_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> missile_time
-    {
-      get { return _missile_time; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _missile_continue_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(24, Name=@"missile_continue_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> missile_continue_time
-    {
-      get { return _missile_continue_time; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _rage_missile_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(25, Name=@"rage_missile_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> rage_missile_time
-    {
-      get { return _rage_missile_time; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _suicide_missile_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(26, Name=@"suicide_missile_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> suicide_missile_time
-    {
-      get { return _suicide_missile_time; }
-    }
-  
-    private readonly global::System.Collections.Generic.List<uint> _suicide_move_time = new global::System.Collections.Generic.List<uint>();
-    [global::ProtoBuf.ProtoMember(27, Name=@"suicide_move_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<uint> suicide_move_time
-    {
-      get { return _suicide_move_time; }
-    }
-  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1271,22 +1034,15 @@ namespace gprotocol
       get { return _group_id; }
       set { _group_id = value; }
     }
-    private p_mon_ai _ai;
-    [global::ProtoBuf.ProtoMember(16, IsRequired = true, Name=@"ai", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public p_mon_ai ai
-    {
-      get { return _ai; }
-      set { _ai = value; }
-    }
     private uint _fight_point;
-    [global::ProtoBuf.ProtoMember(17, IsRequired = true, Name=@"fight_point", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(16, IsRequired = true, Name=@"fight_point", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint fight_point
     {
       get { return _fight_point; }
       set { _fight_point = value; }
     }
     private uint _defense;
-    [global::ProtoBuf.ProtoMember(18, IsRequired = true, Name=@"defense", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(17, IsRequired = true, Name=@"defense", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint defense
     {
       get { return _defense; }
@@ -1329,58 +1085,6 @@ namespace gprotocol
     {
       get { return _config_id; }
       set { _config_id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"p_relation_near")]
-  public partial class p_relation_near : global::ProtoBuf.IExtensible
-  {
-    public p_relation_near() {}
-    
-    private uint _role_id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"role_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint role_id
-    {
-      get { return _role_id; }
-      set { _role_id = value; }
-    }
-    private string _name;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string name
-    {
-      get { return _name; }
-      set { _name = value; }
-    }
-    private uint _job;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"job", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint job
-    {
-      get { return _job; }
-      set { _job = value; }
-    }
-    private uint _lvl;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"lvl", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint lvl
-    {
-      get { return _lvl; }
-      set { _lvl = value; }
-    }
-    private uint _sex;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"sex", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint sex
-    {
-      get { return _sex; }
-      set { _sex = value; }
-    }
-    private uint _fightpoint;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"fightpoint", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint fightpoint
-    {
-      get { return _fightpoint; }
-      set { _fightpoint = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -3891,6 +3595,16 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"login_auth_key_c2s")]
+  public partial class login_auth_key_c2s : global::ProtoBuf.IExtensible
+  {
+    public login_auth_key_c2s() {}
+    
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"login_relogin_c2s")]
   public partial class login_relogin_c2s : global::ProtoBuf.IExtensible
   {
@@ -5172,13 +4886,6 @@ namespace gprotocol
   {
     public role_acc_info_s2c() {}
     
-    private readonly global::System.Collections.Generic.List<p_weapon_acc> _weapon_acc = new global::System.Collections.Generic.List<p_weapon_acc>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"weapon_acc", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<p_weapon_acc> weapon_acc
-    {
-      get { return _weapon_acc; }
-    }
-  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -5575,6 +5282,13 @@ namespace gprotocol
     {
       get { return _z; }
       set { _z = value; }
+    }
+    private p_map_role _role_info;
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"role_info", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public p_map_role role_info
+    {
+      get { return _role_info; }
+      set { _role_info = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

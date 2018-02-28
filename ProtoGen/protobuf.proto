@@ -139,13 +139,6 @@ message p_debuff {
     required uint32 end_time = 2; // debuff结束时间
 }
 
-//武器配件
-message p_weapon_acc {
-    required uint32 weapon_index = 1; // 武器系列
-    required uint32 pos = 2; // 孔位
-    required uint32 weapon_acc_id = 3; // 配件id
-}
-
 //角色地图信息
 message p_map_role {
     required uint32 id = 1; // 角色id
@@ -169,38 +162,6 @@ message p_map_role {
     repeated p_buff buffs = 20; // buff列表
     repeated p_debuff debuffs = 21; // debuff列表
     repeated p_goods equips = 22; // 装备信息
-    repeated p_weapon_acc weapon_acc = 23; // 武器配件
-}
-
-//怪物AI
-message p_mon_ai {
-    required uint32 id = 1; // ai id
-    required uint32 type = 2; // ai类型
-    repeated uint32 move_await_time = 3; // 不受击时的移动等待时间范围
-    required uint32 normal_move_odds = 4; // 移动到下个掩体的概率
-    required uint32 hp_threshold = 5; // 行为变化掉血量万分比
-    required uint32 avoid_odds = 6; // 蹲下几率
-    required uint32 move_odds = 7; // 移动几率
-    required uint32 shoot_interval_bullet_count = 8; // 开火间隔触发发射子弹数
-    required uint32 shoot_cd_behavior = 9; // 射击时间间隔行为(通用)
-    required uint32 bazooka_odds = 10; // 使用火箭炮概率
-    required uint32 grenade_odds = 11; // 使用手雷概率
-    required uint32 rage_attack = 12; // 狂暴状态攻击力提升(BOSS)
-    required uint32 rage_deffend = 13; // 狂暴状态防御力提升(BOSS)
-    required uint32 rage_time = 14; // 狂暴状态持续时间(BOSS)
-    required uint32 suicide_time = 15; // 自杀状态持续时间(BOSS)
-    repeated uint32 hit_rate = 16; // 目标静止命中率(敌人)
-    repeated uint32 move_hit_rate = 17; // 目标移动命中率(敌人)
-    repeated uint32 shoot_time_range = 18; // 射击时间范围
-    repeated uint32 shoot_time_interval = 19; // 开火间隔(通用)
-    repeated uint32 shoot_cd_range = 20; // 射击时间间隔范围
-    repeated uint32 props_cd_range = 21; // 使用道具的CD时间
-    repeated uint32 shoot_prep_time = 22; // 射击准备时间(boss)
-    repeated uint32 missile_time = 23; // 导弹准备时间(BOSS)
-    repeated uint32 missile_continue_time = 24; // 导弹继续射击时间(BOSS)
-    repeated uint32 rage_missile_time = 25; // 狂暴状态导弹准备时间(BOSS)
-    repeated uint32 suicide_missile_time = 26; // 自杀攻击导弹准备时间(boss)
-    repeated uint32 suicide_move_time = 27; // 自杀状态移动等待时间(boss)
 }
 
 //怪物地图信息
@@ -220,9 +181,8 @@ message p_map_mon {
     required uint32 mapping_id = 13; // 前端用到的映射ID
     required int32 config_id = 14; // 前端用到的地图障碍物ID
     required uint32 group_id = 15; // 前端用到的分组ID
-    required p_mon_ai ai = 16; // 怪物AI
-    required uint32 fight_point = 17; // 战斗力
-    required uint32 defense = 18; // 防御值
+    required uint32 fight_point = 16; // 战斗力
+    required uint32 defense = 17; // 防御值
 }
 
 //简单怪物地图信息
@@ -231,16 +191,6 @@ message p_simple_map_mon {
     required uint32 monid = 2; // 怪物类型
     required uint32 mapping_id = 3; // 前端用到的映射ID
     required int32 config_id = 4; // 前端用到的地图障碍物ID
-}
-
-//附近玩家
-message p_relation_near {
-    required uint32 role_id = 1; // 角色id
-    required string name = 2; // 角色名
-    required uint32 job = 3; // 职业
-    required uint32 lvl = 4; // 等级
-    required uint32 sex = 5; // 性别 1男 2女
-    required uint32 fightpoint = 6; // 战力
 }
 
 //角色物品信息
@@ -700,7 +650,7 @@ message task_update_s2c {
 message login_heart_c2s {
 }
 message login_heart_s2c {
-   required uint32 server_time = 1; // 服务器时间(本地时间)
+    required uint32 server_time = 1; // 服务器时间(本地时间)
 }
 
 // ##begin##login##login_login##1##1##登陆##end##
@@ -721,7 +671,7 @@ message login_login_s2c {
     required uint32 code = 1; // 错误码
     required string accname = 2; // 用户名
     required string nick_name = 3; // 昵称
-    required uint32 heart_interval = 4[default=1]; // 心跳间隔，秒
+    required uint32 heart_interval = 4 [default = 1]; // 心跳间隔，秒
     repeated p_login_info login_info = 5; // 角色登陆信息
 }
 
@@ -768,6 +718,8 @@ message login_auth_key_s2c {
     required uint32 encrypt_type = 6; // 加密模式
     repeated uint32 mapping_table = 7; // 映射表
 }
+message login_auth_key_c2s {
+}
 
 // ##begin##login##login_relogin##1##7##重登陆##end##
 message login_relogin_c2s {
@@ -779,7 +731,8 @@ message login_relogin_s2c {
 }
 
 // ##begin##login##login_wait_info##1##8##排队信息##end##
-message login_wait_info_c2s { }
+message login_wait_info_c2s {
+}
 message login_wait_info_s2c {
     required uint32 wait_flag = 1; // 排队标识, 0: 不用排队，直接进 1:需要排队
     required uint32 index = 2; // 当前排在第几位
@@ -787,13 +740,15 @@ message login_wait_info_s2c {
 }
 
 // ##begin##login##login_config##1##9##服务端配置##end##
-message login_config_c2s { }
+message login_config_c2s {
+}
 message login_config_s2c {
     required uint32 open_time = 1; // 开服时间
 }
 
 // ##begin##login##login_share_config##1##10##分享的配置##end##
-message login_share_config_c2s { }
+message login_share_config_c2s {
+}
 message login_share_config_s2c {
     required uint32 quick_code = 1; // quickSDK的渠道id
     required uint32 is_share = 2; // 是否为正常分享
@@ -1008,7 +963,6 @@ message role_sync_s2c {
 // ##begin##role##role_acc_info##3##45##配件信息##end##
 message role_acc_info_c2s { }
 message role_acc_info_s2c {
-    repeated p_weapon_acc weapon_acc = 1; // 武器配件信息
 }
 // ##begin##role##role_buy_gold##3##46##购买金币##end##
 message role_buy_gold_c2s { }
@@ -1085,6 +1039,7 @@ message map_enter_s2c {
     required int32 x = 3; // 当前x
     required int32 y = 4; // 当前y
     required int32 z = 5; // 当前z
+    required p_map_role role_info = 6; // 当前角色信息
 }
 // ##begin##map##map_sight##4##3##视野信息##end##
 message map_sight_s2c {
