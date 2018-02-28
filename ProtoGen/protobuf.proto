@@ -4,11 +4,11 @@
 // 公共
 // 设置信息
 message p_setting_info {
-   required uint32                         key = 1;                    // 设置key
-   required uint32                         value = 2;                  // 设置值
+    required uint32 key = 1; // 设置key
+    required uint32 value = 2; // 设置值
 }
 
-message p_dir{
+message p_dir {
     required int32 x = 1;
     required int32 y = 2;
     required int32 z = 3;
@@ -16,10 +16,10 @@ message p_dir{
 }
 
 // 角色登陆信息
-message p_login_info{
+message p_login_info {
     required uint32 id = 1; //角色id
     required string name = 2; //角色名称
-    required int32  job = 3; //职业
+    required int32 job = 3; //职业
     required uint32 level = 4; //等级
     required uint32 rank = 5; //功勋
     required uint32 sex = 6; //性别 1男 2女
@@ -30,58 +30,58 @@ message p_login_info{
 }
 
 // 部分数据
-message p_item{
+message p_item {
     required uint32 key = 1; //类型
     repeated int32 value = 2; //值
 }
 
-message p_goods{
+message p_goods {
     required uint32 id = 1; //物品唯一id
     required uint32 goods_id = 2; //物品类型id
     required uint32 good_type = 3; //物品类型，0：普通物品， 1：装备 2：武器
     required uint32 count = 4; //数量
     required uint32 pos = 5; //位置
     required uint32 expire = 6; //到期时间
-    required uint32 valid = 7;//是否生效
-    required uint32 cur_exp = 8;//当前经验
-    required uint32 lv = 9;//当前等级
-    required uint32 next_lv_exp = 10;//下一级经验
-    required uint32 is_look = 11;//是否被查看
+    required uint32 valid = 7; //是否生效
+    required uint32 cur_exp = 8; //当前经验
+    required uint32 lv = 9; //当前等级
+    required uint32 next_lv_exp = 10; //下一级经验
+    required uint32 is_look = 11; //是否被查看
 }
 
 // 角色信息
-message p_role{
-    required uint32 id = 1;// 角色id
-    required string name = 2;// 角色名称
-    required uint32 sex = 3;// 性别  1男 2女
-    required uint32 level = 4;// 等级
-    required uint32 rank = 5;// 功勋
-    required uint32 job = 6;// 职业
-    required uint32 map_id = 7;// 地图id
-    required int32 x = 8;// x坐标
-    required int32 y = 9;// y坐标
-    required int32 z = 10;// z坐标
+message p_role {
+    required uint32 id = 1; // 角色id
+    required string name = 2; // 角色名称
+    required uint32 sex = 3; // 性别  1男 2女
+    required uint32 level = 4; // 等级
+    required uint32 rank = 5; // 功勋
+    required uint32 job = 6; // 职业
+    required uint32 map_id = 7; // 地图id
+    required int32 x = 8; // x坐标
+    required int32 y = 9; // y坐标
+    required int32 z = 10; // z坐标
 }
 
 // 基础属性信息
-message p_base_attr{
-    required uint32 hp_cur = 1;// 生命值
-    required uint32 hp_full = 2;// 最大生命值
-    required uint32 def = 3;// 护甲
-    required uint32 crit = 4;// 暴击
-    required uint32 crit_ratio = 5;// 暴击伤害
-    required uint32 speed = 6;// x方向移动速度(1秒钟多少像素)
-    required uint32 att_range = 7;// 射程
-    required uint32 att_speed = 8;// 射速
-    required uint32 offset_x = 9;// 后座力x轴偏移
-    required uint32 offset_y = 10;// 后座力y轴偏移
-    required uint32 reload_time = 11;// 换弹时间
-    required uint32 mobility = 12;// 机动性
-    required uint32 clip_size = 13;// 弹夹容量
-}            
+message p_base_attr {
+    required uint32 hp_cur = 1; // 生命值
+    required uint32 hp_full = 2; // 最大生命值
+    required uint32 def = 3; // 护甲
+    required uint32 crit = 4; // 暴击
+    required uint32 crit_ratio = 5; // 暴击伤害
+    required uint32 speed = 6; // x方向移动速度(1秒钟多少像素)
+    required uint32 att_range = 7; // 射程
+    required uint32 att_speed = 8; // 射速
+    required uint32 offset_x = 9; // 后座力x轴偏移
+    required uint32 offset_y = 10; // 后座力y轴偏移
+    required uint32 reload_time = 11; // 换弹时间
+    required uint32 mobility = 12; // 机动性
+    required uint32 clip_size = 13; // 弹夹容量
+}
 
 //玩家属性信息
-message p_role_attr{
+message p_role_attr {
     required uint32 id = 1; // 角色id
     required string name = 2; // 角色名称
     required uint32 sex = 3; // 性别 1男 2女
@@ -110,7 +110,7 @@ message p_role_attr{
 }
 
 //buff刷新点信息
-message p_map_buff_point{
+message p_map_buff_point {
     required uint32 id = 1; // 刷新点id
     required int32 x = 2; // x
     required int32 y = 3; // y
@@ -119,13 +119,13 @@ message p_map_buff_point{
 }
 
 //buff信息
-message p_buff{
+message p_buff {
     required uint32 id = 1; // buffid
     required uint32 end_time = 2; // buff结束时间
 }
 
 //debuff刷新点信息
-message p_map_debuff_point{
+message p_map_debuff_point {
     required uint32 point_id = 1; // point_id
     required uint32 map_debuff_id = 2; // map_debuff_id
     required int32 x = 3; // x
@@ -134,20 +134,20 @@ message p_map_debuff_point{
 }
 
 //debuff信息
-message p_debuff{
+message p_debuff {
     required uint32 debuff_id = 1; // debuffid
     required uint32 end_time = 2; // debuff结束时间
 }
 
 //武器配件
-message p_weapon_acc{
+message p_weapon_acc {
     required uint32 weapon_index = 1; // 武器系列
     required uint32 pos = 2; // 孔位
     required uint32 weapon_acc_id = 3; // 配件id
 }
 
 //角色地图信息
-message p_map_role{
+message p_map_role {
     required uint32 id = 1; // 角色id
     required string name = 2; // 角色名称
     required uint32 sex = 3; // 性别 1男 2女
@@ -173,7 +173,7 @@ message p_map_role{
 }
 
 //怪物AI
-message p_mon_ai{
+message p_mon_ai {
     required uint32 id = 1; // ai id
     required uint32 type = 2; // ai类型
     repeated uint32 move_await_time = 3; // 不受击时的移动等待时间范围
@@ -204,7 +204,7 @@ message p_mon_ai{
 }
 
 //怪物地图信息
-message p_map_mon{
+message p_map_mon {
     required uint32 id = 1; // 怪物id
     required uint32 monid = 2; // 怪物类型
     required uint32 lvl = 3; // 怪物等级
@@ -226,7 +226,7 @@ message p_map_mon{
 }
 
 //简单怪物地图信息
-message p_simple_map_mon{
+message p_simple_map_mon {
     required uint32 id = 1; // 怪物id
     required uint32 monid = 2; // 怪物类型
     required uint32 mapping_id = 3; // 前端用到的映射ID
@@ -234,7 +234,7 @@ message p_simple_map_mon{
 }
 
 //附近玩家
-message p_relation_near{
+message p_relation_near {
     required uint32 role_id = 1; // 角色id
     required string name = 2; // 角色名
     required uint32 job = 3; // 职业
@@ -244,54 +244,49 @@ message p_relation_near{
 }
 
 //角色物品信息
-message p_chat_goods{
+message p_chat_goods {
     required uint32 id = 1; // 物品唯一id
     required uint32 repos = 2; // 物品所在库
 }
 
 //角色推送聊天物品信息
-message p_chat_push_goods{
+message p_chat_push_goods {
     required uint32 id = 1; // 物品唯一id
     required uint32 goods_id = 2; // 物品类别id
 }
 
 //聊天排行信息
-message p_chat_rank{
+message p_chat_rank {
     required uint32 rank_id = 1; // 排行id
     required uint32 pos = 2; // 排名
 }
 
 //目标
-message p_target{
+message p_target {
     required uint32 id = 1; // id
     required uint32 type = 2; // 类型
 }
 
 //伤害
-message p_damage{
+message p_damage {
     required uint32 id = 1; // id
-    required uint32 type = 2; // 类型 1怪物 2角色, 7.战地模式boss 10 机器人
-    required uint32 dmg = 3; // 伤害数值
-    required uint32 dmg_type = 4; // 伤害类型 0miss 2暴击 3普通
-    required uint32 state_type = 5; // 伤害状态类型 0无状态 1手雷 2火箭炮
-    required uint32 attack_position = 6; // 伤害部位 1:头部  2：其他部位
-    repeated int32 int_list = 7; // 参数，前三个元素是x,y,z
+    repeated int32 int_list = 2; // 参数，前三个元素是x,y,z
 }
 
 //kv结构
-message p_key_value{
+message p_key_value {
     required uint32 key = 1; // key
     required uint32 val = 2; // val
 }
 
 //悬赏任务
-message p_recruit{
+message p_recruit {
     required uint32 id = 1; // 任务ID
     required uint32 color = 2; // 任务品质
 }
 
 //好友信息
-message p_friend_info{
+message p_friend_info {
     required uint32 role_id = 1; // 玩家id
     required string name = 2; // 玩家名
     required uint32 level = 3; // 等级
@@ -311,19 +306,19 @@ message p_friend_info{
 }
 
 //角色邮件附件
-message p_mail_attach{
+message p_mail_attach {
     required uint32 id = 1; // 物品类型id
     required uint32 count = 2; // 物品数量
 }
 
 //携带数量
-message p_goods_limit{
+message p_goods_limit {
     required uint32 goods_id = 1; // 可携带物品goods_id
     required uint32 goods_num = 2; // 可携带物品数量
 }
 
 //排行榜上的玩家信息
-message p_rank_role{
+message p_rank_role {
     required uint32 userid = 1; // 角色ID
     required string name = 2; // 角色名字
     required uint32 vip = 3; // vip
@@ -334,7 +329,7 @@ message p_rank_role{
 }
 
 //排行榜信息
-message p_rank{
+message p_rank {
     required uint32 id = 1; // id（不一定为role_id,武器排行榜的为武器id）
     required uint32 role_id = 2; // 角色ID
     required uint32 pos = 3; // 排名
@@ -344,7 +339,7 @@ message p_rank{
 }
 
 //商品促销信息
-message p_cuxiao_goods_info{
+message p_cuxiao_goods_info {
     required uint32 cuxiao_id = 1; // 促销id
     required uint32 goods_id = 2; // 道具类型ID
     required uint32 num = 3; // 道具数量
@@ -358,7 +353,7 @@ message p_cuxiao_goods_info{
 }
 
 //传闻需要的角色信息
-message p_rumor_role{
+message p_rumor_role {
     required uint32 userid = 1; // 角色ID
     required string name = 2; // 角色名字
     required uint32 lvl = 3; // 等级
@@ -366,13 +361,13 @@ message p_rumor_role{
 }
 
 //传闻需要的道具信息
-message p_rumor_goods{
+message p_rumor_goods {
     required uint32 goods_id = 1; // 道具ID
     required uint32 unique_id = 2; // 道具唯一ID
 }
 
 //传闻数据
-message p_rumor{
+message p_rumor {
     repeated p_rumor_role role = 1; // 角色信息
     repeated p_rumor_goods goods = 2; // 道具信息
     repeated uint32 i_data = 3; // 数据1
@@ -380,7 +375,7 @@ message p_rumor{
 }
 
 //邮件模块需要的角色信息
-message p_mail_role{
+message p_mail_role {
     required uint32 userid = 1; // 角色ID
     required string name = 2; // 角色名字
     required uint32 lvl = 3; // 等级
@@ -388,14 +383,14 @@ message p_mail_role{
 }
 
 //邮件数据
-message p_mail_args{
+message p_mail_args {
     repeated p_mail_role role = 1; // 角色信息
     repeated uint32 i_data = 2; // 数据1
     repeated string s_data = 3; // 数据2
 }
 
 //邮件基本信息
-message p_mail_basic_info{
+message p_mail_basic_info {
     required uint32 id = 1; // 邮件唯一id
     required uint32 config_id = 2; // 模板id
     required uint32 send_id = 3; // 发送者ID，为0表示系统
@@ -414,7 +409,7 @@ message p_mail_basic_info{
 }
 
 //广播
-message p_brocast{
+message p_brocast {
     required uint32 id = 1; // 广播ID
     required string content = 2; // 广播内容
     required uint32 start_time = 3; // 起始时间
@@ -422,7 +417,7 @@ message p_brocast{
 }
 
 //充值购买数据
-message p_pay_package_item{
+message p_pay_package_item {
     required uint32 pay_id = 1; // 充值id
     required uint32 end_time = 2; // 到期时间，0为无限期
     required uint32 daily_reward = 3; // 是否已领取今日的返还
@@ -431,7 +426,7 @@ message p_pay_package_item{
 }
 
 //奖项信息
-message p_condition{
+message p_condition {
     required uint32 condition_id = 1; // 奖项ID
     required uint32 flag = 2; // 状态 0:未完成  1：完成可领取 2：已经完成领取 3:已过期
     required uint32 count = 3; // 数量
@@ -439,7 +434,7 @@ message p_condition{
 }
 
 //活动信息
-message p_activity_info{
+message p_activity_info {
     required uint32 role_id = 1; // 玩家ID
     required uint32 activity_id = 2; // 活动ID
     required uint32 count = 3; // 统计数据
@@ -447,20 +442,20 @@ message p_activity_info{
 }
 
 //活动开启信息
-message p_activity_open{
+message p_activity_open {
     required uint32 activity_id = 1; // 活动ID
     required uint32 type = 2; // 图标类型 1:活动显示 2:活动开启
     required uint32 is_open = 3; // 图标是否开启 0: 不开放 1:开放
 }
 
 //抽奖奖品
-message p_luck_draw_goods{
+message p_luck_draw_goods {
     required uint32 goods_id = 1; // 物品ID
     required uint32 num = 2; // 数量
 }
 
 //抽奖类型信息
-message p_luck_draw_info{
+message p_luck_draw_info {
     required uint32 draw_id = 1; // 抽奖类型 1: 金币抽奖 2：钻石抽奖
     required uint32 next_free_time = 2; // 下次免费时间
     required uint32 cur_free_times = 3; // 当前第几次免费抽奖
@@ -468,7 +463,7 @@ message p_luck_draw_info{
 }
 
 //任务信息
-message p_mission{
+message p_mission {
     required uint32 mission_id = 1; // 任务ID
     required uint32 mission_type_id = 2; // 任务类型ID
     required uint32 type_com_count = 3; // 该类型任务完成的次数
@@ -479,31 +474,31 @@ message p_mission{
 }
 
 //场景物品
-message p_map_goods{
+message p_map_goods {
     required uint32 goods_id = 1; // 物品id
     required uint32 num = 2; // 物品数量
 }
 
 //武器升级系统材料
-message p_weapon_reinforce_goods{
+message p_weapon_reinforce_goods {
     required uint32 goods_id = 1; // 物品类型ID
     required uint32 num = 2; // 物品数量
 }
 
 //武器升星材料
-message p_weapon_start_goods{
+message p_weapon_start_goods {
     required uint32 goods_id = 1; // 物品唯一D
     required uint32 num = 2; // 物品数量
 }
 
 //卖出物品
-message p_sale_goods{
+message p_sale_goods {
     required uint32 goods_id = 1; // 唯一id
     required uint32 num = 2; // 物品数量
 }
 
 //任务信息
-message p_task{
+message p_task {
     required uint32 task_id = 1; // 任务ID
     required uint32 task_type_id = 2; // 任务类型ID
     required uint32 state = 3; // 任务状态 0：未完成  1：完成  2：已经领取
@@ -512,7 +507,7 @@ message p_task{
 }
 
 //引导任务信息
-message p_guide_task{
+message p_guide_task {
     required uint32 guide_id = 1; // 任务ID
     required uint32 state = 2; // 任务状态 0：未完成  1：完成  2：已经领取
     required uint32 listener_cur_num = 3; // 当前任务进度，完成的数量
@@ -520,20 +515,20 @@ message p_guide_task{
 }
 
 //七天引导
-message p_seven_guide{
+message p_seven_guide {
     required uint32 day = 1; // 第几天
     repeated p_guide_task guide_info = 2; // 引导任务
 }
 
 //活动前置条件
-message p_activity_condition{
+message p_activity_condition {
     required uint32 activity_id = 1; // 活动id
     required uint32 sort_id = 2; // 分类id
     required uint32 state = 3; // 状态 0：未完成  1：已经完成
 }
 
 //活动总信息
-message p_activity_all_info{
+message p_activity_all_info {
     required uint32 activity_id = 1; // 活动id
     required uint32 cur_data = 2; // 当前真实值
     required uint32 admin_data = 3; // 后台设置值
@@ -541,7 +536,7 @@ message p_activity_all_info{
 }
 
 //传闻广播信息
-message p_rumor_brocast{
+message p_rumor_brocast {
     required uint32 id = 1; // 广播ID
     required uint32 Type = 2; // 广播类型
     repeated p_rumor_role role = 3; // 角色信息
@@ -551,7 +546,7 @@ message p_rumor_brocast{
 }
 
 //聊天参数
-message p_chat_args{
+message p_chat_args {
     required uint32 chat_id = 1; // 主推聊天id
     repeated uint32 i_data = 2; // 数据1
     repeated string s_data = 3; // 数据2
@@ -1073,33 +1068,30 @@ message role_bc_info_s2c {
 // ##model_begin##map##4##地图##model_end##
 
 // ##begin##map##map_switch##4##1##请求场景切换(暂时没用)##end##
-message map_switch_c2s {
-    required uint32 mapid = 1; // 地图ID
-    required int32 x = 2; // x坐标
-    required int32 y = 3; // y坐标
-    required int32 z = 4; // z坐标
-}
 message map_switch_s2c {
     required uint32 code = 1; // 错误码
-    required string name = 2; // 名字(在多人副本时标记谁出问题了，单人副本可忽视)
-    repeated p_buff buffs = 3; // 玩家身上的buff
-    repeated p_debuff debuffs = 4; // 玩家身上的debuff
+    required uint32 map_id = 2; // 地图id
+    required int32 x = 3; // 当前x
+    required int32 y = 4; // 当前y
+    required int32 z = 5; // 当前z
+    repeated p_buff buffs = 6; // 玩家身上的buff
+    repeated p_debuff debuffs = 7; // 玩家身上的debuff
 }
-
-// ##begin##map##map_sight##4##2##视野信息##end##
-message map_sight_c2s { }
+// ##begin##map##map_enter##4##2##前端开始进入地图##end##
+message map_enter_c2s { }
+message map_enter_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 map_id = 2; // 地图id
+    required int32 x = 3; // 当前x
+    required int32 y = 4; // 当前y
+    required int32 z = 5; // 当前z
+}
+// ##begin##map##map_sight##4##3##视野信息##end##
 message map_sight_s2c {
-    required uint32 map_id = 1; // 地图id
-    required uint32 phase = 2; // 阶段ID
-    required uint32 x = 3; // 目标掩体ID
-    required uint32 y = 4; // 目标站立点ID
-    required int32 rx = 5; // 当前x
-    required int32 ry = 6; // 当前y
-    required int32 rz = 7; // 当前z
-    repeated p_map_role roles_enter = 8; // 进入玩家列表
-    repeated p_simple_map_mon mons_enter = 9; // 进入怪物列表
-    repeated p_map_buff_point buffpoint_enter = 10; // 进入buff点列表
-    repeated p_map_debuff_point debuff_point_enter = 11; // 进入debuff点列表
+    repeated p_map_role roles_enter = 2; // 玩家列表
+    repeated p_simple_map_mon mons_enter = 3; // 怪物列表
+    repeated p_map_buff_point buffpoint_enter = 4; // buff点列表
+    repeated p_map_debuff_point debuff_point_enter = 5; // debuff点列表
 }
 
 // ##begin##map##map_role_enter##4##4##玩家进入视野##end##
@@ -1184,19 +1176,12 @@ message map_role_dead_s2c {
 }
 
 
-// ##begin##map##map_finish##4##15##通关##end##
+// ##begin##map##map_finish##4##14##通关##end##
 message map_finish_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##map##map_enter_req##4##16##服务器主动请求切图##end##
-message map_enter_req_s2c {
-    required uint32 mapid = 1; // 地图ID
-    required uint32 x = 2; // 障碍物ID
-    required uint32 y = 3; // 站立点ID
-}
-
-// ##begin##map##map_time_control##4##17##副本时间控制##end##
+// ##begin##map##map_time_control##4##15##副本时间控制##end##
 message map_time_control_c2s {
     required uint32 state = 1; // 1暂停；2恢复
 }
@@ -1204,32 +1189,27 @@ message map_time_control_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##map##map_attack##4##18##攻击##end##
+// ##begin##map##map_attack##4##16##攻击##end##
 message map_attack_c2s {
     required uint32 src_id = 1; // 伤害源ID
-    required uint32 src_type = 2; // 伤害源类型 1怪物 2玩家，7.战地boss 10：机器人
-    required uint32 weapon_id = 3; // 武器ID
-    required int32 tag = 4; // 攻击包标记，用于战地模式发伤害包
-    repeated p_damage damage = 5; // 目标伤害数据
+    repeated p_damage damage = 2; // 目标伤害数据
 }
 message map_attack_s2c {
     required uint32 src_id = 1; // 伤害源ID
-    required uint32 src_type = 2; // 伤害源类型 1怪物 2玩家
-    required uint32 weapon_id = 3; // 武器ID
-    repeated p_damage damage = 4; // 目标伤害数据
+    repeated p_damage damage = 2; // 目标伤害数据
 }
 
-// ##begin##map##map_buff_point_enter##4##20##buff点进入场景##end##
+// ##begin##map##map_buff_point_enter##4##17##buff点进入场景##end##
 message map_buff_point_enter_s2c {
     repeated p_map_buff_point buff_points = 1; // buff点列表
 }
 
-// ##begin##map##map_buff_point_leave##4##21##buff点离开场景##end##
+// ##begin##map##map_buff_point_leave##4##18##buff点离开场景##end##
 message map_buff_point_leave_s2c {
     repeated uint32 ids = 1; // buff点列表
 }
 
-// ##begin##map##map_buff_point_get##4##22##获得buff点##end##
+// ##begin##map##map_buff_point_get##4##19##获得buff点##end##
 message map_buff_point_get_c2s {
     required uint32 point_id = 1; // buff点id
     required uint32 type = 2; // 获得buff点类型(1:玩家 2:机器人)
@@ -1244,17 +1224,17 @@ message map_buff_point_get_s2c {
     repeated p_buff buff_list = 6; // 获得的buff
 }
 
-// ##begin##map##map_debuff_point_enter##4##23##debuff点进入场景##end##
+// ##begin##map##map_debuff_point_enter##4##20##debuff点进入场景##end##
 message map_debuff_point_enter_s2c {
     repeated p_map_debuff_point debuff_points = 1; // debuff点列表
 }
 
-// ##begin##map##map_debuff_point_leave##4##24##debuff点离开场景##end##
+// ##begin##map##map_debuff_point_leave##4##21##debuff点离开场景##end##
 message map_debuff_point_leave_s2c {
     repeated uint32 point_ids = 1; // debuff点列表
 }
 
-// ##begin##map##map_debuff_point_get##4##25##获得debuff点##end##
+// ##begin##map##map_debuff_point_get##4##22##获得debuff点##end##
 message map_debuff_point_get_c2s {
     required uint32 point_id = 1; // debuff点id
     required uint32 type = 2; // 获得方式类型 0触动获得 1碰撞获得 2debuff点消失获得
@@ -1266,16 +1246,16 @@ message map_debuff_point_get_s2c {
     repeated p_debuff debuff_list = 4; // 获得的debuff列表
 }
 
-// ##begin##map##map_move_break##4##33##移动中断##end##
-message map_move_break_c2s {
-    required uint32 break_direct = 1; // 打断方向，0打断后向左走，1打断后向右走，2打断后不走
+// ##begin##map##map_bc_info##4##23##活动总信息##end##
+message map_bc_info_c2s {
+    required uint32 type = 1; // 数据类型
+    required string data = 2; // 数据
 }
-message map_move_break_s2c {
-    required uint32 id = 1; // 玩家id
-    required uint32 break_direct = 2; // 打断方向，0打断后向左走，1打断后向右走，2打断后不走
-    repeated int32 int_list = 3; // 当前x,当前y,当前z,目标掩体点id，目标站立点id
+message map_bc_info_s2c {
+    required uint32 role_id = 1; // 发送者id
+    required uint32 type = 2; // 数据类型
+    required string data = 3; // 数据
 }
-
 
 // ##model_begin##goods##5##物品##model_end##
 // ##begin##goods##goods_info##5##1##物品信息##end##

@@ -1495,43 +1495,8 @@ namespace gprotocol
       get { return _id; }
       set { _id = value; }
     }
-    private uint _type;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint type
-    {
-      get { return _type; }
-      set { _type = value; }
-    }
-    private uint _dmg;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"dmg", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint dmg
-    {
-      get { return _dmg; }
-      set { _dmg = value; }
-    }
-    private uint _dmg_type;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"dmg_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint dmg_type
-    {
-      get { return _dmg_type; }
-      set { _dmg_type = value; }
-    }
-    private uint _state_type;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"state_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint state_type
-    {
-      get { return _state_type; }
-      set { _state_type = value; }
-    }
-    private uint _attack_position;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"attack_position", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint attack_position
-    {
-      get { return _attack_position; }
-      set { _attack_position = value; }
-    }
     private readonly global::System.Collections.Generic.List<int> _int_list = new global::System.Collections.Generic.List<int>();
-    [global::ProtoBuf.ProtoMember(7, Name=@"int_list", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(2, Name=@"int_list", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public global::System.Collections.Generic.List<int> int_list
     {
       get { return _int_list; }
@@ -5502,44 +5467,6 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_switch_c2s")]
-  public partial class map_switch_c2s : global::ProtoBuf.IExtensible
-  {
-    public map_switch_c2s() {}
-    
-    private uint _mapid;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"mapid", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint mapid
-    {
-      get { return _mapid; }
-      set { _mapid = value; }
-    }
-    private int _x;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int x
-    {
-      get { return _x; }
-      set { _x = value; }
-    }
-    private int _y;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int y
-    {
-      get { return _y; }
-      set { _y = value; }
-    }
-    private int _z;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int z
-    {
-      get { return _z; }
-      set { _z = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_switch_s2c")]
   public partial class map_switch_s2c : global::ProtoBuf.IExtensible
   {
@@ -5552,22 +5479,43 @@ namespace gprotocol
       get { return _code; }
       set { _code = value; }
     }
-    private string _name;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string name
+    private uint _map_id;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"map_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint map_id
     {
-      get { return _name; }
-      set { _name = value; }
+      get { return _map_id; }
+      set { _map_id = value; }
+    }
+    private int _x;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int x
+    {
+      get { return _x; }
+      set { _x = value; }
+    }
+    private int _y;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int y
+    {
+      get { return _y; }
+      set { _y = value; }
+    }
+    private int _z;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int z
+    {
+      get { return _z; }
+      set { _z = value; }
     }
     private readonly global::System.Collections.Generic.List<p_buff> _buffs = new global::System.Collections.Generic.List<p_buff>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"buffs", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(6, Name=@"buffs", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_buff> buffs
     {
       get { return _buffs; }
     }
   
     private readonly global::System.Collections.Generic.List<p_debuff> _debuffs = new global::System.Collections.Generic.List<p_debuff>();
-    [global::ProtoBuf.ProtoMember(4, Name=@"debuffs", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(7, Name=@"debuffs", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_debuff> debuffs
     {
       get { return _debuffs; }
@@ -5578,11 +5526,56 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_sight_c2s")]
-  public partial class map_sight_c2s : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_enter_c2s")]
+  public partial class map_enter_c2s : global::ProtoBuf.IExtensible
   {
-    public map_sight_c2s() {}
+    public map_enter_c2s() {}
     
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_enter_s2c")]
+  public partial class map_enter_s2c : global::ProtoBuf.IExtensible
+  {
+    public map_enter_s2c() {}
+    
+    private uint _code;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"code", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint code
+    {
+      get { return _code; }
+      set { _code = value; }
+    }
+    private uint _map_id;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"map_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint map_id
+    {
+      get { return _map_id; }
+      set { _map_id = value; }
+    }
+    private int _x;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int x
+    {
+      get { return _x; }
+      set { _x = value; }
+    }
+    private int _y;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int y
+    {
+      get { return _y; }
+      set { _y = value; }
+    }
+    private int _z;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int z
+    {
+      get { return _z; }
+      set { _z = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -5593,78 +5586,29 @@ namespace gprotocol
   {
     public map_sight_s2c() {}
     
-    private uint _map_id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"map_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint map_id
-    {
-      get { return _map_id; }
-      set { _map_id = value; }
-    }
-    private uint _phase;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"phase", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint phase
-    {
-      get { return _phase; }
-      set { _phase = value; }
-    }
-    private uint _x;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint x
-    {
-      get { return _x; }
-      set { _x = value; }
-    }
-    private uint _y;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint y
-    {
-      get { return _y; }
-      set { _y = value; }
-    }
-    private int _rx;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"rx", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int rx
-    {
-      get { return _rx; }
-      set { _rx = value; }
-    }
-    private int _ry;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"ry", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int ry
-    {
-      get { return _ry; }
-      set { _ry = value; }
-    }
-    private int _rz;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"rz", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int rz
-    {
-      get { return _rz; }
-      set { _rz = value; }
-    }
     private readonly global::System.Collections.Generic.List<p_map_role> _roles_enter = new global::System.Collections.Generic.List<p_map_role>();
-    [global::ProtoBuf.ProtoMember(8, Name=@"roles_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, Name=@"roles_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_map_role> roles_enter
     {
       get { return _roles_enter; }
     }
   
     private readonly global::System.Collections.Generic.List<p_simple_map_mon> _mons_enter = new global::System.Collections.Generic.List<p_simple_map_mon>();
-    [global::ProtoBuf.ProtoMember(9, Name=@"mons_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, Name=@"mons_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_simple_map_mon> mons_enter
     {
       get { return _mons_enter; }
     }
   
     private readonly global::System.Collections.Generic.List<p_map_buff_point> _buffpoint_enter = new global::System.Collections.Generic.List<p_map_buff_point>();
-    [global::ProtoBuf.ProtoMember(10, Name=@"buffpoint_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(4, Name=@"buffpoint_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_map_buff_point> buffpoint_enter
     {
       get { return _buffpoint_enter; }
     }
   
     private readonly global::System.Collections.Generic.List<p_map_debuff_point> _debuff_point_enter = new global::System.Collections.Generic.List<p_map_debuff_point>();
-    [global::ProtoBuf.ProtoMember(11, Name=@"debuff_point_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(5, Name=@"debuff_point_enter", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_map_debuff_point> debuff_point_enter
     {
       get { return _debuff_point_enter; }
@@ -6067,37 +6011,6 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_enter_req_s2c")]
-  public partial class map_enter_req_s2c : global::ProtoBuf.IExtensible
-  {
-    public map_enter_req_s2c() {}
-    
-    private uint _mapid;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"mapid", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint mapid
-    {
-      get { return _mapid; }
-      set { _mapid = value; }
-    }
-    private uint _x;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint x
-    {
-      get { return _x; }
-      set { _x = value; }
-    }
-    private uint _y;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint y
-    {
-      get { return _y; }
-      set { _y = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_time_control_c2s")]
   public partial class map_time_control_c2s : global::ProtoBuf.IExtensible
   {
@@ -6144,29 +6057,8 @@ namespace gprotocol
       get { return _src_id; }
       set { _src_id = value; }
     }
-    private uint _src_type;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"src_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint src_type
-    {
-      get { return _src_type; }
-      set { _src_type = value; }
-    }
-    private uint _weapon_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"weapon_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint weapon_id
-    {
-      get { return _weapon_id; }
-      set { _weapon_id = value; }
-    }
-    private int _tag;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"tag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int tag
-    {
-      get { return _tag; }
-      set { _tag = value; }
-    }
     private readonly global::System.Collections.Generic.List<p_damage> _damage = new global::System.Collections.Generic.List<p_damage>();
-    [global::ProtoBuf.ProtoMember(5, Name=@"damage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, Name=@"damage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_damage> damage
     {
       get { return _damage; }
@@ -6189,22 +6081,8 @@ namespace gprotocol
       get { return _src_id; }
       set { _src_id = value; }
     }
-    private uint _src_type;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"src_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint src_type
-    {
-      get { return _src_type; }
-      set { _src_type = value; }
-    }
-    private uint _weapon_id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"weapon_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint weapon_id
-    {
-      get { return _weapon_id; }
-      set { _weapon_id = value; }
-    }
     private readonly global::System.Collections.Generic.List<p_damage> _damage = new global::System.Collections.Generic.List<p_damage>();
-    [global::ProtoBuf.ProtoMember(4, Name=@"damage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, Name=@"damage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<p_damage> damage
     {
       get { return _damage; }
@@ -6428,49 +6306,56 @@ namespace gprotocol
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_move_break_c2s")]
-  public partial class map_move_break_c2s : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_bc_info_c2s")]
+  public partial class map_bc_info_c2s : global::ProtoBuf.IExtensible
   {
-    public map_move_break_c2s() {}
+    public map_bc_info_c2s() {}
     
-    private uint _break_direct;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"break_direct", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint break_direct
+    private uint _type;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint type
     {
-      get { return _break_direct; }
-      set { _break_direct = value; }
+      get { return _type; }
+      set { _type = value; }
+    }
+    private string _data;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string data
+    {
+      get { return _data; }
+      set { _data = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_move_break_s2c")]
-  public partial class map_move_break_s2c : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"map_bc_info_s2c")]
+  public partial class map_bc_info_s2c : global::ProtoBuf.IExtensible
   {
-    public map_move_break_s2c() {}
+    public map_bc_info_s2c() {}
     
-    private uint _id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint id
+    private uint _role_id;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"role_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint role_id
     {
-      get { return _id; }
-      set { _id = value; }
+      get { return _role_id; }
+      set { _role_id = value; }
     }
-    private uint _break_direct;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"break_direct", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public uint break_direct
+    private uint _type;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint type
     {
-      get { return _break_direct; }
-      set { _break_direct = value; }
+      get { return _type; }
+      set { _type = value; }
     }
-    private readonly global::System.Collections.Generic.List<int> _int_list = new global::System.Collections.Generic.List<int>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"int_list", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<int> int_list
+    private string _data;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string data
     {
-      get { return _int_list; }
+      get { return _data; }
+      set { _data = value; }
     }
-  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
