@@ -16,7 +16,7 @@ namespace com.game.client
 
 			private string _ip;
 			private int _port;
-			private float _connectTimeOut;
+			private int _connectTimeOut;
 
 			private TcpClient _socket;
 
@@ -41,9 +41,6 @@ namespace com.game.client
 
 			public void Update ()
 			{
-				if (isCheckTimeOut)
-					OnTimeOut ();
-
 				if (isCheckSendQue)
 					OnCheckSendQue ();
 
@@ -55,11 +52,10 @@ namespace com.game.client
 				
 			}
 
-			bool isCheckTimeOut = false;
 			bool isCheckSendQue = false;
 			bool isCheckReceiveQue = false;
 			bool isOnReceiver = false;
-			public void Init (string ip, int port, float outTime)
+			public void Init (string ip, int port, int outTime)
 			{
 			    _ip = ip;
 			    _port = port;
@@ -69,7 +65,6 @@ namespace com.game.client
 			public void Dispose ()
 			{
 				_state = eConnectState.None;
-				isCheckTimeOut = false;
 				isCheckReceiveQue = false;
 				isCheckSendQue = false;
 				isOnReceiver = false;

@@ -128,7 +128,7 @@ namespace com.game.client
 
             private void OnError(string error)
             {
-				LoginModule.GetInstance ().LoginPanel.LockPanel.Show ("[网络发生错误],请重启启动客户端");
+				//LoginModule.GetInstance ().LoginPanel.LockPanel.Show ("[网络发生错误],请重启启动客户端");
 				Debug.LogError ("[网络发生错误]"+ error);
             }
 
@@ -139,11 +139,26 @@ namespace com.game.client
 
             private void OnConnect()
             {
-				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]Connect:IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " Success. And SendFirst HeartPackage");
-				SendHeart ();
+				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]Connect:IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " Success. And RequestLoginAuthKey");
+				Request_Login_Auth_Key ();
 				if (_needReConnect)
 					OnReConnect ();
             }
+
+			private void Request_Login_Auth_Key(){
+				Message message = _msgPool.Talk();
+				message.Seq = CurMsgSeq;
+				message.module = Module.login;
+				message.command = Command.login_auth_key;
+				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+				{
+					ProtoBuf.Serializer.Serialize(m, new gprotocol.login_auth_key_c2s());
+					message.voData = m.ToArray();
+				}
+				_lastSendTime = System.DateTime.Now;
+				_gameSocket.WriteData(message.AllBytes);
+				_msgPool.Recovery(message);
+			}
 
 
 			private void OnReConnect(){

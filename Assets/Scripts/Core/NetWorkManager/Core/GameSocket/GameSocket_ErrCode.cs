@@ -7,9 +7,8 @@
 			/** 客戶端主动断线 */
 			Null,
 
-			/** 错误 - 创建Socket */
-			CreateSocket,
-
+			/** 错误 - 服务器拒绝连接 */
+			ConnectFail,
 			/** 错误 - 服务器拒绝连接 */
 			ConnectRefused,
 
