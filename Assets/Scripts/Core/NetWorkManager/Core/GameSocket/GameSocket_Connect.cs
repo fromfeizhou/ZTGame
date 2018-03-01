@@ -10,7 +10,6 @@ namespace com.game.client
 		public partial class GameSocket
 		{
 			private static bool IsConnectionSuccessful = false;  
-			private static Exception socketexception;  
 			private static ManualResetEvent TimeoutObject = new ManualResetEvent(false);  
 			public void Connect ()
 			{
@@ -37,9 +36,7 @@ namespace com.game.client
 					{  
 						_state = eConnectState.Connected;
 						Invoking_CallBack_OnConnect();
-						isCheckReceiveQue = true;
-						isCheckSendQue = true;
-						isOnReceiver = true;
+						isRunning = true;
 					}  
 					else  
 					{  
@@ -50,9 +47,10 @@ namespace com.game.client
 				}  
 				else  
 				{  
-					Invoking_CallBack_OnError (eErrCode.ConnectOutTime, null);
+					Invoking_CallBack_OnError (eErrCode.ConnectFail, null);
 					Dispose ();
 				}  
+				TimeoutObject.Reset ();
 			}
 
 

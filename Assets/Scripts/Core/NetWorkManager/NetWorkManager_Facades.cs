@@ -106,6 +106,10 @@ namespace com.game.client
 								_curMsgSeq = (Int16)authData.unique_id;
 								Debug.Log ("设置网络参数：" + "Start:" + authData.unique_id + ", Add:" + authData.unique_add + ", Max:" + authData.max_unique_id + ", ReLoginKey:" + authData.relogin_key);
 							}
+
+							if (_needReConnect)
+								OnReConnect ();
+
 							return;
 						}
 					case Command.login_relogin:

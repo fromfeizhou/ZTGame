@@ -41,20 +41,14 @@ namespace com.game.client
 
 			public void Update ()
 			{
-				if (isCheckSendQue)
-					OnCheckSendQue ();
-
-				if (isCheckReceiveQue)
-					OnCheckReceiveQue ();
-
-				if (isOnReceiver)
+				if (isRunning) {
 					onReceive ();
-				
+					OnCheckReceiveQue ();
+					OnCheckSendQue ();
+				}
 			}
 
-			bool isCheckSendQue = false;
-			bool isCheckReceiveQue = false;
-			bool isOnReceiver = false;
+			bool isRunning = false;
 			public void Init (string ip, int port, int outTime)
 			{
 			    _ip = ip;
@@ -65,9 +59,7 @@ namespace com.game.client
 			public void Dispose ()
 			{
 				_state = eConnectState.None;
-				isCheckReceiveQue = false;
-				isCheckSendQue = false;
-				isOnReceiver = false;
+				isRunning = false;
 
 			    if (_socket != null)
                 {

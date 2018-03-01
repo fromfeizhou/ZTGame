@@ -121,9 +121,8 @@ namespace com.game.client
 
 				if (errCode == eErrCode.SendMsgFail) {
 					_needReConnect = true;
+					Connect ();
 				}
-
-				Connect ();
             }
 
             private void OnError(string error)
@@ -141,8 +140,6 @@ namespace com.game.client
             {
 				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]Connect:IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " Success. And RequestLoginAuthKey");
 				Request_Login_Auth_Key ();
-				if (_needReConnect)
-					OnReConnect ();
             }
 
 			private void Request_Login_Auth_Key(){

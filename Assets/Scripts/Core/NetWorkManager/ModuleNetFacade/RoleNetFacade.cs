@@ -29,8 +29,6 @@ namespace com.game.client
 			[NetCommandAttribute(Command.role_gongxun)]
 			private void OnReceive_Role_GongXun(int code, role_gongxun_s2c vo)
 			{
-				
-				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_GongXun]当前功勋:" + vo.rank);
 			}
 
@@ -44,9 +42,8 @@ namespace com.game.client
 			[NetCommandAttribute(Command.role_bc_info)]
 			private void OnReceive_Role_BC_Info(int code, role_bc_info_s2c vo)
 			{
-				
+				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
                 BPBattleEvent.GetInstance().dispatchEvent(BP_BATTLE_EVENT.COMMAND, new Notification(vo.data));
-				//UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_BC_Info]推帧:[" + vo.role_id + ":" + vo.type + "]" + vo.data);
 			}
 
 			[NetCommandAttribute(Command.role_attr)]
@@ -55,31 +52,21 @@ namespace com.game.client
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Attr]属性更新:当前生命值" + vo.attr.hp_cur + "...");
 			}
 
-
 			[NetCommandAttribute(Command.role_update_fight_point)]
 			private void OnReceive_Role_Flght_Point(int code, role_update_fight_point_s2c vo){
 				
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Flght_Point]战力更新:" + vo.fight_point);
 			}
 
-
 			[NetCommandAttribute(Command.role_fortune)]
 			private void OnReceive_Role_Fortune(int code, role_fortune_s2c vo){
 				UnityEngine.Debug.Log ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Fortune]财富更新:Scoin:" + vo.coin + ", coupon:" + vo.coupon + ", gold:" + vo.gold + ", silver:" + vo.silver);
 			}
 
-
-
 			[NetCommandAttribute(Command.role_error)]
 			private void OnReceive_Role_Error(int code, role_error_s2c vo){
 				UnityEngine.Debug.LogError ("[" + System.DateTime.Now + "]" + "[OnReceive_Role_Error]消息错误:method_id:" + vo.method_id + ", section_id:" + vo.section_id);
 			}
-
-
-
-
-
-
 		}
 	}
 }
