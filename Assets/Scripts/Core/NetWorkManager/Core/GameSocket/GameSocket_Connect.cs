@@ -17,7 +17,7 @@ namespace com.game.client
                     return;
 
 				if (_state != eConnectState.None) {
-					Invoking_CallBack_OnError (eErrCode.ConnectStateErr,null);
+					Invoking_CallBack_OnError (eErrCode.ConnectStateErr,new Exception("ConnectStateErr"));
 					return;
 				}
 
@@ -41,13 +41,13 @@ namespace com.game.client
 					else  
 					{  
 						_state = eConnectState.ConnectionRefused;
-						Invoking_CallBack_OnError (eErrCode.ConnectFail, null);
+						Invoking_CallBack_OnError (eErrCode.ConnectFail, new Exception("ConnectFail"));
 						Dispose ();
 					}  
 				}  
 				else  
 				{  
-					Invoking_CallBack_OnError (eErrCode.ConnectFail, null);
+					Invoking_CallBack_OnError (eErrCode.ConnectFail, new Exception("ConnectFail"));
 					Dispose ();
 				}  
 				TimeoutObject.Reset ();
