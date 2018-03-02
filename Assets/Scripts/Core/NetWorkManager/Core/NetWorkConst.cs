@@ -9,19 +9,13 @@ namespace com.game.client
 			/** 是否开启前后端通信 */
 			public static bool IsOpenNetWork = true;
 
+			/** 服务器列表-URL地址*/
 			public static string ServerListPath{
 				get{
-					return string.Format ("file://" + Application.dataPath + "/Config/NetWorkConfig.txt");
+					//return "http://s1.game.gdxygm.com/info.txt";//正式服
+					return "http://s1.game.gdxygm.com/info.txt";//开发服
 				}
 			}
-
-
-			//public const string Ip = "120.79.43.54";
-			//public const int Port = 93;
-
-			public const string Ip = "120.79.192.95";
-			public const int Port = 9001;
-
 
 			public const int ConnectTimeOut = 15;
 
