@@ -13,14 +13,27 @@ public class UILoginPanel : MonoBehaviour
 
 	private Widget _widget;
 
-	void Start()
+	IEnumerator Start()
 	{
+		yield return InitServerList ();
 		LoginModule.GetInstance ().LoginPanel = this;
 		LoginModule.GetInstance().CreateRolePanel = transform.parent.Find ("UICreateRolePanel").GetComponent<UICreateRolePanel> ();
 		_widget = Widget.Create(gameObject);
-		_widget.BandingBtn_OnClick (OnBtnClick_Login,"ViewPort/Btn_Login");
-		_widget.BandingBtn_OnClick (OnBtnClick_LoginWithOutNet,"ViewPort/Btn_LoginWithOutNet");
-		_inputFieldAccount = _widget.GetComponent<InputField> ("ViewPort/Account/InputField");
+		_widget.BandingBtn_OnClick (OnBtnClick_Login,"ViewPort_Login/Btn_Login");
+		_widget.BandingBtn_OnClick (OnBtnClick_LoginWithOutNet,"ViewPort_Login/Btn_LoginWithOutNet");
+		_inputFieldAccount = _widget.GetComponent<InputField> ("ViewPort_Login/IF_Account/InputField");
+	}
+
+
+	private IEnumerator InitServerList(){
+		Debug.Log(NetWorkConst.ServerListPath);
+		WWW www = new WWW (NetWorkConst.ServerListPath);
+		yield return www;
+		Debug.Log (www);
+		if (www != null)
+			Debug.Log (www.text);
+		Debug.Log ("InitServerList Finish");
+		yield return null;
 	}
 
 	private void OnBtnClick_Login()
