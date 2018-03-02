@@ -84,6 +84,7 @@ namespace subjectnerdagreement.psdexport
 			if (tex == null)
 				return null;
 			Sprite sprite = SaveAsset(settings, tex, layerIndex);
+
 			Object.DestroyImmediate(tex);
 			return sprite;
 		}
@@ -181,10 +182,11 @@ namespace subjectnerdagreement.psdexport
 			AssetDatabase.Refresh();
 
 			// Load the texture so we can change the type
-			var textureObj = AssetDatabase.LoadAssetAtPath(assetPath, typeof(Texture2D));
+			Texture2D textureObj = AssetDatabase.LoadAssetAtPath(assetPath, typeof(Texture2D)) as Texture2D;
 
 			// Get the texture importer for the asset
 			TextureImporter textureImporter = (TextureImporter)AssetImporter.GetAtPath(assetPath);
+			textureImporter.textureType = TextureImporterType.Sprite;
 			// Read out the texture import settings so import pivot point can be changed
 			TextureImporterSettings importSetting = new TextureImporterSettings();
 			textureImporter.ReadTextureSettings(importSetting);

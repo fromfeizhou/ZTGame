@@ -791,14 +791,13 @@ namespace subjectnerdagreement.psdexport
 		#endregion
 
 		#region Sprite creation
-		private bool showCreateSprites;
 		private SpriteAlignment createAlign = SpriteAlignment.Center;
 
 		private void DrawCreateEntry()
 		{
-			showCreateSprites = EditorGUILayout.Foldout(showCreateSprites, "Sprite Creation", styleBoldFoldout);
+			//showCreateSprites = EditorGUILayout.Foldout(showCreateSprites, "Sprite Creation", styleBoldFoldout);
 
-			if (!showCreateSprites || !imageLoaded)
+			if (!imageLoaded)
 				return;
 
 			float labelWidth = EditorGUIUtility.labelWidth;
@@ -826,7 +825,6 @@ namespace subjectnerdagreement.psdexport
 
 			GUILayout.Space(5f);
 
-			bool createSprites = false;
 			bool createUiImgs = false;
 
 			EditorGUIUtility.labelWidth = labelWidth;
@@ -836,14 +834,6 @@ namespace subjectnerdagreement.psdexport
 					GUI.enabled = false;
 
 				const float buttonHeight = 50f;
-
-				using (new EditorGUILayout.VerticalScope())
-				{
-					GUILayout.Label("2D Sprites", styleHeader);
-					createSprites = GUILayout.Button("Create 2D Sprites",
-													GUILayout.Height(buttonHeight),
-													GUILayout.ExpandHeight(false));
-				}
 
 				using (new EditorGUILayout.VerticalScope())
 				{
@@ -866,8 +856,6 @@ namespace subjectnerdagreement.psdexport
 				GUI.enabled = true;
 			}
 
-			if (createSprites)
-				PsdBuilder.BuildPsd(Selection.activeGameObject, selectedGroup, settings, fileInfo, createAlign, spriteConstructor);
 			if (createUiImgs)
 				PsdBuilder.BuildPsd(Selection.activeGameObject, selectedGroup, settings, fileInfo, createAlign, uiConstructor);
 
