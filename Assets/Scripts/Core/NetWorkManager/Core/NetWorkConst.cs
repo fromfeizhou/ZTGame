@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace com.game.client
 {
 	namespace network
@@ -7,11 +9,18 @@ namespace com.game.client
 			/** 是否开启前后端通信 */
 			public static bool IsOpenNetWork = true;
 
-			public const string Ip = "120.79.43.54";
-			public const int Port = 93;
+			public static string ServerListPath{
+				get{
+					return string.Format ("file://" + Application.dataPath + "/Config/NetWorkConfig.txt");
+				}
+			}
 
-			//public const string Ip = "120.79.192.95";
-			//public const int Port = 9001;
+
+			//public const string Ip = "120.79.43.54";
+			//public const int Port = 93;
+
+			public const string Ip = "120.79.192.95";
+			public const int Port = 9001;
 
 
 			public const int ConnectTimeOut = 15;
