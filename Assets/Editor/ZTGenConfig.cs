@@ -56,7 +56,8 @@ public static class ExampleGenConfig
                 typeof(Action<double>),
                 typeof(Action<bool>),
                 typeof(UnityEngine.Events.UnityAction),
-                typeof(System.Collections.IEnumerator)
+                typeof(System.Collections.IEnumerator),
+                typeof(UnityEngine.Events.UnityAction<UnityEngine.Object, string>)
             };
 
     //黑名单

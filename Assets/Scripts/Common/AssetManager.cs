@@ -5,41 +5,8 @@ using UnityEngine.Events;
 using XLua;
 
 [LuaCallCSharp]
-public class DTest {
-    public double ComplexFunc(int p1, ref int p2, out string p3, Action luafunc, out Action csfunc)
-    {
-        luafunc();
-        p2 = 10;
-        p3 = "123";
-        csfunc = () =>
-        {
-            Debug.Log("csharp callback invoked!");
-        };
-        return 1.23;
-    }
-}
-
-
-[LuaCallCSharp]
 public class AssetManager
 {
-    //public static void Test()
-    //{
-    //    Debug.Log("Test");
-    //}
-    public static void DDD(Action luafunc)
-    {
-        luafunc();
-    }
-    public void TestFunc(int i)
-    {
-        Debug.Log("TestFunc: " + i);
-    }
-
-    public static void TestFunc2(int i)
-    {
-        Debug.Log("TestFunc2: " + i);
-    }
     /* 
      * @brief 加载资源
      * @param path 资源路径
