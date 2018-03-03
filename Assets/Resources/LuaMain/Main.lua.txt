@@ -1,0 +1,45 @@
+--Main.txt
+--@breif lua入口函数
+--@data 2018/2/27
+
+require 'LuaMain.AssetUpdater'
+
+function Awake()
+	print("xlua awake")
+end
+
+function Start()
+	print("xlua start")
+	---初始化 资源更新
+	AssetUpdater:Init()
+end
+
+function Update()
+	
+end
+
+function OnDestroy()
+    print("xlua destroy")
+end
+
+-- function InitPanel()
+
+-- 	print("InitPanel")
+-- 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
+-- 	CS.AssetManager.LoadAsset(PathManager:GetUIPrefab("MText"),function (target,path)
+-- 		local prefab = target
+-- 		print(typeof(target))
+-- 		print(prefab)
+-- 		if prefab then
+-- 			local gameobject = CS.UnityEngine.GameObject.Instantiate(target)
+-- 			local component = gameobject:GetComponent(typeof(CS.MTextFormat))
+-- 			component.TextStr = "MTextFormat"
+
+-- 			gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
+-- 		    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
+-- 			gameobject.transform.transform:SetParent(mainPanel,false)
+-- 		end
+		
+-- 	end)
+-- end
+

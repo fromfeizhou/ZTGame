@@ -8,7 +8,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using XLua;
 
+[LuaCallCSharp]
 public class AssetUpdater : MonoBehaviour
 {
     /// <summary>
@@ -554,7 +556,7 @@ public class AssetUpdater : MonoBehaviour
         Debug.Log("AssetUpdater:Done");
         IsDone = true;
         OnDoneEvent();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
     /// <summary>
@@ -665,16 +667,12 @@ public class AssetUpdater : MonoBehaviour
     /// <summary>
     ///   
     /// </summary>
-    void Awake()
+
+    public void StartAssetUpdater(string url)
     {
         Reset();
-        StartAssetUpdater();
-    }
-
-    private void StartAssetUpdater()
-    {
         List<string> url_group = new List<string>();
-        url_group.Add("http://192.168.0.188:80");
+        url_group.Add(url);
         this.StartUpdate(url_group);
     }
     #endregion

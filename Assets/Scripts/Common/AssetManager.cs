@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using XLua;
 
@@ -12,7 +10,7 @@ public class AssetManager
      * @param path 资源路径
      * @param callback 回调函数
      */
-    public static void LoadAsset(string path, UnityAction<UnityEngine.Object, string> callback = null, System.Type type = null)
+    public static void LoadAsset(string path, UnityAction<Object, string> callback = null, System.Type type = null)
     {
         // Windows 平台分隔符为 '/', OS 平台 路径分隔符为 '\'， 此处是一个大坑
         if (Application.platform == RuntimePlatform.WindowsEditor)
@@ -20,23 +18,23 @@ public class AssetManager
             path = path.Replace('\\', '/');
         }
 
-#if UNITY_EDITOR
-        //编辑器模式下 资源获取
-        UnityEngine.Object obj = null;
-        if (null != type)
-        {
-            obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
-        }
-        else
-        {
-            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
-        }
-        if (null != callback)
-        {
-            callback(obj, path);
-        }
-        return;
-#else
+//#if UNITY_EDITOR
+//        //编辑器模式下 资源获取
+//        Object obj = null;
+//        if (null != type)
+//        {
+//            obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
+//        }
+//        else
+//        {
+//            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
+//        }
+//        if (null != callback)
+//        {
+//            callback(obj, path);
+//        }
+//        return;
+//#else
         string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         string abName = path.Replace(fileName, "").Replace('/', '_');
@@ -50,7 +48,7 @@ public class AssetManager
             return;
         }
         callback(null, path);
-#endif
+//#endif
     }
 
     /* 
@@ -58,7 +56,7 @@ public class AssetManager
      * @param path 资源路径
      * @param callback 回调函数
      */
-    public static UnityEngine.Object LoadLuaAsset(string path)
+    public static Object LoadLuaAsset(string path)
     {
         // Windows 平台分隔符为 '/', OS 平台 路径分隔符为 '\'， 此处是一个大坑
         if (Application.platform == RuntimePlatform.WindowsEditor)
@@ -68,7 +66,7 @@ public class AssetManager
 
 #if UNITY_EDITOR
         //编辑器模式下 资源获取
-        UnityEngine.Object obj = null;
+        Object obj = null;
         obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
         return obj;
 #else
@@ -89,11 +87,11 @@ public class AssetManager
 
 
     //加载所有资源
-    public static void LoadAllAsset(string path, UnityAction<UnityEngine.Object[], string> callback = null)
+    public static void LoadAllAsset(string path, UnityAction<Object[], string> callback = null)
     {
 #if UNITY_EDITOR
         //编辑器模式下 资源获取
-        UnityEngine.Object[] objs = null;
+        Object[] objs = null;
         objs = UnityEditor.AssetDatabase.LoadAllAssetsAtPath(path);
         if (null != callback)
         {

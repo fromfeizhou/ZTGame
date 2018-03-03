@@ -11,10 +11,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using XLua;
 
 /// <summary>
 ///   资源管理器
 /// </summary>
+/// 
+[LuaCallCSharp]
 public class AssetBundleManager : MonoSingleton<AssetBundleManager>
 {
     /// <summary>

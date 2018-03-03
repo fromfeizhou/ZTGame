@@ -20,7 +20,7 @@ public class Injection
 }
 
 [LuaCallCSharp]
-public class LuaMainScene : MonoBehaviour
+public class LuaMainScene : MonoSingleton<LuaMainScene>
 {
     public TextAsset luaScript;
     public Injection[] injections;
