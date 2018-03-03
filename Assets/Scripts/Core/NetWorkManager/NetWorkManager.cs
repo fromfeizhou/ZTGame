@@ -40,11 +40,11 @@ namespace com.game.client
 
 			private bool _needReConnect = false;
 
-			public void Init(System.Action<bool> _action_LockScreen)
+			public void Init(string ip, int port, System.Action<bool> _action_LockScreen)
             {
                 RegisterFacades();
                 _gameSocket = new GameSocket();
-                _gameSocket.Init(NetWorkConst.Ip, NetWorkConst.Port, NetWorkConst.ConnectTimeOut);
+				_gameSocket.Init(ip, port, NetWorkConst.ConnectTimeOut);
 
                 _msgPool = new ObjectPool<Message>(32);
 
@@ -138,7 +138,6 @@ namespace com.game.client
 
             private void OnConnect()
             {
-				Debug.Log ("[" + System.DateTime.Now + "]" + "[" + this.GetType().Name + "]Connect:IP" + NetWorkConst.Ip + ":" + NetWorkConst.Port + " Success. And RequestLoginAuthKey");
 				Request_Login_Auth_Key ();
             }
 
