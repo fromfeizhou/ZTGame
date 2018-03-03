@@ -3,9 +3,9 @@
 --@data 2018/2/27
 
 PathManager = {
-	g_sAssetPath = "Assets"
+	g_sAssetPath = "Assets",
 
-	m_sUIPrefab = "Assets/Prefabs/UI/"
+	m_sUIPrefab = "Assets/Prefabs/UI/",
 }
 
 --============================================public head===============================================--------

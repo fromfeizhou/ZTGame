@@ -3,7 +3,8 @@
 --@data 2018/2/27
 
 local util = require 'xlua.util'
---require 'PathManager'
+require 'Common.PathManager'
+
 function Awake()
 	print("xlua awake")
 	InitPanel()
@@ -22,12 +23,36 @@ function OnDestroy()
 end
 
 function InitPanel()
+	local func = function()
+		print(111)
+	end
+
+	print(func)
+	CS.AssetManager:TestFunc2(123)
+	local func2 = CS.AssetManager
+	print(1)
+	local test = func2()
+	print(2)
+	test:TestFunc(1)
+
+	local DrivenClass = CS.DTest
+    local testobj = DrivenClass()
+	local ret, p2, p3, csfunc = testobj:ComplexFunc(1, 100, function()
+       print('i am lua callback')
+    end)
+    print('ComplexFunc ret:', ret, p2, p3, csfunc)
+    csfunc()
+
 	print("InitPanel")
 	print(CS.UnityEngine.Vector3(1,1,1))
 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
-
-
-	-- local gameobject = CS.UnityEngine.GameObject.Instantiate(PathManager.GetUIPrefab(MText))
+	-- CS.AssetManager:LoadAsset(PathManager:GetUIPrefab("MText"),function (target,path)
+	-- 	print(path)
+	-- end)
+	-- 	print(path)
+	-- 	print(target)
+	-- end)
+	-- local gameobject = CS.UnityEngine.GameObject.Instantiate(PathManager:GetUIPrefab("MText"))
 	-- local component = gameobject:GetComponent(typeof(CS.MTextFormat))
 	-- component.TextStr = "MTextFormat"
 	-- print(component.TextStr)
@@ -35,9 +60,5 @@ function InitPanel()
 	-- gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
  --    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
 	-- gameobject.transform.transform:SetParent(mainPanel,false)
-
-	local LuaTest = CS.LuaTest()
-	print(LuaTest)
-	print(LuaTest:DLog())
 
 end

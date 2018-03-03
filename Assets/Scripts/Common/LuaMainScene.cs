@@ -49,20 +49,30 @@ public class LuaMainScene : MonoBehaviour
         {
             scriptEnv.Set(injection.name, injection.value);
         }
-
+        luaEnv.AddLoader(CustomLoaderMethod);
         luaEnv.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
-
         Action luaAwake = scriptEnv.Get<Action>("Awake");
         scriptEnv.Get("Start", out luaStart);
         scriptEnv.Get("Update", out luaUpdate);
         scriptEnv.Get("Ondestroy", out luaOnDestroy);
-
         if (luaAwake != null)
         {
             luaAwake();
         }
     }
 
+    private byte[] CustomLoaderMethod(ref string fileName)
+    {
+        fileName = PathManager.LuaPath +"/" + fileName.Replace('.', '/') + ".txt";
+        TextAsset txtAsset = AssetManager.LoadLuaAsset(fileName) as TextAsset;
+        if (null != txtAsset)
+        {
+            return txtAsset.bytes;
+        }
+        //找到指定文件  
+        return null;
+    }
+                                   
     // Use this for initialization
     void Start()
     {
