@@ -18,3 +18,8 @@ function Split(s, sp)
   
     return res  
 end  
+
+--@brief Debug输出
+function GCSLog(...)
+    CS.GameTool.Log(...)
+end

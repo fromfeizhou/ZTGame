@@ -4,8 +4,9 @@
 LuaFileLoad = {
 	G_tLoginLuaList = {
 		"LuaGameStart",
-		
+		"AssetUpdate",		
 		"Common.GameConfig",
+		"Common.GlobalMethod"
 		"Common.PathManager",
 		"Common.NetWorkManager",
 

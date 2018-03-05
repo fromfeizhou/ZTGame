@@ -33,15 +33,17 @@ public class AssetUpdater : MonoBehaviour
         Max
     }
 
-    /// <summary>
-    ///   UpdateEvent
-    /// </summary>
-    public event System.Action<AssetUpdater> OnUpdate;
+    public delegate void UpdateDelegate(string name, float current, float max);
+    private UpdateDelegate _onUpdate;
+    public delegate void DoneDelegate();
+    private DoneDelegate _onDone;
 
-    /// <summary>
-    ///   DoneEvent
-    /// </summary>
-    public event System.Action<AssetUpdater> OnDone;
+    public void SetAssetLuaFunc(UpdateDelegate update,DoneDelegate done)
+    {
+        _onUpdate = update;
+        _onDone = done;
+    }
+
 
     /// <summary>
     ///   是否结束
@@ -591,8 +593,8 @@ public class AssetUpdater : MonoBehaviour
     /// </summary>
     void OnUpdateEvent()
     {
-        if (OnUpdate != null)
-            OnUpdate(this);
+        if (_onUpdate != null)
+            _onUpdate(CurrentState.ToString(), CurrentStateCompleteValue, CurrentStateTotalValue);
     }
 
     /// <summary>
@@ -600,8 +602,8 @@ public class AssetUpdater : MonoBehaviour
     /// </summary>
     void OnDoneEvent()
     {
-        if (OnDone != null)
-            OnDone(this);
+        if (_onDone != null)
+            _onDone();
     }
 
     /// <summary>
