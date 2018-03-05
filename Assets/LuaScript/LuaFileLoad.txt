@@ -1,42 +1,47 @@
---AssetUpdater.txt
---@breif ab包管理
---@data 2018/3/3
+--LuaFileLoad.txt
+--@breif lua列表
+--@data 2018/3/5
+LuaFileLoad = {
+	G_tLoginLuaList = {
+		"LuaGameStart",
+	},
 
-AssetUpdater = {
-	m_GameObject = nil, --资源更新父对象
-	m_Asset = nil,		--更新管理对象
+	G_tOtherList = {
+	}
 }
-
---@brief c#引用
-local CSAssetUpdater = CS.AssetUpdater
-local CSGameObject = CS.UnityEngine.GameObject
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 初始化
-function AssetUpdater:Init()
-	local gameObject = CSGameObject("AssetUpdater")
-	local component = gameObject:AddComponent(typeof(CSAssetUpdater))
-
-	self.m_GameObject = gameObject
-	self.m_Asset = component
-
-	self:StartAssetUpdater()
+function LuaFileLoad:Start()
 	
-
-	local DrivenClass = CS.Tutorial.DrivenClass
-    local testobj = DrivenClass()
-    local function lua_event_callback1() print('lua_event_callback1') end
-    local function lua_event_callback2() print('lua_event_callback2') end
-    testobj:TestEvent('+', lua_event_callback1)
-    testobj:CallEvent()
 end
 
 --@brief 开始检查加载
-function AssetUpdater:StartAssetUpdater()
-	self.m_Asset:StartAssetUpdater("http://192.168.0.188:80")
+function LuaFileLoad:Update()
+
+end
+
+function LuaFileLoad:OnDestroy()
+	-- body
+end
+
+function LuaFileLoad:LoadLoginLua(loadDone)
+	for i=1, #(LuaFileLoad.G_tLoginLuaList) do  
+    	local fileName = LuaFileLoad.G_tLoginLuaList[i]
+    	require(fileName)
+	end 
+	print(111)
+	print(loadDone)
+	if loadDone then
+		loadDone()
+	end
+end
+
+function LuaFileLoad:LoadOtherLua()
+	-- body
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

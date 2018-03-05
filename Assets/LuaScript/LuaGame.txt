@@ -1,14 +1,10 @@
---AssetUpdater.txt
---@breif ab包管理
---@data 2018/3/3
-
-AssetUpdater = {
-	m_GameObject = nil, --资源更新父对象
-	m_Asset = nil,		--更新管理对象
+--LuaGame.txt
+--@breif lua入口
+--@data 2018/3/5
+LuaGame = {
 }
 
 --@brief c#引用
-local CSAssetUpdater = CS.AssetUpdater
 local CSGameObject = CS.UnityEngine.GameObject
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -16,27 +12,29 @@ local CSGameObject = CS.UnityEngine.GameObject
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 初始化
-function AssetUpdater:Init()
-	local gameObject = CSGameObject("AssetUpdater")
-	local component = gameObject:AddComponent(typeof(CSAssetUpdater))
-
-	self.m_GameObject = gameObject
-	self.m_Asset = component
-
-	self:StartAssetUpdater()
-	
-
-	local DrivenClass = CS.Tutorial.DrivenClass
-    local testobj = DrivenClass()
-    local function lua_event_callback1() print('lua_event_callback1') end
-    local function lua_event_callback2() print('lua_event_callback2') end
-    testobj:TestEvent('+', lua_event_callback1)
-    testobj:CallEvent()
+function LuaGame:Start()
+	print("LuaGame:Start")
+	---初始化 加载登录lua
+	LuaFileLoad:LoadLoginLua(function()
+		print("LuaGame:LoadLoginLuaDone")
+		self.m_LuaGameStart = LuaGameStart:Create()
+		self.m_LuaGameStart:Init()
+	end)
 end
 
---@brief 开始检查加载
-function AssetUpdater:StartAssetUpdater()
-	self.m_Asset:StartAssetUpdater("http://192.168.0.188:80")
+--@brief 更新
+function LuaGame:Update()
+	if self.m_LuaGameStart ~= nil then
+		self.m_LuaGameStart:Update()
+	end
+end
+
+--@brief 移除
+function LuaGame:OnDestroy()
+	if self.m_LuaGameStart ~= nil then
+		self.m_LuaGameStart:Destroy()
+		self.m_LuaGameStart = nil
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

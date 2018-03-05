@@ -1,42 +1,31 @@
---AssetUpdater.txt
---@breif ab包管理
---@data 2018/3/3
-
-AssetUpdater = {
-	m_GameObject = nil, --资源更新父对象
-	m_Asset = nil,		--更新管理对象
+--LuaGameStart.txt
+--@breif lua入口
+--@data 2018/3/5
+LuaGameStart = {
 }
-
---@brief c#引用
-local CSAssetUpdater = CS.AssetUpdater
-local CSGameObject = CS.UnityEngine.GameObject
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化
-function AssetUpdater:Init()
-	local gameObject = CSGameObject("AssetUpdater")
-	local component = gameObject:AddComponent(typeof(CSAssetUpdater))
-
-	self.m_GameObject = gameObject
-	self.m_Asset = component
-
-	self:StartAssetUpdater()
-	
-
-	local DrivenClass = CS.Tutorial.DrivenClass
-    local testobj = DrivenClass()
-    local function lua_event_callback1() print('lua_event_callback1') end
-    local function lua_event_callback2() print('lua_event_callback2') end
-    testobj:TestEvent('+', lua_event_callback1)
-    testobj:CallEvent()
+--@brief 拷贝原表
+function LuaGameStart:Create()
+	local obj = {}
+	setmetatable( obj, { __index = LuaGameStart })
+	return obj
 end
 
---@brief 开始检查加载
-function AssetUpdater:StartAssetUpdater()
-	self.m_Asset:StartAssetUpdater("http://192.168.0.188:80")
+--@brief 初始化
+function LuaGameStart:Init()
+	print("LuaGameStart:Init")
+end
+
+--@brief 更新
+function LuaGameStart:Update()
+end
+
+--@brief 移除
+function LuaGameStart:Destroy()
+	print("LuaGameStart:Destroy")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
