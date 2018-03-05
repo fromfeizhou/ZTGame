@@ -4,6 +4,13 @@
 LuaFileLoad = {
 	G_tLoginLuaList = {
 		"LuaGameStart",
+		
+		"Common.GameConfig",
+		"Common.PathManager",
+		"Common.NetWorkManager",
+
+		--[[UI面板相关]]
+		"Login.LoginModel"
 	},
 
 	G_tOtherList = {

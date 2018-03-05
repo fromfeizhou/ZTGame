@@ -1,0 +1,4 @@
+print("GameConfig")
+GameConfig = {
+	IsOpenNetWork = true,
+}

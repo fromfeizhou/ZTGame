@@ -16,6 +16,11 @@ end
 
 --@brief 初始化
 function LuaGameStart:Init()
+
+	if GameConfig.IsOpenNetWork then 
+		NetWorkManager:Init()
+	end
+	
 	print("LuaGameStart:Init")
 end
 

@@ -1,0 +1,67 @@
+--NetWorkManager.txt
+--@breif 
+--@data 2018/3/5
+NetWorkManager = {
+	m_instance,
+	m_serverList,--服务器列表
+}
+
+--@brief c#引用
+local CSNetWorkManager = CS.NetWorkManager
+local CSLog = CS.GameTool.Log
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function NetWorkManager:Init()
+	CSLog("NetWorkManager:Init()")
+	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
+	NetWorkManager.m_instance:Init()
+	--[[设置网络消息回调]]
+	local func = function(module,command,msgData)
+		NetWorkManager:_ReceiveMsg(module,command,msgData)
+	end
+
+	NetWorkManager:_InitServerList(NetWorkManager.m_instance:SetDelegateReceiveMsg(func))
+end
+
+--@brief 开始检查加载
+function NetWorkManager:Update()
+
+end
+
+function NetWorkManager:OnDestroy()
+	-- body
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 网络消息回调
+function NetWorkManager:_ReceiveMsg(module,command,msgData)
+		CSLog(tostring(module) ,tostring(command), tostring(msgData))
+end
+
+--@brief 初始化服务器列表
+function NetWorkManager:_InitServerList(initDelegate)
+	--[[服务器列表请求回调]]
+	local func_WebRequest = function (result,data)
+		if result then
+			CSLog(data)
+			local arr = Split(data,'=')
+			if #arr == 2 then
+				local ipArr = Split(arr[2],':')
+				if #ipArr ==2 then
+					local ip =ipArr[1]
+					local port = ipArr[2]
+				end
+			end
+
+			if initDelegate then initDelegate() end
+		else
+			CSLog(data)
+		end
+	end
+
+	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
+end

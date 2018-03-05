@@ -1,0 +1,76 @@
+--LoginModel.txt
+--@breif lua入口
+--@data 2018/3/5
+LoginModel = {
+}
+
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function LoginModel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = LoginModel })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function LoginModel:Init()
+	print("LoginModel:Init")
+	local canvas = CSGameObject.Find("Canvas").transform
+	local callback_loadfinish = function(target,path)
+		local prefab = target
+ 		if prefab then
+ 			local transform = CSTransform.Instantiate(target.transform)
+ 			CSLog(transform)
+ 			--transform.localPosition = CSVector3.zero
+ 		    --transform.localScale = CSVector3.one
+ 			transform:SetParent(canvas,false)
+		end
+	end
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("UILoginPanel"),callback_loadfinish)
+
+-- 	print("InitPanel")
+-- 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
+-- 	CS.AssetManager.LoadAsset(PathManager:GetUIPrefab("MText"),function (target,path)
+-- 		local prefab = target
+-- 		print(typeof(target))
+-- 		print(prefab)
+-- 		if prefab then
+-- 			local gameobject = CS.UnityEngine.GameObject.Instantiate(target)
+-- 			local component = gameobject:GetComponent(typeof(CS.MTextFormat))
+-- 			component.TextStr = "MTextFormat"
+
+-- 			gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
+-- 		    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
+-- 			gameobject.transform.transform:SetParent(mainPanel,false)
+-- 		end
+		
+-- 	end)
+
+
+end
+
+--@brief 更新
+function LoginModel:Update()
+end
+
+--@brief 移除
+function LoginModel:Destroy()
+	print("LoginModel:Destroy")
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function LoginModel:_initServerList()
+	-- body
+end
