@@ -25,13 +25,8 @@ function AssetUpdater:Init()
 
 	self:StartAssetUpdater()
 	
-
-	local DrivenClass = CS.Tutorial.DrivenClass
-    local testobj = DrivenClass()
     local function lua_event_callback1() print('lua_event_callback1') end
     local function lua_event_callback2() print('lua_event_callback2') end
-    testobj:TestEvent('+', lua_event_callback1)
-    testobj:CallEvent()
 end
 
 --@brief 开始检查加载

@@ -40,8 +40,6 @@ function LuaFileLoad:LoadLoginLua(loadDone)
     	local fileName = LuaFileLoad.G_tLoginLuaList[i]
     	require(fileName)
 	end 
-	print(111)
-	print(loadDone)
 	if loadDone then
 		loadDone()
 	end
