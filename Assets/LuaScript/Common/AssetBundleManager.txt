@@ -1,0 +1,9 @@
+--AssetBundleManager.txt
+--@breif ab包管理
+--@data 2018/3/3
+
+AssetBundleManager = {}
+
+function AssetBundleManager:Init()
+	-- body
+end
