@@ -1,9 +1,10 @@
---LuaFileLoad.txt
+﻿--LuaFileLoad.txt
 --@breif lua列表
 --@data 2018/3/5
 LuaFileLoad = {
 	G_tLoginLuaList = {
 		"LuaGameStart",
+
 		"AssetUpdate",		
 		"Common.GameConfig",
 		"Common.GlobalMethod"
