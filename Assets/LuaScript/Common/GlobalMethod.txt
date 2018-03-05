@@ -19,7 +19,27 @@ function Split(s, sp)
     return res  
 end  
 
+--@brief 从当前字符串的开头和结尾删除所有空白字符后剩余的字符串
+function Trim (s) 
+  return (string.gsub(s, "^%s*(.-)%s*$", "%1")) 
+end
+
 --@brief Debug输出
 function GCSLog(...)
+    if not GameConfig.IsDebug then
+        return
+    end
     CS.GameTool.Log(...)
+end
+
+--@brief 序列化table表
+function SerializeTable(tTable)
+    if not GameConfig.IsDebug then
+        return ""
+    end
+    local str = ""
+    for key,value in pairs(tTable) do
+        str = str .. tostring(key)..':'..tostring(value)..'\n'
+    end
+    return str
 end
