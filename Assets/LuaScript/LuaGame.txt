@@ -14,12 +14,7 @@ local CSGameObject = CS.UnityEngine.GameObject
 --@brief 初始化
 function LuaGame:Start()
 	print("LuaGame:Start")
-	---初始化 加载登录lua
-	LuaFileLoad:LoadLoginLua(function()
-		print("LuaGame:LoadLoginLuaDone")
-		self.m_LuaGameStart = LuaGameStart:Create()
-		self.m_LuaGameStart:Init()
-	end)
+	self:_InitAssetUpdater()
 end
 
 --@brief 更新
@@ -40,3 +35,26 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 初始化资源加载
+function LuaGame:_InitAssetUpdater()
+	local updater = require 'AssetUpdater' --加载文件
+	updater:Init(function ()
+		--资源更新流程结束 加载登陆lua文件列表
+		self:_InitLuaFileLoad()
+		updater:Destroy()
+	end)
+end
+
+
+--@brief 初始化lua加载
+function LuaGame:_InitLuaFileLoad( )
+	require 'LuaFileLoad' --加载文件
+
+	---初始化 加载登录lua
+	LuaFileLoad:LoadLoginLua(function()
+		print("LuaGame:LoadLoginLuaDone")
+		self.m_LuaGameStart = LuaGameStart:Create()
+		self.m_LuaGameStart:Init()
+	end)
+end

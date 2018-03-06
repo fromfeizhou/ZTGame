@@ -7,7 +7,6 @@ LuaFileLoad = {
 
 		"Common.GameConfig",
 		"Common.GlobalMethod",
-		"Common.AssetUpdater",		
 		"Common.PathManager",
 		"Common.NetWorkManager",
 
