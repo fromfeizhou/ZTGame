@@ -1,0 +1,79 @@
+--AssetUpdater.txt
+--@breif ab包管理
+--@data 2018/3/3
+
+local AssetUpdater = {
+	m_gameObject = nil, --资源更新父对象
+	m_updater = nil,		--更新管理对象
+	m_callBack = nil,		--外部加载回调
+	m_text = nil,		--进度显示文本
+}
+
+--@brief c#引用
+local CSAssetUpdater = CS.AssetUpdater
+local CSGameObject = CS.UnityEngine.GameObject
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 初始化
+function AssetUpdater:Init(assetDone)
+	local gameObject = CSGameObject("AssetUpdater")
+	local component = gameObject:AddComponent(typeof(CSAssetUpdater))
+
+	self.m_gameObject = gameObject
+	self.m_updater = component
+	self.m_callBack = assetDone
+
+	--文本显示(临时) 
+	self.m_text = CSGameObject.Find("Text"):GetComponent("Text")
+	
+	--添加进度回调函数
+    local function update(...) self:_UpdateAssetLoad(...) end
+    local function done() self:_UpdateAssetDone() end
+   	self.m_updater:SetAssetLuaFunc(update,done)
+
+   	--开始加载
+	self:StartAssetUpdater()
+end
+
+--@brief 开始检查加载
+function AssetUpdater:StartAssetUpdater()
+	self.m_updater:StartAssetUpdater("http://192.168.0.188:80")
+end
+
+--@brief 清除加载对象
+function AssetUpdater:Destroy()
+	if self.m_gameObject then
+		CSGameObject.Destroy(self.m_gameObject)
+		self.m_gameObject = nil
+	end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 资源更新进度
+--@param stepName 进度名字
+--@param curVal 当前进度（0-1）
+--@param maxVal 最大进度值(1) 
+function AssetUpdater:_UpdateAssetLoad(stepName,curVal,maxVal)
+	local result = string.format("AssetUpdater:_UpdateAssetLoad\n%s:  %d / %d",stepName,curVal,maxVal)
+	print(result)
+	
+	--文本显示(临时) 
+	self.m_text.text = result
+end
+
+--@brief 加载完毕
+function AssetUpdater:_UpdateAssetDone()
+	print("AssetUpdater:_UpdateAssetDone")
+
+	if self.m_callBack then
+		self.m_callBack()
+	end
+	--文本显示(临时) 
+	self.m_text.text = "AssetUpdater:_UpdateAssetDone"
+end
+
+return AssetUpdater
