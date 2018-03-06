@@ -2,8 +2,8 @@
 --@breif lua入口
 --@data 2018/3/5
 LoginModel = {
+	m_tPanelList = nil,
 }
-
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -24,39 +24,7 @@ end
 
 --@brief 初始化
 function LoginModel:Init()
-	print("LoginModel:Init")
-	local canvas = CSGameObject.Find("Canvas").transform
-	local callback_loadfinish = function(target,path)
-		local prefab = target
- 		if prefab then
- 			local transform = CSTransform.Instantiate(target.transform)
- 			CSLog(transform)
- 			--transform.localPosition = CSVector3.zero
- 		    --transform.localScale = CSVector3.one
- 			transform:SetParent(canvas,false)
-		end
-	end
-	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("UILoginPanel"),callback_loadfinish)
-
--- 	print("InitPanel")
--- 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
--- 	CS.AssetManager.LoadAsset(PathManager:GetUIPrefab("MText"),function (target,path)
--- 		local prefab = target
--- 		print(typeof(target))
--- 		print(prefab)
--- 		if prefab then
--- 			local gameobject = CS.UnityEngine.GameObject.Instantiate(target)
--- 			local component = gameobject:GetComponent(typeof(CS.MTextFormat))
--- 			component.TextStr = "MTextFormat"
-
--- 			gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
--- 		    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
--- 			gameobject.transform.transform:SetParent(mainPanel,false)
--- 		end
-		
--- 	end)
-
-
+	self.m_tPanelList = {}
 end
 
 --@brief 更新
@@ -66,6 +34,30 @@ end
 --@brief 移除
 function LoginModel:Destroy()
 	print("LoginModel:Destroy")
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			panel:Destroy()
+		end
+		self.m_tPanelList = nil
+	end
+end
+
+--@breif 显示面板
+function LoginModel:ShowPanel( panelType )
+	local panel = nil
+
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		if panelType == LOGIN_TYPE.MAIN then
+			panel = LoginMainPanel:Create()
+			self.m_tPanelList[panelType] = panel
+		end
+	end
+
+	if panel then
+		panel:Show()
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

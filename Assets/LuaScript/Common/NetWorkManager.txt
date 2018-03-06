@@ -3,7 +3,6 @@
 --@data 2018/3/5
 NetWorkManager = {
 	m_instance,
-	m_serverList,--服务器列表
 }
 
 --@brief c#引用
@@ -23,8 +22,7 @@ function NetWorkManager:Init()
 	local func = function(module,command,msgData)
 		NetWorkManager:_ReceiveMsg(module,command,msgData)
 	end
-
-	NetWorkManager:_InitServerList(NetWorkManager.m_instance:SetDelegateReceiveMsg(func))
+	NetWorkManager.m_instance:SetDelegateReceiveMsg(func)
 end
 
 --@brief 开始检查加载
@@ -36,23 +34,14 @@ function NetWorkManager:OnDestroy()
 	-- body
 end
 
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 网络消息回调
-function NetWorkManager:_ReceiveMsg(module,command,msgData)
-		CSLog(tostring(module) ,tostring(command), tostring(msgData))
-end
-
 --@brief 初始化服务器列表
-function NetWorkManager:_InitServerList(callback)
+function NetWorkManager:InitServerList()
 	--[[服务器列表请求回调]]
 	local func_WebRequest = function (result,data)
 		if result then
 
-			NetWorkManager.m_serverList = {}
+			local serverList = {}
 			local serverItemStrArr = Split(Trim(data),'\n')
-				CSLog(SerializeTable(serverItemStrArr))
 
 			for i=1,#serverItemStrArr do
 				local arr = Split(serverItemStrArr[i],'=')
@@ -61,17 +50,24 @@ function NetWorkManager:_InitServerList(callback)
 				if #arr == 2 then
 					local ipArr = Split(arr[2],':')
 					if #ipArr ==2 then
-						netData.ip = ipArr[1]
+						netData.host = ipArr[1]
 						netData.port = ipArr[2]
 					end
 				end
-				table.insert(NetWorkManager.m_serverList,netData)
+				table.insert(serverList,netData)
 			end
-			if callback then callback() end
+			GlobalData:GetNetEventDispatcher():DispatchEvent(NET_EVENT.SERVER_FINISH,serverList)
 		else
 			CSLog(data)
 		end
 	end
 
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 网络消息回调
+function NetWorkManager:_ReceiveMsg(module,command,msgData)
+		CSLog(tostring(module) ,tostring(command), tostring(msgData))
 end

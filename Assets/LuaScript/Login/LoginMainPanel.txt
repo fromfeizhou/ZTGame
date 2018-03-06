@@ -1,0 +1,158 @@
+--LoginMainPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+LoginMainPanel = {
+	m_transform = nil,
+	m_gameObject = nil,
+	m_inputFieldAccount = nil,
+	m_serverItem_Prefab = nil,
+	m_txtCurServerName = nil,
+	m_serverListPanelParent = nil,
+	m_curSelectAddress = nil,
+	m_tServerItemList = nil,
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function LoginMainPanel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = LoginMainPanel })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化登录界面（加载面板资源）
+function LoginMainPanel:Init()
+	local callback_loadfinish = function(target,path)
+		self:_LoadAssetPanelFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("LoginMainPanel"),callback_loadfinish)
+	self:_AddEvents()
+end
+
+--@brief 显示登录面板
+function LoginMainPanel:Show()
+	self.m_gameObject:SetActive(true)
+	NetWorkManager.InitServerList();
+end
+
+--@brief 隐藏登录面板
+function LoginMainPanel:Hide()
+	self.m_gameObject:SetActive(false)
+end
+
+function LoginMainPanel:Destroy()
+	self:_RemoveEvents()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function LoginMainPanel:_LoadAssetPanelFinish(target,path)
+	local prefab = target
+ 		if prefab then
+			local canvas = CSGameObject.Find("Canvas").transform
+ 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+ 			self:_InitPanel()
+		end
+end
+--@brief 初始化登录界面UI控件
+function LoginMainPanel:_InitPanel()	
+
+	-- 按钮 - 服务器列表
+	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Group_CurServer/Btn_SelectServer",function() self:_OnBtnClick_ServerList() end)
+	-- 按钮 - 登录游戏
+	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Btn_Login",function() self:_OnBtnClick_Login() end)
+	-- 输入框 - 账号
+	self.m_inputFieldAccount = PanelWidget:GetInputField(self.m_transform,"ViewPort_Login/IF_Account/InputField");
+	-- 文本 - 当前服务器信息
+	self.m_txtCurServerName = PanelWidget:GetText(self.m_transform,"ViewPort_Login/Group_CurServer/Txt_CurServer");
+	-- 节点 - 服务器地址预设父物体
+	self.m_serverListPanelParent = PanelWidget:GetChild(self.m_transform,"ViewPort_ServerList");
+	-- 预设 - 服务器地址预设
+	self.m_serverItem_Prefab = PanelWidget:GetChild(self.m_transform,"ViewPort_ServerList/Scroll View/Viewport/Content/ServerItem");
+	
+end
+
+function LoginMainPanel:_AddEvents()
+	GCSLog("LoginMainPanel:_AddEvents()")
+	GlobalData:GetNetEventDispatcher():AddEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish,self)
+end
+
+function LoginMainPanel:_RemoveEvents()
+	GCSLog("LoginMainPanel:_RemoveEvents()")
+	GlobalData:GetNetEventDispatcher():RemoveEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish)
+end
+
+function LoginMainPanel:_OnServerFinish( serverList )
+	self.m_curSelectAddress = serverList[1]
+	self.m_tServerItemList = {}
+	for i=1,#serverList do
+		local serverItem = self:_CreateServerItem(serverList[i])
+		table.insert(self.m_tServerItemList,serverItem)
+	end
+	self:_Update_CurServerName();
+end
+
+
+function LoginMainPanel:_ShowServerList()
+	self.m_serverListPanelParent.gameObject:SetActive(true)
+end
+
+function LoginMainPanel:_HideServerList()
+	self.m_serverListPanelParent.gameObject:SetActive(false)
+end
+
+--@brief 按钮 - 服务器列表
+function LoginMainPanel:_OnBtnClick_ServerList()
+	self:_Update_ServerItem();
+	self:_ShowServerList()
+end
+
+--@brief 按钮 - 登录
+function LoginMainPanel:_OnBtnClick_Login()
+	GCSLog("_OnBtnClick_Login")
+end
+
+function LoginMainPanel:_CreateServerItem( addressData )
+	local serverItem = {}
+	serverItem.itemData = addressData
+	serverItem.transform = CSTransform.Instantiate(self.m_serverItem_Prefab, self.m_serverItem_Prefab.parent)
+	serverItem.txtServerName = PanelWidget:GetText(serverItem.transform,"Txt_ServerName")
+	PanelWidget:GetButton(serverItem.transform,"Btn_Confirm",function () self:_Select_ServerItem(addressData) end)
+	serverItem.txtServerName.text = addressData.name
+	serverItem.transform.gameObject:SetActive(true)
+	return serverItem
+end
+
+function LoginMainPanel:_Select_ServerItem( addressData )
+	self.m_curSelectAddress = addressData
+	self:_Update_CurServerName()
+	self:_HideServerList()
+end
+
+function LoginMainPanel:_Update_ServerItem()
+	for i=1,#self.m_tServerItemList do
+		local serverItem = self.m_tServerItemList[i]
+		serverItem.txtServerName.text = serverItem.itemData.name
+		if serverItem.itemData.name == self.m_curSelectAddress.name then
+			serverItem.txtServerName.text = serverItem.txtServerName.text .. "(当前选中)"
+		end
+	end
+end
+
+
+
+function LoginMainPanel:_Update_CurServerName( )
+	self.m_txtCurServerName.text =  self.m_curSelectAddress.name .. "(" .. self.m_curSelectAddress.host .. ":" .. self.m_curSelectAddress.port .. ")"
+end

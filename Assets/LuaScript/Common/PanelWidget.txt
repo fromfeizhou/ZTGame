@@ -1,0 +1,19 @@
+PanelWidget = {
+	
+}
+
+function PanelWidget:GetButton(panel,path,onClick)
+	local transform = panel:Find(path)
+	transform:GetComponent("Button").onClick:AddListener(onClick)
+end
+function PanelWidget:GetInputField(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("InputField");
+end
+function PanelWidget:GetText(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("Text");
+end
+function PanelWidget:GetChild(panel,path)
+	return panel:Find(path)
+end

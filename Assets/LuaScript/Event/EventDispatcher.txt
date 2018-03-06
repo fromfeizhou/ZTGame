@@ -17,7 +17,7 @@ function EventDispatcher:Create()
 	return obj
 end
 
-function EventDispatcher:AddEvent(name,listener)
+function EventDispatcher:AddEvent(name,listener,target)
 	-- 先看看事件是否存在
 	local index = 1
 	if self.m_listeners[name] == nil then
@@ -30,11 +30,11 @@ function EventDispatcher:AddEvent(name,listener)
 	    index = #self.m_listeners[name] + 1
 	end
 	--cclog("EventDispatcher:addEvent %s,index = %d",name,index)
-	self.m_listeners[name][index] = listener
+	self.m_listeners[name][index] = {target = target,listener = listener}
 end
 
 --@brief 移除事件
---@param listenter 带参数移除当前事件 不带参数全部移除
+--@param listener 带参数移除当前事件 不带参数全部移除
 function EventDispatcher:RemoveEvent(name,listener)
 	if self.m_listeners[name] == nil then
 	    return
@@ -42,6 +42,7 @@ function EventDispatcher:RemoveEvent(name,listener)
 	local existIndex = self:_GetEventIndex(name,listener)
 	if existIndex == -1 then return end
 	table.remove(self.m_listeners[name],existIndex)
+	GCSLog("",#self.m_listeners[name])
 end
 
 --@brief 弹射事件
@@ -50,7 +51,8 @@ function EventDispatcher:DispatchEvent(name,...)
 	    return
 	end
 	for k,v in pairs(self.m_listeners[name]) do
-	    v(...)
+		local func = v.listener
+		func(v.target,...)
 	end    
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -62,7 +64,7 @@ function EventDispatcher:_GetEventIndex(name,listener)
 	    return -1
 	end
 	for i=1,#self.m_listeners[name] do
-	    if self.m_listeners[name][i] == listener then
+	    if self.m_listeners[name][i].listener == listener then
 	        return i
 	    end
 	end
