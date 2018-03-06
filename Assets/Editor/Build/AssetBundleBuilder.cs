@@ -15,11 +15,18 @@ public class AssetBundleBuilder : MonoBehaviour
     const string assetBundlesPath = "../../";
 
     static BuildTarget target = BuildTarget.Android;
+    [MenuItem("CYH_Tools/AB_Packager/ClearAbName")]
+    public static void ClearAssetBundleName()
+    {
+        //清除所有的AssetBundleName
+        ClearAllAssetBundleName();
+        Debug.Log("BuildAssetBundleName Finish");
+    }
     [MenuItem("CYH_Tools/AB_Packager/BuildAbName")]
     public static void BuildAssetBundleName()
     {
         //清除所有的AssetBundleName
-        ClearAssetBundlesName();
+        ClearAllAssetBundleName();
         //设置指定路径下所有需要打包的assetbundlename
         SetAssetBundlesName(assetsDir);
         SetAssetBundlesName(modelsDir);
@@ -83,7 +90,7 @@ public class AssetBundleBuilder : MonoBehaviour
     /// <summary>
     /// 清除所有的AssetBundleName，由于打包方法会将所有设置过AssetBundleName的资源打包，所以自动打包前需要清理
     /// </summary>
-    static void ClearAssetBundlesName()
+    static void ClearAllAssetBundleName()
     {
         //获取所有的AssetBundle名称
         string[] abNames = AssetDatabase.GetAllAssetBundleNames();

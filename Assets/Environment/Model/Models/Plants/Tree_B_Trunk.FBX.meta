@@ -11,6 +11,7 @@ ModelImporter:
     3300000: //RootNode
     4300000: Tree_B_Trunk
     9500000: //RootNode
+    11100000: //RootNode
   materials:
     importMaterials: 0
     materialName: 0
@@ -75,9 +76,9 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
-  assetBundleName: assets_environment_prefabs_models_plants
+  assetBundleName: 
   assetBundleVariant: 
