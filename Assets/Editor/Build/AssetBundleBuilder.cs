@@ -123,7 +123,7 @@ public class AssetBundleBuilder : MonoBehaviour
             {
                 if (!files[i].Name.Contains("SpritePng"))
                 {
-                    SetAssetBundlesName(files[i].FullName);
+                    SetAssetBundlesName(files[i].FullName, inAbName);
                 }
             }
             else if (!_filteredAssets.Exists(a => files[i].Name.EndsWith(a))) //如果是文件的话，则设置AssetBundleName，并排除掉.meta文件

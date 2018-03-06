@@ -672,6 +672,7 @@ public class AssetUpdater : MonoBehaviour
 
     public void StartAssetUpdater(string url)
     {
+        AssetBundleManager.GetInstance().Relaunch();
         Reset();
         List<string> url_group = new List<string>();
         url_group.Add(url);

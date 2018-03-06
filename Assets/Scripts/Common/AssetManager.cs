@@ -71,11 +71,8 @@ public class AssetManager
         return obj;
 #else
         Object obj2 = null;
-        string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
-        string abName = path.Replace(fileName, "").Replace('/', '_');
-        abName = abName.Substring(0, abName.Length - 1).ToLower();
-        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies(abName); ;
+        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript"); ;
         //加载assetBundleManifest文件    
         if (null != bundle)
         {   
