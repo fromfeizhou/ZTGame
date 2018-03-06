@@ -48,6 +48,7 @@ function LoginMainPanel:Hide()
 	self.m_gameObject:SetActive(false)
 end
 
+--@brief 销毁登录面板
 function LoginMainPanel:Destroy()
 	self:_RemoveEvents()
 end
@@ -66,6 +67,7 @@ function LoginMainPanel:_LoadAssetPanelFinish(target,path)
  			self:_InitPanel()
 		end
 end
+
 --@brief 初始化登录界面UI控件
 function LoginMainPanel:_InitPanel()	
 
@@ -84,16 +86,19 @@ function LoginMainPanel:_InitPanel()
 	
 end
 
+--@brief 增加事件
 function LoginMainPanel:_AddEvents()
 	GCSLog("LoginMainPanel:_AddEvents()")
 	GlobalData:GetNetEventDispatcher():AddEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish,self)
 end
 
+--@brief 移除事件
 function LoginMainPanel:_RemoveEvents()
 	GCSLog("LoginMainPanel:_RemoveEvents()")
 	GlobalData:GetNetEventDispatcher():RemoveEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish)
 end
 
+--@brief 事件监听 - 下载服务器列表数据完成
 function LoginMainPanel:_OnServerFinish( serverList )
 	self.m_curSelectAddress = serverList[1]
 	self.m_tServerItemList = {}
@@ -104,11 +109,12 @@ function LoginMainPanel:_OnServerFinish( serverList )
 	self:_Update_CurServerName();
 end
 
-
+--@brief 显示服务器列表
 function LoginMainPanel:_ShowServerList()
 	self.m_serverListPanelParent.gameObject:SetActive(true)
 end
 
+--@brief 隐藏服务器列表
 function LoginMainPanel:_HideServerList()
 	self.m_serverListPanelParent.gameObject:SetActive(false)
 end
@@ -124,6 +130,7 @@ function LoginMainPanel:_OnBtnClick_Login()
 	GCSLog("_OnBtnClick_Login")
 end
 
+--@brief 创建服务器Item
 function LoginMainPanel:_CreateServerItem( addressData )
 	local serverItem = {}
 	serverItem.itemData = addressData
@@ -135,12 +142,14 @@ function LoginMainPanel:_CreateServerItem( addressData )
 	return serverItem
 end
 
+--@brief 选择服务器Item
 function LoginMainPanel:_Select_ServerItem( addressData )
 	self.m_curSelectAddress = addressData
 	self:_Update_CurServerName()
 	self:_HideServerList()
 end
 
+--@brief 刷新所有服务器Item
 function LoginMainPanel:_Update_ServerItem()
 	for i=1,#self.m_tServerItemList do
 		local serverItem = self.m_tServerItemList[i]
@@ -151,8 +160,7 @@ function LoginMainPanel:_Update_ServerItem()
 	end
 end
 
-
-
+--@brief 刷新当前服务器地址数据
 function LoginMainPanel:_Update_CurServerName( )
 	self.m_txtCurServerName.text =  self.m_curSelectAddress.name .. "(" .. self.m_curSelectAddress.host .. ":" .. self.m_curSelectAddress.port .. ")"
 end

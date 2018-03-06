@@ -17,7 +17,6 @@ function NetWorkManager:Init()
 	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
 	NetWorkManager.m_instance:Init()
 
-
 	--[[设置网络消息回调]]
 	local func = function(module,command,msgData)
 		NetWorkManager:_ReceiveMsg(module,command,msgData)
@@ -61,7 +60,6 @@ function NetWorkManager:InitServerList()
 			CSLog(data)
 		end
 	end
-
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
