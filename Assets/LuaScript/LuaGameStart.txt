@@ -16,16 +16,13 @@ end
 
 --@brief 初始化
 function LuaGameStart:Init()
-
+	print("LuaGameStart:Init")
 	if GameConfig.IsOpenNetWork then 
 		NetWorkManager:Init()
 	end
 	 
 	local loginmodel = LoginModel:Create()
 	loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
-
-	--AssetUpdater:Init()
-	print("LuaGameStart:Init")
 end
 
 --@brief 更新
