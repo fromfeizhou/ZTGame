@@ -11,6 +11,7 @@ public class AssetBundleBuilder : MonoBehaviour
     static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
     static string prefabsDir = Application.dataPath + "/Prefabs";
     static string scenesDir = Application.dataPath + "/Environment";
+    static string luaScript = Application.dataPath + "/LuaScript";
     //打包后存放路径
     const string assetBundlesPath = "../../";
 
@@ -32,7 +33,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(modelsDir);
         SetAssetBundlesName(prefabsDir);
         SetAssetBundlesName(scenesDir);
-
+        SetAssetBundlesName(luaScript,"luaScript");
         EditorUtility.ClearProgressBar();
 
         Debug.Log("BuildAssetBundleName Finish");
@@ -110,7 +111,7 @@ public class AssetBundleBuilder : MonoBehaviour
     /// <summary>
     /// 设置所有在指定路径下的AssetBundleName
     /// </summary>
-    static void SetAssetBundlesName(string _assetsPath)
+    static void SetAssetBundlesName(string _assetsPath,string inAbName = "")
     {
         //先获取指定路径下的所有Asset，包括子文件夹下的资源
         DirectoryInfo dir = new DirectoryInfo(_assetsPath);
@@ -127,7 +128,11 @@ public class AssetBundleBuilder : MonoBehaviour
             }
             else if (!_filteredAssets.Exists(a => files[i].Name.EndsWith(a))) //如果是文件的话，则设置AssetBundleName，并排除掉.meta文件
             {
-                string abName = dir.FullName.Remove(0, dir.FullName.IndexOf("Assets")).Replace('\\', '_').Replace('/', '_');
+                string abName = inAbName;
+                if (abName == "")
+                {
+                    abName = dir.FullName.Remove(0, dir.FullName.IndexOf("Assets")).Replace('\\', '_').Replace('/', '_');
+                }
                 EditorUtility.DisplayProgressBar("设置名字", abName,i*1.0f/ files.Length);
                 SetABName(files[i].FullName, abName);     //逐个设置AssetBundleName
             }
