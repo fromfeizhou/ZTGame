@@ -1,0 +1,70 @@
+--EventDispatcher.txt
+--@breif 事件发送器
+--@data 2018/3/06
+EventDispatcher = {
+	m_listeners = nil,  --事件管理器
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 创建事件发送器
+function EventDispatcher:Create()
+	local obj = {}
+	setmetatable( obj, { __index = EventDispatcher })
+	obj.m_listeners = {}
+	return obj
+end
+
+function EventDispatcher:AddEvent(name,listener)
+	-- 先看看事件是否存在
+	local index = 1
+	if self.m_listeners[name] == nil then
+	    self.m_listeners[name] = {}
+	else
+	    local existIndex = self:_GetEventIndex(name,listener)
+	    if existIndex ~= -1 then
+	        return
+	    end
+	    index = #self.m_listeners[name] + 1
+	end
+	--cclog("EventDispatcher:addEvent %s,index = %d",name,index)
+	self.m_listeners[name][index] = listener
+end
+
+--@brief 移除事件
+--@param listenter 带参数移除当前事件 不带参数全部移除
+function EventDispatcher:RemoveEvent(name,listener)
+	if self.m_listeners[name] == nil then
+	    return
+	end
+	local existIndex = self:_GetEventIndex(name,listener)
+	if existIndex == -1 then return end
+	table.remove(self.m_listeners[name],existIndex)
+end
+
+--@brief 弹射事件
+function EventDispatcher:DispatchEvent(name,...)
+	if self.m_listeners[name] == nil then
+	    return
+	end
+	for k,v in pairs(self.m_listeners[name]) do
+	    v(...)
+	end    
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function EventDispatcher:_GetEventIndex(name,listener)
+	if self.m_listeners[name] == nil then
+	    return -1
+	end
+	for i=1,#self.m_listeners[name] do
+	    if self.m_listeners[name][i] == listener then
+	        return i
+	    end
+	end
+	return -1
+end
