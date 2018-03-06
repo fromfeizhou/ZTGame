@@ -1,0 +1,13 @@
+--ModelData.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brife 模块类型
+MODEL_TPYE = {
+	LOGIN = 1, --登录
+}
+
+--@登录面板类型
+LOGIN_TYPE = {
+	MAIN = 1, --主面板
+}
