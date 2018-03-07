@@ -1,7 +1,7 @@
 --LuaGame.txt
 --@breif lua入口
 --@data 2018/3/5
-LuaGame = {
+local LuaGame = {
 }
 
 --@brief c#引用
@@ -12,9 +12,9 @@ local CSGameObject = CS.UnityEngine.GameObject
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 初始化
-function LuaGame:Start()
-	print("LuaGame:Start")
-	self:_InitAssetUpdater()
+function LuaGame:Init()
+	print("LuaGame:Init")
+	self:_InitLuaFileLoad()
 end
 
 --@brief 更新
@@ -25,7 +25,7 @@ function LuaGame:Update()
 end
 
 --@brief 移除
-function LuaGame:OnDestroy()
+function LuaGame:Destroy()
 	if self.m_LuaGameStart ~= nil then
 		self.m_LuaGameStart:Destroy()
 		self.m_LuaGameStart = nil
@@ -36,21 +36,9 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
---@brief 初始化资源加载
-function LuaGame:_InitAssetUpdater()
-	local updater = require 'AssetUpdater' --加载文件
-	updater:Init(function ()
-		--资源更新流程结束 加载登陆lua文件列表
-		self:_InitLuaFileLoad()
-		updater:Destroy()
-	end)
-end
-
-
 --@brief 初始化lua加载
 function LuaGame:_InitLuaFileLoad( )
-	require 'LuaFileLoad' --加载文件
-
+	local luaFieLoad = require 'LuaFileLoad' --加载文件
 	---初始化 加载登录lua
 	LuaFileLoad:LoadLoginLua(function()
 		print("LuaGame:LoadLoginLuaDone")
@@ -58,3 +46,6 @@ function LuaGame:_InitLuaFileLoad( )
 		self.m_LuaGameStart:Init()
 	end)
 end
+
+--@brief 返回LuaGame表
+return LuaGame

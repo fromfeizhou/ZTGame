@@ -2,44 +2,54 @@
 --@breif lua入口函数
 --@data 2018/2/27
 
-require 'LuaGame'
-require 'LuaFileLoad'
-function Awake()
+G_mainLuaGame = nil	--游戏主逻辑入口 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function Main_Awake()
 	print("xlua awake")
 end
 
-function Start()
+function Main_StartEditor()
+	print("xlua start editor")
+	Main_EnterLuaGame()
+end
+
+function Main_Start()
 	print("xlua start")
-	LuaGame:Start()
+	Main_InitAssetUpdater()
 end
 
-function Update()
-	LuaGame:Update()
+function Main_Update()
+	if G_mainLuaGame then
+		G_mainLuaGame:Update()
+	end
 end
 
-function OnDestroy()
-	LuaGame:OnDestroy()
+function Main_OnDestroy()
     print("xlua destroy")
+	if G_mainLuaGame then
+		G_mainLuaGame:Destroy()
+		G_mainLuaGame = nil
+	end
 end
 
--- function InitPanel()
 
--- 	print("InitPanel")
--- 	local mainPanel = CS.UnityEngine.GameObject.Find("MainPanel").transform
--- 	CS.AssetManager.LoadAsset(PathManager:GetUIPrefab("MText"),function (target,path)
--- 		local prefab = target
--- 		print(typeof(target))
--- 		print(prefab)
--- 		if prefab then
--- 			local gameobject = CS.UnityEngine.GameObject.Instantiate(target)
--- 			local component = gameobject:GetComponent(typeof(CS.MTextFormat))
--- 			component.TextStr = "MTextFormat"
+--@brief 初始化资源加载
+function Main_InitAssetUpdater()
+	local updater = require 'LuaMain.AssetUpdater' --加载文件
+	updater:Init(function ()
+		--资源更新流程结束 游戏主逻辑入口
+		Main_EnterLuaGame()
+	end)
+end
 
--- 			gameobject.transform.localPosition = CS.UnityEngine.Vector3.zero
--- 		    gameobject.transform.localScale = CS.UnityEngine.Vector3.one
--- 			gameobject.transform.transform:SetParent(mainPanel,false)
--- 		end
-		
--- 	end)
--- end
+--@brief 启动游戏逻辑
+function Main_EnterLuaGame()
+	G_mainLuaGame = require 'LuaGame'
+	G_mainLuaGame:Init()
+end
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -186,10 +186,6 @@ public class AssetUpdater : MonoBehaviour
     /// </summary>
     IEnumerator Updating()
     {
-        while (!AssetBundleManager.GetInstance().WaitForLaunch())
-        {
-            yield return null;
-        }
         UpdateState(EmState.Initialize);
         yield return StartInitialize();
         UpdateState(EmState.VerifyURL);
@@ -222,7 +218,13 @@ public class AssetUpdater : MonoBehaviour
         //创建缓存目录
         if (!Directory.Exists(DownLoadCommon.CACHE_PATH))
             Directory.CreateDirectory(DownLoadCommon.CACHE_PATH);
+        AssetBundleManager.GetInstance().Relaunch();
 
+        //ab包启动
+        while (!AssetBundleManager.GetInstance().WaitForLaunch())
+        {
+            yield return null;
+        }
         UpdateCompleteValue(1f, 1f);
         yield return null;
     }
@@ -531,6 +533,12 @@ public class AssetUpdater : MonoBehaviour
             AssetBundleManager.GetInstance().Relaunch();
         }
 
+        //ab包重新启动
+        while (!AssetBundleManager.GetInstance().WaitForLaunch())
+        {
+            yield return null;
+        }
+
         UpdateCompleteValue(1f, 1f);
         yield return 0;
     }
@@ -672,7 +680,6 @@ public class AssetUpdater : MonoBehaviour
 
     public void StartAssetUpdater(string url)
     {
-        AssetBundleManager.GetInstance().Relaunch();
         Reset();
         List<string> url_group = new List<string>();
         url_group.Add(url);

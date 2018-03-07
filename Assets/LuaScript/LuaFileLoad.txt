@@ -2,6 +2,7 @@
 --@breif lua列表
 --@data 2018/3/5
 LuaFileLoad = {
+	--登陆模块相关逻辑所需lua文件
 	G_tLoginLuaList = {
 		"LuaGameStart",
 		"GameConfig",
@@ -21,6 +22,7 @@ LuaFileLoad = {
 		"Login.LoginMainPanel",
 	},
 
+	--其他lua文件
 	G_tOtherList = {
 	}
 }
@@ -30,7 +32,7 @@ LuaFileLoad = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 初始化
-function LuaFileLoad:Start()
+function LuaFileLoad:Init()
 	
 end
 
@@ -39,10 +41,11 @@ function LuaFileLoad:Update()
 
 end
 
-function LuaFileLoad:OnDestroy()
+function LuaFileLoad:Destroy()
 	-- body
 end
 
+--@brief 加载登陆模块lua文件
 function LuaFileLoad:LoadLoginLua(loadDone)
 	for i=1, #(LuaFileLoad.G_tLoginLuaList) do  
     	local fileName = LuaFileLoad.G_tLoginLuaList[i]
@@ -53,6 +56,8 @@ function LuaFileLoad:LoadLoginLua(loadDone)
 	end
 end
 
+
+--@brief 加载游戏逻辑lua文件
 function LuaFileLoad:LoadOtherLua()
 	-- body
 end

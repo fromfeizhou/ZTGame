@@ -51,10 +51,15 @@ public class LuaMainScene : MonoSingleton<LuaMainScene>
         }
         luaEnv.AddLoader(CustomLoaderMethod);
         luaEnv.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
-        Action luaAwake = scriptEnv.Get<Action>("Awake");
-        scriptEnv.Get("Start", out luaStart);
-        scriptEnv.Get("Update", out luaUpdate);
-        scriptEnv.Get("Ondestroy", out luaOnDestroy);
+        Action luaAwake = scriptEnv.Get<Action>("Main_Awake");
+#if UNITY_EDITOR
+        scriptEnv.Get("Main_StartEditor", out luaStart);
+#else
+        scriptEnv.Get("Main_Start", out luaStart);
+#endif
+
+        scriptEnv.Get("Main_Update", out luaUpdate);
+        scriptEnv.Get("Main_Ondestroy", out luaOnDestroy);
         if (luaAwake != null)
         {
             luaAwake();
