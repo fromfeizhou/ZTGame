@@ -5,7 +5,7 @@ using System;
 public class TerrainSlicing : Editor
 {
     private const string MapShader = "Custom/Environment/LightedTerrain";
-    private const string MapMaterialSavePath = "Assets/ResourcesLib/Map/MapMaterial.mat";
+    private const string MapMaterialSavePath = "Assets/Map/Model/Materials/MapMaterial.mat";
 
     //开始分割地形
     [MenuItem("Terrain/Slicing")]
@@ -87,7 +87,7 @@ public class TerrainSlicing : Editor
                 }
                 newData.splatPrototypes = newSplats;
 
-                float[, ,] alphamap = new float[alphamapResolution, alphamapResolution, splatProtos.Length];
+                float[,,] alphamap = new float[alphamapResolution, alphamapResolution, splatProtos.Length];
                 alphamap = terrainData.GetAlphamaps(col * newData.alphamapWidth, row * newData.alphamapHeight, newData.alphamapWidth, newData.alphamapHeight);
                 newData.SetAlphamaps(0, 0, alphamap);
 
@@ -113,64 +113,111 @@ public class TerrainSlicing : Editor
             }
         }
 
-        //Collect Tree
-        //Transform TreeRoot = GameObject.Find("[Trees]").transform;
-        //for (int i = 0; i < TreeRoot.childCount; i++)
+        //foreach (eMapItemType type in Enum.GetValues(typeof(eMapItemType)))
         //{
-        //    Transform tree = TreeRoot.GetChild(i);
-        //    int col = (int)tree.localPosition.x / MapDefine.MAPITEMSIZE;
-        //    int row = (int)tree.localPosition.z / MapDefine.MAPITEMSIZE;
-        //    string mapKey = string.Format(MapDefine.MAPKEYNAME, row, col);
-        //    MapItemInfoBase mapItemInfoBase = new MapItemInfoBase();
-        //    mapItemInfoBase.Pos = tree.localPosition - new Vector3(col * MapDefine.MAPITEMSIZE, 0, row * MapDefine.MAPITEMSIZE);
-        //    mapItemInfoBase.Angle = Vector3.zero;
-        //    mapItemInfoBase.Scale = tree.localScale;
-        //    mapAsset.AddMapItem(mapKey, eMapItemType.Tree, mapItemInfoBase);
+        //    string strName = type.ToString();
+        //    GameObject tempRoot = GameObject.Find(string.Format("[{0}]", strName));
+        //    if (tempRoot == null) continue;
+        //    Transform mapItem = tempRoot.transform;
+        //    for (int i = 0; i < mapItem.childCount; i++)
+        //    {
+        //        Transform wall = mapItem.GetChild(i);
+        //        int col = (int)wall.localPosition.x / MapDefine.MAPITEMSIZE;
+        //        int row = (int)wall.localPosition.z / MapDefine.MAPITEMSIZE;
+        //        string mapKey = string.Format(MapDefine.MAPKEYNAME, row, col);
+        //        MapItemInfoBase mapItemInfoBase = new MapItemInfoBase();
+        //        mapItemInfoBase.Pos = wall.localPosition - new Vector3(col * MapDefine.MAPITEMSIZE, 0, row * MapDefine.MAPITEMSIZE);
+        //        mapItemInfoBase.Angle = wall.localEulerAngles;
+        //        mapItemInfoBase.Scale = wall.localScale;
+        //        mapAsset.AddMapItem(mapKey, type, mapItemInfoBase);
+        //    }
         //}
-
-        //Transform WallRoot = GameObject.Find("[Wall01]").transform;
-        //for (int i = 0; i < WallRoot.childCount; i++)
-        //{
-        //    Transform wall = WallRoot.GetChild(i);
-        //    int col = (int)wall.localPosition.x / MapDefine.MAPITEMSIZE;
-        //    int row = (int)wall.localPosition.z / MapDefine.MAPITEMSIZE;
-        //    string mapKey = string.Format(MapDefine.MAPKEYNAME, row, col);
-        //    MapItemInfoBase mapItemInfoBase = new MapItemInfoBase();
-        //    mapItemInfoBase.Pos = wall.localPosition - new Vector3(col * MapDefine.MAPITEMSIZE, 0, row * MapDefine.MAPITEMSIZE);
-        //    mapItemInfoBase.Angle = Vector3.zero;
-        //    mapItemInfoBase.Scale = wall.localScale;
-        //    mapAsset.AddMapItem(mapKey, eMapItemType.Wall01, mapItemInfoBase);
-        //}
-
-
-        foreach (eMapItemType type in Enum.GetValues(typeof(eMapItemType)))
-        {
-            string strName = type.ToString();
-            GameObject tempRoot=GameObject.Find(string.Format("[{0}]", strName));
-            if(tempRoot==null) continue;
-            Transform mapItem = tempRoot.transform;
-            for (int i = 0; i < mapItem.childCount; i++)
-            {
-                Transform wall = mapItem.GetChild(i);
-                int col = (int)wall.localPosition.x / MapDefine.MAPITEMSIZE;
-                int row = (int)wall.localPosition.z / MapDefine.MAPITEMSIZE;
-                string mapKey = string.Format(MapDefine.MAPKEYNAME, row, col);
-                MapItemInfoBase mapItemInfoBase = new MapItemInfoBase();
-                mapItemInfoBase.Pos = wall.localPosition - new Vector3(col * MapDefine.MAPITEMSIZE, 0, row * MapDefine.MAPITEMSIZE);
-                mapItemInfoBase.Angle = wall.localEulerAngles;
-                mapItemInfoBase.Scale = wall.localScale;
-                mapAsset.AddMapItem(mapKey, type, mapItemInfoBase);
-            }
-        }
-
-        
-
-        AssetDatabase.CreateAsset(mapAsset, MapDefine.MAPITEMINFOASSET);
+       // AssetDatabase.CreateAsset(mapAsset, MapDefine.MAPITEMINFOASSET);
         GameObject.DestroyImmediate(mapRoot.gameObject);
         EditorUtility.ClearProgressBar();
     }
 
+    //地图元素网格（按网格加载）
+    [MenuItem("Terrain/SplitTerrainItem")]
+    private static void SplitTerrainItem()
+    {
+        MapAsset mapAsset = new MapAsset();
+        string bigMapIndex = "0_0";// 大地图坐标 后续通过读取场景名字获取
 
+        string[] bigMapIndexs = bigMapIndex.Split('_');
+        if (bigMapIndexs.Length != 2)
+        {
+            Debug.LogError("Map Data is Error!!!");
+            return;
+        }
+        int bigMapX= int.Parse(bigMapIndexs[0]);
+        int bigMapY= int.Parse(bigMapIndexs[1]);
+        //基于大地图偏移
+        int offsetX = bigMapX * MapDefine.MAPITEMTOTALSIZE;
+        int offsetY = bigMapY* MapDefine.MAPITEMTOTALSIZE;
+        string bigMapKey = bigMapX + "" + bigMapY;
+        foreach (eMapItemType type in Enum.GetValues(typeof(eMapItemType)))
+        {
+            string elementType = type.ToString();
+            GameObject tempRoot = GameObject.Find(string.Format("[{0}]", elementType));
+            if (tempRoot == null) continue;
+            Transform mapItem = tempRoot.transform;
+            for (int i = 0; i < mapItem.childCount; i++)
+            {
+                Transform element = mapItem.GetChild(i);
+                int col = (int)(element.position.x + offsetX) / MapDefine.MapElementSize;
+                int row = (int)(element.position.z + offsetY )/ MapDefine.MapElementSize;
+                string elementGridKey = col + "" + row;
+                //bound
+                Vector3 postion = element.position;
+                Vector3 scale = element.localScale;
+                element.position = Vector3.zero;
+                element.localScale = Vector3.one;
+                Vector3 center = Vector3.zero;
+                Renderer[] renders = element.GetComponentsInChildren<Renderer>();
+                foreach (Renderer child in renders)
+                    center += child.bounds.center;
+                center /= renders.Length;
+                Bounds bounds = new Bounds(center, Vector3.zero);
+                foreach (Renderer child in renders)
+                    bounds.Encapsulate(child.bounds);
+                Vector3 centralPoint =  bounds.center;
+                element.position = postion;
+                element.localScale = scale;
+
+                centralPoint += element.position;
+                int starX = (int)(centralPoint.x - bounds.size.x * 0.5f+ offsetX) / MapDefine.MapElementSize;
+                int endX = (int)(centralPoint.x + bounds.size.x * 0.5f+offsetX) / MapDefine.MapElementSize;
+                int starZ = (int)(centralPoint.z - bounds.size.z * 0.5f+offsetY) / MapDefine.MapElementSize;
+                int endZ = (int)(centralPoint.z + bounds.size.z * 0.5f+offsetY) / MapDefine.MapElementSize;
+                for (int k = starX; k <= endX; k++)
+                {
+                    for (int j = starZ; j <= endZ; j++)
+                    {
+                        string gridKey = k + "" + j;
+                        string elementKey = bigMapKey + elementGridKey + (int)type + i;
+                        MapElementInfo elementInfo = new MapElementInfo()
+                        {
+                            Pos = element.position,
+                            Angle = element.eulerAngles,
+                            Scale = element.localScale
+                        };
+                        MapElement mapElement = new MapElement();
+                        mapElement.elementKey = elementKey;
+                        mapElement.elementType = elementType;
+                        mapElement.elementInfo = elementInfo;
+                        mapAsset.AddMapElement(mapElement);
+                        mapAsset.AddMapElementGridItem(gridKey, elementKey);
+                    }
+                }
+            }
+        }
+        string tempPth = string.Format(MapDefine.MapAssetFolderPath, bigMapKey);
+        if (!Directory.Exists(tempPth))
+            Directory.CreateDirectory(tempPth);
+        tempPth += string.Format(MapDefine.MapAssetFileName, bigMapKey);
+        AssetDatabase.CreateAsset(mapAsset, tempPth);
+    }
 
     //地形转换为Mesh
     private static void TerrainToMesh(GameObject terrainObj, Material mat, string mapKey)
@@ -193,7 +240,7 @@ public class TerrainSlicing : Editor
         int w = terrainData.heightmapWidth;
         int h = terrainData.heightmapHeight;
         Vector3 size = terrainData.size;
-        float[, ,] alphaMapData = terrainData.GetAlphamaps(0, 0, terrainData.alphamapWidth, terrainData.alphamapHeight);
+        float[,,] alphaMapData = terrainData.GetAlphamaps(0, 0, terrainData.alphamapWidth, terrainData.alphamapHeight);
         Vector3 meshScale = new Vector3(size.x / (w - 1f) * vertexCountScale, 1, size.z / (h - 1f) * vertexCountScale);
         Vector2 uvScale = new Vector2(1f / (w - 1f), 1f / (h - 1f)) * vertexCountScale * (size.x / terrainData.splatPrototypes[0].tileSize.x);     // [dev] 此处有问题，若每个图片大小不一，则出问题。日后改善
 
@@ -294,13 +341,13 @@ public class TerrainSlicing : Editor
 
         GameObject prefabGo = PrefabUtility.CreatePrefab(MapDefine.TERRAIN_PREFAB_PATH + mapKey + ".prefab", t.gameObject);
 
-        if(mesh==null)
+        if (mesh == null)
         {
             Debug.LogError("mesh is null!!1" + MapDefine.TERRAIN_ASSET_PATH + "Mesh_" + mapKey + ".asset");
             return;
         }
         prefabGo.GetComponent<MeshFilter>().sharedMesh = mesh;
-        
+
         AssetDatabase.CreateAsset(mesh, MapDefine.TERRAIN_ASSET_PATH + "Mesh_" + mapKey + ".asset");
 
         AssetDatabase.Refresh();

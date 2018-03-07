@@ -93,7 +93,7 @@ public class MapTileView : MonoBehaviour {
             string tempName=(tempItem.MapItemType ).ToString();
             tempParent = _terrain.transform.Find(string.Format("[{0}]", tempName));
             if (tempParent == null) continue;
-            tempAssetPath = string.Format(MapDefine.MapItemPath, tempName);
+            tempAssetPath = string.Format(MapDefine.MapElementPath, tempName);
 
             for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
             {
@@ -102,8 +102,8 @@ public class MapTileView : MonoBehaviour {
                     GameObject assetTree = obj as GameObject;
                     Transform tree = Instantiate(assetTree).transform;
                     tree.SetParent(tempParent);
-                    tree.localPosition = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
-                    tree.localEulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
+                    tree.position = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
+                    tree.eulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
                     tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
                     trees.Add(tree.gameObject);
                     BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();

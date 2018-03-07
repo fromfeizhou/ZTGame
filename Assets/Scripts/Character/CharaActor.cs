@@ -53,6 +53,9 @@ public class CharaActor : MonoBehaviour
         _charaInfo.removeEventListener(CHARA_EVENT.CHANGE_OPACITY, OnChangeOpacity);
     }
 
+
+
+
     //改变透明度
     public void OnChangeOpacity(Notification data)
     {
@@ -60,10 +63,19 @@ public class CharaActor : MonoBehaviour
         if (opcacity > 0)
         {
             _anima.gameObject.SetActive(true);
-           SkinnedMeshRenderer render = _anima.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
-           Color color = render.material.color;
-         
-           render.material.color = new Color(color.r, color.g, color.b, opcacity);
+            SkinnedMeshRenderer render = _anima.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+
+            if (opcacity == 1)
+            {
+                render.material.shader = Shader.Find("Custom/PengLuOccTransVF");
+            }
+            else
+            {
+                render.material.shader = Shader.Find("Legacy Shaders/Transparent/Diffuse");
+                Color color = render.material.color;
+                render.material.color = new Color(color.r, color.g, color.b, opcacity);
+            }
+        
         }
         else
         {

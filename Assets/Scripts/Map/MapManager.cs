@@ -1,23 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class MapDefine
 {
-    public const string MAPITEMINFOASSET = "Assets/ResourcesLib/Config/MapAsset.asset";
-    public const string TERRAIN_ASSET_PATH = "Assets/ResourcesLib/Map/TerrainRes/";
-    public const string TERRAIN_PREFAB_PATH = "Assets/Prefabs/Map/MapItem/";
-    public const string MAPITEM_TREE = "Assets/Prefabs/Map/tree.prefab";
-    public const string MAPITEM_Wall01 = "Assets/Prefabs/Map/wall01.prefab";
+    public const string MapAssetFileName = "/MapAsset{0}.asset";
+    public const string MapAssetFolderPath = "Assets/Map/MapData/MapAsset{0}";
+    public const string MapAssetFilePath = "Assets/Map/MapData/MapAsset{0}/MapAsset{1}.asset";
+    public const string TERRAIN_ASSET_PATH = "Assets/Map/Model/TerrainRes/";
+    public const string TERRAIN_PREFAB_PATH = "Assets/Map/Prefabs/MapItem/";
     public const string MapDataSavePath = "Assets/MapData.txt";
     public const string MapRoleCreatePointSavePath = "Assets/RoleCreatePosData.txt";
-    public const string MapItemPath = "Assets/Prefabs/Map/{0}.prefab";
+    public const string MapElementPath = "Assets/Map/Prefabs/MapElementPrefabs/{0}.prefab";
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
     public const int MAPITEMTOTALSIZE = 2048;
-    public const int MAPITEMSIZE = 256;
+    public const int MAPITEMSIZE = 256;//地图切割大小
+
+    public const int MapElementSize = 32;//预设格子大小
 
     //格子大小
     public const float GridSize_Main = 20;
@@ -88,7 +93,7 @@ public class MapBlockData
     }
     public override string ToString()
     {
-        if (type == eMapBlockType.Event||type==eMapBlockType.Hide)
+        if (type == eMapBlockType.Event || type == eMapBlockType.Hide)
             return string.Format("{0}:{1}:{2}:{3}", row, col, (int)type, param);
         return string.Format("{0}:{1}:{2}", row, col, (int)type);
     }
@@ -157,6 +162,18 @@ public class RoleTilePos
 public class MapManager : Singleton<MapManager>
 {
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
+
+    private Dictionary<string, Dictionary<string, MapElement>> AllMapElementDic =
+        new Dictionary<string, Dictionary<string, MapElement>>();
+    //预设网格资源列表
+    private Dictionary<string, Dictionary<string, MapElementGrid>> AllMapElementGridDic =
+        new Dictionary<string, Dictionary<string, MapElementGrid>>();
+    //视野内预设列表
+    private Dictionary<string, MapElement> visionElementDic = new Dictionary<string, MapElement>();
+    private Dictionary<string, GameObject> loadedObj = new Dictionary<string, GameObject>();
+
+    private Dictionary<string,MapElementGrid> visionGridList=new Dictionary<string, MapElementGrid>();
+
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<MapTileView> _mapViewList = null;
     private MapTilePos _mapTilePosCenter;  //地图中心
@@ -168,6 +185,7 @@ public class MapManager : Singleton<MapManager>
     private bool _isInit = false;
     private GameObject _floorPrefab;
     private GameObject _sceneLayer;
+    private GameObject _mapElementRoot;
 
 
     private List<MapBlockData> _mapBlockData;
@@ -175,6 +193,8 @@ public class MapManager : Singleton<MapManager>
 
     private System.Random rd = new System.Random();
 
+    private string currentBigMapIndex = "00";
+    private Vector2 currElementGrid = Vector2.zero;
 
     #region 角色创建坐标
     private void InitRoleCreatPosData()
@@ -195,12 +215,13 @@ public class MapManager : Singleton<MapManager>
 
     public Vector3 GetRandomPos()
     {
-        if(_roleTilePosList!=null&&_roleTilePosList.Count>0){
+        if (_roleTilePosList != null && _roleTilePosList.Count > 0)
+        {
             int temp = rd.Next(0, _roleTilePosList.Count);
 
             return _roleTilePosList[temp].pos;
         }
-        return new Vector3(400f,0,400f);
+        return new Vector3(400f, 0, 400f);
     }
 
     //获取角色创建坐标
@@ -216,7 +237,7 @@ public class MapManager : Singleton<MapManager>
                 return _roleTilePosList[index].pos;
         }
         return Vector3.zero;
-        
+
     }
 
     #endregion
@@ -247,6 +268,7 @@ public class MapManager : Singleton<MapManager>
     {
         InitMapData();
         _sceneLayer = GameObject.Find("SceneMap");
+        _mapElementRoot = GameObject.Find("MapElement");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
         _maxDataRow = 8;
@@ -266,12 +288,36 @@ public class MapManager : Singleton<MapManager>
             _mapDataDic[tileData.Row][tileData.Column] = tileData;
         }
 
-        AssetManager.LoadAsset(MapDefine.MAPITEMINFOASSET, (obj, str) => mapAsset = obj as MapAsset);
-        AssetManager.LoadAsset("Assets/Prefabs/Map/Floor.prefab", LoadFloorCom);
+        AssetManager.LoadAsset(String.Format(MapDefine.MapAssetFilePath, currentBigMapIndex, currentBigMapIndex), (obj, str) => { InitMapAsset(currentBigMapIndex, obj); });//= obj as MapAsset);
+        AssetManager.LoadAsset(string.Format(MapDefine.MapElementPath, "Floor"), LoadFloorCom);
     }
 
     private MapAsset mapAsset;
 
+
+    private void InitMapAsset(string key, Object obj)
+    {
+        mapAsset = obj as MapAsset;
+
+        if (mapAsset != null)
+        {
+            Dictionary<string, MapElement> tempElementDic = new Dictionary<string, MapElement>();
+            for (int index = 0; index < mapAsset.elementList.Count; index++)
+            {
+                MapElement tempElement = mapAsset.elementList[index];
+                tempElementDic[tempElement.elementKey] = tempElement;
+            }
+            AllMapElementDic[key] = tempElementDic;
+
+            Dictionary<string,MapElementGrid> tempElementGridDic=new Dictionary<string, MapElementGrid>();
+            for (int index = 0; index < mapAsset.ElementGrids.Count; index++)
+            {
+                MapElementGrid tempElementGrid = mapAsset.ElementGrids[index];
+                tempElementGridDic[tempElementGrid.gridKey] = tempElementGrid;
+            }
+            AllMapElementGridDic[key] = tempElementGridDic;
+        }
+    }
 
     public List<MapBlockData> GetMapBlock(float minRow, float maxRow, float minCol, float maxCol)
     {
@@ -383,7 +429,16 @@ public class MapManager : Singleton<MapManager>
         //    UpdateMapView();
         //    return;
         //}
-        if (_mapTilePosCenter==null||Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
+        int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
+        int tempY = Mathf.FloorToInt(pos.z / MapDefine.MapElementSize);
+        if (_mapTilePosCenter == null || Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
+        {
+            currElementGrid.x = tempX;
+            currElementGrid.y = tempY;
+            UpdateElementView( pos);
+        }
+
+        if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
         {
             if (_mapTilePosCenter == null)
                 _mapTilePosCenter = new MapTilePos();
@@ -420,7 +475,89 @@ public class MapManager : Singleton<MapManager>
             }
         }
         _isInit = true;
-       // UpdateMapView();
+        // UpdateMapView();
+    }
+
+    private void UpdateElementView(Vector3 pos)
+    {
+        if (_isInit == false)
+            return;
+        Dictionary<string, MapElement> elementDic = new Dictionary<string, MapElement>();
+        int bigMapX = (int)pos.x / MapDefine.MAPITEMTOTALSIZE;
+        int bigMapY = (int)pos.z / MapDefine.MAPITEMTOTALSIZE;
+        string bigMapKey = bigMapX + "" + bigMapY;
+        int beginX = (int) currElementGrid.x - 1;
+        int beginY = (int) currElementGrid.y - 1;
+        int endX = (int) currElementGrid.x + 1;
+        int endY = (int) currElementGrid.y + 1;
+        for (int i = beginX; i <= endX; i++)
+        {
+            if (i < 0) continue;
+            for (int j = beginY; j <= endY; j++)
+            {
+                if (j < 0) continue;
+                string gridKey = i + "" + j;
+                Dictionary<string, MapElementGrid> tempGridDataDic;
+                if(AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
+                {
+                    MapElementGrid tempGridData;
+                    if (tempGridDataDic.TryGetValue(gridKey, out tempGridData))
+                    {
+                        List<string> tempElementKeyList = tempGridData.elementKeyList;
+                        for (int index = 0; index < tempElementKeyList.Count; index++)
+                        {
+                            MapElement element;
+                            Dictionary<string, MapElement> tempElementDic;
+                            if (AllMapElementDic.TryGetValue(bigMapKey, out tempElementDic))
+                                if(tempElementDic.TryGetValue(tempElementKeyList[index],out element))
+                                {
+                                    if (!elementDic.ContainsKey(element.elementKey))
+                                        elementDic[element.elementKey] = element;
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        var needClearElementDic = visionElementDic.Keys.Except(elementDic.Keys);
+        var needLoadElementDic = elementDic.Keys.Except(visionElementDic.Keys);
+        foreach (var key in needLoadElementDic)
+        {
+            MapElement elementData = elementDic[key];
+            MapElementInfo elementInfo = elementData.elementInfo;
+            string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
+            AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
+            {
+                if (obj != null)
+                {
+                    GameObject assetTree = obj as GameObject;
+                    Transform element = GameObject.Instantiate(assetTree).transform;
+                    element.SetParent(_mapElementRoot.transform);
+                    element.position = elementInfo.Pos;
+                    element.eulerAngles = elementInfo.Angle;
+                    element.localScale = elementInfo.Scale;
+                    BuildingZTCollider tempcollider = element.GetComponent<BuildingZTCollider>();
+                    if (tempcollider != null)
+                    {
+                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
+                        if (tempBattle != null)
+                            tempcollider.SetTarget(tempBattle.Collider);
+                    }
+                    loadedObj[elementData.elementKey] = element.gameObject;
+                }
+            });
+        }
+        foreach (var key in needClearElementDic)
+        {
+            if (loadedObj.ContainsKey(key))
+            {
+                GameObject tempObj = loadedObj[key];
+                GameObject.Destroy(tempObj);
+                loadedObj.Remove(key);
+            }
+        }
+        visionElementDic = elementDic;
+       
     }
 
     //刷新地图
@@ -450,13 +587,13 @@ public class MapManager : Singleton<MapManager>
             if (index < 0) continue;
             for (int j = beginY; j <= endY; j++)
             {
-                if (j < 0 ) continue;
+                if (j < 0) continue;
                 bool isShow = false;
                 for (int k = 0; k < _mapViewList.Count; k++)
                 {
                     MapTileView tileView = _mapViewList[k];
                     MapTileData data = tileView.GetMapData();
-                    if (data != null&&tileView.IsLoad && data.Column == j && data.Row == index)
+                    if (data != null && tileView.IsLoad && data.Column == j && data.Row == index)
                     {
                         isShow = true;
                         break;
@@ -506,9 +643,9 @@ public class MapManager : Singleton<MapManager>
             if (_mapTilePos.Column == 0) return;
             for (int i = 0; i < columnNum; i++)
             {
-                
+
                 //数据列数固定 当前列 + 列数
-                int dataColumn = _mapTilePos.Column-1 + MapDefine.MaxViewColumnNum;
+                int dataColumn = _mapTilePos.Column - 1 + MapDefine.MaxViewColumnNum;
                 for (int k = 0; k < MapDefine.MaxViewRowNum; k++)
                 {
                     int floorBegin = k * MapDefine.MaxViewColumnNum;
@@ -562,7 +699,7 @@ public class MapManager : Singleton<MapManager>
             for (int i = 0; i < rowNum; i++)
             {
                 //数据行数固定 当前列  + 总行数
-                int dataRow = _mapTilePos.Row + MapDefine.MaxViewRowNum-1;
+                int dataRow = _mapTilePos.Row + MapDefine.MaxViewRowNum - 1;
                 for (int k = 0; k < MapDefine.MaxViewColumnNum; k++)
                 {
                     int floorBegin = 0;
@@ -614,10 +751,10 @@ public class MapManager : Singleton<MapManager>
 
         //x移动 列位移
         int column = _mapTilePosCenter.Column;
-        int columnMax = _maxDataColumn - MapDefine.MaxViewColumnNum+1;
+        int columnMax = _maxDataColumn - MapDefine.MaxViewColumnNum + 1;
 
         int row = _mapTilePosCenter.Row;
-        int rowMax = _maxDataRow - MapDefine.MaxViewRowNum+1;
+        int rowMax = _maxDataRow - MapDefine.MaxViewRowNum + 1;
 
         column = column >= 0 ? column : 0;
         column = column >= columnMax ? columnMax : column;
