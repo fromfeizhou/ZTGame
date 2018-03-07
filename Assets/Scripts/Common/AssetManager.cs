@@ -72,7 +72,7 @@ public class AssetManager
 #else
         Object obj2 = null;
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
-        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript"); ;
+        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript");
         //加载assetBundleManifest文件    
         if (null != bundle)
         {   
@@ -82,6 +82,13 @@ public class AssetManager
 #endif
     }
 
+	public static byte[] LoadPbAsset(string path)
+	{
+		TextAsset pbAsset = LoadLuaAsset (path) as TextAsset;
+		if (pbAsset != null)
+			return pbAsset.bytes;
+		return null;
+	}
 
     //加载所有资源
     public static void LoadAllAsset(string path, UnityAction<Object[], string> callback = null)
