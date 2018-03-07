@@ -37,6 +37,11 @@ public class LuaMainScene : MonoSingleton<LuaMainScene>
 
     void Awake()
     {
+
+		luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
+		luaEnv.AddBuildin("lpeg", XLua.LuaDLL.Lua.LoadLpeg);
+		luaEnv.AddBuildin("protobuf.c", XLua.LuaDLL.Lua.LoadProtobufC);
+
         scriptEnv = luaEnv.NewTable();
 
         LuaTable meta = luaEnv.NewTable();

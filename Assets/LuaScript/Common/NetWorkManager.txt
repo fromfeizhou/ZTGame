@@ -16,21 +16,18 @@ function NetWorkManager:Init()
 	CSLog("NetWorkManager:Init()")
 	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
 	NetWorkManager.m_instance:Init()
-
 	--[[设置网络消息回调]]
-	local func = function(module,command,msgData)
-		NetWorkManager:_ReceiveMsg(module,command,msgData)
+	local func = function(protocal, buffer)
+		NetWorkManager:_CallProtocal(protocal, buffer)
 	end
 	NetWorkManager.m_instance:SetDelegateReceiveMsg(func)
 end
 
---@brief 开始检查加载
-function NetWorkManager:Update()
-
-end
-
-function NetWorkManager:OnDestroy()
-	-- body
+--@brief 请求连接服务器
+function NetWorkManager:RequestConnect( addressData )
+	self.m_instance:SetNetWorkAddress(addressData.host,addressData.port)
+	self.m_instance:RequestConnect()
+	CSLog("[NetWorkManager:RequestConnect]",SerializeTable(addressData))
 end
 
 --@brief 初始化服务器列表
@@ -62,10 +59,48 @@ function NetWorkManager:InitServerList()
 	end
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
 end
+
+
+function NetWorkManager:SendNetMessage(model, command, protobuf)
+	-- body
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+Protocal = {
+	Connect 	= 101,	--连接服务器
+    Exception 	= 102,	--异常掉线
+    Disconnect 	= 103,	--正常断线  
+	NetMessage 	= 104,	--游戏逻辑数据
+}
+
 --@brief 网络消息回调
-function NetWorkManager:_ReceiveMsg(module,command,msgData)
-		CSLog(tostring(module) ,tostring(command), tostring(msgData))
+function NetWorkManager:_CallProtocal(protocal, buffer)
+	if protocal == Protocal.Connect then
+		self:_OnConnect()
+	elseif protocal == Protocal.Exception then
+		self:_OnException(buffer)
+	elseif protocal == Protocal.Disconnect then
+		self:_OnDisconnect()
+	elseif protocal == Protocal.NetMessage then
+		self:_OnNetMessage(buffer)
+	end
+end
+
+function NetWorkManager:_OnConnect()
+	CSLog("[NetWorkManager:_OnConnect]")
+end
+
+function NetWorkManager:_OnException(exception)
+	CSLog("[NetWorkManager:_OnException]" .. exception)
+end
+
+function NetWorkManager:_OnDisconnect()
+	CSLog("[NetWorkManager:_OnDisconnect]")
+end
+
+function NetWorkManager:_OnNetMessage(msgData)
+	CSLog("[NetWorkManager:_OnNetMessage]" .. msgData)
 end
