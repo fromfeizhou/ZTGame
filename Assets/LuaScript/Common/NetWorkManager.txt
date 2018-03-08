@@ -9,6 +9,22 @@ NetWorkManager = {
 local CSNetWorkManager = CS.NetWorkManager
 local CSLog = GCSLog
 local  CSByteBuffer = CS.ByteBuffer
+
+
+
+--@brief 当前次登录验证信息
+local _loginAuthKey
+--@brief 当前消息序号
+local _curMsgSeq
+
+--@brief 协议类型定义
+Protocal = {
+	Connect 	= 101,	--连接服务器
+    Exception 	= 102,	--异常掉线
+    Disconnect 	= 103,	--正常断线  
+	NetMessage 	= 104,	--游戏逻辑数据
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -24,21 +40,6 @@ function NetWorkManager:Init()
 	NetWorkManager.m_instance:SetDelegateReceiveMsg(func)
 end
 
---[[
-local login_auth_key_s2c{
-	required uint32 unique_id = 1; // 协议序列号
-    required uint32 unique_add = 2; // 协议序列号增幅
-    required uint32 max_unique_id = 3; // 最大序列号
-    required uint32 encryption_key = 4; // 协议加密key
-    required string relogin_key = 5; // 重登陆key
-    required uint32 encrypt_type = 6; // 加密模式
-    repeated uint32 mapping_table = 7; // 映射表
-}
-]]
-
-function NetWorkManager:SetLoginAuthKey()
-	-- body
-end
 
 --@brief 请求连接服务器
 function NetWorkManager:RequestConnect( addressData )
@@ -77,64 +78,7 @@ function NetWorkManager:InitServerList()
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
 end
 
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-Protocal = {
-	Connect 	= 101,	--连接服务器
-    Exception 	= 102,	--异常掉线
-    Disconnect 	= 103,	--正常断线  
-	NetMessage 	= 104,	--游戏逻辑数据
-}
-
---@brief 网络消息回调
-function NetWorkManager:_CallProtocal(protocal, buffer)
-	if protocal == Protocal.Connect then
-		self:_OnConnect()
-	elseif protocal == Protocal.Exception then
-		self:_OnException(buffer)
-	elseif protocal == Protocal.Disconnect then
-		self:_OnDisconnect()
-	elseif protocal == Protocal.NetMessage then
-		self:_OnNetMessage(buffer)
-	end
-end
-
-function NetWorkManager:_OnConnect()
-	self:_Request_Login_Auth_Key()
-end
-
-function NetWorkManager:_OnException(exception)
-	GCSLog("[NetWorkManager:_OnException]" , exception:ReadString())
-end
-
-function NetWorkManager:_OnDisconnect()
-	CSLog("[NetWorkManager:_OnDisconnect]")
-end
-
-function NetWorkManager:_OnNetMessage(msgData)
-	local model = msgData:ReadByte()
-	local command = msgData:ReadByte()
-	local len = msgData:GetLength ()
-	local pbData = msgData:ReadBytes(len - 2)
-	local model_pb = MODEL_PB[model][command] .. "_s2c"
-	local decode = ZTProtoData.m_pb.decode(model_pb , pbData)
-	self:OnReceive(model,command,decode);
-end
-
-function NetWorkManager:_SendHeard()
-	local vo_heart = {}
-	NetWorkManager:SendNetMessage(1,0,vo_heart)
-end
-
-function NetWorkManager:_Request_Login_Auth_Key(  )
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.AUTH_KEY
-	self:SendNetMsg(package)
-end
-
+--@brief 发送网络消息包
 function NetWorkManager:SendNetMsg(package)
 	local byteBuff = CSByteBuffer()
 	byteBuff:WriteUInt16(0)
@@ -151,32 +95,75 @@ function NetWorkManager:SendNetMsg(package)
 	self.m_instance:SendSocketMessage(messageData)
 end
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 获取当前消息序号
+function GetCurMsgSeq()
+	_curMsgSeq = _curMsgSeq + _loginAuthKey.unique_add;
+	if _curMsgSeq > _loginAuthKey.max_unique_id then
+		_curMsgSeq = _loginAuthKey.unique_id
+	end
+	return _curMsgSeq;
+end
 
-function NetWorkManager:OnReceive(model,command,pbData)
-	if model == PB_LOGIN.MODEL and command == PB_LOGIN.AUTH_KEY then
-		GCSLog("unique_id:",pbData.unique_id)
-		GCSLog("unique_add:",pbData.unique_add)
-		GCSLog("max_unique_id:",pbData.max_unique_id)
-		GCSLog("encryption_key:",pbData.encryption_key)
-		GCSLog("relogin_key:",pbData.relogin_key)
-		GCSLog("encrypt_type:",pbData.encrypt_type)
-		GCSLog("mapping_table:",pbData.mapping_table)
+--@brief 网络消息回调
+function NetWorkManager:_CallProtocal(protocal, buffer)
+	if protocal == Protocal.Connect then
+		self:_OnConnect()
+	elseif protocal == Protocal.Exception then
+		self:_OnException(buffer)
+	elseif protocal == Protocal.Disconnect then
+		self:_OnDisconnect()
+	elseif protocal == Protocal.NetMessage then
+		self:_OnNetMessage(buffer)
 	end
 end
 
---[[
+--@brief 网络状态事件 - 连接完成
+function NetWorkManager:_OnConnect()
+	self:_Request_Login_Auth_Key()
+end
 
-	private gprotocol.login_auth_key_s2c _authData;
+--@brief 网络状态事件 - 网络发生异常
+function NetWorkManager:_OnException(exception)
+	GCSLog("[NetWorkManager:_OnException]" , exception:ReadString())
+end
 
-	private ushort _curMsgSeq;
-	public ushort CurMsgSeq
-	{
-		get
-		{
-			_curMsgSeq += (ushort)_authData.unique_add;
-			if (_curMsgSeq > _authData.max_unique_id)
-				_curMsgSeq = (ushort)_authData.unique_id;
-			return _curMsgSeq;
-		}
-	}
-]]
+--@brief 网络状态事件 - 网络断线
+function NetWorkManager:_OnDisconnect()
+	CSLog("[NetWorkManager:_OnDisconnect]")
+end
+
+--@brief 网络状态事件 - 接收到服务器消息
+function NetWorkManager:_OnNetMessage(msgData)
+	local model = msgData:ReadByte()
+	local command = msgData:ReadByte()
+	local len = msgData:GetLength ()
+	local pbData = msgData:ReadBytes(len - 2)
+	local model_pb = MODEL_PB[model][command] .. "_s2c"
+	local decode = ZTProtoData.m_pb.decode(model_pb , pbData)
+	self:OnReceive(model,command,decode);
+end
+
+
+--@brief pb数据处理逻辑
+function NetWorkManager:OnReceive(model,command,pbData)
+	if model == PB_LOGIN.MODEL and command == PB_LOGIN.AUTH_KEY then
+		_loginAuthKey = pbData
+	end
+end
+
+--@brief 发送心跳
+function NetWorkManager:_SendHeard()
+	local vo_heart = {}
+	NetWorkManager:SendNetMessage(1,0,vo_heart)
+end
+
+--@brief 请求登录验证
+function NetWorkManager:_Request_Login_Auth_Key(  )
+	local package 	= {}
+	package.model 	= PB_LOGIN.MODEL
+	package.command = PB_LOGIN.AUTH_KEY
+	self:SendNetMsg(package)
+end

@@ -25,7 +25,6 @@ end
 --@brief 初始化
 function LoginModel:Init()
 	self.m_tPanelList = {}
-	--self:PbTest()
 end
 
 --@brief 更新
@@ -61,8 +60,8 @@ function LoginModel:ShowPanel( panelType )
 	end
 end
 
+--@brief 请求登录游戏
 function LoginModel:NetWork_RequestLogin()
-
 	local login_login_c2s = {
 		accname = "claine", -- 用户名
 		key = "112233", 	-- 验证key
@@ -76,37 +75,10 @@ function LoginModel:NetWork_RequestLogin()
 		uid = "", 			-- quickSDK的uid
 		nick_name = "", 	-- 昵称
 	}
-
 	NetWorkManager:SendNetMessage(1,1,login_login_c2s)
-
 end
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-
-
-
---[[
---@brief
-function LoginModel:PbTest()
-    local p_dir = { }
-    p_dir.x = 111
-    p_dir.y = 222
-    p_dir.z = 333
-    p_dir.w = 444
-
-    --序列化
-    local encode = ZTProtoData.m_pb.encode('p_dir', p_dir)
-
-    -- 反序列化
-    local user_decode = ZTProtoData.m_pb.decode('p_dir', encode)
-
-    GCSLog(user_decode.x)
-    GCSLog(user_decode.y)
-    GCSLog(user_decode.z)
-    GCSLog(user_decode.w)
-end
-]]
