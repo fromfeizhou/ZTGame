@@ -1,0 +1,1103 @@
+
+ùï
+protobuf.proto",
+p_setting_info
+key (
+value ("3
+p_dir	
+x (	
+y (	
+z (	
+w ("∑
+p_login_info
+
+id (
+name (	
+job (
+level (
+rank (
+sex (
+last_login_time (
+	server_id (
+platform	 (
+platform_serv_id
+ ("$
+p_item
+key (
+value ("∏
+p_goods
+
+id (
+goods_id (
+	good_type (
+count (
+pos (
+expire (
+valid (
+cur_exp (
+
+lv	 (
+next_lv_exp
+ (
+is_look ("ä
+p_role
+
+id (
+name (	
+sex (
+level (
+rank (
+job (
+map_id (	
+x (	
+y	 (	
+z
+ ("
+p_base_attr
+hp_cur (
+hp_full (
+def (
+crit (
+
+crit_ratio (
+speed (
+	att_range (
+	att_speed (
+offset_x	 (
+offset_y
+ (
+reload_time (
+mobility (
+	clip_size ("…
+p_role_attr
+
+id (
+name (	
+sex (
+level (
+cur_exp (
+next_lv_exp (
+job (
+gongxun (
+
+next_lv_gx	 (
+gongxun_sum
+ (
+rank (
+silver (
+gold (
+coin (
+has_combine (
+custom_face (	
+fight_point (
+vigour (
+vigour_full (
+	vip_level (
+	vip_score (
+shaping (
+attr (2.p_base_attr
+
+title_list (
+
+vip_reward ("R
+p_map_buff_point
+
+id (	
+x (	
+y (	
+z (
+	buff_list ("&
+p_buff
+
+id (
+end_time ("^
+p_map_debuff_point
+point_id (
+map_debuff_id (	
+x (	
+y (	
+z ("/
+p_debuff
+	debuff_id (
+end_time ("€
+
+p_map_role
+
+id (
+name (	
+sex (
+level (
+rank (
+job (
+team (	
+x (	
+y	 (	
+z
+ (	
+d (
+state (
+
+hp (
+hp_full (
+	vip_level (
+shaping (
+fight_point (
+defense (
+buffs (2.p_buff
+debuffs (2	.p_debuff
+equips (2.p_goods"ë
+	p_map_mon
+
+id (
+monid (
+lvl (
+dir (2.p_dir	
+x (	
+y (	
+z (
+
+hp (
+hp_full	 (
+speed
+ (
+born (
+state (
+
+mapping_id (
+	config_id (
+group_id (
+fight_point (
+defense ("T
+p_simple_map_mon
+
+id (
+monid (
+
+mapping_id (
+	config_id (")
+p_chat_goods
+
+id (
+repos ("1
+p_chat_push_goods
+
+id (
+goods_id ("+
+p_chat_rank
+rank_id (
+pos ("$
+p_target
+
+id (
+type ("(
+p_damage
+
+id (
+int_list ("'
+p_key_value
+key (
+val ("&
+	p_recruit
+
+id (
+color ("∑
+p_friend_info
+role_id (
+name (	
+level (
+	vip_level (
+rank (
+fight_point (
+sex (
+flag (
+	is_online	 (
+can_rece_vigour_times
+ (
+model (
+last_give_time (
+relation (
+	max_score (
+gongxun (
+equips (2.p_goods"*
+p_mail_attach
+
+id (
+count ("4
+p_goods_limit
+goods_id (
+	goods_num ("y
+p_rank_role
+userid (
+name (	
+vip (
+rank (
+
+lv (
+fight_point (
+dress_id	 ("p
+p_rank
+
+id (
+role_id (
+pos (
+
+pos_change (
+role (2.p_rank_role
+data ("◊
+p_cuxiao_goods_info
+	cuxiao_id (
+goods_id (
+num (
+
+money_type (
+	org_price (
+price (
+discount (
+serv_remain_num (
+role_remain_num	 (
+role_max_num
+ ("F
+p_rumor_role
+userid (
+name (	
+lvl (
+sex ("4
+p_rumor_goods
+goods_id (
+	unique_id ("e
+p_rumor
+role (2.p_rumor_role
+goods (2.p_rumor_goods
+i_data (
+s_data (	"E
+p_mail_role
+userid (
+name (	
+lvl (
+sex ("I
+p_mail_args
+role (2.p_mail_role
+i_data (
+s_data (	"µ
+p_mail_basic_info
+
+id (
+	config_id (
+send_id (
+	send_name (	
+status (
+type (
+title (	
+	send_time (
+expire_time	 (
+content
+ (	
+silver (
+gold (
+vigour (
+	mail_args (2.p_mail_args(
+mail_attach_list (2.p_mail_attach"N
+	p_brocast
+
+id (
+content (	
+
+start_time (
+end_time ("|
+p_pay_package_item
+pay_id (
+end_time (
+daily_reward (
+reward_times (
+last_reward_time ("Q
+p_condition
+condition_id (
+flag (
+count (
+op_time ("g
+p_activity_info
+role_id (
+activity_id (
+count (
+	condition (2.p_condition"E
+p_activity_open
+activity_id (
+type (
+is_open ("2
+p_luck_draw_goods
+goods_id (
+num ("m
+p_luck_draw_info
+draw_id (
+next_free_time (
+cur_free_times (
+total_free_times ("´
+	p_mission
+
+mission_id (
+mission_type_id (
+type_com_count (
+type_all_count (
+state (
+listener_cur_num (
+listener_max_num (",
+p_map_goods
+goods_id (
+num ("9
+p_weapon_reinforce_goods
+goods_id (
+num ("5
+p_weapon_start_goods
+goods_id (
+num ("-
+p_sale_goods
+goods_id (
+num ("r
+p_task
+task_id (
+task_type_id (
+state (
+listener_cur_num (
+listener_max_num ("c
+p_guide_task
+guide_id (
+state (
+listener_cur_num (
+listener_max_num ("?
+p_seven_guide
+day (!
+
+guide_info (2.p_guide_task"K
+p_activity_condition
+activity_id (
+sort_id (
+state ("d
+p_activity_all_info
+activity_id (
+cur_data (
+
+admin_data (
+
+admin_time ("á
+p_rumor_brocast
+
+id (
+Type (
+role (2.p_rumor_role
+goods (2.p_rumor_goods
+i_data (
+s_data (	">
+p_chat_args
+chat_id (
+i_data (
+s_data (	"
+rank_info_c2s
+type ("c
+rank_info_s2c
+code (
+type (
+info (2.p_rank
+pos (
+
+pos_change ("'
+rank_role_rank_info_c2s
+type ("K
+rank_role_rank_info_s2c
+type (
+cur_rank (
+cur_rate ("*
+activity_activity_list_c2s
+type ("S
+activity_activity_list_s2c
+code ('
+activity_list (2.p_activity_info"M
+ activity_get_activity_reward_c2s
+activity_id (
+condition_id ("[
+ activity_get_activity_reward_s2c
+activity_id (
+condition_id (
+code ("1
+activity_activity_info_c2s
+activity_id ("S
+activity_activity_info_s2c
+code ('
+activity_info (2.p_activity_info"
+activity_all_open_info_c2s"F
+activity_all_open_info_s2c(
+activity_opens (2.p_activity_open"I
+activity_update_open_info_s2c(
+activity_opens (2.p_activity_open"k
+activity_update_activity_s2c
+activity_id (
+schedule ($
+condition_info (2.p_condition"
+mission_list_c2s"H
+mission_list_s2c
+code (&
+daily_mission_list (2
+.p_mission"4
+mission_get_mission_reward_c2s
+
+mission_id ("B
+mission_get_mission_reward_s2c
+code (
+
+mission_id (""
+ mission_refresh_mission_list_c2s"ä
+ mission_refresh_mission_list_s2c
+code (
+cur_free_times (
+total_free_times (&
+daily_mission_list (2
+.p_mission":
+mission_update_mission_s2c
+missions (2
+.p_mission"
+seven_guide_list_c2s"^
+seven_guide_list_s2c
+code (
+status ((
+seven_guide_list (2.p_seven_guide"$
+seven_guide_award_c2s
+day ("2
+seven_guide_award_s2c
+code (
+day ("
+seven_guide_update_c2s"I
+seven_guide_update_s2c/
+update_seven_guide_list (2.p_seven_guide"
+task_list_c2s"+
+task_list_s2c
+	task_list (2.p_task""
+task_reward_c2s
+task_id ("0
+task_reward_s2c
+task_id (
+code ("-
+task_update_s2c
+	task_list (2.p_task"
+login_heart_c2s"&
+login_heart_s2c
+server_time ("Ã
+login_login_c2s
+accname (	
+key (	
+fcm (
+serv_id (
+platform (
+token (	
+	device_id (	
+device_desc (	
+product_code	 (	
+uid
+ (	
+	nick_name (	"Å
+login_login_s2c
+code (
+accname (	
+	nick_name (	
+heart_interval (:1!
+
+login_info (2.p_login_info"#
+login_select_role_c2s
+
+id ("[
+login_select_role_s2c
+code (
+version (	
+time (
+role (2.p_role"P
+login_create_role_c2s
+name (	
+job (
+sex (
+serv_id ("1
+login_create_role_s2c
+code (
+
+id (" 
+login_reject_s2c
+code ("
+login_stop_s2c
+time ("¨
+login_auth_key_s2c
+	unique_id (
+
+unique_add (
+max_unique_id (
+encryption_key (
+relogin_key (	
+encrypt_type (
+mapping_table ("
+login_auth_key_c2s",
+login_relogin_c2s
+
+id (
+key (	"!
+login_relogin_s2c
+code ("
+login_wait_info_c2s"J
+login_wait_info_s2c
+	wait_flag (
+index (
+	total_num ("
+login_config_c2s"%
+login_config_s2c
+	open_time ("
+login_share_config_c2s"á
+login_share_config_s2c
+
+quick_code (
+is_share (
+	is_normal (
+wechat_appid (	
+wechat_appkey (	
+	title_url (	
+site (	
+site_url (	
+	image_url	 (	
+
+sina_appid
+ (	
+sina_appkey (	
+sina_redirecturl (	"
+role_info_c2s"+
+role_info_s2c
+role (2.p_role_attr"&
+role_mobile_c2s
+client_info ("!
+role_info_other_c2s
+
+id ("]
+role_info_other_s2c
+code (
+role (2.p_role_attr
+
+goods_list (2.p_goods"+
+role_attr_s2c
+attr (2.p_base_attr"
+role_fortune_c2s"N
+role_fortune_s2c
+silver (
+gold (
+coupon (
+coin ("/
+role_hp_mp_change_c2s
+
+hp (
+
+mp ("&
+role_vip_gift_c2s
+	reward_lv ("D
+role_vip_gift_s2c
+	reward_lv (
+count (
+ecode ("Ñ
+role_gongxun_s2c
+gongxun (
+
+next_lv_gx (
+rank (
+reward_silver (
+reward_gold (
+	last_rank ("6
+role_exp_inc_s2c
+inc (
+has_world_exp (">
+role_upgrade_s2c
+lvl (
+exp (
+exp_full ("
+role_sign_c2s
+times ("ì
+role_sign_s2c
+code (
+times (
+deduct_money (
+today_times (
+month_times (
+newer_times (
+schedule ("
+role_sign_info_c2s"e
+role_sign_info_s2c
+today_times (
+month_times (
+newer_times (
+schedule ("
+role_guide_list_c2s"e
+role_guide_list_s2c
+list (
+
+lastest_id (
+
+group_list (
+lastest_group_id ("
+role_guide_latest_c2s"5
+role_guide_latest_s2c
+
+id (
+group_id ("G
+role_guide_complete_c2s
+ids (
+	group_ids (
+type ("G
+role_guide_complete_s2c
+code (
+ids (
+	group_ids ("
+role_pay_package_info_c2s">
+role_pay_package_info_s2c!
+list (2.p_pay_package_item"*
+role_pay_package_buy_c2s
+pay_id ("K
+role_pay_package_buy_s2c
+code (!
+item (2.p_pay_package_item"-
+role_pay_package_refund_c2s
+pay_id ("N
+role_pay_package_refund_s2c
+code (!
+item (2.p_pay_package_item"
+role_revive_c2s
+type ("O
+role_revive_s2c
+code (
+born_x (
+born_y (
+born_z ("#
+role_use_cdkey_c2s
+cdkey (	"1
+role_use_cdkey_s2c
+code (
+cdkey (	"*
+role_pay_package_req_c2s
+pay_id ("J
+role_pay_package_req_s2c
+code (
+pay_id (
+order_id (	"0
+role_online_time_s2c
+time (
+
+cm ("
+role_vigour_buy_c2s"#
+role_vigour_buy_s2c
+code ("
+role_vigour_info_c2s"e
+role_vigour_info_s2c
+vigour (
+vigour_full (
+	buy_times (
+can_buy_times ("T
+role_sync_c2s
+state (	
+x (	
+y (	
+z (
+dir (2.p_dir"`
+role_sync_s2c
+
+id (
+state (	
+x (	
+y (	
+z (
+dir (2.p_dir"
+role_acc_info_c2s"
+role_acc_info_s2c"
+role_buy_gold_c2s"O
+role_buy_gold_s2c
+code (
+cur_buy_times (
+can_buy_times ("
+role_buy_gold_info_c2s"F
+role_buy_gold_info_s2c
+cur_buy_times (
+can_buy_times ("7
+role_error_s2c
+
+section_id (
+	method_id ("C
+role_buy_activity_goods_c2s
+activity_id (
+sort_id ("+
+role_buy_activity_goods_s2c
+code (""
+ role_activity_condition_info_c2s"V
+ role_activity_condition_info_s2c2
+activity_conditions (2.p_activity_condition"
+role_update_fight_point_c2s"2
+role_update_fight_point_s2c
+fight_point ("1
+role_activity_all_info_c2s
+activity_id ("E
+role_activity_all_info_s2c'
+	all_infos (2.p_activity_all_info".
+role_bc_info_c2s
+type (
+data (	"?
+role_bc_info_s2c
+role_id (
+type (
+data (	"É
+map_switch_s2c
+code (
+map_id (	
+x (	
+y (	
+z (
+buffs (2.p_buff
+debuffs (2	.p_debuff"
+map_enter_c2s"n
+map_enter_s2c
+code (
+map_id (	
+x (	
+y (	
+z (
+	role_info (2.p_map_role"µ
+map_sight_s2c 
+roles_enter (2.p_map_role%
+
+mons_enter (2.p_simple_map_mon*
+buffpoint_enter (2.p_map_buff_point/
+debuff_point_enter (2.p_map_debuff_point"@
+map_role_enter_s2c
+roles (2.p_map_role
+revive ("#
+map_role_leave_s2c
+roles ("?
+map_move_c2s
+
+id (
+direct (
+move_status ("E
+map_move_s2c
+
+id (	
+x (	
+y (
+move_status ("-
+map_mon_enter_s2c
+mons (2
+.p_map_mon" 
+map_mon_leave_s2c
+ids ("y
+map_mon_move_s2c
+
+id (	
+x (	
+y (	
+z (	
+i (	
+j (
+move_status (
+speed ("?
+map_role_update_c2s
+
+id (
+change_list (2.p_item"?
+map_role_update_s2c
+
+id (
+change_list (2.p_item">
+map_mon_update_c2s
+
+id (
+change_list (2.p_item">
+map_mon_update_s2c
+
+id (
+change_list (2.p_item",
+map_mon_dead_s2c
+
+id (
+code ("l
+map_role_dead_s2c
+
+id (
+	attack_id (
+	weapon_id (
+type (
+attack_position ("
+map_finish_s2c
+code ("%
+map_time_control_c2s
+state ("$
+map_time_control_s2c
+code (";
+map_attack_c2s
+src_id (
+damage (2	.p_damage";
+map_attack_s2c
+src_id (
+damage (2	.p_damage"B
+map_buff_point_enter_s2c&
+buff_points (2.p_map_buff_point"'
+map_buff_point_leave_s2c
+ids ("J
+map_buff_point_get_c2s
+point_id (
+type (
+robot_id ("Ö
+map_buff_point_get_s2c
+code (
+type (
+point_id (
+role_id (
+robot_id (
+	buff_list (2.p_buff"H
+map_debuff_point_enter_s2c*
+debuff_points (2.p_map_debuff_point"/
+map_debuff_point_leave_s2c
+	point_ids (":
+map_debuff_point_get_c2s
+point_id (
+type ("k
+map_debuff_point_get_s2c
+code (
+point_id (
+role_id (
+debuff_list (2	.p_debuff"-
+map_bc_info_c2s
+type (
+data (	">
+map_bc_info_s2c
+role_id (
+type (
+data (	"
+goods_info_c2s
+repos ("=
+goods_info_s2c
+repos (
+
+goods_info (2.p_goods"-
+goods_delete_s2c
+repos (
+
+id ("
+goods_use_c2s
+
+id ("R
+goods_use_s2c
+code (
+goods_id (!
+goods (2.p_luck_draw_goods"8
+goods_puton_c2s
+
+id (
+pos (
+flag ("L
+goods_puton_s2c
+code (
+flag (
+pos (
+goods_id (":
+goods_takeoff_c2s
+
+id (
+pos (
+flag ("A
+goods_takeoff_s2c
+code (
+flag (
+goods_id ("0
+goods_batch_use_c2s
+
+id (
+count ("5
+goods_batch_use_s2c
+code (
+goods_id ("+
+goods_renew_weapon_c2s
+	weapon_id ("&
+goods_renew_weapon_s2c
+code ("%
+goods_outimes_tips_c2s
+ids ("9
+goods_sale_goods_c2s!
+
+sale_goods (2.p_sale_goods"$
+goods_sale_goods_s2c
+code ("<
+goods_set_valid_c2s
+goods_id (
+valid_value ("J
+goods_set_valid_s2c
+code (
+goods_id (
+valid_value ("%
+goods_look_c2s
+weapon_type ("A
+goods_replace_c2s
+
+id (
+
+replace_id (
+flag ("/
+goods_replace_s2c
+code (
+flag ("U
+chat_req_c2s
+	chat_type (
+content (	!
+
+goods_list (2.p_chat_goods"/
+chat_req_s2c
+code (
+	chat_type ("\
+chat_private_chat_c2s
+role_id (
+content (	!
+
+goods_list (2.p_chat_goods"I
+chat_private_chat_s2c
+code (
+role_id (
+	role_name (	"ˆ
+chat_content_push_s2c
+	chat_type (
+	sender_id (
+	server_id (
+sender_name (	
+
+sender_sex (
+
+sender_lvl (
+
+sender_vip (
+
+sender_job (
+fight_point	 (
+content
+ (	
+min_type (
+	chat_args (2.p_chat_args
+equips (2.p_goods&
+
+goods_list (2.p_chat_push_goods$
+chat_rank_list (2.p_chat_rank".
+chat_show_info_c2s
+
+id (
+type ("N
+chat_show_info_s2c
+code (
+type (
+
+goods_info (2.p_goods"
+chat_horn_length_c2s"&
+chat_horn_length_s2c
+length (":
+chat_sys_anounce_s2c
+content (	
+	http_link (	"[
+chat_rumor_s2c
+channel (
+type_id (
+must (
+content (2.p_rumor"4
+chat_gm_advice_c2s
+title (	
+content (	""
+chat_gm_advice_s2c
+code (">
+chat_client_commit_error_c2s
+err_type (
+desc (	",
+chat_client_commit_error_s2c
+code ("*
+chat_basic_info_req_c2s
+role_id ("o
+chat_basic_info_req_s2c
+code (
+role_id (
+	role_name (	
+role_lvl (
+role_sex ("
+chat_brocast_info_c2s"m
+chat_brocast_info_s2c
+type ( 
+brocast_list (2
+.p_brocast$
+
+rumor_list (2.p_rumor_brocast"
+setting_get_all_c2s"/
+setting_get_all_s2c
+key (
+val ("9
+setting_set_one_setting_c2s
+key (
+value ("8
+setting_set_one_setting_s2c
+code (
+key (";
+setting_proto_forbid_s2c
+section (
+method ("
+mail_get_box_list_c2s"ç
+mail_get_box_list_s2c
+code (
+total_count (%
+	mail_list (2.p_mail_basic_info*
+send_mail_list (2.p_mail_basic_info"8
+mail_del_mail_c2s
+	mail_type (
+mail_ids ("F
+mail_del_mail_s2c
+code (
+	mail_type (
+mail_ids ("'
+mail_take_attach_c2s
+mail_id ("5
+mail_take_attach_s2c
+code (
+mail_id ("@
+mail_new_mail_inform_s2c$
+new_mail (2.p_mail_basic_info"q
+mail_send_c2s
+recv_id (
+	recv_name (	
+title (	
+content (	
+silver (
+gold ("P
+mail_send_s2c
+code (
+mail_id ( 
+mail (2.p_mail_basic_info"%
+mail_read_mail_c2s
+mail_id ("3
+mail_read_mail_s2c
+code (
+mail_id ("
+mail_take_attach_all_c2s"'
+mail_take_attach_all_s2c
+ids ("
+achieve_list_c2s"h
+achieve_list_s2c
+code (
+done (
+log (
+reward (
+doing (2.p_key_value"?
+achieve_reach_condition_c2s 
+
+conditions (2.p_key_value"M
+achieve_reach_condition_s2c
+code ( 
+
+conditions (2.p_key_value"(
+achieve_reward_c2s
+
+achieve_id ("6
+achieve_reward_s2c
+code (
+
+achieve_id ("\
+achieve_update_s2c
+done (
+log (
+reward (
+doing (2.p_key_value

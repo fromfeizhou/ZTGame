@@ -19,6 +19,7 @@ function LuaGameStart:Init()
 	print("LuaGameStart:Init")
 	if GameConfig.IsOpenNetWork then 
 		NetWorkManager:Init()
+		ZTProtoData:Init()
 	end
 	 
 	local loginmodel = LoginModel:Create()

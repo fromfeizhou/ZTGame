@@ -8,6 +8,7 @@ NetWorkManager = {
 --@brief c#引用
 local CSNetWorkManager = CS.NetWorkManager
 local CSLog = GCSLog
+local  CSByteBuffer = CS.ByteBuffer
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -21,6 +22,22 @@ function NetWorkManager:Init()
 		NetWorkManager:_CallProtocal(protocal, buffer)
 	end
 	NetWorkManager.m_instance:SetDelegateReceiveMsg(func)
+end
+
+--[[
+local login_auth_key_s2c{
+	required uint32 unique_id = 1; // 协议序列号
+    required uint32 unique_add = 2; // 协议序列号增幅
+    required uint32 max_unique_id = 3; // 最大序列号
+    required uint32 encryption_key = 4; // 协议加密key
+    required string relogin_key = 5; // 重登陆key
+    required uint32 encrypt_type = 6; // 加密模式
+    repeated uint32 mapping_table = 7; // 映射表
+}
+]]
+
+function NetWorkManager:SetLoginAuthKey()
+	-- body
 end
 
 --@brief 请求连接服务器
@@ -60,11 +77,6 @@ function NetWorkManager:InitServerList()
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
 end
 
-
-function NetWorkManager:SendNetMessage(model, command, protobuf)
-	-- body
-end
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -90,11 +102,11 @@ function NetWorkManager:_CallProtocal(protocal, buffer)
 end
 
 function NetWorkManager:_OnConnect()
-	CSLog("[NetWorkManager:_OnConnect]")
+	self:_Request_Login_Auth_Key()
 end
 
 function NetWorkManager:_OnException(exception)
-	CSLog("[NetWorkManager:_OnException]" .. exception)
+	GCSLog("[NetWorkManager:_OnException]" , exception:ReadString())
 end
 
 function NetWorkManager:_OnDisconnect()
@@ -102,5 +114,69 @@ function NetWorkManager:_OnDisconnect()
 end
 
 function NetWorkManager:_OnNetMessage(msgData)
-	CSLog("[NetWorkManager:_OnNetMessage]" .. msgData)
+	local model = msgData:ReadByte()
+	local command = msgData:ReadByte()
+	local len = msgData:GetLength ()
+	local pbData = msgData:ReadBytes(len - 2)
+	local model_pb = MODEL_PB[model][command] .. "_s2c"
+	local decode = ZTProtoData.m_pb.decode(model_pb , pbData)
+	self:OnReceive(model,command,decode);
 end
+
+function NetWorkManager:_SendHeard()
+	local vo_heart = {}
+	NetWorkManager:SendNetMessage(1,0,vo_heart)
+end
+
+function NetWorkManager:_Request_Login_Auth_Key(  )
+	local package 	= {}
+	package.model 	= PB_LOGIN.MODEL
+	package.command = PB_LOGIN.AUTH_KEY
+	self:SendNetMsg(package)
+end
+
+function NetWorkManager:SendNetMsg(package)
+	local byteBuff = CSByteBuffer()
+	byteBuff:WriteUInt16(0)
+	byteBuff:WriteByte(package.model)
+	byteBuff:WriteByte(package.command)
+	
+	if package.data and #package.data > 0  then		
+		local model_pb = MODEL_PB[package.model][package.command] .. "_c2s"
+		local encode = ZTProtoData.m_pb.encode(model_pb, package.data)
+		byteBuff:WriteBytes(encode)
+	end
+	local messageData = byteBuff:ToBytes()
+	byteBuff:Close()
+	self.m_instance:SendSocketMessage(messageData)
+end
+
+
+function NetWorkManager:OnReceive(model,command,pbData)
+	if model == PB_LOGIN.MODEL and command == PB_LOGIN.AUTH_KEY then
+		GCSLog("unique_id:",pbData.unique_id)
+		GCSLog("unique_add:",pbData.unique_add)
+		GCSLog("max_unique_id:",pbData.max_unique_id)
+		GCSLog("encryption_key:",pbData.encryption_key)
+		GCSLog("relogin_key:",pbData.relogin_key)
+		GCSLog("encrypt_type:",pbData.encrypt_type)
+		GCSLog("mapping_table:",pbData.mapping_table)
+	end
+end
+
+--[[
+
+	private gprotocol.login_auth_key_s2c _authData;
+
+	private ushort _curMsgSeq;
+	public ushort CurMsgSeq
+	{
+		get
+		{
+			_curMsgSeq += (ushort)_authData.unique_add;
+			if (_curMsgSeq > _authData.max_unique_id)
+				_curMsgSeq = (ushort)_authData.unique_id;
+			return _curMsgSeq;
+		}
+	}
+]]
