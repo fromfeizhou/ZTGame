@@ -60,8 +60,8 @@ public static class ExampleGenConfig
 		typeof(UnityEngine.Events.UnityAction),
 		typeof(System.Collections.IEnumerator),
 		typeof(UnityEngine.Events.UnityAction<UnityEngine.Object, string>),
-		typeof(Action<int,int,byte[]>),
         typeof(Action<string,float,float>),
+		typeof(Action<int,ByteBuffer>),
 	};
 
 	//黑名单
