@@ -1,204 +1,109 @@
-锘縰sing System.Collections.Generic;
 using UnityEngine;
-using com.game.client.network.gamescoket;
-using com.game.client.utility;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using XLua;
+using UnityEngine.Networking;
 
-namespace com.game.client
+[LuaCallCSharp]
+public class NetWorkManager : MonoSingleton<NetWorkManager>
 {
-    namespace network
-    {
-        public partial class NetWorkManager
-        {
-            private static NetWorkManager _instace;
-            public static NetWorkManager Instace
-            {
-                get
-                {
-                    if (_instace == null) _instace = new NetWorkManager();
-                    return _instace;
-                }
-            }
+	private string _host;
+	private int _port;
+	
+	private SocketClient _socketClient;
+	static readonly object m_lockObject = new object ();
+	static Queue<KeyValuePair<int, ByteBuffer>> mEvents = new Queue<KeyValuePair<int, ByteBuffer>> ();
 
-			private gprotocol.login_auth_key_s2c authData = new gprotocol.login_auth_key_s2c ();
-            private GameSocket _gameSocket;
-			private Int16 _curMsgSeq;
-			public Int16 CurMsgSeq
-            {
-                get
-				{
-					_curMsgSeq += (Int16)authData.unique_add;
-					if (_curMsgSeq > authData.max_unique_id)
-						_curMsgSeq = (Int16)authData.unique_id;
-					//Debug.Log ("_curMsgSeq:" + _curMsgSeq);
-					return _curMsgSeq;
-				}
-            }
+	private Action<int,ByteBuffer> _onReceiveMsg;
+	    
 
-            private ObjectPool<Message> _msgPool;
-			private Dictionary<uint,string> errDic;
+	public void InitServerList(string serverList,Action<bool,string> callback){
+		StartCoroutine (_initServerList(serverList,callback));
+	}
 
-			private bool _needReConnect = false;
-
-			public void Init(string ip, int port, System.Action<bool> _action_LockScreen)
-            {
-                RegisterFacades();
-                _gameSocket = new GameSocket();
-				_gameSocket.Init(ip, port, NetWorkConst.ConnectTimeOut);
-
-                _msgPool = new ObjectPool<Message>(32);
-
-                _gameSocket.CallBack_OnConnect = OnConnect;
-                _gameSocket.CallBack_OnSend = OnSend;
-                _gameSocket.CallBack_OnDisConnect = OnDisConnect;
-                _gameSocket.CallBack_OnReceive = OnReceive;
-                _gameSocket.CallBack_OnError = OnError;
-
-				errDic = new Dictionary<uint, string> ();
-				TextAsset errCodeStr = Resources.Load<TextAsset> (PathManager.NetWorkErrCodeFilePath);
-				string[] errorStr = errCodeStr.text.Trim().Split ('\n');
-				for (int i = 0; i < errorStr.Length; i++) {
-					string str = errorStr [i];
-					if (str.StartsWith ("-define")) {
-						str = str.Substring (8).Split (',') [1].Trim();
-						string key = str.Split ('%') [0].Trim ();
-						errDic[uint.Parse(key.Substring (0, key.Length - 2))] = str.Split ('%') [1].Trim ();
-					}
-				}
-
-				Message msg = new Message ();
-				msg.module = Module.login;
-				msg.command = Command.login_heart;
-				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
-				{
-					ProtoBuf.Serializer.Serialize(m, new gprotocol.login_heart_s2c());
-					msg.voData = m.ToArray();
-				}
-				FacadeInvoking (msg);
-
-            }
-
-            public void Connect()
-            {
-                _gameSocket.Connect();
-            }
-
-			public void SendNetMsg(byte facade, byte command, global::ProtoBuf.IExtensible vo)
-            {
-				Message message = _msgPool.Talk();
-				message.Seq = CurMsgSeq;
-				message.module = facade;
-				message.command = command;
-				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
-				{
-					ProtoBuf.Serializer.Serialize(m, vo);
-					message.voData = m.ToArray();
-				}
-                _gameSocket.WriteData(message.AllBytes);
-
-				//Debug.Log ("[SendSocketMsg]Module:" + facade + ", Command:" + command);
-				_msgPool.Recovery(message);
-
-            }
-			private string GetContent(byte[] data)
-			{
-				string output = string.Empty;
-				for (int i = 0; i < data.Length; i++)
-				{
-					output += data[i].ToString("X2") + " ";
-				}
-				return output.Trim();
+	private IEnumerator _initServerList(string serverList,Action<bool,string> callback){
+		if (string.IsNullOrEmpty (serverList) || callback == null) {
+			Debug.LogError ("[" + this.GetType().Name + "]" + "serverList or callback is null");
+			yield break;
+		}
+		   
+		UnityWebRequest webRequest = UnityWebRequest.Get(serverList);
+		yield return webRequest.SendWebRequest ();
+		if (!string.IsNullOrEmpty(webRequest.error)) {
+			callback (false, "[webRequest] Error");
+		} else {
+			if (webRequest.responseCode == 200) {
+				callback (true, webRequest.downloadHandler.text);
+			} else {
+				callback (false, "[webRequest] responseCode:" + webRequest.responseCode);
 			}
-            public void DisConnect()
-            {
-				_gameSocket.DisConnect(eErrCode.Null);
-            }
+		}
+	}
 
-			private void OnDisConnect(eErrCode errCode)
-            {
-				Debug.Log ("杩炴帴鏂紑:" + errCode);
-				HeartSwitch (false);
+	public void SetDelegateReceiveMsg(Action<int,ByteBuffer> onReceiveMsg){
+		this._onReceiveMsg = onReceiveMsg;
+	}
 
-				if (errCode == eErrCode.SendMsgFail) {
-					_needReConnect = true;
-					Connect ();
-				}
-            }
+	public void SetNetWorkAddress(string host,int port)
+	{
+		_host = host;
+		_port = port;
+	}
 
-            private void OnError(string error)
-            {
-				//LoginModule.GetInstance ().LoginPanel.LockPanel.Show ("[缃戠粶鍙戠敓閿欒],璇烽噸鍚惎鍔ㄥ鎴风");
-				Debug.LogError ("[缃戠粶鍙戠敓閿欒]"+ error);
-            }
+	public override void Init ()
+	{
+		_socketClient = new SocketClient ();
+		_socketClient.OnRegister ();
+	}
+      
+	///------------------------------------------------------------------------------------
+	public static void AddEvent (int _event, ByteBuffer data)
+	{
+		lock (m_lockObject) {
+			mEvents.Enqueue (new KeyValuePair<int, ByteBuffer> (_event, data));
+		}
+	}
 
-			/** 閿佸睆 */
-			private void OnLockScreen(){
-				
-			}
-
-            private void OnConnect()
-            {
-				Request_Login_Auth_Key ();
-            }
-
-			private void Request_Login_Auth_Key(){
-				Message message = _msgPool.Talk();
-				message.Seq = CurMsgSeq;
-				message.module = Module.login;
-				message.command = Command.login_auth_key;
-				using (System.IO.MemoryStream m = new System.IO.MemoryStream())
+	/// <summary>
+	/// 交给Command，这里不想关心发给谁。
+	/// </summary>
+	void Update ()
+	{
+		if (mEvents.Count > 0) {
+			while (mEvents.Count > 0) {
+				KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue ();
+				if(_onReceiveMsg != null)
 				{
-					ProtoBuf.Serializer.Serialize(m, new gprotocol.login_auth_key_c2s());
-					message.voData = m.ToArray();
-				}
-				_lastSendTime = System.DateTime.Now;
-				_gameSocket.WriteData(message.AllBytes);
-				_msgPool.Recovery(message);
-			}
-
-
-			private void OnReConnect(){
-				gprotocol.login_relogin_c2s vo = new gprotocol.login_relogin_c2s ()
-				{
-					id = PlayerModule.GetInstance ().RoleID,
-					key = authData.relogin_key,
-				};
-				Debug.Log ("鏂嚎閲嶈繛璇锋眰銆侷D:" + vo.id + ", reLoginKey:" + vo.key);
-				SendNetMsg(Module.login,Command.login_relogin,vo);
-			}
-
-            private void OnSend()
-            {
-				
-            }
-
-            private void OnReceive(byte[] data)
-            {
-                Message message = _msgPool.Talk();
-                message.Parse(data);
-				FacadeInvoking(message);
-                _msgPool.Recovery(message);
-            }
-
-            public void Update()
-            {
-                CheckHeart();
-
-                if (_gameSocket != null)
-                    _gameSocket.Update();
-            }
-
-
-            public void Dispose()
-            {
-            }
-
-			public void CheckErrCode(uint code)
-			{
-				if (code != 0 && errDic.ContainsKey (code)) {
-					Debug.LogError ("[NetWorkManager][OnReceiveData]ErrCode:" + code + ", Content:" + errDic[code]);
+					if(_onReceiveMsg != null)
+						_onReceiveMsg(_event.Key,_event.Value);
 				}
 			}
-        }
-    }
+		}
+	}
+
+	/// <summary>
+	/// 发送链接请求
+	/// </summary>
+	public void RequestConnect ()
+	{
+		_socketClient.SendConnect (_host, _port);
+	}
+
+	/// <summary>
+	/// 发送SOCKET消息
+	/// </summary>
+	public void SendSocketMessage (byte[] msgData)
+	{
+		_socketClient.WriteMessage(msgData);
+	}
+	         
+	/// <summary>
+	/// 析构函数
+	/// </summary>
+	void OnDestroy ()
+	{
+		_socketClient.OnRemove ();
+		Debug.Log ("~NetworkManager was destroy");
+	}
 }
