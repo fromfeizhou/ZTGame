@@ -10,6 +10,6 @@ public class UISystemNoticePanel : MonoBehaviour {
 
 	void Update()
 	{
-		_txtPing.text = NetWorkManager.Instace.Ping.ToString();
+		//_txtPing.text = NetWorkManager.GetInstance().Ping.ToString();
 	}
 }

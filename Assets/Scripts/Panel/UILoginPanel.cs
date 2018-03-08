@@ -30,9 +30,7 @@ public class UILoginPanel : MonoBehaviour
 		yield return InitServerList ();
 	}
 
-
 	private IEnumerator InitServerList(){
-		Debug.Log(NetWorkConst.ServerListPath);
 		WWW www = new WWW (NetWorkConst.ServerListPath);
 		yield return www;
 		if (!string.IsNullOrEmpty (www.error)) {
@@ -98,7 +96,7 @@ public class UILoginPanel : MonoBehaviour
 		LockPanel.Show ("正在连接中");
 
 		NetWorkConst.IsOpenNetWork = true;
-		GameManager.GetInstance ().SetNetWorkAddress (curSelectServerItemData.Ip,curSelectServerItemData.Port);
+		NetWorkManager.GetInstance ().SetNetWorkAddress (curSelectServerItemData.Ip,curSelectServerItemData.Port);
 		GameManager.GetInstance ().Init ();
 		StartCoroutine (WaitSendLogin());
 	}
@@ -114,8 +112,6 @@ public class UILoginPanel : MonoBehaviour
 		NetWorkConst.IsOpenNetWork = false;
 		GameManager.GetInstance ().Init ();
 		LoginModule.GetInstance ().EnterGameScene ();
-
 	}
-
 }
    

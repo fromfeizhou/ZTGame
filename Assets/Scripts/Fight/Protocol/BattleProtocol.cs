@@ -106,11 +106,12 @@ public class BattleProtocol : Singleton<BattleProtocol>
         string bpOut = JsonUtility.ToJson(bp);
         if (NetWorkConst.IsOpenNetWork)
         {
+			/*
             gprotocol.role_bc_info_c2s vo = new gprotocol.role_bc_info_c2s()
             {
                 data = bpOut,
-            };
-            NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
+            };*/
+            //NetWorkManager.Instace.SendNetMsg(Module.role, Command.role_bc_info, vo);
         }
         else
         {

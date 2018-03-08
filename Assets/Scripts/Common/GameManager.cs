@@ -13,15 +13,6 @@ public class GameManager : MonoSingleton<GameManager>
     private List<UnityAction> _loadFuncList;
     // Use this for initialization
 
-	private string _ip;
-	private int _port;
-
-	public void SetNetWorkAddress (string ip, int port){
-		_ip = ip;
-		_port = port;
-	}
-
-
     public override void Init()
     {
         Application.targetFrameRate = 45;
@@ -46,8 +37,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (NetWorkConst.IsOpenNetWork)
         {
-			NetWorkManager.Instace.Init(_ip,_port,null);
-            NetWorkManager.Instace.Connect();
+			NetWorkManager.GetInstance ().Init ();
+			NetWorkManager.GetInstance().RequestConnect();
         }
     }
 
@@ -85,8 +76,6 @@ public class GameManager : MonoSingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        NetWorkManager.Instace.Update();
-
         if (GameManager.GameInit == false)
         {
             return;
@@ -118,11 +107,13 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else
         {
+			/*
             PlayerModule.GetInstance().SetRoleInfo(new gprotocol.p_role()
             {
                 id = 1,
                 job = 1
             });
+            */
             BattleProtocol.GetInstance().SendEnterBattle(1, 1);
             BattleProtocol.GetInstance().SendEnterBattle(2, 1);
         }
