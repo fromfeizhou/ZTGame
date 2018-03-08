@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public enum eMapItemType
 {
-    Tree,
+    Tree=1,
     Tree08,
     Wall01,
     Wall02,
@@ -43,12 +43,68 @@ public class MapInfo
     public List<MapItemInfo> MapItemList = new List<MapItemInfo>();
 }
 
+[System.Serializable]
+public class MapElementGrid
+{
+    public string gridKey;
+    public List<string> elementKeyList = new List<string>();
+}
+
+[System.Serializable]
+public class MapElement
+{
+    public string elementKey;
+    public string elementType;
+    public MapElementInfo elementInfo;
+}
+
+[System.Serializable]
+public class MapElementInfo
+{
+    public Vector3 Pos;
+    public Vector3 Angle;
+    public Vector3 Scale;
+}
+
 
 [CreateAssetMenu]
 [System.Serializable]
 public class MapAsset : ScriptableObject
 {
     public List<MapInfo> MapList = new List<MapInfo>();
+
+    public List<MapElement> elementList = new List<MapElement>();
+
+    public List<MapElementGrid> ElementGrids = new List<MapElementGrid>();
+
+    public void AddMapElement( MapElement data)
+    {
+        if (data == null) return;
+        int index = elementList.FindIndex(a => a.elementKey.Equals(data.elementKey));
+        if (index < 0)
+            elementList.Add(data);
+    }
+
+    public void AddMapElementGridItem(string gridKey, string elementKey)
+    {
+        int index = ElementGrids.FindIndex(a => a.gridKey.Equals(gridKey));
+        if (index < 0)
+        {
+            MapElementGrid grid = new MapElementGrid();
+            grid.gridKey = gridKey;
+            grid.elementKeyList.Add(elementKey);
+            ElementGrids.Add(grid);
+        }
+        else
+        {
+            List<string> elementKeys = ElementGrids[index].elementKeyList;
+            int tempIndex = elementKeys.FindIndex(a => a.Equals(elementKey));
+            if (tempIndex < 0)
+                elementKeys.Add(elementKey);
+
+        }
+    }
+
     public void AddMapItem<T>(string mapKey, eMapItemType mapType, T mapItem) where T: MapItemInfoBase
     {
         MapInfo mapInfo;
