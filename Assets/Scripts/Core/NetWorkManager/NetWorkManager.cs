@@ -29,7 +29,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 		}
 		   
 		UnityWebRequest webRequest = UnityWebRequest.Get(serverList);
-		yield return webRequest.SendWebRequest ();
+		yield return webRequest.Send ();
 		if (!string.IsNullOrEmpty(webRequest.error)) {
 			callback (false, "[webRequest] Error");
 		} else {

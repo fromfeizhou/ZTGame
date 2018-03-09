@@ -25,6 +25,7 @@ end
 --@brief 初始化
 function LoginModel:Init()
 	self.m_tPanelList = {}
+
 end
 
 --@brief 更新

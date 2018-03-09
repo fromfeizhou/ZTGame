@@ -1,55 +1,75 @@
---GlobalData.txt
+--SystemNoticePanel.txt
 --@breif lua入口
 --@data 2018/3/5
-GlobalData = {
-	NetEventDispatcher = nil,
-	MdlEventDispatcher = nil,
+SystemNoticePanel = {
+	m_transform = nil,
+	m_gameObject = nil,
+
+	m_Notice = nil,
 }
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 更新
-function GlobalData:Update()
+--@brief 拷贝原表
+function SystemNoticePanel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = SystemNoticePanel })
+	obj:Init()
+	return obj
 end
 
---@brief 移除
-function GlobalData:Destroy()
-end
-
---@breif 网络事件
-NET_EVENT = {
-	SERVER_FINISH = "net_event_server_finish", 
-	RECEIVE_MESSAGE = "net_event_receive_message",
-}
-function GlobalData:GetNetEventDispatcher()
-	if GlobalData.NetEventDispatcher == nil then 
-		GlobalData.NetEventDispatcher = EventDispatcher:Create() 
+--@brief 初始化登录界面（加载面板资源）
+function SystemNoticePanel:Init()
+	local callback_loadfinish = function(target,path)
+		self:_LoadAssetPanelFinish(target,path)
 	end
-	return GlobalData.NetEventDispatcher
+		
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("SystemNoticePanel"),callback_loadfinish)
 end
 
+--@brief 显示登录面板
+function SystemNoticePanel:Show()
+	self.m_gameObject:SetActive(true)
+end
 
---@breif 模块事件
-MDL_EVENT = {
-	SHOW_PANEL = "mdl_event_show_panel",
-	HIDE_PANEL = "mdl_event_hide_panel",
-}
+--@brief 隐藏登录面板
+function SystemNoticePanel:Hide()
+	self.m_gameObject:SetActive(false)
+end
 
-function GlobalData:GetMdlEventDispatcher()
-	if GlobalData.MdlEventDispatcher == nil then 
-		GlobalData.MdlEventDispatcher = EventDispatcher:Create() 
-	end
-	return GlobalData.MdlEventDispatcher
+--@brief 销毁登录面板
+function SystemNoticePanel:Destroy()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function SystemNoticePanel:_LoadAssetPanelFinish(target,path)
+	local prefab = target
+ 		if prefab then
+			local canvas = CSGameObject.Find("Canvas").transform
+ 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+ 			self:_InitPanel()
+		end
+end
+
+--@brief 初始化登录界面UI控件
+function SystemNoticePanel:_InitPanel()	
+	-- 按钮 - 用户确认
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:_OnClick_Confirm() end)
+	-- 文本 - 用户提示
+	self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
+end
+
+--@brief 确认按钮
+function SystemNoticePanel:_OnClick_Confirm()
+	self:Hide()
+end
