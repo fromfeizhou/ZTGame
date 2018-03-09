@@ -47,11 +47,15 @@ end
 
 --@brief 请求连接服务器
 function NetWorkManager:RequestConnect( addressData )
+
+	local ModelData = {}
+	ModelData.modelType = MODEL_TYPE.SYSTEM
+	ModelData.panelType = SYSTEM_TYPE.NOTICE
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,ModelData)
+
+
 	self.m_instance:SetNetWorkAddress(addressData.host,addressData.port)
 	self.m_instance:RequestConnect()
-	if not _systemModel then _systemModel = SystemModel:Create() end
-	_systemModel:ShowPanel(SYSTEM_TYPE.NOTICE)
-	CSLog("[NetWorkManager:RequestConnect]",SerializeTable(addressData))
 end
 
 --@brief 初始化服务器列表

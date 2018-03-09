@@ -32,6 +32,11 @@ function SystemNoticePanel:Init()
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("SystemNoticePanel"),callback_loadfinish)
 end
 
+--@brief 面板每帧刷新
+function SystemNoticePanel:Update()
+	--GCSLog("SystemNoticePanel:Update")
+end
+
 --@brief 显示登录面板
 function SystemNoticePanel:Show()
 	self.m_gameObject:SetActive(true)

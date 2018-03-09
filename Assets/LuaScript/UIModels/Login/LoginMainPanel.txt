@@ -37,6 +37,11 @@ function LoginMainPanel:Init()
 	self:_AddEvents()
 end
 
+--@brief 面板每帧刷新
+function LoginMainPanel:Update()
+	--GCSLog("LoginMainPanel:Update")
+end
+
 --@brief 显示登录面板
 function LoginMainPanel:Show()
 	self.m_gameObject:SetActive(true)
@@ -127,8 +132,6 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
-	GCSLog("[LoginMainPanel:_OnBtnClick_Login]",SerializeTable(self.m_curSelectAddress))
-
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
 end
 

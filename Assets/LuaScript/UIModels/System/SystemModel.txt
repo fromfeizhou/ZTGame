@@ -16,6 +16,7 @@ local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
 function SystemModel:Create()
+	GCSLog("SystemModel:Create")
 	local obj = {}
 	setmetatable( obj, { __index = SystemModel })
 	obj:Init()
@@ -29,6 +30,7 @@ end
 
 --@brief 更新
 function SystemModel:Update()
+	GCSLog("SystemModel:Update")
 end
 
 --@brief 移除
@@ -45,7 +47,6 @@ end
 --@breif 显示面板
 function SystemModel:ShowPanel( panelType )
 	local panel = nil
-
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else

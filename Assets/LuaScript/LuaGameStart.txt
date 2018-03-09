@@ -26,6 +26,7 @@ end
 
 --@brief 更新
 function LuaGameStart:Update()
+	ModelManager:Update()
 end
 
 --@brief 移除

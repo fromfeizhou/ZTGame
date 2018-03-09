@@ -16,7 +16,7 @@ local CSModelManager = CS.ModelManager
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 初始化
 function ModelManager:Init()
-	GCSLog("ModelManager:Init()")
+	GCSLog("ModelManager:Init")
 	ModelManager.m_instance = CSModelManager.GetInstance()
 	ModelManager.m_instance:Init()
 	ModelManager.m_modelList = {}
@@ -26,11 +26,21 @@ function ModelManager:Init()
 	ModelManager:_AddEvents()
 end
 
+--@brief 更新模块列表中的模块逻辑
+function ModelManager:Update()
+	ModelManager:_UpdatePanel();
+end
+
 --@breif 移除
 function ModelManager:Destroy()
 	ModelManager:_RemoveEvents()
 end
 
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@breif 添加监听模块事件
 function ModelManager:_AddEvents()
 	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_ShowPanel,ModelManager)
@@ -42,43 +52,68 @@ function ModelManager:_RemoveEvents()
 
 end
 
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@breif 事件句柄 显示面板
 function ModelManager:_OnHandle_ShowPanel(panelData)
-	local model = ModelManager:GetModel(panelData.modelType)
+	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
 		model:ShowPanel(panelData.panelType)
 	else
-		GCSLog("[ModelManager:_OnHandle_ShowPanel]found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_ShowPanel found out ",panelData.panelType)
 	end
 end
 
 --@breif 事件句柄 隐藏面板
 function ModelManager:_OnHandle_HidePanel(panelData)
-	local model = ModelManager:GetModel(panelData.modelType)
+	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
 		model:HidePanel(panelData.panelType)
 		ModelManager:_TryCleanModel()
 	else
-		GCSLog("[ModelManager:_OnHandle_ShowPanel]found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_ShowPanel found out ",panelData.panelType)
 	end
 end
+
+
+--@brief 刷新当前缓存中的面板
+function ModelManager:_UpdatePanel()
+	if ModelManager.m_modelList then
+		for k,model in pairs(ModelManager.m_modelList) do
+			if model.m_tPanelList then
+				for i,panel in pairs(model.m_tPanelList) do
+					panel:Update()
+				end
+			end
+		end
+	end
+end
+
 
 --@breif 尝试清理模块
 function ModelManager:_TryCleanModel(model)
 	if not model then return end
-	if #model.m_tPanelList == 0 then
+	if model.m_tPanelList == nil or #model.m_tPanelList == 0 then
 		ModelManager:_RemoveModel(model);
 	end
+end
+
+--@breif 获取模块
+function ModelManager:_GetModel( modelType )
+	if not ModelManager.m_modelList[modelType] then
+		local model = ModelManager:_CreateModel(modelType)
+		if model then
+			ModelManager:_AddModel(modelType,model)
+		else
+			GCSLog("ModelManager:_GetModel",modelType)
+		end
+	end
+	return ModelManager.m_modelList[modelType]
 end
 
 --@breif 创建模块
 function ModelManager:_CreateModel( modelType)
 	GCSLog("[ModelManager:_CreateModel]",modelType)
-
 	local modelTemplate = nil
+	local model = nil
 	if modelType == MODEL_TYPE.SYSTEM then 
 		modelTemplate = SystemModel
 	elseif modelType == MODEL_TYPE.LOGIN then 
@@ -86,23 +121,9 @@ function ModelManager:_CreateModel( modelType)
 	end
 
 	if modelTemplate then
-		modelTemplate:Create()
+		model = modelTemplate:Create()
 	end
-
-	return modelTemplate
-end
-
---@breif 获取模块
-function ModelManager:GetModel( modelType )
-	if not ModelManager.m_modelList[modelType] then
-		local model = ModelManager:_CreateModel(modelType)
-		if model then
-			ModelManager:_AddModel(modelType,model)
-		else
-			GCSLog("[ModelManager:GetModel]found out ",modelType)
-		end
-	end
-	return ModelManager.m_modelList[modelType]
+	return model
 end
 
 --@breif 添加模块到缓存列表
