@@ -1,7 +1,7 @@
 ﻿--LuaFileLoad.txt
 --@breif lua列表
 --@data 2018/3/5
-LuaFileLoad = {
+local LuaFileLoad = {
 	--登陆模块相关逻辑所需lua文件
 	G_tLoginLuaList = {
 		"LuaGameStart",
@@ -9,6 +9,7 @@ LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
+		"Global.CommonData",
 		"Global.GlobalData",
 		"Global.ModelData",
 		"Global.ZTProtoData",
@@ -28,6 +29,9 @@ LuaFileLoad = {
 
 	--游戏lua文件
 	G_tGameList = {
+		"Global.Animator.AnimatorData",
+		"Global.Animator.Animator",
+
 		"Battle.ZTBattleScene",
 		"Battle.ZTCharaManager",
 	}
@@ -81,3 +85,5 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+return LuaFileLoad
