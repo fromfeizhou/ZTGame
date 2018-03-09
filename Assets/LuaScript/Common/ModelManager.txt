@@ -1,0 +1,109 @@
+--ModelManager.txt
+--@breif 
+--@data 2018/3/5
+ModelManager = {
+	m_instance,
+	m_modelList = nil,
+	m_modelDef = nil,
+
+	m_mdlEvent = nil,
+}
+
+--@brief c#引用
+local CSModelManager = CS.ModelManager
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function ModelManager:Init()
+	GCSLog("ModelManager:Init()")
+	ModelManager.m_instance = CSModelManager.GetInstance()
+	ModelManager.m_instance:Init()
+	ModelManager.m_modelList = {}
+	ModelManager.m_modelDef = {}
+	ModelManager.m_mdlEvent = GlobalData:GetMdlEventDispatcher()
+
+	ModelManager:_AddEvents()
+end
+
+--@breif 移除
+function ModelManager:Destroy()
+	ModelManager:_RemoveEvents()
+end
+
+function ModelManager:_AddEvents()
+	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_ShowPanel,ModelManager)
+end
+
+function ModelManager:_RemoveEvents()
+	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_ShowPanel)
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function ModelManager:_OnHandle_ShowPanel(panelData)
+	local model = ModelManager:GetModel(panelData.modelType)
+	if model then
+		model:ShowPanel(panelData.panelType)
+	else
+		GCSLog("[ModelManager:_OnHandle_ShowPanel]found out ",panelData.panelType)
+	end
+end
+
+function ModelManager:_OnHandle_HidePanel(panelData)
+	local model = ModelManager:GetModel(panelData.modelType)
+	if model then
+		model:HidePanel(panelData.panelType)
+		ModelManager:_CheckCleanModel()
+	else
+		GCSLog("[ModelManager:_OnHandle_ShowPanel]found out ",panelData.panelType)
+	end
+end
+
+function ModelManager:_CheckCleanModel(model)
+	if not model then return end
+	if #model.m_tPanelList == 0 then
+		ModelManager:RemoveModel(model);
+	end
+end
+
+function ModelManager:_GetModelTemplate( modelType)
+	local modelTemplate = nil
+	if modelType == MODEL_TYPE.SYSTEM then 
+		modelTemplate = SystemModel
+	elseif modelType == MODEL_TYPE.LOGIN then 
+		modelTemplate = LoginModel
+	end
+
+	if modelTemplate then
+		modelTemplate:Create()
+	end
+
+	return modelTemplate
+end
+
+function ModelManager:GetModel( modelType )
+	if not ModelManager.m_modelList[modelType] then
+		local model = ModelManager._GetModelTemplate(modelType)
+		if model then
+			ModelManager:_AddModel(model)
+		else
+			GCSLog("[ModelManager:GetModel]found out ",modelType)
+		end
+	end
+	return ModelManager.m_modelList[modelType]
+end
+
+function ModelManager:_AddModel(modelType, model )
+	if ModelManager.m_modelList[model] then return end
+	GCSLog("[ModelManager:_AddModel] add ",modelType)
+	ModelManager.m_modelList[modelType] = model
+end
+
+function ModelManager:_RemoveModel(model)
+	if not ModelManager.m_modelList[model] then return end
+	ModelManager.m_modelList[model]:Destroy()
+	ModelManager.m_modelList[model] = nil
+end

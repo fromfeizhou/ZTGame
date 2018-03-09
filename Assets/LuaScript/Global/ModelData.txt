@@ -2,8 +2,9 @@
 --@breif lua入口
 --@data 2018/3/5
 
---@brife 模块类型
-MODEL_TPYE = {
+--@brife 模块类型(添加类型 在ModelManager:GetModel下增加对应处理)
+MODEL_TYPE = {
+	SYSTEM = 0,--系统
 	LOGIN = 1, --登录
 }
 
@@ -11,3 +12,8 @@ MODEL_TPYE = {
 LOGIN_TYPE = {
 	MAIN = 1, --主面板
 }
+
+SYSTEM_TYPE = {
+	NOTICE = 1, --用户提示
+}
+

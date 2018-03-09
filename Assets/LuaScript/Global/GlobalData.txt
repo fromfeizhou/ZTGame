@@ -2,7 +2,8 @@
 --@breif lua入口
 --@data 2018/3/5
 GlobalData = {
-	NetEventDispatcher = nil
+	NetEventDispatcher = nil,
+	MdlEventDispatcher = nil,
 }
 
 --@brief c#引用
@@ -33,6 +34,20 @@ function GlobalData:GetNetEventDispatcher()
 		GlobalData.NetEventDispatcher = EventDispatcher:Create() 
 	end
 	return GlobalData.NetEventDispatcher
+end
+
+
+--@breif 模块事件
+MDL_EVENT = {
+	SHOW_PANEL = "mdl_event_show_panel",
+	HIDE_PANEL = "mdl_event_hide_panel",
+}
+
+function GlobalData:GetMdlEventDispatcher()
+	if GlobalData.MdlEventDispatcher == nil then 
+		GlobalData.MdlEventDispatcher = EventDispatcher:Create() 
+	end
+	return GlobalData.MdlEventDispatcher
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

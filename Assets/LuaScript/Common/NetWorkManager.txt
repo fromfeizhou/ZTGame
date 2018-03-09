@@ -8,7 +8,7 @@ NetWorkManager = {
 --@brief c#引用
 local CSNetWorkManager = CS.NetWorkManager
 local CSLog = GCSLog
-local  CSByteBuffer = CS.ByteBuffer
+local CSByteBuffer = CS.ByteBuffer
 
 
 
@@ -28,6 +28,10 @@ Protocal = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 系统模块
+local _systemModel 
+
 --@brief 初始化
 function NetWorkManager:Init()
 	CSLog("NetWorkManager:Init()")
@@ -45,6 +49,8 @@ end
 function NetWorkManager:RequestConnect( addressData )
 	self.m_instance:SetNetWorkAddress(addressData.host,addressData.port)
 	self.m_instance:RequestConnect()
+	if not _systemModel then _systemModel = SystemModel:Create() end
+	_systemModel:ShowPanel(SYSTEM_TYPE.NOTICE)
 	CSLog("[NetWorkManager:RequestConnect]",SerializeTable(addressData))
 end
 
@@ -156,8 +162,6 @@ end
 
 --@brief 发送心跳
 function NetWorkManager:_SendHeard()
-	local vo_heart = {}
-	NetWorkManager:SendNetMessage(1,0,vo_heart)
 end
 
 --@brief 请求登录验证

@@ -1,47 +1,66 @@
---LuaGameStart.txt
+--SystemModel.txt
 --@breif lua入口
 --@data 2018/3/5
-LuaGameStart = {
+SystemModel = {
+	m_tPanelList = nil,
 }
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LuaGameStart:Create()
+function SystemModel:Create()
 	local obj = {}
-	setmetatable( obj, { __index = LuaGameStart })
+	setmetatable( obj, { __index = SystemModel })
+	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function LuaGameStart:Init()
-	print("LuaGameStart:Init")
-	if GameConfig.IsOpenNetWork then 
-		NetWorkManager:Init()
-		ZTProtoData:Init()
-	end
-
-	ModelManager:Init()
-
-	self:_OnGameStart()
+function SystemModel:Init()
+	self.m_tPanelList = {}
 end
 
 --@brief 更新
-function LuaGameStart:Update()
+function SystemModel:Update()
 end
 
 --@brief 移除
-function LuaGameStart:Destroy()
-	print("LuaGameStart:Destroy")
+function SystemModel:Destroy()
+	print("SystemModel:Destroy")
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			panel:Destroy()
+		end
+		self.m_tPanelList = nil
+	end
+end
+
+--@breif 显示面板
+function SystemModel:ShowPanel( panelType )
+	local panel = nil
+
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		if panelType == SYSTEM_TYPE.NOTICE then
+			panel = SystemNoticePanel:Create()
+			self.m_tPanelList[panelType] = panel
+		end
+	end
+
+	if panel then
+		panel:Show()
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-function LuaGameStart:_OnGameStart()
-	local loginPanelData = {}
-	loginPanelData.modelType = MODEL_TYPE.LOGIN
-	loginPanelData.panelType = LOGIN_TYPE.MAIN
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
-end
+

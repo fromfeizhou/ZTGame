@@ -8,7 +8,7 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
-		"Global.CommonData",
+		--"Global.CommonData",
 		"Global.GlobalData",
 		"Global.ModelData",
 		"Global.ZTProtoData",
