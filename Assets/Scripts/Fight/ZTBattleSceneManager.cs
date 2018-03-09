@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZTSceneManager : Singleton<ZTSceneManager>
+public class ZTBattleSceneManager : Singleton<ZTBattleSceneManager>
 {
     private CameraFollow _cameraManager;
 
@@ -36,8 +36,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
         CommandDic = new Dictionary<uint, List<FightCommandBase>>();
 
         OwnerControl.GetInstance().Init();
-        //地图初始化
-        MapManager.GetInstance().InitMap();
+        
         //技能解析管理器初始化
         SkillActionManager.GetInstance().Init();
         //特效管理器
@@ -201,7 +200,7 @@ public class ZTSceneManager : Singleton<ZTSceneManager>
     private void OnUpdateGrassId(Notification data)
     {
         uint battleId = (uint)data.param;
-        CharaActorInfo info = ZTSceneManager.GetInstance().GetCharaById(battleId);
+        CharaActorInfo info = ZTBattleSceneManager.GetInstance().GetCharaById(battleId);
         ICharaBattle battleInfo = info as ICharaBattle;
         if (null == info || null == battleInfo) return;
         int GrassId = MyPlayer.GrassId;

@@ -1,50 +1,48 @@
---LuaGame.txt
---@breif lua入口
---@data 2018/3/5
-local LuaGame = {
+--ZTCharaManager.txt
+--@breif 战斗对象管理
+--@data 2018/03/07
+ZTCharaManager = {
+	m_tCharaList = nil,
+	m_tSortCharaList = nil,
 }
 
 --@brief c#引用
-
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化
-function LuaGame:Init()
-	print("LuaGame:Init")
-	self:_InitLuaFileLoad()
+--@brief 拷贝原表
+function ZTCharaManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = ZTCharaManager })
+	obj:Init()
+	return obj
 end
 
---@brief 更新
-function LuaGame:Update()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Update()
-	end
+--@brief 初始化
+function ZTCharaManager:Init()
+	CSLog("ZTCharaManager:Init")
+	self.m_tCharaList = {}
 end
 
 --@brief 移除
-function LuaGame:Destroy()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Destroy()
-		self.m_LuaGameStart = nil
+function ZTCharaManager:Destroy()
+	CSLog("ZTCharaManager:Destroy")
+	if self.m_tCharaList then
+		for i,v in pairs(self.m_tCharaList) do
+			v:Destroy()
+		end
+		self.m_tCharaList = nil
 	end
+end
+
+--@brief 更新
+function ZTCharaManager:Update()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化lua加载
-function LuaGame:_InitLuaFileLoad( )
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadLoginLua(function()
-		print("LuaGame:LoadLoginLuaDone")
-		self.m_LuaGameStart = LuaGameStart:Create()
-		self.m_LuaGameStart:Init()
-	end)
-end
-
---@brief 返回LuaGame表
-return LuaGame

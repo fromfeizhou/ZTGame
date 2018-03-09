@@ -1,50 +1,47 @@
---LuaGame.txt
---@breif lua入口
---@data 2018/3/5
-local LuaGame = {
+--ZTBattleScene.txt
+--@breif 战斗场景
+--@data 2018/03/07
+ZTBattleScene = {
+	m_goZtBattleScene = nil,	--战斗场景对象
+	m_comZtBattleScene = nil,	--战斗场景组件
+	m_ztCharaManager = nil,		--战斗对象管理
 }
-
 --@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSSceneManager = CS.ZTSceneManager
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化
-function LuaGame:Init()
-	print("LuaGame:Init")
-	self:_InitLuaFileLoad()
+--@brief 切换战斗场景
+function ZTBattleScene:InitScene()
+	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 
---@brief 更新
-function LuaGame:Update()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Update()
+
+function ZTBattleScene:Destroy()
+	if self.m_ztBattleScene then
+		CSGameObject.Destroy()
 	end
 end
-
---@brief 移除
-function LuaGame:Destroy()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Destroy()
-		self.m_LuaGameStart = nil
-	end
-end
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 场景9加载完毕
+function ZTBattleScene:_SceneReplaceComplete()
+	--初始化场景管理器
+	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
+	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
+	self.m_comZtBattleScene:ManagerInit(CSVector3(1000,0,1000))
 
---@brief 初始化lua加载
-function LuaGame:_InitLuaFileLoad( )
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadLoginLua(function()
-		print("LuaGame:LoadLoginLuaDone")
-		self.m_LuaGameStart = LuaGameStart:Create()
-		self.m_LuaGameStart:Init()
-	end)
+	self.m_ztCharaManager = ZTCharaManager:Create()
 end
 
---@brief 返回LuaGame表
-return LuaGame
+
+--@brief 战斗场景初始化
+function ZTBattleScene:_Init()
+	-- body
+end

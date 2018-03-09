@@ -1,50 +1,37 @@
---LuaGame.txt
---@breif lua入口
---@data 2018/3/5
-local LuaGame = {
+--Animator.txt
+--@breif 人物动画
+--@data 2018/03/07
+Animator = {
 }
 
 --@brief c#引用
-
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSZTAnimator = CS.ZTAnimator
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function Animator:Create()
+	local obj = {}
+	setmetatable( obj, { __index = Animator })
+	obj:Init()
+	return obj
+end
 
 --@brief 初始化
-function LuaGame:Init()
-	print("LuaGame:Init")
-	self:_InitLuaFileLoad()
+function Animator:Init()
+	CSLog("Animator:Init")
 end
 
---@brief 更新
-function LuaGame:Update()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Update()
-	end
-end
 
 --@brief 移除
-function LuaGame:Destroy()
-	if self.m_LuaGameStart ~= nil then
-		self.m_LuaGameStart:Destroy()
-		self.m_LuaGameStart = nil
-	end
+function Animator:Destroy()
+	CSLog("Animator:Destroy")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化lua加载
-function LuaGame:_InitLuaFileLoad( )
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadLoginLua(function()
-		print("LuaGame:LoadLoginLuaDone")
-		self.m_LuaGameStart = LuaGameStart:Create()
-		self.m_LuaGameStart:Init()
-	end)
-end
-
---@brief 返回LuaGame表
-return LuaGame
