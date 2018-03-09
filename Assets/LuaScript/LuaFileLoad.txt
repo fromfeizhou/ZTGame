@@ -22,15 +22,22 @@ local LuaFileLoad = {
 		"ProtoBuff.NetProtocal",
 		"ProtoBuff.ProtocalDefine",
 
-		--[[UI面板相关]]
 
+
+
+
+		--[[UI面板相关]]
 		--系统模块
-		"Panel.System.SystemModel",
-		"Panel.System.SystemNoticePanel",
+		"UIModels.System.SystemModel",
+		"UIModels.System.SystemNoticePanel",
 
 		--登录模块
-		"Panel.Login.LoginModel",
-		"Panel.Login.LoginMainPanel",
+		"UIModels.Login.LoginModel",
+		"UIModels.Login.LoginMainPanel",
+
+
+
+
 
 
 	},

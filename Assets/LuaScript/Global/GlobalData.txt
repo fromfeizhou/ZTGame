@@ -29,6 +29,7 @@ NET_EVENT = {
 	SERVER_FINISH = "net_event_server_finish", 
 	RECEIVE_MESSAGE = "net_event_receive_message",
 }
+--@breif 获取网络事件管理器
 function GlobalData:GetNetEventDispatcher()
 	if GlobalData.NetEventDispatcher == nil then 
 		GlobalData.NetEventDispatcher = EventDispatcher:Create() 
@@ -43,6 +44,7 @@ MDL_EVENT = {
 	HIDE_PANEL = "mdl_event_hide_panel",
 }
 
+--@breif 获取模块事件管理器
 function GlobalData:GetMdlEventDispatcher()
 	if GlobalData.MdlEventDispatcher == nil then 
 		GlobalData.MdlEventDispatcher = EventDispatcher:Create() 

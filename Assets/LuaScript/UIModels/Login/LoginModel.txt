@@ -24,8 +24,8 @@ end
 
 --@brief 初始化
 function LoginModel:Init()
-	self.m_tPanelList = {}
-
+	print("[LoginModel:Init()]")
+	LoginModel.m_tPanelList = {}
 end
 
 --@brief 更新
@@ -46,7 +46,6 @@ end
 --@breif 显示面板
 function LoginModel:ShowPanel( panelType )
 	local panel = nil
-
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else

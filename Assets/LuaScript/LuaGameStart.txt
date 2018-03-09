@@ -44,9 +44,19 @@ function LuaGameStart:_EnterLoginModel()
 		ZTProtoData:Init()
 	end
 	 
-	local loginmodel = LoginModel:Create()
-	loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
+	 ModelManager:Init() --初始化模块管理器
+	 self:_ShowPanel_Login()
 end
+
+--@brief 显示登录界面
+function LuaGameStart:_ShowPanel_Login()
+	local loginPanelData = {}
+	loginPanelData.modelType = MODEL_TYPE.LOGIN
+	loginPanelData.panelType = LOGIN_TYPE.MAIN
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
+end
+
+
 
 --@brief 进入技能调试
 function LuaGameStart:_EnterSkillDebug()
