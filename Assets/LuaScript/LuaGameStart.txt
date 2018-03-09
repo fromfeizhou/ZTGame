@@ -17,14 +17,13 @@ end
 --@brief 初始化
 function LuaGameStart:Init()
 	print("LuaGameStart:Init")
-	-- if GameConfig.IsOpenNetWork then 
-	-- 	NetWorkManager:Init()
-	-- end
+	if GameConfig.IsOpenNetWork then 
+		NetWorkManager:Init()
+		ZTProtoData:Init()
+	end
 	 
-	-- local loginmodel = LoginModel:Create()
-	-- loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
-
-	self:_LoadGameLuaFile()
+	local loginmodel = LoginModel:Create()
+	loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
 end
 
 --@brief 更新
@@ -39,14 +38,3 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 加载游戏lua脚本
-function LuaGameStart:_LoadGameLuaFile()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLuaDone")
-
-		ZTBattleScene:InitScene()
-	end)
-end

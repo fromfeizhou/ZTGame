@@ -4,10 +4,9 @@
 
 PathManager = {
 	g_sAssetPath = "Assets",
-	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设
-	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设
-
-	m_sPlayerAnim = 
+	m_sUIPrefab = "Assets/Prefabs/UI/",
+	m_sUIPanel = "Assets/Prefabs/Panel/",
+	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -24,6 +23,13 @@ end
 --@return string 地址
 function PathManager:GetUIPanel(name)
 	return PathManager.m_sUIPanel .. name .. ".prefab"
+end
+
+--@brief 获取pb文件路径
+--@param name pb文件名字
+--@return string 地址
+function PathManager:GetPbFile(name)
+	return PathManager.m_sPbFile .. name .. ".pb.bytes"
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -60,6 +60,25 @@ function LoginModel:ShowPanel( panelType )
 	end
 end
 
+--@brief 请求登录游戏
+function LoginModel:NetWork_RequestLogin()
+	local login_login_c2s = {
+		accname = "claine", -- 用户名
+		key = "112233", 	-- 验证key
+		fcm = 0, 			-- 防沉迷信息(暂不使用)
+		serv_id = 0, 		-- 服务器ID
+		platform = 0, 		-- 平台，为0则为本地开发
+		token = "", 		-- 验证数据串
+		device_id = "", 	-- 设备ID
+		device_desc = "", 	-- 设备描述
+		product_code = "", 	-- quickSDK产品code
+		uid = "", 			-- quickSDK的uid
+		nick_name = "", 	-- 昵称
+	}
+	NetWorkManager:SendNetMessage(1,1,login_login_c2s)
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+

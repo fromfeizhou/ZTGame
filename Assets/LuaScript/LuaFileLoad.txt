@@ -11,11 +11,15 @@ LuaFileLoad = {
 
 		"Global.GlobalData",
 		"Global.ModelData",
+		"Global.ZTProtoData",
 
 		"Common.GlobalMethod",
 		"Common.PathManager",
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
+
+		"ProtoBuff.NetProtocal",
+		"ProtoBuff.ProtocalDefine",
 
 		--[[UI面板相关]]
 		"Login.LoginModel",

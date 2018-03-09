@@ -40,7 +40,7 @@ end
 --@brief 显示登录面板
 function LoginMainPanel:Show()
 	self.m_gameObject:SetActive(true)
-	NetWorkManager.InitServerList();
+	NetWorkManager:InitServerList();
 end
 
 --@brief 隐藏登录面板
@@ -127,7 +127,9 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
-	GCSLog("_OnBtnClick_Login")
+	GCSLog("[LoginMainPanel:_OnBtnClick_Login]",SerializeTable(self.m_curSelectAddress))
+
+	NetWorkManager:RequestConnect(self.m_curSelectAddress)
 end
 
 --@brief 创建服务器Item
