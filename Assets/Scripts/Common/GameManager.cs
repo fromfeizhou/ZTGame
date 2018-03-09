@@ -67,7 +67,7 @@ public class GameManager : MonoSingleton<GameManager>
         GameManager.GameInit = true;
         GameStartEvent.GetInstance().dispatchEvent(GAME_LOAD_SETP_EVENT.LOAD_COM);
 
-        ZTSceneManager.GetInstance().Init();
+        ZTBattleSceneManager.GetInstance().Init();
         //ZTXLuaEnv.GetInstance().Init();
         //测试
         Test();
@@ -81,15 +81,15 @@ public class GameManager : MonoSingleton<GameManager>
             return;
         }
 
-        //战斗刷新 场景刷新 统一通过ZTSceneManager update内部调用
-        ZTSceneManager.GetInstance().Update();
+        //战斗刷新 场景刷新 统一通过ZTBattleSceneManager update内部调用
+        ZTBattleSceneManager.GetInstance().Update();
     }
 
     public override void Destroy()
     {
         LocalString.Destroy();
         PathManager.Destroy();
-        ZTSceneManager.GetInstance().Destroy();
+        ZTBattleSceneManager.GetInstance().Destroy();
         //SpriteFaceCache.Destory();
         //AssetManager.Destroy();
         //ZTXLuaEnv.GetInstance().Destroy();
