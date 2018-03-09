@@ -1,5 +1,4 @@
-﻿--LuaFileLoad.txt
---@breif lua列表
+﻿--@breif lua列表
 --@data 2018/3/5
 LuaFileLoad = {
 	--登陆模块相关逻辑所需lua文件
@@ -12,18 +11,27 @@ LuaFileLoad = {
 		"Global.GlobalData",
 		"Global.ModelData",
 		"Global.ZTProtoData",
+		"Global.GlobalMethod",
 
-		"Common.GlobalMethod",
 		"Common.PathManager",
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
+		"Common.ModelManager",
 
 		"ProtoBuff.NetProtocal",
 		"ProtoBuff.ProtocalDefine",
 
 		--[[UI面板相关]]
-		"Login.LoginModel",
-		"Login.LoginMainPanel",
+
+		--系统模块
+		"Panel.System.SystemModel",
+		"Panel.System.SystemNoticePanel",
+
+		--登录模块
+		"Panel.Login.LoginModel",
+		"Panel.Login.LoginMainPanel",
+
+
 	},
 
 	--游戏lua文件
@@ -36,13 +44,7 @@ LuaFileLoad = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化
-function LuaFileLoad:Init()
-	
-end
-
---@brief 开始检查加载
+ --@brief 初始化 function LuaFileLoad:init() end --@brief 开始检查加载
 function LuaFileLoad:Update()
 
 end
@@ -60,8 +62,7 @@ function LuaFileLoad:LoadLoginLua(loadDone)
     	end
 	end 
 	if loadDone then
-		loadDone()
-	end
+		loadDone() end
 end
 
 
@@ -77,7 +78,6 @@ function LuaFileLoad:LoadGameLua(loadDone)
 		loadDone()
 	end
 end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+ --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
