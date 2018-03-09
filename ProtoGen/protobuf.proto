@@ -139,6 +139,15 @@ message p_debuff {
     required uint32 end_time = 2; // debuff结束时间
 }
 
+// 玩家帧数据
+message p_role_frame{
+    required uint32 role_id = 1; // 玩家id
+    required uint32 frame_id = 2; // 帧id
+    required uint32 type = 3; // 数据类型
+    repeated int32 int_data = 4; // int数据 数组
+    required string str_data = 5;
+}
+
 //角色地图信息
 message p_map_role {
     required uint32 id = 1; // 角色id
@@ -159,9 +168,11 @@ message p_map_role {
     required uint32 shaping = 16; // 外型id
     required uint32 fight_point = 17; // 战斗力
     required uint32 defense = 18; // 防御值
-    repeated p_buff buffs = 20; // buff列表
-    repeated p_debuff debuffs = 21; // debuff列表
-    repeated p_goods equips = 22; // 装备信息
+    repeated p_role_frame moving_frames = 19; // 移动帧
+    repeated p_role_frame skill_frames = 21; // 技能帧
+    repeated p_buff buffs = 21; // buff列表
+    repeated p_debuff debuffs = 22; // debuff列表
+    repeated p_goods equips = 23; // 装备信息
 }
 
 //怪物地图信息
@@ -503,7 +514,7 @@ message p_chat_args {
 }
 
 
-// ##model_begin##rank##10##设置##model_end##
+// ##model_begin##rank##10##排行榜##model_end##
 // ##begin##rank##rank_info##10##1##排行榜信息##end##
 message rank_info_c2s {
     required uint32 type = 1; // 排行榜类型ID
@@ -527,7 +538,7 @@ message rank_role_rank_info_s2c {
 }
 
 
-// ##model_begin##activity##11##设置##model_end##
+// ##model_begin##activity##11##活动##model_end##
 // ##begin##activity##activity_activity_list##11##1##活动列表##end##
 message activity_activity_list_c2s {
     required uint32 type = 1; // 活动类型
@@ -571,7 +582,7 @@ message activity_update_activity_s2c {
 }
 
 
-// ##model_begin##mission##12##设置##model_end##
+// ##model_begin##mission##12##排行榜##model_end##
 // ##begin##mission##mission_list##12##1##日常任务列表##end##
 message mission_list_c2s {}
 message mission_list_s2c {
@@ -600,7 +611,7 @@ message mission_update_mission_s2c {
 }
 
 
-// ##model_begin##seven##13##设置##model_end##
+// ##model_begin##seven##13##七天引导##model_end##
 // ##begin##seven##seven_guide_list##13##1##七天引导列表##end##
 message seven_guide_list_c2s {}
 message seven_guide_list_s2c {
@@ -1201,7 +1212,29 @@ message map_debuff_point_get_s2c {
     repeated p_debuff debuff_list = 4; // 获得的debuff列表
 }
 
-// ##begin##map##map_bc_info##4##23##活动总信息##end##
+// ##begin##map##map_role_frame##4##23##玩家帧消息##end##
+message map_role_frame_c2s {
+    required uint32 frame_id = 1; // 帧id
+    // 数据类型:
+    // 1.移动
+    // 2.使用技能
+    // 3.技能碰撞
+    // 4.生成buff
+    // 5.产生Effect
+    // 所有数据均为int数据，组装进int_data数组里面
+    required uint32 type = 2;
+    repeated int32 int_data = 3; // int数据
+    required string str_data = 4;
+}
+
+// ##begin##map##map_frame##4##24##驱动帧消息##end##
+message map_frame_s2c {
+    required uint32 start_id = 1; // 起始id
+    required uint32 end_id = 2; // 结束id
+    repeated p_role_frame data = 3; // 玩家帧消息
+}
+
+// ##begin##map##map_bc_info##4##25##活动总信息##end##
 message map_bc_info_c2s {
     required uint32 type = 1; // 数据类型
     required string data = 2; // 数据
@@ -1524,7 +1557,7 @@ message mail_take_attach_all_s2c {
 }
 
 
-// ##model_begin##achieve##9##设置##model_end##
+// ##model_begin##achieve##9##成就##model_end##
 // ##begin##achieve##achieve_list##9##1##当前成就列表##end##
 message achieve_list_c2s {}
 message achieve_list_s2c {

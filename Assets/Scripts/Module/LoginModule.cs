@@ -11,11 +11,12 @@ public class LoginModule : Singleton<LoginModule> {
 
 	/** 服务器版本号 */
 	private string _serverVersion;
-	private gprotocol.login_login_s2c _loginInfo;
+	//private gprotocol.login_login_s2c _loginInfo;
 
 	/** 请求登录服务器 */
 	public void NetWork_Request_Login(string mAccName, string passWord)
 	{
+		/*
 		gprotocol.login_login_c2s vo = new gprotocol.login_login_c2s ()
 		{
 			accname = mAccName, 		// 用户名
@@ -30,27 +31,31 @@ public class LoginModule : Singleton<LoginModule> {
 			uid = string.Empty, 		// quickSDK的uid
 			nick_name = "互撸娃的哥哥", 	// 昵称
 		};
-		NetWorkManager.Instace.SendNetMsg(Module.login,Command.login_login,vo);
+		NetWorkManager.GetInstance().SendNetMsg(Module.login,Command.login_login,vo);
+		*/
 	}
 
 
 	public void NetWork_Request_CreateRole(string name, uint job){
+		/*
 		gprotocol.login_create_role_c2s roleVO = new gprotocol.login_create_role_c2s ();
 		roleVO.name = name;	// 角色名字
 		roleVO.job = job;	// 职业
 		roleVO.sex = 1;		// 性别 1男 2女
 		roleVO.serv_id = 0;	// 服务器ID
-		NetWorkManager.Instace.SendNetMsg (Module.login, Command.login_create_role, roleVO);
+		NetWorkManager.GetInstance().SendNetMsg (Module.login, Command.login_create_role, roleVO);
+		*/
 	}
 
 	public void NetWork_Request_SelectRole(uint roleId){
-
+		/*
 		gprotocol.login_select_role_c2s vo = new gprotocol.login_select_role_c2s (){ 
 			id = roleId
 		};
-		NetWorkManager.Instace.SendNetMsg (Module.login, Command.login_select_role, vo);
+		NetWorkManager.GetInstance().SendNetMsg (Module.login, Command.login_select_role, vo);
+		*/
 	}
-
+	/*
 	public void OnReceive_Login(gprotocol.login_login_s2c loginInfo)
 	{
 		if (loginInfo == null) {
@@ -68,7 +73,7 @@ public class LoginModule : Singleton<LoginModule> {
 		HidePanel_CreateRole ();
 		EnterGameScene ();
 	}
-
+*/
 	public void EnterGameScene(){
 		LoginPanel.LockPanel.Show ("加载中");
 		LoginPanel.StartCoroutine (coEnterGameScene());
