@@ -1,52 +1,37 @@
---LuaGameStart.txt
---@breif lua入口
---@data 2018/3/5
-LuaGameStart = {
+--Animator.txt
+--@breif 人物动画
+--@data 2018/03/07
+Animator = {
 }
 
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSZTAnimator = CS.ZTAnimator
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LuaGameStart:Create()
+function Animator:Create()
 	local obj = {}
-	setmetatable( obj, { __index = LuaGameStart })
+	setmetatable( obj, { __index = Animator })
+	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function LuaGameStart:Init()
-	print("LuaGameStart:Init")
-	-- if GameConfig.IsOpenNetWork then 
-	-- 	NetWorkManager:Init()
-	-- end
-	 
-	-- local loginmodel = LoginModel:Create()
-	-- loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
-
-	self:_LoadGameLuaFile()
+function Animator:Init()
+	CSLog("Animator:Init")
 end
 
---@brief 更新
-function LuaGameStart:Update()
-end
 
 --@brief 移除
-function LuaGameStart:Destroy()
-	print("LuaGameStart:Destroy")
+function Animator:Destroy()
+	CSLog("Animator:Destroy")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 加载游戏lua脚本
-function LuaGameStart:_LoadGameLuaFile()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLuaDone")
-
-		ZTBattleScene:InitScene()
-	end)
-end

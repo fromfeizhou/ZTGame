@@ -22,8 +22,10 @@ LuaFileLoad = {
 		"Login.LoginMainPanel",
 	},
 
-	--其他lua文件
-	G_tOtherList = {
+	--游戏lua文件
+	G_tGameList = {
+		"Battle.ZTBattleScene",
+		"Battle.ZTCharaManager",
 	}
 }
 
@@ -49,7 +51,9 @@ end
 function LuaFileLoad:LoadLoginLua(loadDone)
 	for i=1, #(LuaFileLoad.G_tLoginLuaList) do  
     	local fileName = LuaFileLoad.G_tLoginLuaList[i]
-    	require(fileName)
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
 	end 
 	if loadDone then
 		loadDone()
@@ -58,8 +62,16 @@ end
 
 
 --@brief 加载游戏逻辑lua文件
-function LuaFileLoad:LoadOtherLua()
-	-- body
+function LuaFileLoad:LoadGameLua(loadDone)
+	for i=1, #(LuaFileLoad.G_tGameList) do  
+    	local fileName = LuaFileLoad.G_tGameList[i]
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
+	end 
+	if loadDone then
+		loadDone()
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

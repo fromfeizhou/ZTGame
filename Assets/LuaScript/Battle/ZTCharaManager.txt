@@ -1,52 +1,48 @@
---LuaGameStart.txt
---@breif lua入口
---@data 2018/3/5
-LuaGameStart = {
+--ZTCharaManager.txt
+--@breif 战斗对象管理
+--@data 2018/03/07
+ZTCharaManager = {
+	m_tCharaList = nil,
+	m_tSortCharaList = nil,
 }
 
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LuaGameStart:Create()
+function ZTCharaManager:Create()
 	local obj = {}
-	setmetatable( obj, { __index = LuaGameStart })
+	setmetatable( obj, { __index = ZTCharaManager })
+	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function LuaGameStart:Init()
-	print("LuaGameStart:Init")
-	-- if GameConfig.IsOpenNetWork then 
-	-- 	NetWorkManager:Init()
-	-- end
-	 
-	-- local loginmodel = LoginModel:Create()
-	-- loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
-
-	self:_LoadGameLuaFile()
-end
-
---@brief 更新
-function LuaGameStart:Update()
+function ZTCharaManager:Init()
+	CSLog("ZTCharaManager:Init")
+	self.m_tCharaList = {}
 end
 
 --@brief 移除
-function LuaGameStart:Destroy()
-	print("LuaGameStart:Destroy")
+function ZTCharaManager:Destroy()
+	CSLog("ZTCharaManager:Destroy")
+	if self.m_tCharaList then
+		for i,v in pairs(self.m_tCharaList) do
+			v:Destroy()
+		end
+		self.m_tCharaList = nil
+	end
+end
+
+--@brief 更新
+function ZTCharaManager:Update()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 加载游戏lua脚本
-function LuaGameStart:_LoadGameLuaFile()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	LuaFileLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLuaDone")
-
-		ZTBattleScene:InitScene()
-	end)
-end

@@ -4,8 +4,10 @@
 
 PathManager = {
 	g_sAssetPath = "Assets",
-	m_sUIPrefab = "Assets/Prefabs/UI/",
-	m_sUIPanel = "Assets/Prefabs/Panel/",
+	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设
+	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设
+
+	m_sPlayerAnim = 
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
