@@ -22,10 +22,10 @@ public class BPBattle
     public BPBattle(uint battleId)
     {
         BattleId = battleId;
-        Frame = ZTSceneManager.GetInstance().SceneFrame;
+        Frame = ZTBattleSceneManager.GetInstance().SceneFrame;
 
         Pos = MapManager.GetInstance().GetRandomPos();//new Vector3(400, 0, 400);
-        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(battleId) as ICharaBattle;
+        ICharaBattle info = ZTBattleSceneManager.GetInstance().GetCharaById(battleId) as ICharaBattle;
         if (null != info)
         {
             Pos = info.MovePos;
@@ -190,7 +190,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
 
     public void UpdatePos(BPBattle bp)
     {
-        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        ICharaBattle info = ZTBattleSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
         if (null != info)
         {
             info.MovePos = bp.Pos;
@@ -233,7 +233,7 @@ public class BattleProtocol : Singleton<BattleProtocol>
     //收到玩家进入场景
     public void ParseReborn(BPReborn bp)
     {
-        ICharaBattle info = ZTSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
+        ICharaBattle info = ZTBattleSceneManager.GetInstance().GetCharaById(bp.BattleId) as ICharaBattle;
         if (null != info)
         {
             info.Reborn();
