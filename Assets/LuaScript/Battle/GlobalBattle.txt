@@ -34,6 +34,8 @@ function GlobalBattle:GetBattleData(battleId,careerType,pos)
 	data.battleId = battleId or 1
 	data.careerType = careerType or CareerType.FashShi
 	data.pos = pos or CSVector3(100,0,100)
+
+	return data
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

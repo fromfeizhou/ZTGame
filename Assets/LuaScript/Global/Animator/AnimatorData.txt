@@ -26,7 +26,8 @@ local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表(继承事件)
 function AnimatorData:Create(animaType,careerType)
-	local obj = EventDispatcher:Create()
+	setmetatable( AnimatorData, { __index = EventDispatcher:Create() })
+	local obj = {}
 	setmetatable( obj, { __index = AnimatorData })
 	obj:Init(animaType,careerType)
 	return obj
@@ -67,6 +68,7 @@ end
 --@brief 刷新位置
 --@param vector3 pos
 function AnimatorData:UpdatePos(pos)
+	CSLog("AnimatorData:UpdatePos",pos)
 	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
 end
 

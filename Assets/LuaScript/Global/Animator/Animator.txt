@@ -2,6 +2,7 @@
 --@breif 人物动画
 --@data 2018/03/07
 Animator = {
+	m_goAnima, --挂钩object
 	m_ztAnima, --C#动作接口引用
 	m_animData,		--动画data
 	m_bIsInCamera,	--是否进入场景范围
@@ -17,18 +18,19 @@ local CSZTAnimator = CS.ZTAnimator
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function Animator:Create(animaData)
+function Animator:Create(animaData,container)
 	local obj = {}
 	setmetatable( obj, { __index = Animator })
-	obj:Init(animaData)
+	obj:Init(animaData,container)
 	return obj
 end
 
 --@brief 初始化
-function Animator:Init(animaData)
+function Animator:Init(animaData,container)
 	CSLog("Animator:Init")
 	self.m_bIsInCamera = false
-	self.m_ztAnima = CSZTAnimator()
+	self.m_goAnima = CSGameObject("Animator")
+	self.m_ztAnima = self.m_goAnima:AddComponent(typeof(CSZTAnimator))
 	self.m_animData = animaData or  AnimatorData:Create()
 	self:_AddEvent()
 end
