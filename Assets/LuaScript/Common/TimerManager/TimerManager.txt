@@ -1,0 +1,143 @@
+--TimerManager.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--[[测试用例：循环定时器(LoopTime)
+--@brief 按钮
+function Example:ActiveLoopTime()
+	loopTimer = LoopTimer:Create(self._OnTimerHandle,self)
+	loopTimer:SetParam(0.5,0,self._OnTimerFinish)
+	startTime = os.clock()
+	TimerManager:AddTimer(loopTimer)
+end
+
+--@brief 激活时
+function Example:_OnTimerHandle()
+	times = times + 1
+	if times >= 27 then 	loopTimer.m_isFinish = true end
+	GCSLog("_OnTimerHandle",times,os.clock()-startTime)
+	startTime = os.clock()
+end
+
+--@brief 完成时
+function Example:_OnTimerFinish()
+	GCSLog("_OnTimerFinish")
+end
+]]
+
+TimerManager = {
+	m_tTimerList = nil,
+	m_nTimerCnt = 0, --当前定时器计数
+	
+	m_cTime_time,
+	m_cTime_deltaTime,
+	m_cTime_unscaledDeltaTime,
+	m_cTime_unscaledTime,
+	
+	m_cTime_fixedTime,
+	m_cTime_fixedDeltaTime,
+	m_cTime_fixedUnscaledDeltaTime,
+	m_cTime_fixedUnscaledTime,
+}
+
+local CSTime = CS.UnityEngine.Time
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function TimerManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = TimerManager })
+	obj.Init()
+	return obj
+end
+
+--@brief 初始化
+function TimerManager:Init()
+	TimerManager.m_tTimerList = {}
+end
+
+
+--@brief 更新
+function TimerManager:Update()
+	self:_UpdateTime()
+	self:_CleanFinishTimer()
+	self:_Ticks()
+end
+
+--@brief 销毁管理器
+function TimerManager:Destroy()
+
+end
+
+--@brief 添加定时器
+function TimerManager:AddTimer(timer)
+	self.m_nTimerCnt = self.m_nTimerCnt + 1
+	self.m_tTimerList[timer.m_onHandle] = timer
+	self.m_tTimerList[timer.m_onHandle]:OnStart()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 嘀嗒所有定时器
+function TimerManager:_Ticks()
+	if self.m_nTimerCnt > 0 then
+		local timerInfo = self:_PackTimeInfo()
+		for k,timer in pairs(self.m_tTimerList) do
+			if not timer.isFinish then
+				timer:Tick(timerInfo)
+			end
+		end
+	end
+end
+
+--@brief 清理已完成的定时器
+function TimerManager:_CleanFinishTimer()
+	if self.m_nTimerCnt > 0 then
+		for k,timer in pairs(self.m_tTimerList) do
+			if timer.m_isFinish then 
+				if self.m_tTimerList[k].m_onFinish then
+					self.m_tTimerList[k].m_onFinish(self.m_tTimerList[k].m_targe)
+				end
+				self.m_tTimerList[k] = nil
+				self.m_nTimerCnt = self.m_nTimerCnt - 1
+			end
+		end
+	end
+end
+
+--@brief 移除定时器
+function TimerManager:_RemoveTimer(timer)
+	if self.m_tTimerList[timer.m_onHandle] then
+		self.m_tTimerList[timer.m_onHandle] = nil
+		self.m_nTimerCnt = self.m_nTimerCnt - 1
+	end
+end
+
+--@brief 包装时间信息
+function TimerManager:_PackTimeInfo()
+	local timeInfo = {}
+	timeInfo.time 					= self.m_cTime_time
+	timeInfo.deltaTime 				= self.m_cTime_deltaTime
+	timeInfo.unscaledDeltaTime 		= self.m_cTime_unscaledDeltaTime
+	timeInfo.unscaledTime 			= self.m_cTime_unscaledTime
+	timeInfo.fixedTime 				= self.m_cTime_fixedTime
+	timeInfo.fixedDeltaTime 		= self.m_cTime_fixedDeltaTime
+	timeInfo.fixedUnscaledDeltaTime = self.m_cTime_fixedUnscaledDeltaTime
+	timeInfo.fixedUnscaledTime 		= self.m_cTime_fixedUnscaledTime
+	return timeInfo
+end
+
+function TimerManager:_UpdateTime()
+	self.m_cTime_time					= CSTime.time
+	self.m_cTime_deltaTime				= CSTime.deltaTime
+	self.m_cTime_unscaledDeltaTime		= CSTime.unscaledDeltaTime
+	self.m_cTime_unscaledTime			= CSTime.unscaledTime
+	self.m_cTime_fixedTime				= CSTime.fixedTime
+	self.m_cTime_fixedDeltaTime			= CSTime.fixedDeltaTime
+	self.m_cTime_fixedUnscaledDeltaTime	= CSTime.fixedUnscaledDeltaTime
+	self.m_cTime_fixedUnscaledTime		= CSTime.fixedUnscaledTime
+end

@@ -1,0 +1,36 @@
+--FixTimer.txt
+--@breif 固定定时器
+--@data 2018/3/9
+
+FixTimer = {
+	m_fromTime,
+	m_toTime,
+
+	m_clockWise, --顺时针
+}
+
+function FixTimer:Create(handle,targe)
+	local timer = Timer:Create(TIMER_TYPE.FIX,handle,targe)
+	setmetatable( timer, { __index = FixTimer })
+	timer:Init()
+	return timer
+end
+
+function FixTimer:Init()
+	m_clockWise = m_fromTime < m_toTime
+end
+
+function FixTimer:SetParam(fromTime, toTime)
+	self.m_fromTime = fromTime
+	self.m_toTime = toTime
+end
+
+--@brief 嘀嗒
+function FixTimer:Tick()
+
+end
+
+function FixTimer:OnStart()
+	self.isPause = false
+	self.m_startTime = os.time()
+end
