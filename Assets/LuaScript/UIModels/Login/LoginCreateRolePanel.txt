@@ -1,87 +1,81 @@
---SystemModel.txt
+--LoginCreateRolePanel.txt
 --@breif lua入口
 --@data 2018/3/5
-SystemModel = {
-	m_tPanelList = nil,
+LoginCreateRolePanel = {
+	m_transform = nil,
+	m_gameObject = nil,
 }
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SystemModel:Create()
-	GCSLog("SystemModel:Create")
+function LoginCreateRolePanel:Create()
 	local obj = {}
-	setmetatable( obj, { __index = SystemModel })
+	setmetatable( obj, { __index = LoginCreateRolePanel })
 	obj:Init()
 	return obj
 end
 
---@brief 初始化
-function SystemModel:Init()
-	self.m_tPanelList = {}
+--@brief 初始化登录界面（加载面板资源）
+function LoginCreateRolePanel:Init()
+	local callback_loadfinish = function(target,path)
+		self:_LoadAssetPanelFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("LoginCreateRolePanel"),callback_loadfinish)
 end
 
---@brief 更新
-function SystemModel:Update()
-	GCSLog("SystemModel:Update")
+--@brief 面板每帧刷新
+function LoginCreateRolePanel:Update(deltaTime)
 end
 
---@brief 移除
-function SystemModel:Destroy()
-	print("SystemModel:Destroy")
-	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			panel:Destroy()
-		end
-		self.m_tPanelList = nil
-	end
+--@brief 显示登录面板
+function LoginCreateRolePanel:Show()
+	self.m_gameObject:SetActive(true)
 end
 
---@breif 显示面板
-function SystemModel:ShowPanel( panelType )
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		if panelType == SYSTEM_TYPE.NOTICE then
-			panel = SystemNoticePanel:Create()
-		elseif panelType == SYSTEM_TYPE.LOCK then
-			panel = SystemLockPanel:Create()
-		else
-			GCSLog("SystemModel:ShowPanel found out",panelType)
-		end
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel then
-		panel:Show()
-	end
+--@brief 隐藏登录面板
+function LoginCreateRolePanel:Hide()
+	self.m_gameObject:SetActive(false)
 end
 
-
-function SystemModel:HidePanel(panelType)
-
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("SystemModel:HidePanel","found out",panelType)
-	end
-
-	if panel then
-		panel:Hide()
-	end
+--@brief 销毁登录面板
+function LoginCreateRolePanel:Destroy()
 end
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function LoginCreateRolePanel:_LoadAssetPanelFinish(target,path)
+	local prefab = target
+ 		if prefab then
+			local canvas = CSGameObject.Find("Canvas").transform
+ 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+ 			self:_InitPanel()
+		end
+end
+
+--@brief 初始化登录界面UI控件
+function LoginCreateRolePanel:_InitPanel()	
+	-- 按钮 - 服务器列表
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_0/Button",function() self:_OnBtnClick_Confirm(0) end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_1/Button",function() self:_OnBtnClick_Confirm(1) end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_2/Button",function() self:_OnBtnClick_Confirm(2) end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_3/Button",function() self:_OnBtnClick_Confirm(3) end)
+end
+
+--@brief 按钮 - 服务器列表
+function LoginCreateRolePanel:_OnBtnClick_Confirm( roleId )
+	GCSLog("LoginCreateRolePanel:_OnBtnClick_Confirm",roleId)
+	LoginModel:NetWork_RequestCreateRole(roleId)
+end
+
 

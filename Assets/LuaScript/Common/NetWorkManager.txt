@@ -46,7 +46,6 @@ function NetWorkManager:Init()
 	NetWorkManager.m_instance:SetDelegateReceiveMsg(func)
 end
 
-
 --@brief 请求连接服务器
 function NetWorkManager:RequestConnect( addressData )
 
@@ -94,16 +93,18 @@ function NetWorkManager:InitServerList()
 end
 
 --@brief 发送网络消息包
-function NetWorkManager:SendNetMsg(package)
+function NetWorkManager:SendNetMsg(pbData)
 	local byteBuff = CSByteBuffer()
 	byteBuff:WriteUInt16(self:_GetCurMsgSeq())
-	byteBuff:WriteByte(package.model)
-	byteBuff:WriteByte(package.command)
-	
-	if package.data and #package.data > 0  then		
-		local model_pb = MODEL_PB[package.model][package.command] .. "_c2s"
-		local encode = ZTProtoData.m_pb.encode(model_pb, package.data)
-		byteBuff:WriteBytes(encode)
+	byteBuff:WriteByte(pbData.model)
+	byteBuff:WriteByte(pbData.command)
+		GCSLog("==============","model:",pbData.data)
+
+	if pbData.data then
+		local model_pb = MODEL_PB[pbData.model][pbData.command] .. "_c2s"
+		local encode = ZTProtoData.m_pb.encode(model_pb, pbData.data)
+		byteBuff:WriteBytes(encode)	
+		GCSLog("======================================","model:",pbData.model,"command:",pbData.command,"pbName:",model_pb)
 	end
 	local messageData = byteBuff:ToBytes()
 	byteBuff:Close()
@@ -169,8 +170,10 @@ function NetWorkManager:OnReceive(model,command,pbData)
 	if model == PB_LOGIN.MODEL then
 		if     command == PB_LOGIN.AUTH_KEY then
 			self:_Receive_Login_Auth_Key(pbData)
-		elseif  command == PB_LOGIN.LOGIN then
+		elseif command == PB_LOGIN.LOGIN then
 			self:_Receive_Login_Login(pbData)
+		elseif command == PB_LOGIN.CREATE_ROLE then
+			LoginModel:Receive_RequestCreateRole(pbData)
 		end
 	end
 end
@@ -181,10 +184,11 @@ end
 function NetWorkManager:_Request_Login_Auth_Key( )
 	GCSLog("NetWorkManager:_Request_Login_Auth_Key")
 
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.AUTH_KEY
-	self:SendNetMsg(package)
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command = PB_LOGIN.AUTH_KEY
+	pbData.data = {}
+	self:SendNetMsg(pbData)
 end
 
 --@brief 回复 - 登录验证
@@ -201,17 +205,61 @@ function NetWorkManager:_Receive_Login_Auth_Key(pbData)
 	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
 	
 	--请求登录服务器
-	LoginModel:NetWork_RequestLogin()
+	self:NetWork_RequestLogin()
+end
+
+
+--@brief 请求登录游戏
+function NetWorkManager:NetWork_RequestLogin()
+	GCSLog("LoginModel:NetWork_RequestLogin")
+	
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command = PB_LOGIN.LOGIN
+	pbData.data = {}
+	pbData.data.accname 		= "ClaineLe"	-- 用户名
+	pbData.data.key 			= "tset"		-- 验证key
+	pbData.data.fcm 			= 0 			-- 防沉迷信息(暂不使用)
+	pbData.data.serv_id 		= 0 			-- 服务器ID
+	pbData.data.platform		= 0 			-- 平台，为0则为本地开发
+	pbData.data.token		= "" 				-- 验证数据串
+	pbData.data.device_id	= ""				-- 设备ID
+	pbData.data.device_desc 	= "" 			-- 设备描述
+	pbData.data.product_code	= "" 			-- quickSDK产品code
+	pbData.data.uid 			= "" 			-- quickSDK的uid
+	pbData.data.nick_name	= "" 				-- 昵称
+	
+	GCSLog("NetWorkManager:NetWork_RequestLogin",pbData.data)	
+	NetWorkManager:SendNetMsg(pbData)
 end
 
 local _heartInterval
 --@brief 回复 - 登录服务器
-function NetWorkManager:_Receive_Login_Login(pbData)
+function NetWorkManager:_Receive_Login_Login(login_login_s2c)
 	
-	_heartInterval = pbData.heart_interval
+	
 	GCSLog("NetWorkManager:_Receive_Login_Login")
-	GCSLog("心跳间隔:",_heartInterval)
+	GCSLog("心跳间隔:",login_login_s2c.heart_interval)
+	
+	--心跳开启
+	_heartInterval = login_login_s2c.heart_interval
 	self:_OpenHeart()
+
+	GCSLog("人物信息:",login_login_s2c.code)
+	if login_login_s2c.code == 0 then--成功
+	elseif login_login_s2c.code == 12 then--没有角色
+		--显示创角界面
+		local dispatcher = GlobalData:GetMdlEventDispatcher()
+		local panelData = {}
+		panelData.modelType = MODEL_TYPE.LOGIN
+		panelData.panelType = LOGIN_TYPE.CREATEROLE
+		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+	elseif login_login_s2c.code == 20 then
+		GCSLog("参数错误")
+	end
+
+		
+	
 	
 	--[[
 	--隐藏锁屏面板
@@ -243,8 +291,9 @@ end
 
 --@brief 发送心跳
 function NetWorkManager:_SendHeart()
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.HEART
-	self:SendNetMsg(package)
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command 	= PB_LOGIN.HEART
+	pbData.data		= {}
+	self:SendNetMsg(pbData)
 end

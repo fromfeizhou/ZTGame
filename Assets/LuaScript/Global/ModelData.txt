@@ -4,8 +4,8 @@
 
 --@brife 模块类型(添加类型 在ModelManager:GetModel下增加对应处理)
 MODEL_TYPE = {
-	SYSTEM = 0,--系统
-	LOGIN = 1, --登录
+	SYSTEM = 0,		--系统
+	LOGIN = 1, 		--登录
 }
 
 --@系统面板类型
@@ -17,5 +17,6 @@ SYSTEM_TYPE = {
 --@登录面板类型
 LOGIN_TYPE = {
 	MAIN = 1, --主面板
+	CREATEROLE = 2,	--创角
 }
 

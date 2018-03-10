@@ -39,6 +39,8 @@ local LuaFileLoad = {
 		--登录模块
 		"UIModels.Login.LoginModel",
 		"UIModels.Login.LoginMainPanel",
+		"UIModels.Login.LoginCreateRolePanel",
+
 
 
 
