@@ -259,7 +259,7 @@ public class TerrainSlicing : Editor
                         tempColliderRoot.SetParent(null);
                     PrefabUtility.CreatePrefab("Assets"+prefabPath, element.gameObject);
                     if (tempColliderRoot != null)
-                        tempColliderRoot.SetParent(element.tr);
+                        tempColliderRoot.SetParent(element.transform);
                 }
                 else
                 {
