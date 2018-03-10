@@ -68,6 +68,7 @@ public class MapTileView : MonoBehaviour {
         }
     }
     private Vector3 aaa = new Vector3(0.2f, 0.0f, 0.2f);
+
     private void UpdateMapItem()
     {
         //Transform tempParent = null;

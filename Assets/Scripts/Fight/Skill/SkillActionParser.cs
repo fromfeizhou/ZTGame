@@ -122,7 +122,7 @@ public class SkillActionParser
         if (null != _skillActionDic)
         {
 
-            uint curFrame = ZTSceneManager.GetInstance().SceneFrame;
+            uint curFrame = ZTBattleSceneManager.GetInstance().SceneFrame;
             //帧率溢出 补足
             if (curFrame < Command.StartFrame)
             {
@@ -168,7 +168,7 @@ public class SkillActionParser
                 SkillActionBase skillActoin = _skillActionDic[id][i];
 
                 skillActoin.IsStart = true;
-                skillActoin.ActFrame = ZTSceneManager.GetInstance().SceneFrame;
+                skillActoin.ActFrame = ZTBattleSceneManager.GetInstance().SceneFrame;
 
             }
         }

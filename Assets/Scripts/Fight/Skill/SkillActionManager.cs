@@ -65,7 +65,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
                     list.RemoveAt(i);
                     //if (list.Count == 0)
                     //{
-                    //    ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(key) as ICharaBattle;
+                    //    ICharaBattle battleInfo = ZTBattleSceneManager.GetInstance().GetCharaById(key) as ICharaBattle;
                     //    //if (null != battleInfo) battleInfo.ChangeState(BATTLE_STATE.NONE);
                     //}
                 }
@@ -84,7 +84,7 @@ public class SkillActionManager : Singleton<SkillActionManager>
             _addSkillCommand.RemoveAt(0);
             if (null != command)
             {
-                ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(command.BattleId) as ICharaBattle;
+                ICharaBattle battleInfo = ZTBattleSceneManager.GetInstance().GetCharaById(command.BattleId) as ICharaBattle;
 
                 if (null == battleInfo) return;
 

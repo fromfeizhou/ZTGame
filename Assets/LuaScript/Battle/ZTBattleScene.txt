@@ -4,7 +4,6 @@
 ZTBattleScene = {
 	m_goZtBattleScene = nil,	--战斗场景对象
 	m_comZtBattleScene = nil,	--战斗场景组件
-	m_ztCharaManager = nil,		--战斗对象管理
 }
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -21,27 +20,49 @@ function ZTBattleScene:InitScene()
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 
+function ZTBattleScene:Update()
+	--CSLog("ZTBattleScene:Update")
+end
 
 function ZTBattleScene:Destroy()
-	if self.m_ztBattleScene then
-		CSGameObject.Destroy()
-	end
+	self:_UnInt()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 场景9加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
-	--初始化场景管理器
-	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
-	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
-	self.m_comZtBattleScene:ManagerInit(CSVector3(1000,0,1000))
-
-	self.m_ztCharaManager = ZTCharaManager:Create()
+	self:_Init()
 end
 
 
 --@brief 战斗场景初始化
 function ZTBattleScene:_Init()
-	-- body
+	--初始化场景管理器
+	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
+	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
+	self.m_comZtBattleScene:ManagerInit(CSVector3(1000,0,1000))
+	self.m_comZtBattleScene:SetUpdate(function() self:Update()
+	end)
+
+	--战斗对象管理
+	self.m_ztCharaManager = ZTCharaManager:Create()
+end
+
+--@brief 战斗场景初始化
+function ZTBattleScene:_UnInt()
+	--清理战斗对象管理
+	if self.m_ztCharaManager then
+		self.m_ztCharaManager:Destroy()
+		self.m_ztCharaManager = nil
+	end
+
+	--清理场景管理器
+	if self.m_goZtBattleScene then
+		CSGameObject.Destroy(self.m_goZtBattleScene)
+		self.m_goZtBattleScene = nil
+		self.m_comZtBattleScene = nil
+	end
+
+
 end

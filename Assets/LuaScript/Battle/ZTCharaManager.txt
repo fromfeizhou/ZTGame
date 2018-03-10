@@ -4,6 +4,7 @@
 ZTCharaManager = {
 	m_tCharaList = nil,
 	m_tSortCharaList = nil,
+	m_ztCharaContainer = nil,	--玩家容器
 }
 
 --@brief c#引用
@@ -11,6 +12,8 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+local table = table
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -25,7 +28,12 @@ end
 --@brief 初始化
 function ZTCharaManager:Init()
 	CSLog("ZTCharaManager:Init")
+	--战斗对象容器
+	self.m_ztCharaContainer = CSGameObject("CharaContainer").transform
 	self.m_tCharaList = {}
+
+	--测试代码
+	self:_InitSkillTest()
 end
 
 --@brief 移除
@@ -37,12 +45,61 @@ function ZTCharaManager:Destroy()
 		end
 		self.m_tCharaList = nil
 	end
+
+	--清理战斗对象容器
+	if self.m_ztCharaContainer then
+		CSGameObject.Destroy(self.m_ztCharaContainer.gameObject)
+		self.m_ztCharaContainer = nil
+	end
 end
 
 --@brief 更新
 function ZTCharaManager:Update()
 end
 
+
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 添加事件监听
+function ZTCharaManager:_AddEvent()
+	GlobalBattle:GetBattleEventDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
+	GlobalBattle:GetBattleEventDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnRemoveCharacter,self)
+end
+
+
+--@brife 添加对象
+function ZTCharaManager:_OnAddCharacter(battleData)
+	--创建对象
+	local chara = Character:Create(battleData)
+
+	--加入队列
+	self.m_tCharaList[battleData.battleId] = chara
+	table.insert(self.m_tSortCharaList,chara)
+
+	--升序排序
+	table.sort(self.m_tSortCharaList,
+	function(a,b)
+		return a.battleId < b.battleId
+	end)
+end
+
+--@brife 移除对象
+function ZTCharaManager:_OnRemoveCharacter(battleId)
+	self.m_tCharaList[battleId] = nil
+	for i = 1,#self.m_tSortCharaList do
+		local chara = self.m_tSortCharaList[i]
+		if chara:GetBattleId() == battleId then
+			table.remove(self.m_tSortCharaList,i)
+			break
+		end
+	end
+end
+
+
+--@brief 测试技能
+function ZTCharaManager:_InitSkillTest()
+	local player1 = GlobalBattle:GetBattleData(1,CareerType.Hero,CSVector3(100,0,100))
+	local player2 = GlobalBattle:GetBattleData(2,CareerType.Hero,CSVector3(200,0,200))
+end

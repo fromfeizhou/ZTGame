@@ -1,43 +1,39 @@
---PathManager.txt
---@breif 地址管理
---@data 2018/2/27
-
-PathManager = {
-	g_sAssetPath = "Assets",		--资源根目录地址
-	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
-	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
-	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
-
-	m_sAnimator = "Assets/Models/TmpCharacter/",		--模型预设地址
+--GlobalBattle.txt
+--@breif 战斗全局数据
+--@data 2018/3/10
+GlobalBattle = {
+	BattleEventDispatcher = nil,		--事件发送器
 }
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 获取ui预设地址
---@param name ui名字
-function PathManager:GetUIPrefab(name)
-	return PathManager.m_sUIPrefab .. name .. ".prefab"
+
+--@breif 网络事件
+BATTLE_EVENT = {
+	ADD_CHARACTER = "BATTLE_EVENT_ADD_CHARACTER", 	--添加玩家
+	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
+}
+--@breif 获取战斗事件管理器
+function GlobalBattle:GetBattleEventDispatcher()
+	if GlobalBattle.BattleEventDispatcher == nil then 
+		GlobalBattle.BattleEventDispatcher = EventDispatcher:Create() 
+	end
+	return GlobalBattle.BattleEventDispatcher
 end
 
---@brief 获取面板ui预设地址
---@param name ui面板名字
---@return string 地址
-function PathManager:GetUIPanel(name)
-	return PathManager.m_sUIPanel .. name .. ".prefab"
-end
-
---@brief 获取pb文件路径
---@param name pb文件名字
---@return string 地址
-function PathManager:GetPbFile(name)
-	return PathManager.m_sPbFile .. name .. ".pb.bytes"
-end
-
-
---@brief 获取模型地址
-function PathManager:GetAnimatorPath(name)
-	return PathManager.m_sAnimator .. name ..".prefab"
+--@brife 战斗对象结构
+function GlobalBattle:GetBattleData(battleId,careerType,pos)
+	local data = {}
+	data.battleId = battleId or 1
+	data.careerType = careerType or CareerType.FashShi
+	data.pos = pos or CSVector3(100,0,100)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

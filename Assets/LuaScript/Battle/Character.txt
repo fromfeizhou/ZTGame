@@ -1,0 +1,94 @@
+--Character.txt
+--@breif lua模板
+--@data 2018/03/09
+Character = {
+	m_nBattleId = nil,	--战斗对象id
+	m_animData = nil,	--形象数据
+	m_animator = nil,	--形象动画
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function Character:Create(battleData)
+	local obj = {}
+	setmetatable( obj, { __index = Character })
+	obj:Init(battleData)
+	return obj
+end
+
+--@brief 初始化
+function Character:Init(battleData)
+	CSLog("Character:Init")
+	self.m_nBattleId = battleData.battleId or 1
+	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
+	self.m_animator = Animator:Create(self.m_animData)
+	self:UpdatePos(battleData.pos)
+end
+
+
+--@brief 移除
+function Character:Destroy()
+	CSLog("Character:Destroy")
+	--清理形象
+	if self.m_animator then
+		self.m_animator:Destroy()
+		self.m_animator = nil
+	end
+	--清理形象数据
+	if self.m_animData then
+		self.m_animData:Destroy()
+		self.m_animData = nil
+	end
+end
+
+
+--@brife 获得战斗id
+function Character:GetBattleId()
+	return self.m_nBattleId
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brife 动作相关
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 播放动作
+--@param 动作名
+function Character:Play(name)
+	self.m_animData:Play(name)
+end
+
+--@brief 创建显示(进入镜头范围)
+function Character:SetInCamera(inCamera)
+	self.m_animData:Play(name)
+end
+
+--@brief 刷新位置
+--@param vector3 pos
+function Character:UpdatePos(pos)
+	self.m_animData:Play(name)
+end
+
+--@brief 更新角度
+--@param vector3 dir
+function Character:UpdateRotate(dir)
+	self.m_animData:Play(name)
+end
+
+--@brief 改变半透明（草丛状态显示）
+function Character:ChangeTranslucence(isTrans)
+	self.m_animData:Play(name)
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brife 动作相关
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
