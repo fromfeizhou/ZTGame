@@ -38,7 +38,7 @@ function LoginMainPanel:Init()
 end
 
 --@brief 面板每帧刷新
-function LoginMainPanel:Update()
+function LoginMainPanel:Update(deltaTime)
 	--GCSLog("LoginMainPanel:Update")
 end
 

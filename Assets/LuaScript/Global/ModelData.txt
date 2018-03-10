@@ -8,12 +8,14 @@ MODEL_TYPE = {
 	LOGIN = 1, --登录
 }
 
+--@系统面板类型
+SYSTEM_TYPE = {
+	NOTICE = 1, --用户提示
+	LOCK = 2,	--锁屏等待
+}
+
 --@登录面板类型
 LOGIN_TYPE = {
 	MAIN = 1, --主面板
-}
-
-SYSTEM_TYPE = {
-	NOTICE = 1, --用户提示
 }
 

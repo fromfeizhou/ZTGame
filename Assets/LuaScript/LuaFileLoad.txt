@@ -18,6 +18,11 @@ local LuaFileLoad = {
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
 		"Common.ModelManager",
+		"Common.TimerManager.Timer",
+		"Common.TimerManager.FixTimer",
+		"Common.TimerManager.LoopTimer",
+		"Common.TimerManager.TimerManager",
+
 
 		"ProtoBuff.NetProtocal",
 		"ProtoBuff.ProtocalDefine",
@@ -30,6 +35,7 @@ local LuaFileLoad = {
 		--系统模块
 		"UIModels.System.SystemModel",
 		"UIModels.System.SystemNoticePanel",
+		"UIModels.System.SystemLockPanel",
 
 		--登录模块
 		"UIModels.Login.LoginModel",

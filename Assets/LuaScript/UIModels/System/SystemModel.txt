@@ -52,8 +52,12 @@ function SystemModel:ShowPanel( panelType )
 	else
 		if panelType == SYSTEM_TYPE.NOTICE then
 			panel = SystemNoticePanel:Create()
-			self.m_tPanelList[panelType] = panel
+		elseif panelType == SYSTEM_TYPE.LOCK then
+			panel = SystemLockPanel:Create()
+		else
+			GCSLog("SystemModel:ShowPanel found out",panelType)
 		end
+		self.m_tPanelList[panelType] = panel
 	end
 
 	if panel then

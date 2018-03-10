@@ -2,7 +2,6 @@
 --@breif 
 --@data 2018/3/5
 ModelManager = {
-	m_instance,
 	m_modelList = nil,
 	m_modelDef = nil,
 
@@ -11,24 +10,31 @@ ModelManager = {
 
 --@brief c#引用
 local CSModelManager = CS.ModelManager
+local CSTime = CS.Time
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function ModelManager:Create()
+	GCSLog("ModelManager:Create")
+	local obj = {}
+	setmetatable( obj, { __index = ModelManager })
+	obj:Init()
+	return obj
+end
+
+
 --@brief 初始化
 function ModelManager:Init()
-	GCSLog("ModelManager:Init")
-	ModelManager.m_instance = CSModelManager.GetInstance()
-	ModelManager.m_instance:Init()
 	ModelManager.m_modelList = {}
 	ModelManager.m_modelDef = {}
 	ModelManager.m_mdlEvent = GlobalData:GetMdlEventDispatcher()
-
 	ModelManager:_AddEvents()
 end
 
 --@brief 更新模块列表中的模块逻辑
 function ModelManager:Update()
-	ModelManager:_UpdatePanel();
+	ModelManager:_UpdatePanel(CSTime.deltaTime)
 end
 
 --@breif 移除
@@ -43,44 +49,46 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@breif 添加监听模块事件
 function ModelManager:_AddEvents()
-	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_ShowPanel,ModelManager)
+	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show,ModelManager)
+	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide,ModelManager)
 end
 
 --@breif 移除模块事件
 function ModelManager:_RemoveEvents()
-	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_ShowPanel)
+	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show)
+	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide)
 
 end
 
 --@breif 事件句柄 显示面板
-function ModelManager:_OnHandle_ShowPanel(panelData)
+function ModelManager:_OnHandle_Show(panelData)
 	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
 		model:ShowPanel(panelData.panelType)
 	else
-		GCSLog("ModelManager:_OnHandle_ShowPanel found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Show found out ",panelData.panelType)
 	end
 end
 
 --@breif 事件句柄 隐藏面板
-function ModelManager:_OnHandle_HidePanel(panelData)
+function ModelManager:_OnHandle_Hide(panelData)
 	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
 		model:HidePanel(panelData.panelType)
 		ModelManager:_TryCleanModel()
 	else
-		GCSLog("ModelManager:_OnHandle_ShowPanel found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Hide found out ",panelData.panelType)
 	end
 end
 
 
 --@brief 刷新当前缓存中的面板
-function ModelManager:_UpdatePanel()
+function ModelManager:_UpdatePanel( deltaTime )
 	if ModelManager.m_modelList then
 		for k,model in pairs(ModelManager.m_modelList) do
 			if model.m_tPanelList then
 				for i,panel in pairs(model.m_tPanelList) do
-					panel:Update()
+					panel:Update(deltaTime)
 				end
 			end
 		end

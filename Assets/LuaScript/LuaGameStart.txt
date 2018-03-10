@@ -27,6 +27,7 @@ end
 --@brief 更新
 function LuaGameStart:Update()
 	ModelManager:Update()
+	TimerManager:Update()
 end
 
 --@brief 移除
@@ -45,7 +46,9 @@ function LuaGameStart:_EnterLoginModel()
 		ZTProtoData:Init()
 	end
 	 
-	 ModelManager:Init() --初始化模块管理器
+	 ModelManager:Create() --创建模块管理器
+	 TimerManager:Create() --创建定时管理器
+	 
 	 self:_ShowPanel_Login()
 end
 
