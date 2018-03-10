@@ -16,6 +16,7 @@ public class MapDefine
     public const string MapDataSavePath = "Assets/MapData.txt";
     public const string MapRoleCreatePointSavePath = "Assets/RoleCreatePosData.txt";
     public const string MapElementPath = "Assets/Map/Prefabs/MapElementPrefabs/{0}.prefab";
+    public const string MapElementFilePath = "/Map/Prefabs/MapElementPrefabs/";//地图元素生成文件路劲
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
@@ -23,6 +24,8 @@ public class MapDefine
     public const int MAPITEMSIZE = 256;//地图切割大小
 
     public const int MapElementSize = 32;//预设格子大小
+
+    public const float MapBlockSize = 0.2f;
 
     //格子大小
     public const float GridSize_Main = 20;
@@ -64,7 +67,7 @@ public enum eMapBlockType
     Collect,//碰撞区域
     Hide,   //隐藏区域
     Event,  //事件
-    playerPoint
+    PlayerPoint
     //Count,  //总数
 }
 
@@ -85,10 +88,7 @@ public class MapBlockData
         }
         get
         {
-            if (type == eMapBlockType.Hide)
-                _param = "1";
-            return
-                _param;
+            return _param;
         }
     }
     public override string ToString()
@@ -141,7 +141,7 @@ public class RoleTilePos
         string[] datas = data.Split(':');
         if (datas.Length > 1)
         {
-            if (int.Parse(datas[2]) == (int)eMapBlockType.playerPoint)
+            if (int.Parse(datas[2]) == (int)eMapBlockType.PlayerPoint)
             {
                 roleData = new RoleTilePos();
                 roleData.row = int.Parse(datas[0]);
@@ -172,7 +172,7 @@ public class MapManager : Singleton<MapManager>
     private Dictionary<string, MapElement> visionElementDic = new Dictionary<string, MapElement>();
     private Dictionary<string, GameObject> loadedObj = new Dictionary<string, GameObject>();
 
-    private Dictionary<string,MapElementGrid> visionGridList=new Dictionary<string, MapElementGrid>();
+    private Dictionary<string, MapElementGrid> visionGridList = new Dictionary<string, MapElementGrid>();
 
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private List<MapTileView> _mapViewList = null;
@@ -197,21 +197,6 @@ public class MapManager : Singleton<MapManager>
     private Vector2 currElementGrid = Vector2.zero;
 
     #region 角色创建坐标
-    private void InitRoleCreatPosData()
-    {
-        if (File.Exists(MapDefine.MapRoleCreatePointSavePath))
-        {
-            _roleTilePosList = new List<RoleTilePos>();
-            string[] contents = File.ReadAllLines(MapDefine.MapRoleCreatePointSavePath);
-            for (int i = 0; i < contents.Length; i++)
-            {
-                if (!string.IsNullOrEmpty(contents[i]))
-                {
-                    _roleTilePosList.Add(RoleTilePos.Parse(contents[i]));
-                }
-            }
-        }
-    }
 
     public Vector3 GetRandomPos()
     {
@@ -264,11 +249,14 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    public void InitMap()
+    public void InitMap(Vector3 pos = default(Vector3))
     {
+        Debug.Log("MapManager:Init");
+        SetMapCenterPos(pos);
+
         InitMapData();
-        _sceneLayer = GameObject.Find("SceneMap");
-        _mapElementRoot = GameObject.Find("MapElement");
+        _sceneLayer = new GameObject("SceneMap");
+        _mapElementRoot = new GameObject("MapElement");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
         _maxDataRow = 8;
@@ -289,7 +277,7 @@ public class MapManager : Singleton<MapManager>
         }
 
         AssetManager.LoadAsset(String.Format(MapDefine.MapAssetFilePath, currentBigMapIndex, currentBigMapIndex), (obj, str) => { InitMapAsset(currentBigMapIndex, obj); });//= obj as MapAsset);
-        AssetManager.LoadAsset(string.Format(MapDefine.MapElementPath, "Floor"), LoadFloorCom);
+        AssetManager.LoadAsset("Assets/Map/Prefabs/Floor.prefab", LoadFloorCom);
     }
 
     private MapAsset mapAsset;
@@ -309,7 +297,7 @@ public class MapManager : Singleton<MapManager>
             }
             AllMapElementDic[key] = tempElementDic;
 
-            Dictionary<string,MapElementGrid> tempElementGridDic=new Dictionary<string, MapElementGrid>();
+            Dictionary<string, MapElementGrid> tempElementGridDic = new Dictionary<string, MapElementGrid>();
             for (int index = 0; index < mapAsset.ElementGrids.Count; index++)
             {
                 MapElementGrid tempElementGrid = mapAsset.ElementGrids[index];
@@ -435,7 +423,7 @@ public class MapManager : Singleton<MapManager>
         {
             currElementGrid.x = tempX;
             currElementGrid.y = tempY;
-            UpdateElementView( pos);
+            UpdateElementView(pos);
         }
 
         if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
@@ -475,7 +463,8 @@ public class MapManager : Singleton<MapManager>
             }
         }
         _isInit = true;
-        // UpdateMapView();
+
+        UpdateMapView();
     }
 
     private void UpdateElementView(Vector3 pos)
@@ -486,19 +475,19 @@ public class MapManager : Singleton<MapManager>
         int bigMapX = (int)pos.x / MapDefine.MAPITEMTOTALSIZE;
         int bigMapY = (int)pos.z / MapDefine.MAPITEMTOTALSIZE;
         string bigMapKey = bigMapX + "" + bigMapY;
-        int beginX = (int) currElementGrid.x - 1;
-        int beginY = (int) currElementGrid.y - 1;
-        int endX = (int) currElementGrid.x + 1;
-        int endY = (int) currElementGrid.y + 1;
+        int beginX = (int)currElementGrid.x - 1;
+        int beginY = (int)currElementGrid.y - 1;
+        int endX = (int)currElementGrid.x + 1;
+        int endY = (int)currElementGrid.y + 1;
         for (int i = beginX; i <= endX; i++)
         {
             if (i < 0) continue;
             for (int j = beginY; j <= endY; j++)
             {
                 if (j < 0) continue;
-                string gridKey = i + "" + j;
+                string gridKey = i + "_" + j;
                 Dictionary<string, MapElementGrid> tempGridDataDic;
-                if(AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
+                if (AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
                 {
                     MapElementGrid tempGridData;
                     if (tempGridDataDic.TryGetValue(gridKey, out tempGridData))
@@ -509,7 +498,7 @@ public class MapManager : Singleton<MapManager>
                             MapElement element;
                             Dictionary<string, MapElement> tempElementDic;
                             if (AllMapElementDic.TryGetValue(bigMapKey, out tempElementDic))
-                                if(tempElementDic.TryGetValue(tempElementKeyList[index],out element))
+                                if (tempElementDic.TryGetValue(tempElementKeyList[index], out element))
                                 {
                                     if (!elementDic.ContainsKey(element.elementKey))
                                         elementDic[element.elementKey] = element;
@@ -537,12 +526,12 @@ public class MapManager : Singleton<MapManager>
                     element.eulerAngles = elementInfo.Angle;
                     element.localScale = elementInfo.Scale;
                     BuildingZTCollider tempcollider = element.GetComponent<BuildingZTCollider>();
-                    if (tempcollider != null)
-                    {
-                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-                        if (tempBattle != null)
-                            tempcollider.SetTarget(tempBattle.Collider);
-                    }
+                    //if (tempcollider != null)
+                    //{
+                    //    ICharaBattle tempBattle = ZTBattleSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
+                    //    if (tempBattle != null)
+                    //        tempcollider.SetTarget(tempBattle.Collider);
+                    //}
                     loadedObj[elementData.elementKey] = element.gameObject;
                 }
             });
@@ -557,7 +546,7 @@ public class MapManager : Singleton<MapManager>
             }
         }
         visionElementDic = elementDic;
-       
+
     }
 
     //刷新地图

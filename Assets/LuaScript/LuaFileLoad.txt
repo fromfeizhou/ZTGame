@@ -8,7 +8,6 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
-		--"Global.CommonData",
 		"Global.GlobalData",
 		"Global.ModelData",
 		"Global.ZTProtoData",
@@ -50,9 +49,12 @@ local LuaFileLoad = {
 
 	--游戏lua文件
 	G_tGameList = {
+		"Global.CommonData",
 		"Global.Animator.AnimatorData",
 		"Global.Animator.Animator",
 
+		"Battle.GlobalBattle",
+		"Battle.Character",
 		"Battle.ZTBattleScene",
 		"Battle.ZTCharaManager",
 	}

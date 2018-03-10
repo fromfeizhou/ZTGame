@@ -7,37 +7,75 @@ using XLua;
 public class ZTAnimator : MonoBehaviour {
      
     private Animation _animator; //动画
+    private GameObject _animatorGo; //动画对象
     private bool _isTrans;  //是否半透明
 
     public void Start()
     {
         _animator = null;
+        _animatorGo = null;
         _isTrans = false;
     }
 
-    public void CreateAnimaView(string path)
+   
+
+    public void OnDestroy()
     {
-        AssetManager.LoadAsset(path,(Object target,string comePath)=>{
+        //if (null != _animatorGo)
+        //{
+        //    GameObject.Destroy(_animatorGo);
+        //}
+        _animatorGo = null;
+        _animator = null;
+    }
+
+    //创建形象
+    public void CreateAnimatorView(string path)
+    {
+        if (null != _animator)
+        {
+            this.gameObject.SetActive(true);
+            return;
+        }
+
+        AssetManager.LoadAsset(path, (Object target, string comePath) => {
             GameObject prefab = target as GameObject;
             if (null != prefab)
             {
                 GameObject go = GameObject.Instantiate(prefab);
+                _animatorGo = go;
                 _animator = go.GetComponent<Animation>();
             }
         });
     }
 
-    public void OnDestroy()
+    //移除形象
+    public void RemoveAnimatorView()
     {
         if (null != _animator)
         {
-            GameObject.Destroy(_animator);
+            this.gameObject.SetActive(false);
+            this.StartCoroutine(timeOut());
+        }
+    }
+
+    IEnumerator timeOut()
+    {
+        yield return new WaitForSeconds(60);
+        //非活动状态 清理东西对象
+        if (!this.gameObject.activeSelf)
+        {
+            if (null != _animatorGo)
+            {
+                GameObject.Destroy(_animatorGo);
+            }
+            _animatorGo = null;
             _animator = null;
         }
     }
 
     //播放动作
-    public void PlayHandler(string actoinName)
+    public void Play(string actoinName)
     {
         if (null == _animator) return;
         _animator.Play(actoinName);

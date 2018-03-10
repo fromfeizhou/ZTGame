@@ -3,10 +3,12 @@
 --@data 2018/2/27
 
 PathManager = {
-	g_sAssetPath = "Assets",
-	m_sUIPrefab = "Assets/Prefabs/UI/",
-	m_sUIPanel = "Assets/Prefabs/Panel/",
+	g_sAssetPath = "Assets",		--资源根目录地址
+	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
+	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
+
+	m_sAnimator = "Assets/Models/TmpCharacter/",		--模型预设地址
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -30,6 +32,12 @@ end
 --@return string 地址
 function PathManager:GetPbFile(name)
 	return PathManager.m_sPbFile .. name .. ".pb.bytes"
+end
+
+
+--@brief 获取模型地址
+function PathManager:GetAnimatorPath(name)
+	return PathManager.m_sAnimator .. name ..".prefab"
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

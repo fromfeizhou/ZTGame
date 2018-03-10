@@ -1,0 +1,41 @@
+--GlobalBattle.txt
+--@breif 战斗全局数据
+--@data 2018/3/10
+GlobalBattle = {
+	BattleEventDispatcher = nil,		--事件发送器
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@breif 网络事件
+BATTLE_EVENT = {
+	ADD_CHARACTER = "BATTLE_EVENT_ADD_CHARACTER", 	--添加玩家
+	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
+}
+--@breif 获取战斗事件管理器
+function GlobalBattle:GetBattleEventDispatcher()
+	if GlobalBattle.BattleEventDispatcher == nil then 
+		GlobalBattle.BattleEventDispatcher = EventDispatcher:Create() 
+	end
+	return GlobalBattle.BattleEventDispatcher
+end
+
+--@brife 战斗对象结构
+function GlobalBattle:GetBattleData(battleId,careerType,pos)
+	local data = {}
+	data.battleId = battleId or 1
+	data.careerType = careerType or CareerType.FashShi
+	data.pos = pos or CSVector3(100,0,100)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
