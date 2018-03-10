@@ -24,16 +24,16 @@ public class MapColliderHelper
                     continue;
 
                 mapData += _mapBlockData[i] + "\n";
-                if (_mapBlockData[i].type == eMapBlockType.playerPoint)
-                    mapRoleCreatePoint += _mapBlockData[i] + "\n";
+                //if (_mapBlockData[i].type == eMapBlockType.PlayerPoint)
+                //    mapRoleCreatePoint += _mapBlockData[i] + "\n";
             }
             if (File.Exists(MapDefine.MapDataSavePath))
                 File.Delete(MapDefine.MapDataSavePath);
             File.WriteAllText(MapDefine.MapDataSavePath, mapData.Trim());
 
-            if (File.Exists(MapDefine.MapRoleCreatePointSavePath))
-                File.Delete(MapDefine.MapRoleCreatePointSavePath);
-            File.WriteAllText(MapDefine.MapRoleCreatePointSavePath, mapRoleCreatePoint.Trim());
+            //if (File.Exists(MapDefine.MapRoleCreatePointSavePath))
+            //    File.Delete(MapDefine.MapRoleCreatePointSavePath);
+            //File.WriteAllText(MapDefine.MapRoleCreatePointSavePath, mapRoleCreatePoint.Trim());
 
             AssetDatabase.Refresh();
         }
