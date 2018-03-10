@@ -13,9 +13,11 @@ local CSByteBuffer = CS.ByteBuffer
 
 
 --@brief 当前次登录验证信息
-local _loginAuthKey
+local _loginAuthKey = nil
 --@brief 当前消息序号
-local _curMsgSeq
+local _curMsgSeq = 0
+--@brief 心跳定时器
+local _heartTimer = nil
 
 --@brief 协议类型定义
 Protocal = {
@@ -48,13 +50,16 @@ end
 --@brief 请求连接服务器
 function NetWorkManager:RequestConnect( addressData )
 
-	local ModelData = {}
-	ModelData.modelType = MODEL_TYPE.SYSTEM
-	ModelData.panelType = SYSTEM_TYPE.NOTICE
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,ModelData)
-
-
+	--设置连接地址
 	self.m_instance:SetNetWorkAddress(addressData.host,addressData.port)
+
+	--显示锁屏界面
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+
 	self.m_instance:RequestConnect()
 end
 
@@ -91,7 +96,7 @@ end
 --@brief 发送网络消息包
 function NetWorkManager:SendNetMsg(package)
 	local byteBuff = CSByteBuffer()
-	byteBuff:WriteUInt16(0)
+	byteBuff:WriteUInt16(self:_GetCurMsgSeq())
 	byteBuff:WriteByte(package.model)
 	byteBuff:WriteByte(package.command)
 	
@@ -109,10 +114,12 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 获取当前消息序号
-function GetCurMsgSeq()
-	_curMsgSeq = _curMsgSeq + _loginAuthKey.unique_add;
-	if _curMsgSeq > _loginAuthKey.max_unique_id then
-		_curMsgSeq = _loginAuthKey.unique_id
+function NetWorkManager:_GetCurMsgSeq()
+	if _loginAuthKey then
+		_curMsgSeq = _curMsgSeq + _loginAuthKey.unique_add;
+		if _curMsgSeq > _loginAuthKey.max_unique_id then
+			_curMsgSeq = _loginAuthKey.unique_id
+		end
 	end
 	return _curMsgSeq;
 end
@@ -159,19 +166,85 @@ end
 
 --@brief pb数据处理逻辑
 function NetWorkManager:OnReceive(model,command,pbData)
-	if model == PB_LOGIN.MODEL and command == PB_LOGIN.AUTH_KEY then
-		_loginAuthKey = pbData
+	if model == PB_LOGIN.MODEL then
+		if     command == PB_LOGIN.AUTH_KEY then
+			self:_Receive_Login_Auth_Key(pbData)
+		elseif  command == PB_LOGIN.LOGIN then
+			self:_Receive_Login_Login(pbData)
+		end
 	end
 end
 
---@brief 发送心跳
-function NetWorkManager:_SendHeard()
-end
 
---@brief 请求登录验证
-function NetWorkManager:_Request_Login_Auth_Key(  )
+
+--@brief 请求 - 登录验证
+function NetWorkManager:_Request_Login_Auth_Key( )
+	GCSLog("NetWorkManager:_Request_Login_Auth_Key")
+
 	local package 	= {}
 	package.model 	= PB_LOGIN.MODEL
 	package.command = PB_LOGIN.AUTH_KEY
+	self:SendNetMsg(package)
+end
+
+--@brief 回复 - 登录验证
+function NetWorkManager:_Receive_Login_Auth_Key(pbData)
+	GCSLog("NetWorkManager:_Receive_Login_Auth_Key")
+	_loginAuthKey = pbData
+	GCSLog(SerializeTable(pbData))
+
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	
+	--请求登录服务器
+	LoginModel:NetWork_RequestLogin()
+end
+
+local _heartInterval
+--@brief 回复 - 登录服务器
+function NetWorkManager:_Receive_Login_Login(pbData)
+	
+	_heartInterval = pbData.heart_interval
+	GCSLog("NetWorkManager:_Receive_Login_Login")
+	GCSLog("心跳间隔:",_heartInterval)
+	self:_OpenHeart()
+	
+	--[[
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	
+	--请求登录服务器
+	LoginModel:NetWork_RequestLogin()
+	]]
+end
+
+function NetWorkManager:_OpenHeart()
+	if not _heartTimer then
+		_heartTimer = LoopTimer:Create(self._SendHeart,self)
+		_heartTimer:SetParam(_heartInterval,0)
+		TimerManager:AddTimer(_heartTimer)
+	end
+end
+
+function NetWorkManager:_CloseHeart()
+	if _heartTimer then
+		_heartTimer.m_isFinish = true
+	end
+end
+
+
+--@brief 发送心跳
+function NetWorkManager:_SendHeart()
+	local package 	= {}
+	package.model 	= PB_LOGIN.MODEL
+	package.command = PB_LOGIN.HEART
 	self:SendNetMsg(package)
 end
