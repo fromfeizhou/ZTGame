@@ -14,11 +14,17 @@ public class GameTool
         {
             if (i == 0)
             {
-                str = args[i].ToString();
+                if (null != args[i])
+                    str = args[i].ToString();
+                else
+                    str = "null";
             }
             else
             {
-                str = str + "  " + args[i].ToString();
+                if (null != args[i])
+                    str = str + "  " + args[i].ToString();
+                else
+                    str = str + "  " + "null";
             }
         }
         Debug.Log(str);

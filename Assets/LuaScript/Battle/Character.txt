@@ -16,7 +16,7 @@ local CSLog = CS.GameTool.Log
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function Character:Create(battleData)
+function Character:Create(battleData,container)
 	local obj = {}
 	setmetatable( obj, { __index = Character })
 	obj:Init(battleData)
@@ -24,11 +24,11 @@ function Character:Create(battleData)
 end
 
 --@brief 初始化
-function Character:Init(battleData)
-	CSLog("Character:Init")
+function Character:Init(battleData,container)
+	CSLog("Character:Init",battleData.pos)
 	self.m_nBattleId = battleData.battleId or 1
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
-	self.m_animator = Animator:Create(self.m_animData)
+	self.m_animator = Animator:Create(self.m_animData,container)
 	self:UpdatePos(battleData.pos)
 end
 
@@ -66,24 +66,24 @@ end
 
 --@brief 创建显示(进入镜头范围)
 function Character:SetInCamera(inCamera)
-	self.m_animData:Play(name)
+	self.m_animData:SetInCamera(inCamera)
 end
 
 --@brief 刷新位置
 --@param vector3 pos
 function Character:UpdatePos(pos)
-	self.m_animData:Play(name)
+	self.m_animData:UpdatePos(pos)
 end
 
 --@brief 更新角度
 --@param vector3 dir
 function Character:UpdateRotate(dir)
-	self.m_animData:Play(name)
+	self.m_animData:UpdateRotate(dir)
 end
 
 --@brief 改变半透明（草丛状态显示）
 function Character:ChangeTranslucence(isTrans)
-	self.m_animData:Play(name)
+	self.m_animData:ChangeTranslucence(isTrans)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brife 动作相关
