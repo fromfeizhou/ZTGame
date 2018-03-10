@@ -107,11 +107,11 @@ public class MapTileView : MonoBehaviour {
                     tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
                     trees.Add(tree.gameObject);
                     BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
-                    if(tempcollider!=null){
-                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-                    if (tempBattle != null)
-                        tempcollider.SetTarget(tempBattle.Collider);
-                    }
+                    //if(tempcollider!=null){
+                    //    ICharaBattle tempBattle = ZTBattleSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
+                    //if (tempBattle != null)
+                    //    tempcollider.SetTarget(tempBattle.Collider);
+                    //}
                         
                 });
             }

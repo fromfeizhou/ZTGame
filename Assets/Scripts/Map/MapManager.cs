@@ -264,11 +264,14 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    public void InitMap()
+    public void InitMap(Vector3 pos = default(Vector3))
     {
+        Debug.Log("MapManager:Init");
+        SetMapCenterPos(pos);
+
         InitMapData();
-        _sceneLayer = GameObject.Find("SceneMap");
-        _mapElementRoot = GameObject.Find("MapElement");
+        _sceneLayer = new GameObject("SceneMap");
+        _mapElementRoot = new GameObject("MapElement");
         _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
         _maxDataRow = 8;
@@ -475,7 +478,8 @@ public class MapManager : Singleton<MapManager>
             }
         }
         _isInit = true;
-        // UpdateMapView();
+
+        UpdateMapView();
     }
 
     private void UpdateElementView(Vector3 pos)
@@ -537,12 +541,12 @@ public class MapManager : Singleton<MapManager>
                     element.eulerAngles = elementInfo.Angle;
                     element.localScale = elementInfo.Scale;
                     BuildingZTCollider tempcollider = element.GetComponent<BuildingZTCollider>();
-                    if (tempcollider != null)
-                    {
-                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-                        if (tempBattle != null)
-                            tempcollider.SetTarget(tempBattle.Collider);
-                    }
+                    //if (tempcollider != null)
+                    //{
+                    //    ICharaBattle tempBattle = ZTBattleSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
+                    //    if (tempBattle != null)
+                    //        tempcollider.SetTarget(tempBattle.Collider);
+                    //}
                     loadedObj[elementData.elementKey] = element.gameObject;
                 }
             });

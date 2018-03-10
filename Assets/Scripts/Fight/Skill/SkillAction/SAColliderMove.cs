@@ -31,7 +31,7 @@ public class SAColliderMove : SACollider
         Vector3 targetPos = _actionParser.Command.TargetPos;
         if (_actionParser.Command.TargetId > 0)
         {
-            ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(_actionParser.Command.TargetId) as ICharaBattle;
+            ICharaBattle battleInfo = ZTBattleSceneManager.GetInstance().GetCharaById(_actionParser.Command.TargetId) as ICharaBattle;
             if (null != battleInfo)
             {
                 targetPos = battleInfo.MovePos;
@@ -50,7 +50,7 @@ public class SAColliderMove : SACollider
         //指定目标
         if (_colliderInfo.ColliderType == CollBase.ColType.TARGET)
         {
-            ICharaBattle battleInfo = ZTSceneManager.GetInstance().GetCharaById(_actionParser.Command.TargetId) as ICharaBattle;
+            ICharaBattle battleInfo = ZTBattleSceneManager.GetInstance().GetCharaById(_actionParser.Command.TargetId) as ICharaBattle;
             if (null != battleInfo)
             {
                 DoColliderAction(battleInfo);

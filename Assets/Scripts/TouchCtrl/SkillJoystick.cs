@@ -30,7 +30,7 @@ public class SkillJoystick : JoystickBase
 
     void OnJoystickDownEvent(Vector2 deltaVec)
     {
-        if (ZTSceneManager.GetInstance().MyPlayer.CanUseSkill())
+        if (ZTBattleSceneManager.GetInstance().MyPlayer.CanUseSkill())
         {
             _skillDownState = true;
         }
@@ -49,29 +49,29 @@ public class SkillJoystick : JoystickBase
         //---------------test------------------------//
 
 		SkillId = FightModule.GetInstance().CurSkillId;
-        if (ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
+        if (ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
         {
-            SkillId = ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId;
-            ZTSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
+            SkillId = ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId;
+            ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
         }
 
-        Vector3 targetPos =ZTSceneManager.GetInstance().MyPlayer.MovePos + new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
+        Vector3 targetPos =ZTBattleSceneManager.GetInstance().MyPlayer.MovePos + new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
         Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
 
         //选择最近目标
         uint targetId =0;
         if (SkillId == 1001)
         {
-            ICharaBattle battleInfo = SkillMethod.GetNearestTarget(ZTSceneManager.GetInstance().MyPlayer, SkillDefine.ColliderTarget.ENEMY);
-            if (null == battleInfo || Vector3.Distance(ZTSceneManager.GetInstance().MyPlayer.MovePos, battleInfo.MovePos) > 6) return;
+            ICharaBattle battleInfo = SkillMethod.GetNearestTarget(ZTBattleSceneManager.GetInstance().MyPlayer, SkillDefine.ColliderTarget.ENEMY);
+            if (null == battleInfo || Vector3.Distance(ZTBattleSceneManager.GetInstance().MyPlayer.MovePos, battleInfo.MovePos) > 6) return;
 
             targetId = battleInfo.BattleId;
-            dir = (battleInfo.MovePos - ZTSceneManager.GetInstance().MyPlayer.MovePos).normalized;
+            dir = (battleInfo.MovePos - ZTBattleSceneManager.GetInstance().MyPlayer.MovePos).normalized;
         }
-        BattleProtocol.GetInstance().SendSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
+        BattleProtocol.GetInstance().SendSkillCommand(ZTBattleSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
         //---------------test------------------------//
         
-        //SkillCommand command = FightDefine.GetSkillCommand(ZTSceneManager.GetInstance().MyPlayer.BattleId,ZTSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
+        //SkillCommand command = FightDefine.GetSkillCommand(ZTBattleSceneManager.GetInstance().MyPlayer.BattleId,ZTBattleSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
         //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
 }
