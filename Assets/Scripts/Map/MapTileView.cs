@@ -70,52 +70,44 @@ public class MapTileView : MonoBehaviour {
     private Vector3 aaa = new Vector3(0.2f, 0.0f, 0.2f);
     private void UpdateMapItem()
     {
-        Transform tempParent = null;
-        _mapInfo = MapManager.GetInstance().GetMapInfiByPos(_mapTileData.Row, _mapTileData.Column);
-        if (_mapInfo == null)
-        {
-            return;
-        }
+        //Transform tempParent = null;
+        //_mapInfo = MapManager.GetInstance().GetMapInfiByPos(_mapTileData.Row, _mapTileData.Column);
+        //if (_mapInfo == null)
+        //{
+        //    return;
+        //}
 
-        for (int i = 0; i < _mapInfo.MapItemList.Count; i++)
-        {
-            string tempAssetPath = "";
-            MapItemInfo tempItem = _mapInfo.MapItemList[i];
-            //if (tempItem.MapItemType == eMapItemType.Tree){
-            //    treeParent = _terrain.transform.Find("[Tree]");
-            //    tempAssetPath = MapDefine.MAPITEM_TREE;
-            //}
-            //else if (tempItem.MapItemType == eMapItemType.Wall01)
-            //{
-            //    treeParent = _terrain.transform.Find("[Wall01]");
-            //    tempAssetPath = MapDefine.MAPITEM_Wall01;
-            //}
-            string tempName=(tempItem.MapItemType ).ToString();
-            tempParent = _terrain.transform.Find(string.Format("[{0}]", tempName));
-            if (tempParent == null) continue;
-            tempAssetPath = string.Format(MapDefine.MapElementPath, tempName);
+        //for (int i = 0; i < _mapInfo.MapItemList.Count; i++)
+        //{
+        //    string tempAssetPath = "";
+        //    MapItemInfo tempItem = _mapInfo.MapItemList[i];
 
-            for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
-            {
-                AssetManager.LoadAsset(tempAssetPath, (obj, str) =>
-                {
-                    GameObject assetTree = obj as GameObject;
-                    Transform tree = Instantiate(assetTree).transform;
-                    tree.SetParent(tempParent);
-                    tree.position = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
-                    tree.eulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
-                    tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
-                    trees.Add(tree.gameObject);
-                    BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
-                    if(tempcollider!=null){
-                        ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-                    if (tempBattle != null)
-                        tempcollider.SetTarget(tempBattle.Collider);
-                    }
+        //    string tempName=(tempItem.MapItemType ).ToString();
+        //    tempParent = _terrain.transform.Find(string.Format("[{0}]", tempName));
+        //    if (tempParent == null) continue;
+        //    tempAssetPath = string.Format(MapDefine.MapElementPath, tempName);
+
+        //    for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
+        //    {
+        //        AssetManager.LoadAsset(tempAssetPath, (obj, str) =>
+        //        {
+        //            GameObject assetTree = obj as GameObject;
+        //            Transform tree = Instantiate(assetTree).transform;
+        //            tree.SetParent(tempParent);
+        //            tree.position = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
+        //            tree.eulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
+        //            tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
+        //            trees.Add(tree.gameObject);
+        //            BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
+        //            if(tempcollider!=null){
+        //                ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
+        //            if (tempBattle != null)
+        //                tempcollider.SetTarget(tempBattle.Collider);
+        //            }
                         
-                });
-            }
-        }
+        //        });
+        //    }
+        //}
     }
 
     private MapInfo _mapInfo;
