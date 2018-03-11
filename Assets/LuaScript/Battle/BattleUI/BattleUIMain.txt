@@ -1,52 +1,39 @@
---PathManager.txt
---@breif 地址管理
---@data 2018/2/27
-
-PathManager = {
-	g_sAssetPath = "Assets",		--资源根目录地址
-	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
-	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
-	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
-	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
-
-	m_sAnimator = "Assets/Models/TmpCharacter/",		--模型预设地址
+--BattleUIMain.txt
+--@breif 战斗界面ui
+--@data 2018/03/11
+BattleUIMain = {
+	m_moveContainer = nil,		--移动容器
+	m_skillContainer = nil,		--技能容器
+	m_hpContainer = nil,		--hp容器
 }
 
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 获取ui预设地址
---@param name ui名字
-function PathManager:GetUIPrefab(name)
-	return PathManager.m_sUIPrefab .. name .. ".prefab"
+--@brief 拷贝原表
+function BattleUIMain:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleUIMain })
+	obj:Init()
+	return obj
 end
 
---@brief 获取面板ui预设地址
---@param name ui面板名字
---@return string 地址
-function PathManager:GetUIPanel(name)
-	return PathManager.m_sUIPanel .. name .. ".prefab"
-end
-
---@brief 获取pb文件路径
---@param name pb文件名字
---@return string 地址
-function PathManager:GetPbFile(name)
-	return PathManager.m_sPbFile .. name .. ".pb.bytes"
+--@brief 初始化
+function BattleUIMain:Init()
+	CSLog("BattleUIMain:Init")
+	local canvas = CSGameObject.Find("Canvas").transform
+ 	self.m_transform = CSTransform.Instantiate(target.transform,canvas)
 end
 
 
---@brief 获取模型地址
-function PathManager:GetAnimatorPath(name)
-	return PathManager.m_sAnimator .. name ..".prefab"
-end
-
-
---@brief 获取pb文件路径
---@param name pb文件名字
---@return string 地址
-function PathManager:GetBatteUIPanel(name)
-	return PathManager.m_sBattleUIPrefab .. name ..".prefab"
+--@brief 移除
+function BattleUIMain:Destroy()
+	CSLog("BattleUIMain:Destroy")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

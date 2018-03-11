@@ -1,0 +1,52 @@
+--MoveJoystick.txt
+--@breif 移动控制UI
+--@data 2018/03/11
+MoveJoystick = {
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function MoveJoystick:Create()
+	local obj = {}
+	setmetatable( obj, { __index = MoveJoystick })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function MoveJoystick:Init()
+	CSLog("MoveJoystick:Init")
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("MoveJoystick"),callback_loadfinish)
+end
+
+
+--@brief 移除
+function MoveJoystick:Destroy()
+	CSLog("MoveJoystick:Destroy")
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function MoveJoystick:_LoadAsseFinish(target,path)
+	local prefab = target
+ 		if prefab then
+			local canvas = CSGameObject.Find("Canvas").transform
+ 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+ 			self:_InitPanel()
+		end
+end
