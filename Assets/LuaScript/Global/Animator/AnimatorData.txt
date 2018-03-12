@@ -16,6 +16,9 @@ AnimatorData = {
 	m_nCareerType = nil,	--职业类型
 }
 
+--@breif 继承EventDispatcher
+setmetatable( AnimatorData, { __index = EventDispatcher})
+
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
@@ -26,7 +29,6 @@ local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表(继承事件)
 function AnimatorData:Create(animaType,careerType)
-	setmetatable( AnimatorData, { __index = EventDispatcher:Create() })
 	local obj = {}
 	setmetatable( obj, { __index = AnimatorData })
 	obj:Init(animaType,careerType)
@@ -36,6 +38,9 @@ end
 --@brief 初始化
 function AnimatorData:Init(animaType,careerType)
 	CSLog("AnimatorData:Init")
+	--基类初始化
+	EventDispatcher.Init(self)
+
 	self.m_nType = animaType or AnimatorType.Hero
 	self.m_nCareerType = careerType or CareerType.FashShi
 end
