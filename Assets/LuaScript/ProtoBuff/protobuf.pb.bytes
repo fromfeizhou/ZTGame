@@ -1,6 +1,6 @@
 
-ùï
-protobuf.proto",
+◊†
+protobuf.protoztGame.proto",
 p_setting_info
 key (
 value ("3
@@ -68,7 +68,7 @@ crit_ratio (
  (
 reload_time (
 mobility (
-	clip_size ("…
+	clip_size ("÷
 p_role_attr
 
 id (
@@ -94,8 +94,8 @@ next_lv_gx	 (
 vigour_full (
 	vip_level (
 	vip_score (
-shaping (
-attr (2.p_base_attr
+shaping ('
+attr (2.ztGame.proto.p_base_attr
 
 title_list (
 
@@ -119,7 +119,13 @@ vip_reward ("R
 z ("/
 p_debuff
 	debuff_id (
-end_time ("€
+end_time ("c
+p_role_frame
+role_id (
+frame_id (
+type (
+int_data (
+str_data (	"Á
 
 p_map_role
 
@@ -142,16 +148,18 @@ p_map_role
 	vip_level (
 shaping (
 fight_point (
-defense (
-buffs (2.p_buff
-debuffs (2	.p_debuff
-equips (2.p_goods"ë
+defense (1
+moving_frames (2.ztGame.proto.p_role_frame0
+skill_frames (2.ztGame.proto.p_role_frame#
+buffs (2.ztGame.proto.p_buff'
+debuffs (2.ztGame.proto.p_debuff%
+equips (2.ztGame.proto.p_goods"û
 	p_map_mon
 
 id (
 monid (
-lvl (
-dir (2.p_dir	
+lvl ( 
+dir (2.ztGame.proto.p_dir	
 x (	
 y (	
 z (
@@ -200,7 +208,7 @@ mapping_id (
 	p_recruit
 
 id (
-color ("∑
+color ("ƒ
 p_friend_info
 role_id (
 name (	
@@ -217,8 +225,8 @@ mapping_id (
 last_give_time (
 relation (
 	max_score (
-gongxun (
-equips (2.p_goods"*
+gongxun (%
+equips (2.ztGame.proto.p_goods"*
 p_mail_attach
 
 id (
@@ -234,15 +242,15 @@ mapping_id (
 
 lv (
 fight_point (
-dress_id	 ("p
+dress_id	 ("}
 p_rank
 
 id (
 role_id (
 pos (
 
-pos_change (
-role (2.p_rank_role
+pos_change ('
+role (2.ztGame.proto.p_rank_role
 data ("◊
 p_cuxiao_goods_info
 	cuxiao_id (
@@ -264,21 +272,21 @@ money_type (
 sex ("4
 p_rumor_goods
 goods_id (
-	unique_id ("e
-p_rumor
-role (2.p_rumor_role
-goods (2.p_rumor_goods
+	unique_id ("
+p_rumor(
+role (2.ztGame.proto.p_rumor_role*
+goods (2.ztGame.proto.p_rumor_goods
 i_data (
 s_data (	"E
 p_mail_role
 userid (
 name (	
 lvl (
-sex ("I
-p_mail_args
-role (2.p_mail_role
+sex ("V
+p_mail_args'
+role (2.ztGame.proto.p_mail_role
 i_data (
-s_data (	"µ
+s_data (	"œ
 p_mail_basic_info
 
 id (
@@ -294,9 +302,9 @@ money_type (
  (	
 silver (
 gold (
-vigour (
-	mail_args (2.p_mail_args(
-mail_attach_list (2.p_mail_attach"N
+vigour (,
+	mail_args (2.ztGame.proto.p_mail_args5
+mail_attach_list (2.ztGame.proto.p_mail_attach"N
 	p_brocast
 
 id (
@@ -314,12 +322,12 @@ start_time (
 condition_id (
 flag (
 count (
-op_time ("g
+op_time ("t
 p_activity_info
 role_id (
 activity_id (
-count (
-	condition (2.p_condition"E
+count (,
+	condition (2.ztGame.proto.p_condition"E
 p_activity_open
 activity_id (
 type (
@@ -363,11 +371,11 @@ mission_id (
 guide_id (
 state (
 listener_cur_num (
-listener_max_num ("?
+listener_max_num ("L
 p_seven_guide
-day (!
+day (.
 
-guide_info (2.p_guide_task"K
+guide_info (2.ztGame.proto.p_guide_task"K
 p_activity_condition
 activity_id (
 sort_id (
@@ -378,13 +386,13 @@ guide_info (2.p_guide_task"K
 
 admin_data (
 
-admin_time ("á
+admin_time ("°
 p_rumor_brocast
 
 id (
-Type (
-role (2.p_rumor_role
-goods (2.p_rumor_goods
+Type ((
+role (2.ztGame.proto.p_rumor_role*
+goods (2.ztGame.proto.p_rumor_goods
 i_data (
 s_data (	">
 p_chat_args
@@ -392,11 +400,11 @@ admin_time ("á
 i_data (
 s_data (	"
 rank_info_c2s
-type ("c
+type ("p
 rank_info_s2c
 code (
-type (
-info (2.p_rank
+type ("
+info (2.ztGame.proto.p_rank
 pos (
 
 pos_change ("'
@@ -407,10 +415,10 @@ pos_change ("'
 cur_rank (
 cur_rate ("*
 activity_activity_list_c2s
-type ("S
+type ("`
 activity_activity_list_s2c
-code ('
-activity_list (2.p_activity_info"M
+code (4
+activity_list (2.ztGame.proto.p_activity_info"M
  activity_get_activity_reward_c2s
 activity_id (
 condition_id ("[
@@ -419,24 +427,23 @@ pos_change ("'
 condition_id (
 code ("1
 activity_activity_info_c2s
-activity_id ("S
+activity_id ("`
 activity_activity_info_s2c
-code ('
-activity_info (2.p_activity_info"
-activity_all_open_info_c2s"F
-activity_all_open_info_s2c(
-activity_opens (2.p_activity_open"I
-activity_update_open_info_s2c(
-activity_opens (2.p_activity_open"k
+code (4
+activity_info (2.ztGame.proto.p_activity_info"
+activity_all_open_info_c2s"S
+activity_all_open_info_s2c5
+activity_opens (2.ztGame.proto.p_activity_open"V
+activity_update_open_info_s2c5
+activity_opens (2.ztGame.proto.p_activity_open"x
 activity_update_activity_s2c
 activity_id (
-schedule ($
-condition_info (2.p_condition"
-mission_list_c2s"H
+schedule (1
+condition_info (2.ztGame.proto.p_condition"
+mission_list_c2s"U
 mission_list_s2c
-code (&
-daily_mission_list (2
-.p_mission"4
+code (3
+daily_mission_list (2.ztGame.proto.p_mission"4
 mission_get_mission_reward_c2s
 
 mission_id ("B
@@ -444,39 +451,37 @@ mission_id ("B
 code (
 
 mission_id (""
- mission_refresh_mission_list_c2s"ä
+ mission_refresh_mission_list_c2s"ó
  mission_refresh_mission_list_s2c
 code (
 cur_free_times (
-total_free_times (&
-daily_mission_list (2
-.p_mission":
-mission_update_mission_s2c
-missions (2
-.p_mission"
-seven_guide_list_c2s"^
+total_free_times (3
+daily_mission_list (2.ztGame.proto.p_mission"G
+mission_update_mission_s2c)
+missions (2.ztGame.proto.p_mission"
+seven_guide_list_c2s"k
 seven_guide_list_s2c
 code (
-status ((
-seven_guide_list (2.p_seven_guide"$
+status (5
+seven_guide_list (2.ztGame.proto.p_seven_guide"$
 seven_guide_award_c2s
 day ("2
 seven_guide_award_s2c
 code (
 day ("
-seven_guide_update_c2s"I
-seven_guide_update_s2c/
-update_seven_guide_list (2.p_seven_guide"
-task_list_c2s"+
-task_list_s2c
-	task_list (2.p_task""
+seven_guide_update_c2s"V
+seven_guide_update_s2c<
+update_seven_guide_list (2.ztGame.proto.p_seven_guide"
+task_list_c2s"8
+task_list_s2c'
+	task_list (2.ztGame.proto.p_task""
 task_reward_c2s
 task_id ("0
 task_reward_s2c
 task_id (
-code ("-
-task_update_s2c
-	task_list (2.p_task"
+code (":
+task_update_s2c'
+	task_list (2.ztGame.proto.p_task"
 login_heart_c2s"&
 login_heart_s2c
 server_time ("Ã
@@ -492,22 +497,22 @@ mission_id (""
 product_code	 (	
 uid
  (	
-	nick_name (	"Å
+	nick_name (	"é
 login_login_s2c
 code (
 accname (	
 	nick_name (	
-heart_interval (:1!
+heart_interval (:1.
 
-login_info (2.p_login_info"#
+login_info (2.ztGame.proto.p_login_info"#
 login_select_role_c2s
 
-id ("[
+id ("h
 login_select_role_s2c
 code (
 version (	
-time (
-role (2.p_role"P
+time ("
+role (2.ztGame.proto.p_role"P
 login_create_role_c2s
 name (	
 job (
@@ -562,21 +567,21 @@ sina_appid
  (	
 sina_appkey (	
 sina_redirecturl (	"
-role_info_c2s"+
-role_info_s2c
-role (2.p_role_attr"&
+role_info_c2s"8
+role_info_s2c'
+role (2.ztGame.proto.p_role_attr"&
 role_mobile_c2s
 client_info ("!
 role_info_other_c2s
 
-id ("]
+id ("w
 role_info_other_s2c
-code (
-role (2.p_role_attr
+code ('
+role (2.ztGame.proto.p_role_attr)
 
-goods_list (2.p_goods"+
-role_attr_s2c
-attr (2.p_base_attr"
+goods_list (2.ztGame.proto.p_goods"8
+role_attr_s2c'
+attr (2.ztGame.proto.p_base_attr"
 role_fortune_c2s"N
 role_fortune_s2c
 silver (
@@ -646,19 +651,19 @@ group_list (
 code (
 ids (
 	group_ids ("
-role_pay_package_info_c2s">
-role_pay_package_info_s2c!
-list (2.p_pay_package_item"*
+role_pay_package_info_c2s"K
+role_pay_package_info_s2c.
+list (2 .ztGame.proto.p_pay_package_item"*
 role_pay_package_buy_c2s
-pay_id ("K
+pay_id ("X
 role_pay_package_buy_s2c
-code (!
-item (2.p_pay_package_item"-
+code (.
+item (2 .ztGame.proto.p_pay_package_item"-
 role_pay_package_refund_c2s
-pay_id ("N
+pay_id ("[
 role_pay_package_refund_s2c
-code (!
-item (2.p_pay_package_item"
+code (.
+item (2 .ztGame.proto.p_pay_package_item"
 role_revive_c2s
 type ("O
 role_revive_s2c
@@ -689,21 +694,21 @@ group_list (
 vigour (
 vigour_full (
 	buy_times (
-can_buy_times ("T
+can_buy_times ("a
 role_sync_c2s
 state (	
 x (	
 y (	
-z (
-dir (2.p_dir"`
+z ( 
+dir (2.ztGame.proto.p_dir"m
 role_sync_s2c
 
 id (
 state (	
 x (	
 y (	
-z (
-dir (2.p_dir"
+z ( 
+dir (2.ztGame.proto.p_dir"
 role_acc_info_c2s"
 role_acc_info_s2c"
 role_buy_gold_c2s"O
@@ -724,47 +729,47 @@ section_id (
 sort_id ("+
 role_buy_activity_goods_s2c
 code (""
- role_activity_condition_info_c2s"V
- role_activity_condition_info_s2c2
-activity_conditions (2.p_activity_condition"
+ role_activity_condition_info_c2s"c
+ role_activity_condition_info_s2c?
+activity_conditions (2".ztGame.proto.p_activity_condition"
 role_update_fight_point_c2s"2
 role_update_fight_point_s2c
 fight_point ("1
 role_activity_all_info_c2s
-activity_id ("E
-role_activity_all_info_s2c'
-	all_infos (2.p_activity_all_info".
+activity_id ("R
+role_activity_all_info_s2c4
+	all_infos (2!.ztGame.proto.p_activity_all_info".
 role_bc_info_c2s
 type (
 data (	"?
 role_bc_info_s2c
 role_id (
 type (
-data (	"É
+data (	"ù
 map_switch_s2c
 code (
 map_id (	
 x (	
 y (	
-z (
-buffs (2.p_buff
-debuffs (2	.p_debuff"
-map_enter_c2s"n
+z (#
+buffs (2.ztGame.proto.p_buff'
+debuffs (2.ztGame.proto.p_debuff"
+map_enter_c2s"{
 map_enter_s2c
 code (
 map_id (	
 x (	
 y (	
-z (
-	role_info (2.p_map_role"µ
-map_sight_s2c 
-roles_enter (2.p_map_role%
+z (+
+	role_info (2.ztGame.proto.p_map_role"È
+map_sight_s2c-
+roles_enter (2.ztGame.proto.p_map_role2
 
-mons_enter (2.p_simple_map_mon*
-buffpoint_enter (2.p_map_buff_point/
-debuff_point_enter (2.p_map_debuff_point"@
-map_role_enter_s2c
-roles (2.p_map_role
+mons_enter (2.ztGame.proto.p_simple_map_mon7
+buffpoint_enter (2.ztGame.proto.p_map_buff_point<
+debuff_point_enter (2 .ztGame.proto.p_map_debuff_point"M
+map_role_enter_s2c'
+roles (2.ztGame.proto.p_map_role
 revive ("#
 map_role_leave_s2c
 roles ("?
@@ -778,10 +783,9 @@ mons_enter (2.p_simple_map_mon*
 id (	
 x (	
 y (
-move_status ("-
-map_mon_enter_s2c
-mons (2
-.p_map_mon" 
+move_status (":
+map_mon_enter_s2c%
+mons (2.ztGame.proto.p_map_mon" 
 map_mon_leave_s2c
 ids ("y
 map_mon_move_s2c
@@ -793,23 +797,23 @@ mons_enter (2.p_simple_map_mon*
 i (	
 j (
 move_status (
-speed ("?
+speed ("L
 map_role_update_c2s
 
-id (
-change_list (2.p_item"?
+id ()
+change_list (2.ztGame.proto.p_item"L
 map_role_update_s2c
 
-id (
-change_list (2.p_item">
+id ()
+change_list (2.ztGame.proto.p_item"K
 map_mon_update_c2s
 
-id (
-change_list (2.p_item">
+id ()
+change_list (2.ztGame.proto.p_item"K
 map_mon_update_s2c
 
-id (
-change_list (2.p_item",
+id ()
+change_list (2.ztGame.proto.p_item",
 map_mon_dead_s2c
 
 id (
@@ -826,40 +830,49 @@ mons_enter (2.p_simple_map_mon*
 map_time_control_c2s
 state ("$
 map_time_control_s2c
-code (";
+code ("H
 map_attack_c2s
-src_id (
-damage (2	.p_damage";
+src_id (&
+damage (2.ztGame.proto.p_damage"H
 map_attack_s2c
-src_id (
-damage (2	.p_damage"B
-map_buff_point_enter_s2c&
-buff_points (2.p_map_buff_point"'
+src_id (&
+damage (2.ztGame.proto.p_damage"O
+map_buff_point_enter_s2c3
+buff_points (2.ztGame.proto.p_map_buff_point"'
 map_buff_point_leave_s2c
 ids ("J
 map_buff_point_get_c2s
 point_id (
 type (
-robot_id ("Ö
+robot_id ("í
 map_buff_point_get_s2c
 code (
 type (
 point_id (
 role_id (
-robot_id (
-	buff_list (2.p_buff"H
-map_debuff_point_enter_s2c*
-debuff_points (2.p_map_debuff_point"/
+robot_id ('
+	buff_list (2.ztGame.proto.p_buff"U
+map_debuff_point_enter_s2c7
+debuff_points (2 .ztGame.proto.p_map_debuff_point"/
 map_debuff_point_leave_s2c
 	point_ids (":
 map_debuff_point_get_c2s
 point_id (
-type ("k
+type ("x
 map_debuff_point_get_s2c
 code (
 point_id (
-role_id (
-debuff_list (2	.p_debuff"-
+role_id (+
+debuff_list (2.ztGame.proto.p_debuff"X
+map_role_frame_c2s
+frame_id (
+type (
+int_data (
+str_data (	"[
+map_frame_s2c
+start_id (
+end_id ((
+data (2.ztGame.proto.p_role_frame"-
 map_bc_info_c2s
 type (
 data (	">
@@ -868,22 +881,22 @@ mons_enter (2.p_simple_map_mon*
 type (
 data (	"
 goods_info_c2s
-repos ("=
+repos ("J
 goods_info_s2c
-repos (
+repos ()
 
-goods_info (2.p_goods"-
+goods_info (2.ztGame.proto.p_goods"-
 goods_delete_s2c
 repos (
 
 id ("
 goods_use_c2s
 
-id ("R
+id ("_
 goods_use_s2c
 code (
-goods_id (!
-goods (2.p_luck_draw_goods"8
+goods_id (.
+goods (2.ztGame.proto.p_luck_draw_goods"8
 goods_puton_c2s
 
 id (
@@ -915,10 +928,10 @@ goods_info (2.p_goods"-
 goods_renew_weapon_s2c
 code ("%
 goods_outimes_tips_c2s
-ids ("9
-goods_sale_goods_c2s!
+ids ("F
+goods_sale_goods_c2s.
 
-sale_goods (2.p_sale_goods"$
+sale_goods (2.ztGame.proto.p_sale_goods"$
 goods_sale_goods_s2c
 code ("<
 goods_set_valid_c2s
@@ -938,24 +951,24 @@ replace_id (
 flag ("/
 goods_replace_s2c
 code (
-flag ("U
+flag ("b
 chat_req_c2s
 	chat_type (
-content (	!
+content (	.
 
-goods_list (2.p_chat_goods"/
+goods_list (2.ztGame.proto.p_chat_goods"/
 chat_req_s2c
 code (
-	chat_type ("\
+	chat_type ("i
 chat_private_chat_c2s
 role_id (
-content (	!
+content (	.
 
-goods_list (2.p_chat_goods"I
+goods_list (2.ztGame.proto.p_chat_goods"I
 chat_private_chat_s2c
 code (
 role_id (
-	role_name (	"ˆ
+	role_name (	"™
 chat_content_push_s2c
 	chat_type (
 	sender_id (
@@ -972,32 +985,32 @@ sender_job (
 fight_point	 (
 content
  (	
-min_type (
-	chat_args (2.p_chat_args
-equips (2.p_goods&
+min_type (,
+	chat_args (2.ztGame.proto.p_chat_args%
+equips (2.ztGame.proto.p_goods3
 
-goods_list (2.p_chat_push_goods$
-chat_rank_list (2.p_chat_rank".
+goods_list (2.ztGame.proto.p_chat_push_goods1
+chat_rank_list (2.ztGame.proto.p_chat_rank".
 chat_show_info_c2s
 
 id (
-type ("N
+type ("[
 chat_show_info_s2c
 code (
-type (
+type ()
 
-goods_info (2.p_goods"
+goods_info (2.ztGame.proto.p_goods"
 chat_horn_length_c2s"&
 chat_horn_length_s2c
 length (":
 chat_sys_anounce_s2c
 content (	
-	http_link (	"[
+	http_link (	"h
 chat_rumor_s2c
 channel (
 type_id (
-must (
-content (2.p_rumor"4
+must (&
+content (2.ztGame.proto.p_rumor"4
 chat_gm_advice_c2s
 title (	
 content (	""
@@ -1016,13 +1029,12 @@ goods_info (2.p_goods"
 	role_name (	
 role_lvl (
 role_sex ("
-chat_brocast_info_c2s"m
+chat_brocast_info_c2s"á
 chat_brocast_info_s2c
-type ( 
-brocast_list (2
-.p_brocast$
+type (-
+brocast_list (2.ztGame.proto.p_brocast1
 
-rumor_list (2.p_rumor_brocast"
+rumor_list (2.ztGame.proto.p_rumor_brocast"
 setting_get_all_c2s"/
 setting_get_all_s2c
 key (
@@ -1036,12 +1048,12 @@ rumor_list (2.p_rumor_brocast"
 setting_proto_forbid_s2c
 section (
 method ("
-mail_get_box_list_c2s"ç
+mail_get_box_list_c2s"ß
 mail_get_box_list_s2c
 code (
-total_count (%
-	mail_list (2.p_mail_basic_info*
-send_mail_list (2.p_mail_basic_info"8
+total_count (2
+	mail_list (2.ztGame.proto.p_mail_basic_info7
+send_mail_list (2.ztGame.proto.p_mail_basic_info"8
 mail_del_mail_c2s
 	mail_type (
 mail_ids ("F
@@ -1053,20 +1065,20 @@ rumor_list (2.p_rumor_brocast"
 mail_id ("5
 mail_take_attach_s2c
 code (
-mail_id ("@
-mail_new_mail_inform_s2c$
-new_mail (2.p_mail_basic_info"q
+mail_id ("M
+mail_new_mail_inform_s2c1
+new_mail (2.ztGame.proto.p_mail_basic_info"q
 mail_send_c2s
 recv_id (
 	recv_name (	
 title (	
 content (	
 silver (
-gold ("P
+gold ("]
 mail_send_s2c
 code (
-mail_id ( 
-mail (2.p_mail_basic_info"%
+mail_id (-
+mail (2.ztGame.proto.p_mail_basic_info"%
 mail_read_mail_c2s
 mail_id ("3
 mail_read_mail_s2c
@@ -1075,29 +1087,29 @@ rumor_list (2.p_rumor_brocast"
 mail_take_attach_all_c2s"'
 mail_take_attach_all_s2c
 ids ("
-achieve_list_c2s"h
+achieve_list_c2s"u
 achieve_list_s2c
 code (
 done (
 log (
-reward (
-doing (2.p_key_value"?
-achieve_reach_condition_c2s 
+reward ((
+doing (2.ztGame.proto.p_key_value"L
+achieve_reach_condition_c2s-
 
-conditions (2.p_key_value"M
+conditions (2.ztGame.proto.p_key_value"Z
 achieve_reach_condition_s2c
-code ( 
+code (-
 
-conditions (2.p_key_value"(
+conditions (2.ztGame.proto.p_key_value"(
 achieve_reward_c2s
 
 achieve_id ("6
 achieve_reward_s2c
 code (
 
-achieve_id ("\
+achieve_id ("i
 achieve_update_s2c
 done (
 log (
-reward (
-doing (2.p_key_value
+reward ((
+doing (2.ztGame.proto.p_key_value

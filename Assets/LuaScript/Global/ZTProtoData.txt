@@ -33,3 +33,11 @@ end
 function ZTProtoData:LoadPbAsset( pbFileName )
 	return CS.AssetManager.LoadPbAsset(PathManager:GetPbFile(pbFileName))
 end
+
+function ZTProtoData:EnCode(message, t, func , ...)
+	return self.m_pb.encode(message, t, func , ...)
+end
+
+function ZTProtoData:DeCode(typename, buffer, length)
+	return self.m_pb.decode(typename, buffer, length)
+end

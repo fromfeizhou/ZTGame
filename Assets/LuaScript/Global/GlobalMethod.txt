@@ -39,7 +39,11 @@ function SerializeTable(tTable)
     end
     local str = ""
     for key,value in pairs(tTable) do
-        str = str .. tostring(key)..':'..tostring(value)..'\n'
+		local res = tostring(value)
+		if value and type(value) == "table" then
+			res = "{" .. SerializeTable(value) .. "}"
+		end
+        str = str .. tostring(key)..':'..res..'\n'
     end
     return str
 end
