@@ -79,8 +79,6 @@ function LoginModel:HidePanel(panelType)
 	end
 end
 
-
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -91,9 +89,9 @@ function LoginModel:NetWork_RequestCreateRole(jobId)
 	package.model 	= PB_LOGIN.MODEL
 	package.command = PB_LOGIN.CREATE_ROLE
 	package.data = {
-		name = "tset", 	-- 人物名字
+		name = "tdfsdfset", 	-- 人物名字
 		job = jobId,	-- 角色职业
-		sex = 0,		-- 性别
+		sex = 1,		-- 性别
 		serv_id = 0,	-- 服务器ID
 	}
 	NetWorkManager:SendNetMsg(package)
@@ -103,6 +101,7 @@ end
 function LoginModel:Receive_RequestCreateRole(login_create_role_s2c)
 	GCSLog("LoginModel:Receive_RequestCreateRole")
 	GCSLog("角色ID",login_create_role_s2c.id)
+	GCSLog("错误码",login_create_role_s2c.code)
 	self.m_nlogin_create_role_s2c = login_create_role_s2c
 	
 	self:NetWork_RequestSeleftRole(self.m_nlogin_create_role_s2c.id)
@@ -110,19 +109,21 @@ end
 
 --@brief 回复 - 选择角色
 function LoginModel:NetWork_RequestSeleftRole(roleId)
-	GCSLog("LoginModel:NetWork_RequestSeleftRole")
+	GCSLog("LoginModel:NetWork_RequestSeleftRole", roleId)
+
 	local package 	= {}
 	package.model 	= PB_LOGIN.MODEL
 	package.command = PB_LOGIN.SELECT_ROLE
 	package.data = {
 		id = roleId
 	}
+	
 	NetWorkManager:SendNetMsg(package)
 end
 
 --@brief 回复 - 选择角色
-function LoginModel:Receive_RequestSelectRole(login_create_role_s2c)
+function LoginModel:Receive_RequestSelectRole(login_select_role_s2c)
 	GCSLog("LoginModel:Receive_RequestSelectRole")
-	GCSLog("错误码",code.id)
-	self.m_nlogin_select_role_s2c = login_create_role_s2c
+	GCSLog("错误码",login_select_role_s2c.code)
+	self.m_nlogin_select_role_s2c = login_select_role_s2c
 end
