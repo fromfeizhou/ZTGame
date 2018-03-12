@@ -83,7 +83,8 @@ public class cModule
 
 public class ParseProto{
 
-	private const string protoPath = "ProtoGen/protobuf.proto";
+	private const string protoPath = "BuildProto/protobuf.proto";
+	private const string ErrorCodePath = "ecode_zh.hrl";
 	private const string ProtocalDefine_SavePath = "Assets/LuaScript/ProtoBuff/ProtocalDefine.txt";
 	private const string NetProtocal_SavePath = "Assets/LuaScript/ProtoBuff/NetProtocal.txt";
 
@@ -137,11 +138,25 @@ public class ParseProto{
 		return moduleList;
 	}
 
-	[MenuItem("Tools/ParseProto")]
-	private static void Parse()
+	[MenuItem("Tools/ParseProtoFile")]
+	private static void ParseProtoFile()
 	{
 		List<cModule> moduleList = ParseProtoToModuleList();
 		SaveCSharpNetFacadeFiles (moduleList);
 		AssetDatabase.Refresh ();
+	}
+
+	[MenuItem("Tools/ParseErrorCode")]
+	private static void ParseErrorCode()
+	{
+		if (!File.Exists (ErrorCodePath)) {
+			Debug.LogError ("[ParseErrorCode]Found out Path. path:" + ErrorCodePath);
+			return;
+		}
+
+		string[] Contents = File.ReadAllLines (ErrorCodePath);
+		for (int i = 0; i < Contents.Length; i++) {
+		
+		}
 	}
 }
