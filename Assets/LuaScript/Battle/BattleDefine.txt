@@ -1,0 +1,149 @@
+--BattleDefine.txt
+--@breif 战斗预定义
+--@data 2018/3/10
+
+--@brief c#引用
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+--@breif 战斗预定义
+BattleDefine = {
+	PlayerSpeed = 0.05,		--移动速度
+	PlayerRadius = 1,		--碰撞半径
+	CommandStep = 5,		--驱动帧步伐
+}
+
+--@brief 方向预定义
+BattleDirType = {
+	None = 0,	--停止
+	Up = 1,		
+	UpLeft = 2,
+	Left = 3,
+
+	DownLeft = 4,
+	Down = 5,
+	DownRight = 6,
+
+	Right = 7,
+	UpRight = 8,
+}
+
+BattleDirDefine = {
+	UpLeft = CSVector3(-1, 0, 1),
+	UpRight = CSVector3(1, 0, 1),
+	DownLeft = CSVector3(-1, 0, -1),
+	DownRight = CSVector3(1, 0, -1),
+}
+--@brief 获得对应方向的方向向量
+function BattleDirDefine:GetPos(dir)
+	if dir == BattleDirType.Up then
+		return CSVector3.forward
+
+	elseif dir == BattleDirType.UpLeft then
+		return BattleDirDefine.UpLeft
+
+	elseif dir == BattleDirType.Left then
+		return CSVector3.left
+
+	elseif dir == BattleDirType.DownLeft then
+		return BattleDirDefine.DownLeft
+
+	elseif dir == BattleDirType.Down then
+		return CSVector3.back
+
+	elseif dir == BattleDirType.DownRight then
+		return BattleDirDefine.DownRight
+
+	elseif dir == BattleDirType.Right then
+		return CSVector3.right
+
+	elseif dir == BattleDirType.UpRight then
+		return BattleDirDefine.UpRight
+	end
+	return CSVector3.zero
+end
+--@brief 获得对应方向的方向向量列表
+function BattleDirDefine:GetList(dir)
+	if not BattleDirDefine.m_tList then
+		BattleDirDefine.m_tList = {}
+		
+		BattleDirDefine[BattleDirType.Up] = {CSVector3.forward, CSVector3.right}
+		BattleDirDefine[BattleDirType.DOWN] = {CSVector3.back, CSVector3.left}
+		BattleDirDefine[BattleDirType.LEFT] = {CSVector3.left, CSVector3.forward}
+		BattleDirDefine[BattleDirType.RIGHT] = {CSVector3.right, CSVector3.back}
+
+		BattleDirDefine[BattleDirType.UpLeft] = {BattleDirDefine.UpLeft, CSVector3.forward, CSVector3.left}
+		BattleDirDefine[BattleDirType.UpRight] = {BattleDirDefine.UpRight, CSVector3.forward, CSVector3.right}
+		BattleDirDefine[BattleDirType.DownLeft] = {BattleDirDefine.DownLeft, CSVector3.back, CSVector3.left}
+		BattleDirDefine[BattleDirType.DownRight] = {BattleDirDefine.DownRight, CSVector3.back, CSVector3.right}
+	end
+
+	return BattleDirDefine[dir] or {}
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************全局事件 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 全局战斗事件
+BattleEvent = {
+	BattleDispatcher = nil,		--事件发送器
+	CommandDispatcher = nil,		--事件发送器
+}
+
+
+--@breif 网络事件
+BATTLE_EVENT = {
+	ADD_CHARACTER = "BATTLE_EVENT_ADD_CHARACTER", 	--添加玩家
+	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
+}
+--@breif 获取战斗事件管理器
+function BattleEvent:GetBattleDispatcher()
+	if BattleEvent.BattleDispatcher == nil then 
+		BattleEvent.BattleDispatcher = EventDispatcher:Create() 
+	end
+	return BattleEvent.BattleDispatcher
+end
+
+--@breif 清理战斗事件管理器（战斗退出清理）
+function BattleEvent:RemoveBattleDispatcher()
+	if BattleEvent.BattleDispatcher == nil then 
+		BattleEvent.BattleDispatcher:RemoveEvent()
+	end
+	BattleEvent.BattleDispatcher = nil
+end
+
+--@brief 战斗对象结构
+function BattleEvent:GetBattleData(battleId,careerType,pos)
+	local data = {}
+	data.battleId = battleId or 1
+	data.careerType = careerType or CareerType.FashShi
+	data.pos = pos or CSVector3(100,0,100)
+
+	return data
+end
+
+
+--@breif 战斗命令
+BATTLE_COMMAND_EVENT = {
+	ADD_COMMAND = "BATTLE_COMMAND_EVENT_ADD_COMMAND",	--添加命令
+}
+--@breif 获取战斗命令事件管理器
+function BattleEvent:GetCommandDispatcher()
+	if BattleEvent.CommandDispatcher == nil then 
+		BattleEvent.CommandDispatcher = EventDispatcher:Create() 
+	end
+	return BattleEvent.CommandDispatcher
+end
+
+--@breif 清理战斗事件管理器（战斗退出清理）
+function BattleEvent:RemoveCommandDispatcher()
+	if BattleEvent.CommandDispatcher == nil then 
+		BattleEvent.CommandDispatcher:RemoveEvent()
+	end
+	BattleEvent.CommandDispatcher = nil
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************全局事件 End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

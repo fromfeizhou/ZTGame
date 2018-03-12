@@ -1,123 +1,66 @@
---Animator.txt
---@breif 人物动画
+--BattleCommand.txt
+--@breif 帧命令
 --@data 2018/03/07
-Animator = {
-	m_goAnima, --挂钩object
-	m_ztAnima, --C#动作接口引用
-	m_animData,		--动画data
-	m_bIsInCamera,	--是否进入场景范围
+BattleCommandType = {
+	Move = 1,	--移动
+	Skill = 2,		--技能	
 }
-
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
-local CSZTAnimator = CS.ZTAnimator
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public Begin*************************************************************
+--*******************************************************基础命令 Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+BattleCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nType = nil,		--命令类型
+}
+
 --@brief 拷贝原表
-function Animator:Create(animaData,container)
+function BattleCommand:Create(battleId,type)
 	local obj = {}
-	setmetatable( obj, { __index = Animator })
-	obj:Init(animaData,container)
+	setmetatable( obj, { __index = BattleCommand })
+	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function Animator:Init(animaData,container)
-	CSLog("Animator:Init",container)
-	self.m_bIsInCamera = false
-	self.m_goAnima = CSGameObject("Animator")
-	self.m_goAnima.transform:SetParent(container,false)
-	self.m_ztAnima = self.m_goAnima:AddComponent(typeof(CSZTAnimator))
-	self.m_animData = animaData or  AnimatorData:Create()
-	self:_AddEvent()
-end
-
---@brief 移除
-function Animator:Destroy()
-	CSLog("Animator:Destroy")
-	if self.m_ztAnima then
-		self.m_ztAnima:Destroy()
-		self.m_ztAnima = nil
-	end
-
-	self:_RemoveEvent()
-	self.m_animData = nil
+function BattleCommand:Init()
+	CSLog("BattleCommand:Init")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
+--*******************************************************基础命令 End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 监听事件
-function Animator:_AddEvent()
-	if self.m_animData then
-		self.m_animData:AddEvent(AnimaEvent.Play, self._OnPlay, self)
-		self.m_animData:AddEvent(AnimaEvent.InCamera, self._OnSetInCamera, self)
-		self.m_animData:AddEvent(AnimaEvent.UpdatePos, self._OnUpdatePos, self)
-		self.m_animData:AddEvent(AnimaEvent.UpdateRotate, self._OnUpdateRotate, self)
-		self.m_animData:AddEvent(AnimaEvent.ChangeTranslucence, self._OnChangeTranslucence, self)
-	end
-end
-
---@brief 移除事件
-function Animator:_RemoveEvent()
-	if self.m_animData then
-		self.m_animData:RemoveEvent()
-	end
-end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---************************************************所有动画操作通过操作animData实现************************************************
+--*******************************************************移动命令 Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 创建形象
-function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetAnimatorPath())
+BattleMoveCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nType = nil,		--命令类型
+	m_nDir = nil,		--移动方向
+}
+
+--@brief 拷贝原表
+function BattleMoveCommand:Create(battleId,type,dir)
+	local obj = {}
+	setmetatable( obj, { __index = BattleMoveCommand })
+	obj:Init(battleId,type,dir)
+	return obj
 end
 
---@brief 移除形象
-function Animator:_RemoveAnimatorView()
-	self.m_ztAnima:RemoveAnimatorView()
-end
-
---@brief 创建显示(进入镜头范围)
-function Animator:_OnSetInCamera(inCamera)
-	if self.m_bIsInCamera == inCamera then
-		return
-	end
-	self.m_bIsInCamera = inCamera
-	if self.m_bIsInCamera then
-		self:_CreateAnimatorView()
-	else
-		self:_RemoveAnimatorView()
-	end
+--@brief 初始化
+function BattleMoveCommand:Init(battleId,commandType,dir)
+	CSLog("BattleMoveCommand:Init")
+	self.m_nBattleId = battleId
+	self.m_nType = commandType
+	self.m_nDir = dir
 end
 
 
---@brief 播放动作
---@param 动作名
-function Animator:_OnPlay(name)
-	self.m_ztAnima:Play(name)
-end
-
---@brief 刷新位置
---@param vector3 pos
-function Animator:_OnUpdatePos(pos)
-	self.m_ztAnima:UpdatePos(pos)
-end
-
---@brief 更新角度
---@param vector3 dir
-function Animator:_OnUpdateRotate(dir)
-	self.m_ztAnima:UpdateRotate(dir)
-end
-
---@brief 改变半透明（草丛状态显示）
-function Animator:_OnChangeTranslucence(isTrans)
-	self.m_ztAnima:ChangeTranslucence(isTrans)
-end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---************************************************所有动画操作通过操作animData实现************************************************
+--*******************************************************移动命令 End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

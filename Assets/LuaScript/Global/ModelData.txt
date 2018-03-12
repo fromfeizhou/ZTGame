@@ -2,7 +2,7 @@
 --@breif lua入口
 --@data 2018/3/5
 
---@brife 模块类型(添加类型 在ModelManager:GetModel下增加对应处理)
+--@brief 模块类型(添加类型 在ModelManager:GetModel下增加对应处理)
 MODEL_TYPE = {
 	SYSTEM = 0,		--系统
 	LOGIN = 1, 		--登录

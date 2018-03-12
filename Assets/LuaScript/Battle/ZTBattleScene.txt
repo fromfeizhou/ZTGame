@@ -30,7 +30,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 场景9加载完毕
+--@brief 场景加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
 	self:_Init()
 end
@@ -45,17 +45,14 @@ function ZTBattleScene:_Init()
 	self.m_comZtBattleScene:SetUpdate(function() self:Update()
 	end)
 
-	--战斗对象管理
-	self.m_ztCharaManager = ZTCharaManager:Create()
+	--全局控制器初始化
+	GlobalBattleCtrl:Init()
 end
 
 --@brief 战斗场景初始化
 function ZTBattleScene:_UnInt()
-	--清理战斗对象管理
-	if self.m_ztCharaManager then
-		self.m_ztCharaManager:Destroy()
-		self.m_ztCharaManager = nil
-	end
+	--清理全局控制器
+	GlobalBattleCtrl:Destroy()
 
 	--清理场景管理器
 	if self.m_goZtBattleScene then

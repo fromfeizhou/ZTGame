@@ -5,6 +5,9 @@ Character = {
 	m_nBattleId = nil,	--战斗对象id
 	m_animData = nil,	--形象数据
 	m_animator = nil,	--形象动画
+
+	m_nMoveDir = nil,	--移动方向
+	m_charaPos = nil,		--当前位置
 }
 
 --@brief c#引用
@@ -19,7 +22,7 @@ local CSLog = CS.GameTool.Log
 function Character:Create(battleData,container)
 	local obj = {}
 	setmetatable( obj, { __index = Character })
-	obj:Init(battleData)
+	obj:Init(battleData,container)
 	return obj
 end
 
@@ -29,6 +32,7 @@ function Character:Init(battleData,container)
 	self.m_nBattleId = battleData.battleId or 1
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
+	self.m_charaPos = CSVector3.zero
 	self:UpdatePos(battleData.pos)
 end
 
@@ -48,15 +52,25 @@ function Character:Destroy()
 	end
 end
 
+--@brief 刷新逻辑帧
+function Character:UpdateCommand()
+	self:_UpdateMoveCommand()
+end
 
---@brife 获得战斗id
+--@brief 获得战斗id
 function Character:GetBattleId()
 	return self.m_nBattleId
 end
 
+--@brief 设置方向
+function Character:SetDirection(dir)
+	if self.m_nMoveDir ~= dir then
+		self.m_nMoveDir = dir
+	end
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brife 动作相关
+--@brief 动作相关
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 播放动作
 --@param 动作名
@@ -72,7 +86,9 @@ end
 --@brief 刷新位置
 --@param vector3 pos
 function Character:UpdatePos(pos)
-	self.m_animData:UpdatePos(pos)
+	if not self.m_charaPos.Equals(pos) then
+		self.m_animData:UpdatePos(pos)
+	end
 end
 
 --@brief 更新角度
@@ -86,9 +102,28 @@ function Character:ChangeTranslucence(isTrans)
 	self.m_animData:ChangeTranslucence(isTrans)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brife 动作相关
+--@brief 动作相关
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 刷新移动
+function Character:_UpdateMoveCommand()
+	if self.m_nMoveDir ~= BattleDirType.None then
+
+		local list = BattleDirDefine:GetList(dir)
+		local hitPos 
+		local canMove = false
+		for i =1,#list do
+			hitPos = self.m_charaPos + list[i] * BattleDefine.PlayerSpeed
+			if i == 1 then
+				canMove = true
+				break
+			end
+		end
+		if canMove then
+			self:UpdatePos(hitPos)
+		end
+	end
+end

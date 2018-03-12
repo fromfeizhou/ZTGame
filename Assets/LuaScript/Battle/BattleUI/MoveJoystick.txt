@@ -2,6 +2,7 @@
 --@breif 移动控制UI
 --@data 2018/03/11
 MoveJoystick = {
+	m_ctrlContainer = nil,	--父容器
 }
 
 --@brief c#引用
@@ -23,6 +24,8 @@ end
 --@brief 初始化
 function MoveJoystick:Init()
 	CSLog("MoveJoystick:Init")
+	self.m_ctrlContainer = GlobalBattleCtrl.m_battleUIMain.m_ctrlContainer
+	
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
@@ -43,10 +46,7 @@ end
 function MoveJoystick:_LoadAsseFinish(target,path)
 	local prefab = target
  		if prefab then
-			local canvas = CSGameObject.Find("Canvas").transform
- 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
  			self.m_gameObject = self.m_transform.gameObject
- 			self.m_transform.gameObject:SetActive(false)
- 			self:_InitPanel()
 		end
 end

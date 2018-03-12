@@ -63,25 +63,30 @@ end
 function ZTCharaManager:Update()
 end
 
-
+--@brief 逻辑帧刷新
+function ZTCharaManager:UpdateCommand()
+	for i = 1,#self.m_tSortCharaList do
+		self.m_tSortCharaList[i]:UpdateCommand()
+	end
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加事件监听
 function ZTCharaManager:_AddEvent()
-	GlobalBattle:GetBattleEventDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
-	GlobalBattle:GetBattleEventDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
+	BattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
+	BattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
 end
 
 --@brief 移除事件监听
 function ZTCharaManager:_RemoveEvent()
-	GlobalBattle:GetBattleEventDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
-	GlobalBattle:GetBattleEventDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
+	BattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
+	BattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
 end
 
 
---@brife 添加对象
+--@brief 添加对象
 function ZTCharaManager:_OnAddCharacter(battleData)
 	CSLog("ZTCharaManager:_OnAddCharacter",battleData.battleId)
 	--创建对象
@@ -99,7 +104,7 @@ function ZTCharaManager:_OnAddCharacter(battleData)
 	-- table.sort(self.m_tSortCharaList,sortfunc)
 end
 
---@brife 移除对象
+--@brief 移除对象
 function ZTCharaManager:_OnRemoveCharacter(battleId)
 	CSLog("ZTCharaManager:_OnRemoveCharacter",battleId)
 	self.m_tCharaList[battleId] = nil
@@ -116,8 +121,8 @@ end
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
 	local player1 = GlobalBattle:GetBattleData(1,CareerType.Hero,CSVector3(1150,0,1150))
-	GlobalBattle:GetBattleEventDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
+	BattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 
 	local player2 = GlobalBattle:GetBattleData(2,CareerType.Hero,CSVector3(1200,0,1200))
-	GlobalBattle:GetBattleEventDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+	BattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
 end

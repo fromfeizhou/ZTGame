@@ -1,4 +1,4 @@
---@brife 登陆相关
+--@brief 登陆相关
 PB_LOGIN = {
 	MODEL = 1, 		--模块ID
 	HEART = 0, 		--心跳
@@ -14,7 +14,7 @@ PB_LOGIN = {
 	SHARE_CONFIG = 10, 		--分享的配置
 }
 
---@brife 角色
+--@brief 角色
 PB_ROLE = {
 	MODEL = 3, 		--模块ID
 	INFO = 1, 		--角色信息
@@ -53,7 +53,7 @@ PB_ROLE = {
 	BC_INFO = 55, 		--活动总信息
 }
 
---@brife 地图
+--@brief 地图
 PB_MAP = {
 	MODEL = 4, 		--模块ID
 	SWITCH = 1, 		--请求场景切换(暂时没用)
@@ -83,7 +83,7 @@ PB_MAP = {
 	BC_INFO = 25, 		--活动总信息
 }
 
---@brife 物品
+--@brief 物品
 PB_GOODS = {
 	MODEL = 5, 		--模块ID
 	INFO = 1, 		--物品信息
@@ -100,7 +100,7 @@ PB_GOODS = {
 	REPLACE = 12, 		--装备替换(只限于已经装备的装备互相替换)
 }
 
---@brife 聊天
+--@brief 聊天
 PB_CHAT = {
 	MODEL = 6, 		--模块ID
 	REQ = 1, 		--聊天请求，包含世界，场景，家族，队伍
@@ -116,7 +116,7 @@ PB_CHAT = {
 	BROCAST_INFO = 11, 		--请求广播内容
 }
 
---@brife 设置
+--@brief 设置
 PB_SETTING = {
 	MODEL = 7, 		--模块ID
 	GET_ALL = 1, 		--获取设置
@@ -124,7 +124,7 @@ PB_SETTING = {
 	PROTO_FORBID = 3, 		--禁止协议
 }
 
---@brife 邮件系统
+--@brief 邮件系统
 PB_MAIL = {
 	MODEL = 8, 		--模块ID
 	GET_BOX_LIST = 1, 		--获取邮件列表
@@ -136,7 +136,7 @@ PB_MAIL = {
 	TAKE_ATTACH_ALL = 7, 		--一键提取附件
 }
 
---@brife 成就
+--@brief 成就
 PB_ACHIEVE = {
 	MODEL = 9, 		--模块ID
 	LIST = 1, 		--当前成就列表
@@ -145,14 +145,14 @@ PB_ACHIEVE = {
 	UPDATE = 4, 		--更新通知
 }
 
---@brife 排行榜
+--@brief 排行榜
 PB_RANK = {
 	MODEL = 10, 		--模块ID
 	INFO = 1, 		--排行榜信息
 	ROLE_RANK_INFO = 2, 		--玩家的排行榜进度
 }
 
---@brife 活动
+--@brief 活动
 PB_ACTIVITY = {
 	MODEL = 11, 		--模块ID
 	ACTIVITY_LIST = 1, 		--活动列表
@@ -163,7 +163,7 @@ PB_ACTIVITY = {
 	UPDATE_ACTIVITY = 6, 		--更新活动状态
 }
 
---@brife 排行榜
+--@brief 排行榜
 PB_MISSION = {
 	MODEL = 12, 		--模块ID
 	LIST = 1, 		--日常任务列表
@@ -172,7 +172,7 @@ PB_MISSION = {
 	UPDATE_MISSION = 4, 		--更新任务
 }
 
---@brife 七天引导
+--@brief 七天引导
 PB_SEVEN = {
 	MODEL = 13, 		--模块ID
 	GUIDE_LIST = 1, 		--七天引导列表
@@ -180,7 +180,7 @@ PB_SEVEN = {
 	GUIDE_UPDATE = 3, 		--引导更新
 }
 
---@brife 任务
+--@brief 任务
 PB_TASK = {
 	MODEL = 14, 		--模块ID
 	LIST = 1, 		--任务列表
