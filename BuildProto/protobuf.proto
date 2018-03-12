@@ -1,3 +1,4 @@
+package ztGame.proto;
 // protobuf的使用详情参考http://blog.csdn.net/yi_ya/article/details/40404231
 // 协议号 1 + 1, 1代表模块名, 1代表模块内协议号
 
@@ -169,7 +170,7 @@ message p_map_role {
     required uint32 fight_point = 17; // 战斗力
     required uint32 defense = 18; // 防御值
     repeated p_role_frame moving_frames = 19; // 移动帧
-    repeated p_role_frame skill_frames = 21; // 技能帧
+    repeated p_role_frame skill_frames = 20; // 技能帧
     repeated p_buff buffs = 21; // buff列表
     repeated p_debuff debuffs = 22; // debuff列表
     repeated p_goods equips = 23; // 装备信息
