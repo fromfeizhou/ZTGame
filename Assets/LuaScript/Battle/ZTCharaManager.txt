@@ -115,7 +115,7 @@ end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
-	local player1 = GlobalBattle:GetBattleData(1,CareerType.Hero,CSVector3(1000,0,1000))
+	local player1 = GlobalBattle:GetBattleData(1,CareerType.Hero,CSVector3(1150,0,1150))
 	GlobalBattle:GetBattleEventDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 
 	local player2 = GlobalBattle:GetBattleData(2,CareerType.Hero,CSVector3(1200,0,1200))

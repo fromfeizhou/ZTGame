@@ -5,6 +5,7 @@
 PathManager = {
 	g_sAssetPath = "Assets",		--资源根目录地址
 	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
+	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
 	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
 
@@ -38,6 +39,14 @@ end
 --@brief 获取模型地址
 function PathManager:GetAnimatorPath(name)
 	return PathManager.m_sAnimator .. name ..".prefab"
+end
+
+
+--@brief 获取pb文件路径
+--@param name pb文件名字
+--@return string 地址
+function PathManager:GetBatteUIPanel(name)
+	return PathManager.m_sBattleUIPrefab .. name ..".prefab"
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

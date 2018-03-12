@@ -42,7 +42,7 @@ public class ZTAnimator : MonoBehaviour {
             GameObject prefab = target as GameObject;
             if (null != prefab)
             {
-                GameObject go = GameObject.Instantiate(prefab);
+                GameObject go = GameObject.Instantiate(prefab,this.gameObject.transform);
                 _animatorGo = go;
                 _animator = go.GetComponent<Animation>();
             }
