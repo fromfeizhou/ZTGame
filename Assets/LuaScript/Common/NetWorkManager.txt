@@ -244,18 +244,7 @@ function NetWorkManager:_Receive_Login_Login(login_login_s2c)
 	self:_OpenHeart()
 
 	if login_login_s2c.code == 0 then--成功
-		GCSLog("错误码:",					login_login_s2c.code)	
-		GCSLog("用户名:",					login_login_s2c.accname)
-		GCSLog("昵称:",						login_login_s2c.nick_name)
-		GCSLog("心跳间隔:",					login_login_s2c.heart_interval)
-		GCSLog("角色登陆信息_角色id:",		login_login_s2c.login_info[1].id)
-		GCSLog("角色登陆信息_角色名称:",	login_login_s2c.login_info[1].name)
-		GCSLog("角色登陆信息_职业:",		login_login_s2c.login_info[1].job)
-		GCSLog("角色登陆信息_等级:",		login_login_s2c.login_info[1].level)
-		GCSLog("角色登陆信息_功勋:",		login_login_s2c.login_info[1].rank)
-		GCSLog("角色登陆信息_性别:",		login_login_s2c.login_info[1].sex)
-		GCSLog("角色登陆信息_上次登陆时间:",login_login_s2c.login_info[1].last_login_time)
-
+		LoginModel:Receive_RequestSelectRole(login_login_s2c)
 	elseif login_login_s2c.code == 12 then--没有角色
 		--显示创角界面
 		local dispatcher = GlobalData:GetMdlEventDispatcher()

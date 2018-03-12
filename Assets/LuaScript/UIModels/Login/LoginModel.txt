@@ -124,6 +124,19 @@ end
 --@brief 回复 - 选择角色
 function LoginModel:Receive_RequestSelectRole(login_select_role_s2c)
 	GCSLog("LoginModel:Receive_RequestSelectRole")
-	GCSLog("错误码",login_select_role_s2c.code)
 	self.m_nlogin_select_role_s2c = login_select_role_s2c
+
+	GCSLog("错误码:",					login_select_role_s2c.code)	
+	GCSLog("用户名:",					login_select_role_s2c.accname)
+	GCSLog("昵称:",						login_select_role_s2c.nick_name)
+	GCSLog("心跳间隔:",					login_select_role_s2c.heart_interval)
+	GCSLog("角色登陆信息_角色id:",		login_select_role_s2c.login_info[1].id)
+	GCSLog("角色登陆信息_角色名称:",	login_select_role_s2c.login_info[1].name)
+	GCSLog("角色登陆信息_职业:",		login_select_role_s2c.login_info[1].job)
+	GCSLog("角色登陆信息_等级:",		login_select_role_s2c.login_info[1].level)
+	GCSLog("角色登陆信息_功勋:",		login_select_role_s2c.login_info[1].rank)
+	GCSLog("角色登陆信息_性别:",		login_select_role_s2c.login_info[1].sex)
+	GCSLog("角色登陆信息_上次登陆时间:",login_select_role_s2c.login_info[1].last_login_time)
+	
+	
 end
