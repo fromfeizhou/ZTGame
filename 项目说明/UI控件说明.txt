@@ -1,0 +1,7 @@
+@BtnImg_####  		图片按钮 (图片ID: 	@BtnImg_1234		)
+@BtnTxt_####  		文字按钮 (文字ID: 	@BtnTxt_进入游戏	)
+@Txt_####     		文本显示 (文本显示: @Txt_用户提示		)
+@Board_####     	图片显示 (文本显示: @Board_3452			)
+@BackGround_####	图片显示 (文本显示: @BackGround_3452	)
+@Icon_####     		图片显示 (文本显示: @Icon_3452			)
+@BtnBase_#### 		点击按钮 (图片ID: 	@BtnBase_6789		)
