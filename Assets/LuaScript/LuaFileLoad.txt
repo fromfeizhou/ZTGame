@@ -18,8 +18,10 @@ local LuaFileLoad = {
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
 
-		"ProtoBuff.NetProtocal",
-		"ProtoBuff.ProtocalDefine",
+		"ProtoBuff.NetProtocol",
+		"ProtoBuff.ProtocolDefine",
+		"ProtoBuff.ZTProtocol",
+
 
 		"Global.GlobalData",
 		"Global.ZTProtoData",

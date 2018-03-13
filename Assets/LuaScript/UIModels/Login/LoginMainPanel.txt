@@ -4,7 +4,7 @@
 LoginMainPanel = {
 	m_transform = nil,
 	m_gameObject = nil,
-	m_inputFieldAccount = nil,
+	m_inputAccount = nil,
 	m_serverItem_Prefab = nil,
 	m_txtCurServerName = nil,
 	m_serverListPanelParent = nil,
@@ -16,6 +16,12 @@ LoginMainPanel = {
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
+
+
+
+
+
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -35,10 +41,19 @@ function LoginMainPanel:Init()
 		
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("LoginMainPanel"),callback_loadfinish)
 	self:_AddEvents()
+	self:_RegProtocol()
 end
+
+function LoginMainPanel:_RegProtocol()
+end
+function LoginMainPanel:_UnRegProtocol()
+end
+
+
 
 --@brief 面板每帧刷新
 function LoginMainPanel:Update(deltaTime)
+	
 	--GCSLog("LoginMainPanel:Update")
 end
 
@@ -56,6 +71,7 @@ end
 --@brief 销毁登录面板
 function LoginMainPanel:Destroy()
 	self:_RemoveEvents()
+	self:_UnRegProtocol()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -79,13 +95,21 @@ function LoginMainPanel:_InitPanel()
 	-- 按钮 - 服务器列表
 	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Group_CurServer/Btn_SelectServer",function() self:_OnBtnClick_ServerList() end)
 	-- 按钮 - 登录游戏
+
 	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Btn_Login",function() self:_OnBtnClick_Login() end)
+
 	-- 输入框 - 账号
-	self.m_inputFieldAccount = PanelWidget:GetInputField(self.m_transform,"ViewPort_Login/IF_Account/InputField");
+	self.m_inputAccount = PanelWidget:GetText(self.m_transform,"ViewPort_Login/IF_Account/InputField/Text");
+	
+	-- 输入框 - 密码
+	self.m_inputKey = PanelWidget:GetText(self.m_transform,"ViewPort_Login/IF_PassWord/InputField/Text");
+	
 	-- 文本 - 当前服务器信息
 	self.m_txtCurServerName = PanelWidget:GetText(self.m_transform,"ViewPort_Login/Group_CurServer/Txt_CurServer");
+
 	-- 节点 - 服务器地址预设父物体
 	self.m_serverListPanelParent = PanelWidget:GetChild(self.m_transform,"ViewPort_ServerList");
+
 	-- 预设 - 服务器地址预设
 	self.m_serverItem_Prefab = PanelWidget:GetChild(self.m_transform,"ViewPort_ServerList/Scroll View/Viewport/Content/ServerItem");
 	
@@ -95,12 +119,27 @@ end
 function LoginMainPanel:_AddEvents()
 	GCSLog("LoginMainPanel:_AddEvents()")
 	GlobalData:GetNetEventDispatcher():AddEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish,self)
+	
+	--NetWork
+	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.LOGIN, self._Receive_Login_Login, self)
+	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.CREATE_ROLE, self._Receive_Create_Role, self)
+	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role, self)
+
+
+	
+	
 end
 
 --@brief 移除事件
 function LoginMainPanel:_RemoveEvents()
 	GCSLog("LoginMainPanel:_RemoveEvents()")
 	GlobalData:GetNetEventDispatcher():RemoveEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish)
+	
+	--NetWork
+	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.LOGIN, 		self._Receive_Login_Login)
+	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.CREATE_ROLE, self._Receive_Create_Role)
+	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role)
+
 end
 
 --@brief 事件监听 - 下载服务器列表数据完成
@@ -132,9 +171,10 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
+	LoginModel.m_pAccname 	= self.m_inputAccount.text
+	LoginModel.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
 end
-
 --@brief 创建服务器Item
 function LoginMainPanel:_CreateServerItem( addressData )
 	local serverItem = {}
@@ -169,3 +209,76 @@ end
 function LoginMainPanel:_Update_CurServerName( )
 	self.m_txtCurServerName.text =  self.m_curSelectAddress.name .. "(" .. self.m_curSelectAddress.host .. ":" .. self.m_curSelectAddress.port .. ")"
 end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request Start***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 请求 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
+function LoginMainPanel:Request_Login()
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command 	= PB_LOGIN.LOGIN
+	pbData.data = {}
+	pbData.data.accname 		= LoginModel.m_pAccname	-- 用户名
+	pbData.data.key 			= LoginModel.m_pKey		-- 验证key
+	pbData.data.fcm 			= 0 			-- 防沉迷信息(暂不使用)
+	pbData.data.serv_id 		= 0 			-- 服务器ID
+	pbData.data.platform		= 0 			-- 平台，为0则为本地开发
+	pbData.data.token			= "" 				-- 验证数据串
+	pbData.data.device_id		= ""				-- 设备ID
+	pbData.data.device_desc 	= "" 			-- 设备描述
+	pbData.data.product_code	= "" 			-- quickSDK产品code
+	pbData.data.uid 			= "" 			-- quickSDK的uid
+	pbData.data.nick_name		= "" 				-- 昵称
+	GCSLog("LoginModel:NetWork_RequestLogin","accname:",pbData.data.accname,"key",self.m_pKey)
+	NetWorkManager:SendNetMsg(pbData)
+end
+
+--@brief 请求 - 选择角色 - PB_LOGIN.MODEL - PB_LOGIN.SELECT_ROLE
+function LoginMainPanel:_Request_Select_Role(roleId)
+    GCSLog("LoginMainPanel:_Request_Select_Role", roleId)
+
+    local package     = {}
+    package.model     = PB_LOGIN.MODEL
+    package.command = PB_LOGIN.SELECT_ROLE
+    package.data = {
+        id = roleId
+    }
+    NetWorkManager:SendNetMsg(package)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive Start***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 回复 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
+function LoginMainPanel:_Receive_Login_Login(login_login_s2c)
+	GCSLog("LoginMainPanel:_Receive_Login_Login=======",login_login_s2c.code,"===============")
+	if login_login_s2c.code == 0 then--成功
+		self:_Request_Select_Role(login_login_s2c.login_info[1].id)
+	elseif login_login_s2c.code == 12 then--没有角色
+		--显示创角界面
+		local dispatcher = GlobalData:GetMdlEventDispatcher()
+		local panelData = {}
+		panelData.modelType = MODEL_TYPE.LOGIN
+		panelData.panelType = LOGIN_TYPE.CREATEROLE
+		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+	elseif login_login_s2c.code == 20 then
+		GCSLog("参数错误")
+	
+	end
+end
+
+--@brief 回复 - 选择角色 - PB_LOGIN.MODEL - PB_LOGIN.SELECT_ROLE
+function LoginMainPanel:_Receive_Select_Role(login_select_role_s2c)
+	GCSLog("LoginMainPanel:_Receive_Select_Role\n",SerializeTable(login_select_role_s2c))
+	self.m_nlogin_select_role_s2c = login_select_role_s2c
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
