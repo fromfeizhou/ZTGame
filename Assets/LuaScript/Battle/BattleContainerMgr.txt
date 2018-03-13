@@ -1,8 +1,7 @@
---BattleUIMgr.txt
+--BattleContainerMgr.txt
 --@breif 战斗界面ui
 --@data 2018/03/11
-BattleUIMgr = {
-	m_mainUIContainer = nil,	--ui主容器
+BattleContainerMgr = {
 	m_ctrlContainer = nil,		--控制UI容器
 	m_skillContainer = nil,		--技能UI容器
 	m_playerContainer = nil,	--玩家容器
@@ -12,47 +11,46 @@ BattleUIMgr = {
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
-local CSRectTransform = CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
-local CSVector2 = CS.UnityEngine.Vector2
-local CSLayerMask = CS.UnityEngine.LayerMask
 local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleUIMgr:Create()
+function BattleContainerMgr:Create()
 	local obj = {}
-	setmetatable( obj, { __index = BattleUIMgr })
+	setmetatable( obj, { __index = BattleContainerMgr })
 	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function BattleUIMgr:Init()
-	CSLog("BattleUIMgr:Init")
+function BattleContainerMgr:Init()
+	CSLog("BattleContainerMgr:Init")
 	local canvasTrans = CSGameObject.Find("Canvas").transform
-	self.m_mainUIContainer = self:_CreateContainer("MainUIContainer")
-	self.m_mainUIContainer:SetParent(canvasTrans,false)
+	CSGameObject("MainUIContainer").transform.SetParent(canvasTrans,false)
+
 	--控制UI容器
-	self.m_ctrlContainer = self:_CreateContainer("CtrlContainer",self.m_mainUIContainer)
+	self.m_ctrlContainer = CSGameObject("CtrlContainer").transform
+	self.m_ctrlContainer:SetParent(canvasTrans,false)
 
 	--技能UI容器
-	self.m_skillContainer = self:_CreateContainer("SkillContainer",self.m_mainUIContainer)
+	self.m_skillContainer = CSGameObject("SkillContainer").transform
+	self.m_skillContainer:SetParent(canvasTrans,false)
 
 	--玩家容器
-	self.m_playerContainer = self:_CreateContainer("PlayerContainer",self.m_mainUIContainer)
+	self.m_playerContainer = CSGameObject("PlayerContainer").transform
+	self.m_playerContainer:SetParent(canvasTrans,false)
 
 	--hp容器
-	self.m_hpContainer = self:_CreateContainer("HpContainer",self.m_mainUIContainer)
-
-	--创建战斗ui
-	self:_CreateBattleUI()
+	self.m_hpContainer = CSGameObject("HpContainer").transform
+	self.m_hpContainer:SetParent(canvasTrans,false)
 end
 
+
 --@brief 移除
-function BattleUIMgr:Destroy()
-	CSLog("BattleUIMgr:Destroy")
+function BattleContainerMgr:Destroy()
+	CSLog("BattleContainerMgr:Destroy")
 	if self.m_ctrlContainer then
 		CSGameObject.Destroy(self.m_ctrlContainer.gameObject)
 		self.m_ctrlContainer = nil
@@ -77,30 +75,3 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brife 创建容器
-function BattleUIMgr:_CreateContainer(name,parentCon)
-	local gameObject = CSGameObject(name,typeof(CSRectTransform))
-	gameObject.layer = CSLayerMask.NameToLayer("UI")
-	local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
-
-	if parentCon then
-		rectTrans:SetParent(parentCon,false)
-	end
-	
-	rectTrans.pivot = CSVector2(0.5,0.5)
-	rectTrans.anchorMin = CSVector2(0,0)
-	rectTrans.anchorMax = CSVector2(1,1)
-	rectTrans.offsetMin = CSVector2(0,0)
-	rectTrans.offsetMax = CSVector2(0,0)
-	return rectTrans
-end
-
---@brief 创建ui
-function BattleUIMgr:_CreateBattleUI()
-	self:_CreateMoveJoystick()
-end
-
---@brief 创建移动摇杆
-function BattleUIMgr:_CreateMoveJoystick()
-	MoveJoystick:Create(self.m_ctrlContainer)
-end

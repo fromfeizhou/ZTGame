@@ -43,6 +43,7 @@ end
 function LuaGameStart:_EnterLoginModel()
 	if GameConfig.IsOpenNetWork then 
 		NetWorkManager:Init()
+		ZTProtocol:Init()
 		ZTProtoData:Init()
 	end
 	 

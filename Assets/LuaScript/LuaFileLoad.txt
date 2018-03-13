@@ -5,7 +5,7 @@ local LuaFileLoad = {
 	G_tLoginLuaList = {
 		"LuaGameStart",
 		"GameConfig",
-		--基础库
+
 		"Event.EventDispatcher",
 
 		"Common.Data.ModelData",
@@ -18,14 +18,15 @@ local LuaFileLoad = {
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
 
-		--协议包
-		"ProtoBuff.NetProtocal",
-		"ProtoBuff.ProtocalDefine",
-		
-		--游戏全局数据
+		"ProtoBuff.NetProtocol",
+		"ProtoBuff.ProtocolDefine",
+		"ProtoBuff.ZTProtocol",
+
+
 		"Global.GlobalData",
 		"Global.ZTProtoData",
 		"Global.GlobalMethod",
+
 
 		--[[UI面板相关]]
 		--系统模块
@@ -37,28 +38,25 @@ local LuaFileLoad = {
 		"UIModels.Login.LoginModel",
 		"UIModels.Login.LoginMainPanel",
 		"UIModels.Login.LoginCreateRolePanel",
+
+
+
+
+
+
+
 	},
 
 	--游戏lua文件
 	G_tGameList = {
-		--基础库
 		"Common.Data.CommonData",
 		"Common.Animator.AnimatorData",
 		"Common.Animator.Animator",
-		--战斗相关lua
-		"Battle.BattleDefine",
 
-		"Battle.Character.Character",
-		"Battle.Character.ZTCharaManager",
-		
-		"Battle.BattleCommand.BattleCommand",
-		"Battle.BattleCommand.BattleCommandMgr",
-		
-		"Battle.BattleUI.MoveJoystick",
-		"Battle.BattleUI.BattleUIMgr",
-
-		"Battle.GlobalBattleCtrl",
+		"Battle.GlobalBattle",
+		"Battle.Character",
 		"Battle.ZTBattleScene",
+		"Battle.ZTCharaManager",
 	}
 }
 

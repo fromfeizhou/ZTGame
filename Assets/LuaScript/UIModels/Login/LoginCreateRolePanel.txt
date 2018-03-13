@@ -75,7 +75,44 @@ end
 --@brief 按钮 - 服务器列表
 function LoginCreateRolePanel:_OnBtnClick_Confirm( roleId )
 	GCSLog("LoginCreateRolePanel:_OnBtnClick_Confirm",roleId)
-	LoginModel:NetWork_RequestCreateRole(roleId)
+	self:_Request_Create_Role(roleId)
 end
 
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request Start***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 请求 - 创建角色
+function LoginCreateRolePanel:_Request_Create_Role(jobId)
+	GCSLog("LoginCreateRolePanel:_Request_Create_Role")
+	local package 	= {}
+	package.model 	= PB_LOGIN.MODEL
+	package.command = PB_LOGIN.CREATE_ROLE
+	package.data = {
+		name = LoginModel.m_pAccname, 	-- 人物名字
+		job = jobId,	-- 角色职业
+		sex = 1,		-- 性别
+		serv_id = 0,	-- 服务器ID
+	}
+	NetWorkManager:SendNetMsg(package)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive Start***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 回复 - 创建角色 - PB_LOGIN.MODEL - PB_LOGIN.CREATE_ROLE
+function LoginCreateRolePanel:_Receive_Create_Role(login_create_role_s2c)
+	GCSLog("LoginCreateRolePanel:_Receive_Create_Role")
+	GCSLog("角色ID",login_create_role_s2c.id)
+	GCSLog("错误码",login_create_role_s2c.code)
+	self.m_nlogin_create_role_s2c = login_create_role_s2c
+	self:NetWork_RequestSeleftRole(self.m_nlogin_create_role_s2c.id)
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

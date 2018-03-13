@@ -6,6 +6,8 @@ LoginModel = {
 	m_nlogin_create_role_s2c = nil,
 	m_nlogin_select_role_s2c = nil,
 
+	m_pAccname = nil,
+	m_pKey = nil,
 }
 
 --@brief c#引用
@@ -46,6 +48,7 @@ function LoginModel:Destroy()
 	end
 end
 
+
 --@breif 显示面板
 function LoginModel:ShowPanel( panelType )
 	local panel = nil
@@ -65,6 +68,7 @@ function LoginModel:ShowPanel( panelType )
 	end
 end
 
+--@breif 隐藏面板
 function LoginModel:HidePanel(panelType)
 
 	local panel = nil
@@ -82,61 +86,3 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 请求 - 创建角色
-function LoginModel:NetWork_RequestCreateRole(jobId)
-	GCSLog("LoginModel:NetWork_RequestCreateRole")
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.CREATE_ROLE
-	package.data = {
-		name = "tdfsdfset", 	-- 人物名字
-		job = jobId,	-- 角色职业
-		sex = 1,		-- 性别
-		serv_id = 0,	-- 服务器ID
-	}
-	NetWorkManager:SendNetMsg(package)
-end
-
---@brief 回复 - 创建角色
-function LoginModel:Receive_RequestCreateRole(login_create_role_s2c)
-	GCSLog("LoginModel:Receive_RequestCreateRole")
-	GCSLog("角色ID",login_create_role_s2c.id)
-	GCSLog("错误码",login_create_role_s2c.code)
-	self.m_nlogin_create_role_s2c = login_create_role_s2c
-	
-	self:NetWork_RequestSeleftRole(self.m_nlogin_create_role_s2c.id)
-end
-
---@brief 回复 - 选择角色
-function LoginModel:NetWork_RequestSeleftRole(roleId)
-	GCSLog("LoginModel:NetWork_RequestSeleftRole", roleId)
-
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.SELECT_ROLE
-	package.data = {
-		id = roleId
-	}
-	
-	NetWorkManager:SendNetMsg(package)
-end
-
---@brief 回复 - 选择角色
-function LoginModel:Receive_RequestSelectRole(login_select_role_s2c)
-	GCSLog("LoginModel:Receive_RequestSelectRole")
-	self.m_nlogin_select_role_s2c = login_select_role_s2c
-
-	GCSLog("错误码:",					login_select_role_s2c.code)	
-	GCSLog("用户名:",					login_select_role_s2c.accname)
-	GCSLog("昵称:",						login_select_role_s2c.nick_name)
-	GCSLog("心跳间隔:",					login_select_role_s2c.heart_interval)
-	GCSLog("角色登陆信息_角色id:",		login_select_role_s2c.login_info[1].id)
-	GCSLog("角色登陆信息_角色名称:",	login_select_role_s2c.login_info[1].name)
-	GCSLog("角色登陆信息_职业:",		login_select_role_s2c.login_info[1].job)
-	GCSLog("角色登陆信息_等级:",		login_select_role_s2c.login_info[1].level)
-	GCSLog("角色登陆信息_功勋:",		login_select_role_s2c.login_info[1].rank)
-	GCSLog("角色登陆信息_性别:",		login_select_role_s2c.login_info[1].sex)
-	GCSLog("角色登陆信息_上次登陆时间:",login_select_role_s2c.login_info[1].last_login_time)
-	
-	
-end
