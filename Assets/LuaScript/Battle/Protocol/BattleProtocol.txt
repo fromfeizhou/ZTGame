@@ -5,7 +5,7 @@ BattleProtocol = {
 	m_battleCommandMgr = nil,		--命令操作管理者
 	m_tCommandList = nil,		--操作集合
 
-	mt_tClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
+	m_tstClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
 }
 
 --@brief c#引用
@@ -19,23 +19,24 @@ function BattleProtocol:Init()
 	BattleProtocol.m_battleCommandMgr = GlobalBattleCtrl.m_battleCommandMgr
 end
 
-
 --@brief 移除
 function BattleProtocol:Destroy()
 	CSLog("BattleProtocol:Destroy")
 end
 
-
-
 --@brief 移动
-function BattleProtocol:SendMoveCommand(data)
-	local frame = 
+function BattleProtocol:SendMoveCommand(command)
+	--技能测试
 	if GameConfig.IsSkillDebugScene then
+		BattleProtocol:__TsClientInputCommand(command)
 	end
 end
 
 --@brief 接收驱动帧
-function BattleProtocol:ParseCommand(command)
+function BattleProtocol:ParseCommand(commands)
+	for frame,commandList in pairs(commands) do
+		BattleProtocol.m_battleCommandMgr:AddCommandList(frame,commandList)
+	end
 	BattleCommandMgr:SetNextFrame()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -43,25 +44,27 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brife 客户端模拟驱动帧发送(技能测试使用)
-function BattleProtocol:__ClientSendCommand()
+function BattleProtocol:__TsClientSendCommand()
 	--发送驱动帧
-	if not BattleProtocol.mt_tClientCommandList then
-		BattleProtocol:__ClientParseCommand({})
+	if not BattleProtocol.m_tstClientCommandList then
+		BattleProtocol:__TsClientInputCommand({})
 	else
-		BattleProtocol:__ClientParseCommand(BattleProtocol.mt_tClientCommandList)
+		BattleProtocol:__TsClientInputCommand(BattleProtocol.m_tstClientCommandList)
 	end
 
-	BattleProtocol.mt_tClientCommandList = {}
+	BattleProtocol.m_tstClientCommandList = {}
 end
 
 --@brife 客户端模拟塞入驱动帧
-function BattleProtocol:__ClientInputCommand(frame,command)
-	if not BattleProtocol.mt_tClientCommandList then
-		BattleProtocol.mt_tClientCommandList = {}
+function BattleProtocol:__TsClientInputCommand(command)
+	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep
+
+	if not BattleProtocol.m_tstClientCommandList then
+		BattleProtocol.m_tstClientCommandList = {}
 	end
-	if not BattleProtocol.mt_tClientCommandList[frame] then
-		BattleProtocol.mt_tClientCommandList[frame] = {}
+	if not BattleProtocol.m_tstClientCommandList[frame] then
+		BattleProtocol.m_tstClientCommandList[frame] = {}
 	end
-	table.insert( BattleProtocol.mt_tClientCommandList[frame], command )
+	table.insert( BattleProtocol.m_tstClientCommandList[frame], command )
 end
 

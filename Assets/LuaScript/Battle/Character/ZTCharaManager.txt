@@ -64,6 +64,17 @@ function ZTCharaManager:Update()
 end
 
 --@brief 逻辑帧刷新
+--@param 使用者id
+--@param 移动方向
+function ZTCharaManager:AddMoveCommand(battleId,dir)
+	local battleId = command.m_nBattleId
+	local chara = self.m_tCharaList[battleId]
+	if chara then
+		chara:SetDirection(dir)
+	end
+end
+
+--@brief 逻辑帧刷新
 function ZTCharaManager:UpdateCommand()
 	for i = 1,#self.m_tSortCharaList do
 		self.m_tSortCharaList[i]:UpdateCommand()
@@ -75,14 +86,14 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加事件监听
 function ZTCharaManager:_AddEvent()
-	BattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
-	BattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
+	GBattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
+	GBattleEvent:GetBattleDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
 end
 
 --@brief 移除事件监听
 function ZTCharaManager:_RemoveEvent()
-	BattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
-	BattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
+	GBattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
+	GBattleEvent:GetBattleDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
 end
 
 
@@ -120,9 +131,9 @@ end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
-	local player1 = GlobalBattle:GetBattleData(1,CareerType.Hero,CSVector3(1150,0,1150))
-	BattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
+	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,CSVector3(1150,0,1150))
+	GBattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 
-	local player2 = GlobalBattle:GetBattleData(2,CareerType.Hero,CSVector3(1200,0,1200))
-	BattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,CSVector3(1200,0,1200))
+	GBattleEvent:GetBattleDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
 end

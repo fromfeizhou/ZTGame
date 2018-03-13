@@ -117,5 +117,6 @@ end
 
 --@brife 发送移动操作
 function MoveJoystick:_SendMoveCommand(dir)
-	BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),BattleCommandType.Move,dir)
+	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),BattleCommandType.Move,dir)
+	BattleProtocol:SendMoveCommand(command)
 end

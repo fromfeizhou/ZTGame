@@ -38,39 +38,39 @@ function BattleCommandMgr:Destroy()
 	CSLog("BattleCommandMgr:Destroy")
 end
 
---@brief 刷新帧命令
+--@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
-	if self.m_nClientFrame < self.m_tServerCommand then
+	if self.m_nClientFrame < self.m_nServerFrame then
 		self:_RunCommand()
 		--比驱动帧慢 加速
-		if self.m_nClientFrame < self.m_tServerCommand - BattleDefine.CommandStep then
+		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStep then
 			self:_RunCommand()
 			self:_RunCommand()
 		end
+	else
+		--技能测试
+		if GameConfig.IsSkillDebugScene then
+			BattleProtocol:__TsClientSendCommand()
+		end 
 	end
 end
 
 --@brife 设置下一驱动帧
 function BattleCommandMgr:SetNextFrame()
-	self.m_tServerCommand = self.m_tServerCommand + BattleDefine.CommandStep
+	self.m_nServerFrame = self.m_nServerFrame + BattleDefine.CommandStep
 end
 
 --@brief 添加命令
-function BattleCommandMgr:AddCommandList(commandsList)
+function BattleCommandMgr:AddCommandList(frame,commandList)
 	if not self.m_tServerCommand[frame] then
 		self.m_tServerCommand[frame] = {}
 	end
-	tInsert(self.m_tServerCommand[frame],commands)
+	tInsert(self.m_tServerCommand[frame],commandList)
 end
-
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
-
 --@brief 命令往前驱动
 function BattleCommandMgr:_RunCommand()
 	--客户端往前驱动
@@ -81,26 +81,29 @@ function BattleCommandMgr:_RunCommand()
 		return
 	end
 
-
-	local commands = self.m_tServerCommand[self.m_nClientFrame]
-	if commands then
-		self:_ParseCommand(commands)
+	local commandList = self.m_tServerCommand[self.m_nClientFrame]
+	if commandList then
+		self:_ParseCommand(commandList)
 	end
-	self.m_tServerCommand = nil
+	self.m_tServerCommand[self.m_nClientFrame] = nil
 
 	--刷新全局逻辑帧命令
-	GlobalBattleCtrl:DataUpdate()
+	GlobalBattleCtrl:CommandUpdate()
 end
 
 --@brief 解析帧命令
-function BattleCommandMgr:_ParseCommand(commands)
-	for i = 1, #commands do
-		local command = commands[i]
-
+function BattleCommandMgr:_ParseCommand(commandList)
+	for i = 1, #commandList do
+		local command = commandList[i]
+		if command.m_nType == BattleCommandType.Move then
+			self:_ParseMove(command)
+		end
 	end
 end
 
 --@brief 移动命令
 function BattleCommandMgr:_ParseMove(command)
-	-- body
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:AddMoveCommand(command.m_nBattleId,command.m_nDir)
+	end
 end
