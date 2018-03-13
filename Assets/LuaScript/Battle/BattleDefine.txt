@@ -8,9 +8,11 @@ local CSLog = CS.GameTool.Log
 
 --@breif 战斗预定义
 BattleDefine = {
+
+	CommandStep = 3,		--驱动帧步伐
+
 	PlayerSpeed = 0.05,		--移动速度
 	PlayerRadius = 1,		--碰撞半径
-	CommandStep = 5,		--驱动帧步伐
 }
 
 --@brief 方向预定义
@@ -86,9 +88,8 @@ end
 --*******************************************************全局事件 Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 全局战斗事件
-BattleEvent = {
+GBattleEvent = {
 	BattleDispatcher = nil,		--事件发送器
-	CommandDispatcher = nil,		--事件发送器
 }
 
 
@@ -98,23 +99,23 @@ BATTLE_EVENT = {
 	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
 }
 --@breif 获取战斗事件管理器
-function BattleEvent:GetBattleDispatcher()
-	if BattleEvent.BattleDispatcher == nil then 
-		BattleEvent.BattleDispatcher = EventDispatcher:Create() 
+function GBattleEvent:GetBattleDispatcher()
+	if GBattleEvent.BattleDispatcher == nil then 
+		GBattleEvent.BattleDispatcher = EventDispatcher:Create() 
 	end
-	return BattleEvent.BattleDispatcher
+	return GBattleEvent.BattleDispatcher
 end
 
 --@breif 清理战斗事件管理器（战斗退出清理）
-function BattleEvent:RemoveBattleDispatcher()
-	if BattleEvent.BattleDispatcher == nil then 
-		BattleEvent.BattleDispatcher:RemoveEvent()
+function GBattleEvent:RemoveBattleDispatcher()
+	if GBattleEvent.BattleDispatcher == nil then 
+		GBattleEvent.BattleDispatcher:RemoveEvent()
 	end
-	BattleEvent.BattleDispatcher = nil
+	GBattleEvent.BattleDispatcher = nil
 end
 
 --@brief 战斗对象结构
-function BattleEvent:GetBattleData(battleId,careerType,pos)
+function GBattleEvent:GetBattleData(battleId,careerType,pos)
 	local data = {}
 	data.battleId = battleId or 1
 	data.careerType = careerType or CareerType.FashShi

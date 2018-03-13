@@ -29,6 +29,9 @@ function GlobalBattleCtrl:Init()
 
 	--帧命令管理器
 	GlobalBattleCtrl.m_battleCommandMgr = BattleCommandMgr:Create()
+
+	--启动协议监听
+	BattleProtocol:Init()
 end
 
 
@@ -68,7 +71,7 @@ function GlobalBattleCtrl:DestroyData()
 end
 
 --@brief 界面刷新
-function GlobalBattleCtrl:UIUpdate()
+function GlobalBattleCtrl:Update()
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Update()
 	end
@@ -82,8 +85,10 @@ function GlobalBattleCtrl:UIUpdate()
 	end
 end
 
+
+
 --@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)
-function GlobalBattleCtrl:DataUpdate()
+function GlobalBattleCtrl:CommandUpdate()
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:UpdateCommand()
 	end

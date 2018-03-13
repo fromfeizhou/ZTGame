@@ -62,7 +62,8 @@ public static class ExampleGenConfig
 		typeof(UnityEngine.Events.UnityAction<UnityEngine.Object, string>),
         typeof(Action<string,float,float>),
 		typeof(Action<int,ByteBuffer>),
-	};
+        typeof(Action<Vector2>),
+    };
 
 	//黑名单
 	[BlackList]
