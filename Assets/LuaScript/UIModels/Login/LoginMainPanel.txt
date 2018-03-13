@@ -264,10 +264,21 @@ function LoginMainPanel:_Receive_Login_Login(login_login_s2c)
 	elseif login_login_s2c.code == 12 then--没有角色
 		--显示创角界面
 		local dispatcher = GlobalData:GetMdlEventDispatcher()
-		local panelData = {}
-		panelData.modelType = MODEL_TYPE.LOGIN
-		panelData.panelType = LOGIN_TYPE.CREATEROLE
-		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+		
+		local panelData_CreateRole = {
+			modelType = MODEL_TYPE.LOGIN,
+			panelType = LOGIN_TYPE.CREATEROLE
+		}
+		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData_CreateRole)
+
+			
+		local panelData_LoginRole = {
+			modelType = MODEL_TYPE.LOGIN,
+			panelType = LOGIN_TYPE.MAIN,
+		}
+		dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData_LoginRole)
+
+		
 	elseif login_login_s2c.code == 20 then
 		GCSLog("参数错误")
 	
@@ -278,6 +289,15 @@ end
 function LoginMainPanel:_Receive_Select_Role(login_select_role_s2c)
 	GCSLog("LoginMainPanel:_Receive_Select_Role\n",SerializeTable(login_select_role_s2c))
 	self.m_nlogin_select_role_s2c = login_select_role_s2c
+	
+	if LoginModel.m_pIsOpenedCreatePanel then 
+		local panelData = {
+			modelType = MODEL_TYPE.LOGIN,
+			panelType = LOGIN_TYPE.CREATEROLE,
+		}
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	end
+	LoginModel:LoginFinish()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Receive End***************************************************************
