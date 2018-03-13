@@ -5,28 +5,31 @@ MoveJoystick = {
 	m_ctrlContainer = nil,	--父容器
 	m_transform = nil,		--当前对象transfrom
 	m_gameObject = nil,		--当前对象挂钩gameObject
+	m_joystick = nil,		--摇杆组件
 }
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function MoveJoystick:Create()
+function MoveJoystick:Create(parent)
 	local obj = {}
 	setmetatable( obj, { __index = MoveJoystick })
-	obj:Init()
+	obj:Init(parent)
 	return obj
 end
 
 --@brief 初始化
-function MoveJoystick:Init()
+function MoveJoystick:Init(parent)
 	CSLog("MoveJoystick:Init")
-	self.m_ctrlContainer = GlobalBattleCtrl.m_battleUIMain.m_ctrlContainer
+	self.m_ctrlContainer = parent
 	
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
@@ -39,7 +42,7 @@ end
 --@brief 移除
 function MoveJoystick:Destroy()
 	CSLog("MoveJoystick:Destroy")
-	
+
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -51,5 +54,9 @@ function MoveJoystick:_LoadAsseFinish(target,path)
  		if prefab then
  			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
  			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
+ 			self.m_joystick.onJoystickDownEvent = function( ... )
+ 				print("update")
+ 			end
 		end
 end

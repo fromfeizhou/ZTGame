@@ -3,7 +3,7 @@
 --@data 2018/3/10
 
 GlobalBattleCtrl = {
-	m_battleContainerMgr = nil,	--主ui管理器
+	m_battleUIMgr = nil,	--主ui管理器
 	m_ztCharaManager = nil, --玩家对象管理
 	m_battleCommandMgr = nil,	--帧命令管理器
 }
@@ -17,7 +17,7 @@ local CSLog = CS.GameTool.Log
 --@breif 初始化
 function GlobalBattleCtrl:Init()
 	--主容器管理器(备注：先创建 最后移除)
-	GlobalBattleCtrl.m_battleContainerMgr = BattleContainerMgr:Create()
+	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
 
 	--战斗对象管理
 	GlobalBattleCtrl.m_ztCharaManager = ZTCharaManager:Create()
@@ -39,16 +39,18 @@ function GlobalBattleCtrl:Destroy()
 	end
 
 	--主容器管理器(备注：先创建 最后移除)
-	if GlobalBattleCtrl.m_battleContainerMgr then
-		GlobalBattleCtrl.m_battleContainerMgr:Destroy()
-		GlobalBattleCtrl.m_battleContainerMgr = nil
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Destroy()
+		GlobalBattleCtrl.m_battleUIMgr = nil
 	end
+
+	
 end
 
 --@brief 界面刷新
 function GlobalBattleCtrl:UIUpdate()
-	if GlobalBattleCtrl.m_battleContainerMgr then
-		GlobalBattleCtrl.m_battleContainerMgr:Update()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Update()
 	end
 
 	if GlobalBattleCtrl.m_ztCharaManager then

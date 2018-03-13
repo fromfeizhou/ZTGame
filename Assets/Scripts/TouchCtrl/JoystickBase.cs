@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using XLua;
 
+[LuaCallCSharp]
 public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
 
@@ -20,6 +22,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public virtual void Start()
     {
+        Debug.Log("start");
 		innerCircleTrans = transform.Find("InnerCircle") as RectTransform;
         _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         _isDownTouch = false;
@@ -36,6 +39,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     /// </summary>
     public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log("123123");
         _isDownTouch = true;
         Vector2 pos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
