@@ -3,6 +3,8 @@
 --@data 2018/3/10
 
 GlobalBattleCtrl = {
+	m_nOwnerId = nil,		--操作者id
+
 	m_battleUIMgr = nil,	--主ui管理器
 	m_ztCharaManager = nil, --玩家对象管理
 	m_battleCommandMgr = nil,	--帧命令管理器
@@ -16,6 +18,9 @@ local CSLog = CS.GameTool.Log
 
 --@breif 初始化
 function GlobalBattleCtrl:Init()
+	
+	GlobalBattleCtrl:InitData()
+
 	--主容器管理器(备注：先创建 最后移除)
 	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
 
@@ -26,8 +31,13 @@ function GlobalBattleCtrl:Init()
 	GlobalBattleCtrl.m_battleCommandMgr = BattleCommandMgr:Create()
 end
 
+
+
 --@brief 移除
 function GlobalBattleCtrl:Destroy()
+	
+	GlobalBattleCtrl:DestroyData()
+
 	--清理全局事件管理器
 	BattleEvent:RemoveBattleDispatcher()
 	BattleEvent:RemoveCommandDispatcher()
@@ -45,6 +55,16 @@ function GlobalBattleCtrl:Destroy()
 	end
 
 	
+end
+
+--@rife 初始化数据
+function GlobalBattleCtrl:InitData()
+	GlobalBattleCtrl.m_nOwnerId = 1
+end
+
+--@rife 删除数据
+function GlobalBattleCtrl:DestroyData()
+	-- body
 end
 
 --@brief 界面刷新
@@ -67,6 +87,11 @@ function GlobalBattleCtrl:DataUpdate()
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:UpdateCommand()
 	end
+end
+
+--@brief 获得当前用户id
+function GlobalBattleCtrl:GetOwnerId()
+	return GlobalBattleCtrl.m_nOwnerId
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

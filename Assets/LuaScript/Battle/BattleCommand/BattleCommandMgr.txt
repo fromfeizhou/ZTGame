@@ -33,6 +33,11 @@ function BattleCommandMgr:Init()
 	self.m_nServerFrame = 0
 end
 
+--@brief 移除
+function BattleCommandMgr:Destroy()
+	CSLog("BattleCommandMgr:Destroy")
+end
+
 --@brief 刷新帧命令
 function BattleCommandMgr:Update()
 	if self.m_nClientFrame < self.m_tServerCommand then
@@ -43,37 +48,28 @@ function BattleCommandMgr:Update()
 			self:_RunCommand()
 		end
 	end
+end
 
+--@brife 设置下一驱动帧
+function BattleCommandMgr:SetNextFrame()
+	self.m_tServerCommand = self.m_tServerCommand + BattleDefine.CommandStep
+end
 
+--@brief 添加命令
+function BattleCommandMgr:AddCommandList(commandsList)
+	if not self.m_tServerCommand[frame] then
+		self.m_tServerCommand[frame] = {}
+	end
+	tInsert(self.m_tServerCommand[frame],commands)
 end
 
 
---@brief 移除
-function BattleCommandMgr:Destroy()
-	CSLog("BattleCommandMgr:Destroy")
-end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
---@brief 监听事件
-function BattleCommandMgr:_AddEvent()
-	BattleEvent:GetCommandDispatcher():AddEvent(BATTLE_COMMAND_EVENT.ADD_COMMAND,self._OnAddCommand,self)
-end
 
---@brief 移除监听
-function BattleCommandMgr:_RemoveEvent()
-	BattleEvent:GetCommandDispatcher():RemoveEvent(BATTLE_COMMAND_EVENT.ADD_COMMAND,self._OnAddCommand)
-end
-
---@brief 添加命令
-function BattleCommandMgr:_OnAddCommand(frame,command)
-	if not self.m_tServerCommand[frame] then
-		self.m_tServerCommand[frame] = {}
-	end
-	tInsert(self.m_tServerCommand[frame],command)
-end
 
 --@brief 命令往前驱动
 function BattleCommandMgr:_RunCommand()
@@ -86,9 +82,9 @@ function BattleCommandMgr:_RunCommand()
 	end
 
 
-	local commandList = self.m_tServerCommand[self.m_nClientFrame]
-	if commandList then
-		self:_ParseCommand(commandList)
+	local commands = self.m_tServerCommand[self.m_nClientFrame]
+	if commands then
+		self:_ParseCommand(commands)
 	end
 	self.m_tServerCommand = nil
 
@@ -97,9 +93,9 @@ function BattleCommandMgr:_RunCommand()
 end
 
 --@brief 解析帧命令
-function BattleCommandMgr:_ParseCommand(commandList)
-	for i = 1, #commandList do
-		local command = commandList[i]
+function BattleCommandMgr:_ParseCommand(commands)
+	for i = 1, #commands do
+		local command = commands[i]
 
 	end
 end

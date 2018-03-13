@@ -6,6 +6,8 @@ MoveJoystick = {
 	m_transform = nil,		--当前对象transfrom
 	m_gameObject = nil,		--当前对象挂钩gameObject
 	m_joystick = nil,		--摇杆组件
+
+	m_bIsSend = nil,		--是否发送操作
 }
 
 --@brief c#引用
@@ -30,7 +32,9 @@ end
 function MoveJoystick:Init(parent)
 	CSLog("MoveJoystick:Init")
 	self.m_ctrlContainer = parent
+	self.m_bIsSend = false
 	
+	--加载预设件
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
@@ -55,8 +59,63 @@ function MoveJoystick:_LoadAsseFinish(target,path)
  			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
  			self.m_gameObject = self.m_transform.gameObject
  			self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
- 			self.m_joystick.onJoystickDownEvent = function( ... )
- 				print("update")
- 			end
+ 			self:_InitJoyEvent()
 		end
+end
+
+--@brief 添加控制事件 
+function MoveJoystick:_InitJoyEvent()
+	self.m_joystick.onJoystickDownEvent = function(pos)
+		self:_OnJoystickDown(pos)
+	end
+
+	self.m_joystick.onJoystickMoveEvent = function(pos)
+		self:_OnJoystickMove(pos)
+	end
+
+	self.m_joystick.onJoystickUpEvent = function(pos)
+		self:_OnJoystickUp(pos)
+	end
+end
+
+--@brief 触摸点按下
+function MoveJoystick:_OnJoystickDown(pos)
+end
+
+--@brief 触摸点移动
+function MoveJoystick:_OnJoystickMove(pos)
+	local angle = math.deg(math.atan(pos.y,pos.x))
+	if angle >= -22.5 and angle < 22.5 then
+        self:_SendMoveCommand(BattleDir.Right)
+    elseif angle >= 22.5 and angle < 67.5 then
+        self:_SendMoveCommand(BattleDir.UpRight)
+    elseif angle >= 67.5 and angle < 112.5 then
+        self:_SendMoveCommand(BattleDir.Up)
+    elseif angle >= 112.5 and angle < 157.5 then
+        self:_SendMoveCommand(BattleDir.UpLeft)
+    elseif angle >= -157.5 and angle < -112.5 then
+        self:_SendMoveCommand(BattleDir.DownLeft)
+    elseif angle >= -112.5 and angle < -67.5 then
+        self:_SendMoveCommand(BattleDir.Down)
+    elseif angle >= -67.5 and angle < -22.5 then
+        self:_SendMoveCommand(BattleDir.DownRight)
+    else
+        self:_SendMoveCommand(BattleDir.Left)
+    end
+    self.m_bIsSend = true
+end
+
+
+
+--@brief 触摸点松开
+function MoveJoystick:_OnJoystickUp(pos)
+	if self.m_bIsSend then
+	 	self:_SendMoveCommand(BattleDir.None);
+	 	self.m_bIsSend = false
+	end
+end
+
+--@brife 发送移动操作
+function MoveJoystick:_SendMoveCommand(dir)
+	BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),BattleCommandType.Move,dir)
 end

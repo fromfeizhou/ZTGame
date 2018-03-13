@@ -110,7 +110,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
-	if self.m_nMoveDir ~= BattleDirType.None then
+	if self.m_nMoveDir ~= BattleDir.None then
 
 		local list = BattleDirDefine:GetList(dir)
 		local hitPos 

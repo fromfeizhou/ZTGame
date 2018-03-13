@@ -14,7 +14,7 @@ BattleDefine = {
 }
 
 --@brief 方向预定义
-BattleDirType = {
+BattleDir = {
 	None = 0,	--停止
 	Up = 1,		
 	UpLeft = 2,
@@ -36,28 +36,28 @@ BattleDirDefine = {
 }
 --@brief 获得对应方向的方向向量
 function BattleDirDefine:GetPos(dir)
-	if dir == BattleDirType.Up then
+	if dir == BattleDir.Up then
 		return CSVector3.forward
 
-	elseif dir == BattleDirType.UpLeft then
+	elseif dir == BattleDir.UpLeft then
 		return BattleDirDefine.UpLeft
 
-	elseif dir == BattleDirType.Left then
+	elseif dir == BattleDir.Left then
 		return CSVector3.left
 
-	elseif dir == BattleDirType.DownLeft then
+	elseif dir == BattleDir.DownLeft then
 		return BattleDirDefine.DownLeft
 
-	elseif dir == BattleDirType.Down then
+	elseif dir == BattleDir.Down then
 		return CSVector3.back
 
-	elseif dir == BattleDirType.DownRight then
+	elseif dir == BattleDir.DownRight then
 		return BattleDirDefine.DownRight
 
-	elseif dir == BattleDirType.Right then
+	elseif dir == BattleDir.Right then
 		return CSVector3.right
 
-	elseif dir == BattleDirType.UpRight then
+	elseif dir == BattleDir.UpRight then
 		return BattleDirDefine.UpRight
 	end
 	return CSVector3.zero
@@ -67,15 +67,15 @@ function BattleDirDefine:GetList(dir)
 	if not BattleDirDefine.m_tList then
 		BattleDirDefine.m_tList = {}
 		
-		BattleDirDefine[BattleDirType.Up] = {CSVector3.forward, CSVector3.right}
-		BattleDirDefine[BattleDirType.DOWN] = {CSVector3.back, CSVector3.left}
-		BattleDirDefine[BattleDirType.LEFT] = {CSVector3.left, CSVector3.forward}
-		BattleDirDefine[BattleDirType.RIGHT] = {CSVector3.right, CSVector3.back}
+		BattleDirDefine[BattleDir.Up] = {CSVector3.forward, CSVector3.right}
+		BattleDirDefine[BattleDir.DOWN] = {CSVector3.back, CSVector3.left}
+		BattleDirDefine[BattleDir.LEFT] = {CSVector3.left, CSVector3.forward}
+		BattleDirDefine[BattleDir.RIGHT] = {CSVector3.right, CSVector3.back}
 
-		BattleDirDefine[BattleDirType.UpLeft] = {BattleDirDefine.UpLeft, CSVector3.forward, CSVector3.left}
-		BattleDirDefine[BattleDirType.UpRight] = {BattleDirDefine.UpRight, CSVector3.forward, CSVector3.right}
-		BattleDirDefine[BattleDirType.DownLeft] = {BattleDirDefine.DownLeft, CSVector3.back, CSVector3.left}
-		BattleDirDefine[BattleDirType.DownRight] = {BattleDirDefine.DownRight, CSVector3.back, CSVector3.right}
+		BattleDirDefine[BattleDir.UpLeft] = {BattleDirDefine.UpLeft, CSVector3.forward, CSVector3.left}
+		BattleDirDefine[BattleDir.UpRight] = {BattleDirDefine.UpRight, CSVector3.forward, CSVector3.right}
+		BattleDirDefine[BattleDir.DownLeft] = {BattleDirDefine.DownLeft, CSVector3.back, CSVector3.left}
+		BattleDirDefine[BattleDir.DownRight] = {BattleDirDefine.DownRight, CSVector3.back, CSVector3.right}
 	end
 
 	return BattleDirDefine[dir] or {}
@@ -121,27 +121,6 @@ function BattleEvent:GetBattleData(battleId,careerType,pos)
 	data.pos = pos or CSVector3(100,0,100)
 
 	return data
-end
-
-
---@breif 战斗命令
-BATTLE_COMMAND_EVENT = {
-	ADD_COMMAND = "BATTLE_COMMAND_EVENT_ADD_COMMAND",	--添加命令
-}
---@breif 获取战斗命令事件管理器
-function BattleEvent:GetCommandDispatcher()
-	if BattleEvent.CommandDispatcher == nil then 
-		BattleEvent.CommandDispatcher = EventDispatcher:Create() 
-	end
-	return BattleEvent.CommandDispatcher
-end
-
---@breif 清理战斗事件管理器（战斗退出清理）
-function BattleEvent:RemoveCommandDispatcher()
-	if BattleEvent.CommandDispatcher == nil then 
-		BattleEvent.CommandDispatcher:RemoveEvent()
-	end
-	BattleEvent.CommandDispatcher = nil
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

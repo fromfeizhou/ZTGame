@@ -1,0 +1,67 @@
+--BattleProtocol.txt
+--@breif 战斗协议
+--@data 2018/03/13
+BattleProtocol = {
+	m_battleCommandMgr = nil,		--命令操作管理者
+	m_tCommandList = nil,		--操作集合
+
+	mt_tClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
+}
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function BattleProtocol:Init()
+	CSLog("BattleProtocol:Init")
+	BattleProtocol.m_battleCommandMgr = GlobalBattleCtrl.m_battleCommandMgr
+end
+
+
+--@brief 移除
+function BattleProtocol:Destroy()
+	CSLog("BattleProtocol:Destroy")
+end
+
+
+
+--@brief 移动
+function BattleProtocol:SendMoveCommand(data)
+	local frame = 
+	if GameConfig.IsSkillDebugScene then
+	end
+end
+
+--@brief 接收驱动帧
+function BattleProtocol:ParseCommand(command)
+	BattleCommandMgr:SetNextFrame()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brife 客户端模拟驱动帧发送(技能测试使用)
+function BattleProtocol:__ClientSendCommand()
+	--发送驱动帧
+	if not BattleProtocol.mt_tClientCommandList then
+		BattleProtocol:__ClientParseCommand({})
+	else
+		BattleProtocol:__ClientParseCommand(BattleProtocol.mt_tClientCommandList)
+	end
+
+	BattleProtocol.mt_tClientCommandList = {}
+end
+
+--@brife 客户端模拟塞入驱动帧
+function BattleProtocol:__ClientInputCommand(frame,command)
+	if not BattleProtocol.mt_tClientCommandList then
+		BattleProtocol.mt_tClientCommandList = {}
+	end
+	if not BattleProtocol.mt_tClientCommandList[frame] then
+		BattleProtocol.mt_tClientCommandList[frame] = {}
+	end
+	table.insert( BattleProtocol.mt_tClientCommandList[frame], command )
+end
+
