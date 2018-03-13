@@ -8,11 +8,7 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
-		"Global.GlobalData",
-		"Global.ModelData",
-		"Global.ZTProtoData",
-		"Global.GlobalMethod",
-
+		"Common.Data.ModelData",
 		"Common.PathManager",
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
@@ -22,12 +18,12 @@ local LuaFileLoad = {
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
 
-
 		"ProtoBuff.NetProtocal",
 		"ProtoBuff.ProtocalDefine",
 
-
-
+		"Global.GlobalData",
+		"Global.ZTProtoData",
+		"Global.GlobalMethod",
 
 
 		--[[UI面板相关]]
@@ -51,9 +47,9 @@ local LuaFileLoad = {
 
 	--游戏lua文件
 	G_tGameList = {
-		"Global.CommonData",
-		"Global.Animator.AnimatorData",
-		"Global.Animator.Animator",
+		"Common.Data.CommonData",
+		"Common.Animator.AnimatorData",
+		"Common.Animator.Animator",
 
 		"Battle.GlobalBattle",
 		"Battle.Character",
