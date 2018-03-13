@@ -3,6 +3,8 @@
 --@data 2018/03/11
 MoveJoystick = {
 	m_ctrlContainer = nil,	--父容器
+	m_transform = nil,		--当前对象transfrom
+	m_gameObject = nil,		--当前对象挂钩gameObject
 }
 
 --@brief c#引用
@@ -37,6 +39,7 @@ end
 --@brief 移除
 function MoveJoystick:Destroy()
 	CSLog("MoveJoystick:Destroy")
+	
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

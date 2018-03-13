@@ -60,6 +60,4 @@ function ZTBattleScene:_UnInt()
 		self.m_goZtBattleScene = nil
 		self.m_comZtBattleScene = nil
 	end
-
-
 end

@@ -36,13 +36,6 @@ local LuaFileLoad = {
 		"UIModels.Login.LoginModel",
 		"UIModels.Login.LoginMainPanel",
 		"UIModels.Login.LoginCreateRolePanel",
-
-
-
-
-
-
-
 	},
 
 	--游戏lua文件
@@ -51,10 +44,17 @@ local LuaFileLoad = {
 		"Common.Animator.AnimatorData",
 		"Common.Animator.Animator",
 
-		"Battle.GlobalBattle",
-		"Battle.Character",
+		"Battle.BattleDefine",
+		
+		"Battle.Character.Character",
+		"Battle.Character.ZTCharaManager",
+		
+		"Battle.BattleCommand.BattleCommand",
+		"Battle.BattleCommand.BattleCommandMgr",
+		
+		"Battle.BattleContainerMgr",
+		"Battle.GlobalBattleCtrl",
 		"Battle.ZTBattleScene",
-		"Battle.ZTCharaManager",
 	}
 }
 

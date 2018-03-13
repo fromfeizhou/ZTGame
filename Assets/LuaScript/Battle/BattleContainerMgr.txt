@@ -28,7 +28,7 @@ end
 function BattleContainerMgr:Init()
 	CSLog("BattleContainerMgr:Init")
 	local canvasTrans = CSGameObject.Find("Canvas").transform
-	CSGameObject("MainUIContainer").transform.SetParent(canvasTrans,false)
+	CSGameObject("MainUIContainer").transform:SetParent(canvasTrans,false)
 
 	--控制UI容器
 	self.m_ctrlContainer = CSGameObject("CtrlContainer").transform
