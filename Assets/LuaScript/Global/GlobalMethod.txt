@@ -33,17 +33,33 @@ function GCSLog(...)
 end
 
 --@brief 序列化table表
-function SerializeTable(tTable)
+function SerializeTable(tTable,index)
     if not GameConfig.IsDebug then
         return ""
     end
     local str = ""
+    index = index or 0
+    local space = ""
+    for i = 1,index do
+        space = space .. "    "
+    end
+
     for key,value in pairs(tTable) do
 		local res = tostring(value)
 		if value and type(value) == "table" then
-			res = "{" .. SerializeTable(value) .. "}"
+			res =  SerializeTable(value,index + 1)
 		end
-        str = str .. tostring(key)..':'..res..'\n'
+        str = str ..space.. "["..tostring(key).."] = "..res..'\n'
     end
-    return str
+    
+    return "{\n"..str..space.."}"
+end
+
+--@brief table表长度
+function ZTableLen(tTable)
+    local count = 0
+    for key,value in pairs(tTable) do
+        count = count +1
+    end
+    return count
 end
