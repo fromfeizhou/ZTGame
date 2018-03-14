@@ -22,13 +22,11 @@ BattleCommand = {
 function BattleCommand:Create(battleId,type)
 	local obj = {}
 	setmetatable( obj, { __index = BattleCommand })
-	obj:Init()
 	return obj
 end
 
 --@brief 初始化
 function BattleCommand:Init()
-	CSLog("BattleCommand:Init")
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -54,7 +52,7 @@ end
 
 --@brief 初始化
 function BattleMoveCommand:Init(battleId,commandType,dir)
-	CSLog("BattleMoveCommand:Init")
+	--CSLog("BattleMoveCommand:Init",battleId,commandType,dir)
 	self.m_nBattleId = battleId
 	self.m_nType = commandType
 	self.m_nDir = dir

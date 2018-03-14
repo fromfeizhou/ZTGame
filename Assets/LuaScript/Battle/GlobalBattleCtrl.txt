@@ -3,11 +3,12 @@
 --@data 2018/3/10
 
 GlobalBattleCtrl = {
-	m_nOwnerId = nil,		--操作者id
-
 	m_battleUIMgr = nil,	--主ui管理器
 	m_ztCharaManager = nil, --玩家对象管理
 	m_battleCommandMgr = nil,	--帧命令管理器
+
+	m_nOwnerId = nil,		--操作者id
+	m_character = nil,		--操作者数据	
 }
 
 --@brief c#引用
@@ -18,17 +19,21 @@ local CSLog = CS.GameTool.Log
 
 --@breif 初始化
 function GlobalBattleCtrl:Init()
-	
-	GlobalBattleCtrl:InitData()
+	--****************管理者初始化begin************************************************
+	--镜头管理
+	BattleCameraMgr:Init()
 
-	--主容器管理器(备注：先创建 最后移除)
+	--主UI管理器(备注：先创建 最后移除)
 	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
-
 	--战斗对象管理
 	GlobalBattleCtrl.m_ztCharaManager = ZTCharaManager:Create()
-
 	--帧命令管理器
 	GlobalBattleCtrl.m_battleCommandMgr = BattleCommandMgr:Create()
+	
+	--****************管理者初始化end************************************************
+
+	--全局数据引用初始化
+	GlobalBattleCtrl:InitData()
 
 	--启动协议监听
 	BattleProtocol:Init()
@@ -38,36 +43,44 @@ end
 
 --@brief 移除
 function GlobalBattleCtrl:Destroy()
-	
+	--全局数据引用初始化
 	GlobalBattleCtrl:DestroyData()
-
-	--清理全局事件管理器
-	BattleEvent:RemoveBattleDispatcher()
-	BattleEvent:RemoveCommandDispatcher()
+	
+	--镜头管理
+	BattleCameraMgr:Destroy()
 
 	--清理战斗对象管理
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:Destroy()
 		GlobalBattleCtrl.m_ztCharaManager = nil
+		
 	end
-
-	--主容器管理器(备注：先创建 最后移除)
+	--主UI管理器(备注：先创建 最后移除)
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
 	end
 
 	
+	--清理全局事件管理器
+	GBattleEvent:RemoveDispatcher()
 end
 
 --@rife 初始化数据
 function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_nOwnerId = 1
+	--对象数组
+	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
+	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
+	--控制对象
+	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 end
 
 --@rife 删除数据
 function GlobalBattleCtrl:DestroyData()
-	-- body
+	GlobalBattleCtrl.m_nOwnerId = nil
+	GlobalBattleCtrl.m_tCharacterDic = nil
+	GlobalBattleCtrl.m_tCharacterList = nil
 end
 
 --@brief 界面刷新
@@ -83,6 +96,8 @@ function GlobalBattleCtrl:Update()
 	if GlobalBattleCtrl.m_battleCommandMgr then
 		GlobalBattleCtrl.m_battleCommandMgr:Update()
 	end
+
+	BattleCameraMgr:Update()
 end
 
 
@@ -97,6 +112,21 @@ end
 --@brief 获得当前用户id
 function GlobalBattleCtrl:GetOwnerId()
 	return GlobalBattleCtrl.m_nOwnerId
+end
+
+--@brief 获得对象字典
+function GlobalBattleCtrl:GetCharacterDic()
+	return GlobalBattleCtrl.m_tCharacterDic
+end
+
+--@brief 获得用户列表
+function GlobalBattleCtrl:GetCharacterList()
+	return GlobalBattleCtrl.m_tCharacterList
+end
+
+--@brife 获取当前用户
+function GlobalBattleCtrl:GetOwnerChara()
+	return GlobalBattleCtrl.m_character
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -37,7 +37,7 @@ BattleDirDefine = {
 	DownRight = CSVector3(1, 0, -1),
 }
 --@brief 获得对应方向的方向向量
-function BattleDirDefine:GetPos(dir)
+function BattleDirDefine:GetDirPos(dir)
 	if dir == BattleDir.Up then
 		return CSVector3.forward
 
@@ -65,22 +65,21 @@ function BattleDirDefine:GetPos(dir)
 	return CSVector3.zero
 end
 --@brief 获得对应方向的方向向量列表
-function BattleDirDefine:GetList(dir)
+function BattleDirDefine:GetDirList(dir)
 	if not BattleDirDefine.m_tList then
 		BattleDirDefine.m_tList = {}
 		
-		BattleDirDefine[BattleDir.Up] = {CSVector3.forward, CSVector3.right}
-		BattleDirDefine[BattleDir.DOWN] = {CSVector3.back, CSVector3.left}
-		BattleDirDefine[BattleDir.LEFT] = {CSVector3.left, CSVector3.forward}
-		BattleDirDefine[BattleDir.RIGHT] = {CSVector3.right, CSVector3.back}
+		BattleDirDefine.m_tList[BattleDir.Up] = {CSVector3.forward, CSVector3.right}
+		BattleDirDefine.m_tList[BattleDir.Down] = {CSVector3.back, CSVector3.left}
+		BattleDirDefine.m_tList[BattleDir.Left] = {CSVector3.left, CSVector3.forward}
+		BattleDirDefine.m_tList[BattleDir.Right] = {CSVector3.right, CSVector3.back}
 
-		BattleDirDefine[BattleDir.UpLeft] = {BattleDirDefine.UpLeft, CSVector3.forward, CSVector3.left}
-		BattleDirDefine[BattleDir.UpRight] = {BattleDirDefine.UpRight, CSVector3.forward, CSVector3.right}
-		BattleDirDefine[BattleDir.DownLeft] = {BattleDirDefine.DownLeft, CSVector3.back, CSVector3.left}
-		BattleDirDefine[BattleDir.DownRight] = {BattleDirDefine.DownRight, CSVector3.back, CSVector3.right}
+		BattleDirDefine.m_tList[BattleDir.UpLeft] = {BattleDirDefine.UpLeft, CSVector3.forward, CSVector3.left}
+		BattleDirDefine.m_tList[BattleDir.UpRight] = {BattleDirDefine.UpRight, CSVector3.forward, CSVector3.right}
+		BattleDirDefine.m_tList[BattleDir.DownLeft] = {BattleDirDefine.DownLeft, CSVector3.back, CSVector3.left}
+		BattleDirDefine.m_tList[BattleDir.DownRight] = {BattleDirDefine.DownRight, CSVector3.back, CSVector3.right}
 	end
-
-	return BattleDirDefine[dir] or {}
+	return BattleDirDefine.m_tList[dir] or {}
 end
 
 
@@ -97,9 +96,10 @@ GBattleEvent = {
 BATTLE_EVENT = {
 	ADD_CHARACTER = "BATTLE_EVENT_ADD_CHARACTER", 	--添加玩家
 	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
+	UPDATE_CAMERA = "BATTLE_EVENT_UPDATE_CAMERA",		--刷新镜头
 }
 --@breif 获取战斗事件管理器
-function GBattleEvent:GetBattleDispatcher()
+function GBattleEvent:GetDispatcher()
 	if GBattleEvent.BattleDispatcher == nil then 
 		GBattleEvent.BattleDispatcher = EventDispatcher:Create() 
 	end
@@ -107,7 +107,7 @@ function GBattleEvent:GetBattleDispatcher()
 end
 
 --@breif 清理战斗事件管理器（战斗退出清理）
-function GBattleEvent:RemoveBattleDispatcher()
+function GBattleEvent:RemoveDispatcher()
 	if GBattleEvent.BattleDispatcher == nil then 
 		GBattleEvent.BattleDispatcher:RemoveEvent()
 	end
@@ -121,6 +121,14 @@ function GBattleEvent:GetBattleData(battleId,careerType,pos)
 	data.careerType = careerType or CareerType.FashShi
 	data.pos = pos or CSVector3(100,0,100)
 
+	return data
+end
+
+--@brief 战斗对象结构
+function GBattleEvent:GetCameraData(cameraType,pos)
+	local data = {}
+	data.cameraType = cameraType or BattleCameraType.Move
+	data.pos = pos or CSVector3.zero
 	return data
 end
 
