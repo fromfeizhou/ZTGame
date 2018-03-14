@@ -73,7 +73,7 @@ end
 --@brief 刷新位置
 --@param vector3 pos
 function AnimatorData:UpdatePos(pos)
-	CSLog("AnimatorData:UpdatePos",pos)
+	-- CSLog("AnimatorData:UpdatePos",pos)
 	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
 end
 

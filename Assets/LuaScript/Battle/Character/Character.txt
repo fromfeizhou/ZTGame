@@ -34,6 +34,7 @@ function Character:Init(battleData,container)
 	self.m_animator = Animator:Create(self.m_animData,container)
 	self.m_charaPos = CSVector3.zero
 	self:UpdatePos(battleData.pos)
+	self.m_nMoveDir = BattleDir.None
 end
 
 
@@ -64,8 +65,14 @@ end
 
 --@brief 设置方向
 function Character:SetDirection(dir)
+	--CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
 		self.m_nMoveDir = dir
+		if self.m_nMoveDir ~= BattleDir.None then
+			self:Play("run")
+		else
+			self:Play("idle")
+		end
 	end
 end
 
@@ -87,7 +94,11 @@ end
 --@param vector3 pos
 function Character:UpdatePos(pos)
 	if not self.m_charaPos.Equals(pos) then
+		self.m_charaPos = pos
+		--动画刷新通知
 		self.m_animData:UpdatePos(pos)
+		-- CS.GameTool.LogError("Character:UpdatePos")
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CAMERA,GBattleEvent:GetCameraData(BattleCameraType.Move,pos))
 	end
 end
 
@@ -111,8 +122,7 @@ end
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
 	if self.m_nMoveDir ~= BattleDir.None then
-
-		local list = BattleDirDefine:GetList(dir)
+		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
 		local hitPos 
 		local canMove = false
 		for i =1,#list do
@@ -123,6 +133,7 @@ function Character:_UpdateMoveCommand()
 			end
 		end
 		if canMove then
+			--CSLog("Character:_UpdateMoveCommand",self.m_nMoveDir,hitPos)
 			self:UpdatePos(hitPos)
 		end
 	end

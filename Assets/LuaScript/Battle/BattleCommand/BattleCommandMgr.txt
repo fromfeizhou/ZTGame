@@ -50,7 +50,7 @@ function BattleCommandMgr:Update()
 	else
 		--技能测试
 		if GameConfig.IsSkillDebugScene then
-			BattleProtocol:__TsClientSendCommand()
+			BattleProtocol:__TsClientSendDriveCommand()
 		end 
 	end
 end
@@ -65,7 +65,7 @@ function BattleCommandMgr:AddCommandList(frame,commandList)
 	if not self.m_tServerCommand[frame] then
 		self.m_tServerCommand[frame] = {}
 	end
-	tInsert(self.m_tServerCommand[frame],commandList)
+	self.m_tServerCommand[frame] = commandList
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -82,6 +82,7 @@ function BattleCommandMgr:_RunCommand()
 	end
 
 	local commandList = self.m_tServerCommand[self.m_nClientFrame]
+	
 	if commandList then
 		self:_ParseCommand(commandList)
 	end
@@ -103,6 +104,7 @@ end
 
 --@brief 移动命令
 function BattleCommandMgr:_ParseMove(command)
+	-- CSLog("BattleCommandMgr:_ParseMove")
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:AddMoveCommand(command.m_nBattleId,command.m_nDir)
 	end

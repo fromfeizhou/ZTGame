@@ -24,8 +24,10 @@ function BattleProtocol:Destroy()
 	CSLog("BattleProtocol:Destroy")
 end
 
+
 --@brief 移动
-function BattleProtocol:SendMoveCommand(command)
+function BattleProtocol:SendMoveCommand(dir)
+	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),BattleCommandType.Move,dir)
 	--技能测试
 	if GameConfig.IsSkillDebugScene then
 		BattleProtocol:__TsClientInputCommand(command)
@@ -34,31 +36,31 @@ end
 
 --@brief 接收驱动帧
 function BattleProtocol:ParseCommand(commands)
+	--数据存储
 	for frame,commandList in pairs(commands) do
 		BattleProtocol.m_battleCommandMgr:AddCommandList(frame,commandList)
 	end
-	BattleCommandMgr:SetNextFrame()
+	--驱动逻辑帧往前
+	BattleProtocol.m_battleCommandMgr:SetNextFrame()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brife 客户端模拟驱动帧发送(技能测试使用)
-function BattleProtocol:__TsClientSendCommand()
+function BattleProtocol:__TsClientSendDriveCommand()
 	--发送驱动帧
 	if not BattleProtocol.m_tstClientCommandList then
-		BattleProtocol:__TsClientInputCommand({})
+		BattleProtocol:ParseCommand({})
 	else
-		BattleProtocol:__TsClientInputCommand(BattleProtocol.m_tstClientCommandList)
+		BattleProtocol:ParseCommand(BattleProtocol.m_tstClientCommandList)
 	end
-
 	BattleProtocol.m_tstClientCommandList = {}
 end
 
 --@brife 客户端模拟塞入驱动帧
 function BattleProtocol:__TsClientInputCommand(command)
-	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep
-
+	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
 	if not BattleProtocol.m_tstClientCommandList then
 		BattleProtocol.m_tstClientCommandList = {}
 	end

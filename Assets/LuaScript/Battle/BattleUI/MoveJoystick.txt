@@ -8,6 +8,7 @@ MoveJoystick = {
 	m_joystick = nil,		--摇杆组件
 
 	m_bIsSend = nil,		--是否发送操作
+	m_sendDir = nil,		--已发送移动类型
 }
 
 --@brief c#引用
@@ -33,6 +34,7 @@ function MoveJoystick:Init(parent)
 	CSLog("MoveJoystick:Init")
 	self.m_ctrlContainer = parent
 	self.m_bIsSend = false
+	self.m_sendDir = nil
 	
 	--加载预设件
 	local callback_loadfinish = function(target,path)
@@ -80,6 +82,7 @@ end
 
 --@brief 触摸点按下
 function MoveJoystick:_OnJoystickDown(pos)
+	self.m_sendDir = nil
 end
 
 --@brief 触摸点移动
@@ -117,6 +120,10 @@ end
 
 --@brife 发送移动操作
 function MoveJoystick:_SendMoveCommand(dir)
-	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),BattleCommandType.Move,dir)
-	BattleProtocol:SendMoveCommand(command)
+	if self.m_sendDir == dir then
+		return
+	end
+	-- CSLog("MoveJoystick:_SendMoveCommand")
+	self.m_sendDir = dir
+	BattleProtocol:SendMoveCommand(dir)
 end
