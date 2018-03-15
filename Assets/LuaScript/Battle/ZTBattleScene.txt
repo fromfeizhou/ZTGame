@@ -42,7 +42,7 @@ function ZTBattleScene:_Init()
 	--初始化场景管理器
 	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
 	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
-	self.m_comZtBattleScene:ManagerInit(CSVector3(270,0,270))
+	self.m_comZtBattleScene:MapInit(CSVector3(270,0,270))
 	self.m_comZtBattleScene:SetUpdate(function() self:Update()
 	end)
 
@@ -81,6 +81,6 @@ end
 function ZTBattleScene:_OnUpdateScenePos(pos)
 	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
 	if self.m_comZtBattleScene then
-		--self.m_comZtBattleScene:ManagerUpdate(pos)
+		self.m_comZtBattleScene:MapUpdate(pos)
 	end
 end
