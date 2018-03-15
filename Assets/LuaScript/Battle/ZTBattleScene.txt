@@ -69,16 +69,16 @@ end
 
 --@brief 监听事件
 function ZTBattleScene:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CAMERA,self._UpdateCameraPos,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
 end
 
 --@brifef 移除事件
 function ZTBattleScene:_RemoveEvent()
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CAMERA,self._UpdateCameraPos)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
 end
 
 --@brief 刷新镜头位置
-function ZTBattleScene:_UpdateCameraPos(pos)
+function ZTBattleScene:_OnUpdateScenePos(pos)
 	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
 	if self.m_comZtBattleScene then
 		--self.m_comZtBattleScene:ManagerUpdate(pos)

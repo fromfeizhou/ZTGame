@@ -35,6 +35,9 @@ function GlobalBattleCtrl:Init()
 	--全局数据引用初始化
 	GlobalBattleCtrl:InitData()
 
+	--第一次初始化通知镜头刷新
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+
 	--启动协议监听
 	BattleProtocol:Init()
 end

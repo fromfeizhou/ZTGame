@@ -78,20 +78,18 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听事件
 function BattleCameraMgr:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
 end
 
 --@brifef 移除事件
 function BattleCameraMgr:_RemoveEvent()
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
 end
 
 --@brief 刷新镜头
-function BattleCameraMgr:_OnUpdateCamera(data)
-	-- CSLog("BattleCameraMgr:_OnUpdateCamera",SerializeTable(data))
-	if data.cameraType == BattleCameraType.Move then
-		BattleCameraMgr:_SetFocus(data.pos)
-	end
+function BattleCameraMgr:_OnUpdateScenePos(pos)
+	CSLog("BattleCameraMgr:_OnUpdateScenePos",pos)
+	BattleCameraMgr:_SetFocus(pos)
 end
 
 --@brief 设置镜头焦点

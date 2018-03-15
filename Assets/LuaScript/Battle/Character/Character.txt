@@ -28,7 +28,7 @@ end
 
 --@brief 初始化
 function Character:Init(battleData,container)
-	CSLog("Character:Init",battleData.pos)
+	-- CSLog("Character:Init",battleData.pos)
 	self.m_nBattleId = battleData.battleId or 1
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
@@ -84,6 +84,11 @@ function Character:SetDirection(dir)
 	end
 end
 
+--@brief 获得位置
+function Character:GetPos()
+	return self.m_charaPos
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 动作相关
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -101,12 +106,15 @@ end
 --@brief 刷新位置
 --@param vector3 pos
 function Character:UpdatePos(pos)
+	-- CS.GameTool.LogError("Character:UpdatePos",self.m_charaPos,pos,self.m_charaPos.Equals(pos))
 	if not self.m_charaPos.Equals(pos) then
 		self.m_charaPos = pos
 		--动画刷新通知
 		self.m_animData:UpdatePos(pos)
-		-- CS.GameTool.LogError("Character:UpdatePos")
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CAMERA,GBattleEvent:GetCameraData(BattleCameraType.Move,pos))
+		--CS.GameTool.LogError("Character:UpdatePos")
+		if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
+			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
+		end
 	end
 end
 
