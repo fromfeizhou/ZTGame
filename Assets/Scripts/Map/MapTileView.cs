@@ -34,12 +34,21 @@ public class MapTileView : MonoBehaviour {
     private void UpdateTileView()
     {
         ClearTrrain();
-        MapManager.GetInstance().SafeGetTrrainPrefab(_mapTileData.Row, _mapTileData.Column, go =>
+        string mapKey = string.Format("{0}_{1}", _mapTileData.Row, _mapTileData.Column);
+        string assetPath = MapDefine.TERRAIN_PREFAB_PATH + mapKey + ".prefab";
+        AssetManager.LoadAsset(assetPath, (obj, str) =>
         {
-            if(_terrain == null)
-                CreateTrrain(go);
-            UpdateMapItem();
+            GameObject mapGo = obj as GameObject;
+            CreateTrrain(mapGo);
         });
+
+
+        //MapManager.GetInstance().SafeGetTrrainPrefab(_mapTileData.Row, _mapTileData.Column, go =>
+        //{
+        //    if (_terrain == null)
+        //        CreateTrrain(go);
+        //    UpdateMapItem();
+        //});
     }
 
     private int _gridCnt = MapDefine.MAPITEMSIZE * 4;
@@ -148,17 +157,7 @@ public class MapTileView : MonoBehaviour {
 
     private List<GameObject> trees = new List<GameObject>();
 
-    private void MapTextureCom(Object target, string path)
-    {
-        GameObject go = target as GameObject;
-        if (go == null)
-        {
-            Debug.Log("loadTerrainPath:" + path);
-            return;
-        }
-        MapManager.GetInstance().AddTrrainPrefab(path, go);
-        CreateTrrain(go);
-    }
+ 
 
     private void UpdateTrrain()
     {

@@ -105,32 +105,32 @@ public class MapAsset : ScriptableObject
         }
     }
 
-    public void AddMapItem<T>(string mapKey, eMapItemType mapType, T mapItem) where T: MapItemInfoBase
-    {
-        MapInfo mapInfo;
-        int indexMapInfo = MapList.FindIndex(a => a.MapKey.Equals(mapKey));
-        if (indexMapInfo < 0)
-        {
-            mapInfo = new MapInfo { MapKey = mapKey};
-            MapList.Add(mapInfo);
-        }
-        else
-        {
-            mapInfo = MapList[indexMapInfo];
-        }
+    //public void AddMapItem<T>(string mapKey, eMapItemType mapType, T mapItem) where T: MapItemInfoBase
+    //{
+    //    MapInfo mapInfo;
+    //    int indexMapInfo = MapList.FindIndex(a => a.MapKey.Equals(mapKey));
+    //    if (indexMapInfo < 0)
+    //    {
+    //        mapInfo = new MapInfo { MapKey = mapKey};
+    //        MapList.Add(mapInfo);
+    //    }
+    //    else
+    //    {
+    //        mapInfo = MapList[indexMapInfo];
+    //    }
 
-        MapItemInfo mapItemInfo;
-        int indexMapItemInfo = mapInfo.MapItemList.FindIndex(a => a.MapItemType == mapType);
-        if (indexMapItemInfo < 0)
-        {
-            mapItemInfo = new MapItemInfo() { MapItemType = mapType };
-            mapInfo.MapItemList.Add(mapItemInfo);
-        }
-        else
-        {
-            mapItemInfo = mapInfo.MapItemList[indexMapItemInfo];
-        }
+    //    MapItemInfo mapItemInfo;
+    //    int indexMapItemInfo = mapInfo.MapItemList.FindIndex(a => a.MapItemType == mapType);
+    //    if (indexMapItemInfo < 0)
+    //    {
+    //        mapItemInfo = new MapItemInfo() { MapItemType = mapType };
+    //        mapInfo.MapItemList.Add(mapItemInfo);
+    //    }
+    //    else
+    //    {
+    //        mapItemInfo = mapInfo.MapItemList[indexMapItemInfo];
+    //    }
 
-        mapItemInfo.MapItemInfoList.Add(mapItem);
-    }
+    //    mapItemInfo.MapItemInfoList.Add(mapItem);
+    //}
 }

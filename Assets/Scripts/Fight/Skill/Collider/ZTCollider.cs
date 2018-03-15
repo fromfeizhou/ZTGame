@@ -74,7 +74,8 @@ public class CollBase : IMove
     //碰撞计算 取的旋转
     public float GetCalRotate()
     {
-        return -_rotate;
+        //if (Mathf.RoundToInt(_rotate) == 0) return 0;
+        return Mathf.Deg2Rad * (360 - _rotate); //(180 - _rotate)%180;
     }
 
     //移动接口实现
@@ -209,7 +210,8 @@ public class CollRectange : CollBase
 
     public float GetLength()
     {
-        return width > height ? width * 0.5f : height * 0.5f;
+        //return width > height ? width * 0.5f : height * 0.5f;
+        return Mathf.Sqrt(Mathf.Pow(width * 0.5f, 2) + Mathf.Pow(height * 0.5f, 2));
     }
 }
 
@@ -344,11 +346,13 @@ public class ZTCollider
     public static bool RectangleToRectangle(CollRectange CollA, CollRectange CollB)
     {
         //长轴距离过滤
-        if (Vector2.Distance(CollA.GetV2Pos(), CollB.GetV2Pos()) > CollB.GetLength() + CollA.GetLength())
-        {
-            return false;
-        }
-
+        //if (Vector2.Distance(CollA.GetV2Pos(), CollB.GetV2Pos()) > CollB.GetLength() + CollA.GetLength())
+        //{
+        //    return false;
+        //}
+        //Debug.Log("=========================================================================");
+      //  GameTool.Log(CollA.x, CollA.y, CollA.extents.x, CollA.extents.y, CollA.axes[0], CollA.axes[1], CollA.GetCalRotate());
+        //GameTool.Log(CollB.x, CollB.y, CollB.extents.x, CollB.extents.y, CollB.axes[0], CollB.axes[1], CollB.GetCalRotate());
         Vector2 nv = CollA.centerPoint - CollB.centerPoint;
         Vector2 axisA1 = CollA.axes[0];
         if (CollA.GetProjectionRadius(axisA1) + CollB.GetProjectionRadius(axisA1) <= Mathf.Abs(Vector2.Dot(nv, axisA1))) return false;
