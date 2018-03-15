@@ -46,7 +46,7 @@ public class ZTBattleScene : MonoBehaviour {
     }
 
     //启动管理器
-    public void ManagerInit(Vector3 centerPos)
+    public void MapInit(Vector3 centerPos)
     {
        // centerPos = new Vector3(270f, 0, 240f);
         //地图初始化
@@ -55,11 +55,16 @@ public class ZTBattleScene : MonoBehaviour {
         IsInit = true;
     }
 
-    public void ManagerUpdate(Vector3 pos)
+    public void MapUpdate(Vector3 pos)
     {
         MapManager.GetInstance().Update(pos);
     }
 
+
+    public MapBlockData MapGetCurMapBlock(Vector3 pos)
+    {
+       return MapManager.GetInstance().GetCurMapBlock(pos);
+    }
 
 
 }
