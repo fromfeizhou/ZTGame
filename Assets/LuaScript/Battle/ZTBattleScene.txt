@@ -42,16 +42,18 @@ function ZTBattleScene:_Init()
 	--初始化场景管理器
 	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
 	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
-	self.m_comZtBattleScene:ManagerInit(CSVector3(1000,0,1000))
+	self.m_comZtBattleScene:ManagerInit(CSVector3(270,0,270))
 	self.m_comZtBattleScene:SetUpdate(function() self:Update()
 	end)
 
 	--全局控制器初始化
 	GlobalBattleCtrl:Init()
+	self:_AddEvent()
 end
 
 --@brief 战斗场景初始化
 function ZTBattleScene:_UnInt()
+	self:_RemoveEvent()
 	--清理全局控制器
 	GlobalBattleCtrl:Destroy()
 
@@ -63,4 +65,22 @@ function ZTBattleScene:_UnInt()
 	end
 
 
+end
+
+--@brief 监听事件
+function ZTBattleScene:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CAMERA,self._UpdateCameraPos,self)
+end
+
+--@brifef 移除事件
+function ZTBattleScene:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CAMERA,self._UpdateCameraPos)
+end
+
+--@brief 刷新镜头位置
+function ZTBattleScene:_UpdateCameraPos(pos)
+	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
+	if self.m_comZtBattleScene then
+		--self.m_comZtBattleScene:ManagerUpdate(pos)
+	end
 end
