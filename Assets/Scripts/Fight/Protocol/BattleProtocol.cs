@@ -24,7 +24,7 @@ public class BPBattle
         BattleId = battleId;
         Frame = ZTBattleSceneManager.GetInstance().SceneFrame;
 
-        Pos = MapManager.GetInstance().GetRandomPos();//new Vector3(400, 0, 400);
+        Pos = new Vector3(400, 0, 400);
         ICharaBattle info = ZTBattleSceneManager.GetInstance().GetCharaById(battleId) as ICharaBattle;
         if (null != info)
         {

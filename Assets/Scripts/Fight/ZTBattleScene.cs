@@ -8,9 +8,15 @@ using XLua;
 public class ZTBattleScene : MonoBehaviour {
     private bool IsInit;
     private Action _update;
+    private Action<string, float, float> _mapUpdateProcess;
     public void SetUpdate(Action update)
     {
         _update = update;
+    }
+
+    public void SetMapProcess(Action<string, float, float> mapUpdateProcess)
+    {
+        _mapUpdateProcess = mapUpdateProcess;
     }
 
     void Awake()
@@ -42,10 +48,18 @@ public class ZTBattleScene : MonoBehaviour {
     //启动管理器
     public void ManagerInit(Vector3 centerPos)
     {
+       // centerPos = new Vector3(270f, 0, 240f);
         //地图初始化
-        MapManager.GetInstance().InitMap(centerPos);
+        MapManager.GetInstance().InitMap( _mapUpdateProcess, centerPos);
 
         IsInit = true;
     }
+
+    public void ManagerUpdate(Vector3 pos)
+    {
+        MapManager.GetInstance().Update(pos);
+    }
+
+
 
 }
