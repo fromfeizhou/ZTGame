@@ -21,33 +21,24 @@ public class EquipData
 public class BaseModelSprite
 {
     protected GameObject model;
-    protected Animator animator;
+    protected Animation animator;
     protected bool isTrans;
 
     //创建
-    public virtual void CreateModel(string path) { }
+    public virtual void CreateModel(string path,Transform parent) { }
     //销毁
     public  virtual  void RemoveAnimatorView() { }
     //播放
     public virtual void Play(string animationName) { }
-    //位置更新
-    public virtual void UpdatePos(Vector3 pos) { }
-    //旋转
-    public virtual void UpdateRotete(Vector3 dir) { }
     //透明度
     public  virtual  void ChangeTranslucence(bool isTrans) { }
     //设置装备
     public  virtual  void SetEquipDatas(List<int> equips) { }
-
-
-
 }
 
-public class roleModelSprite : BaseModelSprite
+public class RoleModelSprite : BaseModelSprite
 {
-
-
-    public override void CreateModel(string path)
+    public override void CreateModel(string path,Transform parent)
     {
         if (null != animator)
         {
@@ -59,9 +50,9 @@ public class roleModelSprite : BaseModelSprite
             GameObject prefab = target as GameObject;
             if (null != prefab)
             {
-                GameObject go = GameObject.Instantiate(prefab, animator.transform);
+                GameObject go = GameObject.Instantiate(prefab, parent);
                 model = go;
-                animator = go.GetComponent<Animator>();
+                animator = go.GetComponent<Animation>();
             }
         });
     }
@@ -98,17 +89,6 @@ public class roleModelSprite : BaseModelSprite
     {
         if (null == animator) return;
         animator.Play(animationName);
-    }
-
-    public override void UpdatePos(Vector3 pos)
-    {
-        model.transform.localPosition = pos;
-    }
-
-    public override void UpdateRotete(Vector3 dir)
-    {
-        float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-        model.transform.localRotation = Quaternion.Euler(Vector3.up * angle);
     }
 
     public override void ChangeTranslucence(bool isTrans)

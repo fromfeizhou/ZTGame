@@ -24,8 +24,8 @@ public class ZTAnimator : MonoBehaviour {
     public void CreateAnimatorView(string path)
     {
         if (modelSprite == null)
-            modelSprite = new roleModelSprite();
-        modelSprite.CreateModel(path);
+            modelSprite = new RoleModelSprite();
+        modelSprite.CreateModel(path,this.transform);
     }
 
     public void SetEquips(List<int> equips)
@@ -51,15 +51,14 @@ public class ZTAnimator : MonoBehaviour {
     //刷新位置
     public void UpdatePos(Vector3 pos)
     {
-        if (modelSprite == null) return;
-        modelSprite.UpdatePos(pos);
+        this.transform.localPosition = pos;
     }
 
     //更新角度
     public void UpdateRotate(Vector3 dir)
     {
-        if (modelSprite == null) return;
-        modelSprite.UpdateRotete(dir);
+        float angle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+        this.transform.localRotation = Quaternion.Euler(Vector3.up * angle);
     }
 
     //改变透明度

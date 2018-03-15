@@ -83,10 +83,16 @@ end
 --@brief 触摸点按下
 function MoveJoystick:_OnJoystickDown(pos)
 	self.m_sendDir = nil
+	self:_OnMoveAction(pos)
 end
 
 --@brief 触摸点移动
 function MoveJoystick:_OnJoystickMove(pos)
+	self:_OnMoveAction(pos)
+end
+
+--@brief 触发移动
+function MoveJoystick:_OnMoveAction(pos)
 	local angle = math.deg(math.atan(pos.y,pos.x))
 	if angle >= -22.5 and angle < 22.5 then
         self:_SendMoveCommand(BattleDir.Right)

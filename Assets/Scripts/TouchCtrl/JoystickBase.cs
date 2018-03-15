@@ -40,9 +40,11 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         Vector2 pos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
         innerCircleTrans.anchoredPosition = pos;
-
-        if (onJoystickDownEvent != null)
-            onJoystickDownEvent(innerCircleTrans.anchoredPosition / outerCircleRadius);
+        if(Vector2.Distance(innerCircleTrans.anchoredPosition, Vector2.zero) >= activeMoveDistance){
+            if (onJoystickDownEvent != null)
+                onJoystickDownEvent(innerCircleTrans.anchoredPosition / outerCircleRadius);
+        }
+        
     }
 
     /// <summary>

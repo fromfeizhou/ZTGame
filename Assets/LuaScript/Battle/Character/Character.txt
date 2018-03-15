@@ -67,12 +67,20 @@ end
 function Character:SetDirection(dir)
 	--CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
-		self.m_nMoveDir = dir
-		if self.m_nMoveDir ~= BattleDir.None then
+		--切换待机 和其他状态 播放对应动作
+		if self.m_nMoveDir == BattleDir.None then
 			self:Play("run")
-		else
+		elseif dir == BattleDir.None then
 			self:Play("idle")
 		end
+		
+		--切换角度
+		if dir ~= BattleDir.None then
+			self:UpdateRotate(BattleDirDefine:GetDirPos(dir))
+		end
+
+		self.m_nMoveDir = dir
+
 	end
 end
 
