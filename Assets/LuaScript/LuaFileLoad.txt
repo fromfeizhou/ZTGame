@@ -50,6 +50,7 @@ local LuaFileLoad = {
 		--战斗关联
 		"Battle.Protocol.BattleProtocol",
 		"Battle.BattleDefine",
+		"Battle.BattleMapHeight",
 		"Battle.BattleCameraMgr",
 		"Battle.GlobalBattleCtrl",
 		"Battle.ZTBattleScene",

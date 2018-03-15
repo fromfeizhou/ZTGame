@@ -108,6 +108,10 @@ end
 function Character:UpdatePos(pos)
 	-- CS.GameTool.LogError("Character:UpdatePos",self.m_charaPos,pos,self.m_charaPos.Equals(pos))
 	if not self.m_charaPos.Equals(pos) then
+		--设置高度
+		local height = BattleMapHeight:GetHight(pos)
+		pos.y = height
+
 		self.m_charaPos = pos
 		--动画刷新通知
 		self.m_animData:UpdatePos(pos)

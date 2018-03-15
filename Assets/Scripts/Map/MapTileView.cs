@@ -117,6 +117,7 @@ public class MapTileView : MonoBehaviour {
     private void CreateTrrain(GameObject go)
     {
         _terrain = GameObject.Instantiate(go);
+        _terrain.layer = LayerMask.NameToLayer("Terrain");
         UpdateTrrain();
     }
 
@@ -165,5 +166,6 @@ public class MapTileView : MonoBehaviour {
         _terrain.transform.localPosition = Vector3.zero;
         _terrain.transform.localEulerAngles = Vector3.zero;
         _terrain.transform.localScale = Vector3.one;
+        _terrain.AddComponent<MeshCollider>();
     }
 }

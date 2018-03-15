@@ -22,9 +22,13 @@ function GlobalBattleCtrl:Init()
 	--****************管理者初始化begin************************************************
 	--镜头管理
 	BattleCameraMgr:Init()
-
+	--高度读取
+	BattleMapHeight:Init()
+	
 	--主UI管理器(备注：先创建 最后移除)
 	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
+
+
 	--战斗对象管理
 	GlobalBattleCtrl.m_ztCharaManager = ZTCharaManager:Create()
 	--帧命令管理器
@@ -51,6 +55,8 @@ function GlobalBattleCtrl:Destroy()
 	
 	--镜头管理
 	BattleCameraMgr:Destroy()
+	--高度读取
+	BattleMapHeight:Destroy()
 
 	--清理战斗对象管理
 	if GlobalBattleCtrl.m_ztCharaManager then

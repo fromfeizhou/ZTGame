@@ -88,7 +88,7 @@ end
 
 --@brief 刷新镜头
 function BattleCameraMgr:_OnUpdateScenePos(pos)
-	CSLog("BattleCameraMgr:_OnUpdateScenePos",pos)
+	-- CSLog("BattleCameraMgr:_OnUpdateScenePos",pos)
 	BattleCameraMgr:_SetFocus(pos)
 end
 
