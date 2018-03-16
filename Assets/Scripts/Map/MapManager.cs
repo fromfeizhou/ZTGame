@@ -133,9 +133,9 @@ public class MapBlockData
             Int16 x = (Int16)row;
             Int16 y = (Int16)col;
             Int16 paramData = (Int16)paramValue;
-            btyeBuffer.WriteInt16(x);
-            btyeBuffer.WriteInt16(y);
-            btyeBuffer.WriteInt16(paramData);
+            btyeBuffer.WriteInt16(x,false);
+            btyeBuffer.WriteInt16(y, false);
+            btyeBuffer.WriteInt16(paramData, false);
         }
     }
 
@@ -363,6 +363,7 @@ public class MapManager : Singleton<MapManager>
                 byte curByte = ColliderDatas[byteRow];
                 byte temp = (byte)Mathf.Pow(2, byteCol);
                 int value = curByte & temp;
+                tempData=new MapBlockData();
                 tempData.row = row;
                 tempData.col = col;
                 tempData.type = value > 1 ? eMapBlockType.Collect : eMapBlockType.None;
@@ -420,6 +421,7 @@ public class MapManager : Singleton<MapManager>
             //Debug.LogError("Map change Pos>>>>>>>>>>");
             mapView.UpdateTerrainView(_mapTilePosCenter.Row, _mapTilePosCenter.Column);
         }
+        mapView.UpdateRoleRay(pos);
     }
 
 

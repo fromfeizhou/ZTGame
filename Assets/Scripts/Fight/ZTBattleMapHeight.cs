@@ -80,7 +80,7 @@ public class ZTBattleMapHeight{
             else
             {
                 cache[row].Add(column, 0);
-                Debug.LogError("ZTBattleMapHeight:Error");
+            //    Debug.LogError("ZTBattleMapHeight:Error");
             }
             _heightCount++;
             if (_heightCount > MapDataMax)
