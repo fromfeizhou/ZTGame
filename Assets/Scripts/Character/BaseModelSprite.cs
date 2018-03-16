@@ -122,7 +122,7 @@ public class RoleModelSprite : BaseModelSprite
             {
                 render.material.shader = Shader.Find("Legacy Shaders/Transparent/Diffuse");
                 Color color = render.material.color;
-                render.material.color = new Color(color.r, color.g, color.b, 125);
+                render.material.color = new Color(color.r, color.g, color.b, 0.5f);
             }
         }
     }
