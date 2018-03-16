@@ -251,6 +251,10 @@ public class TerrainSlicing : Editor
             Transform element = go.GetChild(index);
             if (element.name.Contains("Ele_"))
             {
+                Transform foorRoot = element.Find("Box_Collider");
+                if (foorRoot != null)
+                    foorRoot.gameObject.layer = LayerMask.NameToLayer("Roof");
+
                 string prefabPath = MapDefine.MapElementFilePath + element.name + ".prefab";
                 if(!System.IO.File.Exists(Application.dataPath+prefabPath))
                 {
@@ -260,10 +264,6 @@ public class TerrainSlicing : Editor
                     PrefabUtility.CreatePrefab("Assets"+prefabPath, element.gameObject);
                     if (tempColliderRoot != null)
                         tempColliderRoot.SetParent(element.transform);
-                }
-                else
-                {
-                    Debug.LogError("element is Exists!");
                 }
                 int col = (int) (element.position.x + offsetX) / MapDefine.MapElementSize;
                 int row = (int) (element.position.z + offsetY) / MapDefine.MapElementSize;

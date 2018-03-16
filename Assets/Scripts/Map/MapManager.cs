@@ -350,28 +350,56 @@ public class MapManager : Singleton<MapManager>
         int row = Mathf.RoundToInt(pos.x / MapDefine.MapMinGridSize);
         int col = Mathf.RoundToInt(pos.z / MapDefine.MapMinGridSize);
 
-        MapBlockData tempData;
-        if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
-            return tempData;
-        else
+        //MapBlockData tempData;
+        //if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
+        //{
+        //    return tempData;
+        //}
+        //else
+        //{
+        //    int index = row + col * 10240;
+        //    int byteRow = index / 8;
+        //    int byteCol = index % 8;
+        //    if (byteRow < ColliderDatas.Length)
+        //    {
+        //        byte curByte = ColliderDatas[byteRow];
+        //        byte temp = (byte)Mathf.Pow(2, byteCol);
+        //        int value = curByte & temp;
+        //        tempData = new MapBlockData();
+        //        tempData.row = row;
+        //        tempData.col = col;
+        //        tempData.type = value >= 1 ? eMapBlockType.Collect : eMapBlockType.None;
+        //        Debug.LogError("row: " + row + " col :" + col + "Value " + value);
+        //        mapBlockDataDic[row + "_" + col] = tempData;
+        //    }
+        //}
+
+
+        MapBlockData tempData = null;
+        int index = row + col * 10240;
+        int byteRow = index / 8;
+        int byteCol = index % 8;
+        if (byteRow < ColliderDatas.Length)
         {
-            int index = row + col * 10240;
-            int byteRow = index / 8;
-            int byteCol = index % 8;
-            if (byteRow < ColliderDatas.Length)
+            byte curByte = ColliderDatas[byteRow];
+            byte temp = (byte)Mathf.Pow(2, byteCol);
+            int value = curByte & temp;
+            tempData = new MapBlockData();
+            tempData.row = row;
+            tempData.col = col;
+            tempData.type = value >= 1 ? eMapBlockType.Collect : eMapBlockType.None;
+         //   Debug.LogError("row: " + row + " col :" + col + "Value " + value);
+          //  mapBlockDataDic[row + "_" + col] = tempData;
+        }
+        if (tempData == null)
+        {
+            if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
             {
-                byte curByte = ColliderDatas[byteRow];
-                byte temp = (byte)Mathf.Pow(2, byteCol);
-                int value = curByte & temp;
-                tempData=new MapBlockData();
-                tempData.row = row;
-                tempData.col = col;
-                tempData.type = value >=1 ? eMapBlockType.Collect : eMapBlockType.None;
-                mapBlockDataDic[row + "_" + col] = tempData;
+                Debug.LogError(" Hide" + tempData.paramValue);
+                return tempData;
             }
         }
-        return tempData;
-        
+         return tempData;
     }
 
     public override void Destroy()

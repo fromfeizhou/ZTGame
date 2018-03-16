@@ -50,9 +50,7 @@ public class MapColliderEditor : EditorWindow
             Transform element = go.GetChild(index);
             if (element.name.Contains("Ele_"))
             {
-                Transform foorRoot = element.Find("Box_Collider");
-                if (foorRoot != null)
-                    foorRoot.gameObject.layer = LayerMask.NameToLayer("Roof");
+                
                 Transform colliderRoots = element.Find("ColliderRoot");
                 if (colliderRoots == null) continue;
                 List<KeyValuePair<string, CollRectange>> goInCludeRects = GetGoIncludeBlocks(element, offsetX, offsetY);
@@ -674,6 +672,7 @@ public class MapColliderEditor : EditorWindow
                     Vector2 pos = new Vector2(i % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - j % _gridCnt_Edit) * MapDefine.GridSize_Edit);
                     EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
                         MapDefine.MapBlockTypeColor[1]);
+                    Debug.LogError(i + "   " + j);
                 }
 
 
