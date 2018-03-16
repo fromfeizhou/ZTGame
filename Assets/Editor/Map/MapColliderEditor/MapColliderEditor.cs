@@ -50,6 +50,9 @@ public class MapColliderEditor : EditorWindow
             Transform element = go.GetChild(index);
             if (element.name.Contains("Ele_"))
             {
+                Transform foorRoot = element.Find("Box_Collider");
+                if (foorRoot != null)
+                    foorRoot.gameObject.layer = LayerMask.NameToLayer("Roof");
                 Transform colliderRoots = element.Find("ColliderRoot");
                 if (colliderRoots == null) continue;
                 List<KeyValuePair<string, CollRectange>> goInCludeRects = GetGoIncludeBlocks(element, offsetX, offsetY);

@@ -27,8 +27,10 @@ public class MapElementView
 
 
     private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
-
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
+
+    private Transform lastRayObj;
+    private Transform rayObj;
 
     private string mapKey;
     public void SetBigMapKey(Vector3 pos = default(Vector3))
@@ -149,6 +151,33 @@ public class MapElementView
                 }
             }
         }
+    }
+    //射线检测（建筑屋顶逻辑）
+    public void UpdateRoleRay(Vector3 pos)
+    {
+        lastRayObj = rayObj;
+        Vector3 targetPos = pos + 100 * Vector3.up;
+        Vector3 temp = pos-targetPos;
+        RaycastHit[] hit;
+        hit = Physics.RaycastAll(targetPos, temp.normalized, 10000f, LayerMask.GetMask("Roof"));
+        if (hit.Length>0)//建筑屋顶 
+            rayObj = hit[0].collider.transform;
+
+        if (lastRayObj != rayObj)
+        {
+            SetRayObjEnabel(lastRayObj, true);
+            SetRayObjEnabel(rayObj, false);
+        }
+    }
+
+    private void SetRayObjEnabel(Transform obj,bool isShow)
+    {
+        if(obj==null)return;
+        for (int index = 0; index < obj.childCount; index++)
+        {
+            obj.GetChild(index).gameObject.SetActive(isShow);
+        }
+
     }
 
     public void UpdateElementView(Vector3 pos, int gridX, int gridY)

@@ -90,53 +90,54 @@ public class ByteBuffer
 		this.writer.Write (value);  
 	}
 
-	public void WriteInt(int value){
+	public void WriteInt(int value,bool checkBigLittleEndian = true){
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data);  
 	}
-	public void WriteUInt(uint value){
+	public void WriteUInt(uint value, bool checkBigLittleEndian = true)
+    {
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data);  
 	}
 
-	public void WriteInt16 (Int16 value)
+	public void WriteInt16 (Int16 value, bool checkBigLittleEndian = true)
 	{
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data);  
 	}
-	public void WriteUInt16 (UInt16 value)
+	public void WriteUInt16 (UInt16 value, bool checkBigLittleEndian = true)
 	{
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data);  
 	}
 
-	public void WriteInt32 (Int32 value)
+	public void WriteInt32 (Int32 value, bool checkBigLittleEndian = true)
 	{  
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data); 
 	}
-	public void WriteUInt32 (UInt32 value)
+	public void WriteUInt32 (UInt32 value, bool checkBigLittleEndian = true)
 	{  
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data); 
 	}
 
-	public void WriteInt64 (Int64 value)
+	public void WriteInt64 (Int64 value, bool checkBigLittleEndian = true)
 	{  
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data); 
 	}
-	public void WriteUInt64 (UInt64 value)
+	public void WriteUInt64 (UInt64 value, bool checkBigLittleEndian = true)
 	{  
 		byte[] data = BitConverter.GetBytes (value);
-		CheckBigLittleEndianFilp (data);
+		CheckBigLittleEndianFilp (data,checkBigLittleEndian);
 		this.writer.Write(data); 
 	}
 
@@ -162,8 +163,9 @@ public class ByteBuffer
 
 	// -------------------------------------------------------------------------------
 	/** 大小端检查 */
-	private void CheckBigLittleEndianFilp(byte[] data){
-		if (BitConverter.IsLittleEndian)
+	private void CheckBigLittleEndianFilp(byte[] data, bool checkBigLittleEndian = true)
+    {
+		if (BitConverter.IsLittleEndian && checkBigLittleEndian)
 			Array.Reverse (data);
 	}
 
