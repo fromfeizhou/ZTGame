@@ -167,6 +167,7 @@ function Character:_UpdateMoveCommand()
 			local hitType,param = GlobalBattleCtrl:MapGetCurMapBlock(hitPos)
 			if hitType == BlockType.None or hitType == BlockType.Hide then
 				canMove = true
+				-- CSLog("Änimator:_UpdateMoveCommand",hitPos,hitType)
                 if hitType == BlockType.Hide then
                 	self:SetGlassId(param)
                 else
