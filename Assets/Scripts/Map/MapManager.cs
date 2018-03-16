@@ -384,10 +384,15 @@ public class MapManager : Singleton<MapManager>
             byte curByte = ColliderDatas[byteRow];
             byte temp = (byte)Mathf.Pow(2, byteCol);
             int value = curByte & temp;
-            tempData = new MapBlockData();
-            tempData.row = row;
-            tempData.col = col;
-            tempData.type = value >= 1 ? eMapBlockType.Collect : eMapBlockType.None;
+            
+            if (value >= 1)
+            {
+                tempData = new MapBlockData();
+                tempData.row = row;
+                tempData.col = col;
+                tempData.type = eMapBlockType.Collect;
+            }
+               
          //   Debug.LogError("row: " + row + " col :" + col + "Value " + value);
           //  mapBlockDataDic[row + "_" + col] = tempData;
         }
