@@ -30,7 +30,6 @@ using UnityEngine.UI;
 
 /*DefaultAmount*/
 /*Colckwish*/
-using UnityEditor;
 
 public class ZTImageBase : Image , IWidget
 {
@@ -40,7 +39,7 @@ public class ZTImageBase : Image , IWidget
 		string[] param = paramStr.Trim().Split ('_');
 		string assetName = param [param.Length - 1];
 		string assetPath = "Assets/ResourcesLib/Images/PanelPng/" + assetName + ".png";
-		sprite = AssetDatabase.LoadAssetAtPath<Sprite> (assetPath);
+		sprite = UnityEditor.AssetDatabase.LoadAssetAtPath<Sprite> (assetPath);
 		base.SetNativeSize ();
 	}
 	#endif
