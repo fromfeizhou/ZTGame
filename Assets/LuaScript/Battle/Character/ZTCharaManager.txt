@@ -157,7 +157,7 @@ end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
-	local list = {CSVector3(270,0,270),CSVector3(280,0,280),CSVector3(290,0,290),CSVector3(300,0,300),CSVector3(310,0,310)}
+	local list = {CSVector3(270,0,240),CSVector3(270,0,250),CSVector3(270,0,260),CSVector3(270,0,270),CSVector3(270,0,280)}
 	local index = math.random(1,#list)
 	local pos = list[index]
 	table.remove(list,index)
