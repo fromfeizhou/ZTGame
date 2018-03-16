@@ -94,9 +94,12 @@ function LoginMainPanel:_InitPanel()
 
 	-- 按钮 - 服务器列表
 	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Group_CurServer/Btn_SelectServer",function() self:_OnBtnClick_ServerList() end)
-	-- 按钮 - 登录游戏
 
+	-- 按钮 - 登录游戏
 	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Btn_Login",function() self:_OnBtnClick_Login() end)
+
+	-- 按钮 - 登录游戏(无网络)
+	PanelWidget:GetButton(self.m_transform,"ViewPort_Login/Btn_LoginNoNet",function() self:_OnBtnClick_LoginNoNet() end)
 
 	-- 输入框 - 账号
 	self.m_inputAccount = PanelWidget:GetText(self.m_transform,"ViewPort_Login/IF_Account/InputField/Text");
@@ -175,6 +178,14 @@ function LoginMainPanel:_OnBtnClick_Login()
 	LoginModel.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
 end
+
+--@brief 按钮 - 无网络登录
+function LoginMainPanel:_OnBtnClick_LoginNoNet()
+	GCSLog("LoginMainPanel:_OnBtnClick_LoginNoNet()")
+	GameConfig.IsSkillDebugScene = true
+	LuaGameStart:_EnterSkillDebug()
+end
+
 --@brief 创建服务器Item
 function LoginMainPanel:_CreateServerItem( addressData )
 	local serverItem = {}
