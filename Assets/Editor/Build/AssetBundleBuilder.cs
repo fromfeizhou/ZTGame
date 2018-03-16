@@ -10,7 +10,7 @@ public class AssetBundleBuilder : MonoBehaviour
     static string assetsDir = Application.dataPath + "/ResourcesLib";
     static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
     static string prefabsDir = Application.dataPath + "/Prefabs";
-    static string scenesDir = Application.dataPath + "/Environment";
+    static string mapDir = Application.dataPath + "/Map";
     static string luaScript = Application.dataPath + "/LuaScript";
     //打包后存放路径
     const string assetBundlesPath = "../../";
@@ -32,7 +32,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(assetsDir);
         SetAssetBundlesName(modelsDir);
         SetAssetBundlesName(prefabsDir);
-        SetAssetBundlesName(scenesDir);
+        SetAssetBundlesName(mapDir);
         SetAssetBundlesName(luaScript,"luaScript");
         EditorUtility.ClearProgressBar();
 

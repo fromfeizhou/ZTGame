@@ -62,10 +62,10 @@ public class ZTAnimator : MonoBehaviour {
     }
 
     //改变透明度
-    public void ChangeTranslucence(bool isTrans)
+    public void ChangeTranslucence(int transLv)
     {
         if (modelSprite == null) return;
-        modelSprite.ChangeTranslucence(isTrans);
+        modelSprite.ChangeTranslucence(transLv);
 
     }
 
