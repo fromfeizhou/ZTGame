@@ -28,7 +28,7 @@ public class MapColliderHelper
         int index = 0;
         foreach (KeyValuePair<string, MapBlockData> item in hideData)
         {
-            Array.Copy(item.Value.GetBytes(), 0, hideTytes, index * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
+            Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
         }
 
         File.WriteAllBytes(MapDefine.MapHideBlockDataSavePath, hideTytes);

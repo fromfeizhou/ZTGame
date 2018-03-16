@@ -366,7 +366,7 @@ public class MapManager : Singleton<MapManager>
                 tempData=new MapBlockData();
                 tempData.row = row;
                 tempData.col = col;
-                tempData.type = value > 1 ? eMapBlockType.Collect : eMapBlockType.None;
+                tempData.type = value >=1 ? eMapBlockType.Collect : eMapBlockType.None;
                 mapBlockDataDic[row + "_" + col] = tempData;
             }
         }

@@ -155,19 +155,27 @@ public class MapElementView
     //射线检测（建筑屋顶逻辑）
     public void UpdateRoleRay(Vector3 pos)
     {
-        lastRayObj = rayObj;
+       
         Vector3 targetPos = pos + 100 * Vector3.up;
         Vector3 temp = pos-targetPos;
         RaycastHit[] hit;
         hit = Physics.RaycastAll(targetPos, temp.normalized, 10000f, LayerMask.GetMask("Roof"));
-        if (hit.Length>0)//建筑屋顶 
+        if (hit.Length > 0) //建筑屋顶 
+        {
+            lastRayObj = rayObj;
             rayObj = hit[0].collider.transform;
+        }
+        else
+        {
+            rayObj = null;
+        }
 
         if (lastRayObj != rayObj)
         {
             SetRayObjEnabel(lastRayObj, true);
             SetRayObjEnabel(rayObj, false);
         }
+
     }
 
     private void SetRayObjEnabel(Transform obj,bool isShow)
