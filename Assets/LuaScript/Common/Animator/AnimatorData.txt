@@ -43,6 +43,8 @@ function AnimatorData:Init(animaType,careerType)
 
 	self.m_nType = animaType or AnimatorType.Hero
 	self.m_nCareerType = careerType or CareerType.FashShi
+
+	self.m_tTransLv = TransLevelDefine.Normal
 end
 
 
@@ -84,8 +86,12 @@ function AnimatorData:UpdateRotate(dir)
 end
 
 --@brief 改变半透明（草丛状态显示）
-function AnimatorData:ChangeTranslucence(isTrans)
-	self:DispatchEvent(AnimaEvent.ChangeTranslucence,isTrans)
+function AnimatorData:ChangeTranslucence(transLv)
+	if self.m_tTransLv == transLv then
+		return
+	end
+	self.m_tTransLv = transLv
+	self:DispatchEvent(AnimaEvent.ChangeTranslucence,self.m_tTransLv)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

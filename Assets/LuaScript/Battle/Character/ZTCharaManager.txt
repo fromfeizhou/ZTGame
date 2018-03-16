@@ -98,14 +98,30 @@ end
 function ZTCharaManager:_AddEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass,self)
 end
 
 --@brief 移除事件监听
 function ZTCharaManager:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass)
 end
 
+--@brief change glass id
+function ZTCharaManager:_OnUpdateCharacterGlass(battleId)
+	local chara = self.m_tCharaList[battleId]
+	local owner = GlobalBattleCtrl:GetOwnerChara()
+	if chara:GetGlassId() > 0 then
+		if chara.m_nCampId == owner.m_nCampId or chara.m_nGlassId ==  owner.m_nGlassId then
+			chara:ChangeTranslucence(TransLevelDefine.Trans)
+		else
+			chara:ChangeTranslucence(TransLevelDefine.Hide)
+		end
+	else
+		chara:ChangeTranslucence(TransLevelDefine.Normal)
+	end
+end
 
 --@brief 添加对象
 function ZTCharaManager:_OnAddCharacter(battleData)
@@ -146,11 +162,11 @@ function ZTCharaManager:_InitSkillTest()
 	local pos = list[index]
 	table.remove(list,index)
 
-	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos)
+	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 	
 	index = math.random(1,#list)
 	pos = list[index]
-	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos)
+	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
 end

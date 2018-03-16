@@ -115,8 +115,8 @@ function Animator:_OnUpdateRotate(dir)
 end
 
 --@brief 改变半透明（草丛状态显示）
-function Animator:_OnChangeTranslucence(isTrans)
-	self.m_ztAnima:ChangeTranslucence(isTrans)
+function Animator:_OnChangeTranslucence(transLv)
+	self.m_ztAnima:ChangeTranslucence(transLv)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --************************************************所有动画操作通过操作animData实现************************************************

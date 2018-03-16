@@ -8,6 +8,8 @@ Character = {
 
 	m_nMoveDir = nil,	--移动方向
 	m_charaPos = nil,		--当前位置
+	m_nGlassId = nil,		--草丛id
+	m_nCampId = nil,		--camp
 }
 
 --@brief c#引用
@@ -35,6 +37,9 @@ function Character:Init(battleData,container)
 	self.m_charaPos = CSVector3.zero
 	self:UpdatePos(battleData.pos)
 	self.m_nMoveDir = BattleDir.None
+
+	self.m_nGlassId = -1
+	self.m_nCampId = battleData.camp
 end
 
 
@@ -128,9 +133,21 @@ function Character:UpdateRotate(dir)
 	self.m_animData:UpdateRotate(dir)
 end
 
+--@brief 设置草丛id
+function Character:SetGlassId(glassId)
+	if self.m_nGlassId == glassId then
+		return
+	end
+	self.m_nGlassId = glassId
+
+	--通知更新草丛id
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self.m_nBattleId)
+end
+
+
 --@brief 改变半透明（草丛状态显示）
-function Character:ChangeTranslucence(isTrans)
-	self.m_animData:ChangeTranslucence(isTrans)
+function Character:ChangeTranslucence(transLv)
+	self.m_animData:ChangeTranslucence(transLv)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 动作相关
@@ -150,6 +167,11 @@ function Character:_UpdateMoveCommand()
 			local hitType,param = GlobalBattleCtrl:MapGetCurMapBlock(hitPos)
 			if hitType == BlockType.None or hitType == BlockType.Hide then
 				canMove = true
+                if hitType == BlockType.Hide then
+                	self:SetGlassId(param)
+                else
+                	self:SetGlassId(-1)
+                end
 				break
 			end
 		end
@@ -159,34 +181,3 @@ function Character:_UpdateMoveCommand()
 		end
 	end
 end
---[[
- bool isMove = false;
-                _hitPos = MovePos + list[i] * Speed;
-                _mapBlockData = MapManager.GetInstance().GetCurMapBlock(_hitPos);
-                if (null != _mapBlockData)
-                {
-                    //草丛判断
-                    if (_mapBlockData.type == eMapBlockType.Hide)
-                    {
-                        GrassId = int.Parse(_mapBlockData.param);
-                    }
-                    else
-                    {
-                        GrassId = -1;
-                    }
-
-                    //碰撞判断
-                    if (_mapBlockData.type != eMapBlockType.Collect)
-                    {
-                        MovePos = _hitPos;
-                        isMove = true;
-                    }
-                }
-                else
-                {
-                    MovePos = _hitPos;
-                    GrassId = -1;
-                    isMove = true;
-                }
-                if (isMove) return;
-]]

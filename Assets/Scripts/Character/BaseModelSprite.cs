@@ -22,7 +22,7 @@ public class BaseModelSprite
 {
     protected GameObject model;
     protected Animation animator;
-    protected bool isTrans;
+    protected int transLv;
 
     //创建
     public virtual void CreateModel(string path,Transform parent) { }
@@ -31,7 +31,7 @@ public class BaseModelSprite
     //播放
     public virtual void Play(string animationName) { }
     //透明度
-    public  virtual  void ChangeTranslucence(bool isTrans) { }
+    public  virtual  void ChangeTranslucence(int level) { }
     //设置装备
     public  virtual  void SetEquipDatas(List<int> equips) { }
 }
@@ -91,24 +91,30 @@ public class RoleModelSprite : BaseModelSprite
         animator.Play(animationName);
     }
 
-    public override void ChangeTranslucence(bool isTrans)
+    public override void ChangeTranslucence(int level)
     {
-        if(this.isTrans != isTrans)
+        if(this.transLv != level)
         {
-            this.isTrans = isTrans;
+            this.transLv = level;
             UpdateTranslucence();
         }
     }
 
+    //0 常规 1隐藏 2半透明
     private void UpdateTranslucence()
     {
         if (null == animator) return;
-        if (isTrans)
+        if (transLv == 1)
+        {
+            animator.gameObject.SetActive(false);
+            
+
+        }
+        else
         {
             animator.gameObject.SetActive(true);
             SkinnedMeshRenderer render = animator.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
-
-            if (!isTrans)
+            if (transLv == 0)
             {
                 render.material.shader = Shader.Find("Custom/PengLuOccTransVF");
             }
@@ -118,11 +124,6 @@ public class RoleModelSprite : BaseModelSprite
                 Color color = render.material.color;
                 render.material.color = new Color(color.r, color.g, color.b, 125);
             }
-
-        }
-        else
-        {
-            animator.gameObject.SetActive(false);
         }
     }
 
