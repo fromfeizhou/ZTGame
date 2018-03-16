@@ -48,15 +48,11 @@ function ZTBattleScene:_Init()
 
 	--全局控制器初始化
 	GlobalBattleCtrl:Init()
-	--设置全局碰撞接口
-	GlobalBattleCtrl.MapGetCurMapBlock = function (pos)
-		local blockType,param = 0,0
-		if self.m_comZtBattleScene then
-			blockType,param = self.m_comZtBattleScene:MapGetCurMapBlock(pos,blockType,param)
-			CSLog("GlobalBattleCtrl.MapGetCurMapBlock ",blockType,param)
-		end
-		return blockType,param
-	end
+	--设置全局场景接口
+	GlobalBattleCtrl:SetBattleScene(self.m_comZtBattleScene)
+
+	
+		
 	self:_AddEvent()
 end
 

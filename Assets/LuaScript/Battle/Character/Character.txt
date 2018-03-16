@@ -154,7 +154,7 @@ function Character:_UpdateMoveCommand()
 			end
 		end
 		if canMove then
-			--CSLog("Character:_UpdateMoveCommand",self.m_nMoveDir,hitPos)
+			-- CSLog("Character:_UpdateMoveCommand",self.m_nMoveDir,hitPos)
 			self:UpdatePos(hitPos)
 		end
 	end
