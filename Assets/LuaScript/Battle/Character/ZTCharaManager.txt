@@ -112,7 +112,7 @@ end
 function ZTCharaManager:_OnUpdateCharacterGlass(battleId)
 	local chara = self.m_tCharaList[battleId]
 	local owner = GlobalBattleCtrl:GetOwnerChara()
-	if chara:GetGlassId() > 0 then
+	if chara:m_nGlassId > 0 then
 		if chara.m_nCampId == owner.m_nCampId or chara.m_nGlassId ==  owner.m_nGlassId then
 			chara:ChangeTranslucence(TransLevelDefine.Trans)
 		else
