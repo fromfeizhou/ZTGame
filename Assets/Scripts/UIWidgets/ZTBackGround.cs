@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ZTButtonImg : ZTButtonBase {
-	
+public class ZTBackGround : ZTImage {
+	void Start()
+	{
+	}
 }

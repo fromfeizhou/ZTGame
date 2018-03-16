@@ -2,6 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZTButtonTxt : ZTButtonBase {
+public class ZTButtonTxt : ZTButton {
 	
 }
