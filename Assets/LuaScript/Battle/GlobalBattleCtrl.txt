@@ -118,6 +118,11 @@ function GlobalBattleCtrl:CommandUpdate()
 	end
 end
 
+--@beif 获取碰撞
+function GlobalBattleCtrl:MapGetCurMapBlock()
+	return 0
+end
+
 --@brief 获得当前用户id
 function GlobalBattleCtrl:GetOwnerId()
 	return GlobalBattleCtrl.m_nOwnerId
@@ -138,6 +143,11 @@ function GlobalBattleCtrl:GetOwnerChara()
 	return GlobalBattleCtrl.m_character
 end
 
+
+--@brief 获取碰撞 MapGetCurMapBlock
+function GlobalBattleCtrl:MapGetCurMapBlock(pos)
+	return 0,0
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

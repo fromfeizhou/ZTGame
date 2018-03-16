@@ -61,9 +61,20 @@ public class ZTBattleScene : MonoBehaviour {
     }
 
 
-    public MapBlockData MapGetCurMapBlock(Vector3 pos)
+    public void MapGetCurMapBlock(Vector3 pos, ref int blockType,ref  int param)
     {
-       return MapManager.GetInstance().GetCurMapBlock(pos);
+       MapBlockData data =  MapManager.GetInstance().GetCurMapBlock(pos);
+        if(null == data)
+        {
+            blockType = 0;
+            param = 0;
+        }
+        else
+        {
+            blockType = (int)data.type;
+            param = data.paramValue;
+        }
+       
     }
 
 

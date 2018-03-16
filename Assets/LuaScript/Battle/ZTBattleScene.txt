@@ -48,6 +48,15 @@ function ZTBattleScene:_Init()
 
 	--全局控制器初始化
 	GlobalBattleCtrl:Init()
+	--设置全局碰撞接口
+	GlobalBattleCtrl.MapGetCurMapBlock = function (pos)
+		local blockType,param = 0,0
+		if self.m_comZtBattleScene then
+			blockType,param = self.m_comZtBattleScene:MapGetCurMapBlock(pos,blockType,param)
+			CSLog("GlobalBattleCtrl.MapGetCurMapBlock ",blockType,param)
+		end
+		return blockType,param
+	end
 	self:_AddEvent()
 end
 
@@ -75,6 +84,14 @@ end
 --@brifef 移除事件
 function ZTBattleScene:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+end
+
+--@brief 刷新镜头位置
+function ZTBattleScene:_OnUpdateScenePos(pos)
+	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
+	if self.m_comZtBattleScene then
+		self.m_comZtBattleScene:MapUpdate(pos)
+	end
 end
 
 --@brief 刷新镜头位置

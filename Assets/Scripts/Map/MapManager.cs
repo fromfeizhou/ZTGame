@@ -417,7 +417,7 @@ public class MapManager : Singleton<MapManager>
             _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / MapDefine.MapHeight);
             _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / MapDefine.MapWidth);
 
-            Debug.LogError("Map change Pos>>>>>>>>>>");
+            //Debug.LogError("Map change Pos>>>>>>>>>>");
             mapView.UpdateTerrainView(_mapTilePosCenter.Row, _mapTilePosCenter.Column);
         }
     }

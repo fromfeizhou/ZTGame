@@ -5,6 +5,12 @@
 --@brief c#引用
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+--@brief 碰撞预定义
+BlockType = {
+	None = 0,
+	Collect = 1,
+	Hide = 2,
+}
 
 --@breif 战斗预定义
 BattleDefine = {
