@@ -400,7 +400,7 @@ public class MapManager : Singleton<MapManager>
         {
             if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
             {
-                Debug.LogError(" Hide" + tempData.paramValue);
+                //Debug.LogError(" Hide" + tempData.paramValue);
                 return tempData;
             }
         }
