@@ -35,11 +35,18 @@ end
 
 --@brief 移除
 function BattleCommandMgr:Destroy()
+	self.m_tServerCommand = nil
+	self.m_nClientFrame = 0
+	self.m_nServerFrame = 0
 	CSLog("BattleCommandMgr:Destroy")
 end
 
 --@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
+	if not self.m_tServerCommand then
+		return
+	end
+
 	if self.m_nClientFrame < self.m_nServerFrame then
 		self:_RunCommand()
 		--比驱动帧慢 加速
@@ -66,6 +73,12 @@ function BattleCommandMgr:AddCommandList(frame,commandList)
 		self.m_tServerCommand[frame] = {}
 	end
 	self.m_tServerCommand[frame] = commandList
+end
+
+--@brief 重置
+function BattleCommandMgr:Reset()
+	self:Destroy()
+	self:Init()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

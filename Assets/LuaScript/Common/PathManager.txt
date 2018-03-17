@@ -5,6 +5,7 @@
 PathManager = {
 	g_sAssetPath = "Assets",		--资源根目录地址
 	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
+	m_sUIWidgets = "Assets/Prefabs/UIWidgets/",		--ui组件地址
 	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
 	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
@@ -19,6 +20,11 @@ PathManager = {
 --@param name ui名字
 function PathManager:GetUIPrefab(name)
 	return PathManager.m_sUIPrefab .. name .. ".prefab"
+end
+
+--@brief 获取ui组件地址
+function PathManager:GetUIWidgets(name)
+	return PathManager.m_sUIWidgets .. name ..".prefab"
 end
 
 --@brief 获取面板ui预设地址

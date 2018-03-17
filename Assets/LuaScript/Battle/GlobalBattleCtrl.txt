@@ -85,6 +85,18 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 end
 
+--@rife 初始化数据
+function GlobalBattleCtrl:SetMainCharacter(battleId)
+	GlobalBattleCtrl.m_nOwnerId = battleId
+	--对象数组
+	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
+	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
+	--控制对象
+	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+end
+
 --@rife 删除数据
 function GlobalBattleCtrl:DestroyData()
 	GlobalBattleCtrl.m_nOwnerId = nil

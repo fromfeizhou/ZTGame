@@ -50,7 +50,7 @@ function BattleUIMgr:Init()
 	self:_CreateBattleUI()
 
 	--临时匹配按钮
-	if GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSkillDebugScene then
 		self:_CreateMatchUI()
 	end
 end
@@ -117,7 +117,7 @@ end
 
 --@brief 创建匹配ui
 function BattleUIMgr:_CreateMatchUI()
-	CS.AssetManager.LoadAsset(PathManager:GUIWidgets("ZTButton"),function(target,path)
+	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButton"),function(target,path)
 		local gameObject = CSGameObject.Instantiate(target)
 		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
 		rectTrans:SetParent(self.m_ctrlContainer,false)
@@ -127,7 +127,8 @@ function BattleUIMgr:_CreateMatchUI()
 		rectTrans.anchoredPosition = CSVector2(100,-100)
 
 		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
-			CSLog("BattleUIMgr:_CreateMatchUI")
+			BattleProtocol:SendMath()
+			gameObject:SetActive(false)
 		end)
 	end)
 end

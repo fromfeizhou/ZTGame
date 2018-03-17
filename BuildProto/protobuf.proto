@@ -67,18 +67,18 @@ message p_role {
 // 基础属性信息
 message p_base_attr {
     required uint32 hp_cur = 1; // 生命值
-    required uint32 hp_full = 2; // 最大生命值
-    required uint32 def = 3; // 护甲
-    required uint32 crit = 4; // 暴击
-    required uint32 crit_ratio = 5; // 暴击伤害
-    required uint32 speed = 6; // x方向移动速度(1秒钟多少像素)
-    required uint32 att_range = 7; // 射程
-    required uint32 att_speed = 8; // 射速
-    required uint32 offset_x = 9; // 后座力x轴偏移
-    required uint32 offset_y = 10; // 后座力y轴偏移
-    required uint32 reload_time = 11; // 换弹时间
-    required uint32 mobility = 12; // 机动性
-    required uint32 clip_size = 13; // 弹夹容量
+    required uint32 hp_max = 2; // 最大血量
+    required uint32 attack = 3; // 攻击力
+    required uint32 speed = 4; // 移动
+    required uint32 strength = 5; // 力量，影响角色技能伤害和普通攻击
+    required uint32 magic = 6; // 法力，影响角色技能伤害和普通攻击
+    required uint32 wizard = 7; // 道术，影响角色技能伤害和普通攻击
+    required uint32 defense_physical = 8; // 物防防御力
+    required uint32 defense_magical = 9; // 魔法防御力
+    required uint32 hp_rec = 10; // 生命恢复
+    required uint32 mp_rec = 11; // 能量恢复
+    required uint32 lucky = 12; // 幸运值
+    required uint32 curse = 13; // 诅咒
 }
 
 //玩家属性信息
@@ -164,16 +164,15 @@ message p_map_role {
     required uint32 d = 11; // d
     required uint32 state = 12; // 状态
     required uint32 hp = 13; // 血量
-    required uint32 hp_full = 14; // 满血量
-    required uint32 vip_level = 15; // VIP等级
-    required uint32 shaping = 16; // 外型id
-    required uint32 fight_point = 17; // 战斗力
-    required uint32 defense = 18; // 防御值
-    repeated p_role_frame moving_frames = 19; // 移动帧
-    repeated p_role_frame skill_frames = 20; // 技能帧
-    repeated p_buff buffs = 21; // buff列表
-    repeated p_debuff debuffs = 22; // debuff列表
-    repeated p_goods equips = 23; // 装备信息
+    required uint32 vip_level = 14; // VIP等级
+    required uint32 shaping = 15; // 外型id
+    required uint32 fight_point = 16; // 战斗力
+    required p_base_attr base_attr = 17; // 基础属性
+    repeated p_role_frame moving_frames = 18; // 移动帧
+    repeated p_role_frame skill_frames = 19; // 技能帧
+    repeated p_buff buffs = 20; // buff列表
+    repeated p_debuff debuffs = 21; // debuff列表
+    repeated p_goods equips = 22; // 装备信息
 }
 
 //怪物地图信息
@@ -656,6 +655,20 @@ message task_update_s2c {
     repeated p_task task_list = 1; // 批量任务列表
 }
 
+// ##model_begin##survive##15##大逃杀##model_end##
+// ##begin##survive##survive_match##15##1##开始匹配##end##
+message survive_match_c2s {}
+message survive_match_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##survive##survive_fight##15##2##开始游戏##end##
+message survive_fight_s2c {
+    required uint32 map_id = 1; // 地图id
+    required uint32 num = 2; // 人数
+}
+
+
 // ##model_begin##login##1##登陆相关##model_end##
 
 // ##begin##login##login_heart##1##0##心跳##end##
@@ -1055,6 +1068,7 @@ message map_enter_s2c {
 }
 // ##begin##map##map_sight##4##3##视野信息##end##
 message map_sight_s2c {
+    required uint32 frame_id = 1; // 当前帧id
     repeated p_map_role roles_enter = 2; // 玩家列表
     repeated p_simple_map_mon mons_enter = 3; // 怪物列表
     repeated p_map_buff_point buffpoint_enter = 4; // buff点列表

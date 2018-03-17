@@ -61,6 +61,15 @@ function LuaGameStart:_ShowPanel_Login()
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
 end
 
+--@brief 进入技能调试
+function LuaGameStart:_EnterBattleScene()
+	local luaFieLoad = require 'LuaFileLoad' --加载文件
+	---初始化 加载登录lua
+	luaFieLoad:LoadGameLua(function()
+		print("LuaGame:LoadGameLua")
+			ZTBattleScene:InitScene()
+	end)
+end
 
 
 --@brief 进入技能调试

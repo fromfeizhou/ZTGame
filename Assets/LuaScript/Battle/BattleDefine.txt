@@ -5,6 +5,7 @@
 --@brief c#引用
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
 --@brief 碰撞预定义
 BlockType = {
 	None = 0,
@@ -21,7 +22,7 @@ TransLevelDefine = {
 
 --@breif 战斗预定义
 BattleDefine = {
-
+	PosRate = 100,		    --位置前后端转换系数
 	CommandStep = 3,		--驱动帧步伐
 
 	PlayerSpeed = 0.05,		--移动速度
@@ -95,6 +96,17 @@ function BattleDirDefine:GetDirList(dir)
 	return BattleDirDefine.m_tList[dir] or {}
 end
 
+--@brief 获取服务器坐标
+function BattleDefine:GetServerPos(tx,ty,tz)
+	local posX,posY,posZ = math.floor(tx * BattleDefine.PosRate),math.floor(ty * BattleDefine.PosRate),math.floor(tz * BattleDefine.PosRate)
+	return CS.UnityEngine.Vector3(posX,posY,posZ)
+end
+
+--@brief 获取客户端坐标
+function BattleDefine:GetClientPos(tx,ty,tz)
+	local posX,posY,posZ = tx/BattleDefine.PosRate,ty/BattleDefine.PosRate,tz/BattleDefine.PosRate
+	return CS.UnityEngine.Vector3(posX,posY,posZ)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局事件 Begin*************************************************************

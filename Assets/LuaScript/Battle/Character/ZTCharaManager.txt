@@ -115,19 +115,27 @@ end
 
 --brief 游戏开始刷新所有对象
 function ZTCharaManager:_OnStartGame(playerList)
+	
+	--移除玩家
+	for i,v in pairs(self.m_tCharaList) do
+		if not playerList[v.m_nBattleId] then
+			self:_OnRemoveCharacter(v.m_nBattleId)
+		end
+	end
+
 	--添加玩家
 	for i,v in pairs(playerList) do
 		if not self.m_tCharaList[v.battleId] then
 			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp)
 			self:_OnAddCharacter(data)
+		else
+			chara:SetData(v)
 		end
 	end
-	--移除玩家
-	for i,v in pairs(self.m_tCharaList) do
-		if not playerList[v.battleId] then
-			self:_OnRemoveCharacter(v.battleId)
-		end
-	end
+
+	--test
+	local chara = self.m_tSortCharaList[1]
+	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
 end
 
 --@brief change glass id

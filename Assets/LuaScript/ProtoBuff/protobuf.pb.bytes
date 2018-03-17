@@ -1,5 +1,5 @@
 
-× 
+Ý¡
 protobuf.protoztGame.proto",
 p_setting_info
 key (
@@ -52,23 +52,22 @@
 x (	
 y	 (	
 z
- ("ð
+ ("î
 p_base_attr
-hp_cur (
-hp_full (
-def (
-crit (
-
-crit_ratio (
-speed (
-	att_range (
-	att_speed (
-offset_x	 (
-offset_y
- (
-reload_time (
-mobility (
-	clip_size ("Ö
+hp_cur (
+hp_max (
+attack (
+speed (
+strength (
+magic (
+wizard (
+defense_physical (
+defense_magical	 (
+hp_rec
+ (
+mp_rec (
+lucky (
+curse ("Ö
 p_role_attr
 
 id (
@@ -125,7 +124,7 @@ vip_reward ("R
 frame_id (
 type (
 int_data (
-str_data (	"ç
+str_data (	"ó
 
 p_map_role
 
@@ -143,17 +142,16 @@ p_map_role
 d (
 state (
 
-hp (
-hp_full (
-	vip_level (
-shaping (
-fight_point (
-defense (1
-moving_frames (2.ztGame.proto.p_role_frame0
-skill_frames (2.ztGame.proto.p_role_frame#
-buffs (2.ztGame.proto.p_buff'
-debuffs (2.ztGame.proto.p_debuff%
-equips (2.ztGame.proto.p_goods"ž
+hp (
+	vip_level (
+shaping (
+fight_point (,
+	base_attr (2.ztGame.proto.p_base_attr1
+moving_frames (2.ztGame.proto.p_role_frame0
+skill_frames (2.ztGame.proto.p_role_frame#
+buffs (2.ztGame.proto.p_buff'
+debuffs (2.ztGame.proto.p_debuff%
+equips (2.ztGame.proto.p_goods"ž
 	p_map_mon
 
 id (
@@ -481,7 +479,13 @@ mission_id (""
 task_id (
 code (":
 task_update_s2c'
-	task_list (2.ztGame.proto.p_task"
+	task_list (2.ztGame.proto.p_task"
+survive_match_c2s"!
+survive_match_s2c
+code ("0
+survive_fight_s2c
+map_id (
+num ("
 login_heart_c2s"&
 login_heart_s2c
 server_time ("Ì
@@ -761,8 +765,9 @@ section_id (
 x (	
 y (	
 z (+
-	role_info (2.ztGame.proto.p_map_role"é
-map_sight_s2c-
+	role_info (2.ztGame.proto.p_map_role"û
+map_sight_s2c
+frame_id (-
 roles_enter (2.ztGame.proto.p_map_role2
 
 mons_enter (2.ztGame.proto.p_simple_map_mon7

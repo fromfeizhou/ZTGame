@@ -2,8 +2,9 @@
 --@breif 帧命令
 --@data 2018/03/07
 BattleCommandType = {
-	Move = 1,	--移动
-	Skill = 2,		--技能	
+	Move = 1,			--移动
+	Skill = 2,			--使用技能
+	Collect = 3,		--技能碰撞
 }
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -40,22 +41,33 @@ BattleMoveCommand = {
 	m_nBattleId = nil,		--使用者
 	m_nType = nil,		--命令类型
 	m_nDir = nil,		--移动方向
+	m_pos = nil,		--位置
 }
 
 --@brief 拷贝原表
-function BattleMoveCommand:Create(battleId,type,dir)
+function BattleMoveCommand:Create(battleId,dir,pos)
 	local obj = {}
 	setmetatable( obj, { __index = BattleMoveCommand })
-	obj:Init(battleId,type,dir)
+	obj:Init(battleId,dir,pos)
+	return obj
+end
+
+--@brief 拷贝原表
+function BattleMoveCommand:CreateServer(battleId,dir,tx,ty,tz)
+	local obj = {}
+	setmetatable( obj, { __index = BattleMoveCommand })
+	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
+	obj:Init(battleId,dir,pos)
 	return obj
 end
 
 --@brief 初始化
-function BattleMoveCommand:Init(battleId,commandType,dir)
+function BattleMoveCommand:Init(battleId,dir,pos)
 	--CSLog("BattleMoveCommand:Init",battleId,commandType,dir)
 	self.m_nBattleId = battleId
-	self.m_nType = commandType
+	self.m_nType = BattleCommandType.Move
 	self.m_nDir = dir
+	self.m_pos = pos
 end
 
 
