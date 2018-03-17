@@ -1,14 +1,8 @@
---LoginModel.txt
+--CityModel.txt
 --@breif lua入口
 --@data 2018/3/5
-LoginModel = {
+CityModel = {
 	m_tPanelList = nil,
-	m_nlogin_create_role_s2c = nil,
-	m_nlogin_select_role_s2c = nil,
-
-	m_pIsOpenedCreatePanel = false,
-	m_pAccname = nil,
-	m_pKey = nil,
 }
 
 --@brief c#引用
@@ -21,26 +15,26 @@ local CSLog = GCSLog
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LoginModel:Create()
+function CityModel:Create()
 	local obj = {}
-	setmetatable( obj, { __index = LoginModel })
+	setmetatable( obj, { __index = CityModel })
 	obj:Init()
 	return obj
 end
 
 --@brief 初始化
-function LoginModel:Init()
+function CityModel:Init()
 	self.m_tPanelList = {}
 end
 
 --@brief 更新
-function LoginModel:Update()
+function CityModel:Update()
 end
 
 
 --@brief 移除
-function LoginModel:Destroy()
-	print("LoginModel:Destroy")
+function CityModel:Destroy()
+	print("CityModel:Destroy")
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
 			panel:Destroy()
@@ -51,15 +45,15 @@ end
 
 
 --@breif 显示面板
-function LoginModel:ShowPanel( panelType )
+function CityModel:ShowPanel( panelType )
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
-		if panelType == LOGIN_TYPE.MAIN then
-			panel = LoginMainPanel:Create()
-		elseif panelType == LOGIN_TYPE.CREATEROLE then
-			panel = LoginCreateRolePanel:Create()
+		if panelType == CITY_TYPE.MAIN then
+			panel = CityMainPanel:Create()
+		--elseif panelType == LOGIN_TYPE.CREATEROLE then
+			--panel = LoginCreateRolePanel:Create()
 		end
 		self.m_tPanelList[panelType] = panel
 	end
@@ -70,27 +64,19 @@ function LoginModel:ShowPanel( panelType )
 end
 
 --@breif 隐藏面板
-function LoginModel:HidePanel(panelType)
+function CityModel:HidePanel(panelType)
 
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
-		GCSLog("LoginModel:HidePanel","found out",panelType)
+		GCSLog("CityModel:HidePanel","found out",panelType)
 	end
 
 	if panel then
 		panel:Hide()
 	end
 end
-
-function LoginModel:LoginFinish()
-	GCSLog("登录完成，进入游戏")
-	LuaGameStart:EnterGameCity()
-end
-
-
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

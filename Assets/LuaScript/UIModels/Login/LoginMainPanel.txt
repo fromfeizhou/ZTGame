@@ -182,8 +182,7 @@ end
 --@brief 按钮 - 无网络登录
 function LoginMainPanel:_OnBtnClick_LoginNoNet()
 	GCSLog("LoginMainPanel:_OnBtnClick_LoginNoNet()")
-	GameConfig.IsSkillDebugScene = true
-	LuaGameStart:_EnterSkillDebug()
+	LoginModel:LoginFinish()
 end
 
 --@brief 创建服务器Item
@@ -220,8 +219,6 @@ end
 function LoginMainPanel:_Update_CurServerName( )
 	self.m_txtCurServerName.text =  self.m_curSelectAddress.name .. "(" .. self.m_curSelectAddress.host .. ":" .. self.m_curSelectAddress.port .. ")"
 end
-
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request Start***************************************************************

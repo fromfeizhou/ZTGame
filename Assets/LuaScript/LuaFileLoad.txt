@@ -64,9 +64,9 @@ local LuaFileLoad = {
 		"Battle.BattleUI.MoveJoystick",
 		"Battle.BattleUI.BattleUIMgr",
 
-		
-		
-
+		"UIModels.City.CityModel",
+		"UIModels.City.CityMainPanel",
+		"UIModels.City.ZTCityScene",
 	}
 }
 

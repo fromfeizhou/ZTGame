@@ -6,6 +6,7 @@
 MODEL_TYPE = {
 	SYSTEM = 0,		--系统
 	LOGIN = 1, 		--登录
+	CITY = 2,		--主城
 }
 
 --@系统面板类型
@@ -20,3 +21,7 @@ LOGIN_TYPE = {
 	CREATEROLE = 2,	--创角
 }
 
+--@主城面板类型
+CITY_TYPE = {
+	MAIN = 1,	--模块主面板
+}

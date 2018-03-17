@@ -1,84 +1,61 @@
---LuaGameStart.txt
---@breif lua入口
---@data 2018/3/5
-LuaGameStart = {
+--ZTCityScene.txt
+--@breif 战斗场景
+--@data 2018/03/07
+ZTCityScene = {
+	
 }
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSSceneManager = CS.ZTSceneManager
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function LuaGameStart:Create()
-	local obj = {}
-	setmetatable( obj, { __index = LuaGameStart })
-	return obj
+--@brief 切换战斗场景
+function ZTCityScene:InitScene()
+	CSSceneManager.GetInstance():ReplaceScene("CityScene", function() self:_SceneReplaceComplete() end)
 end
 
---@brief 初始化
-function LuaGameStart:Init()
-	print("LuaGameStart:Init")
-	if GameConfig.IsSkillDebugScene then
-		self:_EnterSkillDebug()
-	else
-		self:_EnterLoginModel()
-	end
+function ZTCityScene:Update()
 end
 
---@brief 更新
-function LuaGameStart:Update()
-	ModelManager:Update()
-	TimerManager:Update()
+function ZTCityScene:Destroy()
+	self:_UnInt()
 end
-
---@brief 移除
-function LuaGameStart:Destroy()
-	print("LuaGameStart:Destroy")
-end
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 进入登录模块
-function LuaGameStart:_EnterLoginModel()
-	if GameConfig.IsOpenNetWork then 
-		NetWorkManager:Init()
-		ZTProtocol:Init()
-		ZTProtoData:Init()
-	end
-	 
-	 ModelManager:Create() --创建模块管理器
-	 TimerManager:Create() --创建定时管理器
-	 
-	 self:_ShowPanel_Login()
-end
-
---@brief 显示登录界面
-function LuaGameStart:_ShowPanel_Login()
+--@brief 场景加载完毕
+function ZTCityScene:_SceneReplaceComplete()
+	self:_Init()
+	
+	--显示场景主面板
 	local loginPanelData = {}
-	loginPanelData.modelType = MODEL_TYPE.LOGIN
-	loginPanelData.panelType = LOGIN_TYPE.MAIN
+	loginPanelData.modelType = MODEL_TYPE.CITY
+	loginPanelData.panelType = CITY_TYPE.MAIN
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
 end
 
 
---@brief 进入主城场景
-function LuaGameStart:EnterGameCity()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	luaFieLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLua")
-			ZTCityScene:InitScene()
-	end)
+--@brief 战斗场景初始化
+function ZTCityScene:_Init()
+	--初始化场景管理器
+	self:_AddEvent()
 end
 
+--@brief 战斗场景初始化
+function ZTCityScene:_UnInt()
+	self:_RemoveEvent()
+end
 
---@brief 进入技能调试
-function LuaGameStart:_EnterSkillDebug()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	luaFieLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLua")
-			ZTBattleScene:InitScene()
-	end)
+--@brief 监听事件
+function ZTCityScene:_AddEvent()
+end
+
+--@brifef 移除事件
+function ZTCityScene:_RemoveEvent()
 end
