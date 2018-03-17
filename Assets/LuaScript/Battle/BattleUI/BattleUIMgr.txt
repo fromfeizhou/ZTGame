@@ -48,6 +48,11 @@ function BattleUIMgr:Init()
 
 	--创建战斗ui
 	self:_CreateBattleUI()
+
+	--临时匹配按钮
+	if GameConfig.IsSkillDebugScene then
+		self:_CreateMatchUI()
+	end
 end
 
 --@brief 移除
@@ -108,4 +113,21 @@ end
 --@brief 创建移动摇杆
 function BattleUIMgr:_CreateMoveJoystick()
 	MoveJoystick:Create(self.m_ctrlContainer)
+end
+
+--@brief 创建匹配ui
+function BattleUIMgr:_CreateMatchUI()
+	CS.AssetManager.LoadAsset(PathManager:GUIWidgets("ZTButton"),function(target,path)
+		local gameObject = CSGameObject.Instantiate(target)
+		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
+		rectTrans:SetParent(self.m_ctrlContainer,false)
+		rectTrans.pivot = CSVector2(0.5,0.5)
+		rectTrans.anchorMin = CSVector2(0,1)
+		rectTrans.anchorMax = CSVector2(0,1)
+		rectTrans.anchoredPosition = CSVector2(100,-100)
+
+		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
+			CSLog("BattleUIMgr:_CreateMatchUI")
+		end)
+	end)
 end
