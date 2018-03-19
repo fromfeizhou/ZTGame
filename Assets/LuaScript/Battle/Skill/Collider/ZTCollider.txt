@@ -16,16 +16,17 @@ local CSLog = CS.GameTool.Log
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function ZTCollider:Create(pos,raidus,height)
+function ZTCollider:Create(x,y,z,raidus,height)
 	local obj = {}
 	setmetatable( obj, { __index = ZTCollider })
+	local pos = GetPosTab(x,y,z)
 	obj:Init(pos,raidus,height)
 	return obj
 end
 
 --@brief 初始化
 function ZTCollider:Init(pos,raidus,height)
-	 self.m_tPos = pos or CSVector3.zero
+	 self.m_tPos = pos
 	 self.m_nRaidus = raidus or 1
 	 self.m_nHeight = height
 end

@@ -125,13 +125,52 @@ end
 
 --@brief 检测碰撞
 function BattleDefine:CheckCollider(colliderA,colliderB)
+	local ay,by = BattleDefine:GetColliderCenteY(colliderA,colliderB)
+	local posA = GetPosTab(colliderA.m_tPos.x, ay, colliderA.m_tPos.z)
+	local posB = GetPosTab(colliderB.m_tPos.x, by, colliderB.m_tPos.z)
+	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus +colliderB.m_nRaidus then
+		return true
+	end
+	return false
+end
+
+--@brief 获取最接近的y轴坐标
+function BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local ay = colliderA.m_tPos.y
 	local ah = colliderA.m_Height
 
-	local bY = colliderB.m_tPos.y
+	local by = colliderB.m_tPos.y
 	local bh = colliderB.m_Height
 
-	return false
+	--计算a点最小值，最大值
+	local aMin = ay - ah
+	local aMax = ay + ah
+	--计算b点最小值，最大值
+	local bMin = by - bh
+	local bMax = by + bh
+	
+	--ab相交 取其一
+	if (aMin >= bMin) and (aMin <= bMax) then
+		return aMin,aMin
+	end
+	if (aMax >= bMin) and (aMax <= bMax) then
+		return aMax,aMax
+	end
+
+	if (bMin >= aMin) and (bMin <= aMax) then
+		return bMin,bMin
+	end
+	if (bMax >= aMin) and (bMax <= aMax) then
+		return bMax,bMax
+	end
+
+	--不相交 取最接近两点
+	if aMin > bMin then
+		return aMin,bMax
+	else
+		return aMax,bMin
+	end
+
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
