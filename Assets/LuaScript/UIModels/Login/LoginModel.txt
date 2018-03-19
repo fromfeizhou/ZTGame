@@ -1,6 +1,14 @@
 --LoginModel.txt
 --@breif lua入口
 --@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = GCSLog
+
+
 LoginModel = {
 	m_tPanelList = nil,
 	m_nlogin_create_role_s2c = nil,
@@ -10,12 +18,6 @@ LoginModel = {
 	m_pAccname = nil,
 	m_pKey = nil,
 }
-
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = GCSLog
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

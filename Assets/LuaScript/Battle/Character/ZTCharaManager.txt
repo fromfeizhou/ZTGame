@@ -1,11 +1,6 @@
 --ZTCharaManager.txt
 --@breif 战斗对象管理
 --@data 2018/03/07
-ZTCharaManager = {
-	m_tCharaList = nil,
-	m_tSortCharaList = nil,
-	m_ztCharaContainer = nil,	--玩家容器
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -13,6 +8,13 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local table = table
+
+
+ZTCharaManager = {
+	m_tCharaList = nil,
+	m_tSortCharaList = nil,
+	m_ztCharaContainer = nil,	--玩家容器
+}
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

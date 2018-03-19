@@ -1,6 +1,6 @@
---AnimatorData.txt
---@breif 动画data
---@data 2018/03/09
+--SkillAction.txt
+--@breif 技能action
+--@data 2018/03/19
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -9,92 +9,42 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
 
---@brief 动画事件
-AnimaEvent = {
-	Play = "Play",		--播放动作
-	InCamera = "InCamera",		--进入镜头
-	UpdatePos = "UpdatePos",		--更新位置
-	UpdateRotate = "UpdateRotate",		--角度旋转
-	ChangeTranslucence = "ChangeTranslucence",		--改变半透明
+SkillAction = {
+	m_nStartFrame = 0, --触发时间
 }
-
-AnimatorData = {
-	m_nType = nil,	--动画类型
-	m_nCareerType = nil,	--职业类型
-}
-
---@breif 继承EventDispatcher
-setmetatable( AnimatorData, { __index = EventDispatcher})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表(继承事件)
-function AnimatorData:Create(animaType,careerType)
+--@brief 拷贝原表
+function SkillAction:Create(actionData)
 	local obj = {}
-	setmetatable( obj, { __index = AnimatorData })
-	obj:Init(animaType,careerType)
+	setmetatable( obj, { __index = SkillAction })
+	obj:Init(actionData)
 	return obj
 end
 
 --@brief 初始化
-function AnimatorData:Init(animaType,careerType)
-	CSLog("AnimatorData:Init")
-	--基类初始化
-	EventDispatcher.Init(self)
-
-	self.m_nType = animaType or AnimatorType.Hero
-	self.m_nCareerType = careerType or CareerType.FashShi
-
-	self.m_tTransLv = TransLevelDefine.Normal
+function SkillAction:Init(actionData)
+	CSLog("SkillAction:Init")
+	self.m_nStartFrame = actionData.m_nStartFrame
 end
 
+--@brief 开始
+function SkillAction:Start( )
+end
+
+
+--@brief 更新
+function SkillAction:Update()
+	-- body
+end
 
 --@brief 移除
-function AnimatorData:Destroy()
-	CSLog("AnimatorData:Destroy")
+function SkillAction:Destroy()
+	CSLog("SkillAction:Destroy")
 end
 
---@brief 获得动画地址
-function AnimatorData:GetAnimatorPath()
-	if self.m_nType == AnimatorType.Hero then
-		return PathManager:GetAnimatorPath(CareerModels[self.m_nCareerType])
-	end
-	return ""
-end
-
---@brief 播放动作
---@param 动作名
-function AnimatorData:Play(name)
-	self:DispatchEvent(AnimaEvent.Play,name)
-end
-
---@brief 创建显示(进入镜头范围)
-function AnimatorData:SetInCamera(inCamera)
-	self:DispatchEvent(AnimaEvent.InCamera,inCamera)
-end
-
---@brief 刷新位置
---@param vector3 pos
-function AnimatorData:UpdatePos(pos)
-	-- CSLog("AnimatorData:UpdatePos",pos)
-	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
-end
-
---@brief 更新角度
---@param vector3 dir
-function AnimatorData:UpdateRotate(dir)
-	self:DispatchEvent(AnimaEvent.UpdateRotate,dir)
-end
-
---@brief 改变半透明（草丛状态显示）
-function AnimatorData:ChangeTranslucence(transLv)
-	if self.m_tTransLv == transLv then
-		return
-	end
-	self.m_tTransLv = transLv
-	self:DispatchEvent(AnimaEvent.ChangeTranslucence,self.m_tTransLv)
-end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

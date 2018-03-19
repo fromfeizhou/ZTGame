@@ -1,16 +1,19 @@
 --BattleCommand.txt
 --@breif 帧命令
 --@data 2018/03/07
-BattleCommandType = {
-	Move = 1,			--移动
-	Skill = 2,			--使用技能
-	Collect = 3,		--技能碰撞
-}
+
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
+BattleCommandType = {
+	Move = 1,			--移动
+	Skill = 2,			--使用技能
+	Collect = 3,		--技能碰撞
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************基础命令 Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

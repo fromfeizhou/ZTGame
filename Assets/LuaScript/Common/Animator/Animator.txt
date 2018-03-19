@@ -1,12 +1,6 @@
 --Animator.txt
 --@breif 人物动画
 --@data 2018/03/07
-Animator = {
-	m_goAnima, --挂钩object
-	m_ztAnima, --C#动作接口引用
-	m_animData,		--动画data
-	m_bIsInCamera,	--是否进入场景范围
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -14,6 +8,15 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local CSZTAnimator = CS.ZTAnimator
+
+
+Animator = {
+	m_goAnima, --挂钩object
+	m_ztAnima, --C#动作接口引用
+	m_animData,		--动画data
+	m_bIsInCamera,	--是否进入场景范围
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

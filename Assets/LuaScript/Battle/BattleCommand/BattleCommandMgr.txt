@@ -1,11 +1,6 @@
 --BattleCommandMgr.txt
 --@breif 帧命令管理
 --@data 2018/03/12
-BattleCommandMgr = {
-	m_tServerCommand = nil,		--服务器驱动帧
-	m_nServerFrame = nil,	--服务器跑动帧
-	m_nClientFrame = nil,	--客户端当前帧
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -13,6 +8,14 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local tInsert = table.insert
+
+
+BattleCommandMgr = {
+	m_tServerCommand = nil,		--服务器驱动帧
+	m_nServerFrame = nil,	--服务器跑动帧
+	m_nClientFrame = nil,	--客户端当前帧
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

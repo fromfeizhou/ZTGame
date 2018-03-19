@@ -1,16 +1,19 @@
 --ZTBattleScene.txt
 --@breif 战斗场景
 --@data 2018/03/07
-ZTBattleScene = {
-	m_goZtBattleScene = nil,	--战斗场景对象
-	m_comZtBattleScene = nil,	--战斗场景组件
-}
+
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local CSSceneManager = CS.ZTSceneManager
+
+
+ZTBattleScene = {
+	m_goZtBattleScene = nil,	--战斗场景对象
+	m_comZtBattleScene = nil,	--战斗场景组件
+}
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

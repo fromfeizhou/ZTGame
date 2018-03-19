@@ -1,13 +1,6 @@
 --BattleUIMgr.txt
 --@breif 战斗界面ui
 --@data 2018/03/11
-BattleUIMgr = {
-	m_mainUIContainer = nil,	--ui主容器
-	m_ctrlContainer = nil,		--控制UI容器
-	m_skillContainer = nil,		--技能UI容器
-	m_playerContainer = nil,	--玩家容器
-	m_hpContainer = nil,		--hp容器
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -17,6 +10,16 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLayerMask = CS.UnityEngine.LayerMask
 local CSLog = CS.GameTool.Log
+
+
+BattleUIMgr = {
+	m_mainUIContainer = nil,	--ui主容器
+	m_ctrlContainer = nil,		--控制UI容器
+	m_skillContainer = nil,		--技能UI容器
+	m_playerContainer = nil,	--玩家容器
+	m_hpContainer = nil,		--hp容器
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

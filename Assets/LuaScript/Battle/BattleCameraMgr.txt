@@ -2,6 +2,12 @@
 --@breif 镜头控制
 --@data 2018/03/14
 
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
 --@brife 镜头事件类型
 BattleCameraType = {
 	Move = 1,		--移动
@@ -14,11 +20,6 @@ BattleCameraMgr = {
 	m_bMoveAction = nil,	--缓动
 }
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

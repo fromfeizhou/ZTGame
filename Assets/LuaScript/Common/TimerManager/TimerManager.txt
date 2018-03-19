@@ -25,6 +25,9 @@ function Example:_OnTimerFinish()
 end
 ]]
 
+
+local CSTime = CS.UnityEngine.Time
+
 TimerManager = {
 	m_tTimerList = nil,
 	m_nTimerCnt = 0, --当前定时器计数
@@ -40,7 +43,6 @@ TimerManager = {
 	m_cTime_fixedUnscaledTime,
 }
 
-local CSTime = CS.UnityEngine.Time
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

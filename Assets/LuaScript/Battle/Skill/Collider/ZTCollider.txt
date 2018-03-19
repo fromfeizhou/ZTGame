@@ -1,17 +1,20 @@
 --ZTCollider.txt
 --@breif 碰撞
 --@data 2018/03/18
-ZTCollider = {
-	m_tPos = nil,		--位置
-	m_nRaidus = nil,	--半径
-	m_nHeight = nil,		--延伸高度(中心点上下各一半)
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
+
+ZTCollider = {
+	m_tPos = nil,		--位置
+	m_nRaidus = nil,	--半径
+	m_nHeight = nil,		--延伸高度(中心点上下各一半)
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

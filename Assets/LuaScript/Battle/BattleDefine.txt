@@ -128,7 +128,7 @@ function BattleDefine:CheckCollider(colliderA,colliderB)
 	local ay,by = BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local posA = GetPosTab(colliderA.m_tPos.x, ay, colliderA.m_tPos.z)
 	local posB = GetPosTab(colliderB.m_tPos.x, by, colliderB.m_tPos.z)
-	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus +colliderB.m_nRaidus then
+	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
 		return true
 	end
 	return false

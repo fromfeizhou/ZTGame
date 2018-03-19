@@ -2,6 +2,10 @@
 --@breif ab包管理
 --@data 2018/3/3
 
+--@brief c#引用
+local CSAssetUpdater = CS.AssetUpdater
+local CSGameObject = CS.UnityEngine.GameObject
+
 local AssetUpdater = {
 	m_gameObject = nil, --资源更新父对象
 	m_updater = nil,		--更新管理对象
@@ -9,9 +13,6 @@ local AssetUpdater = {
 	m_text = nil,		--进度显示文本
 }
 
---@brief c#引用
-local CSAssetUpdater = CS.AssetUpdater
-local CSGameObject = CS.UnityEngine.GameObject
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

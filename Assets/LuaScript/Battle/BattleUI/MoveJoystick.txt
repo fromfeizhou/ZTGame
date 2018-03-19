@@ -1,6 +1,16 @@
 --MoveJoystick.txt
 --@breif 移动控制UI
 --@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+
+
 MoveJoystick = {
 	m_ctrlContainer = nil,	--父容器
 	m_transform = nil,		--当前对象transfrom
@@ -11,13 +21,6 @@ MoveJoystick = {
 	m_sendDir = nil,		--已发送移动类型
 }
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSVector2 = CS.UnityEngine.Vector2
-local CSLog = CS.GameTool.Log
-local CSJoystick = CS.JoystickBase
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

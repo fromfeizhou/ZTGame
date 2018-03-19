@@ -1,6 +1,14 @@
 --BattleContainerMgr.txt
 --@breif 战斗界面ui
 --@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+
 BattleContainerMgr = {
 	m_ctrlContainer = nil,		--控制UI容器
 	m_skillContainer = nil,		--技能UI容器
@@ -8,11 +16,6 @@ BattleContainerMgr = {
 	m_hpContainer = nil,		--hp容器
 }
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

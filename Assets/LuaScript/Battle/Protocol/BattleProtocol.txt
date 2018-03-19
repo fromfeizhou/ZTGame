@@ -1,6 +1,12 @@
 --BattleProtocol.txt
 --@breif 战斗协议
 --@data 2018/03/13
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.CS.UnityEngine.Vector3
+
+
 BattleProtocol = {
 	m_battleCommandMgr = nil,		--命令操作管理者
 	m_tCommandList = nil,		--操作集合
@@ -8,9 +14,6 @@ BattleProtocol = {
 	m_tstClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
 }
 
---@brief c#引用
-local CSLog = CS.GameTool.Log
-local CSVector3 = CS.CS.UnityEngine.Vector3
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
