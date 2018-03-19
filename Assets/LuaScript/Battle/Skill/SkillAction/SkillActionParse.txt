@@ -9,7 +9,7 @@ SkillActionParse = {
 	m_nOwnerId = nil,		--拥有者id
 	m_tOwner = nil,			--拥有者
 	m_nStartFrame = nil,	--起始帧
-	m_nActionId = nil,	--配置id
+	m_nSkillId = nil,		--技能id
 	m_tActionList = nil,	--动作列表
 	m_bFinish = nil,		--结束标记
 }
@@ -18,16 +18,16 @@ SkillActionParse = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
 --@param owner 使用者
---@param actionId 配置id
-function SkillActionParse:Create(ownerId,actionId,startFrame)
+--@param skillId 技能id
+function SkillActionParse:Create(ownerId,skillId,startFrame)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionParse })
-	obj:Init(ownerId,actionId,startFrame)
+	obj:Init(ownerId,skillId,startFrame)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionParse:Init(ownerId,actionId,startFrame)
+function SkillActionParse:Init(ownerId,skillId,startFrame)
 	CSLog("SkillActionParse:Init")
 	self.m_nOwnerId = ownerId
 	self.m_tOwner = GlobalBattleCtrl:GetCharacterDic()[ownerId]
@@ -36,7 +36,7 @@ function SkillActionParse:Init(ownerId,actionId,startFrame)
 		return
 	end
 	self.m_nStartFrame = startFrame
-	self.m_nActionId = actionId
+	self.m_nSkillId = skillId
 	self.m_tActionList = {}
 	self.m_bFinish = false
 	self:_ParseConfig() 
