@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using NPOI.SS.Formula.Functions;
 using UnityEditor;
 using UnityEngine;
 
@@ -68,7 +69,7 @@ public class MapColliderEditor : EditorWindow
                         Renderer tempRenderer = colliderRenderers[colliderIndex];
                         CollRectange tempColl = new CollRectange(tempRenderer.transform.position.x,
                             tempRenderer.transform.position.z, tempRenderer.transform.eulerAngles.y,
-                            tempRenderer.transform.localScale.x, tempRenderer.transform.localScale.z);
+                            tempRenderer.transform.lossyScale.x, tempRenderer.transform.lossyScale.z);
                         colliderRectList.Add(tempColl);
                     }
                     for (int blockIndex = goInCludeRects.Count - 1; blockIndex >= 0; blockIndex--)
@@ -80,7 +81,7 @@ public class MapColliderEditor : EditorWindow
                                 if (blockType == eMapBlockType.Height)
                                     blockParam = colliderRenderers[colliderIndex].bounds.size.y + "";
                                 AddColliderToDic(goInCludeRects[blockIndex].Key, blockType, blockParam);
-                                goInCludeRects.RemoveAt(blockIndex);
+                               // goInCludeRects.RemoveAt(blockIndex);
                                 break;
                             }
                         }
@@ -129,6 +130,8 @@ public class MapColliderEditor : EditorWindow
             };
             if (mapBlockType == eMapBlockType.Hide)
             {
+                Debug.LogError(tempBlock.row + "    " + tempBlock.col + " type: " + tempBlock.type);
+
                 if (!MapHideBlockDataDic.ContainsKey(key))
                     MapHideBlockDataDic[key] = tempBlock;
             }
