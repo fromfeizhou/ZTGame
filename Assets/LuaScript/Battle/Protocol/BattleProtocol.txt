@@ -190,7 +190,7 @@ function BattleProtocol:_OnMapFrame(sightData)
 	--data.end_id
 	local commands = nil
 	if #sightData.data > 0 then
-		CSLog("BattleProtocol:_OnMapFrame",SerializeTable(sightData))
+		-- CSLog("BattleProtocol:_OnMapFrame",SerializeTable(sightData))
 		commands = {}
 		for i,v in pairs(sightData.data) do
 			if v.type == BattleCommandType.Move then
@@ -202,9 +202,7 @@ function BattleProtocol:_OnMapFrame(sightData)
 			end
 		end
 	end
-	if commands then
-		CSLog("BattleProtocol:_OnMapFrame",SerializeTable(commands))
-	end
+	
 	BattleProtocol:ParseCommand(commands)
 
 	--[[

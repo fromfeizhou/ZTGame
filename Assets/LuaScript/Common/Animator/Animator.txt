@@ -39,9 +39,9 @@ end
 --@brief 移除
 function Animator:Destroy()
 	CSLog("Animator:Destroy")
-	if self.m_ztAnima then
-		self.m_ztAnima:Destroy()
-		self.m_ztAnima = nil
+	if self.m_goAnima then
+		CSGameObject:Destroy(self.m_goAnima)
+		self.m_goAnima = nil
 	end
 
 	self:_RemoveEvent()
