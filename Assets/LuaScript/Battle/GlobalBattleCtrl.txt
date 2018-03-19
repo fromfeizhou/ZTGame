@@ -125,16 +125,29 @@ end
 
 
 
+--@brife 设置碰撞检测函数
+function GlobalBattleCtrl:SetBattleScene(battleScene)
+	GlobalBattleCtrl.m_comZtBattleScene = battleScene
+end
+
+--@brief 获取碰撞 MapGetCurMapBlock
+function GlobalBattleCtrl:MapGetCurMapBlock(pos)
+	local blockType,param = 0,0
+	if GlobalBattleCtrl.m_comZtBattleScene  then
+		-- CSLog("GlobalBattleCtrl.MapGetCurMapBlock ",CS.UnityEngine.Vector3(pos.x,pos.y,pos.z))
+		blockType,param = GlobalBattleCtrl.m_comZtBattleScene:MapGetCurMapBlock(pos,blockType,param)
+	end
+	return blockType,param
+end
+
+
+
+
 --@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)
 function GlobalBattleCtrl:CommandUpdate()
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:UpdateCommand()
 	end
-end
-
---@beif 获取碰撞
-function GlobalBattleCtrl:MapGetCurMapBlock()
-	return 0
 end
 
 --@brief 获得当前用户id
@@ -152,23 +165,18 @@ function GlobalBattleCtrl:GetCharacterList()
 	return GlobalBattleCtrl.m_tCharacterList
 end
 
---@brife 获取当前用户
+--@brief 获取当前用户
 function GlobalBattleCtrl:GetOwnerChara()
 	return GlobalBattleCtrl.m_character
 end
 
---@brife 设置碰撞检测函数
-function GlobalBattleCtrl:SetBattleScene(battleScene)
-	GlobalBattleCtrl.m_comZtBattleScene = battleScene
-end
---@brief 获取碰撞 MapGetCurMapBlock
-function GlobalBattleCtrl:MapGetCurMapBlock(pos)
-	local blockType,param = 0,0
-	if GlobalBattleCtrl.m_comZtBattleScene  then
-		-- CSLog("GlobalBattleCtrl.MapGetCurMapBlock ",CS.UnityEngine.Vector3(pos.x,pos.y,pos.z))
-		blockType,param = GlobalBattleCtrl.m_comZtBattleScene:MapGetCurMapBlock(pos,blockType,param)
+
+--@brief 获得当前逻辑帧计数
+function GlobalBattleCtrl:GetCurCommandFrame()
+	if self.m_battleCommandMgr then
+		return self.m_battleCommandMgr.m_nClientFrame
 	end
-	return blockType,param
+	return 0
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************

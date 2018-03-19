@@ -3,12 +3,11 @@
 --@data 2018/03/19
 
 --@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
+
 SkillPlayAction = {
+	m_sAnimName = nil,  --动作名
 }
 
 --@breif 继承SkillAction
@@ -27,24 +26,36 @@ end
 
 --@brief 初始化
 function SkillPlayAction:Init(actionData)
-	CSLog("SkillPlayAction:Init")
+	--继承实现
 	SkillAction.Init(self,actionData)
-
+	self.m_sAnimName = actionData.
 end
 
 --@brief 开始
-function SkillPlayAction:Start( )
+function SkillPlayAction:Start()
+	--继承实现
+	SkillAction.Start(self)
+	self:GetOwner():Play(name)
+	self:Done()
 end
 
 
---@brief 更新
-function SkillPlayAction:Update()
-	-- body
+-- --@brief 更新
+-- function SkillPlayAction:Update()
+-- 	--继承实现
+-- 	SkillAction.Update(self)
+-- end
+
+--@brief 结束
+function SkillPlayAction:Done()
+	--继承实现
+	SkillAction.Done(self)
 end
 
 --@brief 移除
-function SkillPlayAction:Destroy()
-	CSLog("SkillPlayAction:Destroy")
+function SkillAction:Destroy()
+	--继承实现
+	SkillAction.Destroy(self)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

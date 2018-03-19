@@ -3,45 +3,66 @@
 --@data 2018/03/19
 
 --@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
-SkillActionData = {
-	m_nStartFrame = 0,
-}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--基础数据
+SkillActionData = {
+	m_tOwner = nil,		--拥有者
+	m_nStartFrame = 0, --触发时间
+	m_nFrameMax = 0,	--存在时间
+	
+}
 --@brief 拷贝原表
-function SkillActionData:Create()
+function SkillActionData:Create(owner,frame)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionData })
-	obj:Init()
+	obj:Init(owner,frame)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionData:Init()
-	CSLog("SkillActionData:Init")
+function SkillActionData:Init(owner,frame)
+	self.m_tOwner = owner
+	self.m_nStartFrame = frame
+	self.m_nFrameMax = frame
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--播放动作
+SkillActionPlayData = {
+	m_sAnimName = 0,	--动作名
+}
+--@breif SkillActionData
+setmetatable( SkillActionPlayData, { __index = SkillActionData})
+
+--@brief 拷贝原表
+function SkillActionPlayData:Create(owner,frame,name)
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionPlayData })
+	obj:Init(owner,frame,name)
+	return obj
 end
 
---@brief 开始
-function SkillActionData:Start( )
-end
+--@brief 初始化
+function SkillActionPlayData:Init(owner,frame,name)
+	--基类实现
+	SkillActionPlayData.Init(owner,frame)
 
-
---@brief 更新
-function SkillActionData:Update()
-	-- body
-end
-
---@brief 移除
-function SkillActionData:Destroy()
-	CSLog("SkillActionData:Destroy")
+	self.m_sAnimName = name
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
