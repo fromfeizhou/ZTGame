@@ -1,6 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 public enum EquipType
@@ -18,14 +21,79 @@ public class EquipData
 }
 
 
+public enum ZTAnimationType
+{
+    Animator=1,
+    Animation=2
+}
+
+public class AnimationBase
+{
+    public virtual void Play(string name) { }
+
+    public static AnimationBase GetAnimationBase(int type,GameObject go)
+    {
+        ZTAnimationType animationType = ZTAnimationType.Animator;
+        AnimationBase baseAction = null;
+        if (Enum.IsDefined(typeof(ZTAnimationType), type))
+            animationType = (ZTAnimationType) type;
+
+        switch (animationType)
+        {
+            case ZTAnimationType.Animation:
+                baseAction = new AnimationAction(go);
+                 break;
+            case ZTAnimationType.Animator:
+                baseAction = new AnimatorAction(go);
+                break;
+        }
+
+        return baseAction;
+
+    }
+}
+
+public class AnimatorAction:AnimationBase
+{
+    private Animator animator;
+    public AnimatorAction(GameObject go)
+    {
+        if (go != null)
+            animator = go.GetComponent<Animator>();
+    }
+
+    public override void Play(string name)
+    {
+        if (animator != null)
+            animator.Play(name);
+    }
+}
+
+public class AnimationAction : AnimationBase
+{
+    private Animation animation;
+    public AnimationAction(GameObject go)
+    {
+        if (go != null)
+            animation = go.GetComponent<Animation>();
+    }
+
+    public override void Play(string name)
+    {
+        if (animation != null)
+            animation.Play(name);
+    }
+}
+
+
 public class BaseModelSprite
 {
     protected GameObject model;
-    protected Animation animator;
+    protected AnimationBase animator;
     protected int transLv;
 
     //创建
-    public virtual void CreateModel(string path,Transform parent) { }
+    public virtual void CreateModel(string path,Transform parent,int type) { }
     //销毁
     public  virtual  void RemoveAnimatorView() { }
     //播放
@@ -38,7 +106,7 @@ public class BaseModelSprite
 
 public class RoleModelSprite : BaseModelSprite
 {
-    public override void CreateModel(string path,Transform parent)
+    public override void CreateModel(string path,Transform parent,int type)
     {
         if (null != animator)
         {
@@ -52,7 +120,7 @@ public class RoleModelSprite : BaseModelSprite
             {
                 GameObject go = GameObject.Instantiate(prefab, parent);
                 model = go;
-                animator = go.GetComponent<Animation>();
+                animator = AnimationBase.GetAnimationBase(type, go);
             }
         });
     }
@@ -106,14 +174,14 @@ public class RoleModelSprite : BaseModelSprite
         if (null == animator) return;
         if (transLv == 1)
         {
-            animator.gameObject.SetActive(false);
+            model.SetActive(false);
             
 
         }
         else
         {
-            animator.gameObject.SetActive(true);
-            SkinnedMeshRenderer render = animator.gameObject.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+            model.SetActive(true);
+            SkinnedMeshRenderer render = model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
             if (transLv == 0)
             {
                 render.material.shader = Shader.Find("Custom/PengLuOccTransVF");
