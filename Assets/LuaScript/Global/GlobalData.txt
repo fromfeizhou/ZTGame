@@ -1,16 +1,19 @@
 --GlobalData.txt
 --@breif lua入口
 --@data 2018/3/5
-GlobalData = {
-	NetEventDispatcher = nil,
-	MdlEventDispatcher = nil,
-}
+
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
+GlobalData = {
+	NetEventDispatcher = nil,
+	MdlEventDispatcher = nil,
+}
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

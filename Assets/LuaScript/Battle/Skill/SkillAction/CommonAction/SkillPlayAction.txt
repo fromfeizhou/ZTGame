@@ -1,0 +1,63 @@
+--SkillPlayAction.txt
+--@breif 动作播放
+--@data 2018/03/19
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillPlayAction = {
+	m_sAnimName = nil,  --动作名
+}
+
+--@breif 继承SkillAction
+setmetatable( SkillPlayAction, { __index = SkillAction})
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillPlayAction:Create(actionData)
+	local obj = {}
+	setmetatable( obj, { __index = SkillPlayAction })
+	obj:Init(actionData)
+	return obj
+end
+
+--@brief 初始化
+function SkillPlayAction:Init(actionData)
+	--继承实现
+	SkillAction.Init(self,actionData)
+	self.m_sAnimName = self.m_tActionData.m_sAnimName
+end
+
+--@brief 开始
+function SkillPlayAction:Start()
+	--继承实现
+	SkillAction.Start(self)
+	self:GetOwner():Play(self.m_sAnimName)
+	self:Done()
+end
+
+
+-- --@brief 更新
+-- function SkillPlayAction:Update()
+-- 	--继承实现
+-- 	SkillAction.Update(self)
+-- end
+
+--@brief 结束
+function SkillPlayAction:Done()
+	--继承实现
+	SkillAction.Done(self)
+end
+
+--@brief 移除
+function SkillAction:Destroy()
+	--继承实现
+	SkillAction.Destroy(self)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

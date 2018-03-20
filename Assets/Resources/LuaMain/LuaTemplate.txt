@@ -1,14 +1,16 @@
 --LuaTemplate.txt
 --@breif lua模板
 --@data 2018/03/07
-LuaTemplate = {
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
+
+LuaTemplate = {
+}
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

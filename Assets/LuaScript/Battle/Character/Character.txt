@@ -1,6 +1,13 @@
 --Character.txt
 --@breif lua模板
 --@data 2018/03/09
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
 Character = {
 	m_nBattleId = nil,	--战斗对象id
 	m_animData = nil,	--形象数据
@@ -12,11 +19,6 @@ Character = {
 	m_nCampId = nil,		--camp
 }
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -56,6 +58,11 @@ function Character:Destroy()
 		self.m_animData:Destroy()
 		self.m_animData = nil
 	end
+end
+
+--@brief 刷新数据
+function Character:SetData(data)
+	self:UpdatePos(data.pos)
 end
 
 --@brief 刷新逻辑帧

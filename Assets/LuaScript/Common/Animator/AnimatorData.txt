@@ -2,6 +2,13 @@
 --@breif 动画data
 --@data 2018/03/09
 
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+
 --@brief 动画事件
 AnimaEvent = {
 	Play = "Play",		--播放动作
@@ -19,11 +26,6 @@ AnimatorData = {
 --@breif 继承EventDispatcher
 setmetatable( AnimatorData, { __index = EventDispatcher})
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = CS.GameTool.Log
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

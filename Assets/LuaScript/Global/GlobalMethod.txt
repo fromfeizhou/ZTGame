@@ -63,3 +63,8 @@ function ZTableLen(tTable)
     end
     return count
 end
+
+--@bief 获取坐标table
+function GetPosTab(x,y,z)
+    return {x = x,y = y,z = z}
+end

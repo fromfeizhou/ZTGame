@@ -1,11 +1,6 @@
 --ZTCharaManager.txt
 --@breif 战斗对象管理
 --@data 2018/03/07
-ZTCharaManager = {
-	m_tCharaList = nil,
-	m_tSortCharaList = nil,
-	m_ztCharaContainer = nil,	--玩家容器
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -13,6 +8,13 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local table = table
+
+
+ZTCharaManager = {
+	m_tCharaList = nil,
+	m_tSortCharaList = nil,
+	m_ztCharaContainer = nil,	--玩家容器
+}
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -99,6 +101,9 @@ function ZTCharaManager:_AddEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass,self)
+
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+	
 end
 
 --@brief 移除事件监听
@@ -106,6 +111,33 @@ function ZTCharaManager:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass)
+
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--brief 游戏开始刷新所有对象
+function ZTCharaManager:_OnStartGame(playerList)
+	
+	--移除玩家
+	for i,v in pairs(self.m_tCharaList) do
+		if not playerList[v.m_nBattleId] then
+			self:_OnRemoveCharacter(v.m_nBattleId)
+		end
+	end
+
+	--添加玩家
+	for i,v in pairs(playerList) do
+		if not self.m_tCharaList[v.battleId] then
+			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp)
+			self:_OnAddCharacter(data)
+		else
+			chara:SetData(v)
+		end
+	end
+
+	--test
+	local chara = self.m_tSortCharaList[1]
+	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
 end
 
 --@brief change glass id

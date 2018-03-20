@@ -1,13 +1,16 @@
 --NetWorkManager.txt
 --@breif 
 --@data 2018/3/5
-NetWorkManager = {
-	m_instance,
-}
 
 --@brief c#引用
 local CSNetWorkManager = CS.NetWorkManager
 local CSByteBuffer = CS.ByteBuffer
+
+
+NetWorkManager = {
+	m_instance,
+}
+
 
 
 --@brief 当前次登录验证信息

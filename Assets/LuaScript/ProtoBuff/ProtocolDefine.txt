@@ -187,3 +187,10 @@ PB_TASK = {
 	REWARD = 2, 		--领取任务奖励
 	UPDATE = 3, 		--批量更新任务
 }
+
+--@brife 大逃杀
+PB_SURVIVE = {
+	MODEL = 15, 		--模块ID
+	MATCH = 1, 		--开始匹配
+	FIGHT = 2, 		--开始游戏
+}

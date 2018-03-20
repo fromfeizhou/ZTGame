@@ -1,6 +1,12 @@
 --ModelManager.txt
 --@breif 
 --@data 2018/3/5
+
+--@brief c#引用
+local CSModelManager = CS.ModelManager
+local CSTime = CS.Time
+
+
 ModelManager = {
 	m_modelList = nil,
 	m_modelDef = nil,
@@ -8,9 +14,6 @@ ModelManager = {
 	m_mdlEvent = nil,
 }
 
---@brief c#引用
-local CSModelManager = CS.ModelManager
-local CSTime = CS.Time
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

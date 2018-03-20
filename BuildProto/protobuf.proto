@@ -655,6 +655,20 @@ message task_update_s2c {
     repeated p_task task_list = 1; // 批量任务列表
 }
 
+// ##model_begin##survive##15##大逃杀##model_end##
+// ##begin##survive##survive_match##15##1##开始匹配##end##
+message survive_match_c2s {}
+message survive_match_s2c {
+    required uint32 code = 1; // 错误码
+}
+
+// ##begin##survive##survive_fight##15##2##开始游戏##end##
+message survive_fight_s2c {
+    required uint32 map_id = 1; // 地图id
+    required uint32 num = 2; // 人数
+}
+
+
 // ##model_begin##login##1##登陆相关##model_end##
 
 // ##begin##login##login_heart##1##0##心跳##end##
@@ -1054,6 +1068,7 @@ message map_enter_s2c {
 }
 // ##begin##map##map_sight##4##3##视野信息##end##
 message map_sight_s2c {
+    required uint32 frame_id = 1; // 当前帧id
     repeated p_map_role roles_enter = 2; // 玩家列表
     repeated p_simple_map_mon mons_enter = 3; // 怪物列表
     repeated p_map_buff_point buffpoint_enter = 4; // buff点列表

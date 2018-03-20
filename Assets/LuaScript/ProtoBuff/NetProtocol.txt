@@ -162,4 +162,9 @@ MODEL_PB = {
 		[2] = "task_reward",
 		[3] = "task_update",
 	},
+
+	[15] = {
+		[1] = "survive_match",
+		[2] = "survive_fight",
+	},
 }

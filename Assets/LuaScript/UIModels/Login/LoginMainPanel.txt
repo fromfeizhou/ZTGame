@@ -1,6 +1,13 @@
 --LoginMainPanel.txt
 --@breif lua入口
 --@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+
 LoginMainPanel = {
 	m_transform = nil,
 	m_gameObject = nil,
@@ -11,15 +18,6 @@ LoginMainPanel = {
 	m_curSelectAddress = nil,
 	m_tServerItemList = nil,
 }
-
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-
-
-
-
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -1,0 +1,114 @@
+--SkillActionParse.txt
+--@breif 技能解析
+--@data 2018/03/19
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+SkillActionParse = {
+	m_nOwnerId = nil,		--拥有者id
+	m_tOwner = nil,			--拥有者
+	m_nStartFrame = nil,	--起始帧
+	m_nSkillId = nil,		--技能id
+	m_tActionList = nil,	--动作列表
+	m_bFinish = nil,		--结束标记
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+--@param owner 使用者
+--@param skillId 技能id
+function SkillActionParse:Create(ownerId,skillId,startFrame)
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionParse })
+	obj:Init(ownerId,skillId,startFrame)
+	return obj
+end
+
+--@brief 初始化
+function SkillActionParse:Init(ownerId,skillId,startFrame)
+	CSLog("SkillActionParse:Init")
+	self.m_nOwnerId = ownerId
+	self.m_tOwner = GlobalBattleCtrl:GetCharacterDic()[ownerId]
+	if not self.m_tOwner then
+		self:Done()
+		return
+	end
+	self.m_nStartFrame = startFrame
+	self.m_nSkillId = skillId
+	self.m_tActionList = {}
+	self.m_bFinish = false
+	self:_ParseConfig() 
+	self:Update()
+end
+
+
+--@brief 移除
+function SkillActionParse:Destroy()
+	CSLog("SkillActionParse:Destroy")
+end
+
+--@brief 刷新
+function SkillActionParse:Update()
+	if not self.m_bFinish and sefl.m_tActionList then
+		local commandFrame = GlobalBattleCtrl:GetCurCommandFrame()
+		for frame,action in pairs(self.m_tActionList) do
+			if not action:IsFinish() then
+				SkillActionParse:_CheckStart(commandFrame,action)
+			end
+
+			if action:IsStart() then
+				actoin:Update()
+			end
+
+			if actoin:IsFinish() then
+				self.m_tActionList[frame] = nil
+			end
+		end
+	end
+end
+
+--@brief 结束
+function SkillActionParse:Done()
+	self.m_bFinish = true
+end
+
+--@brief 结束标记
+function SkillActionParse:IsFinish()
+	return self.m_bFinish
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--检查启动条件
+function SkillActionParse:_CheckStart(frame,action)
+	if frame >= action:StartFrame() then
+		action:Start()
+	end
+end
+
+--@brief 解析配置
+function SkillActionParse:_ParseConfig()
+	local config = {
+	[0] = {actionType = 0,param = {"attack_1"}},
+	}
+
+	for i,v in pairs(config) do
+		local frame = self.m_nStartFrame + i
+		local param = v.param
+		if v.actionType == SkillActionType.Play then
+			self.m_tActionList[i] = self:_GetPlayAction(frame,v)
+		elseif v.actionType == SkillActionType.Sound then
+
+		end
+	end
+end
+
+--@brief 获得播放Action
+function SkillActionParse:_GetPlayAction(frame,param)
+	local data = SkillActionPlayData:Create(self.m_tOwner,frame,name)
+	local action = SkillPlayAction:Create(data)
+	return action
+end

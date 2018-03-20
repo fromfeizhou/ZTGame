@@ -1,0 +1,115 @@
+--SkillActionManager.txt
+--@breif lua模板
+--@data 2018/03/19
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillActionManager = {
+	m_tSortList = nil,	--排序队列
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillActionManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionManager })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function SkillActionManager:Init()
+	CSLog("SkillActionManager:Init")
+	self.m_tSortList = {}
+end
+
+
+--@brief 移除
+function SkillActionManager:Destroy()
+	CSLog("SkillActionManager:Destroy")
+	self.m_tSortList = nil
+end
+
+--@brief 重置
+function SkillActionManager:Reset()
+	self.m_tSortList = {}
+end
+
+
+--@brief 刷新
+function SkillActionManager:Update()
+	if not self.m_tSortList then
+		return
+	end
+
+	for i = #self.m_tSortList, 1,-1 do
+		local remove = false
+		local data = self.m_tSortList[i]
+		--技能队列为0 清除
+		if #data.list > 0 then
+			self:_UpdateList(data.list)
+		else
+			data.remove(self.m_tSortList,i)
+		end
+	end
+end
+
+
+--@brief  添加解析器
+function SkillActionManager:AddSkill(ownerId,skillId,startFrame)
+	if not self.m_tSortList then
+		return
+	end
+	local actionParse = SkillActionParse:Create(ownerId,skillId,startFrame)
+
+	local input = false
+	for i = 1,#self.m_tSortList do
+		local data = self.m_tSortList[i]
+		if data.id == ownerId then
+			table.insert(data.list,actionParse)
+			input = true
+			break
+		end
+	end
+
+	--没有旧队列 插入 并排序
+	if not input then
+		local data = {id = ownerId,list = {}}
+		table.insert(data.list,actionParse)
+		
+		table.insert(self.m_tSortList ,data)
+
+		--少到大排序
+		table.sort(self.m_tSortList,function(dataA,dataB)
+			return dataA.id < dataB.id
+		end)
+	end
+end
+
+--@brief 碰撞按照服务器顺序优先处理
+function SkillActionManager:SkillCollider(ownerId,skillId,collistList)
+	for i = 1,#self.m_tSortList do
+		local data = self.m_tSortList[i]
+		if data.id == ownerId and data.actionParse.m_nSkillId == skillId then
+			data.actionParse:DoColliderAction(collistList)
+			break
+		end
+	end
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 刷新技能队列
+function SkillActionManager:_UpdateList(list)
+	for i = #list,1,-1 do
+		local actionParse = list[i]
+		if actionParse:IsFinish() then
+			table.remove(list,i)
+		else
+			actionParse:Update()
+		end
+	end
+end

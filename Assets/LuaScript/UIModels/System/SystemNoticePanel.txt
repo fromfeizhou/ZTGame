@@ -1,6 +1,12 @@
 --SystemNoticePanel.txt
 --@breif lua入口
 --@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
 SystemNoticePanel = {
 	m_transform = nil,
 	m_gameObject = nil,
@@ -8,10 +14,6 @@ SystemNoticePanel = {
 	m_Notice = nil,
 }
 
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

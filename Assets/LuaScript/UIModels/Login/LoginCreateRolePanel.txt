@@ -1,15 +1,18 @@
 --LoginCreateRolePanel.txt
 --@breif lua入口
 --@data 2018/3/5
-LoginCreateRolePanel = {
-	m_transform = nil,
-	m_gameObject = nil,
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
+
+
+LoginCreateRolePanel = {
+	m_transform = nil,
+	m_gameObject = nil,
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

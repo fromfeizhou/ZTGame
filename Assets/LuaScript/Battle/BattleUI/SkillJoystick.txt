@@ -1,0 +1,138 @@
+--SkillJoystick.txt
+--@breif 移动控制UI
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+
+
+SkillJoystick = {
+	m_ctrlContainer = nil,	--父容器
+	m_transform = nil,		--当前对象transfrom
+	m_gameObject = nil,		--当前对象挂钩gameObject
+	m_joystick = nil,		--摇杆组件
+
+	m_bIsSend = nil,		--是否发送操作
+	m_sendDir = nil,		--已发送移动类型
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillJoystick:Create(parent)
+	local obj = {}
+	setmetatable( obj, { __index = SkillJoystick })
+	obj:Init(parent)
+	return obj
+end
+
+--@brief 初始化
+function SkillJoystick:Init(parent)
+	CSLog("SkillJoystick:Init")
+	self.m_ctrlContainer = parent
+	self.m_bIsSend = false
+	self.m_sendDir = nil
+	
+	--加载预设件
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillJoystick"),callback_loadfinish)
+end
+
+
+--@brief 移除
+function SkillJoystick:Destroy()
+	CSLog("SkillJoystick:Destroy")
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function SkillJoystick:_LoadAsseFinish(target,path)
+	local prefab = target
+ 		if prefab then
+ 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
+ 			self:_InitJoyEvent()
+		end
+end
+
+--@brief 添加控制事件 
+function SkillJoystick:_InitJoyEvent()
+	self.m_joystick.onJoystickDownEvent = function(pos)
+		self:_OnJoystickDown(pos)
+	end
+
+	self.m_joystick.onJoystickMoveEvent = function(pos)
+		self:_OnJoystickMove(pos)
+	end
+
+	self.m_joystick.onJoystickUpEvent = function(pos)
+		self:_OnJoystickUp(pos)
+	end
+end
+
+--@brief 触摸点按下
+function SkillJoystick:_OnJoystickDown(pos)
+	self.m_sendDir = nil
+	self:_OnMoveAction(pos)
+end
+
+--@brief 触摸点移动
+function SkillJoystick:_OnJoystickMove(pos)
+	self:_OnMoveAction(pos)
+end
+
+--@brief 触发移动
+function SkillJoystick:_OnMoveAction(pos)
+	local angle = math.deg(math.atan(pos.y,pos.x))
+	if angle >= -22.5 and angle < 22.5 then
+        self:_SendMoveCommand(BattleDir.Right)
+    elseif angle >= 22.5 and angle < 67.5 then
+        self:_SendMoveCommand(BattleDir.UpRight)
+    elseif angle >= 67.5 and angle < 112.5 then
+        self:_SendMoveCommand(BattleDir.Up)
+    elseif angle >= 112.5 and angle < 157.5 then
+        self:_SendMoveCommand(BattleDir.UpLeft)
+    elseif angle >= -157.5 and angle < -112.5 then
+        self:_SendMoveCommand(BattleDir.DownLeft)
+    elseif angle >= -112.5 and angle < -67.5 then
+        self:_SendMoveCommand(BattleDir.Down)
+    elseif angle >= -67.5 and angle < -22.5 then
+        self:_SendMoveCommand(BattleDir.DownRight)
+    else
+        self:_SendMoveCommand(BattleDir.Left)
+    end
+    self.m_bIsSend = true
+end
+
+
+
+--@brief 触摸点松开
+function SkillJoystick:_OnJoystickUp(pos)
+	if self.m_bIsSend then
+	 	self:_SendMoveCommand(BattleDir.None);
+	 	self.m_bIsSend = false
+	end
+end
+
+--@brife 发送移动操作
+function SkillJoystick:_SendMoveCommand(dir)
+	if self.m_sendDir == dir then
+		return
+	end
+	-- CSLog("SkillJoystick:_SendMoveCommand")
+	self.m_sendDir = dir
+	BattleProtocol:SendMoveCommand(dir)
+end

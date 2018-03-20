@@ -5,6 +5,7 @@
 --@brief c#引用
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
 --@brief 碰撞预定义
 BlockType = {
 	None = 0,
@@ -21,12 +22,17 @@ TransLevelDefine = {
 
 --@breif 战斗预定义
 BattleDefine = {
-
+	PosRate = 100,		    --位置前后端转换系数
 	CommandStep = 3,		--驱动帧步伐
 
 	PlayerSpeed = 0.05,		--移动速度
 	PlayerRadius = 1,		--碰撞半径
 }
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************位置相关 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 方向预定义
 BattleDir = {
@@ -95,6 +101,81 @@ function BattleDirDefine:GetDirList(dir)
 	return BattleDirDefine.m_tList[dir] or {}
 end
 
+--@brief 获取服务器坐标
+function BattleDefine:GetServerPos(tx,ty,tz)
+	local posX,posY,posZ = math.floor(tx * BattleDefine.PosRate),math.floor(ty * BattleDefine.PosRate),math.floor(tz * BattleDefine.PosRate)
+	return CS.UnityEngine.Vector3(posX,posY,posZ)
+end
+
+--@brief 获取客户端坐标
+function BattleDefine:GetClientPos(tx,ty,tz)
+	local posX,posY,posZ = tx/BattleDefine.PosRate,ty/BattleDefine.PosRate,tz/BattleDefine.PosRate
+	return CS.UnityEngine.Vector3(posX,posY,posZ)
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************位置相关 End*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************战斗通用方法*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 计算点公式
+
+--@brief 检测碰撞
+function BattleDefine:CheckCollider(colliderA,colliderB)
+	local ay,by = BattleDefine:GetColliderCenteY(colliderA,colliderB)
+	local posA = GetPosTab(colliderA.m_tPos.x, ay, colliderA.m_tPos.z)
+	local posB = GetPosTab(colliderB.m_tPos.x, by, colliderB.m_tPos.z)
+	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
+		return true
+	end
+	return false
+end
+
+--@brief 获取最接近的y轴坐标
+function BattleDefine:GetColliderCenteY(colliderA,colliderB)
+	local ay = colliderA.m_tPos.y
+	local ah = colliderA.m_Height
+
+	local by = colliderB.m_tPos.y
+	local bh = colliderB.m_Height
+
+	--计算a点最小值，最大值
+	local aMin = ay - ah
+	local aMax = ay + ah
+	--计算b点最小值，最大值
+	local bMin = by - bh
+	local bMax = by + bh
+	
+	--ab相交 取其一
+	if (aMin >= bMin) and (aMin <= bMax) then
+		return aMin,aMin
+	end
+	if (aMax >= bMin) and (aMax <= bMax) then
+		return aMax,aMax
+	end
+
+	if (bMin >= aMin) and (bMin <= aMax) then
+		return bMin,bMin
+	end
+	if (bMax >= aMin) and (bMax <= aMax) then
+		return bMax,bMax
+	end
+
+	--不相交 取最接近两点
+	if aMin > bMin then
+		return aMin,bMax
+	else
+		return aMax,bMin
+	end
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************************************************战斗通用方法*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局事件 Begin*************************************************************
@@ -111,6 +192,7 @@ BATTLE_EVENT = {
 	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
 	UPDATE_CAMERA = "BATTLE_EVENT_UPDATE_CAMERA",		--刷新镜头
 	UPDATE_SCENE_POS = "BATTLE_EVENT_UPDATE_SCENE_POS",	--刷新场景中心点	
+	START_GAME = "BATTLE_EVENT_START_GAME",				--开始游戏
 	UPDATE_CHARACTER_GLASS = "BATTLE_EVENT_UPDATE_CHARACTER_GLASS",	 --刷新草丛id
 }
 --@breif 获取战斗事件管理器

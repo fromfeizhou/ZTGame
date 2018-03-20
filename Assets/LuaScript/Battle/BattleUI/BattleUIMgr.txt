@@ -1,13 +1,6 @@
 --BattleUIMgr.txt
 --@breif 战斗界面ui
 --@data 2018/03/11
-BattleUIMgr = {
-	m_mainUIContainer = nil,	--ui主容器
-	m_ctrlContainer = nil,		--控制UI容器
-	m_skillContainer = nil,		--技能UI容器
-	m_playerContainer = nil,	--玩家容器
-	m_hpContainer = nil,		--hp容器
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -17,6 +10,16 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLayerMask = CS.UnityEngine.LayerMask
 local CSLog = CS.GameTool.Log
+
+
+BattleUIMgr = {
+	m_mainUIContainer = nil,	--ui主容器
+	m_ctrlContainer = nil,		--控制UI容器
+	m_skillContainer = nil,		--技能UI容器
+	m_playerContainer = nil,	--玩家容器
+	m_hpContainer = nil,		--hp容器
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -48,6 +51,11 @@ function BattleUIMgr:Init()
 
 	--创建战斗ui
 	self:_CreateBattleUI()
+
+	--临时匹配按钮
+	if not GameConfig.IsSkillDebugScene then
+		self:_CreateMatchUI()
+	end
 end
 
 --@brief 移除
@@ -103,9 +111,33 @@ end
 --@brief 创建ui
 function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
+	self:_CreateSkillJoystick()
 end
 
 --@brief 创建移动摇杆
 function BattleUIMgr:_CreateMoveJoystick()
 	MoveJoystick:Create(self.m_ctrlContainer)
+end
+
+--@brief 创建技能按钮
+function BattleUIMgr:_CreateSkillJoystick()
+	SkillJoystick:Create(self.m_ctrlContainer)
+end
+
+--@brief 创建匹配ui
+function BattleUIMgr:_CreateMatchUI()
+	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButton"),function(target,path)
+		local gameObject = CSGameObject.Instantiate(target)
+		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
+		rectTrans:SetParent(self.m_ctrlContainer,false)
+		rectTrans.pivot = CSVector2(0.5,0.5)
+		rectTrans.anchorMin = CSVector2(0,1)
+		rectTrans.anchorMax = CSVector2(0,1)
+		rectTrans.anchoredPosition = CSVector2(100,-100)
+
+		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
+			BattleProtocol:SendMath()
+			gameObject:SetActive(false)
+		end)
+	end)
 end
