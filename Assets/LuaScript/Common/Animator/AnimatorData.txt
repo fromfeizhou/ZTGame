@@ -18,6 +18,12 @@ AnimaEvent = {
 	ChangeTranslucence = "ChangeTranslucence",		--改变半透明
 }
 
+--@brief 动画名字
+AnimatorName = {
+	Move = "move",		--播放动作
+	Idle = "stand",		--进入镜头
+}
+
 AnimatorData = {
 	m_nType = nil,	--动画类型
 	m_nCareerType = nil,	--职业类型
@@ -58,7 +64,7 @@ end
 --@brief 获得动画地址
 function AnimatorData:GetAnimatorPath()
 	if self.m_nType == AnimatorType.Hero then
-		return PathManager:GetAnimatorPath(CareerModels[self.m_nCareerType])
+		return PathManager:GetAnimatorPath(CareerModels[self.m_nCareerType] or CareerModels[1])
 	end
 	return ""
 end

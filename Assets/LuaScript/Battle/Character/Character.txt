@@ -81,9 +81,9 @@ function Character:SetDirection(dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
 		if self.m_nMoveDir == BattleDir.None then
-			self:Play("run")
+			self:Play(AnimatorName.Move)
 		elseif dir == BattleDir.None then
-			self:Play("idle")
+			self:Play(AnimatorName.Idle)
 		end
 		
 		--切换角度

@@ -40,7 +40,7 @@ end
 
 
 --@brief 刷新
-function SkillActionManager:Update()
+function SkillActionManager:UpdateCommand()
 	if not self.m_tSortList then
 		return
 	end

@@ -11,7 +11,7 @@ SkillActionType = {
 
 --@brief 技能容器
 SkillLayer = {
-	HERO = 0，	--玩家
+	HERO = 0,	--玩家
 	Scene = 1,	--场景
 }
 

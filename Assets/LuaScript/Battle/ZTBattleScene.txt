@@ -20,6 +20,7 @@ ZTBattleScene = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 切换战斗场景
 function ZTBattleScene:InitScene()
+	CSLog("ZTBattleScene:InitScene")
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 

@@ -116,14 +116,13 @@ end
 
 --@brief 创建移动摇杆
 function BattleUIMgr:_CreateMoveJoystick()
-	--test 
-	local testSkillId = 10001
-	MoveJoystick:Create(testSkillId, self.m_ctrlContainer)
+	MoveJoystick:Create(self.m_ctrlContainer)
 end
 
 --@brief 创建技能按钮
 function BattleUIMgr:_CreateSkillJoystick()
-	SkillJoystick:Create(self.m_ctrlContainer)
+	local testSkillId = 10001
+	SkillJoystick:Create(testSkillId,self.m_ctrlContainer)
 end
 
 --@brief 创建匹配ui

@@ -18,6 +18,7 @@ SkillJoystick = {
 	m_joystick = nil,		--摇杆组件
 
 	m_nSkillId = nil,		--技能id
+	m_nDistance = nil,		--技能距离
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -36,7 +37,7 @@ function SkillJoystick:Init(skillId,parent)
 	CSLog("SkillJoystick:Init")
 	self.m_ctrlContainer = parent
 	self.m_nSkillId = skillId
-	
+	self.m_nDistance = 100
 	--加载预设件
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
@@ -83,36 +84,11 @@ end
 
 --@brief 触摸点按下
 function SkillJoystick:_OnJoystickDown(pos)
-	self.m_sendDir = nil
-	self:_OnMoveAction(pos)
 end
 
 --@brief 触摸点移动
 function SkillJoystick:_OnJoystickMove(pos)
-	self:_OnMoveAction(pos)
-end
 
---@brief 触发移动
-function SkillJoystick:_OnMoveAction(pos)
-	local angle = math.deg(math.atan(pos.y,pos.x))
-	if angle >= -22.5 and angle < 22.5 then
-        self:_SendMoveCommand(BattleDir.Right)
-    elseif angle >= 22.5 and angle < 67.5 then
-        self:_SendMoveCommand(BattleDir.UpRight)
-    elseif angle >= 67.5 and angle < 112.5 then
-        self:_SendMoveCommand(BattleDir.Up)
-    elseif angle >= 112.5 and angle < 157.5 then
-        self:_SendMoveCommand(BattleDir.UpLeft)
-    elseif angle >= -157.5 and angle < -112.5 then
-        self:_SendMoveCommand(BattleDir.DownLeft)
-    elseif angle >= -112.5 and angle < -67.5 then
-        self:_SendMoveCommand(BattleDir.Down)
-    elseif angle >= -67.5 and angle < -22.5 then
-        self:_SendMoveCommand(BattleDir.DownRight)
-    else
-        self:_SendMoveCommand(BattleDir.Left)
-    end
-    self.m_bIsSend = true
 end
 
 
@@ -120,18 +96,18 @@ end
 --@brief 触摸点松开
 function SkillJoystick:_OnJoystickUp(pos)
 	if self.m_bIsSend then
-	 	self:_SendMoveCommand(BattleDir.None);
+	 	self:_SendSkillCommand(pos);
 	 	self.m_bIsSend = false
 	end
 end
 
 --@brife 发送移动操作
 --@param 目标标点
-function SkillJoystick:_SendSkillCommand(targetPos)
-	if self.m_sendDir == dir then
-		return
-	end
-	-- CSLog("SkillJoystick:_SendMoveCommand")
-	self.m_sendDir = dir
-	BattleProtocol:SendMoveCommand(dir)
+function SkillJoystick:_SendSkillCommand(pos)
+	-- CSLog("SkillJoystick:_SendSkillCommand")
+	local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
+	local distance = self.m_nDistance
+	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
+
+	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
 end
