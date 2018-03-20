@@ -68,7 +68,8 @@ end
 --@brief 逻辑帧刷新
 --@param 使用者id
 --@param 移动方向
-function ZTCharaManager:AddMoveCommand(battleId,dir)
+function ZTCharaManager:AddMoveCommand(moveCommand)
+	local battleId,dir = moveCommand.m_nBattleId,moveCommand.m_nDir
 	local chara = self.m_tCharaList[battleId]
 	-- CSLog("ZTCharaManager:AddMoveCommand",battleId,dir,chara)
 	if chara then

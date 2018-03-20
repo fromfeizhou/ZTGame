@@ -17,27 +17,25 @@ SkillJoystick = {
 	m_gameObject = nil,		--当前对象挂钩gameObject
 	m_joystick = nil,		--摇杆组件
 
-	m_bIsSend = nil,		--是否发送操作
-	m_sendDir = nil,		--已发送移动类型
+	m_nSkillId = nil,		--技能id
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillJoystick:Create(parent)
+function SkillJoystick:Create(skillId,parent)
 	local obj = {}
 	setmetatable( obj, { __index = SkillJoystick })
-	obj:Init(parent)
+	obj:Init(skillId,parent)
 	return obj
 end
 
 --@brief 初始化
-function SkillJoystick:Init(parent)
+function SkillJoystick:Init(skillId,parent)
 	CSLog("SkillJoystick:Init")
 	self.m_ctrlContainer = parent
-	self.m_bIsSend = false
-	self.m_sendDir = nil
+	self.m_nSkillId = skillId
 	
 	--加载预设件
 	local callback_loadfinish = function(target,path)
@@ -128,7 +126,8 @@ function SkillJoystick:_OnJoystickUp(pos)
 end
 
 --@brife 发送移动操作
-function SkillJoystick:_SendMoveCommand(dir)
+--@param 目标标点
+function SkillJoystick:_SendSkillCommand(targetPos)
 	if self.m_sendDir == dir then
 		return
 	end
