@@ -111,11 +111,17 @@ end
 --@brief 创建ui
 function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
+	self:_CreateSkillJoystick()
 end
 
 --@brief 创建移动摇杆
 function BattleUIMgr:_CreateMoveJoystick()
 	MoveJoystick:Create(self.m_ctrlContainer)
+end
+
+--@brief 创建技能按钮
+function BattleUIMgr:_CreateSkillJoystick()
+	SkillJoystick:Create(self.m_ctrlContainer)
 end
 
 --@brief 创建匹配ui
