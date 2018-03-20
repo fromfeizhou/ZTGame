@@ -130,8 +130,6 @@ public class MapColliderEditor : EditorWindow
             };
             if (mapBlockType == eMapBlockType.Hide)
             {
-                Debug.LogError(tempBlock.row + "    " + tempBlock.col + " type: " + tempBlock.type);
-
                 if (!MapHideBlockDataDic.ContainsKey(key))
                     MapHideBlockDataDic[key] = tempBlock;
             }
