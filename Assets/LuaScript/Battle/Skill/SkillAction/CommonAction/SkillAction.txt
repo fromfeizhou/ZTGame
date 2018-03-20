@@ -71,6 +71,10 @@ function SkillAction:Destroy()
 	CSLog("SkillAction:Destroy")
 end
 
+--@brief 碰撞处理
+function SkillAction:DoColliderAction(colliderList)
+	
+end
 
 --@brief 获得使用者
 function SkillAction:GetOwner()

@@ -33,6 +33,11 @@ function SkillActionManager:Destroy()
 	self.m_tSortList = nil
 end
 
+--@brief 重置
+function SkillActionManager:Reset()
+	self.m_tSortList = {}
+end
+
 
 --@brief 刷新
 function SkillActionManager:Update()
@@ -82,7 +87,17 @@ function SkillActionManager:AddSkill(ownerId,skillId,startFrame)
 			return dataA.id < dataB.id
 		end)
 	end
+end
 
+--@brief 碰撞按照服务器顺序优先处理
+function SkillActionManager:SkillCollider(ownerId,skillId,collistList)
+	for i = 1,#self.m_tSortList do
+		local data = self.m_tSortList[i]
+		if data.id == ownerId and data.actionParse.m_nSkillId == skillId then
+			data.actionParse:DoColliderAction(collistList)
+			break
+		end
+	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

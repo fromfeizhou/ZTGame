@@ -9,6 +9,7 @@ GlobalBattleCtrl = {
 	m_battleUIMgr = nil,	--主ui管理器
 	m_ztCharaManager = nil, --玩家对象管理
 	m_battleCommandMgr = nil,	--帧命令管理器
+	m_skillActionManager = nil,		--技能解析器
 
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
@@ -34,6 +35,9 @@ function GlobalBattleCtrl:Init()
 	GlobalBattleCtrl.m_ztCharaManager = ZTCharaManager:Create()
 	--帧命令管理器
 	GlobalBattleCtrl.m_battleCommandMgr = BattleCommandMgr:Create()
+
+	--技能解析器
+	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 	
 	--****************管理者初始化end************************************************
 
@@ -63,14 +67,23 @@ function GlobalBattleCtrl:Destroy()
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:Destroy()
 		GlobalBattleCtrl.m_ztCharaManager = nil
-		
 	end
+	--帧命令管理器
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:Destroy()
+		GlobalBattleCtrl.m_battleCommandMgr = nil
+	end
+	--技能解析器
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:Destroy()
+		GlobalBattleCtrl.m_skillActionManager = nil
+	end
+
 	--主UI管理器(备注：先创建 最后移除)
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
 	end
-
 	
 	--清理全局事件管理器
 	GBattleEvent:RemoveDispatcher()
@@ -177,6 +190,22 @@ function GlobalBattleCtrl:GetCurCommandFrame()
 		return self.m_battleCommandMgr.m_nClientFrame
 	end
 	return 0
+end
+
+
+--@brief  添加解析器
+function GlobalBattleCtrl:AddSkill(ownerId,skillId,startFrame)
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:AddSkill(ownerId,skillId,startFrame)
+	end
+end
+
+
+--@brief 碰撞按照服务器顺序优先处理
+function GlobalBattleCtrl:SkillCollider(ownerId,skillId,collistList)
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:SkillCollider(ownerId,skillId,collistList)
+	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************

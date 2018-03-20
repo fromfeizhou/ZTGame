@@ -28,14 +28,14 @@ end
 function SkillPlayAction:Init(actionData)
 	--继承实现
 	SkillAction.Init(self,actionData)
-	self.m_sAnimName = actionData.
+	self.m_sAnimName = self.m_tActionData.m_sAnimName
 end
 
 --@brief 开始
 function SkillPlayAction:Start()
 	--继承实现
 	SkillAction.Start(self)
-	self:GetOwner():Play(name)
+	self:GetOwner():Play(self.m_sAnimName)
 	self:Done()
 end
 

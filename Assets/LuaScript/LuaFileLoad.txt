@@ -60,6 +60,16 @@ local LuaFileLoad = {
 
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
+
+		"Battle.Skill.SkillDefine",
+		"Battle.Skill.Collider.ZTCollider",
+		"Battle.Skill.Effect.SkillEffect",
+		"Battle.Skill.SkillAction.CommonAction.SkillAction",
+		"Battle.Skill.SkillAction.CommonAction.SkillPlayAction",
+		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
+		"Battle.Skill.SkillAction.SkillActionData",
+		"Battle.Skill.SkillAction.SkillActionParse",
+		"Battle.Skill.SkillAction.SkillActionManager",
 		
 		"Battle.BattleUI.MoveJoystick",
 		"Battle.BattleUI.BattleUIMgr",
