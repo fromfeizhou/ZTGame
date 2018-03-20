@@ -18,6 +18,7 @@ BattleUIMgr = {
 	m_skillContainer = nil,		--技能UI容器
 	m_playerContainer = nil,	--玩家容器
 	m_hpContainer = nil,		--hp容器
+	m_mapContainer = nil,		--地图容器
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -48,14 +49,22 @@ function BattleUIMgr:Init()
 
 	--hp容器
 	self.m_hpContainer = self:_CreateContainer("HpContainer",self.m_mainUIContainer)
+	
+	--地图容器
+	self.m_mapContainer = self:_CreateContainer("MapContainer",self.m_mainUIContainer)
 
 	--创建战斗ui
 	self:_CreateBattleUI()
+
+	--创建地图面板
+	GCSLog("BattleUIMgr:Init",self.m_mapContainer)
+	MapScrollPanel:Create(self.m_mapContainer)
 
 	--临时匹配按钮
 	if not GameConfig.IsSkillDebugScene then
 		self:_CreateMatchUI()
 	end
+	
 end
 
 --@brief 移除
@@ -79,6 +88,11 @@ function BattleUIMgr:Destroy()
 	if self.m_hpContainer then
 		CSGameObject.Destroy(self.m_hpContainer.gameObject)
 		self.m_hpContainer = nil
+	end
+	
+	if self.m_mapContainer then
+		CSGameObject.Destroy(self.m_mapContainer.gameObject)
+		self.m_mapContainer = nil
 	end
 end
 

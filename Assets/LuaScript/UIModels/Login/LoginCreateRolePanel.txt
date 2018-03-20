@@ -9,6 +9,8 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginCreateRolePanel = {
+	m_model = nil,
+
 	m_transform = nil,
 	m_gameObject = nil,
 }
@@ -17,15 +19,16 @@ LoginCreateRolePanel = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LoginCreateRolePanel:Create()
+function LoginCreateRolePanel:Create(model)
 	local obj = {}
 	setmetatable( obj, { __index = LoginCreateRolePanel })
-	obj:Init()
+	obj:Init(model)
 	return obj
 end
 
 --@brief 初始化登录界面（加载面板资源）
-function LoginCreateRolePanel:Init()
+function LoginCreateRolePanel:Init(model)
+	self.m_model = model
 	local callback_loadfinish = function(target,path)
 		self:_LoadAssetPanelFinish(target,path)
 	end
@@ -40,13 +43,13 @@ end
 --@brief 显示登录面板
 function LoginCreateRolePanel:Show()
 	self.m_gameObject:SetActive(true)
-	LoginModel.m_pIsOpenedCreatePanel = true
+	self.m_model.m_pIsOpenedCreatePanel = true
 end
 
 --@brief 隐藏登录面板
 function LoginCreateRolePanel:Hide()
 	self.m_gameObject:SetActive(false)
-	LoginModel.m_pIsOpenedCreatePanel = false
+	self.m_model.m_pIsOpenedCreatePanel = false
 end
 
 --@brief 销毁登录面板
@@ -94,7 +97,7 @@ function LoginCreateRolePanel:_Request_Create_Role(jobId)
 	package.model 	= PB_LOGIN.MODEL
 	package.command = PB_LOGIN.CREATE_ROLE
 	package.data = {
-		name = LoginModel.m_pAccname, 	-- 人物名字
+		name = self.m_model.m_pAccname, 	-- 人物名字
 		job = jobId,	-- 角色职业
 		sex = 1,		-- 性别
 		serv_id = 0,	-- 服务器ID

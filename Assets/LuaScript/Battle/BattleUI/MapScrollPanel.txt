@@ -1,13 +1,6 @@
---CityMainPanel.txt
+--MapScrollPanel.txt
 --@breif lua入口
 --@data 2018/3/5
-CityMainPanel = {
-	m_model = nil,
-
-	m_transform = nil,
-	m_gameObject = nil,
-	
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -15,107 +8,72 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 
+MapScrollPanel = {
+	m_transform = nil,
+	m_gameObject = nil,
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function CityMainPanel:Create(model)
+function MapScrollPanel:Create(parent)
 	local obj = {}
-	setmetatable( obj, { __index = CityMainPanel })
-	obj:Init(model)
+	setmetatable( obj, { __index = MapScrollPanel })
+	obj:Init(parent)
 	return obj
 end
 
 --@brief 初始化登录界面（加载面板资源）
-function CityMainPanel:Init(model)
-	self.m_model = model
-	
-	local callback_loadfinish = function(target,path)
-		self:_LoadAssetPanelFinish(target,path)
-	end
-		
-	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("CityMainPanel"),callback_loadfinish)
-	self:_AddEvents()
-	self:_RegProtocol()
+function MapScrollPanel:Init(parent)
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("MapScrollPanel"),function(target,path)
+ 		if target then
+ 			self.m_transform = CSTransform.Instantiate(target.transform,parent)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+			
+ 			--@brief 初始化登录界面UI控件
+			
+		end
+	end)
 end
 
 --@brief 面板每帧刷新
-function CityMainPanel:Update(deltaTime)
+function MapScrollPanel:Update(deltaTime)
 end
 
 --@brief 显示登录面板
-function CityMainPanel:Show()
+function MapScrollPanel:Show()
 	self.m_gameObject:SetActive(true)
+	LoginModel.m_pIsOpenedCreatePanel = true
 end
 
 --@brief 隐藏登录面板
-function CityMainPanel:Hide()
+function MapScrollPanel:Hide()
 	self.m_gameObject:SetActive(false)
+	LoginModel.m_pIsOpenedCreatePanel = false
 end
 
 --@brief 销毁登录面板
-function CityMainPanel:Destroy()
-	self:_RemoveEvents()
-	self:_UnRegProtocol()
+function MapScrollPanel:Destroy()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 预设加载成功
-function CityMainPanel:_LoadAssetPanelFinish(target,path)
-	local prefab = target
- 		if prefab then
-			local canvas = CSGameObject.Find("Canvas").transform
- 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self.m_transform.gameObject:SetActive(false)
- 			self:_InitPanel()
-		end
-end
 
---@brief 初始化登录界面UI控件
-function CityMainPanel:_InitPanel()	
-
-	-- 按钮 - 服务器列表
-	PanelWidget:GetButton(self.m_transform,"ViewPort/BtnEnterGame",function() self:_OnBtnClick_EnterGame() end)
-end
-
---@brief 增加事件
-function CityMainPanel:_AddEvents()
-	GCSLog("CityMainPanel:_AddEvents()")
-end
-
---@brief 移除事件
-function CityMainPanel:_RemoveEvents()
-	GCSLog("CityMainPanel:_RemoveEvents()")
-end
-
---@brief 网络协议监听
-function CityMainPanel:_RegProtocol()
-	--NetWork
-	--ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role, self)
-end
---@brief 移除网络协议监听
-function CityMainPanel:_UnRegProtocol()
-	--NetWork
-	--ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role)
-end
-
---@brief 按钮 - 登录
-function CityMainPanel:_OnBtnClick_EnterGame()
-	GCSLog("LuaGameStart:_EnterSkillDebug")
-	ZTBattleScene:InitScene()
-end
-	
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request Start***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 请求 - 创建角色
+function MapScrollPanel:_Request_Create_Role(jobId)
 
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Receive Start***************************************************************
