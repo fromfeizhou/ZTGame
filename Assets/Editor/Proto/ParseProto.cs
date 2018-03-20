@@ -5,6 +5,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 using UnityEditor;
+
+
 [System.Serializable]
 public class cCommand
 {
@@ -85,8 +87,8 @@ public class ParseProto{
 
 	private const string protoPath = "BuildProto/protobuf.proto";
 	private const string ErrorCodePath = "ecode_zh.hrl";
-	private const string ProtocalDefine_SavePath = "Assets/LuaScript/ProtoBuff/ProtocalDefine.txt";
-	private const string NetProtocal_SavePath = "Assets/LuaScript/ProtoBuff/NetProtocal.txt";
+	private const string ProtocalDefine_SavePath = "Assets/LuaScript/ProtoBuff/ProtocolDefine.txt";
+	private const string NetProtocal_SavePath = "Assets/LuaScript/ProtoBuff/NetProtocol.txt";
 
 
 	private static void SaveCSharpNetFacadeFiles(List<cModule> moduleList)
@@ -132,7 +134,7 @@ public class ParseProto{
 			if (idx >= 0)
 				moduleList [idx].commandList.Add (command);
 			else
-				Debug.LogError ("Found Module. moduleId:" + command.moduleId +  "moduleEn:" + command.moduleEn);
+				UnityEngine.Debug.LogError ("Found Module. moduleId:" + command.moduleId +  "moduleEn:" + command.moduleEn);
 		}
 		moduleList.Sort ((left,right)=>left.moduleId.CompareTo(right.moduleId));
 		return moduleList;
@@ -141,22 +143,55 @@ public class ParseProto{
 	[MenuItem("Tools/ParseProtoFile")]
 	private static void ParseProtoFile()
 	{
+		/** 编译 *.proto */
+		string batPath = Application.dataPath + @"\..\BuildProto\";
+		batPath = batPath.Replace("/","\\");
+		ProcessCommand ("build.bat",batPath);  
+		AssetDatabase.Refresh ();
+
+		/** 解析 *.proto */
 		List<cModule> moduleList = ParseProtoToModuleList();
 		SaveCSharpNetFacadeFiles (moduleList);
 		AssetDatabase.Refresh ();
 	}
 
-	[MenuItem("Tools/ParseErrorCode")]
+	//[MenuItem("Tools/ParseErrorCode")]
 	private static void ParseErrorCode()
 	{
-		if (!File.Exists (ErrorCodePath)) {
-			Debug.LogError ("[ParseErrorCode]Found out Path. path:" + ErrorCodePath);
-			return;
+		
+	}
+
+
+	/** 执行 bat 批处理 */
+	private static void ProcessCommand(string command, string workPath){
+		System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo (command);
+		info.CreateNoWindow = false;
+		info.ErrorDialog = true;
+		info.UseShellExecute = true;
+		info.WorkingDirectory = workPath;
+		if (info.UseShellExecute) {
+			info.RedirectStandardOutput = false;
+			info.RedirectStandardError = false;
+			info.RedirectStandardInput = false;
+		} else {
+			info.RedirectStandardOutput = true;
+			info.RedirectStandardError = true;
+			info.RedirectStandardInput = true;
+
+			info.StandardOutputEncoding = System.Text.UTF8Encoding.UTF8;
+			info.StandardErrorEncoding = System.Text.UTF8Encoding.UTF8;
 		}
 
-		string[] Contents = File.ReadAllLines (ErrorCodePath);
-		for (int i = 0; i < Contents.Length; i++) {
-		
+		System.Diagnostics.Process process = System.Diagnostics.Process.Start (info);
+
+		if (!info.UseShellExecute) {
+			Debug.Log (process.StandardOutput);
+			Debug.Log (process.StandardError);
 		}
+
+		process.WaitForExit ();
+		process.Close ();
+
 	}
+
 }
