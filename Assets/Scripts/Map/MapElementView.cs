@@ -244,14 +244,7 @@ public class MapElementView
                     element.position = elementInfo.Pos;
                     element.eulerAngles = elementInfo.Angle;
                     element.localScale = elementInfo.Scale;
-                    BuildingZTCollider tempcollider = element.GetComponent<BuildingZTCollider>();
-                    if (tempcollider != null)
-                    {
-                        tempcollider.enabled = false;
-                        //ICharaBattle tempBattle = ZTBattleSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-                        //if (tempBattle != null)
-                        //    tempcollider.SetTarget(tempBattle.Collider);
-                    }
+
                     loadedObj[elementData.elementKey] = element.gameObject;
                 }
             });
