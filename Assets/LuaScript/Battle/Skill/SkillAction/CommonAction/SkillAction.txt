@@ -72,7 +72,7 @@ function SkillAction:Destroy()
 end
 
 --@brief 碰撞处理
-function SkillAction:DoColliderAction(colliderList)
+function SkillAction:DoColliderAction(colliderCommand)
 	
 end
 

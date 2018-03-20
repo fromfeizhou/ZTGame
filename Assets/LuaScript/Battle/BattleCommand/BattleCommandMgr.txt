@@ -121,7 +121,17 @@ end
 --@brief 移动命令
 function BattleCommandMgr:_ParseMove(command)
 	-- CSLog("BattleCommandMgr:_ParseMove")
-	if GlobalBattleCtrl.m_ztCharaManager then
-		GlobalBattleCtrl.m_ztCharaManager:AddMoveCommand(command.m_nBattleId,command.m_nDir)
-	end
+	GlobalBattleCtrl:AddMovelCommand(command)
+end
+
+--@brief 移动命令
+function BattleCommandMgr:_ParseSkill(command)
+	-- CSLog("BattleCommandMgr:_ParseSkill")
+	GlobalBattleCtrl:AddSkillCommand(command)
+end
+
+--@brief 移动命令
+function BattleCommandMgr:_ParseCollider(command)
+	-- CSLog("BattleCommandMgr:_ParseCollider")
+	GlobalBattleCtrl:AddColliderCommand(command)
 end
