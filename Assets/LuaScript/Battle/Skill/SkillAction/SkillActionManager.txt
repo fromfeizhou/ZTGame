@@ -59,11 +59,12 @@ end
 
 
 --@brief  添加解析器
-function SkillActionManager:AddSkill(ownerId,skillId,startFrame)
+function SkillActionManager:AddSkillCommand(skillCommand)
+	local ownerId,skillId,startFrame = skillCommand.m_nBattleId,skillCommand.m_nSkillId
 	if not self.m_tSortList then
 		return
 	end
-	local actionParse = SkillActionParse:Create(ownerId,skillId,startFrame)
+	local actionParse = SkillActionParse:Create(skillCommand)
 
 	local input = false
 	for i = 1,#self.m_tSortList do
@@ -90,7 +91,7 @@ function SkillActionManager:AddSkill(ownerId,skillId,startFrame)
 end
 
 --@brief 碰撞按照服务器顺序优先处理
-function SkillActionManager:SkillCollider(ownerId,skillId,collistList)
+function SkillActionManager:AddColliderCommand(colliderCommand)
 	for i = 1,#self.m_tSortList do
 		local data = self.m_tSortList[i]
 		if data.id == ownerId and data.actionParse.m_nSkillId == skillId then

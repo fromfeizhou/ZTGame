@@ -194,17 +194,24 @@ end
 
 
 --@brief  添加解析器
-function GlobalBattleCtrl:AddSkill(ownerId,skillId,startFrame)
+function GlobalBattleCtrl:AddMovelCommand(moveCommand)
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:AddMoveCommand(moveCommand)
+	end
+end
+
+--@brief  添加解析器
+function GlobalBattleCtrl:AddSkillCommand(skillCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
-		GlobalBattleCtrl.m_skillActionManager:AddSkill(ownerId,skillId,startFrame)
+		GlobalBattleCtrl.m_skillActionManager:AddSkill(skillCommand)
 	end
 end
 
 
 --@brief 碰撞按照服务器顺序优先处理
-function GlobalBattleCtrl:SkillCollider(ownerId,skillId,collistList)
+function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
-		GlobalBattleCtrl.m_skillActionManager:SkillCollider(ownerId,skillId,collistList)
+		GlobalBattleCtrl.m_skillActionManager:SkillCollider(colliderCommand)
 	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
