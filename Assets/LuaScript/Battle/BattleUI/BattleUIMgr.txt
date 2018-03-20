@@ -57,7 +57,6 @@ function BattleUIMgr:Init()
 	self:_CreateBattleUI()
 
 	--创建地图面板
-	GCSLog("BattleUIMgr:Init",self.m_mapContainer)
 	MapScrollPanel:Create(self.m_mapContainer)
 
 	--临时匹配按钮
