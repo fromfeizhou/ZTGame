@@ -21,11 +21,11 @@ public class ZTAnimator : MonoBehaviour {
     }
 
     //创建形象
-    public void CreateAnimatorView(string path)
+    public void CreateAnimatorView(string path,int type=1)
     {
         if (modelSprite == null)
             modelSprite = new RoleModelSprite();
-        modelSprite.CreateModel(path,this.transform);
+        modelSprite.CreateModel(path,this.transform,type);
     }
 
     public void SetEquips(List<int> equips)
