@@ -51,7 +51,7 @@ function CityModel:ShowPanel( panelType )
 		panel = self.m_tPanelList[panelType]
 	else
 		if panelType == CITY_TYPE.MAIN then
-			panel = CityMainPanel:Create()
+			panel = CityMainPanel:Create(self)
 		--elseif panelType == LOGIN_TYPE.CREATEROLE then
 			--panel = LoginCreateRolePanel:Create()
 		end

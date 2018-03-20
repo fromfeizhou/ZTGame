@@ -206,7 +206,8 @@ function NetWorkManager:_Receive_Login_Auth_Key(pbData)
 	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
 	
 	--请求登录服务器
-	LoginMainPanel:Request_Login()
+	local loginModel = ModelManager:_GetModel(MODEL_TYPE.LOGIN)
+	if loginModel then loginModel:Request_Login() end
 end
 
 --@brief 开启心跳

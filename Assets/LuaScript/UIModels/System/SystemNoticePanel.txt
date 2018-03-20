@@ -8,6 +8,8 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 SystemNoticePanel = {
+	m_model = nil,
+	
 	m_transform = nil,
 	m_gameObject = nil,
 
@@ -18,15 +20,16 @@ SystemNoticePanel = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SystemNoticePanel:Create()
+function SystemNoticePanel:Create(model)
 	local obj = {}
 	setmetatable( obj, { __index = SystemNoticePanel })
-	obj:Init()
+	obj:Init(model)
 	return obj
 end
 
 --@brief 初始化登录界面（加载面板资源）
-function SystemNoticePanel:Init()
+function SystemNoticePanel:Init(model)
+	m_model = model
 	local callback_loadfinish = function(target,path)
 		self:_LoadAssetPanelFinish(target,path)
 	end

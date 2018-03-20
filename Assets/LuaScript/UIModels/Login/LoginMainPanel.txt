@@ -9,6 +9,8 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginMainPanel = {
+	m_model = nil,
+
 	m_transform = nil,
 	m_gameObject = nil,
 	m_inputAccount = nil,
@@ -19,20 +21,21 @@ LoginMainPanel = {
 	m_tServerItemList = nil,
 }
 
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function LoginMainPanel:Create()
+function LoginMainPanel:Create(model)
 	local obj = {}
 	setmetatable( obj, { __index = LoginMainPanel })
-	obj:Init()
+	obj:Init(model)
 	return obj
 end
 
 --@brief 初始化登录界面（加载面板资源）
-function LoginMainPanel:Init()
+function LoginMainPanel:Init(model)
+	
+	self.m_model = model
 	local callback_loadfinish = function(target,path)
 		self:_LoadAssetPanelFinish(target,path)
 	end
@@ -172,15 +175,15 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
-	LoginModel.m_pAccname 	= self.m_inputAccount.text
-	LoginModel.m_pKey		= self.m_inputKey.text
+	self.m_model.m_pAccname 	= self.m_inputAccount.text
+	self.m_model.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
 end
 
 --@brief 按钮 - 无网络登录
 function LoginMainPanel:_OnBtnClick_LoginNoNet()
 	GCSLog("LoginMainPanel:_OnBtnClick_LoginNoNet()")
-	LoginModel:LoginFinish()
+	self.m_model:LoginFinish()
 end
 
 --@brief 创建服务器Item
@@ -221,26 +224,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request Start***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 请求 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
-function LoginMainPanel:Request_Login()
-	local pbData 	= {}
-	pbData.model 	= PB_LOGIN.MODEL
-	pbData.command 	= PB_LOGIN.LOGIN
-	pbData.data = {}
-	pbData.data.accname 		= LoginModel.m_pAccname	-- 用户名
-	pbData.data.key 			= LoginModel.m_pKey		-- 验证key
-	pbData.data.fcm 			= 0 			-- 防沉迷信息(暂不使用)
-	pbData.data.serv_id 		= 0 			-- 服务器ID
-	pbData.data.platform		= 0 			-- 平台，为0则为本地开发
-	pbData.data.token			= "" 				-- 验证数据串
-	pbData.data.device_id		= ""				-- 设备ID
-	pbData.data.device_desc 	= "" 			-- 设备描述
-	pbData.data.product_code	= "" 			-- quickSDK产品code
-	pbData.data.uid 			= "" 			-- quickSDK的uid
-	pbData.data.nick_name		= "" 				-- 昵称
-	GCSLog("LoginModel:NetWork_RequestLogin","accname:",pbData.data.accname,"key",self.m_pKey)
-	NetWorkManager:SendNetMsg(pbData)
-end
+
 
 --@brief 请求 - 选择角色 - PB_LOGIN.MODEL - PB_LOGIN.SELECT_ROLE
 function LoginMainPanel:_Request_Select_Role(roleId)
@@ -296,14 +280,14 @@ function LoginMainPanel:_Receive_Select_Role(login_select_role_s2c)
 	GCSLog("LoginMainPanel:_Receive_Select_Role\n",SerializeTable(login_select_role_s2c))
 	self.m_nlogin_select_role_s2c = login_select_role_s2c
 	
-	if LoginModel.m_pIsOpenedCreatePanel then 
+	if self.m_model.m_pIsOpenedCreatePanel then 
 		local panelData = {
 			modelType = MODEL_TYPE.LOGIN,
 			panelType = LOGIN_TYPE.CREATEROLE,
 		}
 		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
 	end
-	LoginModel:LoginFinish()
+	self.m_model:LoginFinish()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Receive End***************************************************************
