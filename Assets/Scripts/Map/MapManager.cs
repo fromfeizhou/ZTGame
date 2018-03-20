@@ -17,6 +17,7 @@ public class MapDefine
     public const string MapDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapData.bytes";
     public const string MapHideBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HideBolckData.bytes";
     public const string MapHeightBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HeightBolckData.bytes";
+    public const string MapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapPropPostionData.txt";
     public const int MapByteInterval = 6;
 
 
