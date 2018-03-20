@@ -1,5 +1,9 @@
 #/usr/bin/env python
-# -*- coding: UTF-8 -*-
+#coding=utf-8
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf8') 
+
 import os
 import xlrd
 g_root_path = os.getcwd()
@@ -13,11 +17,13 @@ def ToArrTab(value,isStr):
 		else:
 			res = res + '%d,' % int(arr[i])
 	res = res +'}'
-	print res
+	#print res
 	return res
 
 def writeLua(fname):
 	print fname
+	typeList = ["int", "string", "float", "[int]","[string]"]
+	clientFlag = ['k','a','c']
  	try:
  		# excel data dict
  		excel_data_dict = {}
@@ -25,12 +31,25 @@ def writeLua(fname):
  		col_name_list = []
  		#col val type list
  		col_val_type_list = []
- 		# ctype: 0 empty, 1 string, 2 number, 3 date, 4 boolean, 5 error
+
+ 		col_client_flag_list = []
+
  		workbook = xlrd.open_workbook(fname)
  		booksheet = workbook.sheets()[0]
+
+ 		# 遍历第2行的所有列 保存读取类型
+ 		for col in range(0, booksheet.ncols):
+ 			cell = booksheet.cell(1, col)
+ 			col_client_flag_list.append(str(cell.value))
+ 			print cell.value
+ 			assert cell.ctype == 1, "found a invalid col val in col [%d] !~" % (col)
+
  		# 遍历第3行的所有列 保存数据类型
  		for col in range(0, booksheet.ncols):
  			cell = booksheet.cell(2, col)
+ 			valueType = str(cell.value)
+			if not valueType in typeList:
+				valueType = 'int'
  			col_val_type_list.append(str(cell.value))
  			assert cell.ctype == 1, "found a invalid col val in col [%d] !~" % (col)
  		# 遍历第4行的所有列 保存字段名
@@ -52,7 +71,6 @@ def writeLua(fname):
 
 			# 保存每一行的所有数据
 			for col in range(0, booksheet.ncols):
-				
 				cell = booksheet.cell(row, col)
 				k = col_name_list[col]
 				cell_val_type = col_val_type_list[col]
@@ -79,29 +97,31 @@ def writeLua(fname):
 					if cell.ctype == 0:
 						v = '{}'
 					else:
-						print cell.value
 						v = ToArrTab(cell.value,False)
 				elif cell_val_type == '[string]':
 					if cell.ctype == 0:
 						v = '{}'
 					else:
-						print cell.value
 						v = ToArrTab(cell.value,True)
 				else:
-					v = int(cell.value)
+					if cell.ctype == 0:
+						v = -1
+					else:
+						v = int(cell.value)
 				# 加入列表
-				row_data_list.append([k, v])
+				row_data_list.append([k, v,col_client_flag_list[col]])
 			# 保存id 和 row data
 			excel_data_dict[cell_id.value] = row_data_list
 
  		# # export to lua file
- 		lua_export_file = open('../Assets/ResourcesLib/Config/LuaConfig/' + booksheet.name + '.lua.txt', 'w')
+ 		lua_export_file = open('../Assets/ResourcesLib/Config/LuaConfig/' + booksheet.name + '.txt', 'w')
  		lua_export_file.write('%s = {\n' % booksheet.name)
  		# 遍历excel数据字典 按格式写入
  		for k, v in excel_data_dict.items():
  			lua_export_file.write('  id_%d = {\n' % k)
  			for row_data in v:
- 				lua_export_file.write('   {0} = {1},\n'.format(row_data[0], row_data[1]))
+ 				if row_data[2] in clientFlag:
+ 					lua_export_file.write('   {0} = {1},\n'.format(row_data[0], row_data[1]))
  			lua_export_file.write('  },\n')
 
  		lua_export_file.write('}\n')
