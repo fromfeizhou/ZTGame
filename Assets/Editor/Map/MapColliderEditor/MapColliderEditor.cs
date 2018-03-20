@@ -40,7 +40,7 @@ public class MapColliderEditor : EditorWindow
         if (mapElementRoot == null) return;
         CreateElement(mapElementRoot.transform, offsetX, offsetY);
         MapColliderHelper.SaveMapBytesFile(blockBytesData, MapHideBlockDataDic, MapHeightBlockDataDic);
-        // MapColliderHelper.SaveMapBlockFile(new List<MapBlockData>(MapHideBlockDataDic.Values));
+        AssetDatabase.Refresh();
     }
 
     private static void CreateElement(Transform go, int offsetX, int offsetY)
