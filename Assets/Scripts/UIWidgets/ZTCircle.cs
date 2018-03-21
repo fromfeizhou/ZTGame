@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using XLua;
 
-public class Circle : MonoBehaviour {
+[LuaCallCSharp]
+public class ZTCircle : MonoBehaviour {
 
 	/** 计算优化，周长基数，周长：2 * PI * R */
 	private const float BasePerimeter = 2.0f * Mathf.PI * 1.0025f;
@@ -57,6 +59,8 @@ public class Circle : MonoBehaviour {
 					Image lineImg = go.AddComponent<Image> ();
 					lineImg.raycastTarget = false;
 					lineRect.SetParent (transform);
+					lineRect.localPosition = Vector3.zero;
+					lineRect.localScale = Vector3.one;
 					rectLineList.Add (lineRect);
 				}
 				else{

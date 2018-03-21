@@ -31,11 +31,15 @@ public class ZTButton : Button,IWidget,IPointerExitHandler
 		}
 	}
 
+	private bool isDown = false;
+
 	// 当按钮失去焦点
 	public override void OnPointerExit(PointerEventData eventData)
 	{
-		base.OnPointerExit (eventData);
-		_canClick = false;
+		if (isDown) {
+			base.OnPointerExit (eventData);
+			_canClick = false;
+		}
 	}
 
 	public override void OnPointerClick (PointerEventData eventData)
@@ -45,10 +49,19 @@ public class ZTButton : Button,IWidget,IPointerExitHandler
 
 	public override void OnPointerUp (PointerEventData eventData)
 	{
-		base.OnPointerUp (eventData);
-		if (_canClick && onClick != null) {
-			onClick.Invoke ();
+		if (isDown) {
+			base.OnPointerUp (eventData);
+			if (_canClick && onClick != null) {
+				onClick.Invoke ();
+			}
+			_canClick = true;
 		}
-		_canClick = true;
+		isDown = false;
+	}
+
+	public override void OnPointerDown(PointerEventData eventData)
+	{
+		base.OnPointerDown (eventData);
+		isDown = true;
 	}
 }
