@@ -43,7 +43,6 @@ public class MapColliderHelper
             Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
         }
         File.WriteAllBytes(MapDefine.MapHeightBlockDataSavePath, hideTytes);
-
     }
 
     public static void SaveMapBlockFile(List<MapBlockData> _mapBlockData)
