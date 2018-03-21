@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: f74631d92db60de41b419f49ef82b4cd
-timeCreated: 1521526803
+guid: ec47cb5464a49e14db932df36246c9f1
+timeCreated: 1521599900
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -10,151 +10,305 @@ ModelImporter:
     100004: JiTanBaSou 1
     100006: JiTanBaSou 2
     100008: JiTanBaSou 3
-    100010: JiTanDiMian
-    100012: JiTanDiMian 1
-    100014: JiTanDiMian 2
-    100016: JiTanDiMian 3
-    100018: JiTanDiMian 4
-    100020: JiTanLouTi
-    100022: JiTanLouTi 1
-    100024: JiTanLouTi 10
-    100026: JiTanLouTi 11
-    100028: JiTanLouTi 12
-    100030: JiTanLouTi 13
-    100032: JiTanLouTi 14
-    100034: JiTanLouTi 15
-    100036: JiTanLouTi 16
-    100038: JiTanLouTi 17
-    100040: JiTanLouTi 2
-    100042: JiTanLouTi 3
-    100044: JiTanLouTi 4
-    100046: JiTanLouTi 5
-    100048: JiTanLouTi 6
-    100050: JiTanLouTi 7
-    100052: JiTanLouTi 8
-    100054: JiTanLouTi 9
-    100056: JiTanLouTi01
-    100058: JiTanLouTi01 1
-    100060: JiTanLouTi01 2
-    100062: JiTanLouTi01 3
-    100064: JiTanLouTi02
-    100066: JiTanLouTi02 1
-    100068: JiTanLouTi02 2
-    100070: JiTanLouTi02 3
-    100072: JiTanYuanPan
-    100074: JiTanYuanPan01
-    100076: JiTanZhuZi
+    100010: JiTanBaSou001
+    100012: JiTanBaSou002
+    100014: JiTanBaSou004
+    100016: JiTanBaSou005
+    100018: JiTanBaSou006
+    100020: JiTanBaSou007
+    100022: JiTanBaSou008
+    100024: JiTanBaSou009
+    100026: JiTanDiMian
+    100028: JiTanDiMian 1
+    100030: JiTanDiMian 2
+    100032: JiTanDiMian 3
+    100034: JiTanDiMian 4
+    100036: JiTanLouTi
+    100038: JiTanLouTi 1
+    100040: JiTanLouTi 10
+    100042: JiTanLouTi 11
+    100044: JiTanLouTi 12
+    100046: JiTanLouTi 13
+    100048: JiTanLouTi 14
+    100050: JiTanLouTi 15
+    100052: JiTanLouTi 16
+    100054: JiTanLouTi 2
+    100056: JiTanLouTi 3
+    100058: JiTanLouTi 4
+    100060: JiTanLouTi 5
+    100062: JiTanLouTi 6
+    100064: JiTanLouTi 7
+    100066: JiTanLouTi 8
+    100068: JiTanLouTi 9
+    100070: JiTanLouTi01
+    100072: JiTanLouTi01 1
+    100074: JiTanLouTi01 10
+    100076: JiTanLouTi01 11
+    100078: JiTanLouTi01 2
+    100080: JiTanLouTi01 3
+    100082: JiTanLouTi01 4
+    100084: JiTanLouTi01 5
+    100086: JiTanLouTi01 6
+    100088: JiTanLouTi01 7
+    100090: JiTanLouTi01 8
+    100092: JiTanLouTi01 9
+    100094: JiTanLouTi02
+    100096: JiTanLouTi02 1
+    100098: JiTanLouTi02 2
+    100100: JiTanLouTi02 3
+    100102: JiTanPingTai
+    100104: JiTanWeiLan01
+    100106: JiTanWeiLan01 1
+    100108: JiTanWeiLan01 2
+    100110: JiTanWeiLan01 3
+    100112: JiTanWeiLan02
+    100114: JiTanWeiLan02 1
+    100116: JiTanWeiLan02 2
+    100118: JiTanWeiLan02 3
+    100120: JiTanWeiLan03
+    100122: JiTanWeiLan03 1
+    100124: JiTanWeiLan03 2
+    100126: JiTanWeiLan03 3
+    100128: JiTanWeiLan03 4
+    100130: JiTanWeiLan03 5
+    100132: JiTanWeiLan04
+    100134: JiTanWeiLan04 1
+    100136: JiTanWeiLan04 2
+    100138: JiTanWeiLan04 3
+    100140: JiTanWeiLan05
+    100142: JiTanWeiLan05 1
+    100144: JiTanWeiLan05 2
+    100146: JiTanWeiLan05 3
+    100148: JiTanYuanPan
+    100150: JiTanYuanPan01
+    100152: JiTanZhuZi
     400000: //RootNode
     400002: JiTanBaSou
     400004: JiTanBaSou 1
     400006: JiTanBaSou 2
     400008: JiTanBaSou 3
-    400010: JiTanDiMian
-    400012: JiTanDiMian 1
-    400014: JiTanDiMian 2
-    400016: JiTanDiMian 3
-    400018: JiTanDiMian 4
-    400020: JiTanLouTi
-    400022: JiTanLouTi 1
-    400024: JiTanLouTi 10
-    400026: JiTanLouTi 11
-    400028: JiTanLouTi 12
-    400030: JiTanLouTi 13
-    400032: JiTanLouTi 14
-    400034: JiTanLouTi 15
-    400036: JiTanLouTi 16
-    400038: JiTanLouTi 17
-    400040: JiTanLouTi 2
-    400042: JiTanLouTi 3
-    400044: JiTanLouTi 4
-    400046: JiTanLouTi 5
-    400048: JiTanLouTi 6
-    400050: JiTanLouTi 7
-    400052: JiTanLouTi 8
-    400054: JiTanLouTi 9
-    400056: JiTanLouTi01
-    400058: JiTanLouTi01 1
-    400060: JiTanLouTi01 2
-    400062: JiTanLouTi01 3
-    400064: JiTanLouTi02
-    400066: JiTanLouTi02 1
-    400068: JiTanLouTi02 2
-    400070: JiTanLouTi02 3
-    400072: JiTanYuanPan
-    400074: JiTanYuanPan01
-    400076: JiTanZhuZi
+    400010: JiTanBaSou001
+    400012: JiTanBaSou002
+    400014: JiTanBaSou004
+    400016: JiTanBaSou005
+    400018: JiTanBaSou006
+    400020: JiTanBaSou007
+    400022: JiTanBaSou008
+    400024: JiTanBaSou009
+    400026: JiTanDiMian
+    400028: JiTanDiMian 1
+    400030: JiTanDiMian 2
+    400032: JiTanDiMian 3
+    400034: JiTanDiMian 4
+    400036: JiTanLouTi
+    400038: JiTanLouTi 1
+    400040: JiTanLouTi 10
+    400042: JiTanLouTi 11
+    400044: JiTanLouTi 12
+    400046: JiTanLouTi 13
+    400048: JiTanLouTi 14
+    400050: JiTanLouTi 15
+    400052: JiTanLouTi 16
+    400054: JiTanLouTi 2
+    400056: JiTanLouTi 3
+    400058: JiTanLouTi 4
+    400060: JiTanLouTi 5
+    400062: JiTanLouTi 6
+    400064: JiTanLouTi 7
+    400066: JiTanLouTi 8
+    400068: JiTanLouTi 9
+    400070: JiTanLouTi01
+    400072: JiTanLouTi01 1
+    400074: JiTanLouTi01 10
+    400076: JiTanLouTi01 11
+    400078: JiTanLouTi01 2
+    400080: JiTanLouTi01 3
+    400082: JiTanLouTi01 4
+    400084: JiTanLouTi01 5
+    400086: JiTanLouTi01 6
+    400088: JiTanLouTi01 7
+    400090: JiTanLouTi01 8
+    400092: JiTanLouTi01 9
+    400094: JiTanLouTi02
+    400096: JiTanLouTi02 1
+    400098: JiTanLouTi02 2
+    400100: JiTanLouTi02 3
+    400102: JiTanPingTai
+    400104: JiTanWeiLan01
+    400106: JiTanWeiLan01 1
+    400108: JiTanWeiLan01 2
+    400110: JiTanWeiLan01 3
+    400112: JiTanWeiLan02
+    400114: JiTanWeiLan02 1
+    400116: JiTanWeiLan02 2
+    400118: JiTanWeiLan02 3
+    400120: JiTanWeiLan03
+    400122: JiTanWeiLan03 1
+    400124: JiTanWeiLan03 2
+    400126: JiTanWeiLan03 3
+    400128: JiTanWeiLan03 4
+    400130: JiTanWeiLan03 5
+    400132: JiTanWeiLan04
+    400134: JiTanWeiLan04 1
+    400136: JiTanWeiLan04 2
+    400138: JiTanWeiLan04 3
+    400140: JiTanWeiLan05
+    400142: JiTanWeiLan05 1
+    400144: JiTanWeiLan05 2
+    400146: JiTanWeiLan05 3
+    400148: JiTanYuanPan
+    400150: JiTanYuanPan01
+    400152: JiTanZhuZi
     2300000: JiTanBaSou
     2300002: JiTanBaSou 1
     2300004: JiTanBaSou 2
     2300006: JiTanBaSou 3
-    2300008: JiTanDiMian
-    2300010: JiTanDiMian 1
-    2300012: JiTanDiMian 2
-    2300014: JiTanDiMian 3
-    2300016: JiTanDiMian 4
-    2300018: JiTanLouTi
-    2300020: JiTanLouTi 1
-    2300022: JiTanLouTi 10
-    2300024: JiTanLouTi 11
-    2300026: JiTanLouTi 12
-    2300028: JiTanLouTi 13
-    2300030: JiTanLouTi 14
-    2300032: JiTanLouTi 15
-    2300034: JiTanLouTi 16
-    2300036: JiTanLouTi 17
-    2300038: JiTanLouTi 4
-    2300040: JiTanLouTi 5
-    2300042: JiTanLouTi 6
-    2300044: JiTanLouTi 7
-    2300046: JiTanLouTi 8
-    2300048: JiTanLouTi 9
-    2300050: JiTanLouTi01
-    2300052: JiTanLouTi01 1
-    2300054: JiTanLouTi01 2
-    2300056: JiTanLouTi01 3
-    2300058: JiTanLouTi02
-    2300060: JiTanLouTi02 1
-    2300062: JiTanLouTi02 2
-    2300064: JiTanLouTi02 3
-    2300066: JiTanYuanPan
-    2300068: JiTanYuanPan01
-    2300070: JiTanZhuZi
+    2300008: JiTanBaSou001
+    2300010: JiTanBaSou002
+    2300012: JiTanBaSou004
+    2300014: JiTanBaSou005
+    2300016: JiTanBaSou006
+    2300018: JiTanBaSou007
+    2300020: JiTanBaSou008
+    2300022: JiTanBaSou009
+    2300024: JiTanDiMian
+    2300026: JiTanDiMian 1
+    2300028: JiTanDiMian 2
+    2300030: JiTanDiMian 3
+    2300032: JiTanDiMian 4
+    2300034: JiTanLouTi
+    2300036: JiTanLouTi 1
+    2300038: JiTanLouTi 10
+    2300040: JiTanLouTi 11
+    2300042: JiTanLouTi 12
+    2300044: JiTanLouTi 13
+    2300046: JiTanLouTi 14
+    2300048: JiTanLouTi 15
+    2300050: JiTanLouTi 16
+    2300052: JiTanLouTi 2
+    2300054: JiTanLouTi 3
+    2300056: JiTanLouTi 4
+    2300058: JiTanLouTi 5
+    2300060: JiTanLouTi 6
+    2300062: JiTanLouTi 8
+    2300064: JiTanLouTi 9
+    2300066: JiTanLouTi01
+    2300068: JiTanLouTi01 1
+    2300070: JiTanLouTi01 10
+    2300072: JiTanLouTi01 11
+    2300074: JiTanLouTi01 2
+    2300076: JiTanLouTi01 3
+    2300078: JiTanLouTi01 4
+    2300080: JiTanLouTi01 5
+    2300082: JiTanLouTi01 6
+    2300084: JiTanLouTi01 7
+    2300086: JiTanLouTi01 8
+    2300088: JiTanLouTi01 9
+    2300090: JiTanLouTi02
+    2300092: JiTanLouTi02 1
+    2300094: JiTanLouTi02 2
+    2300096: JiTanLouTi02 3
+    2300098: JiTanPingTai
+    2300100: JiTanWeiLan01
+    2300102: JiTanWeiLan01 1
+    2300104: JiTanWeiLan01 2
+    2300106: JiTanWeiLan01 3
+    2300108: JiTanWeiLan02
+    2300110: JiTanWeiLan02 1
+    2300112: JiTanWeiLan02 2
+    2300114: JiTanWeiLan02 3
+    2300116: JiTanWeiLan03
+    2300118: JiTanWeiLan03 1
+    2300120: JiTanWeiLan03 2
+    2300122: JiTanWeiLan03 3
+    2300124: JiTanWeiLan03 4
+    2300126: JiTanWeiLan03 5
+    2300128: JiTanWeiLan04
+    2300130: JiTanWeiLan04 1
+    2300132: JiTanWeiLan04 2
+    2300134: JiTanWeiLan04 3
+    2300136: JiTanWeiLan05
+    2300138: JiTanWeiLan05 1
+    2300140: JiTanWeiLan05 2
+    2300142: JiTanWeiLan05 3
+    2300144: JiTanYuanPan
+    2300146: JiTanYuanPan01
+    2300148: JiTanZhuZi
     3300000: JiTanBaSou
     3300002: JiTanBaSou 1
     3300004: JiTanBaSou 2
     3300006: JiTanBaSou 3
-    3300008: JiTanDiMian
-    3300010: JiTanDiMian 1
-    3300012: JiTanDiMian 2
-    3300014: JiTanDiMian 3
-    3300016: JiTanDiMian 4
-    3300018: JiTanLouTi
-    3300020: JiTanLouTi 1
-    3300022: JiTanLouTi 10
-    3300024: JiTanLouTi 11
-    3300026: JiTanLouTi 12
-    3300028: JiTanLouTi 13
-    3300030: JiTanLouTi 14
-    3300032: JiTanLouTi 15
-    3300034: JiTanLouTi 16
-    3300036: JiTanLouTi 17
-    3300038: JiTanLouTi 4
-    3300040: JiTanLouTi 5
-    3300042: JiTanLouTi 6
-    3300044: JiTanLouTi 7
-    3300046: JiTanLouTi 8
-    3300048: JiTanLouTi 9
-    3300050: JiTanLouTi01
-    3300052: JiTanLouTi01 1
-    3300054: JiTanLouTi01 2
-    3300056: JiTanLouTi01 3
-    3300058: JiTanLouTi02
-    3300060: JiTanLouTi02 1
-    3300062: JiTanLouTi02 2
-    3300064: JiTanLouTi02 3
-    3300066: JiTanYuanPan
-    3300068: JiTanYuanPan01
-    3300070: JiTanZhuZi
+    3300008: JiTanBaSou001
+    3300010: JiTanBaSou002
+    3300012: JiTanBaSou004
+    3300014: JiTanBaSou005
+    3300016: JiTanBaSou006
+    3300018: JiTanBaSou007
+    3300020: JiTanBaSou008
+    3300022: JiTanBaSou009
+    3300024: JiTanDiMian
+    3300026: JiTanDiMian 1
+    3300028: JiTanDiMian 2
+    3300030: JiTanDiMian 3
+    3300032: JiTanDiMian 4
+    3300034: JiTanLouTi
+    3300036: JiTanLouTi 1
+    3300038: JiTanLouTi 10
+    3300040: JiTanLouTi 11
+    3300042: JiTanLouTi 12
+    3300044: JiTanLouTi 13
+    3300046: JiTanLouTi 14
+    3300048: JiTanLouTi 15
+    3300050: JiTanLouTi 16
+    3300052: JiTanLouTi 2
+    3300054: JiTanLouTi 3
+    3300056: JiTanLouTi 4
+    3300058: JiTanLouTi 5
+    3300060: JiTanLouTi 6
+    3300062: JiTanLouTi 8
+    3300064: JiTanLouTi 9
+    3300066: JiTanLouTi01
+    3300068: JiTanLouTi01 1
+    3300070: JiTanLouTi01 10
+    3300072: JiTanLouTi01 11
+    3300074: JiTanLouTi01 2
+    3300076: JiTanLouTi01 3
+    3300078: JiTanLouTi01 4
+    3300080: JiTanLouTi01 5
+    3300082: JiTanLouTi01 6
+    3300084: JiTanLouTi01 7
+    3300086: JiTanLouTi01 8
+    3300088: JiTanLouTi01 9
+    3300090: JiTanLouTi02
+    3300092: JiTanLouTi02 1
+    3300094: JiTanLouTi02 2
+    3300096: JiTanLouTi02 3
+    3300098: JiTanPingTai
+    3300100: JiTanWeiLan01
+    3300102: JiTanWeiLan01 1
+    3300104: JiTanWeiLan01 2
+    3300106: JiTanWeiLan01 3
+    3300108: JiTanWeiLan02
+    3300110: JiTanWeiLan02 1
+    3300112: JiTanWeiLan02 2
+    3300114: JiTanWeiLan02 3
+    3300116: JiTanWeiLan03
+    3300118: JiTanWeiLan03 1
+    3300120: JiTanWeiLan03 2
+    3300122: JiTanWeiLan03 3
+    3300124: JiTanWeiLan03 4
+    3300126: JiTanWeiLan03 5
+    3300128: JiTanWeiLan04
+    3300130: JiTanWeiLan04 1
+    3300132: JiTanWeiLan04 2
+    3300134: JiTanWeiLan04 3
+    3300136: JiTanWeiLan05
+    3300138: JiTanWeiLan05 1
+    3300140: JiTanWeiLan05 2
+    3300142: JiTanWeiLan05 3
+    3300144: JiTanYuanPan
+    3300146: JiTanYuanPan01
+    3300148: JiTanZhuZi
     4300000: JiTanDiMian
     4300002: JiTanLouTi
     4300004: JiTanLouTi01
@@ -191,8 +345,47 @@ ModelImporter:
     4300066: JiTanLouTi
     4300068: JiTanLouTi
     4300070: JiTanLouTi
+    4300072: JiTanBaSou001
+    4300074: JiTanLouTi01
+    4300076: JiTanBaSou002
+    4300078: JiTanLouTi01
+    4300080: JiTanBaSou004
+    4300082: JiTanLouTi01
+    4300084: JiTanBaSou005
+    4300086: JiTanLouTi01
+    4300088: JiTanBaSou006
+    4300090: JiTanLouTi01
+    4300092: JiTanBaSou007
+    4300094: JiTanLouTi01
+    4300096: JiTanLouTi01
+    4300098: JiTanBaSou008
+    4300100: JiTanLouTi01
+    4300102: JiTanBaSou009
+    4300104: JiTanWeiLan01
+    4300106: JiTanPingTai
+    4300108: JiTanWeiLan01
+    4300110: JiTanWeiLan03
+    4300112: JiTanWeiLan03
+    4300114: JiTanWeiLan02
+    4300116: JiTanWeiLan04
+    4300118: JiTanWeiLan05
+    4300120: JiTanWeiLan02
+    4300122: JiTanWeiLan04
+    4300124: JiTanWeiLan03
+    4300126: JiTanWeiLan05
+    4300128: JiTanWeiLan05
+    4300130: JiTanWeiLan02
+    4300132: JiTanWeiLan01
+    4300134: JiTanWeiLan01
+    4300136: JiTanWeiLan03
+    4300138: JiTanWeiLan04
+    4300140: JiTanWeiLan03
+    4300142: JiTanWeiLan05
+    4300144: JiTanWeiLan04
+    4300146: JiTanWeiLan02
+    4300148: JiTanWeiLan03
     7400000: Take 001
-    11100000: //RootNode
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -257,7 +450,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
