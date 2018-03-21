@@ -57,7 +57,7 @@ public class FightDefine
 
     public static bool CompareFrame(uint frame)
     {
-        uint curFrame = ZTSceneManager.GetInstance().SceneFrame;
+        uint curFrame = ZTBattleSceneManager.GetInstance().SceneFrame;
         if (curFrame >= frame)
         {
             return true;

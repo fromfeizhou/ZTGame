@@ -1,19 +1,44 @@
 --NetWorkManager.txt
 --@breif 
 --@data 2018/3/5
+
+--@brief c#引用
+local CSNetWorkManager = CS.NetWorkManager
+local CSByteBuffer = CS.ByteBuffer
+
+
 NetWorkManager = {
 	m_instance,
 }
 
---@brief c#引用
-local CSNetWorkManager = CS.NetWorkManager
-local CSLog = GCSLog
+
+
+--@brief 当前次登录验证信息
+local _loginAuthKey = nil
+--@brief 当前消息序号
+local _curMsgSeq = 0
+--@brief 心跳定时器
+local _heartTimer = nil
+
+--@brief 协议类型定义
+Protocal = {
+	Connect 	= 101,	--连接服务器
+    Exception 	= 102,	--异常掉线
+    Disconnect 	= 103,	--正常断线  
+	NetMessage 	= 104,	--游戏逻辑数据
+}
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 心跳间隔
+local _heartInterval
+
+--@brief 系统模块
+local _systemModel 
+
 --@brief 初始化
 function NetWorkManager:Init()
-	CSLog("NetWorkManager:Init()")
 	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
 	NetWorkManager.m_instance:Init()
 	--[[设置网络消息回调]]
@@ -25,9 +50,18 @@ end
 
 --@brief 请求连接服务器
 function NetWorkManager:RequestConnect( addressData )
+
+	--设置连接地址
 	self.m_instance:SetNetWorkAddress(addressData.host,addressData.port)
+
+	--显示锁屏界面
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+
 	self.m_instance:RequestConnect()
-	CSLog("[NetWorkManager:RequestConnect]",SerializeTable(addressData))
 end
 
 --@brief 初始化服务器列表
@@ -60,21 +94,37 @@ function NetWorkManager:InitServerList()
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
 end
 
+--@brief 发送网络消息包
+function NetWorkManager:SendNetMsg(pbData)
+	local byteBuff = CSByteBuffer()
+	byteBuff:WriteUInt16(self:_GetCurMsgSeq())
+	byteBuff:WriteByte(pbData.model)
+	byteBuff:WriteByte(pbData.command)
 
-function NetWorkManager:SendNetMessage(model, command, protobuf)
-	-- body
+	if pbData.data then
+		local model_pb = "ztGame.proto." .. MODEL_PB[pbData.model][pbData.command] .. "_c2s"
+		local encode = ZTProtoData:EnCode(model_pb, pbData.data)
+		--local encode = ZTProtoData.m_pb.encode(model_pb, pbData.data)
+		byteBuff:WriteBytes(encode)	
+	end
+	local messageData = byteBuff:ToBytes()
+	byteBuff:Close()
+	self.m_instance:SendSocketMessage(messageData)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-Protocal = {
-	Connect 	= 101,	--连接服务器
-    Exception 	= 102,	--异常掉线
-    Disconnect 	= 103,	--正常断线  
-	NetMessage 	= 104,	--游戏逻辑数据
-}
+--@brief 获取当前消息序号
+function NetWorkManager:_GetCurMsgSeq()
+	if _loginAuthKey then
+		_curMsgSeq = _curMsgSeq + _loginAuthKey.unique_add;
+		if _curMsgSeq > _loginAuthKey.max_unique_id then
+			_curMsgSeq = _loginAuthKey.unique_id
+		end
+	end
+	return _curMsgSeq;
+end
 
 --@brief 网络消息回调
 function NetWorkManager:_CallProtocal(protocal, buffer)
@@ -89,18 +139,98 @@ function NetWorkManager:_CallProtocal(protocal, buffer)
 	end
 end
 
+--@brief 网络状态事件 - 连接完成
 function NetWorkManager:_OnConnect()
-	CSLog("[NetWorkManager:_OnConnect]")
+	self:_Request_Login_Auth_Key()
 end
 
+--@brief 网络状态事件 - 网络发生异常
 function NetWorkManager:_OnException(exception)
-	CSLog("[NetWorkManager:_OnException]" .. exception)
+	self:_CloseHeart()
+	GGCSLog("[NetWorkManager:_OnException]" , exception:ReadString())
 end
 
+--@brief 网络状态事件 - 网络断线
 function NetWorkManager:_OnDisconnect()
-	CSLog("[NetWorkManager:_OnDisconnect]")
+	self:_CloseHeart()
+	GCSLog("[NetWorkManager:_OnDisconnect]")
 end
 
+--@brief 网络状态事件 - 接收到服务器消息
 function NetWorkManager:_OnNetMessage(msgData)
-	CSLog("[NetWorkManager:_OnNetMessage]" .. msgData)
+	local model = msgData:ReadByte()
+	local command = msgData:ReadByte()
+	local len = msgData:GetLength ()
+	local pbData = msgData:ReadBytes(len - 2)
+	local model_pb = "ztGame.proto." .. MODEL_PB[model][command] .. "_s2c"
+	local decode = ZTProtoData:DeCode(model_pb , pbData)
+	self:OnReceive(model,command,decode);
+end
+
+--@brief pb数据处理逻辑
+function NetWorkManager:OnReceive(model,command,pbData)
+	if model == PB_LOGIN.MODEL then
+		if command == PB_LOGIN.AUTH_KEY then
+			self:_Receive_Login_Auth_Key(pbData)
+		elseif command == PB_LOGIN.LOGIN then
+			local login_login_s2c = pbData
+			--开启心跳
+			_heartInterval = login_login_s2c.heart_interval
+			self:_OpenHeart()
+		end
+	end
+	ZTProtocol:Invoking(model,command,pbData)
+end
+
+--@brief 请求 - 登录验证
+function NetWorkManager:_Request_Login_Auth_Key( )
+	GCSLog("NetWorkManager:_Request_Login_Auth_Key")
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command = PB_LOGIN.AUTH_KEY
+	pbData.data = {}
+	self:SendNetMsg(pbData)
+end
+
+--@brief 回复 - 登录验证
+function NetWorkManager:_Receive_Login_Auth_Key(pbData)
+	GCSLog("NetWorkManager:_Receive_Login_Auth_Key")
+	_loginAuthKey = pbData
+	GCSLog(SerializeTable(pbData))
+
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	
+	--请求登录服务器
+	local loginModel = ModelManager:_GetModel(MODEL_TYPE.LOGIN)
+	if loginModel then loginModel:Request_Login() end
+end
+
+--@brief 开启心跳
+function NetWorkManager:_OpenHeart()
+	if not _heartTimer then
+		_heartTimer = LoopTimer:Create(self._SendHeart,self)
+		_heartTimer:SetParam(_heartInterval,0)
+		TimerManager:AddTimer(_heartTimer)
+	end
+end
+
+--@brief 关闭心跳
+function NetWorkManager:_CloseHeart()
+	if _heartTimer then
+		_heartTimer.m_isFinish = true
+	end
+end
+
+--@brief 发送心跳
+function NetWorkManager:_SendHeart()
+	local pbData 	= {}
+	pbData.model 	= PB_LOGIN.MODEL
+	pbData.command 	= PB_LOGIN.HEART
+	pbData.data		= {}
+	self:SendNetMsg(pbData)
 end

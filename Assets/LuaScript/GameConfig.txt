@@ -1,4 +1,5 @@
 GameConfig = {
-	IsOpenNetWork = true,
-	IsDebug = true,
+	IsOpenNetWork = true,		--网络开启
+	IsDebug = true,		--是否调试模式
+	IsSkillDebugScene = false,	--技能调试
 }

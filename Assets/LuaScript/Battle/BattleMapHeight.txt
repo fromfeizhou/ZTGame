@@ -1,0 +1,46 @@
+--BattleMapHeight.txt
+--@breif lua模板
+--@data 2018/03/07
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSZTBattleMapHeight = CS.ZTBattleMapHeight
+
+
+BattleMapHeight = {
+	m_ztBattleMapHeight = nil,
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 初始化
+function BattleMapHeight:Init()
+	CSLog("BattleMapHeight:Init")
+	BattleMapHeight.m_ztBattleMapHeight = CSZTBattleMapHeight()
+	BattleMapHeight.m_ztBattleMapHeight:Init()
+end
+
+function BattleMapHeight:GetHight(pos)
+	if BattleMapHeight.m_ztBattleMapHeight then
+		return BattleMapHeight.m_ztBattleMapHeight:GetHeight(pos)
+	end
+	return 0
+end
+
+
+--@brief 移除
+function BattleMapHeight:Destroy()
+	if BattleMapHeight.m_ztBattleMapHeight then
+		BattleMapHeight.m_ztBattleMapHeight:Destroy()
+		BattleMapHeight.m_ztBattleMapHeight = nil
+	end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

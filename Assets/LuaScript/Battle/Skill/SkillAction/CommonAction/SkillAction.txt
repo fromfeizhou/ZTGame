@@ -1,0 +1,85 @@
+--SkillAction.txt
+--@breif 技能action
+--@data 2018/03/19
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillAction = {
+	m_nFrameCount = 0, --帧计数
+	m_tActionData = nil,	--action数据
+	m_bIsStart = false, --是否开启
+	m_bFinish = false,	--是否结束
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillAction:Create(actionData)
+	local obj = {}
+	setmetatable( obj, { __index = SkillAction })
+	obj:Init(actionData)
+	return obj
+end
+
+--@brief 初始化
+function SkillAction:Init(actionData)
+	CSLog("SkillAction:Init")
+	self.m_nStartFrame = actionData.m_nStartFrame
+	self.m_tActionData = actionData
+end
+
+--@brief 开始
+function SkillAction:Start()
+	self.m_bIsStart = true
+end
+
+
+--@brief 更新
+function SkillAction:Update()
+	if self.m_bIsStart and not self.m_bFinish then
+		self.m_nFrameCount = self.m_nFrameCount + 1
+		if self.m_nFrameCount >= self.m_tActionData.m_nFrameMax then
+			self:Done()
+		end
+	end
+end
+
+--@brief 结束
+function SkillAction:Done()
+	self.m_bFinish = true
+end
+
+--@brief 结束标记
+function SkillAction:IsFinish()
+	return self.m_bFinish
+end
+
+--@brief 结束标记
+function SkillAction:IsStart()
+	return self.m_bIsStart
+end
+
+--@brief  获得起始帧 
+function SkillAction:StartFrame()
+	return self.m_tActionData.m_nStartFrame
+end
+--@brief 移除
+function SkillAction:Destroy()
+	CSLog("SkillAction:Destroy")
+end
+
+--@brief 碰撞处理
+function SkillAction:DoColliderAction(colliderCommand)
+	
+end
+
+--@brief 获得使用者
+function SkillAction:GetOwner()
+	return self.m_tActionData.m_tOwner
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

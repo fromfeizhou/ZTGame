@@ -1,0 +1,152 @@
+--BattleCommand.txt
+--@breif 帧命令
+--@data 2018/03/07
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+BattleCommandType = {
+	Move = 1,			--移动
+	Skill = 2,			--使用技能
+	Collider = 3,		--技能碰撞
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************基础命令 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+BattleCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nType = nil,		--命令类型
+}
+
+--@brief 拷贝原表
+function BattleCommand:Create(battleId,type)
+	local obj = {}
+	setmetatable( obj, { __index = BattleCommand })
+	return obj
+end
+
+--@brief 初始化
+function BattleCommand:Init()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************基础命令 End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************移动命令 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+BattleMoveCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nType = nil,		--命令类型
+	m_nDir = nil,		--移动方向
+	m_pos = nil,		--位置
+}
+
+--@brief 拷贝原表
+function BattleMoveCommand:Create(battleId,dir,pos)
+	local obj = {}
+	setmetatable( obj, { __index = BattleMoveCommand })
+	obj:Init(battleId,dir,pos)
+	return obj
+end
+
+--@brief 拷贝原表
+function BattleMoveCommand:CreateServer(battleId,dir,tx,ty,tz)
+	local obj = {}
+	setmetatable( obj, { __index = BattleMoveCommand })
+	--接收服务器坐标转换
+	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
+	obj:Init(battleId,dir,pos)
+	return obj
+end
+
+--@brief 初始化
+function BattleMoveCommand:Init(battleId,dir,pos)
+	--CSLog("BattleMoveCommand:Init",battleId,commandType,dir)
+	self.m_nBattleId = battleId
+	self.m_nType = BattleCommandType.Move
+	self.m_nDir = dir
+	self.m_pos = pos
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************移动命令 End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************技能命令 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+BattleSkillCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nSkillId = nil,		--命令类型
+	m_tSkillPos = nil,		--目标位置
+}
+
+--@brief 拷贝原表
+function BattleSkillCommand:Create(battleId,skillId,pos)
+	local obj = {}
+	setmetatable( obj, { __index = BattleSkillCommand })
+	obj:Init(battleId,skillId,pos)
+	return obj
+end
+
+--@brief 拷贝原表
+function BattleSkillCommand:CreateServer(battleId,skillId,tx,ty,tz)
+	local obj = {}
+	setmetatable( obj, { __index = BattleSkillCommand })
+	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
+	obj:Init(battleId,skillId,pos)
+	return obj
+end
+
+--@brief 初始化
+function BattleSkillCommand:Init(battleId,skillId,pos)
+	self.m_nBattleId = battleId
+	self.m_nType = BattleCommandType.Skill
+	self.m_nSkillId = skillId
+	self.m_tSkillPos = pos
+end
+
+--碰撞
+BattleColliderCommand = {
+	m_nBattleId = nil,		--使用者
+	m_nSkillId = nil,		--命令类型
+	m_nColliderPos = nil,	--碰撞中心
+	m_tTargetList = nil,
+}
+
+--@brief 拷贝原表
+function BattleColliderCommand:Create(battleId,skillId,colliderPos,targetList)
+	local obj = {}
+	setmetatable( obj, { __index = BattleColliderCommand })
+	obj:Init(battleId,skillId,colliderPos,targetList)
+	return obj
+end
+
+--@brief 拷贝原表
+function BattleColliderCommand:CreateServer(battleId,skillId,tx,ty,tz,targetList)
+	local obj = {}
+	setmetatable( obj, { __index = BattleColliderCommand })
+	local  pos = BattleDefine:GetClientPos(tx,ty,tz,targetList)
+	obj:Init(battleId,skillId,pos)
+	return obj
+end
+
+--@brief 初始化
+function BattleColliderCommand:Init(battleId,skillId,colliderPos,targetList)
+	self.m_nBattleId = battleId
+	self.m_nType = BattleCommandType.Collider
+	self.m_nSkillId = skillId
+	self.m_nColliderPos = colliderPos
+	self.m_tTargetList = targetList
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************技能命令 End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+

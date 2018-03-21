@@ -1,0 +1,265 @@
+fileFormatVersion: 2
+guid: f74631d92db60de41b419f49ef82b4cd
+timeCreated: 1521526803
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: JiTanBaSou
+    100004: JiTanBaSou 1
+    100006: JiTanBaSou 2
+    100008: JiTanBaSou 3
+    100010: JiTanDiMian
+    100012: JiTanDiMian 1
+    100014: JiTanDiMian 2
+    100016: JiTanDiMian 3
+    100018: JiTanDiMian 4
+    100020: JiTanLouTi
+    100022: JiTanLouTi 1
+    100024: JiTanLouTi 10
+    100026: JiTanLouTi 11
+    100028: JiTanLouTi 12
+    100030: JiTanLouTi 13
+    100032: JiTanLouTi 14
+    100034: JiTanLouTi 15
+    100036: JiTanLouTi 16
+    100038: JiTanLouTi 17
+    100040: JiTanLouTi 2
+    100042: JiTanLouTi 3
+    100044: JiTanLouTi 4
+    100046: JiTanLouTi 5
+    100048: JiTanLouTi 6
+    100050: JiTanLouTi 7
+    100052: JiTanLouTi 8
+    100054: JiTanLouTi 9
+    100056: JiTanLouTi01
+    100058: JiTanLouTi01 1
+    100060: JiTanLouTi01 2
+    100062: JiTanLouTi01 3
+    100064: JiTanLouTi02
+    100066: JiTanLouTi02 1
+    100068: JiTanLouTi02 2
+    100070: JiTanLouTi02 3
+    100072: JiTanYuanPan
+    100074: JiTanYuanPan01
+    100076: JiTanZhuZi
+    400000: //RootNode
+    400002: JiTanBaSou
+    400004: JiTanBaSou 1
+    400006: JiTanBaSou 2
+    400008: JiTanBaSou 3
+    400010: JiTanDiMian
+    400012: JiTanDiMian 1
+    400014: JiTanDiMian 2
+    400016: JiTanDiMian 3
+    400018: JiTanDiMian 4
+    400020: JiTanLouTi
+    400022: JiTanLouTi 1
+    400024: JiTanLouTi 10
+    400026: JiTanLouTi 11
+    400028: JiTanLouTi 12
+    400030: JiTanLouTi 13
+    400032: JiTanLouTi 14
+    400034: JiTanLouTi 15
+    400036: JiTanLouTi 16
+    400038: JiTanLouTi 17
+    400040: JiTanLouTi 2
+    400042: JiTanLouTi 3
+    400044: JiTanLouTi 4
+    400046: JiTanLouTi 5
+    400048: JiTanLouTi 6
+    400050: JiTanLouTi 7
+    400052: JiTanLouTi 8
+    400054: JiTanLouTi 9
+    400056: JiTanLouTi01
+    400058: JiTanLouTi01 1
+    400060: JiTanLouTi01 2
+    400062: JiTanLouTi01 3
+    400064: JiTanLouTi02
+    400066: JiTanLouTi02 1
+    400068: JiTanLouTi02 2
+    400070: JiTanLouTi02 3
+    400072: JiTanYuanPan
+    400074: JiTanYuanPan01
+    400076: JiTanZhuZi
+    2300000: JiTanBaSou
+    2300002: JiTanBaSou 1
+    2300004: JiTanBaSou 2
+    2300006: JiTanBaSou 3
+    2300008: JiTanDiMian
+    2300010: JiTanDiMian 1
+    2300012: JiTanDiMian 2
+    2300014: JiTanDiMian 3
+    2300016: JiTanDiMian 4
+    2300018: JiTanLouTi
+    2300020: JiTanLouTi 1
+    2300022: JiTanLouTi 10
+    2300024: JiTanLouTi 11
+    2300026: JiTanLouTi 12
+    2300028: JiTanLouTi 13
+    2300030: JiTanLouTi 14
+    2300032: JiTanLouTi 15
+    2300034: JiTanLouTi 16
+    2300036: JiTanLouTi 17
+    2300038: JiTanLouTi 4
+    2300040: JiTanLouTi 5
+    2300042: JiTanLouTi 6
+    2300044: JiTanLouTi 7
+    2300046: JiTanLouTi 8
+    2300048: JiTanLouTi 9
+    2300050: JiTanLouTi01
+    2300052: JiTanLouTi01 1
+    2300054: JiTanLouTi01 2
+    2300056: JiTanLouTi01 3
+    2300058: JiTanLouTi02
+    2300060: JiTanLouTi02 1
+    2300062: JiTanLouTi02 2
+    2300064: JiTanLouTi02 3
+    2300066: JiTanYuanPan
+    2300068: JiTanYuanPan01
+    2300070: JiTanZhuZi
+    3300000: JiTanBaSou
+    3300002: JiTanBaSou 1
+    3300004: JiTanBaSou 2
+    3300006: JiTanBaSou 3
+    3300008: JiTanDiMian
+    3300010: JiTanDiMian 1
+    3300012: JiTanDiMian 2
+    3300014: JiTanDiMian 3
+    3300016: JiTanDiMian 4
+    3300018: JiTanLouTi
+    3300020: JiTanLouTi 1
+    3300022: JiTanLouTi 10
+    3300024: JiTanLouTi 11
+    3300026: JiTanLouTi 12
+    3300028: JiTanLouTi 13
+    3300030: JiTanLouTi 14
+    3300032: JiTanLouTi 15
+    3300034: JiTanLouTi 16
+    3300036: JiTanLouTi 17
+    3300038: JiTanLouTi 4
+    3300040: JiTanLouTi 5
+    3300042: JiTanLouTi 6
+    3300044: JiTanLouTi 7
+    3300046: JiTanLouTi 8
+    3300048: JiTanLouTi 9
+    3300050: JiTanLouTi01
+    3300052: JiTanLouTi01 1
+    3300054: JiTanLouTi01 2
+    3300056: JiTanLouTi01 3
+    3300058: JiTanLouTi02
+    3300060: JiTanLouTi02 1
+    3300062: JiTanLouTi02 2
+    3300064: JiTanLouTi02 3
+    3300066: JiTanYuanPan
+    3300068: JiTanYuanPan01
+    3300070: JiTanZhuZi
+    4300000: JiTanDiMian
+    4300002: JiTanLouTi
+    4300004: JiTanLouTi01
+    4300006: JiTanLouTi01
+    4300008: JiTanDiMian
+    4300010: JiTanLouTi
+    4300012: JiTanDiMian
+    4300014: JiTanLouTi02
+    4300016: JiTanZhuZi
+    4300018: JiTanYuanPan
+    4300020: JiTanYuanPan01
+    4300022: JiTanDiMian
+    4300024: JiTanLouTi01
+    4300026: JiTanLouTi01
+    4300028: JiTanDiMian
+    4300030: JiTanBaSou
+    4300032: JiTanBaSou
+    4300034: JiTanBaSou
+    4300036: JiTanBaSou
+    4300038: JiTanLouTi
+    4300040: JiTanLouTi
+    4300042: JiTanLouTi
+    4300044: JiTanLouTi02
+    4300046: JiTanLouTi02
+    4300048: JiTanLouTi02
+    4300050: JiTanLouTi
+    4300052: JiTanLouTi
+    4300054: JiTanLouTi
+    4300056: JiTanLouTi
+    4300058: JiTanLouTi
+    4300060: JiTanLouTi
+    4300062: JiTanLouTi
+    4300064: JiTanLouTi
+    4300066: JiTanLouTi
+    4300068: JiTanLouTi
+    4300070: JiTanLouTi
+    7400000: Take 001
+    11100000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

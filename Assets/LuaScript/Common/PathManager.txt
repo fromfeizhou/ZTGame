@@ -3,9 +3,14 @@
 --@data 2018/2/27
 
 PathManager = {
-	g_sAssetPath = "Assets",
-	m_sUIPrefab = "Assets/Prefabs/UI/",
-	m_sUIPanel = "Assets/Prefabs/Panel/",
+	g_sAssetPath = "Assets",		--资源根目录地址
+	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
+	m_sUIWidgets = "Assets/Prefabs/UIWidgets/",		--ui组件地址
+	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
+	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
+	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
+
+	m_sAnimator = "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -17,11 +22,37 @@ function PathManager:GetUIPrefab(name)
 	return PathManager.m_sUIPrefab .. name .. ".prefab"
 end
 
+--@brief 获取ui组件地址
+function PathManager:GetUIWidgets(name)
+	return PathManager.m_sUIWidgets .. name ..".prefab"
+end
+
 --@brief 获取面板ui预设地址
 --@param name ui面板名字
 --@return string 地址
 function PathManager:GetUIPanel(name)
 	return PathManager.m_sUIPanel .. name .. ".prefab"
+end
+
+--@brief 获取pb文件路径
+--@param name pb文件名字
+--@return string 地址
+function PathManager:GetPbFile(name)
+	return PathManager.m_sPbFile .. name .. ".pb.bytes"
+end
+
+
+--@brief 获取模型地址
+function PathManager:GetAnimatorPath(name)
+	return string.format(PathManager.m_sAnimator,name) .. name ..".prefab"
+end
+
+
+--@brief 获取pb文件路径
+--@param name pb文件名字
+--@return string 地址
+function PathManager:GetBatteUIPanel(name)
+	return PathManager.m_sBattleUIPrefab .. name ..".prefab"
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

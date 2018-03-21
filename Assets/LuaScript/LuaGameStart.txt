@@ -17,16 +17,17 @@ end
 --@brief 初始化
 function LuaGameStart:Init()
 	print("LuaGameStart:Init")
-	if GameConfig.IsOpenNetWork then 
-		NetWorkManager:Init()
+	if GameConfig.IsSkillDebugScene then
+		self:_EnterSkillDebug()
+	else
+		self:_EnterLoginModel()
 	end
-	 
-	local loginmodel = LoginModel:Create()
-	loginmodel:ShowPanel(LOGIN_TYPE.MAIN)
 end
 
 --@brief 更新
 function LuaGameStart:Update()
+	ModelManager:Update()
+	TimerManager:Update()
 end
 
 --@brief 移除
@@ -37,3 +38,46 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 进入登录模块
+function LuaGameStart:_EnterLoginModel()
+	if GameConfig.IsOpenNetWork then 
+		NetWorkManager:Init()
+		ZTProtocol:Init()
+		ZTProtoData:Init()
+	end
+	 
+	 ModelManager:Create() --创建模块管理器
+	 TimerManager:Create() --创建定时管理器
+	 
+	 self:_ShowPanel_Login()
+end
+
+--@brief 显示登录界面
+function LuaGameStart:_ShowPanel_Login()
+	local loginPanelData = {}
+	loginPanelData.modelType = MODEL_TYPE.LOGIN
+	loginPanelData.panelType = LOGIN_TYPE.MAIN
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
+end
+
+--@brief 进入主城场景
+function LuaGameStart:EnterGameCity()
+	local luaFieLoad = require 'LuaFileLoad' --加载文件
+	---初始化 加载登录lua
+	luaFieLoad:LoadGameLua(function()
+		print("LuaGame:LoadGameLua")
+			ZTCityScene:InitScene()
+	end)
+end
+
+
+--@brief 进入技能调试
+function LuaGameStart:_EnterSkillDebug()
+	local luaFieLoad = require 'LuaFileLoad' --加载文件
+	---初始化 加载登录lua
+	luaFieLoad:LoadGameLua(function()
+		print("LuaGame:LoadGameLua")
+			ZTBattleScene:InitScene()
+	end)
+end

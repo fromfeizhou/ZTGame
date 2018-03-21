@@ -1,11 +1,208 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using NPOI.SS.Formula.Functions;
 using UnityEditor;
 using UnityEngine;
 
 
 public class MapColliderEditor : EditorWindow
 {
+
+    #region 按bit存储碰撞数据，1为碰撞区域
+
+    private static Dictionary<string, MapBlockData> MapHeightBlockDataDic;
+    private static Dictionary<string, MapBlockData> MapHideBlockDataDic;
+    private static byte[] blockBytesData;
+  
+
+    [MenuItem("Terrain/CreateMapColliderData")]
+    private static void CretateMapColliderData()
+    {
+        blockBytesData = new byte[13107200];
+        MapHideBlockDataDic = new Dictionary<string, MapBlockData>();
+        MapHeightBlockDataDic = new Dictionary<string, MapBlockData>();
+        string bigMapIndex = "0_0";// 大地图坐标 后续通过读取场景名字获取
+        string[] bigMapIndexs = bigMapIndex.Split('_');
+        if (bigMapIndexs.Length != 2)
+        {
+            Debug.LogError("Map Data is Error!!!");
+            return;
+        }
+        int bigMapX = int.Parse(bigMapIndexs[0]);
+        int bigMapY = int.Parse(bigMapIndexs[1]);
+
+        //基于大地图偏移
+        int offsetX = bigMapX * MapDefine.MAPITEMTOTALSIZE;
+        int offsetY = bigMapY * MapDefine.MAPITEMTOTALSIZE;
+
+        GameObject mapElementRoot = GameObject.Find("MapElement");
+        if (mapElementRoot == null) return;
+        CreateElement(mapElementRoot.transform, offsetX, offsetY);
+        MapColliderHelper.SaveMapBytesFile(blockBytesData, MapHideBlockDataDic, MapHeightBlockDataDic);
+        AssetDatabase.Refresh();
+    }
+
+    private static void CreateElement(Transform go, int offsetX, int offsetY)
+    {
+        if (go == null) return;
+        for (int index = 0; index < go.childCount; index++)
+        {
+            Transform element = go.GetChild(index);
+            if (element.name.Contains("Ele_"))
+            {
+                
+                Transform colliderRoots = element.Find("ColliderRoot");
+                if (colliderRoots == null) continue;
+                List<KeyValuePair<string, CollRectange>> goInCludeRects = GetGoIncludeBlocks(element, offsetX, offsetY);
+                for (int rootIndex = 0; rootIndex < colliderRoots.childCount; rootIndex++)
+                {
+                    Transform root = colliderRoots.GetChild(rootIndex);
+                    string[] datas = root.name.Split('_');
+                    if (!Enum.IsDefined(typeof(eMapBlockType), datas[0])) continue;
+                    eMapBlockType blockType = (eMapBlockType)Enum.Parse(typeof(eMapBlockType), datas[0]);
+                    string blockParam = datas.Length > 1 ? datas[1] : "";
+                    Renderer[] colliderRenderers = root.GetComponentsInChildren<Renderer>();
+                    List<CollRectange> colliderRectList = new List<CollRectange>();
+                    for (int colliderIndex = 0; colliderIndex < colliderRenderers.Length; colliderIndex++)
+                    {
+                        Renderer tempRenderer = colliderRenderers[colliderIndex];
+                        CollRectange tempColl = new CollRectange(tempRenderer.transform.position.x,
+                            tempRenderer.transform.position.z, tempRenderer.transform.eulerAngles.y,
+                            tempRenderer.transform.lossyScale.x, tempRenderer.transform.lossyScale.z);
+                        colliderRectList.Add(tempColl);
+                    }
+                    for (int blockIndex = goInCludeRects.Count - 1; blockIndex >= 0; blockIndex--)
+                    {
+                        for (int colliderIndex = 0; colliderIndex < colliderRectList.Count; colliderIndex++)
+                        {
+                            if (ZTCollider.CheckCollision(goInCludeRects[blockIndex].Value, colliderRectList[colliderIndex]))
+                            {
+                                if (blockType == eMapBlockType.Height)
+                                    blockParam = colliderRenderers[colliderIndex].bounds.size.y + "";
+                                AddColliderToDic(goInCludeRects[blockIndex].Key, blockType, blockParam);
+                               // goInCludeRects.RemoveAt(blockIndex);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                CreateElement(element, offsetX, offsetY);
+            }
+        }
+    }
+
+    private static MapBlockData tempBlock;
+    private static void AddColliderToDic(string key, eMapBlockType mapBlockType, string param)
+    {
+        if (mapBlockType == eMapBlockType.Collect)
+        {
+            string[] datas = key.Split('_');
+            int row = (int)(int.Parse(datas[0]));
+            int col = (int)(int.Parse(datas[1]));
+            int index = row + col * 10240;
+            int byteRow = index / 8;
+            int byteCol = index % 8;
+
+            if (byteRow >= blockBytesData.Length)
+            {
+                Debug.LogError("byteRow:" + byteRow + "  " + key);
+                return;
+            }
+            byte curByte = blockBytesData[byteRow];
+            byte temp = (byte)Mathf.Pow(2, byteCol);
+            curByte |= temp;
+            blockBytesData[byteRow] = curByte;
+        }
+        else
+        {
+            string[] datas = key.Split('_');
+            int paramValue = string.IsNullOrEmpty(param) ? 0 : int.Parse(param);
+            tempBlock = new MapBlockData
+            {
+                row = int.Parse(datas[0]),
+                col = int.Parse(datas[1]),
+                type = mapBlockType,
+                paramValue = paramValue
+            };
+            if (mapBlockType == eMapBlockType.Hide)
+            {
+                if (!MapHideBlockDataDic.ContainsKey(key))
+                    MapHideBlockDataDic[key] = tempBlock;
+            }
+            else if (mapBlockType == eMapBlockType.Height)
+            {
+                if (!MapHeightBlockDataDic.ContainsKey(key))
+                    MapHeightBlockDataDic[key] = tempBlock;
+            }
+        }
+
+
+        if (!MapHideBlockDataDic.ContainsKey(key))
+        {
+            string[] datas = key.Split('_');
+            int paramValue = string.IsNullOrEmpty(param) ? 0 : int.Parse(param);
+            MapHideBlockDataDic[key] = new MapBlockData { row = int.Parse(datas[0]), col = int.Parse(datas[1]), type = mapBlockType, paramValue = paramValue };
+        }
+    }
+
+
+
+    #endregion
+
+
+
+    private static List<KeyValuePair<string, CollRectange>> GetGoIncludeBlocks(Transform element, int offsetX, int offsetY)
+    {
+
+        int col = (int)((element.position.x + offsetX) / MapDefine.MapBlockSize);
+        int row = (int)((element.position.z + offsetY) / MapDefine.MapBlockSize);
+        string elementGridKey = col + "" + row;
+
+        //bound
+        Vector3 postion = element.position;
+        Vector3 scale = element.localScale;
+        element.position = Vector3.zero;
+        element.localScale = Vector3.one;
+        Vector3 center = Vector3.zero;
+        Renderer[] renders = element.GetComponentsInChildren<Renderer>();
+        foreach (Renderer child in renders)
+            center += child.bounds.center;
+        center /= renders.Length;
+        Bounds bounds = new Bounds(center, Vector3.zero);
+        foreach (Renderer child in renders)
+            bounds.Encapsulate(child.bounds);
+        Vector3 centralPoint = bounds.center;
+        element.position = postion;
+        element.localScale = scale;
+
+        centralPoint += element.position;
+        int starX = (int)((centralPoint.x - bounds.size.x * 0.5f + offsetX) / MapDefine.MapBlockSize);
+        int endX = (int)((centralPoint.x + bounds.size.x * 0.5f + offsetX) / MapDefine.MapBlockSize);
+        int starZ = (int)((centralPoint.z - bounds.size.z * 0.5f + offsetY) / MapDefine.MapBlockSize);
+        int endZ = (int)((centralPoint.z + bounds.size.z * 0.5f + offsetY) / MapDefine.MapBlockSize);
+        List<KeyValuePair<string, CollRectange>> curGoInCludeBlockList = new List<KeyValuePair<string, CollRectange>>();
+
+
+        float radius = MapDefine.MapBlockSize * 0.5f;
+        for (int k = starX; k <= endX; k++)
+        {
+            for (int j = starZ; j <= endZ; j++)
+            {
+                string key = k + "_" + j;
+                KeyValuePair<string, CollRectange> item = new KeyValuePair<string, CollRectange>(key,
+                    new CollRectange(MapDefine.MapBlockSize * k + radius,
+                        MapDefine.MapBlockSize * j + radius, 0, MapDefine.MapBlockSize, MapDefine.MapBlockSize));
+                curGoInCludeBlockList.Add(item);
+            }
+        }
+        return curGoInCludeBlockList;
+    }
+
+
     [MenuItem("Window/MyWindow")] //在unity菜单Window下有MyWindow选项
     private static void MyWindow()
     {
@@ -39,7 +236,7 @@ public class MapColliderEditor : EditorWindow
     private Vector3 _cameraPos_Edit;
 
     private float GridSize_Port = 40f;
-    
+
 
     private enum eMapViewType
     {
@@ -74,9 +271,11 @@ public class MapColliderEditor : EditorWindow
 
     private int _gridCnt_Port
     {
-        get { 
-            float  aa = MapViewSize.x / GridSize_Port;
-            return (int)(aa); }
+        get
+        {
+            float aa = MapViewSize.x / GridSize_Port;
+            return (int)(aa);
+        }
     }
 
     private int _gridCnt_Edit
@@ -89,29 +288,38 @@ public class MapColliderEditor : EditorWindow
     private MapColliderHelper.eMapEditHelper _mapEditHelper = MapColliderHelper.eMapEditHelper.None;
 
 
+
+    private  byte[] mapEditBytes;
+
     void OnEnable()
     {
         InitCamera();
 
-        if (_mapBlockData == null || _mapBlockData.Count == 0)
+        if (mapEditBytes == null)
         {
-            _mapBlockData = new List<MapBlockData>();
-            if (File.Exists(MapDefine.MapDataSavePath))
-            {
-                string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
-                for (int i = 0; i < contents.Length; i++)
-                {
-                    if (!string.IsNullOrEmpty(contents[i]))
-                    {
-                        _mapBlockData.Add(MapBlockData.Parse(contents[i]));
-                    }
-                }
-            }
-            else
-            {
-                MapColliderHelper.SaveMapBlockFile(_mapBlockData);
-            }
+            mapEditBytes = File.ReadAllBytes(MapDefine.MapDataSavePath);
         }
+
+
+        //if (_mapBlockData == null || _mapBlockData.Count == 0)
+        //{
+        //    _mapBlockData = new List<MapBlockData>();
+        //    if (File.Exists(MapDefine.MapDataSavePath))
+        //    {
+        //        string[] contents = File.ReadAllLines(MapDefine.MapDataSavePath);
+        //        for (int i = 0; i < contents.Length; i++)
+        //        {
+        //            if (!string.IsNullOrEmpty(contents[i]))
+        //            {
+        //                _mapBlockData.Add(MapBlockData.Parse(contents[i]));
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MapColliderHelper.SaveMapBlockFile(_mapBlockData);
+        //    }
+        //}
     }
 
     void OnGUI()
@@ -163,8 +371,8 @@ public class MapColliderEditor : EditorWindow
         float portCameraOrz = terrainWidth / mainViewItemCount;
         _cameraPort.orthographicSize = portCameraOrz * 0.5f;
 
-       int tempPortCount = (int)portCameraOrz / 4;//editView 编辑为5米
-       GridSize_Port = MapViewSize.x / tempPortCount;
+        int tempPortCount = (int)portCameraOrz / 4;//editView 编辑为5米
+        GridSize_Port = MapViewSize.x / tempPortCount;
         float portViewItemCount = MapViewSize.x / GridSize_Port;
         float editCameraOrz = portCameraOrz / portViewItemCount;
         _cameraEdit.orthographicSize = editCameraOrz * 0.5f;
@@ -247,7 +455,7 @@ public class MapColliderEditor : EditorWindow
 
         if (e.type == EventType.MouseDown && e.button == 0)
         {
-            int tmpaaRolw  = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit + (int)_selectGridPos_Edit.x);
+            int tmpaaRolw = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit + (int)_selectGridPos_Edit.x);
             int tmpaaColw = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit + (int)_selectGridPos_Edit.y);
 
             curSelectMapBlockData = GetCollider(row, col);
@@ -260,7 +468,7 @@ public class MapColliderEditor : EditorWindow
         if (CurViewType == eMapViewType.Port || CurViewType == eMapViewType.Edit)
         {
             int row = (int)((int)_selectGridPos_Main.x * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.x * _gridCnt_Edit);// + (int)_selectGridPos_Edit.x);
-            int col = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit );//+ (int)_selectGridPos_Edit.y);
+            int col = (int)((int)_selectGridPos_Main.y * _gridCnt_Port * _gridCnt_Edit + (int)_selectGridPos_Port.y * _gridCnt_Edit);//+ (int)_selectGridPos_Edit.y);
 
             for (int index = row; index < row + _gridCnt_Edit; index++)
             {
@@ -328,7 +536,7 @@ public class MapColliderEditor : EditorWindow
             GUI.Label(new Rect(0, 690, 200, 18), labelName);
             curSelectMapBlockData.param = EditorGUI.TextField(new Rect(0, 710, 200, 18), curSelectMapBlockData.param);
         }
-        
+
     }
 
     void Update()
@@ -447,17 +655,42 @@ public class MapColliderEditor : EditorWindow
         int ScrRow = (Mathf.RoundToInt(gridIndex_Port_X + gridIndex_Main_X) * _gridCnt_Edit);
         int ScrCol = (Mathf.RoundToInt(gridIndex_Port_Y + gridIndex_Main_Y) * _gridCnt_Edit);
 
-       
-        List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.IsInBlock(_gridCnt_Edit, ScrRow, ScrCol));
-        for (int i = 0; i < tmpBlockData.Count; i++)
+
+        for (int i = ScrRow; i < ScrRow + _gridCnt_Edit; i++)
         {
-            if (tmpBlockData[i].type != eMapBlockType.None)
+
+            for (int j = ScrCol; j < ScrCol + _gridCnt_Edit; j++)
             {
-                Vector2 pos = new Vector2(tmpBlockData[i].row % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - tmpBlockData[i].col % _gridCnt_Edit) * MapDefine.GridSize_Edit);
-                EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
-                    MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type]);
+
+                int index = i + j * 10240;
+                int byteRow = index / 8;
+                int byteCol = index % 8;
+                byte curByte = mapEditBytes[byteRow];
+                byte temp = (byte)Mathf.Pow(2, byteCol);
+                int value = curByte & temp;
+                if (value >= 1)
+                {
+                    Vector2 pos = new Vector2(i % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - j % _gridCnt_Edit) * MapDefine.GridSize_Edit);
+                    EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
+                        MapDefine.MapBlockTypeColor[1]);
+                    Debug.LogError(i + "   " + j);
+                }
+
+
             }
         }
+
+
+        List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.IsInBlock(_gridCnt_Edit, ScrRow, ScrCol));
+        //for (int i = 0; i < tmpBlockData.Count; i++)
+        //{
+        //    if (tmpBlockData[i].type != eMapBlockType.None)
+        //    {
+        //        Vector2 pos = new Vector2(tmpBlockData[i].row % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - tmpBlockData[i].col % _gridCnt_Edit) * MapDefine.GridSize_Edit);
+        //        EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
+        //            MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type]);
+        //    }
+        //}
     }
 
     private void AddCollider(int row, int col, eMapBlockType mapBlockType)

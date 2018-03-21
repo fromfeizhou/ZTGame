@@ -1,0 +1,70 @@
+--LoopTimer.txt
+--@breif 循环定时器
+--@data 2018/3/9
+
+LoopTimer = {
+	m_interval,
+	m_loopTimes,
+
+	m_loopCnt,
+	m_tickTime,
+	m_startTime,
+}
+
+--@brief 创建
+function LoopTimer:Create(handle,targe)
+	local obj = Timer:Create(TIMER_TYPE.LOOP,handle,targe)
+	setmetatable( obj, { __index = LoopTimer })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function LoopTimer:Init()
+	self.m_loopCnt = 0
+	self.m_tickTime = 0	
+	self.m_startTime = 0
+	self.m_isFinish = false
+end
+
+--@brief 嘀嗒
+--@brief timeInfo 时间信息
+function LoopTimer:Tick( timeInfo )
+	if not self.m_isFinish then 
+		self.m_tickTime = self.m_tickTime + timeInfo.unscaledDeltaTime
+		if self.m_loopTimes == 0 then
+			if self.m_tickTime > self.m_interval then
+				self.m_onHandle(self.m_targe)
+				self.m_tickTime = 0
+			end
+		else
+			if self.m_loopCnt < self.m_loopTimes then
+				if self.m_tickTime > self.m_interval * (self.m_loopCnt + 1) then
+					self.m_loopCnt = self.m_loopCnt + 1
+					self.m_onHandle(self.m_targe)
+					if self.m_loopCnt >= self.m_loopTimes then 
+						self.m_isFinish = true
+					end
+				end
+			end
+		end
+	end
+end
+
+--@brief 开始时
+function LoopTimer:OnStart()
+	self.m_isPause = false
+	if self.m_loopTimes > 0 then
+		self.m_startTime = 0
+	end
+end
+
+--@brief 参数设置
+--@brief interval 时间间隔
+--@brief loopTimes 循环次数
+--@brief onFinish 结束时
+function LoopTimer:SetParam(interval, loopTimes, onFinish)
+	self.m_interval = interval
+	self.m_loopTimes = loopTimes
+	self.m_onFinish = onFinish
+end

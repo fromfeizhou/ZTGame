@@ -1,0 +1,136 @@
+--BattleCameraMgr.txt
+--@breif 镜头控制
+--@data 2018/03/14
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+--@brife 镜头事件类型
+BattleCameraType = {
+	Move = 1,		--移动
+	Shark = 2,		--震屏
+}
+
+BattleCameraMgr = {
+	m_tTargetPos = nil,	--镜头目标坐标
+	m_carmeraTrans = nil,	--设置镜头对象
+	m_bMoveAction = nil,	--缓动
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function BattleCameraMgr:Init()
+	CSLog("BattleCameraMgr:Init")
+	
+	BattleCameraMgr.m_nInitialAngle = 55	--初始俯视角度
+	BattleCameraMgr.m_nHorizontalAngle = 270 --水平角度
+	BattleCameraMgr.m_nInitialHeight = 2	--人物在视野内屏幕中的位置设置
+	BattleCameraMgr.m_nInitialDistance = 9 --镜头距离(近镜头9 远镜头13)
+
+	local upRidus = math.rad(BattleCameraMgr.m_nInitialAngle)
+	local flatRidus = math.rad(BattleCameraMgr.m_nHorizontalAngle)
+	local x = BattleCameraMgr.m_nInitialDistance * math.cos(upRidus) * math.cos(flatRidus)
+	local z = BattleCameraMgr.m_nInitialDistance * math.cos(upRidus) * math.sin(flatRidus)
+	local y = BattleCameraMgr.m_nInitialDistance * math.sin(upRidus)
+
+	BattleCameraMgr.m_tOffsetPos = CSVector3(x,y,z) --镜头相对目标点偏移
+	BattleCameraMgr.m_tTargetPos = CSVector3(x,y,z)
+
+	BattleCameraMgr:SetMainCamera()
+	BattleCameraMgr:_AddEvent()
+end
+
+
+--@brief 移除
+function BattleCameraMgr:Destroy()
+	CSLog("BattleCameraMgr:Destroy")
+	BattleCameraMgr:_RemoveEvent()
+	BattleCameraMgr.m_carmeraTrans = nil
+end
+
+--@brife 刷新镜头
+function BattleCameraMgr:Update()
+	if BattleCameraMgr.m_bMoveAction and BattleCameraMgr.m_carmeraTrans then
+		BattleCameraMgr:_UpdateCameraActoin()
+	end
+end
+
+--@brief 设置镜头
+function BattleCameraMgr:SetMainCamera(cameraName)
+	cameraName = cameraName or "Main Camera"
+	BattleCameraMgr.m_carmeraTrans = CSGameObject.Find(cameraName).transform
+	BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
+
+	--设置镜头朝向
+	local pos = CSVector3(0, BattleCameraMgr.m_nInitialHeight, 0)
+
+	BattleCameraMgr.m_carmeraTrans:LookAt(pos)
+end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 监听事件
+function BattleCameraMgr:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+end
+
+--@brifef 移除事件
+function BattleCameraMgr:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+end
+
+--@brief 刷新镜头
+function BattleCameraMgr:_OnUpdateScenePos(pos)
+	-- CSLog("BattleCameraMgr:_OnUpdateScenePos",pos)
+	BattleCameraMgr:_SetFocus(pos)
+end
+
+--@brief 设置镜头焦点
+function BattleCameraMgr:_SetFocus(pos)
+	if not BattleCameraMgr.m_carmeraTrans then
+		return
+	end
+
+	BattleCameraMgr.m_tTargetPos = pos + BattleCameraMgr.m_tOffsetPos
+	local distance = BattleCameraMgr:_GetDistanceForTarget()
+
+	if distance > 10 then
+		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
+	else
+		BattleCameraMgr.m_bMoveAction = true
+	end
+end
+
+--@brief 刷新镜头位置
+function BattleCameraMgr:_UpdateCameraPos(pos)
+	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
+	BattleCameraMgr.m_carmeraTrans.position = pos
+end
+
+--@brief 镜头缓动
+function BattleCameraMgr:_UpdateCameraActoin()
+	local pos = BattleCameraMgr.m_carmeraTrans.position
+	local curPos = pos + (BattleCameraMgr.m_tTargetPos - pos)/10
+	BattleCameraMgr:_UpdateCameraPos(curPos)
+
+	local distance = BattleCameraMgr:_GetDistanceForTarget()
+	if distance < 0.1 then
+		BattleCameraMgr.m_bMoveAction = nil
+		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
+	end
+end
+
+--@brief 获得镜头与目标点距离
+function BattleCameraMgr:_GetDistanceForTarget()
+	local pos = BattleCameraMgr.m_carmeraTrans.position
+	local distance = CSVector3.Distance(BattleCameraMgr.m_tTargetPos,pos)
+	return distance
+end

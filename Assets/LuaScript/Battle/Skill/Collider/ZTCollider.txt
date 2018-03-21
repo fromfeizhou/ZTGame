@@ -1,0 +1,42 @@
+--ZTCollider.txt
+--@breif 碰撞
+--@data 2018/03/18
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+
+ZTCollider = {
+	m_tPos = nil,		--位置
+	m_nRaidus = nil,	--半径
+	m_nHeight = nil,		--延伸高度(中心点上下各一半)
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function ZTCollider:Create(x,y,z,raidus,height)
+	local obj = {}
+	setmetatable( obj, { __index = ZTCollider })
+	local pos = GetPosTab(x,y,z)
+	obj:Init(pos,raidus,height)
+	return obj
+end
+
+--@brief 初始化
+function ZTCollider:Init(pos,raidus,height)
+	 self.m_tPos = pos
+	 self.m_nRaidus = raidus or 1
+	 self.m_nHeight = height
+end
+
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

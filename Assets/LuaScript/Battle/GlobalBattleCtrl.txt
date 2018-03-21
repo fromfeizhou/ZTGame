@@ -1,0 +1,223 @@
+--BattleDefine.txt
+--@breif 战斗全局控制器
+--@data 2018/3/10
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+GlobalBattleCtrl = {
+	m_battleUIMgr = nil,	--主ui管理器
+	m_ztCharaManager = nil, --玩家对象管理
+	m_battleCommandMgr = nil,	--帧命令管理器
+	m_skillActionManager = nil,		--技能解析器
+
+	m_nOwnerId = nil,		--操作者id
+	m_character = nil,		--操作者数据	
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************全局控制器 Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@breif 初始化
+function GlobalBattleCtrl:Init()
+	--****************管理者初始化begin************************************************
+	--镜头管理
+	BattleCameraMgr:Init()
+	--高度读取
+	BattleMapHeight:Init()
+	
+	--主UI管理器(备注：先创建 最后移除)
+	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
+
+
+	--战斗对象管理
+	GlobalBattleCtrl.m_ztCharaManager = ZTCharaManager:Create()
+	--帧命令管理器
+	GlobalBattleCtrl.m_battleCommandMgr = BattleCommandMgr:Create()
+
+	--技能解析器
+	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
+	
+	--****************管理者初始化end************************************************
+
+	--全局数据引用初始化
+	GlobalBattleCtrl:InitData()
+
+	--第一次初始化通知镜头刷新
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+
+	--启动协议监听
+	BattleProtocol:Init()
+end
+
+
+
+--@brief 移除
+function GlobalBattleCtrl:Destroy()
+	--全局数据引用初始化
+	GlobalBattleCtrl:DestroyData()
+	
+	--镜头管理
+	BattleCameraMgr:Destroy()
+	--高度读取
+	BattleMapHeight:Destroy()
+
+	--清理战斗对象管理
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:Destroy()
+		GlobalBattleCtrl.m_ztCharaManager = nil
+	end
+	--帧命令管理器
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:Destroy()
+		GlobalBattleCtrl.m_battleCommandMgr = nil
+	end
+	--技能解析器
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:Destroy()
+		GlobalBattleCtrl.m_skillActionManager = nil
+	end
+
+	--主UI管理器(备注：先创建 最后移除)
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Destroy()
+		GlobalBattleCtrl.m_battleUIMgr = nil
+	end
+	
+	--清理全局事件管理器
+	GBattleEvent:RemoveDispatcher()
+end
+
+--@rife 初始化数据
+function GlobalBattleCtrl:InitData()
+	GlobalBattleCtrl.m_nOwnerId = 1
+	--对象数组
+	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
+	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
+	--控制对象
+	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+end
+
+--@rife 初始化数据
+function GlobalBattleCtrl:SetMainCharacter(battleId)
+	GlobalBattleCtrl.m_nOwnerId = battleId
+	--对象数组
+	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
+	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
+	--控制对象
+	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+end
+
+--@rife 删除数据
+function GlobalBattleCtrl:DestroyData()
+	GlobalBattleCtrl.m_nOwnerId = nil
+	GlobalBattleCtrl.m_tCharacterDic = nil
+	GlobalBattleCtrl.m_tCharacterList = nil
+	GlobalBattleCtrl.m_comZtBattleScene = nil
+end
+
+--@brief 界面刷新
+function GlobalBattleCtrl:Update()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Update()
+	end
+
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:Update()
+	end
+
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:Update()
+	end
+
+	BattleCameraMgr:Update()
+end
+
+
+
+--@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)
+function GlobalBattleCtrl:CommandUpdate()
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:UpdateCommand()
+	end
+
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:UpdateCommand()
+	end
+end
+
+
+--@brife 设置碰撞检测函数
+function GlobalBattleCtrl:SetBattleScene(battleScene)
+	GlobalBattleCtrl.m_comZtBattleScene = battleScene
+end
+
+--@brief 获取碰撞 MapGetCurMapBlock
+function GlobalBattleCtrl:MapGetCurMapBlock(pos)
+	local blockType,param = 0,0
+	if GlobalBattleCtrl.m_comZtBattleScene  then
+		-- CSLog("GlobalBattleCtrl.MapGetCurMapBlock ",CS.UnityEngine.Vector3(pos.x,pos.y,pos.z))
+		blockType,param = GlobalBattleCtrl.m_comZtBattleScene:MapGetCurMapBlock(pos,blockType,param)
+	end
+	return blockType,param
+end
+
+
+
+--@brief 获得当前用户id
+function GlobalBattleCtrl:GetOwnerId()
+	return GlobalBattleCtrl.m_nOwnerId
+end
+
+--@brief 获得对象字典
+function GlobalBattleCtrl:GetCharacterDic()
+	return GlobalBattleCtrl.m_tCharacterDic
+end
+
+--@brief 获得用户列表
+function GlobalBattleCtrl:GetCharacterList()
+	return GlobalBattleCtrl.m_tCharacterList
+end
+
+--@brief 获取当前用户
+function GlobalBattleCtrl:GetOwnerChara()
+	return GlobalBattleCtrl.m_character
+end
+
+
+--@brief 获得当前逻辑帧计数
+function GlobalBattleCtrl:GetCurCommandFrame()
+	if self.m_battleCommandMgr then
+		return self.m_battleCommandMgr.m_nClientFrame
+	end
+	return 0
+end
+
+
+--@brief  添加解析器
+function GlobalBattleCtrl:AddMovelCommand(moveCommand)
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:AddMoveCommand(moveCommand)
+	end
+end
+
+--@brief  添加解析器
+function GlobalBattleCtrl:AddSkillCommand(skillCommand)
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:AddSkill(skillCommand)
+	end
+end
+
+
+--@brief 碰撞按照服务器顺序优先处理
+function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
+	if GlobalBattleCtrl.m_skillActionManager then
+		GlobalBattleCtrl.m_skillActionManager:SkillCollider(colliderCommand)
+	end
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************全局控制器 End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

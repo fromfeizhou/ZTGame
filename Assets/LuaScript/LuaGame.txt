@@ -5,7 +5,6 @@ local LuaGame = {
 }
 
 --@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -39,9 +38,9 @@ end
 --@brief 初始化lua加载
 function LuaGame:_InitLuaFileLoad( )
 	local luaFieLoad = require 'LuaFileLoad' --加载文件
+
 	---初始化 加载登录lua
-	LuaFileLoad:LoadLoginLua(function()
-		print("LuaGame:LoadLoginLuaDone")
+	luaFieLoad:LoadLoginLua(function()
 		self.m_LuaGameStart = LuaGameStart:Create()
 		self.m_LuaGameStart:Init()
 	end)

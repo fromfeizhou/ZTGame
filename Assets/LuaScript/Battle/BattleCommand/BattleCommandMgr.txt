@@ -1,0 +1,137 @@
+--BattleCommandMgr.txt
+--@breif 帧命令管理
+--@data 2018/03/12
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local tInsert = table.insert
+
+
+BattleCommandMgr = {
+	m_tServerCommand = nil,		--服务器驱动帧
+	m_nServerFrame = nil,	--服务器跑动帧
+	m_nClientFrame = nil,	--客户端当前帧
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleCommandMgr:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleCommandMgr })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function BattleCommandMgr:Init()
+	CSLog("BattleCommandMgr:Init")
+
+	self.m_tServerCommand = {}
+	self.m_nClientFrame = 0
+	self.m_nServerFrame = 0
+end
+
+--@brief 移除
+function BattleCommandMgr:Destroy()
+	self.m_tServerCommand = nil
+	self.m_nClientFrame = 0
+	self.m_nServerFrame = 0
+	CSLog("BattleCommandMgr:Destroy")
+end
+
+--@brief 刷新(每帧刷新检测帧命令往前)
+function BattleCommandMgr:Update()
+	if not self.m_tServerCommand then
+		return
+	end
+
+	if self.m_nClientFrame < self.m_nServerFrame then
+		self:_RunCommand()
+		--比驱动帧慢 加速
+		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStep then
+			self:_RunCommand()
+			self:_RunCommand()
+		end
+	else
+		--技能测试
+		if GameConfig.IsSkillDebugScene then
+			BattleProtocol:__TsClientSendDriveCommand()
+		end 
+	end
+end
+
+--@brife 设置下一驱动帧
+function BattleCommandMgr:SetNextFrame()
+	self.m_nServerFrame = self.m_nServerFrame + BattleDefine.CommandStep
+end
+
+--@brief 添加命令
+function BattleCommandMgr:AddCommandList(frame,commandList)
+	if not self.m_tServerCommand[frame] then
+		self.m_tServerCommand[frame] = {}
+	end
+	self.m_tServerCommand[frame] = commandList
+end
+
+--@brief 重置
+function BattleCommandMgr:Reset()
+	self:Destroy()
+	self:Init()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 命令往前驱动
+function BattleCommandMgr:_RunCommand()
+	--客户端往前驱动
+	self.m_nClientFrame = self.m_nClientFrame + 1
+	--过滤溢出帧 保证客户端逻辑帧在服务器允许范围
+	if self.m_nClientFrame > self.m_nServerFrame then
+		self.m_nClientFrame = self.m_nServerFrame
+		return
+	end
+
+	local commandList = self.m_tServerCommand[self.m_nClientFrame]
+	
+	if commandList then
+		self:_ParseCommand(commandList)
+	end
+	self.m_tServerCommand[self.m_nClientFrame] = nil
+
+	--刷新全局逻辑帧命令
+	GlobalBattleCtrl:CommandUpdate()
+end
+
+--@brief 解析帧命令
+function BattleCommandMgr:_ParseCommand(commandList)
+	for i = 1, #commandList do
+		local command = commandList[i]
+		if command.m_nType == BattleCommandType.Move then
+			self:_ParseMove(command)
+		end
+	end
+end
+
+--@brief 移动命令
+function BattleCommandMgr:_ParseMove(command)
+	-- CSLog("BattleCommandMgr:_ParseMove")
+	GlobalBattleCtrl:AddMovelCommand(command)
+end
+
+--@brief 移动命令
+function BattleCommandMgr:_ParseSkill(command)
+	-- CSLog("BattleCommandMgr:_ParseSkill")
+	GlobalBattleCtrl:AddSkillCommand(command)
+end
+
+--@brief 移动命令
+function BattleCommandMgr:_ParseCollider(command)
+	-- CSLog("BattleCommandMgr:_ParseCollider")
+	GlobalBattleCtrl:AddColliderCommand(command)
+end

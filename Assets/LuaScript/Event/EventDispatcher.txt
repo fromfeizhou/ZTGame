@@ -13,9 +13,13 @@ EventDispatcher = {
 function EventDispatcher:Create()
 	local obj = {}
 	setmetatable( obj, { __index = EventDispatcher })
-	obj.m_listeners = {}
+	obj:Init()
 	return obj
 end
+
+ function EventDispatcher:Init()
+ 	self.m_listeners = {}
+ end
 
 function EventDispatcher:AddEvent(name,listener,target)
 	-- 先看看事件是否存在

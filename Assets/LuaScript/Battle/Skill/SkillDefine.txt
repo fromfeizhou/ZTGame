@@ -1,0 +1,17 @@
+--SkillDefine.txt
+--@breif 技能预定义
+--@data 2018/3/19
+
+
+--@brief 碰撞预定义
+SkillActionType = {
+	Play = 0,		--播放动作
+	Sound = 1,		--播放声音
+}
+
+--@brief 技能容器
+SkillLayer = {
+	HERO = 0,	--玩家
+	Scene = 1,	--场景
+}
+

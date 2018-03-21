@@ -1,0 +1,70 @@
+--@brief 字符串切割
+function Split(s, sp)  
+    local res = {}  
+  
+    local temp = s  
+    local len = 0  
+    while true do  
+        len = string.find(temp, sp)  
+        if len ~= nil then  
+            local result = string.sub(temp, 1, len-1)  
+            temp = string.sub(temp, len+1)  
+            table.insert(res, result)  
+        else  
+            table.insert(res, temp)  
+            break  
+        end  
+    end  
+  
+    return res  
+end  
+
+--@brief 从当前字符串的开头和结尾删除所有空白字符后剩余的字符串
+function Trim (s) 
+  return (string.gsub(s, "^%s*(.-)%s*$", "%1")) 
+end
+
+--@brief Debug输出
+function GCSLog(...)
+    if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.Log(...)
+end
+
+--@brief 序列化table表
+function SerializeTable(tTable,index)
+    if not GameConfig.IsDebug then
+        return ""
+    end
+    local str = ""
+    index = index or 0
+    local space = ""
+    for i = 1,index do
+        space = space .. "    "
+    end
+
+    for key,value in pairs(tTable) do
+		local res = tostring(value)
+		if value and type(value) == "table" then
+			res =  SerializeTable(value,index + 1)
+		end
+        str = str ..space.. "["..tostring(key).."] = "..res..'\n'
+    end
+    
+    return "{\n"..str..space.."}"
+end
+
+--@brief table表长度
+function ZTableLen(tTable)
+    local count = 0
+    for key,value in pairs(tTable) do
+        count = count +1
+    end
+    return count
+end
+
+--@bief 获取坐标table
+function GetPosTab(x,y,z)
+    return {x = x,y = y,z = z}
+end

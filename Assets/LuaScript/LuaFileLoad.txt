@@ -1,7 +1,6 @@
-﻿--LuaFileLoad.txt
---@breif lua列表
+﻿--@breif lua列表
 --@data 2018/3/5
-LuaFileLoad = {
+local LuaFileLoad = {
 	--登陆模块相关逻辑所需lua文件
 	G_tLoginLuaList = {
 		"LuaGameStart",
@@ -9,34 +8,84 @@ LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
-		"Global.GlobalData",
-		"Global.ModelData",
-
-		"Common.GlobalMethod",
+		"Common.Data.ModelData",
 		"Common.PathManager",
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
+		"Common.ModelManager",
+		"Common.TimerManager.Timer",
+		"Common.TimerManager.FixTimer",
+		"Common.TimerManager.LoopTimer",
+		"Common.TimerManager.TimerManager",
+
+		"ProtoBuff.NetProtocol",
+		"ProtoBuff.ProtocolDefine",
+		"ProtoBuff.ZTProtocol",
+
+
+		"Global.GlobalData",
+		"Global.ZTProtoData",
+		"Global.GlobalMethod",
+
 
 		--[[UI面板相关]]
-		"Login.LoginModel",
-		"Login.LoginMainPanel",
+		--系统模块
+		"UIModels.System.SystemModel",
+		"UIModels.System.SystemNoticePanel",
+		"UIModels.System.SystemLockPanel",
+
+		--登录模块
+		"UIModels.Login.LoginModel",
+		"UIModels.Login.LoginMainPanel",
+		"UIModels.Login.LoginCreateRolePanel",
+
 	},
 
-	--其他lua文件
-	G_tOtherList = {
+	--游戏lua文件
+	G_tGameList = {
+		"Common.Data.CommonData",
+		"Common.Animator.AnimatorData",
+		"Common.Animator.Animator",
+
+		--战斗关联
+		"Battle.Protocol.BattleProtocol",
+		"Battle.BattleDefine",
+		"Battle.BattleMapHeight",
+		"Battle.BattleCameraMgr",
+		"Battle.GlobalBattleCtrl",
+		"Battle.ZTBattleScene",
+
+		"Battle.BattleCommand.BattleCommand",
+		"Battle.BattleCommand.BattleCommandMgr",
+
+		"Battle.Character.Character",
+		"Battle.Character.ZTCharaManager",
+
+		"Battle.Skill.SkillDefine",
+		"Battle.Skill.Collider.ZTCollider",
+		"Battle.Skill.Effect.SkillEffect",
+		"Battle.Skill.SkillAction.CommonAction.SkillAction",
+		"Battle.Skill.SkillAction.CommonAction.SkillPlayAction",
+		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
+		"Battle.Skill.SkillAction.SkillActionData",
+		"Battle.Skill.SkillAction.SkillActionParse",
+		"Battle.Skill.SkillAction.SkillActionManager",
+		
+		"Battle.BattleUI.MoveJoystick",
+		"Battle.BattleUI.SkillJoystick",
+		"Battle.BattleUI.BattleUIMgr",
+		"Battle.BattleUI.MapScrollPanel",
+
+		"UIModels.City.CityModel",
+		"UIModels.City.CityMainPanel",
+		"UIModels.City.ZTCityScene",
 	}
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 初始化
-function LuaFileLoad:Init()
-	
-end
-
---@brief 开始检查加载
+ --@brief 初始化 function LuaFileLoad:init() end --@brief 开始检查加载
 function LuaFileLoad:Update()
 
 end
@@ -49,19 +98,29 @@ end
 function LuaFileLoad:LoadLoginLua(loadDone)
 	for i=1, #(LuaFileLoad.G_tLoginLuaList) do  
     	local fileName = LuaFileLoad.G_tLoginLuaList[i]
-    	require(fileName)
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
+	end 
+	if loadDone then
+		loadDone() end
+end
+
+
+--@brief 加载游戏逻辑lua文件
+function LuaFileLoad:LoadGameLua(loadDone)
+	for i=1, #(LuaFileLoad.G_tGameList) do  
+    	local fileName = LuaFileLoad.G_tGameList[i]
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
 	end 
 	if loadDone then
 		loadDone()
 	end
 end
-
-
---@brief 加载游戏逻辑lua文件
-function LuaFileLoad:LoadOtherLua()
-	-- body
-end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+ --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+return LuaFileLoad

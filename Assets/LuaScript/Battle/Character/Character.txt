@@ -1,0 +1,191 @@
+--Character.txt
+--@breif lua模板
+--@data 2018/03/09
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+Character = {
+	m_nBattleId = nil,	--战斗对象id
+	m_animData = nil,	--形象数据
+	m_animator = nil,	--形象动画
+
+	m_nMoveDir = nil,	--移动方向
+	m_charaPos = nil,		--当前位置
+	m_nGlassId = nil,		--草丛id
+	m_nCampId = nil,		--camp
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function Character:Create(battleData,container)
+	local obj = {}
+	setmetatable( obj, { __index = Character })
+	obj:Init(battleData,container)
+	return obj
+end
+
+--@brief 初始化
+function Character:Init(battleData,container)
+	-- CSLog("Character:Init",battleData.pos)
+	self.m_nBattleId = battleData.battleId or 1
+	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
+	self.m_animator = Animator:Create(self.m_animData,container)
+	self.m_charaPos = CSVector3.zero
+	self:UpdatePos(battleData.pos)
+	self.m_nMoveDir = BattleDir.None
+
+	self.m_nGlassId = -1
+	self.m_nCampId = battleData.camp
+end
+
+
+--@brief 移除
+function Character:Destroy()
+	CSLog("Character:Destroy")
+	--清理形象
+	if self.m_animator then
+		self.m_animator:Destroy()
+		self.m_animator = nil
+	end
+	--清理形象数据
+	if self.m_animData then
+		self.m_animData:Destroy()
+		self.m_animData = nil
+	end
+end
+
+--@brief 刷新数据
+function Character:SetData(data)
+	self:UpdatePos(data.pos)
+end
+
+--@brief 刷新逻辑帧
+function Character:UpdateCommand()
+	self:_UpdateMoveCommand()
+end
+
+--@brief 获得战斗id
+function Character:GetBattleId()
+	return self.m_nBattleId
+end
+
+--@brief 设置方向
+function Character:SetDirection(dir)
+	--CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
+	if self.m_nMoveDir ~= dir then
+		--切换待机 和其他状态 播放对应动作
+		if self.m_nMoveDir == BattleDir.None then
+			self:Play(AnimatorName.Move)
+		elseif dir == BattleDir.None then
+			self:Play(AnimatorName.Idle)
+		end
+		
+		--切换角度
+		if dir ~= BattleDir.None then
+			self:UpdateRotate(BattleDirDefine:GetDirPos(dir))
+		end
+
+		self.m_nMoveDir = dir
+
+	end
+end
+
+--@brief 获得位置
+function Character:GetPos()
+	return self.m_charaPos
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 动作相关
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 播放动作
+--@param 动作名
+function Character:Play(name)
+	self.m_animData:Play(name)
+end
+
+--@brief 创建显示(进入镜头范围)
+function Character:SetInCamera(inCamera)
+	self.m_animData:SetInCamera(inCamera)
+end
+
+--@brief 刷新位置
+--@param vector3 pos
+function Character:UpdatePos(pos)
+	-- CS.GameTool.LogError("Character:UpdatePos",self.m_charaPos,pos,self.m_charaPos.Equals(pos))
+	if not self.m_charaPos.Equals(pos) then
+		--设置高度
+		local height = BattleMapHeight:GetHight(pos)
+		pos.y = height
+
+		self.m_charaPos = pos
+		--动画刷新通知
+		self.m_animData:UpdatePos(pos)
+		--CS.GameTool.LogError("Character:UpdatePos")
+		if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
+			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
+		end
+	end
+end
+
+--@brief 更新角度
+--@param vector3 dir
+function Character:UpdateRotate(dir)
+	self.m_animData:UpdateRotate(dir)
+end
+
+--@brief 设置草丛id
+function Character:SetGlassId(glassId)
+	if self.m_nGlassId == glassId then
+		return
+	end
+	self.m_nGlassId = glassId
+
+	--通知更新草丛id
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self.m_nBattleId)
+end
+
+
+--@brief 改变半透明（草丛状态显示）
+function Character:ChangeTranslucence(transLv)
+	self.m_animData:ChangeTranslucence(transLv)
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 动作相关
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 刷新移动
+function Character:_UpdateMoveCommand()
+	if self.m_nMoveDir ~= BattleDir.None then
+		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
+		local hitPos 
+		local canMove = false
+		for i =1,#list do
+			hitPos = self.m_charaPos + list[i] * BattleDefine.PlayerSpeed
+			local hitType,param = GlobalBattleCtrl:MapGetCurMapBlock(hitPos)
+			if hitType == BlockType.None or hitType == BlockType.Hide then
+				canMove = true
+				-- CSLog("Änimator:_UpdateMoveCommand",hitPos,hitType)
+                if hitType == BlockType.Hide then
+                	self:SetGlassId(param)
+                else
+                	self:SetGlassId(-1)
+                end
+				break
+			end
+		end
+		if canMove then
+			-- CSLog("Character:_UpdateMoveCommand",self.m_nMoveDir,hitPos)
+			self:UpdatePos(hitPos)
+		end
+	end
+end

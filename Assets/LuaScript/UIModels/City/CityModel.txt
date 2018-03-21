@@ -1,0 +1,83 @@
+--CityModel.txt
+--@breif lua入口
+--@data 2018/3/5
+CityModel = {
+	m_tPanelList = nil,
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = GCSLog
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function CityModel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = CityModel })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function CityModel:Init()
+	self.m_tPanelList = {}
+end
+
+--@brief 更新
+function CityModel:Update()
+end
+
+
+--@brief 移除
+function CityModel:Destroy()
+	print("CityModel:Destroy")
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			panel:Destroy()
+		end
+		self.m_tPanelList = nil
+	end
+end
+
+
+--@breif 显示面板
+function CityModel:ShowPanel( panelType )
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		if panelType == CITY_TYPE.MAIN then
+			panel = CityMainPanel:Create(self)
+		--elseif panelType == LOGIN_TYPE.CREATEROLE then
+			--panel = LoginCreateRolePanel:Create()
+		end
+		self.m_tPanelList[panelType] = panel
+	end
+
+	if panel then
+		panel:Show()
+	end
+end
+
+--@breif 隐藏面板
+function CityModel:HidePanel(panelType)
+
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		GCSLog("CityModel:HidePanel","found out",panelType)
+	end
+
+	if panel then
+		panel:Hide()
+	end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -1,15 +1,19 @@
 --GlobalData.txt
 --@breif lua入口
 --@data 2018/3/5
-GlobalData = {
-	NetEventDispatcher = nil
-}
+
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+
+GlobalData = {
+	NetEventDispatcher = nil,
+	MdlEventDispatcher = nil,
+}
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -25,13 +29,30 @@ end
 
 --@breif 网络事件
 NET_EVENT = {
-	SERVER_FINISH = "NET_EVENT_SERVER_FINISH",
+	SERVER_FINISH = "net_event_server_finish", 
+	RECEIVE_MESSAGE = "net_event_receive_message",
 }
+--@breif 获取网络事件管理器
 function GlobalData:GetNetEventDispatcher()
 	if GlobalData.NetEventDispatcher == nil then 
 		GlobalData.NetEventDispatcher = EventDispatcher:Create() 
 	end
 	return GlobalData.NetEventDispatcher
+end
+
+
+--@breif 模块事件
+MDL_EVENT = {
+	SHOW_PANEL = "mdl_event_show_panel",
+	HIDE_PANEL = "mdl_event_hide_panel",
+}
+
+--@breif 获取模块事件管理器
+function GlobalData:GetMdlEventDispatcher()
+	if GlobalData.MdlEventDispatcher == nil then 
+		GlobalData.MdlEventDispatcher = EventDispatcher:Create() 
+	end
+	return GlobalData.MdlEventDispatcher
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

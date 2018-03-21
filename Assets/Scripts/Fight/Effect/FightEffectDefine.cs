@@ -79,11 +79,11 @@ public class FightEffectDefine
     private static void SharkScreen(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         //非玩家自己 不需要震动
-        if (battleInfo.BattleId == ZTSceneManager.GetInstance().MyPlayer.BattleId || userId == ZTSceneManager.GetInstance().MyPlayer.BattleId)
+        if (battleInfo.BattleId == ZTBattleSceneManager.GetInstance().MyPlayer.BattleId || userId == ZTBattleSceneManager.GetInstance().MyPlayer.BattleId)
         {
             int time = effect.Param1;
             float offset = effect.Param2 / IntToFloat;
-            ZTSceneManager.GetInstance().SharkScreen(time, offset);
+            ZTBattleSceneManager.GetInstance().SharkScreen(time, offset);
         }
     }
 
@@ -137,7 +137,7 @@ public class FightEffectDefine
     private static void CalculateHurt(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         ICharaFight target = battleInfo as ICharaFight;
-        ICharaFight user = ZTSceneManager.GetInstance().GetCharaById(userId) as ICharaFight;
+        ICharaFight user = ZTBattleSceneManager.GetInstance().GetCharaById(userId) as ICharaFight;
         if (null == target || null == user) return;
         HurtInfo hurtInfo = new HurtInfo();
         hurtInfo.Type = HURT_TYPE.NORMAL;
@@ -151,7 +151,7 @@ public class FightEffectDefine
     private static void AddBuff(ICharaBattle battleInfo, FightEffectInfo effect, uint userId)
     {
         if (userId <= 0) return;
-        battleInfo.AddBuff(new BuffData(effect.Param1, ZTSceneManager.GetInstance().SceneFrame, userId));
+        battleInfo.AddBuff(new BuffData(effect.Param1, ZTBattleSceneManager.GetInstance().SceneFrame, userId));
     }
 
     private static void RemoveBuff(ICharaBattle battleInfo, FightEffectInfo effect)

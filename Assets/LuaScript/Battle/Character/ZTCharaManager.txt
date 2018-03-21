@@ -1,0 +1,205 @@
+--ZTCharaManager.txt
+--@breif 战斗对象管理
+--@data 2018/03/07
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local table = table
+
+
+ZTCharaManager = {
+	m_tCharaList = nil,
+	m_tSortCharaList = nil,
+	m_ztCharaContainer = nil,	--玩家容器
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function ZTCharaManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = ZTCharaManager })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function ZTCharaManager:Init()
+	CSLog("ZTCharaManager:Init")
+	--战斗对象容器
+	self.m_ztCharaContainer = CSGameObject("CharaContainer").transform
+	self.m_tCharaList = {}
+	self.m_tSortCharaList = {}
+	--添加事件监听
+	self:_AddEvent()
+
+	--测试代码
+	self:_InitSkillTest()
+end
+
+--@brief 移除
+function ZTCharaManager:Destroy()
+	CSLog("ZTCharaManager:Destroy")
+	
+	self:RemoveEvent()
+
+	if self.m_tCharaList then
+		for i,v in pairs(self.m_tCharaList) do
+			v:Destroy()
+		end
+		self.m_tCharaList = nil
+	end
+
+	--清理战斗对象容器
+	if self.m_ztCharaContainer then
+		CSGameObject.Destroy(self.m_ztCharaContainer.gameObject)
+		self.m_ztCharaContainer = nil
+	end
+end
+
+--@brief 更新
+function ZTCharaManager:Update()
+end
+
+--@brief 逻辑帧刷新
+--@param 使用者id
+--@param 移动方向
+function ZTCharaManager:AddMoveCommand(moveCommand)
+	local battleId,dir = moveCommand.m_nBattleId,moveCommand.m_nDir
+	local chara = self.m_tCharaList[battleId]
+	-- CSLog("ZTCharaManager:AddMoveCommand",battleId,dir,chara)
+	if chara then
+		chara:SetDirection(dir)
+	end
+end
+
+--@brief 逻辑帧刷新
+function ZTCharaManager:UpdateCommand()
+	for i = 1,#self.m_tSortCharaList do
+		self.m_tSortCharaList[i]:UpdateCommand()
+	end
+end
+
+--@brief 获得对象字典
+function ZTCharaManager:GetCharacterDic()
+	return self.m_tCharaList
+end
+
+--@brief 获得用户列表
+function ZTCharaManager:GetCharacterList()
+	return self.m_tSortCharaList
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 添加事件监听
+function ZTCharaManager:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass,self)
+
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+	
+end
+
+--@brief 移除事件监听
+function ZTCharaManager:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.REMOVE_CHARACTER,self._OnRemoveCharacter)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CHARACTER_GLASS,self._OnUpdateCharacterGlass)
+
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--brief 游戏开始刷新所有对象
+function ZTCharaManager:_OnStartGame(playerList)
+	
+	--移除玩家
+	for i,v in pairs(self.m_tCharaList) do
+		if not playerList[v.m_nBattleId] then
+			self:_OnRemoveCharacter(v.m_nBattleId)
+		end
+	end
+
+	--添加玩家
+	for i,v in pairs(playerList) do
+		if not self.m_tCharaList[v.battleId] then
+			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp)
+			self:_OnAddCharacter(data)
+		else
+			chara:SetData(v)
+		end
+	end
+
+	--test
+	local chara = self.m_tSortCharaList[1]
+	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
+end
+
+--@brief change glass id
+function ZTCharaManager:_OnUpdateCharacterGlass(battleId)
+	local chara = self.m_tCharaList[battleId]
+	local owner = GlobalBattleCtrl:GetOwnerChara()
+	if chara.m_nGlassId > 0 then
+		if chara.m_nCampId == owner.m_nCampId or chara.m_nGlassId ==  owner.m_nGlassId then
+			chara:ChangeTranslucence(TransLevelDefine.Trans)
+		else
+			chara:ChangeTranslucence(TransLevelDefine.Hide)
+		end
+	else
+		chara:ChangeTranslucence(TransLevelDefine.Normal)
+	end
+end
+
+--@brief 添加对象
+function ZTCharaManager:_OnAddCharacter(battleData)
+	CSLog("ZTCharaManager:_OnAddCharacter",battleData.battleId)
+	--创建对象
+	local chara = Character:Create(battleData,self.m_ztCharaContainer)
+
+	--设置可见 
+	chara:SetInCamera(true)
+	--加入队列
+	self.m_tCharaList[battleData.battleId] = chara
+	table.insert(self.m_tSortCharaList,chara)
+	--升序排序
+	-- local function sortfunc(a,b)
+ --        return a.battleId < b.battleId
+ --    end
+	-- table.sort(self.m_tSortCharaList,sortfunc)
+end
+
+--@brief 移除对象
+function ZTCharaManager:_OnRemoveCharacter(battleId)
+	CSLog("ZTCharaManager:_OnRemoveCharacter",battleId)
+	self.m_tCharaList[battleId] = nil
+	for i = 1,#self.m_tSortCharaList do
+		local chara = self.m_tSortCharaList[i]
+		if chara:GetBattleId() == battleId then
+			table.remove(self.m_tSortCharaList,i)
+			break
+		end
+	end
+end
+
+
+--@brief 测试技能
+function ZTCharaManager:_InitSkillTest()
+	local list = {CSVector3(270,0,240),CSVector3(270,0,250),CSVector3(270,0,260),CSVector3(270,0,270),CSVector3(270,0,280)}
+	local index = math.random(1,#list)
+	local pos = list[index]
+	table.remove(list,index)
+
+	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1)
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
+	
+	index = math.random(1,#list)
+	pos = list[index]
+	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2)
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+end

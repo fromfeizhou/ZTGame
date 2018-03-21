@@ -14,7 +14,7 @@ public class SkillMethod
             return targetList;
         }
 
-        List<CharaActorInfo> list = ZTSceneManager.GetInstance().GetCharaList();
+        List<CharaActorInfo> list = ZTBattleSceneManager.GetInstance().GetCharaList();
         for (int i = 0; i < list.Count; i++)
         {
             ICharaBattle info = list[i] as ICharaBattle;

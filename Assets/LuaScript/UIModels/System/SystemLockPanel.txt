@@ -1,0 +1,78 @@
+--SystemLockPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+SystemLockPanel = {
+	m_model = nil,
+	
+	m_transform = nil,
+	m_gameObject = nil,
+
+	--m_Notice = nil,
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SystemLockPanel:Create(model)
+	GCSLog("SystemLockPanel:Create")
+	local obj = {}
+	setmetatable( obj, { __index = SystemLockPanel })
+	obj:Init(model)
+	return obj
+end
+
+--@brief 初始化登录界面（加载面板资源）
+function SystemLockPanel:Init()
+	self.m_model = model
+	local callback_loadfinish = function(target,path)
+		self:_LoadAssetPanelFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("SystemLockPanel"),callback_loadfinish)
+end
+
+--@brief 面板每帧刷新
+function SystemLockPanel:Update(deltaTime)
+end
+
+--@brief 显示登录面板
+function SystemLockPanel:Show()
+	self.m_gameObject:SetActive(true)
+end
+
+--@brief 隐藏登录面板
+function SystemLockPanel:Hide()
+	self.m_gameObject:SetActive(false)
+end
+
+--@brief 销毁登录面板
+function SystemLockPanel:Destroy()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function SystemLockPanel:_LoadAssetPanelFinish(target,path)
+	local prefab = target
+ 		if prefab then
+			local canvas = CSGameObject.Find("Canvas").transform
+ 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_transform.gameObject:SetActive(false)
+ 			self:_InitPanel()
+		end
+end
+
+--@brief 初始化登录界面UI控件
+function SystemLockPanel:_InitPanel()	
+	-- 文本 - 用户提示
+	--self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
+end

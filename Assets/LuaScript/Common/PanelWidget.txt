@@ -2,18 +2,29 @@ PanelWidget = {
 	
 }
 
+--@brief 获取按钮
 function PanelWidget:GetButton(panel,path,onClick)
 	local transform = panel:Find(path)
-	transform:GetComponent("Button").onClick:AddListener(onClick)
+	local button = transform:GetComponent("Button")
+	button.onClick:AddListener(onClick)
+	return button
 end
-function PanelWidget:GetInputField(panel,path)
+
+--@brief 获取输入框
+function PanelWidget:GetInputField(panel,path,onEndEdit)
 	local transform = panel:Find(path)
-	return transform:GetComponent("InputField");
+	local inputField = transform:GetComponent("InputField")
+	inputField.onEndEdit:AddListener(onEndEdit)
+	return inputField
 end
+
+--@brief 获取文本
 function PanelWidget:GetText(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("Text");
 end
+
+--@brief 获取子物体
 function PanelWidget:GetChild(panel,path)
 	return panel:Find(path)
 end
