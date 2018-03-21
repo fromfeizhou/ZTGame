@@ -1,59 +1,70 @@
---SkillPlayAction.txt
---@breif 动作播放
+--SkillActionFace.txt
+--@breif 朝向调整
 --@data 2018/03/19
 
 --@brief c#引用
 local CSLog = CS.GameTool.Log
 
 
-SkillPlayAction = {
-	m_sAnimName = nil,  --动作名
+SkillActionFace = {
+	m_nFaceType = nil,  --朝向
+	m_tSkillPos = nil,	--技能目标点
 }
 
 --@breif 继承SkillAction
-setmetatable( SkillPlayAction, { __index = SkillAction})
+setmetatable( SkillActionFace, { __index = SkillAction})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillPlayAction:Create(actionData)
+function SkillActionFace:Create(actionData,skillPos)
 	local obj = {}
-	setmetatable( obj, { __index = SkillPlayAction })
-	obj:Init(actionData)
+	setmetatable( obj, { __index = SkillActionFace })
+	obj:Init(actionData,skillPos)
 	return obj
 end
 
 --@brief 初始化
-function SkillPlayAction:Init(actionData)
+function SkillActionFace:Init(actionData,skillPos)
 	--继承实现
 	SkillAction.Init(self,actionData)
-	self.m_sAnimName = self.m_tActionData.m_sAnimName
+	self.m_nFaceType = self.m_tActionData.m_nFaceType
+	self.m_tSkillPos = skillPos
 end
 
 --@brief 开始
-function SkillPlayAction:Start()
+function SkillActionFace:Start()
 	--继承实现
 	SkillAction.Start(self)
-	self:GetOwner():Play(self.m_sAnimName)
+	local charaPos = self:GetOwner():GetPos()
+	local dir = nil
+	if self.m_nFaceType == SkillFaceType.UpSkill then
+		dir = self:_GetDir(charaPos,self.m_tSkillPos)
+	elseif self.m_nFaceType == SkillFaceType.BackSkill then
+		dir = self:_GetDir(self.m_tSkillPos,charaPos)
+	end
+	if dir then
+		self:GetOwner():UpdateRotate(dir)
+	end
 	self:Done()
 end
 
 
 -- --@brief 更新
--- function SkillPlayAction:Update()
+-- function SkillActionFace:Update()
 -- 	--继承实现
 -- 	SkillAction.Update(self)
 -- end
 
 --@brief 结束
-function SkillPlayAction:Done()
+function SkillActionFace:Done()
 	--继承实现
 	SkillAction.Done(self)
 end
 
 --@brief 移除
-function SkillAction:Destroy()
+function SkillActionFace:Destroy()
 	--继承实现
 	SkillAction.Destroy(self)
 end
@@ -61,3 +72,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 获得方向
+function SkillActionFace:_GetDir(posBegin,posEnd)
+	return posEnd - posBegin
+end

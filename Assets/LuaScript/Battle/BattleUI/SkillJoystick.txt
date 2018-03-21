@@ -100,7 +100,8 @@ function SkillJoystick:_SendSkillCommand(pos)
 	-- CSLog("SkillJoystick:_SendSkillCommand")
 	local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
 	local distance = self.m_nDistance
-	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
+	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local targetPos = CSVector3(charaPos.x + distance * deltaVec.x, charaPos.y, distance * deltaVec.z + charaPos.z)
 
 	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
 end

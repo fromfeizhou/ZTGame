@@ -1,78 +1,63 @@
---BattleContainerMgr.txt
---@breif 战斗界面ui
---@data 2018/03/11
+--SkillActionPlay.txt
+--@breif 动作播放
+--@data 2018/03/19
 
 --@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
 
-BattleContainerMgr = {
-	m_ctrlContainer = nil,		--控制UI容器
-	m_skillContainer = nil,		--技能UI容器
-	m_playerContainer = nil,	--玩家容器
-	m_hpContainer = nil,		--hp容器
+SkillActionPlay = {
+	m_sAnimName = nil,  --动作名
+	m_tSkillPos = nil,	--技能操作点
 }
+
+--@breif 继承SkillAction
+setmetatable( SkillActionPlay, { __index = SkillAction})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleContainerMgr:Create()
+function SkillActionPlay:Create(actionData,skillPos)
 	local obj = {}
-	setmetatable( obj, { __index = BattleContainerMgr })
-	obj:Init()
+	setmetatable( obj, { __index = SkillActionPlay })
+	obj:Init(actionData,skillPos)
 	return obj
 end
 
 --@brief 初始化
-function BattleContainerMgr:Init()
-	CSLog("BattleContainerMgr:Init")
-	local canvasTrans = CSGameObject.Find("Canvas").transform
-	CSGameObject("MainUIContainer").transform.SetParent(canvasTrans,false)
+function SkillActionPlay:Init(actionData,skillPos)
+	--继承实现
+	SkillAction.Init(self,actionData)
+	self.m_sAnimName = self.m_tActionData.m_sAnimName
+	self.m_tSkillPos = skillPos
+end
 
-	--控制UI容器
-	self.m_ctrlContainer = CSGameObject("CtrlContainer").transform
-	self.m_ctrlContainer:SetParent(canvasTrans,false)
-
-	--技能UI容器
-	self.m_skillContainer = CSGameObject("SkillContainer").transform
-	self.m_skillContainer:SetParent(canvasTrans,false)
-
-	--玩家容器
-	self.m_playerContainer = CSGameObject("PlayerContainer").transform
-	self.m_playerContainer:SetParent(canvasTrans,false)
-
-	--hp容器
-	self.m_hpContainer = CSGameObject("HpContainer").transform
-	self.m_hpContainer:SetParent(canvasTrans,false)
+--@brief 开始
+function SkillActionPlay:Start()
+	--继承实现
+	SkillAction.Start(self)
+	self:GetOwner():Play(self.m_sAnimName)
+	self:Done()
 end
 
 
+-- --@brief 更新
+-- function SkillActionPlay:Update()
+-- 	--继承实现
+-- 	SkillAction.Update(self)
+-- end
+
+--@brief 结束
+function SkillActionPlay:Done()
+	--继承实现
+	SkillAction.Done(self)
+end
+
 --@brief 移除
-function BattleContainerMgr:Destroy()
-	CSLog("BattleContainerMgr:Destroy")
-	if self.m_ctrlContainer then
-		CSGameObject.Destroy(self.m_ctrlContainer.gameObject)
-		self.m_ctrlContainer = nil
-	end
-
-	if self.m_skillContainer then
-		CSGameObject.Destroy(self.m_skillContainer.gameObject)
-		self.m_skillContainer = nil
-	end
-
-	if self.m_playerContainer then
-		CSGameObject.Destroy(self.m_playerContainer.gameObject)
-		self.m_playerContainer = nil
-	end
-
-	if self.m_hpContainer then
-		CSGameObject.Destroy(self.m_hpContainer.gameObject)
-		self.m_hpContainer = nil
-	end
+function SkillActionPlay:Destroy()
+	--继承实现
+	SkillAction.Destroy(self)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
