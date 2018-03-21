@@ -20,3 +20,9 @@ SkillFaceType = {
 	UpSkill = 0,	--朝向技能点
 	BackSkill = 1,	--背向技能点
 }
+
+SkillTargetType = {
+	Self = 0,	--自己
+	Team = 1,	--队友
+	Enemy = 2,
+}

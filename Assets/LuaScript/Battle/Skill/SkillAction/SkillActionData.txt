@@ -82,6 +82,35 @@ function SkillActionPlayData:Init(owner,frame,name)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************分割线***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--播放动作
+SkillActionColliderData = {
+	m_colliderData = nil,	--碰撞数据
+}
+--@breif SkillActionData
+setmetatable( SkillActionColliderData, { __index = SkillActionData})
+
+--@brief 拷贝原表
+--@param 碰撞
+--@param 偏移
+function SkillActionColliderData:Create(owner,frame,colliderData)
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionColliderData })
+	obj:Init(owner,frame,colliderData)
+	return obj
+end
+
+--@brief 初始化
+function SkillActionColliderData:Init(owner,frame,colliderData)
+	--基类实现
+	SkillActionData.Init(self,owner,frame)
+	self.m_colliderData = colliderData
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 

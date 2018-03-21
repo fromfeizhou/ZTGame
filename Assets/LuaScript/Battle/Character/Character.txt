@@ -8,6 +8,14 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
+--人物状态机
+CharacterState = {
+	Normal = 1,			--常规状态
+	Die = 2,			--死亡
+	Skill = 4,			--施法中
+	Controller = 8,		--受控
+}
+
 Character = {
 	m_nBattleId = nil,	--战斗对象id
 	m_animData = nil,	--形象数据
@@ -17,6 +25,8 @@ Character = {
 	m_charaPos = nil,		--当前位置
 	m_nGlassId = nil,		--草丛id
 	m_nCampId = nil,		--camp
+	
+	m_nState = nil,		--玩家状态
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -42,6 +52,8 @@ function Character:Init(battleData,container)
 
 	self.m_nGlassId = -1
 	self.m_nCampId = battleData.camp
+
+	self.m_nState = 0
 end
 
 
@@ -99,6 +111,23 @@ end
 --@brief 获得位置
 function Character:GetPos()
 	return self.m_charaPos
+end
+
+--@brief 设置玩家状态
+function Character:InState(state)
+	self.m_nState = self.m_nState | state
+	CSLog("Character:InState",self.m_nState)
+end
+
+--@brief 设置玩家状态
+function Character:OutState(state)
+	self.m_nState = self.m_nState & ~state
+	CSLog("Character:OutState",self.m_nState)
+end
+
+--@brief 是否是普通状态
+function Character:IsNormalState()
+	return self.m_nState == CharacterState.Normal
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -190,8 +190,8 @@ end
 
 --@brief 获得当前逻辑帧计数
 function GlobalBattleCtrl:GetCurCommandFrame()
-	if self.m_battleCommandMgr then
-		return self.m_battleCommandMgr.m_nClientFrame
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		return GlobalBattleCtrl.m_battleCommandMgr.m_nClientFrame
 	end
 	return 0
 end
