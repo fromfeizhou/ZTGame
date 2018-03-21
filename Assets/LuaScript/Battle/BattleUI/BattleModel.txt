@@ -1,0 +1,88 @@
+--BattleModel.txt
+--@breif lua秘笥
+--@data 2018/3/5
+BattleModel = {
+	m_tPanelList = nil,
+	m_parent = nil,
+}
+
+BATTLE_UI_TYPE = {
+	MAP_SCROLL = 1,	--寄仇夕
+}
+
+--@brief c#哈喘
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = GCSLog
+
+--！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+--*******************************************************Public Begin*************************************************************
+--！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+--@brief 申唄圻燕
+function BattleModel:Create(parent)
+	local obj = {}
+	setmetatable( obj, { __index = BattleModel })
+	obj:Init(parent)
+	return obj
+end
+
+--@brief 兜兵晒
+function BattleModel:Init(parent)
+	self.m_parent = parent
+	self.m_tPanelList = {}
+end
+
+--@brief 厚仟
+function BattleModel:Update()
+end
+
+
+--@brief 卞茅
+function BattleModel:Destroy()
+	print("BattleModel:Destroy")
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			panel:Destroy()
+		end
+		self.m_tPanelList = nil
+	end
+end
+
+
+--@breif �塋消羂�
+function BattleModel:ShowPanel( panelType )
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		if panelType == BATTLE_UI_TYPE.MAP_SCROLL then
+			panel = MapScrollPanel:Create(self.m_parent,self)
+		end
+		
+		self.m_tPanelList[panelType] = panel
+	end
+	
+
+	if panel then
+		panel:Show()
+	end
+end
+
+--@breif 咨茄中医
+function BattleModel:HidePanel(panelType)
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		GCSLog("BattleModel:HidePanel","found out",panelType)
+	end
+
+	if panel then
+		panel:Hide()
+	end
+end
+
+--！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+--*******************************************************Public End***************************************************************
+--！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！

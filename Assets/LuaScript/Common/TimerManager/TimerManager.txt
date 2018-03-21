@@ -90,8 +90,8 @@ function TimerManager:_Ticks()
 		local timerInfo = self:_PackTimeInfo()
 		for k,timer in pairs(self.m_tTimerList) do
 			if not timer.isFinish then
+				if timer.m_onTick then timer.m_onTick(timer.m_target) end
 				timer:Tick(timerInfo)
-				if timer.m_onTick then timer.m_onTick(self.m_target) end
 			end
 		end
 	end

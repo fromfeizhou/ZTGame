@@ -54,6 +54,7 @@ public static class ExampleGenConfig
 		typeof(Action),
 		typeof(Func<double, double, double>),
 		typeof(Action<string>),
+		typeof(Action<float>),
 		typeof(Action<double>),
 		typeof(Action<bool>),
 		typeof(Action<bool,string>),

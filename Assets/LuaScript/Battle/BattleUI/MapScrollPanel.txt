@@ -8,10 +8,12 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3local
 local CSVector2 = CS.UnityEngine.Vector2
 local CSColor = CS.UnityEngine.Color
-
+local CSMathf = CS.UnityEngine.Mathf
 
 
 MapScrollPanel = {
+	m_model = nil,
+	
 	m_transform = nil,
 	m_gameObject = nil,
 	
@@ -25,9 +27,10 @@ MapScrollPanel = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function MapScrollPanel:Create(parent)
+function MapScrollPanel:Create(parent,model)
 	local obj = {}
 	setmetatable( obj, { __index = MapScrollPanel })
+	obj.m_model = model
 	obj:Init(parent)
 	return obj
 end
@@ -36,21 +39,22 @@ end
 function MapScrollPanel:Init(parent)
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("MapScrollPanel"),function(target,path)
  		if target then
- 			self.m_transform = CSTransform.Instantiate(target.transform,parent)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self.m_transform.gameObject:SetActive(false)
+ 			self.m_gameObject = CSGameObject.Instantiate(target,parent)
+ 			self.m_transform = self.m_gameObject.transform
+ 			self.m_gameObject:SetActive(false)
+			
 			
  			--@brief 初始化登录界面UI控件
-			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:Hide() end)
+			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:_Hide() end)
 			PanelWidget:GetZTButton(self.m_transform,"btnTest",function() self:Test() end)
 
 			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:onValueChanged(value) end)
 			self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
 			self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
-			self.m_ztCircleCur:Init(50,200)
+			self.m_ztCircleCur:Init(50)
 			self.m_ztCircleCur:SetColor(CSColor.green)
 			self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleDest")
-			self.m_ztCircleDest:Init(50,300)
+			self.m_ztCircleDest:Init(50)
 			self.m_ztCircleDest:SetColor(CSColor.red)
 
 		end
@@ -59,8 +63,18 @@ end
 
 function MapScrollPanel:Test()
 	GCSLog("--------------[MapScrollPanel:Test] OnClick")
-	self:Active(true,5,0,0,0,0)
+	local _circleInfo = {
+		state = true,
+		moveTime = 20,
+		startPos = CSVector2(300,300),
+		startRadius = 300,
+		endPos = CSVector2(150,200), 
+		endRadius = 100,
+	}
+	self:Active(_circleInfo)
 end
+
+
 
 
 --@brief 面板每帧刷新
@@ -74,7 +88,7 @@ function MapScrollPanel:Show()
 end
 
 --@brief 隐藏登录面板
-function MapScrollPanel:Hide()
+function MapScrollPanel:_Hide()
 	self.m_gameObject:SetActive(false)
 	LoginModel.m_pIsOpenedCreatePanel = false
 end
@@ -84,32 +98,62 @@ function MapScrollPanel:Destroy()
 end
 
 local _circleTimer
-function MapScrollPanel:Active( state, moveTime, startPos, startRadius, endPos, endRadius)
+
+local _circleInfo = {
+	state,
+	moveTime,
+	startPos, 
+	startRadius,
+	endPos, 
+	endRadius
+}
+
+function MapScrollPanel:Active( circleInfo)
 
 	if _circleTimer then 
 		_circleTimer.m_isFinish = true 
 		_circleTimer = nil
 	end
+
+	_circleInfo = circleInfo
+
+	self:_SetCircle(self.m_ztCircleCur,	_circleInfo.startPos,	_circleInfo.startRadius)
+	self:_SetCircle(self.m_ztCircleDest,_circleInfo.endPos,		_circleInfo.endRadius)
+
+	
+	self.m_ztCircleCur:Show()	
+	self.m_ztCircleDest:Show()
 	
 	_circleTimer = LoopTimer:Create(self.OnFinishMove,self)
-	_circleTimer:SetParam(moveTime,1)
+	_circleTimer:SetParam(_circleInfo.moveTime,1)
 	_circleTimer:OnTick(self.onTickMove)
 	TimerManager:AddTimer(_circleTimer)
-	GCSLog("--------------[MapScrollPanel:Active]",moveTime)
 end
 
 function MapScrollPanel:onTickMove()
-	GCSLog("--------------[MapScrollPanel:onTickMove]",os.time)
+	GCSLog("MapScrollPanel:onTickMove()",GlobalBattleCtrl:GetCurCommandFrame())
+	self:SetCircle(_circleTimer.m_tickTime/_circleInfo.moveTime)
 end
 
 function MapScrollPanel:OnFinishMove()
-	GCSLog("--------------[MapScrollPanel:OnFinishMove]",os.time)
+	self:SetCircle(1)
+	self:Test()
 end
+
+function MapScrollPanel:SetCircle(progress)
+	local lerpPos = CSVector2.Lerp (_circleInfo.startPos,_circleInfo.endPos,progress)
+	local lerpRadius = CSMathf.Lerp (_circleInfo.startRadius,_circleInfo.endRadius,progress)
+	self:_SetCircle(self.m_ztCircleCur,lerpPos,lerpRadius)
+end
+	
+function MapScrollPanel:_SetCircle(circle, pos, radius)
+	circle:SetRadius(radius)
+	circle.rectTransform.anchoredPosition = pos
+end
+
 
 function MapScrollPanel:onValueChanged(value)
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * value * 512
-	self.m_ztCircleCur:SetRadius(200 * value)
-	self.m_ztCircleDest:SetRadius(300 * value)
 end
 
 function MapScrollPanel:UpdateCircle()

@@ -58,6 +58,8 @@ local LuaFileLoad = {
 		"Battle.BattleCommand.BattleCommand",
 		"Battle.BattleCommand.BattleCommandMgr",
 
+		"Battle.MapCircle.MapCircleManager",
+	
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
 
@@ -75,6 +77,7 @@ local LuaFileLoad = {
 		"Battle.BattleUI.MoveJoystick",
 		"Battle.BattleUI.SkillJoystick",
 		"Battle.BattleUI.BattleUIMgr",
+		"Battle.BattleUI.BattleModel",
 		"Battle.BattleUI.MapScrollPanel",
 
 		"UIModels.City.CityModel",

@@ -57,10 +57,10 @@ end
 
 --@brief 开始时
 function LoopTimer:OnStart()
-	self.m_isPause = false
 	if self.m_loopTimes > 0 then
 		self.m_startTime = 0
 	end
+	self.m_isPause = false
 end
 
 --@brief 参数设置
