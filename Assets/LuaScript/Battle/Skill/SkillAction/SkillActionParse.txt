@@ -31,17 +31,19 @@ end
 function SkillActionParse:Init(skillCommand)
 	CSLog("SkillActionParse:Init")
 	self.m_nOwnerId = skillCommand.m_nBattleId
-	self.m_tOwner = GlobalBattleCtrl:GetCharacterDic()[ownerId]
+	self.m_tOwner = GlobalBattleCtrl:GetCharacterDic()[self.m_nOwnerId]
 	if not self.m_tOwner then
 		self:Done()
 		return
 	end
-	self.m_nStartFrame = GetCurCommandFrame()
+	self.m_nStartFrame = GlobalBattleCtrl:GetCurCommandFrame()
 	self.m_nSkillId = skillCommand.m_nSkillId
 	self.m_tSkillPos = skillCommand.m_tSkillPos
 	self.m_tActionList = {}
 	self.m_bFinish = false
 	self:_ParseConfig() 
+
+	--创建帧主动刷新一次 检测开始
 	self:Update()
 end
 
@@ -53,20 +55,26 @@ end
 
 --@brief 刷新
 function SkillActionParse:Update()
-	if not self.m_bFinish and sefl.m_tActionList then
+	if not self.m_bFinish and self.m_tActionList then
 		local commandFrame = GlobalBattleCtrl:GetCurCommandFrame()
+		local isComplete = true
 		for frame,action in pairs(self.m_tActionList) do
-			if not action:IsFinish() then
-				SkillActionParse:_CheckStart(commandFrame,action)
+			if not action:IsFinish() and not action:IsStart() then
+				isComplete = false
+				action:CheckStart()
 			end
 
 			if action:IsStart() then
-				actoin:Update()
+				isComplete = false
+				action:Update()
 			end
 
-			if actoin:IsFinish() then
+			if action:IsFinish() then
 				self.m_tActionList[frame] = nil
 			end
+		end
+		if isComplete then
+			self.m_bFinish = true
 		end
 	end
 end
@@ -84,24 +92,18 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---检查启动条件
-function SkillActionParse:_CheckStart(frame,action)
-	if frame >= action:StartFrame() then
-		action:Start()
-	end
-end
+
 
 --@brief 解析配置
 function SkillActionParse:_ParseConfig()
 	local config = {
-	[0] = {actionType = 0,param = {"attack_1"}},
+	[0] = {actionType = 0,param = {"attack1"}},
 	}
-
 	for i,v in pairs(config) do
 		local frame = self.m_nStartFrame + i
 		local param = v.param
 		if v.actionType == SkillActionType.Play then
-			self.m_tActionList[i] = self:_GetPlayAction(frame,v)
+			self.m_tActionList[i] = self:_GetPlayAction(frame,param)
 		elseif v.actionType == SkillActionType.Sound then
 
 		end
@@ -110,7 +112,8 @@ end
 
 --@brief 获得播放Action
 function SkillActionParse:_GetPlayAction(frame,param)
-	local data = SkillActionPlayData:Create(self.m_tOwner,frame,name)
+	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
+	local data = SkillActionPlayData:Create(self.m_tOwner,frame,param[1])
 	local action = SkillPlayAction:Create(data)
 	return action
 end

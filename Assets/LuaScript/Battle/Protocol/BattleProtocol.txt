@@ -322,6 +322,7 @@ end
 
 --@brife 客户端模拟塞入驱动帧
 function BattleProtocol:__TsClientInputCommand(command)
+	--CSLog("BattleProtocol:__TsClientInputCommand",SerializeTable(command))
 	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
 	if not BattleProtocol.m_tstClientCommandList then
 		BattleProtocol.m_tstClientCommandList = {}

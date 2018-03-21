@@ -52,7 +52,8 @@ function SkillActionManager:UpdateCommand()
 		if #data.list > 0 then
 			self:_UpdateList(data.list)
 		else
-			data.remove(self.m_tSortList,i)
+			-- CSLog("SkillActionManager Remove",i)
+			table.remove(self.m_tSortList,i)
 		end
 	end
 end
@@ -60,7 +61,7 @@ end
 
 --@brief  添加解析器
 function SkillActionManager:AddSkillCommand(skillCommand)
-	local ownerId,skillId,startFrame = skillCommand.m_nBattleId,skillCommand.m_nSkillId
+	local ownerId,skillId = skillCommand.m_nBattleId,skillCommand.m_nSkillId
 	if not self.m_tSortList then
 		return
 	end
@@ -92,6 +93,7 @@ end
 
 --@brief 碰撞按照服务器顺序优先处理
 function SkillActionManager:AddColliderCommand(colliderCommand)
+	local ownerId,skillId = colliderCommand.m_nBattleId,colliderCommand.m_nSkillId
 	for i = 1,#self.m_tSortList do
 		local data = self.m_tSortList[i]
 		if data.id == ownerId and data.actionParse.m_nSkillId == skillId then

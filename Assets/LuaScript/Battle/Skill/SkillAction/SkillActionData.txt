@@ -40,7 +40,7 @@ end
 
 --播放动作
 SkillActionPlayData = {
-	m_sAnimName = 0,	--动作名
+	m_sAnimName = "",	--动作名
 }
 --@breif SkillActionData
 setmetatable( SkillActionPlayData, { __index = SkillActionData})
@@ -56,8 +56,7 @@ end
 --@brief 初始化
 function SkillActionPlayData:Init(owner,frame,name)
 	--基类实现
-	SkillActionPlayData.Init(owner,frame)
-
+	SkillActionData.Init(self,owner,frame)
 	self.m_sAnimName = name
 end
 
