@@ -5,8 +5,9 @@
 
 --@brief 碰撞预定义
 SkillActionType = {
-	Play = 0,		--播放动作
-	Sound = 1,		--播放声音
+	Face = 0,		--朝向调整
+	Play = 1,		--播放动作
+	Sound = 2,		--播放声音
 }
 
 --@brief 技能容器
@@ -15,3 +16,7 @@ SkillLayer = {
 	Scene = 1,	--场景
 }
 
+SkillFaceType = {
+	UpSkill = 0,	--朝向技能点
+	BackSkill = 1,	--背向技能点
+}

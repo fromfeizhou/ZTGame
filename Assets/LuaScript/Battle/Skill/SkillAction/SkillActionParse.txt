@@ -97,23 +97,40 @@ end
 --@brief 解析配置
 function SkillActionParse:_ParseConfig()
 	local config = {
-	[0] = {actionType = 0,param = {"attack1"}},
+	[0] = {
+			{actionType = 1,param = {"attack1"}},
+			{actionType = 0,param = {0}},
+		}
 	}
-	for i,v in pairs(config) do
-		local frame = self.m_nStartFrame + i
-		local param = v.param
-		if v.actionType == SkillActionType.Play then
-			self.m_tActionList[i] = self:_GetPlayAction(frame,param)
-		elseif v.actionType == SkillActionType.Sound then
+	for frameCFG,listCFG in pairs(config) do
+		local frame = self.m_nStartFrame + frameCFG
+		for i,actionCFG in pairs(listCFG) do
+			local param = actionCFG.param
 
+			if actionCFG.actionType == SkillActionType.Face then
+				self.m_tActionList[i] = self:_GetRotateAction(frame,param)
+			elseif actionCFG.actionType == SkillActionType.Play then
+				self.m_tActionList[i] = self:_GetPlayAction(frame,param)
+			elseif actionCFG.actionType == SkillActionType.Sound then
+
+			end
 		end
+		
 	end
+end
+
+--@brief 获得基础Action
+function SkillActionParse:_GetRotateAction(frame,param)
+	-- CSLog("SkillActionParse:_GetRotateAction",frame,SerializeTable(param))
+	local data = SkillActionFaceData:Create(self.m_tOwner,frame,param[1])
+	local action = SkillActionFace:Create(data,self.m_tSkillPos)
+	return action
 end
 
 --@brief 获得播放Action
 function SkillActionParse:_GetPlayAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
 	local data = SkillActionPlayData:Create(self.m_tOwner,frame,param[1])
-	local action = SkillPlayAction:Create(data)
+	local action = SkillActionPlay:Create(data,self.m_tSkillPos)
 	return action
 end
