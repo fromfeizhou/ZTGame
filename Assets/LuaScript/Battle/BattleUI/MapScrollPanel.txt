@@ -5,12 +5,20 @@
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
+local CSVector3 = CS.UnityEngine.Vector3local
+local CSVector2 = CS.UnityEngine.Vector2
+local CSColor = CS.UnityEngine.Color
+
 
 
 MapScrollPanel = {
 	m_transform = nil,
 	m_gameObject = nil,
+	
+	m_ScrollView = nil,
+	m_ztCircleCur = nil,
+	m_ztCircleDest = nil,
+
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -33,10 +41,27 @@ function MapScrollPanel:Init(parent)
  			self.m_transform.gameObject:SetActive(false)
 			
  			--@brief 初始化登录界面UI控件
-			
+			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:Hide() end)
+			PanelWidget:GetZTButton(self.m_transform,"btnTest",function() self:Test() end)
+
+			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:onValueChanged(value) end)
+			self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
+			self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
+			self.m_ztCircleCur:Init(50,200)
+			self.m_ztCircleCur:SetColor(CSColor.green)
+			self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleDest")
+			self.m_ztCircleDest:Init(50,300)
+			self.m_ztCircleDest:SetColor(CSColor.red)
+
 		end
 	end)
 end
+
+function MapScrollPanel:Test()
+	GCSLog("--------------[MapScrollPanel:Test] OnClick")
+	self:Active(true,5,0,0,0,0)
+end
+
 
 --@brief 面板每帧刷新
 function MapScrollPanel:Update(deltaTime)
@@ -58,14 +83,38 @@ end
 function MapScrollPanel:Destroy()
 end
 
+local _circleTimer
+function MapScrollPanel:Active( state, moveTime, startPos, startRadius, endPos, endRadius)
 
-function MapScrollPanel:Active( ... )
-
+	if _circleTimer then 
+		_circleTimer.m_isFinish = true 
+		_circleTimer = nil
+	end
 	
---[[ 创建定时器 ]]
-
+	_circleTimer = LoopTimer:Create(self.OnFinishMove,self)
+	_circleTimer:SetParam(moveTime,1)
+	_circleTimer:OnTick(self.onTickMove)
+	TimerManager:AddTimer(_circleTimer)
+	GCSLog("--------------[MapScrollPanel:Active]",moveTime)
 end
 
+function MapScrollPanel:onTickMove()
+	GCSLog("--------------[MapScrollPanel:onTickMove]",os.time)
+end
+
+function MapScrollPanel:OnFinishMove()
+	GCSLog("--------------[MapScrollPanel:OnFinishMove]",os.time)
+end
+
+function MapScrollPanel:onValueChanged(value)
+	self.m_ScrollView.content.sizeDelta = CSVector2.one * value * 512
+	self.m_ztCircleCur:SetRadius(200 * value)
+	self.m_ztCircleDest:SetRadius(300 * value)
+end
+
+function MapScrollPanel:UpdateCircle()
+	
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
@@ -74,10 +123,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request Start***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 请求 - 创建角色
-function MapScrollPanel:_Request_Create_Role(jobId)
 
-end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request End***************************************************************

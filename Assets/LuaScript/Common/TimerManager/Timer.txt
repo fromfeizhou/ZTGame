@@ -3,11 +3,10 @@
 --@data 2018/3/9
 
 Timer = {
-	m_timerType,	--定时器类型
-
 	m_onFinish, 	--完成回调
 	m_onHandle,		--方法句柄
-	m_targe,		--调用对象
+	m_onTick,		--嘀嗒句柄
+	m_target,		--调用对象
 
 	m_isFinish,		--完成
 	m_isPause,		--暂停
@@ -27,29 +26,24 @@ TimeInfo = {
 	fixedUnscaledTime,
 }
 
-TIMER_TYPE = {
-	FIX = 1,
-	LOOP = 2,
-}
 
-
-function Timer:Create(timerType,handle,targe)
+function Timer:Create(handle, target)
 	local obj = {}
 	setmetatable( obj, { __index = Timer })
-	obj:Init(timerType,handle,targe)
+	obj:Init(handle,target)
 	return obj
 end
 
-function Timer:Init(timerType,handle,targe)
-	self.m_timerType = timerType
+function Timer:Init(handle, target)
 	self.m_onFinish = nil
 	self.m_onHandle = handle
 
-	self.m_targe = targe
+	self.m_target = target
 	
 	self.m_isFinish = false
 	self.m_isPause = true
 end
+
 
 
 --@brief 暂停

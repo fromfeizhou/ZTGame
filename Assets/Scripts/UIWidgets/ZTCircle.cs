@@ -14,7 +14,7 @@ public class ZTCircle : MonoBehaviour {
 
 	private List<RectTransform> rectLineList = new List<RectTransform> ();
 
-	private float _lineWidth;
+	private float _lineWidth = 3.0f;
 
 	private float _angle;
 

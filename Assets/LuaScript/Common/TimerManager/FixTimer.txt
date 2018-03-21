@@ -10,7 +10,7 @@ FixTimer = {
 }
 
 function FixTimer:Create(handle,targe)
-	local timer = Timer:Create(TIMER_TYPE.FIX,handle,targe)
+	local timer = Timer:Create(handle,targe)
 	setmetatable( timer, { __index = FixTimer })
 	timer:Init()
 	return timer
@@ -26,11 +26,10 @@ function FixTimer:SetParam(fromTime, toTime)
 end
 
 --@brief 嘀嗒
-function FixTimer:Tick()
+function FixTimer:Tick(timeInfo)
 
 end
 
 function FixTimer:OnStart()
 	self.isPause = false
-	self.m_startTime = os.time()
 end

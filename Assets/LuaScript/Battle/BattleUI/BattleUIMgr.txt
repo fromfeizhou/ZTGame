@@ -19,7 +19,9 @@ BattleUIMgr = {
 	m_playerContainer = nil,	--玩家容器
 	m_hpContainer = nil,		--hp容器
 	m_mapContainer = nil,		--地图容器
-}
+};
+
+local mapScrollPanel
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -61,6 +63,8 @@ function BattleUIMgr:Init()
 		self:_CreateMatchUI()
 	end
 	
+	--临时地图开关按钮
+	self:_CreateMapSwitch()
 end
 
 --@brief 移除
@@ -134,7 +138,7 @@ end
 
 --@brief 创建地图面板
 function BattleUIMgr:_CreateMapScroll()
-	MapScrollPanel:Create(self.m_mapContainer)
+	mapScrollPanel = MapScrollPanel:Create(self.m_mapContainer)
 end
 
 --@brief 创建技能按钮
@@ -157,6 +161,27 @@ function BattleUIMgr:_CreateMatchUI()
 		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
 			BattleProtocol:SendMath()
 			gameObject:SetActive(false)
+		end)
+	end)
+end
+
+
+
+--@brief 创建地图开关按钮
+function BattleUIMgr:_CreateMapSwitch()
+	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButtonTxt"),function(target,path)
+		local gameObject = CSGameObject.Instantiate(target)
+		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
+		rectTrans:SetParent(self.m_ctrlContainer,false)
+		rectTrans.pivot = CSVector2(0.5,0.5)
+		rectTrans.anchorMin = CSVector2(0,1)
+		rectTrans.anchorMax = CSVector2(0,1)
+		rectTrans.anchoredPosition = CSVector2(250,-100)
+
+		local ztBtnTxt = gameObject:GetComponent(typeof(CS.ZTButtonTxt))
+		ztBtnTxt:SetBtnName("MapScroll")
+		ztBtnTxt.onClick:AddListener(function()
+			mapScrollPanel:Show()
 		end)
 	end)
 end

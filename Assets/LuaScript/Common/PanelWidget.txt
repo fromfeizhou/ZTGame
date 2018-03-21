@@ -10,6 +10,14 @@ function PanelWidget:GetButton(panel,path,onClick)
 	return button
 end
 
+--@brief 获取zt按钮
+function PanelWidget:GetZTButton(panel,path,onClick)
+	local transform = panel:Find(path)
+	local button = transform:GetComponent("ZTButton")
+	button.onClick:AddListener(onClick)
+	return button
+end
+
 --@brief 获取输入框
 function PanelWidget:GetInputField(panel,path,onEndEdit)
 	local transform = panel:Find(path)
@@ -27,4 +35,25 @@ end
 --@brief 获取子物体
 function PanelWidget:GetChild(panel,path)
 	return panel:Find(path)
+end
+
+function PanelWidget:GetScrollView(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ScrollRect");
+end
+
+--@brief 获取滑动条
+function PanelWidget:GetZTSlider(panel,path,onValueChanged)
+	local transform = panel:Find(path)
+	local slider = transform:GetComponent("ZTSlider")
+	if onValueChanged then
+		slider.onValueChanged:AddListener(onValueChanged)
+	end
+	return slider
+end
+
+--@brief 获取滑动条
+function PanelWidget:GetZTCircle(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ZTCircle");
 end

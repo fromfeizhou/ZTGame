@@ -12,8 +12,8 @@ LoopTimer = {
 }
 
 --@brief 创建
-function LoopTimer:Create(handle,targe)
-	local obj = Timer:Create(TIMER_TYPE.LOOP,handle,targe)
+function LoopTimer:Create(handle, target)
+	local obj = Timer:Create(handle, target)
 	setmetatable( obj, { __index = LoopTimer })
 	obj:Init()
 	return obj
@@ -27,6 +27,9 @@ function LoopTimer:Init()
 	self.m_isFinish = false
 end
 
+function LoopTimer:OnTick(onTick)
+	self.m_onTick = onTick
+end
 --@brief 嘀嗒
 --@brief timeInfo 时间信息
 function LoopTimer:Tick( timeInfo )
@@ -34,14 +37,14 @@ function LoopTimer:Tick( timeInfo )
 		self.m_tickTime = self.m_tickTime + timeInfo.unscaledDeltaTime
 		if self.m_loopTimes == 0 then
 			if self.m_tickTime > self.m_interval then
-				self.m_onHandle(self.m_targe)
+				self.m_onHandle(self.m_target)
 				self.m_tickTime = 0
 			end
 		else
 			if self.m_loopCnt < self.m_loopTimes then
 				if self.m_tickTime > self.m_interval * (self.m_loopCnt + 1) then
 					self.m_loopCnt = self.m_loopCnt + 1
-					self.m_onHandle(self.m_targe)
+					self.m_onHandle(self.m_target)
 					if self.m_loopCnt >= self.m_loopTimes then 
 						self.m_isFinish = true
 					end
@@ -49,6 +52,7 @@ function LoopTimer:Tick( timeInfo )
 			end
 		end
 	end
+	
 end
 
 --@brief 开始时

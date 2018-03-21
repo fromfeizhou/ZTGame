@@ -86,11 +86,14 @@ end
 
 --@brief 嘀嗒所有定时器
 function TimerManager:_Ticks()
+		GCSLog("--------------[TimerManager:_Ticks]")
+
 	if self.m_nTimerCnt > 0 then
 		local timerInfo = self:_PackTimeInfo()
 		for k,timer in pairs(self.m_tTimerList) do
 			if not timer.isFinish then
 				timer:Tick(timerInfo)
+				if timer.m_onTick then timer.m_onTick(self.m_target) end
 			end
 		end
 	end
