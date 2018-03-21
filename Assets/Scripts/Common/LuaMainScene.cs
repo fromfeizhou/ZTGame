@@ -20,7 +20,7 @@ public class Injection
 }
 
 [LuaCallCSharp]
-public class LuaMainScene : MonoSingleton<LuaMainScene>
+public class LuaMainScene : MonoBehaviour
 {
     public TextAsset luaScript;
     public Injection[] injections;
@@ -69,6 +69,7 @@ public class LuaMainScene : MonoSingleton<LuaMainScene>
         {
             luaAwake();
         }
+        DontDestroyOnLoad(this);
     }
 
     private byte[] CustomLoaderMethod(ref string fileName)
