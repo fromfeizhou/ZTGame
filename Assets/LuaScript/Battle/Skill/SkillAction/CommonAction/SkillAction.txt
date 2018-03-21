@@ -26,7 +26,7 @@ end
 
 --@brief 初始化
 function SkillAction:Init(actionData)
-	CSLog("SkillAction:Init")
+	-- CSLog("SkillAction:Init")
 	self.m_nStartFrame = actionData.m_nStartFrame
 	self.m_tActionData = actionData
 	self.m_bIsStart = false

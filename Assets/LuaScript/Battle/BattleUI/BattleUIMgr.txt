@@ -94,7 +94,9 @@ end
 
 --@brief 刷新ui容器 
 function BattleUIMgr:Update()
-	-- body
+	if GameConfig.IsSkillDebugScene then
+		self:_UpdateKeyBoardControl()
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -157,4 +159,55 @@ function BattleUIMgr:_CreateMatchUI()
 			gameObject:SetActive(false)
 		end)
 	end)
+end
+
+
+
+
+
+-------------------------------------------------------test----------------------------------
+local CSInput = CS.UnityEngine.Input
+local CSKeyCode = CS.UnityEngine.KeyCode
+BattleUIMgr.m_sendDir = false
+BattleUIMgr.m_bSendDir = nil
+--@brief 键盘移动
+function BattleUIMgr:_UpdateKeyBoardControl()
+	 if CSInput.GetKey(CSKeyCode.W) and CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.UpRight)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.W) and CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.UpLeft)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) and CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.DownLeft)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) and CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.DownRight)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.W) then
+        self:_SendMoveCommand(BattleDir.Up)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) then
+        self:_SendMoveCommand(BattleDir.Down)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.Left)
+        BattleUIMgr.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.Right)
+        BattleUIMgr.m_bSend = true
+    elseif BattleUIMgr.m_bSend then
+        self:_SendMoveCommand(BattleDir.None)
+        BattleUIMgr.m_bSend = false
+    end
+end
+
+--@brife 发送移动操作
+function BattleUIMgr:_SendMoveCommand(dir)
+	if BattleUIMgr.m_sendDir == dir then
+		return
+	end
+	-- CSLog("MoveJoystick:_SendMoveCommand")
+	BattleUIMgr.m_sendDir = dir
+	BattleProtocol:SendMoveCommand(dir)
 end
