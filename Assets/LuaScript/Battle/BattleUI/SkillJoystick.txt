@@ -46,7 +46,6 @@ function SkillJoystick:Init(skillId,parent)
 	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillJoystick"),callback_loadfinish)
 end
 
-
 --@brief 移除
 function SkillJoystick:Destroy()
 	CSLog("SkillJoystick:Destroy")
@@ -88,17 +87,11 @@ end
 
 --@brief 触摸点移动
 function SkillJoystick:_OnJoystickMove(pos)
-
 end
-
-
 
 --@brief 触摸点松开
 function SkillJoystick:_OnJoystickUp(pos)
-	if self.m_bIsSend then
-	 	self:_SendSkillCommand(pos);
-	 	self.m_bIsSend = false
-	end
+	 self:_SendSkillCommand(pos);
 end
 
 --@brife 发送移动操作

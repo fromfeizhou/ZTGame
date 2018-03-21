@@ -114,6 +114,10 @@ function BattleCommandMgr:_ParseCommand(commandList)
 		local command = commandList[i]
 		if command.m_nType == BattleCommandType.Move then
 			self:_ParseMove(command)
+		elseif command.m_nType == BattleCommandType.Skill then
+			self:_ParseSkill(command)
+		elseif command.m_nType == BattleCommandType.Skill then
+			self:_ParseCollider(command)
 		end
 	end
 end
@@ -126,7 +130,7 @@ end
 
 --@brief 移动命令
 function BattleCommandMgr:_ParseSkill(command)
-	-- CSLog("BattleCommandMgr:_ParseSkill")
+	--CSLog("BattleCommandMgr:_ParseSkill")
 	GlobalBattleCtrl:AddSkillCommand(command)
 end
 

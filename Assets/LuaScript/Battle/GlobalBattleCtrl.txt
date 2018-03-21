@@ -207,7 +207,7 @@ end
 --@brief  添加解析器
 function GlobalBattleCtrl:AddSkillCommand(skillCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
-		GlobalBattleCtrl.m_skillActionManager:AddSkill(skillCommand)
+		GlobalBattleCtrl.m_skillActionManager:AddSkillCommand(skillCommand)
 	end
 end
 
@@ -215,7 +215,7 @@ end
 --@brief 碰撞按照服务器顺序优先处理
 function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
-		GlobalBattleCtrl.m_skillActionManager:SkillCollider(colliderCommand)
+		GlobalBattleCtrl.m_skillActionManager:AddColliderCommand(colliderCommand)
 	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

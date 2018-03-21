@@ -29,6 +29,18 @@ function SkillAction:Init(actionData)
 	CSLog("SkillAction:Init")
 	self.m_nStartFrame = actionData.m_nStartFrame
 	self.m_tActionData = actionData
+	self.m_bIsStart = false
+	self.m_bFinish = false
+end
+
+--@brief 检查是否执行起始帧
+function SkillAction:CheckStart()
+	if self.m_bIsStart then
+		return
+	end
+	if GlobalBattleCtrl:GetCurCommandFrame() >= self.m_tActionData.m_nStartFrame then
+		self:Start()
+	end
 end
 
 --@brief 开始
