@@ -175,6 +175,8 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
+	GameConfig.IsSkillDebugScene = false
+
 	self.m_model.m_pAccname 	= self.m_inputAccount.text
 	self.m_model.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
@@ -183,6 +185,7 @@ end
 --@brief 按钮 - 无网络登录
 function LoginMainPanel:_OnBtnClick_LoginNoNet()
 	GCSLog("LoginMainPanel:_OnBtnClick_LoginNoNet()")
+	GameConfig.IsSkillDebugScene = true
 	self.m_model:LoginFinish()
 end
 

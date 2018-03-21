@@ -10,7 +10,8 @@ GlobalBattleCtrl = {
 	m_ztCharaManager = nil, --玩家对象管理
 	m_battleCommandMgr = nil,	--帧命令管理器
 	m_skillActionManager = nil,		--技能解析器
-
+	m_mapCircleManager = nil, --地图毒圈管理器
+	
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
 }
@@ -38,6 +39,10 @@ function GlobalBattleCtrl:Init()
 
 	--技能解析器
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
+
+	--地图毒圈管理器
+	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+
 	
 	--****************管理者初始化end************************************************
 
@@ -79,11 +84,18 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_skillActionManager = nil
 	end
 
+	--地图毒圈管理器销毁
+	if GlobalBattleCtrl.m_mapCircleManager then
+		GlobalBattleCtrl.m_mapCircleManager:Destroy()
+		GlobalBattleCtrl.m_mapCircleManager = nil
+	end
+	
 	--主UI管理器(备注：先创建 最后移除)
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
 	end
+
 	
 	--清理全局事件管理器
 	GBattleEvent:RemoveDispatcher()
@@ -146,6 +158,11 @@ function GlobalBattleCtrl:CommandUpdate()
 
 	if GlobalBattleCtrl.m_skillActionManager then
 		GlobalBattleCtrl.m_skillActionManager:UpdateCommand()
+	end
+	
+	--地图毒圈刷新
+	if GlobalBattleCtrl.m_mapCircleManager then
+		GlobalBattleCtrl.m_mapCircleManager:UpdateCommand()
 	end
 end
 
@@ -216,6 +233,13 @@ end
 function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
 		GlobalBattleCtrl.m_skillActionManager:AddColliderCommand(colliderCommand)
+	end
+end
+
+--@brief 添加地图毒圈指令
+function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)
+	if GlobalBattleCtrl.m_mapCircleManager then
+		GlobalBattleCtrl.m_mapCircleManager:AddMapCircleCommand(mapCircleCommand)
 	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

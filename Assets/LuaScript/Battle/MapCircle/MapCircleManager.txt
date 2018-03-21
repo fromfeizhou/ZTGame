@@ -1,0 +1,70 @@
+--MapCircleManager.txt
+--@breif 地图毒圈管理器
+--@data 2018/03/07
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+
+MapCircleManager = {
+	
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function MapCircleManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = MapCircleManager })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function MapCircleManager:Init()
+	
+	--添加事件监听
+	self:_AddEvent()
+
+end
+
+--@brief 移除
+function MapCircleManager:Destroy()
+	CSLog("MapCircleManager:Destroy")
+	
+	self:RemoveEvent()
+
+end
+
+--@brief 更新
+function MapCircleManager:Update()
+end
+
+
+function MapCircleManager:AddMapCircleCommand()
+
+end
+
+--@brief 逻辑帧刷新
+function MapCircleManager:UpdateCommand()
+	
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 添加事件监听
+function MapCircleManager:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
+	
+	
+end
+
+--@brief 移除事件监听
+function MapCircleManager:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
+end
