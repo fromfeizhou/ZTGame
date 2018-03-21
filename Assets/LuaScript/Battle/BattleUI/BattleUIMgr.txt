@@ -56,9 +56,6 @@ function BattleUIMgr:Init()
 	--创建战斗ui
 	self:_CreateBattleUI()
 
-	--创建地图面板
-	MapScrollPanel:Create(self.m_mapContainer)
-
 	--临时匹配按钮
 	if not GameConfig.IsSkillDebugScene then
 		self:_CreateMatchUI()
@@ -125,11 +122,17 @@ end
 function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
 	self:_CreateSkillJoystick()
+	self:_CreateMapScroll()
 end
 
 --@brief 创建移动摇杆
 function BattleUIMgr:_CreateMoveJoystick()
 	MoveJoystick:Create(self.m_ctrlContainer)
+end
+
+--@brief 创建地图面板
+function BattleUIMgr:_CreateMapScroll()
+	MapScrollPanel:Create(self.m_mapContainer)
 end
 
 --@brief 创建技能按钮
