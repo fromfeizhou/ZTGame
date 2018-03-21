@@ -60,12 +60,12 @@ end
 --@brief 预设加载成功
 function MoveJoystick:_LoadAsseFinish(target,path)
 	local prefab = target
- 		if prefab then
- 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
- 			self:_InitJoyEvent()
-		end
+	if prefab then
+		self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
+		self.m_gameObject = self.m_transform.gameObject
+		self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
+		self:_InitJoyEvent()
+	end
 end
 
 --@brief 添加控制事件 
