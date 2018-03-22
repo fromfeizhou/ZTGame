@@ -1,0 +1,161 @@
+--BattleBagPanelPanel.txt
+--BattleBagPanel.txt
+--@breif 移动控制UI
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+local  CSUnityScrollView = CS.UnityEngine.ScrollRect
+
+
+local mainRoot=nil;
+local bagBtn=nil;
+
+BattleBagPanel = {
+	
+	m_parentRoot=nil,
+	m_transform=nil,
+	m_gameObject=nil,
+	m_EquipList=nil,
+
+}
+
+RoleEquipType={
+
+	Equip=1,--武器
+	Cloth=2,--护甲
+	Necklace=3,--项链
+	Rin=4,--戒指
+	Pet=5,--宠物
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleBagPanel:Create(parent)
+	local obj = {}
+	setmetatable( obj, { __index = BattleBagPanel })
+	obj:Init(parent)
+	return obj
+end
+
+--@brief 初始化
+function BattleBagPanel:Init(parent)
+	CSLog("BattleBagPanel:Init")
+	self.m_parentRoot = parent
+	self.m_EquipList={}
+	--加载预设件
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleBagPanel"),callback_loadfinish)
+end
+
+--@brief 移除
+function BattleBagPanel:Destroy()
+	CSLog("BattleBagPanel:Destroy")
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 预设加载成功
+function BattleBagPanel:_LoadAsseFinish(target,path)
+	CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
+	local prefab = target
+ 		if prefab then
+ 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self:_InitPanel()
+ 			self:_InitPanelEvent()
+			CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
+ 		else
+			CSLog("BattleBagPanel:GetEquipCell: prefab load Error!") 
+		end
+end
+
+-- 初始化界面
+function BattleBagPanel:_InitPanel()
+	-- body
+	self.mainRoot=self.m_transform:Find("Main");
+	self.bagBtn=PanelWidget:GetButton(self.m_transform,"BagButton",function() self:OnClickBagBtn() end)	
+
+	for key, value in pairs(RoleEquipType) do     
+	CSLog("BattleBagPanel:GetEquipCell: value :"..value) 
+	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
+	end
+	self:UpdateEquip()
+
+end
+
+--------------ui事件
+
+function BattleBagPanel:OnClickBagBtn()
+	self:UpdateEquip()
+	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
+end
+
+function  BattleBagPanel:UpdateEquip()
+
+	local  tempEquipDatas =GlobalBattleCtrl:GetBattleRoleEquipedList()
+	for key, value in pairs(self.m_EquipList) do
+			value:UpdateCell(tempEquipDatas[key])
+	end
+end
+
+--------------ui事件end
+
+
+--添加全局事件
+--Event 
+function  BattleBagPanel:_AddEvents()
+	-- body
+end
+
+
+--@brief 添加控制事件 
+function BattleBagPanel:_InitPanelEvent()
+	-- self.m_joystick.onJoystickDownEvent = function(pos)
+	-- 	self:_OnJoystickDown(pos)
+	-- end
+
+	-- self.m_joystick.onJoystickMoveEvent = function(pos)
+	-- 	self:_OnJoystickMove(pos)
+	-- end
+
+	-- self.m_joystick.onJoystickUpEvent = function(pos)
+	-- 	self:_OnJoystickUp(pos)
+	-- end
+end
+
+--@brief 触摸点按下
+function BattleBagPanel:_OnJoystickDown(pos)
+end
+
+--@brief 触摸点移动
+function BattleBagPanel:_OnJoystickMove(pos)
+end
+
+--@brief 触摸点松开
+function BattleBagPanel:_OnJoystickUp(pos)
+	 self:_SendSkillCommand(pos);
+end
+
+--@brife 发送移动操作
+--@param 目标标点
+function BattleBagPanel:UnEquip(state,equipId)
+	-- CSLog("BattleBagPanel:_SendSkillCommand")
+	local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
+	local distance = self.m_nDistance
+	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
+
+	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
+end

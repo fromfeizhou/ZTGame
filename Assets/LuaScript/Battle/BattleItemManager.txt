@@ -1,0 +1,51 @@
+--BattleItemManager.txt
+--@breif 战斗物品管理
+--@data 2018/03/20
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+
+BattleItemManager = {
+	m_MapItemList = nil,	--地图物品列表
+	m_OwnerPropList = nil,		--道具
+	m_OwnerEquipList = nil,		--装备列表
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleItemManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleItemManager })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function BattleItemManager:Init()
+	CSLog("BattleItemManager:Init")
+	self.m_OwnerEquipList={}
+	self.m_OwnerEquipList[1]={Name="大刀"}
+	self.m_OwnerEquipList[2]={Name="护甲"}
+	--self.m_OwnerEquipList[3]={Name="宠物"}
+	self.m_OwnerEquipList[4]={Name="戒指"}
+	self.m_OwnerEquipList[5]={Name="项链"}
+
+
+end
+
+
+--@brief 移除
+function BattleItemManager:Destroy()
+	CSLog("BattleItemManager:Destroy")
+end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

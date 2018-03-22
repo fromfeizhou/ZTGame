@@ -1,0 +1,80 @@
+--BattleBagCell.txt
+--@breif 战斗背包
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+
+
+local cellName=nil
+local cellIcon=nil
+
+BattleBagCell = {
+	
+	m_transform=nil,
+
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleBagCell:Create(transform)
+	local obj = {}
+	setmetatable( obj, { __index = BattleBagCell })
+	obj:Init(transform,callBack)
+	return obj
+end
+
+--@brief 初始化
+function BattleBagCell:Init(transform)
+	CSLog("BattleBagCell:Init")
+	self.m_transform = transform
+ 	self:_InitCell()
+end
+
+--@brief 移除
+function BattleBagCell:Destroy()
+	CSLog("BattleBagCell:Destroy")
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--初始化面板组件
+function BattleBagCell:_InitCell()
+	-- body
+	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
+end
+
+-- 更新Cell
+function BattleBagCell:UpdateCell( table )
+
+	if table then
+		self:UpdateData(table)
+	else
+		self:HideCell()
+	end
+end
+
+--刷新数据
+function BattleBagCell:UpdateData(table)
+	self.cellName.text=table.Name
+	-- body
+end
+
+
+--隐藏cell
+function BattleBagCell:HideCell()
+	self.m_transform.gameObject:SetActive(false)
+end
+
+
