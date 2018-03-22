@@ -110,6 +110,7 @@ end
 --@brief 获取客户端坐标
 function BattleDefine:GetClientPos(tx,ty,tz)
 	local posX,posY,posZ = tx/BattleDefine.PosRate,ty/BattleDefine.PosRate,tz/BattleDefine.PosRate
+	
 	return CS.UnityEngine.Vector3(posX,posY,posZ)
 end
 

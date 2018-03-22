@@ -120,9 +120,9 @@ public class PropPostionEditor : Editor
             Transform trans = temp.GetChild(index);
             MapPropPostionType tempType = trans.GetComponent<MapPropPostionType>();
             string data = trans.position.ToString();
-            tempStr.Append((int)trans.position.x + ",");
-            tempStr.Append((int)trans.position.y + ",");
-            tempStr.Append((int)trans.position.z + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.x * 100f) + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.y * 100f) + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.z * 100f) + ",");
             tempStr.Append("#");
             if (tempType.typeId.Count <= 0)
                 tempStr.Append("\n");
@@ -160,9 +160,9 @@ public class PropPostionEditor : Editor
             MapPropPostionType tempType = trans.GetComponent<MapPropPostionType>();
             tempStr.Append("{");
             string data = trans.position.ToString();
-            tempStr.Append((int)trans.position.x + ",");
-            tempStr.Append((int)trans.position.y + ",");
-            tempStr.Append((int)trans.position.z + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.x*100f) + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.y * 100f) + ",");
+            tempStr.Append(Mathf.FloorToInt(trans.position.z * 100f) + ",");
             if (tempType.typeId.Count == 0)
                 tempStr.Append("[]},\n");
             else

@@ -54,6 +54,8 @@ local LuaFileLoad = {
 		"Battle.BattleCameraMgr",
 		"Battle.GlobalBattleCtrl",
 		"Battle.ZTBattleScene",
+		"Battle.BattleItemManager",
+		
 
 		"Battle.BattleCommand.BattleCommand",
 		"Battle.BattleCommand.BattleCommandMgr",
@@ -83,6 +85,7 @@ local LuaFileLoad = {
 
 		"Battle.BattleUI.BagUI.BattleBagPanel",
 		"Battle.BattleUI.BagUI.BattleBagCell",
+
 		--"Battle.BattleUI.BagUI.QuickBag",
 		--"Battle.BattleUI.BagUI.QuickItem",
 

@@ -28,8 +28,7 @@ function GlobalBattleCtrl:Init()
 	--高度读取
 	BattleMapHeight:Init()
 	
-	--主UI管理器(备注：先创建 最后移除)
-	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
+	
 
 
 	--战斗对象管理
@@ -45,7 +44,9 @@ function GlobalBattleCtrl:Init()
 
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
-	
+
+	--主UI管理器
+	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
 	--****************管理者初始化end************************************************
 
 	--全局数据引用初始化
@@ -92,7 +93,7 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_mapCircleManager = nil
 	end
 	
-	--主UI管理器(备注：先创建 最后移除)
+	--主UI管理器(备注：最后移除)
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
@@ -254,7 +255,7 @@ function GlobalBattleCtrl:GetBattleRoleEquipedList()
 	if GlobalBattleCtrl.m_BattleItemManager then
 		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
 	end 
-	return nil
+	return {}
 end
 
 --@brief 获取目标对象
