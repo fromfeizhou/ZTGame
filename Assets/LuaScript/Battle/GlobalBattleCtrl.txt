@@ -41,7 +41,7 @@ function GlobalBattleCtrl:Init()
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
 	--地图毒圈管理器
-	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create(GlobalBattleCtrl.m_battleUIMgr.m_UIModel)
 
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
