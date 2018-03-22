@@ -103,7 +103,9 @@ function SkillActionParse:_ParseConfig()
 	[0] = {
 			{actionType = SkillActionType.Play,param = {"attack1"}},
 			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
-			{actionType = SkillActionType.Collider,param = {1,1,SkillLayerType.Hero,SkillTargetType.Team,200,0,0}},
+		},
+	[1] = {
+			{actionType = SkillActionType.Collider,param = {0.4,1,SkillLayerType.Hero,SkillTargetType.Team,200,1,1}},
 		}
 	}
 	for frameCFG,listCFG in pairs(config) do

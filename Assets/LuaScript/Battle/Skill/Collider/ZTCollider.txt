@@ -48,8 +48,8 @@ end
 
 
 --@brief 设置位置
-function ZTCollider:SetPos(pos)
-	self.m_tPos = GetPosTab(pos)
+function ZTCollider:SetPos(...)
+	self.m_tPos = GetPosTab(...)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
