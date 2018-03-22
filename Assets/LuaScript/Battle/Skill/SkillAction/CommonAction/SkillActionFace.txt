@@ -72,5 +72,5 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 获得方向
 function SkillActionFace:_GetDir(posBegin,posEnd)
-	return posEnd - posBegin
+	return (posEnd - posBegin).normalized
 end

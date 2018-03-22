@@ -47,7 +47,7 @@ function GlobalBattleCtrl:Init()
 
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create(GlobalBattleCtrl.m_battleUIMgr.m_UIModel)
-	
+
 	--****************管理者初始化end************************************************
 
 	--全局数据引用初始化
@@ -290,8 +290,9 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		else
 			table.insert(list,tmp)
 		end
-
+		return list
 	end
+	return {}
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************
