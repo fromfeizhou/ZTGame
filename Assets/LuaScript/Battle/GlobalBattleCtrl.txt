@@ -41,8 +41,10 @@ function GlobalBattleCtrl:Init()
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
 	--地图毒圈管理器
-	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create(GlobalBattleCtrl.m_battleUIMgr.m_UIModel)
 
+	--战斗物资管理
+	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
 	
 	--****************管理者初始化end************************************************
 
@@ -96,6 +98,11 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
 	end
 
+	--物资管理器
+	if GlobalBattleCtrl.m_BattleItemManager then
+		GlobalBattleCtrl.m_BattleItemManager:Destroy()
+		GlobalBattleCtrl.m_BattleItemManager = nil
+	end
 	
 	--清理全局事件管理器
 	GBattleEvent:RemoveDispatcher()
@@ -247,6 +254,13 @@ function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)
 	end
 end
 
+function GlobalBattleCtrl:GetBattleRoleEquipedList()
+	if GlobalBattleCtrl.m_BattleItemManager then
+		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
+	end 
+	return nil
+end
+
 --@brief 获取目标对象
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	if targetType == SkillTargetType.Appoint then
@@ -275,8 +289,6 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		end
 
 	end
-
-
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************

@@ -4,6 +4,7 @@
 BattleModel = {
 	m_tPanelList = nil,
 	m_parent = nil,
+	m_manager = nil,
 }
 
 BATTLE_UI_TYPE = {
@@ -34,7 +35,8 @@ function BattleModel:Init(parent)
 end
 
 --@brief 厚仟
-function BattleModel:Update()
+function BattleModel:UpdateCommand()
+	self:_UpdateCommandPanel()
 end
 
 
@@ -62,7 +64,6 @@ function BattleModel:ShowPanel( panelType )
 		
 		self.m_tPanelList[panelType] = panel
 	end
-	
 
 	if panel then
 		panel:Show()
@@ -86,3 +87,10 @@ end
 --！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 --*******************************************************Public End***************************************************************
 --！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+
+
+function BattleModel:_UpdateCommandPanel()
+	for i,panel in pairs(self.m_tPanelList) do
+		panel:UpdateCommand(deltaTime)
+	end
+end

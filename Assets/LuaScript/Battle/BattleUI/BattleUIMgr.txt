@@ -19,6 +19,7 @@ BattleUIMgr = {
 	m_playerContainer = nil,	--玩家容器
 	m_hpContainer = nil,		--hp容器
 	m_UIContainer = nil,		--地图容器
+	m_BattleBagContainer=nil 	--角色背包
 };
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -55,6 +56,9 @@ function BattleUIMgr:Init()
 
 	--战斗UI模块
 	self.m_UIModel = BattleModel:Create(self.m_UIContainer)
+
+	--战斗背包
+	self.m_BattleBagContainer=self:_CreateContainer("BattleBagContainer",self.m_mainUIContainer)
 	
 	--创建战斗ui
 	self:_CreateBattleUI()
@@ -95,6 +99,11 @@ function BattleUIMgr:Destroy()
 		CSGameObject.Destroy(self.m_UIContainer.gameObject)
 		self.m_UIContainer = nil
 	end
+
+	if self.m_BattleBagContainer then
+		CSGameObject.Destroy(self.m_BattleBagContainer.gameObject)
+		self.m_BattleBagContainer = nil
+	end
 end
 
 --@brief 刷新ui容器 
@@ -129,6 +138,7 @@ end
 function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
 	self:_CreateSkillJoystick()
+	self:_CreateBattleBagPanel()
 end
 
 --@brief 创建移动摇杆
@@ -141,6 +151,11 @@ end
 function BattleUIMgr:_CreateSkillJoystick()
 	local testSkillId = 10001
 	SkillJoystick:Create(testSkillId,self.m_ctrlContainer)
+end
+
+-- 创建背包
+function BattleUIMgr:_CreateBattleBagPanel()
+	BattleBagPanel:Create(self.m_BattleBagContainer)
 end
 
 --@brief 创建匹配ui
