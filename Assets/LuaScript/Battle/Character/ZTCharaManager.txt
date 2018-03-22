@@ -34,6 +34,7 @@ function ZTCharaManager:Init()
 	self.m_ztCharaContainer = CSGameObject("CharaContainer").transform
 	self.m_tCharaList = {}
 	self.m_tSortCharaList = {}
+	self.m_tCharaTeamList = nil
 	--添加事件监听
 	self:_AddEvent()
 
@@ -59,6 +60,8 @@ function ZTCharaManager:Destroy()
 		CSGameObject.Destroy(self.m_ztCharaContainer.gameObject)
 		self.m_ztCharaContainer = nil
 	end
+
+	self.m_tCharaTeamList = nil
 end
 
 --@brief 更新
@@ -92,6 +95,26 @@ end
 --@brief 获得用户列表
 function ZTCharaManager:GetCharacterList()
 	return self.m_tSortCharaList
+end
+
+--@brief 获得队友
+function ZTCharaManager:GetOwnerTeamChara()
+	if not self.m_tCharaTeamList then
+		local chara = GlobalBattleCtrl:GetOwnerChara()
+		if chara then
+			self.m_tCharaTeamList = {}
+
+			for i= 1,#self.m_tSortCharaList do
+				local tmpChara = self.m_tSortCharaList[i]
+				if chara.m_nCampId == tmpChara.m_nCampId then
+					table.insert(self.m_tCharaTeamList,tmpChara)
+				end
+			end
+			return self.m_tCharaTeamList
+		end
+	end
+	return {}
+	
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -136,9 +159,10 @@ function ZTCharaManager:_OnStartGame(playerList)
 		end
 	end
 
-	--test
+	--test(测试代码)
 	local chara = self.m_tSortCharaList[1]
 	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
+
 end
 
 --@brief change glass id
@@ -194,6 +218,7 @@ function ZTCharaManager:_InitSkillTest()
 	local index = math.random(1,#list)
 	local pos = list[index]
 	table.remove(list,index)
+	
 
 	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
@@ -202,4 +227,7 @@ function ZTCharaManager:_InitSkillTest()
 	pos = list[index]
 	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+
+	GlobalBattleCtrl:SetMainCharacter(1)
+
 end
