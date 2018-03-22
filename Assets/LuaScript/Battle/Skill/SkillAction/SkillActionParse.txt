@@ -72,6 +72,7 @@ function SkillActionParse:Update()
 			end
 
 			if action:IsFinish() then
+				action:Destroy()
 				self.m_tActionList[frame] = nil
 			end
 		end
@@ -100,8 +101,11 @@ end
 function SkillActionParse:_ParseConfig()
 	local config = {
 	[0] = {
-			{actionType = 1,param = {"attack1"}},
-			{actionType = 0,param = {0}},
+			{actionType = SkillActionType.Play,param = {"attack1"}},
+			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
+		},
+	[1] = {
+			{actionType = SkillActionType.Collider,param = {0.4,1,SkillLayerType.Hero,SkillTargetType.Team,200,1,1}},
 		}
 	}
 	for frameCFG,listCFG in pairs(config) do
@@ -116,12 +120,12 @@ function SkillActionParse:_ParseConfig()
 				action = self:_GetPlayAction(frame,param)
 
 			elseif actionCFG.actionType == SkillActionType.Collider then
-				action = self._GetColliderAction(frame,param)
+				action = self:_GetColliderAction(frame,param)
 
 			elseif actionCFG.actionType == SkillActionType.Sound then
 
 			end
-			
+
 			if action then
 				self.m_tActionList[i] = action
 			end
@@ -151,8 +155,8 @@ end
 --@brief 获得碰撞Action
 function SkillActionParse:_GetColliderAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
-	--[1]圆半径 [2]高度 [3]层次 [4]目标类型 [5]偏移x [6]偏移y
-	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	--[1]圆半径 [2]高度 [3]层次 [4]目标类型 [5]存在时间[6]偏移x [7]偏移y
+	local data = SkillActionColliderData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionCollider:Create(data)
 	return action
 end

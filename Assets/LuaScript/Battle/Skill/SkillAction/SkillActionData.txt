@@ -13,7 +13,7 @@ local CSLog = CS.GameTool.Log
 SkillActionData = {
 	m_tOwner = nil,		--拥有者
 	m_nStartFrame = 0, --触发时间
-	m_nFrameMax = 0,	--存在时间
+	m_nFrameMax = -1,	--存在时间
 	m_tSkillPos = nil,	--技能位置
 	m_nTargetId = nil,	 --指定目标
 }
@@ -29,9 +29,9 @@ end
 function SkillActionData:Init(owner,frame,skillPos,targetId)
 	self.m_tOwner = owner
 	self.m_nStartFrame = frame
-	self.m_nFrameMax = frame
 	self.m_tSkillPos = skillPos
 	self.m_nTargetId = targetId
+	self.m_nFrameMax = -1
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************分割线***************************************************************
@@ -116,8 +116,10 @@ function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	self.m_ztCollider = collider
 	self.m_skillLayer = param[3] or SkillLayerType.Hero
 	self.m_targetType = param[4] or SkillTargetType.Self
-	self.m_nOffsetX = param[5] or 0
-	self.m_nOffsetZ = param[6] or 0
+	self.m_nFrameMax = param[5] or -1
+	
+	self.m_nOffsetX = param[6] or 0
+	self.m_nOffsetZ = param[7] or 0
 
 end
 

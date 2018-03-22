@@ -28,7 +28,8 @@ function GlobalBattleCtrl:Init()
 	--高度读取
 	BattleMapHeight:Init()
 	
-	
+	--主UI管理器(备注：先创建 最后移除)
+	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
 
 
 	--战斗对象管理
@@ -39,14 +40,17 @@ function GlobalBattleCtrl:Init()
 	--技能解析器
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
-	--地图毒圈管理器
-	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create(GlobalBattleCtrl.m_battleUIMgr.m_UIModel)
+	
 
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
 
 	--主UI管理器
 	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
+
+	--地图毒圈管理器
+	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+	
 	--****************管理者初始化end************************************************
 
 	--全局数据引用初始化
@@ -111,7 +115,8 @@ end
 
 --@rife 初始化数据
 function GlobalBattleCtrl:InitData()
-	--GlobalBattleCtrl.m_nOwnerId = 1
+	--test 测试代码
+	GlobalBattleCtrl.m_nOwnerId = 1
 	--对象数组
 	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
@@ -152,7 +157,10 @@ function GlobalBattleCtrl:Update()
 	if GlobalBattleCtrl.m_battleCommandMgr then
 		GlobalBattleCtrl.m_battleCommandMgr:Update()
 	end
-
+	
+	if GlobalBattleCtrl.m_mapCircleManager then
+		GlobalBattleCtrl.m_mapCircleManager:Update()
+	end
 	BattleCameraMgr:Update()
 end
 
@@ -290,6 +298,11 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		end
 
 	end
+end
+
+--@brief
+function GlobalBattleCtrl:GetUIModel()
+	return self.m_battleUIMgr.m_UIModel
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************

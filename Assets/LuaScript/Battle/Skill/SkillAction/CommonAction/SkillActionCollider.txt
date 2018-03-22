@@ -4,14 +4,20 @@
 
 --@brief c#引用
 local CSLog = CS.GameTool.Log
-
+local CSVector3 = CS.UnityEngine.Vector3
+local CSAngleBetween = CS.GameTool.SignedAngleBetween
+local CSQuaternion = CS.UnityEngine.Quaternion
 
 SkillActionCollider = {
-	m_nOffsetX = nil,	--偏移X
-	m_nOffsetZ = nil,	--偏移Z
+	m_nOffset = nil,	--偏移
 	m_ztCollider = nil,		--碰撞体
 	m_skillLayer = nil,		--位置类型
 	m_targetType = nil,		--目标类型
+
+	m_tColliderList = nil,	--已经碰撞队列
+	m_tColliderTargets = nil, --目标对象
+
+	m_colliderView = nil,	--碰撞显示
 }
 
 --@breif 继承SkillAction
@@ -32,29 +38,19 @@ end
 function SkillActionCollider:Init(actionData)
 	--继承实现
 	SkillAction.Init(self,actionData)
-	self.m_nOffsetX = self.m_tActionData.m_nOffsetX
-	self.m_nOffsetZ = self.m_tActionData.m_nOffsetZ
+	self.m_nOffset = CSVector3(self.m_tActionData.m_nOffsetX,0,self.m_tActionData.m_nOffsetZ)
 	self.m_ztCollider = self.m_tActionData.m_ztCollider
 	self.m_skillLayer = self.m_tActionData.m_skillLayer
 	self.m_targetType = self.m_tActionData.m_targetType
-	self:_SetStartPos()
+	
+	self:_GetTargetList()
 end
 
 --@brief 开始
 function SkillActionCollider:Start()
 	--继承实现
 	SkillAction.Start(self)
-	local charaPos = self:GetOwner():GetPos()
-	local dir = nil
-	if self.m_nFaceType == SkillFaceType.UpSkill then
-		dir = self:_GetDir(charaPos,self.m_tSkillPos)
-	elseif self.m_nFaceType == SkillFaceType.BackSkill then
-		dir = self:_GetDir(self.m_tSkillPos,charaPos)
-	end
-	if dir then
-		self:GetOwner():UpdateRotate(dir)
-	end
-	self:Done()
+	self:_SetStartPos()
 end
 
 
@@ -62,6 +58,8 @@ end
 function SkillActionCollider:Update()
 	--继承实现
 	SkillAction.Update(self)
+
+	self:_UpdateColliderView()
 end
 
 --@brief 结束
@@ -74,26 +72,55 @@ end
 function SkillActionCollider:Destroy()
 	--继承实现
 	SkillAction.Destroy(self)
+	
+	if self.m_colliderView then
+		CS.UnityEngine.GameObject.Destroy(self.m_colliderView)
+		self.m_colliderView = nil
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 获得方向
-function SkillActionCollider:_GetDir(posBegin,posEnd)
-	return posEnd - posBegin
-end
-
-
 --@brief 设置起始位置
 function SkillActionCollider:_SetStartPos()
 	if self.m_skillLayer == SkillLayerType.Hero then
-		self.m_ztCollider:SetPos(self:GetOwner():GetPos())
+		self.m_ztCollider:SetPos(self.m_tOwner:GetColliderPos())
 	elseif self.m_skillLayer == SkillLayerType.SkillPos then
 		self.m_ztCollider:SetPos(self.m_tSkillPos)
 	end
+	local face = self.m_tOwner:GetFacePos()
+	local angle = CSAngleBetween(face,CSVector3.forward)
+ 	
+	local rot = CSQuaternion.Euler(0, angle, 0)
+	self.m_nOffset =  rot * self.m_nOffset
 
-	self.m_ztCollider.m_tPos.x = self.m_tPos.x + self.m_nOffsetX
-	self.m_ztCollider.m_tPos.z = self.m_tPos.z + self.m_nOffsetX
+	self.m_ztCollider.m_tPos.x = self.m_ztCollider.m_tPos.x + self.m_nOffset.x
+	self.m_ztCollider.m_tPos.z = self.m_ztCollider.m_tPos.z + self.m_nOffset.z
 
+	self:_UpdateColliderView()
+end
+
+--@brief 获得方向
+function SkillActionCollider:_GetTargetList()
+	self.m_tColliderTargets = GlobalBattleCtrl:GetTargetList(self.m_tOwner.m_nBattleId,self.m_targetType,self.m_nTargetId)
+end
+
+--@brief checkCollider
+function SkillActionCollider:_CheckCollider()
+	-- body
+end
+
+--@brief 显示碰撞
+function SkillActionCollider:_UpdateColliderView()
+	if not GameConfig.IsSkillDebugScene then
+		return
+	end
+	if not self.m_colliderView then
+		self.m_colliderView =  CS.UnityEngine.GameObject.CreatePrimitive(CS.UnityEngine.PrimitiveType.Cylinder);
+	end
+	local scaleX = self.m_ztCollider.m_nRaidus
+	local scaleY = (self.m_ztCollider.m_nRaidus * 2 + self.m_ztCollider.m_nHeight) /2
+	self.m_colliderView.transform.localScale = {x = scaleX,y = scaleY,z = scaleX}
+    self.m_colliderView.transform.position = self.m_ztCollider.m_tPos;
 end

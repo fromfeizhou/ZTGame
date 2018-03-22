@@ -25,12 +25,15 @@ Character = {
 
 	m_nMoveDir = nil,	--移动方向
 	m_charaPos = nil,		--当前位置
+	m_rotatePos = nil,		--朝向点
 	m_nGlassId = nil,		--草丛id
 	m_nCampId = nil,		--camp
 	
 	m_nState = nil,		--玩家状态
+	m_ztCollider = nil,		--碰撞框
+	m_ztColliderOffset = nil,	--碰撞偏移
 
-	knockAction = nil, --击飞 击倒 击倒等控制器{dir|方向，timeMax|总时间，timeNum|计数}
+	m_knockAction = nil, --击飞 击倒 击倒等控制器{dir|方向，timeMax|总时间，timeNum|计数}
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -51,13 +54,17 @@ function Character:Init(battleData,container)
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
 	self.m_charaPos = CSVector3.zero
-	self:UpdatePos(battleData.pos)
+	self.m_rotatePos = CSVector3.forward
+
 	self.m_nMoveDir = BattleDir.None
 
 	self.m_nGlassId = -1
 	self.m_nCampId = battleData.camp
 
 	self.m_nState = 0
+	self.m_ztCollider =  ZTCollider:Create(0,BattleDefine.PlayerHeight,0,BattleDefine.PlayerRadius,BattleDefine.PlayerHeight)
+
+	self:UpdatePos(battleData.pos)
 end
 
 
@@ -112,6 +119,11 @@ function Character:SetDirection(dir)
 	end
 end
 
+--@brief 获取朝向
+function Character:GetFacePos()
+	return self.m_rotatePos.normalized
+end
+
 --@brief 获得位置
 function Character:GetPos()
 	return self.m_charaPos
@@ -132,6 +144,11 @@ end
 --@brief 是否是普通状态
 function Character:IsNormalState()
 	return self.m_nState == CharacterState.Normal
+end
+
+--@brief 获取碰撞中心
+function Character:GetColliderPos()
+	return self.m_ztCollider.m_tPos
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -158,6 +175,8 @@ function Character:UpdatePos(pos)
 		pos.y = height
 
 		self.m_charaPos = pos
+		self.m_ztCollider:SetPos(pos.x,pos.y + BattleDefine.PlayerHeight,pos.z)
+
 		--动画刷新通知
 		self.m_animData:UpdatePos(pos)
 		--CS.GameTool.LogError("Character:UpdatePos")
@@ -170,7 +189,10 @@ end
 --@brief 更新角度
 --@param vector3 dir
 function Character:UpdateRotate(dir)
-	self.m_animData:UpdateRotate(dir)
+	if not self.m_rotatePos.Equals(dir) then
+		self.m_rotatePos = dir
+		self.m_animData:UpdateRotate(dir)
+	end
 end
 
 --@brief 设置草丛id

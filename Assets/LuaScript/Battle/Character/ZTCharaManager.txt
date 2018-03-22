@@ -227,7 +227,4 @@ function ZTCharaManager:_InitSkillTest()
 	pos = list[index]
 	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
-
-	GlobalBattleCtrl:SetMainCharacter(1)
-
 end

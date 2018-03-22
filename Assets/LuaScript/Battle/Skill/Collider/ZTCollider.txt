@@ -12,7 +12,7 @@ local CSLog = CS.GameTool.Log
 ZTCollider = {
 	m_tPos = nil,		--位置
 	m_nRaidus = nil,	--半径
-	m_nHeight = nil,		--延伸高度(中心点上下各一半)
+	m_nHeight = nil,		--延伸高度
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -43,13 +43,13 @@ end
 function ZTCollider:Init(pos,raidus,height)
 	 self.m_tPos = pos
 	 self.m_nRaidus = raidus or 1
-	 self.m_nHeight = height
+	 self.m_nHeight = height or 0
 end
 
 
 --@brief 设置位置
-function ZTCollider:SetPos(pos)
-	self.m_tPos = GetPosTab(pos)
+function ZTCollider:SetPos(...)
+	self.m_tPos = GetPosTab(...)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
