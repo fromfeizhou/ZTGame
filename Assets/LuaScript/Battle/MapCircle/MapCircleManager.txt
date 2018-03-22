@@ -26,7 +26,6 @@ function MapCircleManager:Create()
 	local obj = {}
 	setmetatable( obj, { __index = MapCircleManager })
 	obj.m_model = GlobalBattleCtrl.m_battleUIMgr.m_UIModel
-	obj.m_model.m_manager = obj;
 	obj:Init()
 	return obj
 end

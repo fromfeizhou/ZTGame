@@ -63,7 +63,7 @@ function MapScrollPanel:Init(parent)
 end
 
 function MapScrollPanel:Test()
-	self.m_model.m_manager:AddMapCircleCommand()
+	MapCircleManager:AddMapCircleCommand()
 end
 
 
