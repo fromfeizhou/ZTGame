@@ -8,7 +8,6 @@ local CSLog = CS.GameTool.Log
 
 SkillActionPlay = {
 	m_sAnimName = nil,  --动作名
-	m_tSkillPos = nil,	--技能操作点
 }
 
 --@breif 继承SkillAction
@@ -18,19 +17,18 @@ setmetatable( SkillActionPlay, { __index = SkillAction})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillActionPlay:Create(actionData,skillPos)
+function SkillActionPlay:Create(actionData)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionPlay })
-	obj:Init(actionData,skillPos)
+	obj:Init(actionData)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionPlay:Init(actionData,skillPos)
+function SkillActionPlay:Init(actionData)
 	--继承实现
 	SkillAction.Init(self,actionData)
 	self.m_sAnimName = self.m_tActionData.m_sAnimName
-	self.m_tSkillPos = skillPos
 end
 
 --@brief 开始

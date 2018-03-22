@@ -14,21 +14,24 @@ SkillActionData = {
 	m_tOwner = nil,		--拥有者
 	m_nStartFrame = 0, --触发时间
 	m_nFrameMax = 0,	--存在时间
-	
+	m_tSkillPos = nil,	--技能位置
+	m_nTargetId = nil,	 --指定目标
 }
 --@brief 拷贝原表
-function SkillActionData:Create(owner,frame)
+function SkillActionData:Create(owner,frame,skillPos,targetId)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionData })
-	obj:Init(owner,frame)
+	obj:Init(owner,frame,skillPos,targetId)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionData:Init(owner,frame)
+function SkillActionData:Init(owner,frame,skillPos,targetId)
 	self.m_tOwner = owner
 	self.m_nStartFrame = frame
 	self.m_nFrameMax = frame
+	self.m_tSkillPos = skillPos
+	self.m_nTargetId = targetId
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************分割线***************************************************************
@@ -42,18 +45,18 @@ SkillActionFaceData = {
 setmetatable( SkillActionFaceData, { __index = SkillActionData})
 
 --@brief 拷贝原表
-function SkillActionFaceData:Create(owner,frame,faceType)
+function SkillActionFaceData:Create(owner,frame,skillPos,targetId,param)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionFaceData })
-	obj:Init(owner,frame,faceType)
+	obj:Init(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionFaceData:Init(owner,frame,faceType)
+function SkillActionFaceData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
-	SkillActionData.Init(self,owner,frame)
-	self.m_nFaceType = faceType
+	SkillActionData.Init(self,owner,frame,skillPos,targetId)
+	self.m_nFaceType = param[1]
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************分割线***************************************************************
@@ -67,18 +70,18 @@ SkillActionPlayData = {
 setmetatable( SkillActionPlayData, { __index = SkillActionData})
 
 --@brief 拷贝原表
-function SkillActionPlayData:Create(owner,frame,name)
+function SkillActionPlayData:Create(owner,frame,skillPos,targetId,param)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionPlayData })
-	obj:Init(owner,frame,name)
+	obj:Init(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionPlayData:Init(owner,frame,name)
+function SkillActionPlayData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
-	SkillActionData.Init(self,owner,frame)
-	self.m_sAnimName = name
+	SkillActionData.Init(self,owner,frame,skillPos,targetId)
+	self.m_sAnimName = param[1]
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -87,26 +90,35 @@ end
 
 --播放动作
 SkillActionColliderData = {
-	m_colliderData = nil,	--碰撞数据
+	m_nOffsetX = nil,	--偏移X
+	m_nOffsetZ = nil,	--偏移Z
+	m_ztCollider = nil,		--碰撞体
+	m_skillLayer = nil,		--位置类型
+	m_targetType = nil,		--目标类型
 }
 --@breif SkillActionData
 setmetatable( SkillActionColliderData, { __index = SkillActionData})
 
 --@brief 拷贝原表
 --@param 碰撞
---@param 偏移
-function SkillActionColliderData:Create(owner,frame,colliderData)
+function SkillActionColliderData:Create(owner,frame,skillPos,targetId,param)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionColliderData })
-	obj:Init(owner,frame,colliderData)
+	obj:Init(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionColliderData:Init(owner,frame,colliderData)
+function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
-	SkillActionData.Init(self,owner,frame)
-	self.m_colliderData = colliderData
+	SkillActionData.Init(self,owner,frame,skillPos,targetId)
+	local collider = ZTCollider:Create(0,0,0,param[1],param[2])
+	self.m_ztCollider = collider
+	self.m_skillLayer = param[3] or SkillLayerType.Hero
+	self.m_targetType = param[4] or SkillTargetType.Self
+	self.m_nOffsetX = param[5] or 0
+	self.m_nOffsetZ = param[6] or 0
+
 end
 
 

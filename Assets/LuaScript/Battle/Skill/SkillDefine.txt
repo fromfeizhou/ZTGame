@@ -3,26 +3,31 @@
 --@data 2018/3/19
 
 
---@brief 碰撞预定义
+--@brief 行为定义
 SkillActionType = {
 	Face = 0,		--朝向调整
 	Play = 1,		--播放动作
 	Sound = 2,		--播放声音
+	Collider = 3,	--碰撞
 }
 
---@brief 技能容器
-SkillLayer = {
-	HERO = 0,	--玩家
+--@brief 技能位置类型(计算 碰撞特效等放置位置选项)
+SkillLayerType = {
+	Hero = 0,	--玩家
 	Scene = 1,	--场景
+	SkillPos = 2,	--技能位置（场景）
 }
-
+--@brief 技能朝向
 SkillFaceType = {
 	UpSkill = 0,	--朝向技能点
 	BackSkill = 1,	--背向技能点
 }
 
+--@brief 技能目标类型（技能效果 或技能操作指向）
 SkillTargetType = {
 	Self = 0,	--自己
 	Team = 1,	--队友
-	Enemy = 2,
+	Enemy = 2,	--敌人
+	All = 3,	--所有人
+	Appoint = 4,	--指定目标
 }

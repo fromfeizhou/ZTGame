@@ -11,6 +11,9 @@ SkillAction = {
 	m_tActionData = nil,	--action数据
 	m_bIsStart = false, --是否开启
 	m_bFinish = false,	--是否结束
+
+	m_tSkillPos = nil,	--技能操作点
+	m_nTargetId = nil,	--技能目标id
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -29,6 +32,10 @@ function SkillAction:Init(actionData)
 	-- CSLog("SkillAction:Init")
 	self.m_nStartFrame = actionData.m_nStartFrame
 	self.m_tActionData = actionData
+
+	self.m_tSkillPos = actionData.m_tTargetPos
+	self.m_nTargetId = actionData.m_nTargetId
+	
 	self.m_bIsStart = false
 	self.m_bFinish = false
 end

@@ -80,8 +80,8 @@ end
 --@brief 使用技能
 --@param skillId 技能id
 --@param pos 技能目标点
-function BattleProtocol:SendSkillCommand(skillId,pos)
-	local command = BattleSkillCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,pos)
+function BattleProtocol:SendSkillCommand(skillId,pos,targetId)
+	local command = BattleSkillCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,pos,targetId)
 	BattleProtocol:SendCommand(command)
 end
 
@@ -269,13 +269,13 @@ function BattleProtocol:_OnMapFrame(sightData)
 					commands[v.frame_id] = {}
 				end
 			elseif v.type == BattleCommandType.Skill then
-				command = BattleSkillCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4])
+				command = BattleSkillCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],v.int_data[5])
 			elseif v.type == BattleCommandType.Collider then
 				local list = {}
 				for i = 1,v.int_data[5] do
 					table.insert(list,v.int_data[5+i])
 				end
-				command = BattleSkillCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],list)
+				command = BattleColliderCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],list)
 			end
 			if command then
 				table.insert(commands[v.frame_id],command)

@@ -15,19 +15,3 @@ public class PropPostionCreate : MonoBehaviour {
 	}
 }
 
-public class MapPropPostionType : MonoBehaviour
-{
-    public List<int> typeId = new List<int>();
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-}

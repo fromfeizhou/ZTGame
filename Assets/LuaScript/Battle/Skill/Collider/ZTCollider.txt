@@ -19,10 +19,22 @@ ZTCollider = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function ZTCollider:Create(x,y,z,raidus,height)
+--@param {pos,radius,height} / {x,y,z,radius,height}
+function ZTCollider:Create(...)
 	local obj = {}
 	setmetatable( obj, { __index = ZTCollider })
-	local pos = GetPosTab(x,y,z)
+	local arg = {...}
+	local pos,raidus,height = nil,1,1
+
+	if #arg == 5 then
+		pos = GetPosTab(arg[1],arg[2],arg[3])
+		raidus = arg[4]
+		height = arg[5]
+	elseif #arg == 3 then
+		pos = GetPosTab[arg[1]]
+		raidus = arg[2]
+		height = arg[3]
+	end
 	obj:Init(pos,raidus,height)
 	return obj
 end
@@ -35,7 +47,10 @@ function ZTCollider:Init(pos,raidus,height)
 end
 
 
-
+--@brief 设置位置
+function ZTCollider:SetPos(pos)
+	self.m_tPos = GetPosTab(pos)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

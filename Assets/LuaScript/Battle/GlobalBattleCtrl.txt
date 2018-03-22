@@ -253,6 +253,37 @@ end
 function GlobalBattleCtrl:GetBattleRoleEquipedList()
 	if GlobalBattleCtrl.m_BattleItemManager then
 		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
+	end 
+	return nil
+end
+
+--@brief 获取目标对象
+function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
+	if targetType == SkillTargetType.Appoint then
+		return {targetId}
+	end
+	if targetType == SkillTargetType.Self then
+		return {userId}
+	end
+
+	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]
+	if not chara then
+		return {}
+	end
+
+	local camp = chara.m_nCampId
+	local list = {}
+	for i = 1,#GlobalBattleCtrl.m_tCharacterList do
+		local tmp = GlobalBattleCtrl.m_tCharacterList[i]
+		local tmpCamp = tmp.m_nCampId
+		if targetType == SkillTargetType.Team and camp == tmpCamp then
+			table.insert(list,tmp)
+		elseif targetType == SkillTargetType.Enemy and camp ~= tmpCamp  then
+			table.insert(list,tmp)
+		else
+			table.insert(list,tmp)
+		end
+
 	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
