@@ -88,7 +88,7 @@ function NetWorkManager:InitServerList()
 			end
 			GlobalData:GetNetEventDispatcher():DispatchEvent(NET_EVENT.SERVER_FINISH,serverList)
 		else
-			CSLog(data)
+			GCSLog(data)
 		end
 	end
 	NetWorkManager.m_instance:InitServerList("http://s1.game.gdxygm.com/info.txt",func_WebRequest)
