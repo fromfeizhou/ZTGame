@@ -86,31 +86,33 @@ BattleSkillCommand = {
 	m_nBattleId = nil,		--使用者
 	m_nSkillId = nil,		--命令类型
 	m_tSkillPos = nil,		--目标位置
+	m_nTargetId = nil,		--选中目标
 }
 
 --@brief 拷贝原表
-function BattleSkillCommand:Create(battleId,skillId,pos)
+function BattleSkillCommand:Create(battleId,skillId,pos,targetId)
 	local obj = {}
 	setmetatable( obj, { __index = BattleSkillCommand })
-	obj:Init(battleId,skillId,pos)
+	obj:Init(battleId,skillId,pos,targetId)
 	return obj
 end
 
 --@brief 拷贝原表
-function BattleSkillCommand:CreateServer(battleId,skillId,tx,ty,tz)
+function BattleSkillCommand:CreateServer(battleId,skillId,tx,ty,tz,targetId)
 	local obj = {}
 	setmetatable( obj, { __index = BattleSkillCommand })
 	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
-	obj:Init(battleId,skillId,pos)
+	obj:Init(battleId,skillId,pos,targetId)
 	return obj
 end
 
 --@brief 初始化
-function BattleSkillCommand:Init(battleId,skillId,pos)
+function BattleSkillCommand:Init(battleId,skillId,pos,targetId)
 	self.m_nBattleId = battleId
 	self.m_nType = BattleCommandType.Skill
 	self.m_nSkillId = skillId
 	self.m_tSkillPos = pos
+	self.m_nTargetId = targetId
 end
 
 --碰撞

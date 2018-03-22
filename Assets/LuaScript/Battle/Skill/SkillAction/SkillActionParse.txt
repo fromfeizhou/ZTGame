@@ -11,6 +11,7 @@ SkillActionParse = {
 	m_nStartFrame = nil,	--起始帧
 	m_nSkillId = nil,		--技能id
 	m_tSkillPos = nil,		--技能位置
+	m_nTargetId = nil,		--选中目标
 	m_tActionList = nil,	--动作列表
 	m_bFinish = nil,		--结束标记
 }
@@ -39,6 +40,7 @@ function SkillActionParse:Init(skillCommand)
 	self.m_nStartFrame = GlobalBattleCtrl:GetCurCommandFrame()
 	self.m_nSkillId = skillCommand.m_nSkillId
 	self.m_tSkillPos = skillCommand.m_tSkillPos
+	self.m_nTargetId = skillCommand.m_nTargetId
 	self.m_tActionList = {}
 	self.m_bFinish = false
 	self:_ParseConfig() 
@@ -106,13 +108,22 @@ function SkillActionParse:_ParseConfig()
 		local frame = self.m_nStartFrame + frameCFG
 		for i,actionCFG in pairs(listCFG) do
 			local param = actionCFG.param
-
+			local action = nil
 			if actionCFG.actionType == SkillActionType.Face then
-				self.m_tActionList[i] = self:_GetRotateAction(frame,param)
+				action = self:_GetRotateAction(frame,param)
+
 			elseif actionCFG.actionType == SkillActionType.Play then
-				self.m_tActionList[i] = self:_GetPlayAction(frame,param)
+				action = self:_GetPlayAction(frame,param)
+
+			elseif actionCFG.actionType == SkillActionType.Collider then
+				action = self._GetColliderAction(frame,param)
+
 			elseif actionCFG.actionType == SkillActionType.Sound then
 
+			end
+			
+			if action then
+				self.m_tActionList[i] = action
 			end
 		end
 		
@@ -122,15 +133,26 @@ end
 --@brief 获得基础Action
 function SkillActionParse:_GetRotateAction(frame,param)
 	-- CSLog("SkillActionParse:_GetRotateAction",frame,SerializeTable(param))
-	local data = SkillActionFaceData:Create(self.m_tOwner,frame,param[1])
-	local action = SkillActionFace:Create(data,self.m_tSkillPos)
+	--[1]朝向
+	local data = SkillActionFaceData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionFace:Create(data)
 	return action
 end
 
 --@brief 获得播放Action
 function SkillActionParse:_GetPlayAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
-	local data = SkillActionPlayData:Create(self.m_tOwner,frame,param[1])
-	local action = SkillActionPlay:Create(data,self.m_tSkillPos)
+	--[1]动作名
+	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionPlay:Create(data)
+	return action
+end
+
+--@brief 获得碰撞Action
+function SkillActionParse:_GetColliderAction(frame,param)
+	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
+	--[1]圆半径 [2]高度 [3]层次 [4]目标类型 [5]偏移x [6]偏移y
+	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionCollider:Create(data)
 	return action
 end

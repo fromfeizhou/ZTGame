@@ -12,8 +12,10 @@ local CSLog = CS.GameTool.Log
 CharacterState = {
 	Normal = 1,			--常规状态
 	Die = 2,			--死亡
-	Skill = 4,			--施法中
-	Controller = 8,		--受控
+	Charge = 4,			--充能
+	Skill = 8,			--施法中
+	KnockState = 16,		--击倒 击飞 击退
+	Controller = 32,		--受控
 }
 
 Character = {
@@ -27,6 +29,8 @@ Character = {
 	m_nCampId = nil,		--camp
 	
 	m_nState = nil,		--玩家状态
+
+	knockAction = nil, --击飞 击倒 击倒等控制器{dir|方向，timeMax|总时间，timeNum|计数}
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -95,7 +99,7 @@ function Character:SetDirection(dir)
 		if self.m_nMoveDir == BattleDir.None then
 			self:Play(AnimatorName.Move)
 		elseif dir == BattleDir.None then
-			self:Play(AnimatorName.Idle)
+			self:Play(AnimatorName.Idle,self.m_nState)
 		end
 		
 		--切换角度
@@ -116,13 +120,13 @@ end
 --@brief 设置玩家状态
 function Character:InState(state)
 	self.m_nState = self.m_nState | state
-	CSLog("Character:InState",self.m_nState)
+	---CSLog("Character:InState",self.m_nState)
 end
 
 --@brief 设置玩家状态
 function Character:OutState(state)
 	self.m_nState = self.m_nState & ~state
-	CSLog("Character:OutState",self.m_nState)
+	--CSLog("Character:OutState",self.m_nState)
 end
 
 --@brief 是否是普通状态
