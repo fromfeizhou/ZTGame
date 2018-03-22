@@ -44,6 +44,9 @@ public class ZTCircle : MonoBehaviour {
 
 	/** 设置线宽度 */
 	public void SetLineWidth(float lineWidth){
+		if (_lineWidth == lineWidth)
+			return;
+		
 		_lineWidth = lineWidth;
 		for (int i = 0; i < rectLineList.Count; i++) {
 			float width = _lineWidth;
@@ -55,26 +58,27 @@ public class ZTCircle : MonoBehaviour {
 	/** 设置线段数 */
 	public void SetLineNum(int lineCnt)
 	{
-		if (lineCnt != rectLineList.Count) {
-			int divCnt = lineCnt - rectLineList.Count;
-			bool isAdd = divCnt > 0;
-			for (int i = 0; i < Mathf.Abs(divCnt); i++) {
-				if (isAdd) {
-					GameObject go = new GameObject ("Line_" + i.ToString());
-					RectTransform lineRect = go.AddComponent<RectTransform> ();
-					Image lineImg = go.AddComponent<Image> ();
-					lineImg.raycastTarget = false;
-					lineRect.SetParent (transform);
-					lineRect.localPosition = Vector3.zero;
-					lineRect.localScale = Vector3.one;
-					rectLineList.Add (lineRect);
-					go.SetActive (_show);
-				}
-				else{
-					RectTransform lineRect = rectLineList [0];
-					GameObject.Destroy (lineRect.gameObject);
-					rectLineList.RemoveAt (0);
-				}
+		if (lineCnt == rectLineList.Count)
+			return;
+		
+		int divCnt = lineCnt - rectLineList.Count;
+		bool isAdd = divCnt > 0;
+		for (int i = 0; i < Mathf.Abs(divCnt); i++) {
+			if (isAdd) {
+				GameObject go = new GameObject ("Line_" + i.ToString());
+				RectTransform lineRect = go.AddComponent<RectTransform> ();
+				Image lineImg = go.AddComponent<Image> ();
+				lineImg.raycastTarget = false;
+				lineRect.SetParent (transform);
+				lineRect.localPosition = Vector3.zero;
+				lineRect.localScale = Vector3.one;
+				rectLineList.Add (lineRect);
+				go.SetActive (_show);
+			}
+			else{
+				RectTransform lineRect = rectLineList [0];
+				GameObject.Destroy (lineRect.gameObject);
+				rectLineList.RemoveAt (0);
 			}
 		}
 
@@ -85,6 +89,9 @@ public class ZTCircle : MonoBehaviour {
 	/** 设置半径 */
 	public void SetRadius(float radius)
 	{
+		if (_radius == radius)
+			return;
+		
 		_radius = radius;
 
 		float len = _lineLenBase * _radius;
@@ -105,13 +112,27 @@ public class ZTCircle : MonoBehaviour {
 		}
 	}
 
+	public void Switch(bool isShow)
+	{
+		if (isShow)
+			Show ();
+		else
+			Hide ();
+	}
+
 	public void Show(){
+		if (_show)
+			return;
 		for (int i = 0; i < rectLineList.Count; i++)
 			rectLineList [i].gameObject.SetActive (true);
+		_show = true;
 	}
 
 	public void Hide(){
+		if (!_show)
+			return;
 		for (int i = 0; i < rectLineList.Count; i++)
-			rectLineList [i].gameObject.SetActive (true);
+			rectLineList [i].gameObject.SetActive (false);
+		_show = false;
 	}
 }

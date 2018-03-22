@@ -40,7 +40,7 @@ function GlobalBattleCtrl:Init()
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
 	--地图毒圈管理器
-	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create(GlobalBattleCtrl.m_battleUIMgr.m_UIModel)
 
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
@@ -111,7 +111,7 @@ end
 
 --@rife 初始化数据
 function GlobalBattleCtrl:InitData()
-	GlobalBattleCtrl.m_nOwnerId = 1
+	--GlobalBattleCtrl.m_nOwnerId = 1
 	--对象数组
 	GlobalBattleCtrl.m_tCharacterDic = GlobalBattleCtrl.m_ztCharaManager:GetCharacterDic()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
@@ -212,6 +212,10 @@ function GlobalBattleCtrl:GetOwnerChara()
 	return GlobalBattleCtrl.m_character
 end
 
+--@brief 队友
+function GlobalBattleCtrl:GetOwnerTeamChara()
+	return GlobalBattleCtrl.m_ztCharaManager:GetOwnerTeamChara()
+end
 
 --@brief 获得当前逻辑帧计数
 function GlobalBattleCtrl:GetCurCommandFrame()

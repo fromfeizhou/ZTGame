@@ -16,6 +16,8 @@ MapScrollPanel = {
 	
 	m_transform = nil,
 	m_gameObject = nil,
+
+	m_scaleValue = 1,
 	
 	m_ScrollView = nil,
 	m_ztCircleCur = nil,
@@ -62,23 +64,18 @@ function MapScrollPanel:Init(parent)
 end
 
 function MapScrollPanel:Test()
-	GCSLog("--------------[MapScrollPanel:Test] OnClick")
-	local _circleInfo = {
-		state = true,
-		moveTime = 20,
-		startPos = CSVector2(300,300),
-		startRadius = 300,
-		endPos = CSVector2(150,200), 
-		endRadius = 100,
-	}
-	self:Active(_circleInfo)
+	self.m_model.m_manager:AddMapCircleCommand()
 end
 
 
+--@brief 面板命令帧每帧刷新
+function MapScrollPanel:Update()
 
+end
 
---@brief 面板每帧刷新
-function MapScrollPanel:Update(deltaTime)
+--@brief 面板逻辑命令帧每帧刷新
+function MapScrollPanel:UpdateCommand()
+	self:UpdateCircle(self.m_model.m_manager.m_circleInfo)
 end
 
 --@brief 显示登录面板
@@ -97,67 +94,45 @@ end
 function MapScrollPanel:Destroy()
 end
 
-local _circleTimer
+function MapScrollPanel:onValueChanged(value)
+	self.m_scaleValue = value;
+	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
+	self:UpdateCircle(self.m_model.m_manager.m_circleInfo)
+end
 
-local _circleInfo = {
-	state,
-	moveTime,
-	startPos, 
-	startRadius,
-	endPos, 
-	endRadius
-}
+function MapScrollPanel:UpdateCircle(circleInfo)
+	local curCommandFrame = GlobalBattleCtrl:GetCurCommandFrame()
+	if circleInfo and curCommandFrame < circleInfo.endFrame then 
+		--当前圈
+		local frameCnt = circleInfo.endFrame - circleInfo.startFrame
+		local progressFrame = curCommandFrame - circleInfo.startFrame
 
-function MapScrollPanel:Active( circleInfo)
-
-	if _circleTimer then 
-		_circleTimer.m_isFinish = true 
-		_circleTimer = nil
+		if progressFrame >= 0 then 
+			local progress = progressFrame/frameCnt
+			local lerpPos = CSVector2.Lerp (circleInfo.startPos,circleInfo.endPos,progress)
+			local lerpRadius = CSMathf.Lerp (circleInfo.startRadius,circleInfo.endRadius,progress)
+			self:_SetCircle(self.m_ztCircleCur,lerpPos,lerpRadius)
+			
+			--目标圈
+			self:_SetCircle(self.m_ztCircleDest,circleInfo.endPos,	circleInfo.endRadius)
+			
+			--显示
+			self.m_ztCircleCur:Show()	
+			self.m_ztCircleDest:Show()
+			return
+		end
 	end
-
-	_circleInfo = circleInfo
-
-	self:_SetCircle(self.m_ztCircleCur,	_circleInfo.startPos,	_circleInfo.startRadius)
-	self:_SetCircle(self.m_ztCircleDest,_circleInfo.endPos,		_circleInfo.endRadius)
-
 	
-	self.m_ztCircleCur:Show()	
-	self.m_ztCircleDest:Show()
-	
-	_circleTimer = LoopTimer:Create(self.OnFinishMove,self)
-	_circleTimer:SetParam(_circleInfo.moveTime,1)
-	_circleTimer:OnTick(self.onTickMove)
-	TimerManager:AddTimer(_circleTimer)
+	--隐藏
+	self.m_ztCircleCur:Hide()	
+	self.m_ztCircleDest:Hide()
+
 end
 
-function MapScrollPanel:onTickMove()
-	GCSLog("MapScrollPanel:onTickMove()",GlobalBattleCtrl:GetCurCommandFrame())
-	self:SetCircle(_circleTimer.m_tickTime/_circleInfo.moveTime)
-end
-
-function MapScrollPanel:OnFinishMove()
-	self:SetCircle(1)
-	self:Test()
-end
-
-function MapScrollPanel:SetCircle(progress)
-	local lerpPos = CSVector2.Lerp (_circleInfo.startPos,_circleInfo.endPos,progress)
-	local lerpRadius = CSMathf.Lerp (_circleInfo.startRadius,_circleInfo.endRadius,progress)
-	self:_SetCircle(self.m_ztCircleCur,lerpPos,lerpRadius)
-end
 	
 function MapScrollPanel:_SetCircle(circle, pos, radius)
-	circle:SetRadius(radius)
-	circle.rectTransform.anchoredPosition = pos
-end
-
-
-function MapScrollPanel:onValueChanged(value)
-	self.m_ScrollView.content.sizeDelta = CSVector2.one * value * 512
-end
-
-function MapScrollPanel:UpdateCircle()
-	
+	circle:SetRadius(radius * self.m_scaleValue)
+	circle.rectTransform.anchoredPosition = pos * self.m_scaleValue
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -165,12 +140,12 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Request Start***************************************************************
+--********************NetWork Request Start***************************************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Request End***************************************************************
+--********************NetWork Request End*****************************************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
