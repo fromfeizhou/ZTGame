@@ -12,6 +12,8 @@ SkillActionCollider = {
 	m_ztCollider = nil,		--碰撞体
 	m_skillLayer = nil,		--位置类型
 	m_targetType = nil,		--目标类型
+
+	m_colliderView = nil,	--碰撞显示
 }
 
 --@breif 继承SkillAction
@@ -44,17 +46,6 @@ end
 function SkillActionCollider:Start()
 	--继承实现
 	SkillAction.Start(self)
-	local charaPos = self:GetOwner():GetPos()
-	local dir = nil
-	if self.m_nFaceType == SkillFaceType.UpSkill then
-		dir = self:_GetDir(charaPos,self.m_tSkillPos)
-	elseif self.m_nFaceType == SkillFaceType.BackSkill then
-		dir = self:_GetDir(self.m_tSkillPos,charaPos)
-	end
-	if dir then
-		self:GetOwner():UpdateRotate(dir)
-	end
-	self:Done()
 end
 
 
@@ -62,6 +53,7 @@ end
 function SkillActionCollider:Update()
 	--继承实现
 	SkillAction.Update(self)
+	self:_UpdateColliderView()
 end
 
 --@brief 结束
@@ -74,6 +66,10 @@ end
 function SkillActionCollider:Destroy()
 	--继承实现
 	SkillAction.Destroy(self)
+	if self.m_colliderView then
+		CS.UnityEngine.GameObject.Destroy(self.m_colliderView)
+		self.m_colliderView = nil
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -88,12 +84,31 @@ end
 --@brief 设置起始位置
 function SkillActionCollider:_SetStartPos()
 	if self.m_skillLayer == SkillLayerType.Hero then
-		self.m_ztCollider:SetPos(self:GetOwner():GetPos())
+		self.m_ztCollider:SetPos(self.m_tOwner:GetPos())
 	elseif self.m_skillLayer == SkillLayerType.SkillPos then
 		self.m_ztCollider:SetPos(self.m_tSkillPos)
 	end
 
-	self.m_ztCollider.m_tPos.x = self.m_tPos.x + self.m_nOffsetX
-	self.m_ztCollider.m_tPos.z = self.m_tPos.z + self.m_nOffsetX
+	self.m_ztCollider.m_tPos.x = self.m_ztCollider.m_tPos.x + self.m_nOffsetX
+	self.m_ztCollider.m_tPos.z = self.m_ztCollider.m_tPos.z + self.m_nOffsetZ
 
+	if GameConfig.IsSkillDebugScene then
+		self:_UpdateColliderView()
+	end
+end
+
+--@brief 显示碰撞
+function SkillActionCollider:_UpdateColliderView()
+	if not self.m_colliderView then
+		self.m_colliderView =  CS.UnityEngine.GameObject.CreatePrimitive(CS.UnityEngine.PrimitiveType.Cylinder);
+	end
+	local scaleX = self.m_ztCollider.m_nRaidus
+	local scaleY = (self.m_ztCollider.m_nRaidus * 2 + self.m_ztCollider.m_nHeight) /2
+	self.m_colliderView.transform.localScale = {x = scaleX,y = scaleY,z = scaleX}
+	-- 0.5 = x,z 1
+	-- 0 = 0.25
+	-- 1 = 2
+	-- 2 = 3
+
+    self.m_colliderView.transform.position = self.m_ztCollider.m_tPos;
 end

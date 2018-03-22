@@ -35,7 +35,7 @@ end
 function SkillActionFace:Start()
 	--继承实现
 	SkillAction.Start(self)
-	local charaPos = self:GetOwner():GetPos()
+	local charaPos = self.m_tOwner:GetPos()
 	local dir = nil
 	if self.m_nFaceType == SkillFaceType.UpSkill then
 		dir = self:_GetDir(charaPos,self.m_tSkillPos)
@@ -43,7 +43,7 @@ function SkillActionFace:Start()
 		dir = self:_GetDir(self.m_tSkillPos,charaPos)
 	end
 	if dir then
-		self:GetOwner():UpdateRotate(dir)
+		self.m_tOwner:UpdateRotate(dir)
 	end
 	self:Done()
 end

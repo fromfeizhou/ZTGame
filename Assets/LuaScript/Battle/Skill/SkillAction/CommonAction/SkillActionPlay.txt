@@ -35,7 +35,7 @@ end
 function SkillActionPlay:Start()
 	--继承实现
 	SkillAction.Start(self)
-	self:GetOwner():Play(self.m_sAnimName)
+	self.m_tOwner:Play(self.m_sAnimName)
 	self:Done()
 end
 

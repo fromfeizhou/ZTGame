@@ -12,6 +12,7 @@ SkillAction = {
 	m_bIsStart = false, --是否开启
 	m_bFinish = false,	--是否结束
 
+	m_tOwner = nil,		--控制者
 	m_tSkillPos = nil,	--技能操作点
 	m_nTargetId = nil,	--技能目标id
 }
@@ -29,12 +30,19 @@ end
 
 --@brief 初始化
 function SkillAction:Init(actionData)
-	-- CSLog("SkillAction:Init")
-	self.m_nStartFrame = actionData.m_nStartFrame
+	--CSLog("SkillAction:Init",actionData.m_nFrameMax)
 	self.m_tActionData = actionData
 
-	self.m_tSkillPos = actionData.m_tTargetPos
-	self.m_nTargetId = actionData.m_nTargetId
+
+	self.m_tOwner = self.m_tActionData.m_tOwner
+
+	self.m_nStartFrame = self.m_tActionData.m_nStartFrame
+	self.m_nFrameMax = self.m_tActionData.m_nFrameMax
+	self.m_nFrameCount = 0
+
+
+	self.m_tSkillPos = self.m_tActionData.m_tSkillPos
+	self.m_nTargetId = self.m_tActionData.m_nTargetId
 	
 	self.m_bIsStart = false
 	self.m_bFinish = false
@@ -45,7 +53,7 @@ function SkillAction:CheckStart()
 	if self.m_bIsStart then
 		return
 	end
-	if GlobalBattleCtrl:GetCurCommandFrame() >= self.m_tActionData.m_nStartFrame then
+	if GlobalBattleCtrl:GetCurCommandFrame() >= self.m_nStartFrame then
 		self:Start()
 	end
 end
@@ -58,9 +66,10 @@ end
 
 --@brief 更新
 function SkillAction:Update()
-	if self.m_bIsStart and not self.m_bFinish then
+	if self.m_bIsStart and not self.m_bFinish and not (self.m_nFrameMax == -1) then
+		--CSLog(self.m_nFrameCount,self.m_nFrameMax)
 		self.m_nFrameCount = self.m_nFrameCount + 1
-		if self.m_nFrameCount >= self.m_tActionData.m_nFrameMax then
+		if self.m_nFrameCount >= self.m_nFrameMax then
 			self:Done()
 		end
 	end
@@ -83,11 +92,11 @@ end
 
 --@brief  获得起始帧 
 function SkillAction:StartFrame()
-	return self.m_tActionData.m_nStartFrame
+	return self.m_nStartFrame
 end
 --@brief 移除
 function SkillAction:Destroy()
-	CSLog("SkillAction:Destroy")
+	--CSLog("SkillAction:Destroy")
 end
 
 --@brief 碰撞处理
@@ -97,7 +106,7 @@ end
 
 --@brief 获得使用者
 function SkillAction:GetOwner()
-	return self.m_tActionData.m_tOwner
+	return self.m_tOwner
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

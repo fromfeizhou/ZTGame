@@ -110,6 +110,7 @@ function SkillActionManager:_UpdateList(list)
 	for i = #list,1,-1 do
 		local actionParse = list[i]
 		if actionParse:IsFinish() then
+			actionParse:Destroy()
 			table.remove(list,i)
 		else
 			actionParse:Update()
