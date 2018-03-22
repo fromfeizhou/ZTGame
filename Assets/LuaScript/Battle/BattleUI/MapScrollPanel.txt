@@ -8,7 +8,6 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3local
 local CSVector2 = CS.UnityEngine.Vector2
 local CSColor = CS.UnityEngine.Color
-local CSMathf = CS.UnityEngine.Mathf
 
 
 MapScrollPanel = {
@@ -68,18 +67,34 @@ function MapScrollPanel:Test()
 end
 
 
---@brief 面板命令帧每帧刷新
-function MapScrollPanel:Update()
+function MapScrollPanel:Updatsssse()
+	local team = GlobalBattleCtrl:getOwnerTeamChara()
+	local playerID = GlobalBattleCtrl:getOwnerTeamChara()
+	for i=1,#team do
+		if team[i]:GetBattleId() == GlobalBattleCtrl:GetOwnerId() then
+			--玩家自己
+		else
+			--队友
+		end
+	end
+
+end
+
+function MapScrollPanel:InitPlayer()
+
+end
+
+function MapScrollPanel:UpdatePlayer()
 
 end
 
 --@brief 面板逻辑命令帧每帧刷新
-function MapScrollPanel:UpdateCommand()
-	self:UpdateCircle(self.m_model.m_manager.m_circleInfo)
+function MapScrollPanel:Update()
+	self:UpdateCircle()
 end
 
 --@brief 显示登录面板
-function MapScrollPanel:Show()
+function MapScrollPanel:Show(...)
 	self.m_gameObject:SetActive(true)
 	LoginModel.m_pIsOpenedCreatePanel = true
 end
@@ -97,42 +112,31 @@ end
 function MapScrollPanel:onValueChanged(value)
 	self.m_scaleValue = value;
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
-	self:UpdateCircle(self.m_model.m_manager.m_circleInfo)
+	self:UpdateCircle()
 end
 
-function MapScrollPanel:UpdateCircle(circleInfo)
-	local curCommandFrame = GlobalBattleCtrl:GetCurCommandFrame()
-	if circleInfo and curCommandFrame < circleInfo.endFrame then 
-		--当前圈
-		local frameCnt = circleInfo.endFrame - circleInfo.startFrame
-		local progressFrame = curCommandFrame - circleInfo.startFrame
-
-		if progressFrame >= 0 then 
-			local progress = progressFrame/frameCnt
-			local lerpPos = CSVector2.Lerp (circleInfo.startPos,circleInfo.endPos,progress)
-			local lerpRadius = CSMathf.Lerp (circleInfo.startRadius,circleInfo.endRadius,progress)
-			self:_SetCircle(self.m_ztCircleCur,lerpPos,lerpRadius)
-			
-			--目标圈
-			self:_SetCircle(self.m_ztCircleDest,circleInfo.endPos,	circleInfo.endRadius)
-			
-			--显示
-			self.m_ztCircleCur:Show()	
-			self.m_ztCircleDest:Show()
-			return
-		end
+function MapScrollPanel:UpdateCircle()
+	if MapCircleManager.m_circleMoveing then
+		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
+		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
+		self:Show_Circle()
 	end
-	
-	--隐藏
+end
+
+function MapScrollPanel:Show_Circle()
+	self.m_ztCircleCur:Show()	
+	self.m_ztCircleDest:Show()
+end
+
+function MapScrollPanel:Hide_Circle()
 	self.m_ztCircleCur:Hide()	
 	self.m_ztCircleDest:Hide()
-
 end
-
 	
-function MapScrollPanel:_SetCircle(circle, pos, radius)
-	circle:SetRadius(radius * self.m_scaleValue)
-	circle.rectTransform.anchoredPosition = pos * self.m_scaleValue
+function MapScrollPanel:_SetCircle(circle, circleInfo)
+	local _mapProportion = 512/2048 * self.m_scaleValue
+	circle:SetRadius(circleInfo.radius * _mapProportion)
+	circle.rectTransform.anchoredPosition = circleInfo.pos  * _mapProportion
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
