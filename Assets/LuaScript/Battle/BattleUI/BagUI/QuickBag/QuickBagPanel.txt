@@ -44,7 +44,7 @@ end
 
 --@brief 移除
 function QuickBagPanel:Update()
-	CSLog("QuickBagPanel:Update")
+	--CSLog("QuickBagPanel:Update")
 
 end
 
@@ -72,7 +72,7 @@ function QuickBagPanel:_InitCell()
 			for i=1,10 do
 				local temRoot=self.m_Grid:GetChild(i-1)
 				if temRoot then
-					self.m_ItemList[i]=BaseBagCell:Create(temRoot,self.OnClickCell(self))
+					self.m_ItemList[i]=BaseBagCell:Create(temRoot,function(itemId,itemNum) self:OnClickCell(itemId,itemNum) end)
 				end
 			end
 		end
@@ -88,9 +88,9 @@ end
 
 
 --测试
-function Test()
+function QuickBagPanel:Test()
 	
-	local  tempData = P{}
+	local  tempData = {}
 	tempData[1]={itemId=1,itemNum=1,name="大刀"}
 	tempData[2]={itemId=2,itemNum=3,name="小刀"}
 	tempData[3]={itemId=3,itemNum=4,name="中刀"}
@@ -100,7 +100,8 @@ function Test()
 	tempData[7]={itemId=7,itemNum=1,name="项链3"}
 	tempData[8]={itemId=8,itemNum=1,name="护甲1"}
 
-	for key,value in pairs(m_ItemList) do
+	for key,value in pairs(self.m_ItemList) do
+		CSLog("QuickBagPanel.Test: ",key,value)
 		value:UpdateCell(tempData[key])
 	end   
 
@@ -109,7 +110,7 @@ end
 --点击cell
 function QuickBagPanel:OnClickCell( itemId,itemNum )
 
-	GCSLog("QuickBagPanel：OnclickCell>>>>",self,type(self))
+	GCSLog("QuickBagPanel：OnclickCell>>>>",itemId,itemNum)
 	-- body
 end
 

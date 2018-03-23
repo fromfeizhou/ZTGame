@@ -60,7 +60,7 @@ end
 
 --@brief 移除
 function BattleBagPanel:Destroy()
-	CSLog("BattleBagPanel:Destroy")
+	--CSLog("BattleBagPanel:Destroy")
 
 end
 

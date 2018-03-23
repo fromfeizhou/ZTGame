@@ -13,6 +13,7 @@ local cellName=nil
 local cellIcon=nil
 local cellNum = 1
 local cellBtn = nil
+local cellContent = 1
 
 BaseBagCell = {
 	
@@ -56,6 +57,7 @@ end
 --初始化面板组件
 function BaseBagCell:_InitCell(callBack)
 	-- body
+	self.cellContent=self.m_transform:Find("Content")
 	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
 	self.cellNum=PanelWidget:GetText(self.m_transform,"Content/Num")
 	self.cellBtn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
@@ -67,13 +69,13 @@ end
 --cell点击回调
 function BaseBagCell:OnCellClick(callBack)
 	if self.m_transform.gameObject.activeSelf then
-		callBack(itemId,itemNum)
+		callBack(self.itemId,self.itemNum)
 	end
 end
 
 -- 更新Cell
 function BaseBagCell:UpdateCell( table )
-
+	CSLog("BaseBagCell:UpdateCell")
 	if table then
 		self:UpdateData(table)
 	else
@@ -83,8 +85,13 @@ end
 
 --刷新数据
 function BaseBagCell:UpdateData(table)
-	self.cellName.text=table.Name
+CSLog(table.name,table.itemId)
 
+	self.itemId=table.itemId
+	self.itemNum=table.itemNum
+
+	self.cellName.text=table.name
+	self.cellNum.text=table.itemNum
 	self.m_transform.gameObject:SetActive(true)
 	-- body
 end
