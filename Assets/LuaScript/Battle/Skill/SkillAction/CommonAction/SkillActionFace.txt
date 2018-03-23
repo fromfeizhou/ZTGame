@@ -17,17 +17,19 @@ setmetatable( SkillActionFace, { __index = SkillAction})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillActionFace:Create(actionData)
+function SkillActionFace:Create(actionParse,actionData)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionFace })
-	obj:Init(actionData)
+	obj:Init(actionParse,actionData)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionFace:Init(actionData)
+function SkillActionFace:Init(actionParse,actionData)
 	--继承实现
-	SkillAction.Init(self,actionData)
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nActionType = SkillActionType.Face
+	
 	self.m_nFaceType = self.m_tActionData.m_nFaceType
 end
 

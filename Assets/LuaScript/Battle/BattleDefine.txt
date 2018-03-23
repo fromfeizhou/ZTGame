@@ -130,7 +130,7 @@ function BattleDefine:CheckCollider(colliderA,colliderB)
 	local ay,by = BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local posA = GetPosTab(colliderA.m_tPos.x, ay, colliderA.m_tPos.z)
 	local posB = GetPosTab(colliderB.m_tPos.x, by, colliderB.m_tPos.z)
-	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
+	if CSVector3.Distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
 		return true
 	end
 	return false
@@ -139,10 +139,10 @@ end
 --@brief 获取最接近的y轴坐标
 function BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local ay = colliderA.m_tPos.y
-	local ah = colliderA.m_Height
+	local ah = colliderA.m_nHeight
 
 	local by = colliderB.m_tPos.y
-	local bh = colliderB.m_Height
+	local bh = colliderB.m_nHeight
 
 	--计算a点最小值，最大值
 	local aMin = ay - ah

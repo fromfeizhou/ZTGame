@@ -135,8 +135,8 @@ end
 function BattleColliderCommand:CreateServer(battleId,skillId,tx,ty,tz,targetList)
 	local obj = {}
 	setmetatable( obj, { __index = BattleColliderCommand })
-	local  pos = BattleDefine:GetClientPos(tx,ty,tz,targetList)
-	obj:Init(battleId,skillId,pos)
+	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
+	obj:Init(battleId,skillId,pos,targetList)
 	return obj
 end
 

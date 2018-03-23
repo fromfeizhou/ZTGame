@@ -93,7 +93,7 @@ SkillActionColliderData = {
 	m_nOffsetX = nil,	--偏移X
 	m_nOffsetZ = nil,	--偏移Z
 	m_ztCollider = nil,		--碰撞体
-	m_skillLayer = nil,		--位置类型
+	m_skillLayer = nil,		--位置类型(起点)
 	m_targetType = nil,		--目标类型
 }
 --@breif SkillActionData
@@ -115,7 +115,7 @@ function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	local collider = ZTCollider:Create(0,0,0,param[1],param[2])
 	self.m_ztCollider = collider
 	self.m_skillLayer = param[3] or SkillLayerType.Hero
-	self.m_targetType = param[4] or SkillTargetType.Self
+	self.m_targetType = param[4] or SkillTargetType.Target
 	self.m_nFrameMax = param[5] or -1
 	
 	self.m_nOffsetX = param[6] or 0

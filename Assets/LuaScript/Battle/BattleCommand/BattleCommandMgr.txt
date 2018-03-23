@@ -79,9 +79,11 @@ function BattleCommandMgr:AddCommandList(frame,commandList)
 end
 
 --@brief 重置
-function BattleCommandMgr:Reset()
+function BattleCommandMgr:Reset(clientFrame,serverFrame)
 	self:Destroy()
 	self:Init()
+	self.m_nClientFrame = clientFrame or 0
+	self.m_nServerFrame = serverFrame or 0
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -116,8 +118,8 @@ function BattleCommandMgr:_ParseCommand(commandList)
 			self:_ParseMove(command)
 		elseif command.m_nType == BattleCommandType.Skill then
 			self:_ParseSkill(command)
-		elseif command.m_nType == BattleCommandType.Skill then
-			self:_ParseCollider(command)
+		-- elseif command.m_nType == BattleCommandType.Collider then
+		-- 	self:_ParseCollider(command)
 		end
 	end
 end
@@ -134,8 +136,8 @@ function BattleCommandMgr:_ParseSkill(command)
 	GlobalBattleCtrl:AddSkillCommand(command)
 end
 
---@brief 移动命令
-function BattleCommandMgr:_ParseCollider(command)
-	-- CSLog("BattleCommandMgr:_ParseCollider")
-	GlobalBattleCtrl:AddColliderCommand(command)
-end
+--@brief 碰撞命令优先处理 不在序列帧队列中
+-- function BattleCommandMgr:_ParseCollider(command)
+-- 	-- CSLog("BattleCommandMgr:_ParseCollider")
+-- 	GlobalBattleCtrl:AddColliderCommand(command)
+-- end

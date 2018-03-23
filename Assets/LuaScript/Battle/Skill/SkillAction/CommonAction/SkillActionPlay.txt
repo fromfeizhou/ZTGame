@@ -17,17 +17,19 @@ setmetatable( SkillActionPlay, { __index = SkillAction})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillActionPlay:Create(actionData)
+function SkillActionPlay:Create(actionParse,actionData)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionPlay })
-	obj:Init(actionData)
+	obj:Init(actionParse,actionData)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionPlay:Init(actionData)
+function SkillActionPlay:Init(actionParse,actionData)
 	--继承实现
-	SkillAction.Init(self,actionData)
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nActionType = SkillActionType.Play
+	
 	self.m_sAnimName = self.m_tActionData.m_sAnimName
 end
 

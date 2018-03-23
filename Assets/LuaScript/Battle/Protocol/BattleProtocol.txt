@@ -8,7 +8,6 @@ local CSVector3 = CS.CS.UnityEngine.Vector3
 
 
 BattleProtocol = {
-	m_battleCommandMgr = nil,		--命令操作管理者
 	m_tCommandList = nil,		--操作集合
 
 	m_tstClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
@@ -20,7 +19,6 @@ BattleProtocol = {
 --@brief 初始化
 function BattleProtocol:Init()
 	CSLog("BattleProtocol:Init")
-	BattleProtocol.m_battleCommandMgr = GlobalBattleCtrl.m_battleCommandMgr
 
 	--@brief 监听协议
 	if not GameConfig.IsSkillDebugScene then
@@ -43,23 +41,28 @@ function BattleProtocol:ParseCommand(commands)
 	--数据存储
 	if commands then
 		for frame,commandList in pairs(commands) do
-			BattleProtocol.m_battleCommandMgr:AddCommandList(frame,commandList)
+			 GlobalBattleCtrl:AddCommandList(frame,commandList)
 		end
 	end
 	--驱动逻辑帧往前
-	BattleProtocol.m_battleCommandMgr:SetNextFrame()
+	 GlobalBattleCtrl:SetNextFrame()
 end
 
 --@brief 发送命令
 function BattleProtocol:SendCommand(command)
+	local commandType = command.m_nType
+
 	--技能测试
 	if GameConfig.IsSkillDebugScene then
+		if commandType  == BattleCommandType.Collider then
+			GlobalBattleCtrl:AddColliderCommand(command)
+			return
+		end
 		BattleProtocol:__TsClientInputCommand(command)
 		return
 	end
 
 	--发送给服务器
-	local commandType = command.m_nType
 
 	if commandType == BattleCommandType.Move then
 		BattleProtocol:SendMoveFrameMsg(command)
@@ -129,7 +132,7 @@ end
 
 --@brief 发送移动驱动帧消息
 function BattleProtocol:SendMoveFrameMsg(command)
-	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
 
 	local pbData = {}
 	pbData.model = PB_MAP.MODEL
@@ -146,7 +149,7 @@ end
 
 --@brief 发送技能驱动帧消息
 function BattleProtocol:SendSkillFrameMsg(command)
-	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
 	local pbData = {}
 	pbData.model = PB_MAP.MODEL
 	pbData.command = PB_MAP.ROLE_FRAME
@@ -154,15 +157,15 @@ function BattleProtocol:SendSkillFrameMsg(command)
 	pbData.data.frame_id = frame
 	pbData.data.type = command.m_nType
 	local pos = BattleDefine:GetServerPos(command.m_tSkillPos.x,command.m_tSkillPos.y,command.m_tSkillPos.z)
-	--技能id，技能操作x， y， z
-	pbData.data.int_data = {command.m_nSkillId,pos.x,pos.y,pos.z}
+	--技能id，技能操作x， y， z,指向目标id
+	pbData.data.int_data = {command.m_nSkillId,pos.x,pos.y,pos.z, command.m_nTargetId}
 	pbData.data.str_data = ""
 	NetWorkManager:SendNetMsg(pbData)
 end
 
 --@brief 发送碰撞驱动帧消息
 function BattleProtocol:SendColliderFrameMsg(command)
-	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
+	local frame =GlobalBattleCtrl:GetCurCommandFrame()
 	local pbData = {}
 	pbData.model = PB_MAP.MODEL
 	pbData.command = PB_MAP.ROLE_FRAME
@@ -211,11 +214,7 @@ function BattleProtocol:_OnMapSight(data)
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.START_GAME,list)
 	end
 	--重置驱动帧管理器
-	if BattleProtocol.m_battleCommandMgr then
-		BattleProtocol.m_battleCommandMgr:Reset()
-		BattleProtocol.m_battleCommandMgr.m_nClientFrame = data.frame_id
-		BattleProtocol.m_battleCommandMgr.m_nServerFrame = data.frame_id
-	end
+	GlobalBattleCtrl:ResetCommandList(data.frame_id,data.frame_id)
 	--[[
 	[1] = {
     [hp] = 100
@@ -264,18 +263,27 @@ function BattleProtocol:_OnMapFrame(sightData)
 		for i,v in pairs(sightData.data) do
 			local command = nil
 			if v.type == BattleCommandType.Move then
-				command = BattleMoveCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4])
+				local battleId,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
+				command = BattleMoveCommand:CreateServer(battleId,x,y,z)
 				if not commands[v.frame_id] then
 					commands[v.frame_id] = {}
 				end
 			elseif v.type == BattleCommandType.Skill then
-				command = BattleSkillCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],v.int_data[5])
+				local battleId,skillId,x,y,z,targetId = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],v.int_data[5]
+				command = BattleSkillCommand:CreateServer(battleId,skillId,x,y,z,targetId)
+
 			elseif v.type == BattleCommandType.Collider then
+				local battleId,skillId,x,y,z = v.role_id,v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
 				local list = {}
 				for i = 1,v.int_data[5] do
 					table.insert(list,v.int_data[5+i])
 				end
-				command = BattleColliderCommand:CreateServer(v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],list)
+				command = BattleColliderCommand:CreateServer(battleId,skillId,x,y,z,list)
+				--碰撞驱动帧优先处理 不塞入队列
+				if command then
+					GlobalBattleCtrl:AddColliderCommand(command)
+					command = nil
+				end
 			end
 			if command then
 				table.insert(commands[v.frame_id],command)
@@ -323,7 +331,7 @@ end
 --@brife 客户端模拟塞入驱动帧
 function BattleProtocol:__TsClientInputCommand(command)
 	--CSLog("BattleProtocol:__TsClientInputCommand",SerializeTable(command))
-	local frame = BattleProtocol.m_battleCommandMgr.m_nClientFrame + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
 	if not BattleProtocol.m_tstClientCommandList then
 		BattleProtocol.m_tstClientCommandList = {}
 	end

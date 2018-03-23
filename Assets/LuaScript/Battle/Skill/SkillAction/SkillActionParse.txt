@@ -32,6 +32,7 @@ end
 function SkillActionParse:Init(skillCommand)
 	CSLog("SkillActionParse:Init")
 	self.m_nOwnerId = skillCommand.m_nBattleId
+
 	self.m_tOwner = GlobalBattleCtrl:GetCharacterDic()[self.m_nOwnerId]
 	if not self.m_tOwner then
 		self:Done()
@@ -60,19 +61,26 @@ function SkillActionParse:Update()
 	if not self.m_bFinish and self.m_tActionList then
 		local commandFrame = GlobalBattleCtrl:GetCurCommandFrame()
 		local isComplete = true
-		for frame,action in pairs(self.m_tActionList) do
-			if not action:IsFinish() and not action:IsStart() then
-				isComplete = false
-				action:CheckStart()
-			end
+		for frame,actionList in pairs(self.m_tActionList) do
+			for i = #actionList,1,-1 do
+				action = actionList[i]
+				if not action:IsFinish() and not action:IsStart() then
+					isComplete = false
+					action:CheckStart()
+				end
 
-			if action:IsStart() then
-				isComplete = false
-				action:Update()
-			end
+				if action:IsStart() then
+					isComplete = false
+					action:Update()
+				end
 
-			if action:IsFinish() then
-				action:Destroy()
+				if action:IsFinish() then
+					action:Destroy()
+					table.remove(actionList,i)
+					i = i - 1
+				end
+			end
+			if #actionList == 0 then
 				self.m_tActionList[frame] = nil
 			end
 		end
@@ -92,6 +100,11 @@ function SkillActionParse:IsFinish()
 	return self.m_bFinish
 end
 
+--@brief 技能id
+function SkillActionParse:GetSkillId()
+	return self.m_nSkillId
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -105,7 +118,7 @@ function SkillActionParse:_ParseConfig()
 			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
 		},
 	[1] = {
-			{actionType = SkillActionType.Collider,param = {0.4,1,SkillLayerType.Hero,SkillTargetType.Team,200,1,1}},
+			{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,SkillTargetType.Enemy,200,0,1}},
 		}
 	}
 	for frameCFG,listCFG in pairs(config) do
@@ -127,7 +140,10 @@ function SkillActionParse:_ParseConfig()
 			end
 
 			if action then
-				self.m_tActionList[i] = action
+				if not self.m_tActionList[i] then
+					self.m_tActionList[i] = {}
+				end
+				table.insert(self.m_tActionList[i],action)
 			end
 		end
 		
@@ -139,7 +155,7 @@ function SkillActionParse:_GetRotateAction(frame,param)
 	-- CSLog("SkillActionParse:_GetRotateAction",frame,SerializeTable(param))
 	--[1]朝向
 	local data = SkillActionFaceData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
-	local action = SkillActionFace:Create(data)
+	local action = SkillActionFace:Create(self,data)
 	return action
 end
 
@@ -148,7 +164,7 @@ function SkillActionParse:_GetPlayAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
 	--[1]动作名
 	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
-	local action = SkillActionPlay:Create(data)
+	local action = SkillActionPlay:Create(self,data)
 	return action
 end
 
@@ -157,6 +173,6 @@ function SkillActionParse:_GetColliderAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
 	--[1]圆半径 [2]高度 [3]层次 [4]目标类型 [5]存在时间[6]偏移x [7]偏移y
 	local data = SkillActionColliderData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
-	local action = SkillActionCollider:Create(data)
+	local action = SkillActionCollider:Create(self,data)
 	return action
 end
