@@ -201,6 +201,17 @@ function GlobalBattleCtrl:GetOwnerId()
 	return GlobalBattleCtrl.m_nOwnerId
 end
 
+--@brief 获取当前用户
+function GlobalBattleCtrl:GetOwnerChara()
+	return GlobalBattleCtrl.m_character
+end
+
+--@brief 获取用户
+function GlobalBattleCtrl:GetCharaById(battleId)
+	return GlobalBattleCtrl.m_tCharacterDic[battleId]
+end
+
+
 --@brief 获得对象字典
 function GlobalBattleCtrl:GetCharacterDic()
 	return GlobalBattleCtrl.m_tCharacterDic
@@ -211,10 +222,7 @@ function GlobalBattleCtrl:GetCharacterList()
 	return GlobalBattleCtrl.m_tCharacterList
 end
 
---@brief 获取当前用户
-function GlobalBattleCtrl:GetOwnerChara()
-	return GlobalBattleCtrl.m_character
-end
+
 
 --@brief 队友
 function GlobalBattleCtrl:GetOwnerTeamChara()

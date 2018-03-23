@@ -145,6 +145,39 @@ function Character:GetPos()
 	return self.m_charaPos
 end
 
+--@brief 是否死亡
+function Character:IsDead()
+	return self.m_nState == CharacterState.Die
+end
+
+--@brief 设置死亡
+function Character:SetDead(isDead)
+	if self.m_bIsDead == isDead then
+		return
+	end
+	self.m_bIsDead = isDead
+	if self.m_bIsDead then
+		self:Play(AnimatorName.Die)
+		self:InState(CharacterState.Die)
+	else
+		self:Play(AnimatorName.Idle)
+		self:OutState(CharacterState.Die)
+	end
+end
+
+--@brief 获取碰撞体
+function Character:GetCollider()
+	return self.m_ztCollider
+end
+
+--@brief 获取碰撞中心
+function Character:GetColliderPos()
+	return self.m_ztCollider.m_tPos
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 计算相关begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 设置玩家状态
 function Character:InState(state)
 	self.m_nState = self.m_nState | state
@@ -162,21 +195,16 @@ function Character:IsNormalState()
 	return self.m_nState == CharacterState.Normal
 end
 
---@brief 是否死亡
-function Character:IsDead()
-	return self.m_nState == CharacterState.Die
+--@brief 修改血量
+function Character:ChangeHp(value)
+	local hp = self:GetHp()
+	hp  = hp + value
+	self:SetHp(hp)
 end
-
---@brief 获取碰撞体
-function Character:GetCollider()
-	return self.m_ztCollider
+--@brief 血量
+function Character:GetHp()
+	return self.m_nHp
 end
-
---@brief 获取碰撞中心
-function Character:GetColliderPos()
-	return self.m_ztCollider.m_tPos
-end
-
 
 --@brief 修改血量
 function Character:SetHp(hp)
@@ -184,19 +212,50 @@ function Character:SetHp(hp)
 		return
 	end
 	self.m_nHp = hp
+	if self.m_nHp < 0 then
+		self.m_nHp = 0
+	end
+
+	if self.m_nHp > self.m_nMaxHp then
+		self.m_nHp = self.m_nMaxHp
+	end
+
 	if self:IsInCamera() then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 	end
 	---test 临时代码begin 要服务器控制死亡装
-	if self.m_nHp == 0 then
+	if self.m_nHp <= 0 then
 		self:SetDead(true)
 	end
 	---test 临时代码end
 end
 
+--@brief 最大血量
+function Character:GetMaxHp()
+	return self.m_nMaxHp
+end
+
+--@brief 获得攻击力
+function Character:GetAttack()
+	return self.m_nAttack
+end
+
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 动作相关
+--@brief 计算相关end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 动作相关begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 添加伤害数字
+function Character:AddHurtNum(value)
+	local hurtInfo = {hurtType = 1,pos = self.m_tPos,value = value}
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTRE_POS,hurtInfo)
+end
+
+
 --@brief 播放动作
 --@param 动作名
 function Character:Play(name)
@@ -267,22 +326,9 @@ function Character:ChangeTranslucence(transLv)
 	self.m_animData:ChangeTranslucence(transLv)
 end
 
---@brief 设置死亡
-function Character:SetDead(isDead)
-	if self.m_bIsDead == isDead then
-		return
-	end
-	self.m_bIsDead = isDead
-	if self.m_bIsDead then
-		self:Play(AnimatorName.Die)
-		self:InState(CharacterState.Die)
-	else
-		self:Play(AnimatorName.Idle)
-		self:OutState(CharacterState.Die)
-	end
-end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 动作相关
+--@brief 动作相关end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

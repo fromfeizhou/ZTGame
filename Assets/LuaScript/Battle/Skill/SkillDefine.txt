@@ -2,7 +2,6 @@
 --@breif 技能预定义
 --@data 2018/3/19
 
-
 --@brief 行为定义
 SkillActionType = {
 	Face = 0,		--朝向调整
@@ -31,3 +30,14 @@ SkillTargetType = {
 	All = 3,	--所有人
 	Appoint = 4,	--指定目标
 }
+
+--@brief 技能效果类型
+SkillEffectType = {
+	None = 0,		--无
+	Shake = 1,		--震屏
+	Hurt  = 2,       --伤害
+	AddBuff = 3,	--添加buff
+	RemoveBuff = 4,		--移除buff
+	Arrtibute = 5,      --属性修改(改变血量等 一次性修改类型)
+}
+
