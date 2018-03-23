@@ -43,6 +43,12 @@ function QuickBagPanel:Init(parent)
 end
 
 --@brief 移除
+function QuickBagPanel:Update()
+	CSLog("QuickBagPanel:Update")
+
+end
+
+--@brief 移除
 function QuickBagPanel:Destroy()
 	CSLog("QuickBagPanel:Destroy")
 
