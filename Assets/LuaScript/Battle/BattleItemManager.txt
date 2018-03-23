@@ -13,6 +13,10 @@ BattleItemManager = {
 	m_MapItemList = nil,	--地图物品列表
 	m_OwnerPropList = nil,		--道具
 	m_OwnerEquipList = nil,		--装备列表
+
+	m_CurItemDic = nil,
+
+	m_viewList 
 }
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -38,11 +42,43 @@ function BattleItemManager:Init()
 
 end
 
+-- --@brief 
+-- function BattleItemManager:UpdateCurItemDic(pos )
+-- 	-- body
+-- end
 
+-- --@brief 
+-- function BattleItemManager:UpdateCurItemById( ...,add )
+-- 	-- body
+-- end
+
+-- rushView{
+-- 	m_viewList[id]  = nil
+-- 	m_viewList= Create
+-- }
 --@brief 移除
 function BattleItemManager:Destroy()
 	CSLog("BattleItemManager:Destroy")
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

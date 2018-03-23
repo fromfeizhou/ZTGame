@@ -1,27 +1,27 @@
 --BattleModel.txt
---@breif luaÈë¿Ú
+--@breif luaæˆ˜æ–—æ¨¡å—
 --@data 2018/3/5
 BattleModel = {
 	m_tPanelList = nil,
 	m_parent = nil,
-	m_manager = nil,
 }
 
 BATTLE_UI_TYPE = {
-	MAP_SCROLL = 1,	--´óµØÍ¼
-	QUICKBAG=2
+	MAP_SCROLL = 1,	--å¤§åœ°å›¾
+	MAP_RADAR = 2,	--é›·è¾¾å›¾
+	QUICKBAG=3,
 }
 
---@brief c#ÒıÓÃ
+--@brief c#å¼•ç”¨
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = GCSLog
 
---¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
---*******************************************************Public Begin*************************************************************
---¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
---@brief ¿½±´Ô­±í
+----------------------------------------------------------------------------------------------------------------------------------
+--*******************************************************Public Begin***************************************************************
+----------------------------------------------------------------------------------------------------------------------------------
+--@brief åˆ›å»º
 function BattleModel:Create(parent)
 	local obj = {}
 	setmetatable( obj, { __index = BattleModel })
@@ -29,19 +29,26 @@ function BattleModel:Create(parent)
 	return obj
 end
 
---@brief ³õÊ¼»¯
+--@brief åˆå§‹åŒ–
 function BattleModel:Init(parent)
 	self.m_parent = parent
 	self.m_tPanelList = {}
 end
 
---@brief ¸üĞÂ
+--@breif æ›´æ–°é¢æ¿
+function BattleModel:Update()
+	for i,panel in pairs(self.m_tPanelList) do
+		panel:Update(deltaTime)
+	end
+end
+
+--@brief å‘½ä»¤å¸§æ›´æ–°
 function BattleModel:UpdateCommand()
 	self:_UpdateCommandPanel()
 end
 
 
---@brief ÒÆ³ı
+--@brief é”€æ¯
 function BattleModel:Destroy()
 	print("BattleModel:Destroy")
 	if self.m_tPanelList then
@@ -52,18 +59,20 @@ function BattleModel:Destroy()
 	end
 end
 
-
---@breif ÏÔÊ¾Ãæ°å
-function BattleModel:ShowPanel( panelType )
+--@breif æ˜¾ç¤ºé¢æ¿
+function BattleModel:ShowPanel( panelType)
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
 		if panelType == BATTLE_UI_TYPE.MAP_SCROLL then
 			panel = MapScrollPanel:Create(self.m_parent,self)
+		elseif panelType == BATTLE_UI_TYPE.MAP_RADAR then
+			panel = MapRadarPanel:Create(self.m_parent,self)
 		elseif panelType== BATTLE_UI_TYPE.QUICKBAG then
 			panel=QuickBagPanel:Create(self.m_parent,self)
 		end
+		
 		self.m_tPanelList[panelType] = panel
 	end
 
@@ -72,7 +81,7 @@ function BattleModel:ShowPanel( panelType )
 	end
 end
 
---@breif Òş²ØÃæ°å
+--@breif éšè—é¢æ¿
 function BattleModel:HidePanel(panelType)
 	local panel = nil
 	if self.m_tPanelList[panelType] then
@@ -86,13 +95,6 @@ function BattleModel:HidePanel(panelType)
 	end
 end
 
---¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public End***************************************************************
---¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
-
-
-function BattleModel:_UpdateCommandPanel()
-	for i,panel in pairs(self.m_tPanelList) do
-		panel:UpdateCommand(deltaTime)
-	end
-end
+----------------------------------------------------------------------------------------------------------------------------------

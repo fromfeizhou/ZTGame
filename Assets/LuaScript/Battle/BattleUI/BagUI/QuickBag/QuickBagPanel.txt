@@ -66,7 +66,7 @@ function QuickBagPanel:_InitCell()
 			for i=1,10 do
 				local temRoot=self.m_Grid:GetChild(i-1)
 				if temRoot then
-					self.m_ItemList[i]=BaseBagCell:Create(temRoot,self.OnClickCell)
+					self.m_ItemList[i]=BaseBagCell:Create(temRoot,self.OnClickCell(self))
 				end
 			end
 		end
@@ -76,7 +76,7 @@ end
 
 --@brief 显示登录面板
 function QuickBagPanel:Show()
- 	CSLog(">>>>>",target)
+ 	CSLog("QuickBagPanel>>>>>",target)
 	self.m_gameObject:SetActive(true)
 end
 
@@ -103,7 +103,7 @@ end
 --点击cell
 function QuickBagPanel:OnClickCell( itemId,itemNum )
 
-	GCSLog(">>>>",self,type(self))
+	GCSLog("QuickBagPanel：OnclickCell>>>>",self,type(self))
 	-- body
 end
 
