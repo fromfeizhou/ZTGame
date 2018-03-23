@@ -1,0 +1,105 @@
+--BaseBagCell.txt
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+
+
+local cellName=nil
+local cellIcon=nil
+local cellNum = 1
+local cellBtn = nil
+local cellContent = 1
+
+BaseBagCell = {
+	
+	m_transform=nil,
+ 	itemNum=nil,
+ 	itemId=nil,
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BaseBagCell:Create(transform,callBack)
+	local obj = {}
+	setmetatable( obj, { __index = BaseBagCell })
+	obj:Init(transform,callBack)
+	return obj
+end
+
+--@brief 初始化
+function BaseBagCell:Init(transform,callBack)
+	CSLog("BaseBagCell:Init")
+	self.m_transform = transform
+	if  not transform then
+--
+	end
+ 	self:_InitCell(callBack)
+end
+
+--@brief 移除
+function BaseBagCell:Destroy()
+	CSLog("BaseBagCell:Destroy")
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--初始化面板组件
+function BaseBagCell:_InitCell(callBack)
+	-- body
+	self.cellContent=self.m_transform:Find("Content")
+	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
+	self.cellNum=PanelWidget:GetText(self.m_transform,"Content/Num")
+	self.cellBtn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
+		self:OnCellClick(callBack)
+	end )
+
+end
+
+--cell点击回调
+function BaseBagCell:OnCellClick(callBack)
+	if self.m_transform.gameObject.activeSelf then
+		callBack(self.itemId,self.itemNum)
+	end
+end
+
+-- 更新Cell
+function BaseBagCell:UpdateCell( table )
+	CSLog("BaseBagCell:UpdateCell")
+	if table then
+		self:UpdateData(table)
+	else
+		self:HideCell()
+	end
+end
+
+--刷新数据
+function BaseBagCell:UpdateData(table)
+CSLog(table.name,table.itemId)
+
+	self.itemId=table.itemId
+	self.itemNum=table.itemNum
+
+	self.cellName.text=table.name
+	self.cellNum.text=table.itemNum
+	self.m_transform.gameObject:SetActive(true)
+	-- body
+end
+
+
+--隐藏cell
+function BaseBagCell:HideCell()
+	self.m_transform.gameObject:SetActive(false)
+end
+
+

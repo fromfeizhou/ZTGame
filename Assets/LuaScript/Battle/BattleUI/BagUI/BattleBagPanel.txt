@@ -60,7 +60,7 @@ end
 
 --@brief 移除
 function BattleBagPanel:Destroy()
-	CSLog("BattleBagPanel:Destroy")
+	--CSLog("BattleBagPanel:Destroy")
 
 end
 
@@ -109,6 +109,7 @@ function  BattleBagPanel:UpdateEquip()
 	for key, value in pairs(self.m_EquipList) do
 			value:UpdateCell(tempEquipDatas[key])
 	end
+	
 end
 
 --------------ui事件end

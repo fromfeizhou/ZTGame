@@ -8,6 +8,8 @@ BattleModel = {
 
 BATTLE_UI_TYPE = {
 	MAP_SCROLL = 1,	--大地图
+	MAP_RADAR = 2,	--雷达图
+	QUICKBAG=3,
 }
 
 --@brief c#引用
@@ -33,6 +35,13 @@ function BattleModel:Init(parent)
 	self.m_tPanelList = {}
 end
 
+--@breif 更新面板
+function BattleModel:Update()
+	for i,panel in pairs(self.m_tPanelList) do
+		panel:Update(deltaTime)
+	end
+end
+
 --@brief 命令帧更新
 function BattleModel:UpdateCommand()
 	self:_UpdateCommandPanel()
@@ -50,7 +59,6 @@ function BattleModel:Destroy()
 	end
 end
 
-
 --@breif 显示面板
 function BattleModel:ShowPanel( panelType)
 	local panel = nil
@@ -59,6 +67,10 @@ function BattleModel:ShowPanel( panelType)
 	else
 		if panelType == BATTLE_UI_TYPE.MAP_SCROLL then
 			panel = MapScrollPanel:Create(self.m_parent,self)
+		elseif panelType == BATTLE_UI_TYPE.MAP_RADAR then
+			panel = MapRadarPanel:Create(self.m_parent,self)
+		elseif panelType== BATTLE_UI_TYPE.QUICKBAG then
+			panel=QuickBagPanel:Create(self.m_parent,self)
 		end
 		
 		self.m_tPanelList[panelType] = panel
@@ -86,9 +98,3 @@ end
 ----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public End***************************************************************
 ----------------------------------------------------------------------------------------------------------------------------------
-
-function BattleModel:Update()
-	for i,panel in pairs(self.m_tPanelList) do
-		panel:Update(deltaTime)
-	end
-end

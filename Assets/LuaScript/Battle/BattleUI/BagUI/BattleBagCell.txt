@@ -27,7 +27,7 @@ BattleBagCell = {
 function BattleBagCell:Create(transform)
 	local obj = {}
 	setmetatable( obj, { __index = BattleBagCell })
-	obj:Init(transform,callBack)
+	obj:Init(transform)
 	return obj
 end
 
