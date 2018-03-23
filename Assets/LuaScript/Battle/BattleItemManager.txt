@@ -8,6 +8,14 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
+BattleMapItemDada = {
+	
+	itemPos=nil,
+	netId=nil,
+	itemId=nil,
+	itemNum=nil,
+}
+
 
 BattleItemManager = {
 	m_MapItemList = nil,	--地图物品列表
@@ -61,6 +69,21 @@ function BattleItemManager:Destroy()
 	CSLog("BattleItemManager:Destroy")
 end
 
+
+function GetCurMapBlockItem(pos)
+	if not self.m_MapItemList then
+		return {}
+	end
+	local  tempItems =nil
+	for key,value in pairs(self.m_MapItemList) do
+		local  tempPos = value.itemPos
+		if(tempPos.x>=pos.min.x and tempPos<=pos.max.x and tempPos.y>=pos.min.y and tempPos.y<=pos.max.y) then
+			local  temKey = value.netId
+			tempItems.temKey=value
+		end
+	end
+	return {}
+end
 
 
 

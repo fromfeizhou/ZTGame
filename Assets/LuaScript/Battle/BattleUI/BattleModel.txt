@@ -1,5 +1,5 @@
 --BattleModel.txt
---@breif lua战斗模块
+--@breif luaæˆ˜æ–—æ¨¡å—
 --@data 2018/3/5
 BattleModel = {
 	m_tPanelList = nil,
@@ -7,12 +7,12 @@ BattleModel = {
 }
 
 BATTLE_UI_TYPE = {
-	MAP_SCROLL = 1,	--大地图
-	MAP_RADAR = 2,	--雷达图
+	MAP_SCROLL = 1,	--å¤§åœ°å›¾
+	MAP_RADAR = 2,	--é›·è¾¾å›¾
 	QUICKBAG=3,
 }
 
---@brief c#引用
+--@brief c#å¼•ç”¨
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
@@ -21,7 +21,7 @@ local CSLog = GCSLog
 ----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public Begin***************************************************************
 ----------------------------------------------------------------------------------------------------------------------------------
---@brief 创建
+--@brief åˆ›å»º
 function BattleModel:Create(parent)
 	local obj = {}
 	setmetatable( obj, { __index = BattleModel })
@@ -29,26 +29,28 @@ function BattleModel:Create(parent)
 	return obj
 end
 
---@brief 初始化
+--@brief åˆå§‹åŒ–
 function BattleModel:Init(parent)
 	self.m_parent = parent
 	self.m_tPanelList = {}
+
+	self:_AddEvent()
 end
 
---@breif 更新面板
+--@breif æ›´æ–°é¢æ¿
 function BattleModel:Update()
 	for i,panel in pairs(self.m_tPanelList) do
 		panel:Update(deltaTime)
 	end
 end
 
---@brief 命令帧更新
+--@brief å‘½ä»¤å¸§æ›´æ–°
 function BattleModel:UpdateCommand()
 	self:_UpdateCommandPanel()
 end
 
 
---@brief 销毁
+--@brief é”€æ¯
 function BattleModel:Destroy()
 	print("BattleModel:Destroy")
 	if self.m_tPanelList then
@@ -57,9 +59,20 @@ function BattleModel:Destroy()
 		end
 		self.m_tPanelList = nil
 	end
+	self:_RemoveEvent()
 end
 
---@breif 显示面板
+function BattleModel:_AddEvent()
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+end
+
+--@brifef 移除事件
+function BattleModel:_RemoveEvent()
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+end
+
+
+--@breif æ˜¾ç¤ºé¢æ¿
 function BattleModel:ShowPanel( panelType)
 	local panel = nil
 	if self.m_tPanelList[panelType] then
@@ -81,7 +94,7 @@ function BattleModel:ShowPanel( panelType)
 	end
 end
 
---@breif 隐藏面板
+--@breif éšè—é¢æ¿
 function BattleModel:HidePanel(panelType)
 	local panel = nil
 	if self.m_tPanelList[panelType] then

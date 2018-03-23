@@ -1,0 +1,104 @@
+--BattleMapMgr.txt
+
+--@cbb c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSMathf = CS.UnityEngine.Mathf
+
+local  offset = 5
+local  radius = 10 --刷新物品距离
+local  interval = 0.3--可拾取距离
+
+BattleMapMgr = {
+	
+	m_rolePos=nil,
+	m_curMapBlockItem=nil,
+	m_battleMapView=nil
+
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function BattleMapMgr:Init(pos)
+	CSLog("BattleMapMgr:Init")
+	self:UpdatePos(pos)
+	self.m_battleMapView=BattleMapView:Create()
+end
+
+--@brief 移除
+function BattleMapMgr:Destroy()
+	CSLog("BattleMapMgr:Destroy")
+	BattleMapMgr:_RemoveEvent()
+end
+
+--@brife 刷新镜头
+function BattleMapMgr:Update()
+	if BattleMapMgr.m_bMoveAction and BattleMapMgr.m_carmeraTrans then
+		BattleMapMgr:_UpdateCameraActoin()
+	end
+end
+
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 监听事件
+function BattleMapMgr:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+end
+
+--@brifef 移除事件
+function BattleMapMgr:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+end
+
+--@brief 事件刷新(role)
+function BattleMapMgr:_OnUpdateScenePos(pos)
+	-- CSLog("BattleMapMgr:_OnUpdateScenePos",pos)
+	BattleMapMgr:UpdatePos(pos)
+	BattleMapMgr:UpdateRoleDistance(pos)
+end
+
+--刷新位置
+function  BattleMapMgr:UpdatePos(pos)
+
+	if not pos then 
+		pos=CSVector3.zero
+	end
+	
+	local  distanceX = CSMathf.Abs(pos.x-self.m_rolePos.x)
+	local distanceY = CSMathf.Abs(Pos.y-self.m_rolePos.y)
+	if distanceY>=self.radius and distanceX>=self.radius then
+		self.m_rolePos=pos
+		local  ranges = {}
+		ranges.min=CSVector2(pos.x-self.radius-self.offset,pos.x+self.radius+self.offset)
+		ranges.max=CSVector2(pos.y-self.radius-self.offset,pos.y+self.radius+self.offset)
+	end
+
+	self.m_curMapBlockItem=GlobalBattleCtrl:GetCurMapClockItem(ranges)
+ 	self.m_battleMapView:UpdateMapView(self.m_curMapBlockItem)
+
+end
+
+--检测role可拾取item
+function BattleMapMgr:UpdateRoleDistance(pos)
+	local canPockItems={}
+
+	for key,value in pairs(self.m_curMapBlockItem) do
+		local  distance = CSVector3.Distance(pos,value.itemPos)
+		if distance <=self.interval then
+			local  temKey = value.netId
+			canPockItems.temKey=value
+		end
+
+	end
+
+	-- body
+end
