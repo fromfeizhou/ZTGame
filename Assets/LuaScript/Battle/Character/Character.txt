@@ -124,6 +124,17 @@ function Character:GetFacePos()
 	return self.m_rotatePos.normalized
 end
 
+--@brief 获取面向角度
+function Character:GetFaceAngle()
+	local faceDir = self:GetFacePos()
+	local tmpVector2 = CSVector3.Angle(CSVector3.forward, faceDir)
+	if faceDir.x <= 0 then 
+		tmpVector2 = 360 - tmpVector2
+	end
+	return -tmpVector2
+end
+
+
 --@brief 获得位置
 function Character:GetPos()
 	return self.m_charaPos
