@@ -99,22 +99,22 @@ end
 
 --@brief 获得队友
 function ZTCharaManager:GetOwnerTeamChara()
-	if not self.m_tCharaTeamList then
-		local chara = GlobalBattleCtrl:GetOwnerChara()
-		if chara then
-			self.m_tCharaTeamList = {}
+	if  self.m_tCharaTeamList then
+		return self.m_tCharaTeamList
+	end
 
-			for i= 1,#self.m_tSortCharaList do
-				local tmpChara = self.m_tSortCharaList[i]
-				if chara.m_nCampId == tmpChara.m_nCampId then
-					table.insert(self.m_tCharaTeamList,tmpChara)
-				end
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		self.m_tCharaTeamList = {}
+		for i= 1,#self.m_tSortCharaList do
+			local tmpChara = self.m_tSortCharaList[i]
+			if chara.m_nCampId == tmpChara.m_nCampId then
+				table.insert(self.m_tCharaTeamList,tmpChara)
 			end
-			return self.m_tCharaTeamList
 		end
+		return self.m_tCharaTeamList
 	end
 	return {}
-	
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
