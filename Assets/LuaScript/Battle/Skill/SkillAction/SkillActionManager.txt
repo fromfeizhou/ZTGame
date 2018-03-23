@@ -93,15 +93,10 @@ end
 
 --@brief 碰撞按照服务器顺序优先处理
 function SkillActionManager:AddColliderCommand(colliderCommand)
-	local ownerId,skillId = colliderCommand.m_nBattleId,colliderCommand.m_nSkillId
-	for i = 1,#self.m_tSortList do
-		local data = self.m_tSortList[i]
-		if data.id == ownerId and data.actionParse.m_nSkillId == skillId then
-			data.actionParse:DoColliderAction(collistList)
-			break
-		end
-	end
+	local ownerId,skillId,pos = colliderCommand.m_nBattleId,colliderCommand.m_nSkillId,colliderCommand.m_nColliderPos
+	CSLog("colliderCommand - ",ownerId,skillId,pos)
 end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

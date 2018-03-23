@@ -7,6 +7,9 @@ local CSLog = CS.GameTool.Log
 
 
 SkillAction = {
+	m_actionParse = nil,	--技能解析器
+
+	m_nActionType = nil,	--行为类型
 	m_nFrameCount = 0, --帧计数
 	m_tActionData = nil,	--action数据
 	m_bIsStart = false, --是否开启
@@ -21,16 +24,18 @@ SkillAction = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillAction:Create(actionData)
+function SkillAction:Create(actionParse,actionData)
 	local obj = {}
 	setmetatable( obj, { __index = SkillAction })
-	obj:Init(actionData)
+	obj:Init(actionParse,actionData)
 	return obj
 end
 
 --@brief 初始化
-function SkillAction:Init(actionData)
+function SkillAction:Init(actionParse,actionData)
 	--CSLog("SkillAction:Init",actionData.m_nFrameMax)
+	self.m_actionParse = actionParse
+
 	self.m_tActionData = actionData
 
 
@@ -99,14 +104,24 @@ function SkillAction:Destroy()
 	--CSLog("SkillAction:Destroy")
 end
 
---@brief 碰撞处理
-function SkillAction:DoColliderAction(colliderCommand)
-	
-end
-
 --@brief 获得使用者
 function SkillAction:GetOwner()
 	return self.m_tOwner
+end
+
+--@brief 是否是主机
+function SkillAction:IsHost()
+	return self.m_tOwner:GetBattleId() == GlobalBattleCtrl:GetOwnerId()
+end
+
+--@brief 获取行为类型
+function SkillAction:GetActionType()
+	return self.m_nActionType
+end
+
+--@brief 技能id
+function SkillAction:GetSkillId()
+	return self.m_actionParse:GetSkillId()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

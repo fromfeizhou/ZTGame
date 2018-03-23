@@ -14,7 +14,7 @@ SkillActionCollider = {
 	m_skillLayer = nil,		--位置类型
 	m_targetType = nil,		--目标类型
 
-	m_tColliderList = nil,	--已经碰撞队列
+	m_tInColliders = nil,	--已经碰撞队列
 	m_tColliderTargets = nil, --目标对象
 
 	m_colliderView = nil,	--碰撞显示
@@ -27,17 +27,19 @@ setmetatable( SkillActionCollider, { __index = SkillAction})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillActionCollider:Create(actionData)
+function SkillActionCollider:Create(actionParse,actionData)
 	local obj = {}
 	setmetatable( obj, { __index = SkillActionCollider })
-	obj:Init(actionData)
+	obj:Init(actionParse,actionData)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionCollider:Init(actionData)
+function SkillActionCollider:Init(actionParse,actionData)
 	--继承实现
-	SkillAction.Init(self,actionData)
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nActionType = SkillActionType.Collider
+
 	self.m_nOffset = CSVector3(self.m_tActionData.m_nOffsetX,0,self.m_tActionData.m_nOffsetZ)
 	self.m_ztCollider = self.m_tActionData.m_ztCollider
 	self.m_skillLayer = self.m_tActionData.m_skillLayer
@@ -58,7 +60,7 @@ end
 function SkillActionCollider:Update()
 	--继承实现
 	SkillAction.Update(self)
-
+	self:_CheckCollider()
 	self:_UpdateColliderView()
 end
 
@@ -78,6 +80,12 @@ function SkillActionCollider:Destroy()
 		self.m_colliderView = nil
 	end
 end
+
+--@brief 结束标记
+function SkillAction:IsFinish()
+	return self.m_bFinish
+end
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
@@ -103,12 +111,41 @@ end
 
 --@brief 获得方向
 function SkillActionCollider:_GetTargetList()
-	self.m_tColliderTargets = GlobalBattleCtrl:GetTargetList(self.m_tOwner.m_nBattleId,self.m_targetType,self.m_nTargetId)
+	self.m_tInColliders = {}
+	self.m_tColliderTargets = GlobalBattleCtrl:GetTargetList(self.m_tOwner:GetBattleId(),self.m_targetType,self.m_nTargetId)
 end
 
 --@brief checkCollider
 function SkillActionCollider:_CheckCollider()
-	-- body
+
+	local list = {}
+	for i,chara in pairs(self.m_tColliderTargets) do
+		local battleId = chara:GetBattleId()
+
+		local isInCollider = self:_CheckInColliderList(battleId)
+		if  isInCollider then
+			break
+		end
+
+		local collider = chara:GetCollider() 
+		if BattleDefine:CheckCollider(collider,self.m_ztCollider) then
+			table.insert(self.m_tInColliders,battleId)
+			table.insert(list,battleId)
+		end
+	end
+	if self:IsHost() and #list > 0 then
+		return BattleProtocol:SendColliderCommand(self:GetSkillId(),self.m_ztCollider.m_tPos,list)
+	end
+end
+
+--@brief 判断是否存在碰撞队列里
+function SkillActionCollider:_CheckInColliderList(battleId)
+	for i,v in pairs(self.m_tInColliders) do
+		if v == battleId then
+			return true
+		end
+	end
+	return false
 end
 
 --@brief 显示碰撞
@@ -122,5 +159,5 @@ function SkillActionCollider:_UpdateColliderView()
 	local scaleX = self.m_ztCollider.m_nRaidus
 	local scaleY = (self.m_ztCollider.m_nRaidus * 2 + self.m_ztCollider.m_nHeight) /2
 	self.m_colliderView.transform.localScale = {x = scaleX,y = scaleY,z = scaleX}
-    self.m_colliderView.transform.position = self.m_ztCollider.m_tPos;
+    self.m_colliderView.transform.position = self.m_ztCollider.m_tPos
 end

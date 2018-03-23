@@ -201,6 +201,17 @@ function GlobalBattleCtrl:GetOwnerId()
 	return GlobalBattleCtrl.m_nOwnerId
 end
 
+--@brief 获取当前用户
+function GlobalBattleCtrl:GetOwnerChara()
+	return GlobalBattleCtrl.m_character
+end
+
+--@brief 获取用户
+function GlobalBattleCtrl:GetCharaById(battleId)
+	return GlobalBattleCtrl.m_tCharacterDic[battleId]
+end
+
+
 --@brief 获得对象字典
 function GlobalBattleCtrl:GetCharacterDic()
 	return GlobalBattleCtrl.m_tCharacterDic
@@ -211,10 +222,7 @@ function GlobalBattleCtrl:GetCharacterList()
 	return GlobalBattleCtrl.m_tCharacterList
 end
 
---@brief 获取当前用户
-function GlobalBattleCtrl:GetOwnerChara()
-	return GlobalBattleCtrl.m_character
-end
+
 
 --@brief 队友
 function GlobalBattleCtrl:GetOwnerTeamChara()
@@ -227,6 +235,27 @@ function GlobalBattleCtrl:GetCurCommandFrame()
 		return GlobalBattleCtrl.m_battleCommandMgr.m_nClientFrame
 	end
 	return 0
+end
+
+--@brief 塞入队列
+function GlobalBattleCtrl:AddCommandList(frame,commandList)
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:AddCommandList(frame,commandList)
+	end
+end
+
+--@brief 重置帧命令管理器
+function GlobalBattleCtrl:ResetCommandList(clientFrame,serverFrame)
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:Reset(clientFrame,serverFrame)
+	end
+end
+
+--@brief 帧命令往前驱动
+function GlobalBattleCtrl:SetNextFrame()
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:SetNextFrame()
+	end
 end
 
 
@@ -263,6 +292,7 @@ end
 
 --@brief 获取目标对象
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
+	-- CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
 	if targetType == SkillTargetType.Appoint then
 		return {targetId}
 	end
@@ -280,15 +310,16 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	for i = 1,#GlobalBattleCtrl.m_tCharacterList do
 		local tmp = GlobalBattleCtrl.m_tCharacterList[i]
 		local tmpCamp = tmp.m_nCampId
-		if targetType == SkillTargetType.Team and camp == tmpCamp then
+
+		if targetType == SkillTargetType.All then
+			table.insert(list,tmp)
+		elseif targetType == SkillTargetType.Team and camp == tmpCamp then
 			table.insert(list,tmp)
 		elseif targetType == SkillTargetType.Enemy and camp ~= tmpCamp  then
 			table.insert(list,tmp)
-		else
-			table.insert(list,tmp)
 		end
-
 	end
+	return list
 end
 
 --@brief

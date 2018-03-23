@@ -130,7 +130,7 @@ function BattleDefine:CheckCollider(colliderA,colliderB)
 	local ay,by = BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local posA = GetPosTab(colliderA.m_tPos.x, ay, colliderA.m_tPos.z)
 	local posB = GetPosTab(colliderB.m_tPos.x, by, colliderB.m_tPos.z)
-	if CSVector3.distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
+	if CSVector3.Distance(posA,posB) <= colliderA.m_nRaidus + colliderB.m_nRaidus then
 		return true
 	end
 	return false
@@ -139,10 +139,10 @@ end
 --@brief 获取最接近的y轴坐标
 function BattleDefine:GetColliderCenteY(colliderA,colliderB)
 	local ay = colliderA.m_tPos.y
-	local ah = colliderA.m_Height
+	local ah = colliderA.m_nHeight
 
 	local by = colliderB.m_tPos.y
-	local bh = colliderB.m_Height
+	local bh = colliderB.m_nHeight
 
 	--计算a点最小值，最大值
 	local aMin = ay - ah
@@ -192,6 +192,10 @@ GBattleEvent = {
 BATTLE_EVENT = {
 	ADD_CHARACTER = "BATTLE_EVENT_ADD_CHARACTER", 	--添加玩家
 	REMOVE_CHARACTER = "BATTLE_EVENT_REMOVE_CHARACTER",		--移除玩家
+	UPDATE_CHARACTRE_POS = "BATTLE_EVENT_UPDATE_CHARACTRE_POS", --刷新玩家位置
+	UPDATE_CHARACTER_HP = "BATTLE_EVENT_UPDATE_CHARACTER_HP",	--刷新玩家hp 
+	ADD_CHARACTER_HURT_NUM = "BATTLE_EVENT_ADD_CHARACTER_HURT_NUM",	--添加飚血动画
+
 	UPDATE_CAMERA = "BATTLE_EVENT_UPDATE_CAMERA",		--刷新镜头
 	UPDATE_SCENE_POS = "BATTLE_EVENT_UPDATE_SCENE_POS",	--刷新场景中心点	
 	START_GAME = "BATTLE_EVENT_START_GAME",				--开始游戏
@@ -215,12 +219,15 @@ function GBattleEvent:RemoveDispatcher()
 end
 
 --@brief 战斗对象结构
-function GBattleEvent:GetBattleData(battleId,careerType,pos,camp)
+function GBattleEvent:GetBattleData(battleId,careerType,pos,camp,hp,maxHp,attack)
 	local data = {}
 	data.battleId = battleId or 1
 	data.careerType = careerType or CareerType.FashShi
 	data.pos = pos or CSVector3(100,0,100)
 	data.camp = camp or 1
+	data.hp = hp or 100
+	data.maxHp = maxHp or 100
+	data.attack = attack or 30
 	return data
 end
 
