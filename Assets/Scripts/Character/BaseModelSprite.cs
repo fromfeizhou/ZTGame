@@ -181,7 +181,7 @@ public class RoleModelSprite : BaseModelSprite
         else
         {
             model.SetActive(true);
-            SkinnedMeshRenderer render = model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer render = model.transform.GetComponentInChildren<SkinnedMeshRenderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
             if (transLv == 0)
             {
                 render.material.shader = Shader.Find("Custom/PengLuOccTransVF");

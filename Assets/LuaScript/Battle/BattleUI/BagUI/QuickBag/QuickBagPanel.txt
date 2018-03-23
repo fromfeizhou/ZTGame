@@ -1,0 +1,112 @@
+--QuickBagPanel.txt
+--@breif 快速拾取背包
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+local  CSRectTransform = CS.UnityEngine.RectTransform
+
+local  testBtn =nil
+
+QuickBagPanel = {
+	
+	m_parent=nil,
+	m_gameObject=nil,
+	m_transform=nil,
+	m_ScrollView=nil,
+	m_Grid=nil,
+	m_ItemList=nil,
+	}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function QuickBagPanel:Create(parent,model)
+	local obj = {}
+	setmetatable( obj, { __index = QuickBagPanel })
+	obj.m_model = model
+	obj:Init(parent)
+	return obj
+end
+
+--@brief 初始化
+function QuickBagPanel:Init(parent)
+	CSLog("QuickBagPanel:Init")
+	self.m_parent = parent
+ 	self:_InitCell()
+end
+
+--@brief 移除
+function QuickBagPanel:Destroy()
+	CSLog("QuickBagPanel:Destroy")
+
+end
+
+--@brief 初始化登录界面（加载面板资源）
+function QuickBagPanel:_InitCell()
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("QuickBagPanel"),function(target,path)
+ 		if target then
+ 			CSLog(">>>>>",target)
+ 			self.m_gameObject = CSGameObject.Instantiate(target,self.m_parent)
+ 			self.m_transform = self.m_gameObject.transform
+ 			self.m_gameObject:SetActive(false)
+			self.m_ItemList={}
+			self.testBtn=PanelWidget:GetZTButton(self.m_transform,"TestBtn",function() self:Test() end)
+ 			--@brief 初始化登录界面UI控件
+	CSLog("QuickBagPanel:Init:>>>>>>",self.m_transform)
+ 			self.m_ScrollView=PanelWidget:GetScrollView(self.m_transform,"ItemPanel/ScrollView")
+			self.m_Grid=self.m_ScrollView.content
+
+			for i=1,10 do
+				local temRoot=self.m_Grid:GetChild(i-1)
+				if temRoot then
+					self.m_ItemList[i]=BaseBagCell:Create(temRoot,self.OnClickCell)
+				end
+			end
+		end
+	end)
+end
+
+
+--@brief 显示登录面板
+function QuickBagPanel:Show()
+ 	CSLog(">>>>>",target)
+	self.m_gameObject:SetActive(true)
+end
+
+
+--测试
+function Test()
+	
+	local  tempData = P{}
+	tempData[1]={itemId=1,itemNum=1,name="大刀"}
+	tempData[2]={itemId=2,itemNum=3,name="小刀"}
+	tempData[3]={itemId=3,itemNum=4,name="中刀"}
+	tempData[4]={itemId=4,itemNum=7,name="宠物"}
+	tempData[5]={itemId=5,itemNum=1,name="项链1"}
+	tempData[6]={itemId=6,itemNum=8,name="项链2"}
+	tempData[7]={itemId=7,itemNum=1,name="项链3"}
+	tempData[8]={itemId=8,itemNum=1,name="护甲1"}
+
+	for key,value in pairs(m_ItemList) do
+		value:UpdateCell(tempData[key])
+	end   
+
+end
+
+--点击cell
+function QuickBagPanel:OnClickCell( itemId,itemNum )
+
+	GCSLog(">>>>",self,type(self))
+	-- body
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

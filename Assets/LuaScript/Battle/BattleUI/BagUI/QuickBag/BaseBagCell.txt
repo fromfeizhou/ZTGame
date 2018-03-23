@@ -1,6 +1,4 @@
---BattleBagCell.txt
---@breif 战斗背包
---@data 2018/03/11
+--BaseBagCell.txt
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -13,34 +11,40 @@ local CSJoystick = CS.JoystickBase
 
 local cellName=nil
 local cellIcon=nil
+local cellNum = 1
+local cellBtn = nil
 
-BattleBagCell = {
+BaseBagCell = {
 	
 	m_transform=nil,
-
+ 	itemNum=nil,
+ 	itemId=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleBagCell:Create(transform)
+function BaseBagCell:Create(transform,callBack)
 	local obj = {}
-	setmetatable( obj, { __index = BattleBagCell })
-	obj:Init(transform)
+	setmetatable( obj, { __index = BaseBagCell })
+	obj:Init(transform,callBack)
 	return obj
 end
 
 --@brief 初始化
-function BattleBagCell:Init(transform)
-	CSLog("BattleBagCell:Init")
+function BaseBagCell:Init(transform,callBack)
+	CSLog("BaseBagCell:Init")
 	self.m_transform = transform
- 	self:_InitCell()
+	if  not transform then
+--
+	end
+ 	self:_InitCell(callBack)
 end
 
 --@brief 移除
-function BattleBagCell:Destroy()
-	CSLog("BattleBagCell:Destroy")
+function BaseBagCell:Destroy()
+	CSLog("BaseBagCell:Destroy")
 
 end
 
@@ -50,13 +54,25 @@ end
 
 
 --初始化面板组件
-function BattleBagCell:_InitCell()
+function BaseBagCell:_InitCell(callBack)
 	-- body
 	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
+	self.cellNum=PanelWidget:GetText(self.m_transform,"Content/Num")
+	self.cellBtn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
+		self:OnCellClick(callBack)
+	end )
+
+end
+
+--cell点击回调
+function BaseBagCell:OnCellClick(callBack)
+	if self.m_transform.gameObject.activeSelf then
+		callBack(itemId,itemNum)
+	end
 end
 
 -- 更新Cell
-function BattleBagCell:UpdateCell( table )
+function BaseBagCell:UpdateCell( table )
 
 	if table then
 		self:UpdateData(table)
@@ -66,14 +82,16 @@ function BattleBagCell:UpdateCell( table )
 end
 
 --刷新数据
-function BattleBagCell:UpdateData(table)
+function BaseBagCell:UpdateData(table)
 	self.cellName.text=table.Name
+
+	self.m_transform.gameObject:SetActive(true)
 	-- body
 end
 
 
 --隐藏cell
-function BattleBagCell:HideCell()
+function BaseBagCell:HideCell()
 	self.m_transform.gameObject:SetActive(false)
 end
 

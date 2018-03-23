@@ -149,6 +149,17 @@ message p_role_frame{
     required string str_data = 5;
 }
 
+//场景物品
+message p_map_goods {
+    required uint32 id = 1; // 物品id
+    required uint32 type_id = 2; // 物品类型id
+    required uint32 num = 3; // 物品数量 随着使用减少
+    required uint32 assembled = 4; // 装备类，是否装配
+    required int32 x = 5; // 坐标x
+    required int32 y = 6; // 坐标y
+    required int32 z = 7; // 坐标z
+}
+
 //角色地图信息
 message p_map_role {
     required uint32 id = 1; // 角色id
@@ -170,9 +181,8 @@ message p_map_role {
     required p_base_attr base_attr = 17; // 基础属性
     repeated p_role_frame moving_frames = 18; // 移动帧
     repeated p_role_frame skill_frames = 19; // 技能帧
-    repeated p_buff buffs = 20; // buff列表
-    repeated p_debuff debuffs = 21; // debuff列表
-    repeated p_goods equips = 22; // 装备信息
+    repeated p_map_goods goods = 20; // 场景道具
+    repeated p_goods equips = 21; // 装备信息
 }
 
 //怪物地图信息
@@ -432,12 +442,6 @@ message p_mission {
     required uint32 state = 5; // 任务状态 0：未完成  1：完成  2：已经领取
     required uint32 listener_cur_num = 6; // 当前任务进度，完成的数量
     required uint32 listener_max_num = 7; // 当前进度，需要的数量
-}
-
-//场景物品
-message p_map_goods {
-    required uint32 goods_id = 1; // 物品id
-    required uint32 num = 2; // 物品数量
 }
 
 //武器升级系统材料
@@ -1070,9 +1074,7 @@ message map_enter_s2c {
 message map_sight_s2c {
     required uint32 frame_id = 1; // 当前帧id
     repeated p_map_role roles_enter = 2; // 玩家列表
-    repeated p_simple_map_mon mons_enter = 3; // 怪物列表
-    repeated p_map_buff_point buffpoint_enter = 4; // buff点列表
-    repeated p_map_debuff_point debuff_point_enter = 5; // debuff点列表
+    repeated p_map_goods map_goods = 3; // 场景物品列表
 }
 
 // ##begin##map##map_role_enter##4##4##玩家进入视野##end##
@@ -1084,19 +1086,6 @@ message map_role_enter_s2c {
 // ##begin##map##map_role_leave##4##5##玩家离开视野##end##
 message map_role_leave_s2c {
     repeated uint32 roles = 1; // 玩家列表
-}
-
-// ##begin##map##map_move##4##6##玩家移动##end##
-message map_move_c2s {
-    required uint32 id = 1; // 角色id
-    required uint32 direct = 2; // 方向
-    required uint32 move_status = 3; // 移动状态 0.正常移动 1.传送门
-}
-message map_move_s2c {
-    required uint32 id = 1; // 角色id
-    required uint32 x = 2; // 障碍物ID
-    required uint32 y = 3; // 站立点ID
-    required uint32 move_status = 4; // 移动状态 0.正常移动 1.传送门
 }
 
 // ##begin##map##map_mon_enter##4##7##怪物进入场景##end##
@@ -1145,39 +1134,6 @@ message map_mon_update_s2c {
 message map_mon_dead_s2c {
     required uint32 id = 1; // 怪物id
     required uint32 code = 2; // 错误码
-}
-
-// ##begin##map##map_role_dead##4##13##角色死亡##end##
-message map_role_dead_s2c {
-    required uint32 id = 1; // 角色id
-    required uint32 attack_id = 2; // 攻击者id
-    required uint32 weapon_id = 3; // 武器id
-    required uint32 type = 4; // 死亡类型 0.被玩家杀 1.PVP突袭
-    required uint32 attack_position = 5; // 伤害部位 1:头部  2：其他部位
-}
-
-
-// ##begin##map##map_finish##4##14##通关##end##
-message map_finish_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##map##map_time_control##4##15##副本时间控制##end##
-message map_time_control_c2s {
-    required uint32 state = 1; // 1暂停；2恢复
-}
-message map_time_control_s2c {
-    required uint32 code = 1; // 错误码
-}
-
-// ##begin##map##map_attack##4##16##攻击##end##
-message map_attack_c2s {
-    required uint32 src_id = 1; // 伤害源ID
-    repeated p_damage damage = 2; // 目标伤害数据
-}
-message map_attack_s2c {
-    required uint32 src_id = 1; // 伤害源ID
-    repeated p_damage damage = 2; // 目标伤害数据
 }
 
 // ##begin##map##map_buff_point_enter##4##17##buff点进入场景##end##
@@ -1249,16 +1205,37 @@ message map_frame_s2c {
     repeated p_role_frame data = 3; // 玩家帧消息
 }
 
-// ##begin##map##map_bc_info##4##25##活动总信息##end##
-message map_bc_info_c2s {
-    required uint32 type = 1; // 数据类型
-    required string data = 2; // 数据
+// ##begin##map##map_pick_goods##4##25##捡起物品##end##
+message map_pick_goods_c2s {
+    required uint32 id = 1; // 物品id
 }
-message map_bc_info_s2c {
-    required uint32 role_id = 1; // 发送者id
-    required uint32 type = 2; // 数据类型
-    required string data = 3; // 数据
+message map_pick_goods_s2c {
+    required uint32 code = 1; // 结果码 为0时所有角色都能收到
+    required uint32 id = 2; // 物品id
+    required uint32 role_id = 3; // 角色id
 }
+
+// ##begin##map##map_discard_goods##4##26##丢弃物品##end##
+message map_discard_goods_c2s {
+    required uint32 id = 1; // 物品id
+}
+message map_discard_goods_s2c {
+    required uint32 code = 1; // 结果码 为0时所有角色都能收到
+    required uint32 id = 2; // 物品id
+    required uint32 role_id = 3; // 角色id
+}
+
+// ##begin##map##map_use_goods##4##27##使用物品/穿戴道具##end##
+message map_use_goods_c2s {
+    required uint32 id = 1; // 物品id
+}
+message map_use_goods_s2c {
+    required uint32 code = 1; // 结果码 为0时所有角色都能收到
+    required uint32 id = 2; // 物品id
+    required uint32 role_id = 3; // 角色id
+}
+
+
 
 // ##model_begin##goods##5##物品##model_end##
 // ##begin##goods##goods_info##5##1##物品信息##end##

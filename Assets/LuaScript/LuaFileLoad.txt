@@ -86,8 +86,8 @@ local LuaFileLoad = {
 		"Battle.BattleUI.BagUI.BattleBagPanel",
 		"Battle.BattleUI.BagUI.BattleBagCell",
 
-		--"Battle.BattleUI.BagUI.QuickBag",
-		--"Battle.BattleUI.BagUI.QuickItem",
+		"Battle.BattleUI.BagUI.QuickBag.QuickBagPanel",
+		"Battle.BattleUI.BagUI.QuickBag.BaseBagCell",
 
 
 		"UIModels.City.CityModel",

@@ -70,6 +70,8 @@ function BattleUIMgr:Init()
 	
 	--临时地图开关按钮
 	self:_CreateMapSwitch()
+
+	self:_CreateQuickBag()
 end
 
 --@brief 移除
@@ -197,6 +199,9 @@ function BattleUIMgr:_CreateMapSwitch()
 	end)
 end
 
+function BattleUIMgr:_CreateQuickBag( ... )
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.QUICKBAG)
+end
 
 
 

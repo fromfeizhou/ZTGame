@@ -9,7 +9,7 @@ BattleModel = {
 
 BATTLE_UI_TYPE = {
 	MAP_SCROLL = 1,	--大地图
-	QUICKBag=2
+	QUICKBAG=2
 }
 
 --@brief c#引用
@@ -61,8 +61,8 @@ function BattleModel:ShowPanel( panelType )
 	else
 		if panelType == BATTLE_UI_TYPE.MAP_SCROLL then
 			panel = MapScrollPanel:Create(self.m_parent,self)
-		elseif panelType== BATTLE_UI_TYPE.QUICKBag then
-			panel=QuickBag:Create(self.m_parent,self)
+		elseif panelType== BATTLE_UI_TYPE.QUICKBAG then
+			panel=QuickBagPanel:Create(self.m_parent,self)
 		end
 		self.m_tPanelList[panelType] = panel
 	end
