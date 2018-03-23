@@ -51,6 +51,7 @@ function MapCircleManager:Update()
 	self.m_model:Update()
 end
 
+--@brief 增加地图指令
 function MapCircleManager:AddMapCircleCommand()
 	local _circleInfo = {
 		state = true,

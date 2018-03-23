@@ -82,6 +82,7 @@ local LuaFileLoad = {
 		"Battle.BattleUI.BattleUIMgr",
 		"Battle.BattleUI.BattleModel",
 		"Battle.BattleUI.MapScrollPanel",
+		"Battle.BattleUI.MapRadarPanel",
 
 		"Battle.BattleUI.BagUI.BattleBagPanel",
 		"Battle.BattleUI.BagUI.BattleBagCell",

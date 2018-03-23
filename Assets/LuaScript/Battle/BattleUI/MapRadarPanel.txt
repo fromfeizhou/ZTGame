@@ -1,0 +1,182 @@
+--MapRadarPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSColor = CS.UnityEngine.Color
+local CSQuaternion = CS.UnityEngine.Quaternion
+
+MapRadarPanel = {
+	m_model = nil,
+	
+	m_transform = nil,
+	m_gameObject = nil,
+
+	m_ztCircleCur = nil,
+	m_ztCircleDest = nil,
+
+	m_playerList = nil,
+
+	m_playerItemParent = nil,
+	m_prePlayerItem = nil,
+
+	m_mapContent = nil,
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function MapRadarPanel:Create(parent,model)
+	local obj = {}
+	setmetatable( obj, { __index = MapRadarPanel })
+	obj.m_model = model
+	obj:Init(parent)
+	return obj
+end
+
+--@brief 初始化登录界面（加载面板资源）
+function MapRadarPanel:Init(parent)
+	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("MapRadarPanel"),function(target,path)
+ 		if target then
+ 			self.m_gameObject = CSGameObject.Instantiate(target,parent)
+ 			self.m_transform = self.m_gameObject.transform
+ 			self.m_gameObject:SetActive(false)
+			
+			PanelWidget:GetZTButton(self.m_transform,"Mask/btnOpenMap",function () self:_OpenMap() end)
+
+			local mapConentTrans = PanelWidget:GetChild(self.m_transform,"Mask/Content")
+			self.m_mapContent = mapConentTrans:GetComponent("RectTransform")
+
+			--毒圈相关
+			self.m_ztCircleCur = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleCur")
+			self.m_ztCircleCur:Init(50)
+			self.m_ztCircleCur:SetColor(CSColor.green)
+			self.m_ztCircleDest = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleDest")
+			self.m_ztCircleDest:Init(50)
+			self.m_ztCircleDest:SetColor(CSColor.red)
+
+			--玩家，队友
+			self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
+			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+			
+			self:_UpdatePlayer()
+		end
+	end)
+end
+
+function MapRadarPanel:_OpenMap( )
+	self.m_model:ShowPanel(BATTLE_UI_TYPE.MAP_SCROLL)
+end
+
+function MapRadarPanel:_CreatePlayer( playerId )
+	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
+	local playerInfo = {
+		id = playerId,
+		rectTransform = playTransform:GetComponent("RectTransform"),
+	}
+
+	local ztImg = playTransform:GetComponent("ZTImage")
+	if ztImg then
+		if playerInfo.id == GlobalBattleCtrl:GetOwnerId() then
+			ztImg.color = CSColor.green;
+		else
+			ztImg.color = CSColor.yellow;
+		end
+	end
+
+	playerInfo.rectTransform.gameObject:SetActive(true)
+	return playerInfo
+end
+
+--@brief 面板逻辑命令帧每帧刷新
+function MapRadarPanel:Update()
+	self:_UpdateCircle()
+	self:_UpdatePlayer()
+end
+
+--@brief 显示登录面板
+function MapRadarPanel:Show()
+	self.m_gameObject:SetActive(true)
+	LoginModel.m_pIsOpenedCreatePanel = true
+end
+
+--@brief 隐藏登录面板
+function MapRadarPanel:_Hide()
+	self.m_gameObject:SetActive(false)
+	LoginModel.m_pIsOpenedCreatePanel = false
+end
+
+--@brief 销毁登录面板
+function MapRadarPanel:Destroy()
+end
+
+
+function MapRadarPanel:_UpdatePlayer()
+	if not self.m_playerList then self.m_playerList = {} end
+	local team = GlobalBattleCtrl:GetOwnerTeamChara()
+	for k,v in pairs(team) do
+
+
+		if not self.m_playerList[k] then
+			self.m_playerList[k] = self:_CreatePlayer(v:GetBattleId())
+		end
+
+		local pos = v:GetPos(v:GetFaceAngle())
+		self.m_playerList[k].rectTransform.anchoredPosition = {x=pos.x, y = pos.z}
+		self.m_playerList[k].rectTransform.localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+
+		if k == GlobalBattleCtrl:GetOwnerId() then
+			self.m_mapContent.anchoredPosition = -self.m_playerList[k].rectTransform.anchoredPosition
+		end
+	end
+end
+
+function MapRadarPanel:_UpdateCircle()
+	if MapCircleManager.m_circleMoveing then
+		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
+		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
+		self:Show_Circle()
+	end
+end
+
+function MapRadarPanel:Show_Circle()
+	self.m_ztCircleCur:Show()	
+	self.m_ztCircleDest:Show()
+end
+
+function MapRadarPanel:Hide_Circle()
+	self.m_ztCircleCur:Hide()	
+	self.m_ztCircleDest:Hide()
+end
+	
+function MapRadarPanel:_SetCircle(circle, circleInfo)
+	circle:SetRadius(circleInfo.radius)
+	circle.rectTransform.anchoredPosition = circleInfo.pos
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request Start***************************************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Request End*****************************************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive Start***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--********************NetWork Receive End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

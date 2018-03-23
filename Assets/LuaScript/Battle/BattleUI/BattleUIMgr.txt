@@ -68,8 +68,6 @@ function BattleUIMgr:Init()
 		self:_CreateMatchUI()
 	end
 	
-	--临时地图开关按钮
-	self:_CreateMapSwitch()
 end
 
 --@brief 移除
@@ -139,6 +137,7 @@ function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
 	self:_CreateSkillJoystick()
 	self:_CreateBattleBagPanel()
+	self:_CreateMapRaderPanel()
 end
 
 --@brief 创建移动摇杆
@@ -178,23 +177,9 @@ end
 
 
 
---@brief 创建地图开关按钮
-function BattleUIMgr:_CreateMapSwitch()
-	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButtonTxt"),function(target,path)
-		local gameObject = CSGameObject.Instantiate(target)
-		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
-		rectTrans:SetParent(self.m_ctrlContainer,false)
-		rectTrans.pivot = CSVector2(0.5,0.5)
-		rectTrans.anchorMin = CSVector2(0,1)
-		rectTrans.anchorMax = CSVector2(0,1)
-		rectTrans.anchoredPosition = CSVector2(250,-100)
-
-		local ztBtnTxt = gameObject:GetComponent(typeof(CS.ZTButtonTxt))
-		ztBtnTxt:SetBtnName("MapScroll")
-		ztBtnTxt.onClick:AddListener(function()
-			self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.MAP_SCROLL)
-		end)
-	end)
+--@brief 显示雷达地图
+function BattleUIMgr:_CreateMapRaderPanel()
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.MAP_RADAR)
 end
 
 

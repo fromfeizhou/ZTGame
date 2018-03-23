@@ -5,10 +5,11 @@
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3local
+local CSRectTransform = CS.UnityEngine.RectTransform
+local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSColor = CS.UnityEngine.Color
-
+local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapScrollPanel = {
 	m_model = nil,
@@ -22,6 +23,7 @@ MapScrollPanel = {
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
 
+	m_playerList = nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -49,8 +51,10 @@ function MapScrollPanel:Init(parent)
 			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:_Hide() end)
 			PanelWidget:GetZTButton(self.m_transform,"btnTest",function() self:Test() end)
 
-			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:onValueChanged(value) end)
+			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 			self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
+
+			--毒圈相关
 			self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
 			self.m_ztCircleCur:Init(50)
 			self.m_ztCircleCur:SetColor(CSColor.green)
@@ -58,6 +62,31 @@ function MapScrollPanel:Init(parent)
 			self.m_ztCircleDest:Init(50)
 			self.m_ztCircleDest:SetColor(CSColor.red)
 
+			--玩家，队友
+			local playerItemParent = PanelWidget:GetChild(self.m_ScrollView.content,"PlayerList")
+			local prePlayerItem = PanelWidget:GetChild(playerItemParent,"PrePlayerItem")
+			self.m_playerList = {}
+			local team = GlobalBattleCtrl:GetOwnerTeamChara()
+			for i=1,#team do
+				local playTransform = CSTransform.Instantiate(prePlayerItem,playerItemParent)
+				local playerInfo = {
+					id = team[i].m_nBattleId,
+					rectTransform = playTransform:GetComponent("RectTransform"),
+				}
+
+				local ztImg = playTransform:GetComponent("ZTImage")
+				if ztImg then
+					if playerInfo.id == GlobalBattleCtrl:GetOwnerId() then
+						ztImg.color = CSColor.green;
+					else
+						ztImg.color = CSColor.yellow;
+					end
+				end
+				playerInfo.rectTransform.gameObject:SetActive(true)
+				self.m_playerList[team[i].m_nBattleId] = playerInfo
+			end
+
+			self:_UpdatePlayer()
 		end
 	end)
 end
@@ -66,35 +95,14 @@ function MapScrollPanel:Test()
 	MapCircleManager:AddMapCircleCommand()
 end
 
-
-function MapScrollPanel:Updatsssse()
-	local team = GlobalBattleCtrl:getOwnerTeamChara()
-	local playerID = GlobalBattleCtrl:getOwnerTeamChara()
-	for i=1,#team do
-		if team[i]:GetBattleId() == GlobalBattleCtrl:GetOwnerId() then
-			--玩家自己
-		else
-			--队友
-		end
-	end
-
-end
-
-function MapScrollPanel:InitPlayer()
-
-end
-
-function MapScrollPanel:UpdatePlayer()
-
-end
-
 --@brief 面板逻辑命令帧每帧刷新
 function MapScrollPanel:Update()
-	self:UpdateCircle()
+	self:_UpdateCircle()
+	self:_UpdatePlayer()
 end
 
 --@brief 显示登录面板
-function MapScrollPanel:Show(...)
+function MapScrollPanel:Show()
 	self.m_gameObject:SetActive(true)
 	LoginModel.m_pIsOpenedCreatePanel = true
 end
@@ -109,13 +117,25 @@ end
 function MapScrollPanel:Destroy()
 end
 
-function MapScrollPanel:onValueChanged(value)
-	self.m_scaleValue = value;
-	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
-	self:UpdateCircle()
+
+function MapScrollPanel:_UpdatePlayer()
+	local team = GlobalBattleCtrl:GetOwnerTeamChara()
+	for k,v in pairs(team) do
+		local pos = v:GetPos(v:GetFaceAngle())
+		self.m_playerList[k].rectTransform.anchoredPosition = {x=pos.x, y = pos.z}
+		self.m_playerList[k].rectTransform.anchoredPosition = 512/2048 * self.m_scaleValue * self.m_playerList[k].rectTransform.anchoredPosition
+		self.m_playerList[k].rectTransform.localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+	end
 end
 
-function MapScrollPanel:UpdateCircle()
+
+function MapScrollPanel:_onValueChanged(value)
+	self.m_scaleValue = value;
+	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
+	self:_UpdateCircle()
+end
+
+function MapScrollPanel:_UpdateCircle()
 	if MapCircleManager.m_circleMoveing then
 		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
 		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)

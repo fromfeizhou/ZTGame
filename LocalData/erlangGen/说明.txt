@@ -1,0 +1,28 @@
+excel配置文件转前端、后端使用的文件
+
+使用方法：
+config_gen.exe xls目录
+生成成功后，会在excel目录下面创建client和server目录
+为了避免与游戏代码内定义的结构、类重名，所有的数据结构前端均加上了Sys，后端加上了sys_
+
+文件夹 PATH 列表
+卷序列号为 0009-B617
+D:.
+├─client 前端使用的
+│  ├─cs  
+│  └─xml
+└─server 后端使用的
+
+client\cs\Packet.cs 请复制到XmlPacket.exe相同目录下，用以xml打包
+client\cs\Sys*.cs 请交给前端开发，每个配置文件生成的类定义
+client\xml\*.xml XmlPacket.exe打包生成BinData.lib供前端使用
+server\sys.hrl 请交给后端开发，每个配置文件生成的record定义
+server\sys_*.erl 请交给后端开发，每个excel文件生成的erl数据
+
+xml文件打包工具
+
+使用方法：
+XmlPacket.exe xml目录
+xml目录如果没有指定的话，默认使用XmlPacket.exe所在目录
+Packet.cs文件必须是最新的，而且与XmlPacket.exe相同目录
+生成成功后，xml目录下生成一个BinData.lib，交给前端即可
