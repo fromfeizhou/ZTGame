@@ -22,6 +22,7 @@ Character = {
 	m_nBattleId = nil,	--战斗对象id
 	m_animData = nil,	--形象数据
 	m_animator = nil,	--形象动画
+	m_bInCamera = nil,	--进入镜头
 
 	m_nMoveDir = nil,	--移动方向
 	m_charaPos = nil,		--当前位置
@@ -52,6 +53,8 @@ function Character:Init(battleData,container)
 	self.m_nBattleId = battleData.battleId or 1
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
+	self.m_bInCamera = false
+
 	self.m_charaPos = CSVector3.zero
 	self.m_rotatePos = CSVector3.forward
 
@@ -59,6 +62,9 @@ function Character:Init(battleData,container)
 
 	self.m_nGlassId = -1
 	self.m_nCampId = battleData.camp
+	self.m_nHp = battleData.hp
+	self.m_nMaxHp = battleData.maxHp
+	self.m_nAttack = battleData.attack
 
 	self.m_nState = 0
 	self.m_ztCollider =  ZTCollider:Create(0,BattleDefine.PlayerHeight,0,BattleDefine.PlayerRadius,BattleDefine.PlayerHeight)
@@ -156,6 +162,11 @@ function Character:IsNormalState()
 	return self.m_nState == CharacterState.Normal
 end
 
+--@brief 是否死亡
+function Character:IsDead()
+	return self.m_nState == CharacterState.Die
+end
+
 --@brief 获取碰撞体
 function Character:GetCollider()
 	return self.m_ztCollider
@@ -164,6 +175,23 @@ end
 --@brief 获取碰撞中心
 function Character:GetColliderPos()
 	return self.m_ztCollider.m_tPos
+end
+
+
+--@brief 修改血量
+function Character:SetHp(hp)
+	if self.m_nHp == hp then
+		return
+	end
+	self.m_nHp = hp
+	if self:IsInCamera() then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+	end
+	---test 临时代码begin 要服务器控制死亡装
+	if self.m_nHp == 0 then
+		self:SetDead(true)
+	end
+	---test 临时代码end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -177,7 +205,16 @@ end
 
 --@brief 创建显示(进入镜头范围)
 function Character:SetInCamera(inCamera)
+	if self.m_bInCamera == inCamera then
+		return
+	end
+	self.m_bInCamera = inCamera
 	self.m_animData:SetInCamera(inCamera)
+end
+
+--@brief 是否在镜头范围内
+function Character:IsInCamera()
+	return self.m_bInCamera
 end
 
 --@brief 刷新位置
@@ -197,6 +234,9 @@ function Character:UpdatePos(pos)
 		--CS.GameTool.LogError("Character:UpdatePos")
 		if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
+		end
+		if self:IsInCamera() then
+			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTRE_POS,self.m_nBattleId)
 		end
 	end
 end
@@ -225,6 +265,21 @@ end
 --@brief 改变半透明（草丛状态显示）
 function Character:ChangeTranslucence(transLv)
 	self.m_animData:ChangeTranslucence(transLv)
+end
+
+--@brief 设置死亡
+function Character:SetDead(isDead)
+	if self.m_bIsDead == isDead then
+		return
+	end
+	self.m_bIsDead = isDead
+	if self.m_bIsDead then
+		self:Play(AnimatorName.Die)
+		self:InState(CharacterState.Die)
+	else
+		self:Play(AnimatorName.Idle)
+		self:OutState(CharacterState.Die)
+	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 动作相关

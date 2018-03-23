@@ -20,8 +20,9 @@ AnimaEvent = {
 
 --@brief 动画名字
 AnimatorName = {
-	Move = "move",		--播放动作
-	Idle = "stand",		--进入镜头
+	Move = "move",		--移动
+	Idle = "stand",		--待机
+	Die = "death",			--死亡
 }
 
 AnimatorData = {
