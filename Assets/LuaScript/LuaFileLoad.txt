@@ -41,6 +41,11 @@ local LuaFileLoad = {
 
 	},
 
+--加载配置文件
+	G_tConfigList = {
+	
+	},
+
 	--游戏lua文件
 	G_tGameList = {
 		"Common.Data.CommonData",
@@ -125,6 +130,15 @@ end
 
 --@brief 加载游戏逻辑lua文件
 function LuaFileLoad:LoadGameLua(loadDone)
+	--加载配置文件
+	for i=1, #(LuaFileLoad.G_tConfigList) do  
+    	local fileName = LuaFileLoad.G_tConfigList[i]
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
+	end 
+
+	--加载游戏逻辑文件
 	for i=1, #(LuaFileLoad.G_tGameList) do  
     	local fileName = LuaFileLoad.G_tGameList[i]
     	if fileName and fileName ~= "" then
