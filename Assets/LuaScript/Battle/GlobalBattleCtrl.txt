@@ -314,12 +314,6 @@ function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)
 	end
 end
 
-function GlobalBattleCtrl:GetBattleRoleEquipedList()
-	if GlobalBattleCtrl.m_BattleItemManager then
-		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
-	end 
-	return {}
-end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 帧命令相关接口end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -353,6 +347,29 @@ function GlobalBattleCtrl:GetHeadContainer()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 容器相关接口end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 资源相关 begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--获取当前地图块item数据
+function GlobalBattleCtrl:GetCurMapClockItem(pos)
+	return GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(pos)
+end
+
+--获取人物装备
+function GlobalBattleCtrl:GetBattleRoleEquipedList()
+	if GlobalBattleCtrl.m_BattleItemManager then
+		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
+	end 
+	return {}
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 资源相关 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
