@@ -16,8 +16,9 @@ BattleMapMgr = {
 	
 	m_rolePos=nil,
 	m_curMapBlockItem=nil,
-	m_battleMapView=nil
-
+	m_battleMapView=nil,
+	m_CanPickItem=nil,
+	m_nTimeCount=nil
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -26,8 +27,10 @@ BattleMapMgr = {
 --@brief 初始化
 function BattleMapMgr:Init(pos)
 	CSLog("BattleMapMgr:Init")
+	m_nTimeCount=5
 	self:UpdatePos(pos)
 	self.m_battleMapView=BattleMapView:Create()
+	BattleMapMgr:_AddEvent()
 end
 
 --@brief 移除
@@ -89,16 +92,34 @@ end
 
 --检测role可拾取item
 function BattleMapMgr:UpdateRoleDistance(pos)
-	local canPockItems={}
-
-	for key,value in pairs(self.m_curMapBlockItem) do
-		local  distance = CSVector3.Distance(pos,value.itemPos)
-		if distance <=self.interval then
-			local  temKey = value.netId
-			canPockItems.temKey=value
+	m_nTimeCount=m_nTimeCount+1
+	if m_nTimeCount >5 then
+		local tempPockItems={}
+		for key,value in pairs(self.m_curMapBlockItem) do
+			local  distance = CSVector3.Distance(pos,value.itemPos)
+			if distance <=self.interval then
+				local  temKey = value.netId
+				tempPockItems.temKey=value
+			end
 		end
-
+		self:IsDisEvent(tempPockItems)
+		m_nTimeCount=m_nTimeCount%5
+	else
+		m_nTimeCount=m_nTimeCount+1
 	end
+end
 
+
+function BattleMapMgr:IsDisEvent(newItem)
 	-- body
+	if #newItem ==#self.m_CanPickItem then
+		for key,value in pairs(newItem) do
+			if not self.m_CanPickItem.key then
+				GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL, newItem)
+				break
+			end
+		end
+	else
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL, newItem)
+	end
 end

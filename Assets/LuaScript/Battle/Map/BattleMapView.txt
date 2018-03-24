@@ -54,7 +54,8 @@ end
 
 --创建预设
 function BattleMapView:UpdateMapView(data)
-	-- body
+	--battleCtrl:GetMaItemLie（）
+	--licat 
 end
 
 

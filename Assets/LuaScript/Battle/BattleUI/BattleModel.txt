@@ -63,14 +63,19 @@ function BattleModel:Destroy()
 end
 
 function BattleModel:_AddEvent()
-	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL,self.OnShowQuickBagPanel,self)
 end
 
 --@brifef 移除事件
 function BattleModel:_RemoveEvent()
-	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL,self.OnShowQuickBagPanel)
 end
 
+
+function BattleModel:OnShowQuickBagPanel(data)
+	if self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL] then
+		self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL]:ShowQuickPanel(data)
+end
 
 --@breif æ˜¾ç¤ºé¢æ¿
 function BattleModel:ShowPanel( panelType)

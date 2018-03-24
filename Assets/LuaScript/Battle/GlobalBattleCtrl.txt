@@ -324,7 +324,7 @@ end
 
 --@brief
 function GlobalBattleCtrl:GetUIModel()
-	return self.m_battleUIMgr.m_UIModel
+	return GlobalBattleCtrl.m_battleUIMgr.m_UIModel
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************全局控制器 End***************************************************************
@@ -336,7 +336,7 @@ end
 
 --获取当前地图块item数据
 function GlobalBattleCtrl:GetCurMapClockItem(pos)
-	return self.GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(pos)
+	return GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(pos)
 end
 
 --获取人物装备
