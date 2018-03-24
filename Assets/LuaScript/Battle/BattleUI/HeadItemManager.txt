@@ -42,14 +42,14 @@ function HeadItemManager:Init()
 	self.m_nTiTime = 0.9
 
 	self:_InitEvent()
-	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("BattleHead"),function(target,path)
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("HurtText"),function(target,path)
 		self.m_hurtGo = target
 	end)
 end
 
 --@brief 刷新
 function HeadItemManager:Update()
-	-- body
+	self:_UpdateHurtNum()
 end
 
 
@@ -81,21 +81,22 @@ function HeadItemManager:_OnUpdateCharacterHurtNum(hurtInfo)
 	local hurtType,pos,value = hurtInfo.hurtType, hurtInfo.pos, hurtInfo.value
 	if self.m_hurtGo then
 		local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
-		local transform = CSTransform.Instantiate(self.m_hurtGo.transform,self.m_container)
-		transform.position = {x = uiPos.x, y = uiPos.y + 0.3, z = 0}
-		--transform.localScale({x = 1,y= 1,z = 1})
-
-		local text = transform.go.GetComponent(typeof(CSText))
+		local hurtGo = CSGameObject.Instantiate(self.m_hurtGo)
+		hurtGo.transform:SetParent(self.m_container,false)
+		hurtGo.transform.position = {x = uiPos.x, y = uiPos.y + 0.3, z = 0}
+		hurtGo.transform.localScale = {x = 1,y= 1,z = 1}
+		
+		local text = hurtGo:GetComponent(typeof(CSText))
         text.text = value
 
         local hurtNum = {
         	text = text,
         	oriPos = pos,
         	time = self.m_nTiTime,		--消失时间
-        	horSpeed = math.random(min, max),	--水平速度随机值
+        	horSpeed = math.random(8, 13)/10,	--水平速度随机值
         	extent = 4,		--抛物线系数
     	}
-    	table.insert(hurtNum)
+    	table.insert(self.m_tHurtNumList,hurtNum)
 	end
 end
 
@@ -104,7 +105,7 @@ function HeadItemManager:_UpdateHurtNum()
 	if not self.m_tHurtNumList then
 		return
 	end
-
+	local dt = 0.025
 	for i = #self.m_tHurtNumList ,1,-1 do
 		local hurtNum = self.m_tHurtNumList[i]
 		hurtNum.time = hurtNum.time - dt;
@@ -118,7 +119,9 @@ function HeadItemManager:_UpdateHurtNum()
 			table.remove(self.m_tHurtNumList,i)
 			break
 		end
+		
+
 		local pos = CSGetWorldToScreenPoint(hurtNum.oriPos,self.m_canvas)
-		hurtNum.text.transform.position = {x = pos.x, y = pos.y + 0.3 + self.m_nTiTime - time, z = 0}
+		hurtNum.text.transform.position = {x = pos.x, y = pos.y + 0.3 + self.m_nTiTime - hurtNum.time, z = 0}
 	end
 end

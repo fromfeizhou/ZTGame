@@ -226,7 +226,7 @@ function Character:SetHp(hp)
 	end
 
 	if GameConfig.IsSkillDebugScene then
-		if self.m_nHp <= 0 then
+		if self.m_nHp <= 0 and not self:IsDead() then
 			self:SetDead(true)
 			local loopTimer = LoopTimer:Create(function()
 				self:SetHp(self:GetMaxHp())
@@ -261,7 +261,7 @@ end
 function Character:AddHurtNum(value)
 	self:ChangeHp(value)
 
-	local hurtInfo = {hurtType = 1,pos = self.m_tPos,value = value}
+	local hurtInfo = {hurtType = 1,pos = self.m_charaPos,value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
 
