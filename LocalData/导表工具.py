@@ -41,7 +41,7 @@ def writeLua(fname):
  		for col in range(0, booksheet.ncols):
  			cell = booksheet.cell(1, col)
  			col_client_flag_list.append(str(cell.value))
- 			print cell.value
+ 			#print cell.value
  			assert cell.ctype == 1, "found a invalid col val in col [%d] !~" % (col)
 
  		# 遍历第3行的所有列 保存数据类型
@@ -114,14 +114,14 @@ def writeLua(fname):
 			excel_data_dict[cell_id.value] = row_data_list
 
  		# # export to lua file
- 		lua_export_file = open('../Assets/ResourcesLib/Config/LuaConfig/' + booksheet.name + '.txt', 'w')
+ 		lua_export_file = open('../Assets/ResourcesLib/LuaScript/ALuaConfig/' + booksheet.name + '.txt', 'w')
  		lua_export_file.write('%s = {\n' % booksheet.name)
  		# 遍历excel数据字典 按格式写入
  		for k, v in excel_data_dict.items():
- 			lua_export_file.write('  id_%d = {\n' % k)
+ 			lua_export_file.write('[%d] = {' % k)
  			for row_data in v:
  				if row_data[2] in clientFlag:
- 					lua_export_file.write('   {0} = {1},\n'.format(row_data[0], row_data[1]))
+ 					lua_export_file.write(' {0} = {1},'.format(row_data[0], row_data[1]))
  			lua_export_file.write('  },\n')
 
  		lua_export_file.write('}\n')
@@ -134,7 +134,7 @@ def main():
     filenames = os.listdir(g_root_path)
     for fname in filenames :
         (filename,extension) = os.path.splitext(fname)
-        if fname.find('~$') == -1 and extension == ".xlsx":
+        if fname.find('~$') == -1 and (extension == ".xlsx" or extension == ".xls"):
     		writeLua(fname)
 
 
