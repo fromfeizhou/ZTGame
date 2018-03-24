@@ -49,7 +49,6 @@ function MapScrollPanel:Init(parent)
 			
  			--@brief 初始化登录界面UI控件
 			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:_Hide() end)
-			PanelWidget:GetZTButton(self.m_transform,"btnTest",function() self:Test() end)
 
 			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 			self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
@@ -91,10 +90,6 @@ function MapScrollPanel:Init(parent)
 	end)
 end
 
-function MapScrollPanel:Test()
-	MapCircleManager:AddMapCircleCommand()
-end
-
 --@brief 面板逻辑命令帧每帧刷新
 function MapScrollPanel:Update()
 	self:_UpdateCircle()
@@ -130,13 +125,13 @@ end
 
 
 function MapScrollPanel:_onValueChanged(value)
-	self.m_scaleValue = value;
+	self.m_scaleValue = value
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
 	self:_UpdateCircle()
 end
 
 function MapScrollPanel:_UpdateCircle()
-	if MapCircleManager.m_circleMoveing then
+	if MapCircleManager.m_curCircleInfo then
 		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
 		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
 		self:Show_Circle()

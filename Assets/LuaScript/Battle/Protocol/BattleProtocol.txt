@@ -199,7 +199,10 @@ end
 
 --@brief 玩家信息
 function BattleProtocol:_OnMapSight(data)
-	CSLog("BattleProtocol:_OnMapSight",data.frame_id,SerializeTable(data.roles_enter))
+	GCSLog("BattleProtocol:_OnMapSight()",data)
+
+	--CSLog("BattleProtocol:_OnMapSight",data.frame_id,SerializeTable(data.roles_enter))
+	CSLog("BattleProtocol:_OnMapSight",SerializeTable(data))
 	if data.roles_enter then
 		local list = {}
 		for i,v in pairs(data.roles_enter) do
@@ -215,6 +218,8 @@ function BattleProtocol:_OnMapSight(data)
 	end
 	--重置驱动帧管理器
 	GlobalBattleCtrl:ResetCommandList(data.frame_id,data.frame_id)
+	if data.circles then MapCircleManager:SetMapCircleCommand(data.circles) end
+
 	--[[
 	[1] = {
     [hp] = 100
