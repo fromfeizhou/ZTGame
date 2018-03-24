@@ -11,6 +11,7 @@ PathManager = {
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
 
 	m_sAnimator = "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
+	m_sModel = "Assets/Models/"
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -47,6 +48,9 @@ function PathManager:GetAnimatorPath(name)
 	return string.format(PathManager.m_sAnimator,name) .. name ..".prefab"
 end
 
+function PathManager:GetModelPath( name )
+	return PathManager.m_sModel .. name .. ".prefab"
+end
 
 --@brief 获取pb文件路径
 --@param name pb文件名字
