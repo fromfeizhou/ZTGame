@@ -141,7 +141,7 @@ message p_debuff {
 }
 
 // 玩家帧数据
-message p_role_frame{
+message p_role_frame {
     required uint32 role_id = 1; // 玩家id
     required uint32 frame_id = 2; // 帧id
     required uint32 type = 3; // 数据类型
@@ -154,10 +154,21 @@ message p_map_goods {
     required uint32 id = 1; // 物品id
     required uint32 type_id = 2; // 物品类型id
     required uint32 num = 3; // 物品数量 随着使用减少
-    required uint32 assembled = 4; // 装备类，是否装配
-    required int32 x = 5; // 坐标x
-    required int32 y = 6; // 坐标y
-    required int32 z = 7; // 坐标z
+    required int32 x = 4; // 坐标x
+    required int32 y = 5; // 坐标y
+    required int32 z = 6; // 坐标z
+}
+
+// 安全圈
+message p_map_circle {
+    required int32 x = 1;
+    required int32 y = 2;
+    required int32 dx = 4;
+    required int32 dy = 5;
+    required uint32 begin_frame = 6;
+    required uint32 end_frame = 7;
+    required uint32 begin_radius = 8;
+    required uint32 end_radius = 9;
 }
 
 //角色地图信息
@@ -1075,6 +1086,7 @@ message map_sight_s2c {
     required uint32 frame_id = 1; // 当前帧id
     repeated p_map_role roles_enter = 2; // 玩家列表
     repeated p_map_goods map_goods = 3; // 场景物品列表
+    repeated p_map_circle circles = 4; // 安全区列表
 }
 
 // ##begin##map##map_role_enter##4##4##玩家进入视野##end##
@@ -1210,9 +1222,10 @@ message map_pick_goods_c2s {
     required uint32 id = 1; // 物品id
 }
 message map_pick_goods_s2c {
-    required uint32 code = 1; // 结果码 为0时所有角色都能收到
+    required uint32 code = 1; // 结果码
     required uint32 id = 2; // 物品id
-    required uint32 role_id = 3; // 角色id
+    required uint32 discard_id = 3; // 从身上扔下的id
+    required p_map_goods goods = 4; // 捡起来的物品
 }
 
 // ##begin##map##map_discard_goods##4##26##丢弃物品##end##
@@ -1220,19 +1233,23 @@ message map_discard_goods_c2s {
     required uint32 id = 1; // 物品id
 }
 message map_discard_goods_s2c {
-    required uint32 code = 1; // 结果码 为0时所有角色都能收到
+    required uint32 code = 1; // 结果码
     required uint32 id = 2; // 物品id
-    required uint32 role_id = 3; // 角色id
 }
 
-// ##begin##map##map_use_goods##4##27##使用物品/穿戴道具##end##
+// ##begin##map##map_use_goods##4##27##使用物品道具##end##
 message map_use_goods_c2s {
     required uint32 id = 1; // 物品id
 }
 message map_use_goods_s2c {
     required uint32 code = 1; // 结果码 为0时所有角色都能收到
     required uint32 id = 2; // 物品id
-    required uint32 role_id = 3; // 角色id
+    required uint32 num = 3; // 物品数量
+}
+// ##begin##map##map_update_goods##4##28##物品更新##end##
+message map_update_goods_s2c {
+    repeated uint32 remove_id_list = 1; // 要删除物品id列表
+    repeated p_map_goods add_goods_list = 2; // 地图新增的物品列表
 }
 
 

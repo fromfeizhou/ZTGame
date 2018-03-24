@@ -1,5 +1,5 @@
 
-Ý¡
+è 
 protobuf.protoztGame.proto",
 p_setting_info
 key (
@@ -124,7 +124,27 @@ vip_reward ("R
 frame_id (
 type (
 int_data (
-str_data (	"ó
+str_data (	"X
+p_map_goods
+
+id (
+type_id (
+num (	
+x (	
+y (	
+z ("Ž
+p_map_circle	
+x (	
+y (
+
+dx (
+
+dy (
+begin_frame (
+	end_frame (
+begin_radius (
+
+end_radius	 ("Ï
 
 p_map_role
 
@@ -148,10 +168,9 @@ p_map_role
 fight_point (,
 	base_attr (2.ztGame.proto.p_base_attr1
 moving_frames (2.ztGame.proto.p_role_frame0
-skill_frames (2.ztGame.proto.p_role_frame#
-buffs (2.ztGame.proto.p_buff'
-debuffs (2.ztGame.proto.p_debuff%
-equips (2.ztGame.proto.p_goods"ž
+skill_frames (2.ztGame.proto.p_role_frame(
+goods (2.ztGame.proto.p_map_goods%
+equips (2.ztGame.proto.p_goods"ž
 	p_map_mon
 
 id (
@@ -346,10 +365,7 @@ mission_id (
 type_all_count (
 state (
 listener_cur_num (
-listener_max_num (",
-p_map_goods
-goods_id (
-num ("9
+listener_max_num ("9
 p_weapon_reinforce_goods
 goods_id (
 num ("5
@@ -765,30 +781,17 @@ section_id (
 x (	
 y (	
 z (+
-	role_info (2.ztGame.proto.p_map_role"û
+	role_info (2.ztGame.proto.p_map_role"«
 map_sight_s2c
 frame_id (-
-roles_enter (2.ztGame.proto.p_map_role2
-
-mons_enter (2.ztGame.proto.p_simple_map_mon7
-buffpoint_enter (2.ztGame.proto.p_map_buff_point<
-debuff_point_enter (2 .ztGame.proto.p_map_debuff_point"M
+roles_enter (2.ztGame.proto.p_map_role,
+	map_goods (2.ztGame.proto.p_map_goods+
+circles (2.ztGame.proto.p_map_circle"M
 map_role_enter_s2c'
 roles (2.ztGame.proto.p_map_role
 revive ("#
 map_role_leave_s2c
-roles ("?
-map_move_c2s
-
-id (
-direct (
-move_status ("E
-map_move_s2c
-
-id (	
-x (	
-y (
-move_status (":
+roles (":
 map_mon_enter_s2c%
 mons (2.ztGame.proto.p_map_mon" 
 map_mon_leave_s2c
@@ -822,26 +825,7 @@ mons_enter (2.ztGame.proto.p_simple_map_mon7
 map_mon_dead_s2c
 
 id (
-code ("l
-map_role_dead_s2c
-
-id (
-	attack_id (
-	weapon_id (
-type (
-attack_position ("
-map_finish_s2c
-code ("%
-map_time_control_c2s
-state ("$
-map_time_control_s2c
-code ("H
-map_attack_c2s
-src_id (&
-damage (2.ztGame.proto.p_damage"H
-map_attack_s2c
-src_id (&
-damage (2.ztGame.proto.p_damage"O
+code ("O
 map_buff_point_enter_s2c3
 buff_points (2.ztGame.proto.p_map_buff_point"'
 map_buff_point_leave_s2c
@@ -877,14 +861,35 @@ mons_enter (2.ztGame.proto.p_simple_map_mon7
 map_frame_s2c
 start_id (
 end_id ((
-data (2.ztGame.proto.p_role_frame"-
-map_bc_info_c2s
-type (
-data (	">
-map_bc_info_s2c
-role_id (
-type (
-data (	"
+data (2.ztGame.proto.p_role_frame" 
+map_pick_goods_c2s
+
+id ("l
+map_pick_goods_s2c
+code (
+
+id (
+
+discard_id ((
+goods (2.ztGame.proto.p_map_goods"#
+map_discard_goods_c2s
+
+id ("1
+map_discard_goods_s2c
+code (
+
+id ("
+map_use_goods_c2s
+
+id (":
+map_use_goods_s2c
+code (
+
+id (
+num ("a
+map_update_goods_s2c
+remove_id_list (1
+add_goods_list (2.ztGame.proto.p_map_goods"
 goods_info_c2s
 repos ("J
 goods_info_s2c
