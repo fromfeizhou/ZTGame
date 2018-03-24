@@ -263,6 +263,13 @@ function GlobalBattleCtrl:GetCurCommandFrame()
 	end
 	return 0
 end
+--@brief 获得当前逻辑帧计数
+function GlobalBattleCtrl:GetCurServerCommandFrame()
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		return GlobalBattleCtrl.m_battleCommandMgr.m_nServerFrame
+	end
+	return 0
+end
 
 --@brief 塞入队列
 function GlobalBattleCtrl:AddCommandList(frame,commandList)

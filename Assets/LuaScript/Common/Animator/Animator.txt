@@ -43,7 +43,7 @@ end
 function Animator:Destroy()
 	CSLog("Animator:Destroy")
 	if self.m_goAnima then
-		CSGameObject:Destroy(self.m_goAnima)
+		CSGameObject.Destroy(self.m_goAnima)
 		self.m_goAnima = nil
 	end
 

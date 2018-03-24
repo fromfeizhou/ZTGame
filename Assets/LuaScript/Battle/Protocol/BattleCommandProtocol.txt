@@ -151,7 +151,6 @@ function BattleCommandProtocol:SendCommandFrameMsg(data)
 	local pbData = {}
 	pbData.model = PB_MAP.MODEL
 	pbData.command = PB_MAP.ROLE_FRAME
-
 	pbData.data = data
 	NetWorkManager:SendNetMsg(pbData)
 end
@@ -290,6 +289,8 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 			if v.type == BattleCommandType.Move then
 				local battleId,dir,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
 				command = BattleMoveCommand:CreateServer(battleId,dir,x,y,z)
+				--CSLog("BattleCommandProtocol:_OnMapFrame Move",v.frame_id,GlobalBattleCtrl:GetCurCommandFrame(),GlobalBattleCtrl:GetCurServerCommandFrame())
+				--CSLog("BattleCommandProtocol:_OnMapFrame Move",SerializeTable(command))
 				if not commands[v.frame_id] then
 					commands[v.frame_id] = {}
 				end
