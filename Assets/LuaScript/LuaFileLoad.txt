@@ -41,6 +41,13 @@ local LuaFileLoad = {
 
 	},
 
+--加载配置文件
+	G_tConfigList = {
+		"ALuaConfig.tab_Equipment"
+
+
+	},
+
 	--游戏lua文件
 	G_tGameList = {
 		"Common.Data.CommonData",
@@ -48,6 +55,7 @@ local LuaFileLoad = {
 		"Common.Animator.Animator",
 
 		--战斗关联
+		"Battle.Protocol.BattleCommandProtocol",
 		"Battle.Protocol.BattleProtocol",
 		"Battle.BattleDefine",
 		"Battle.BattleMapHeight",
@@ -66,8 +74,8 @@ local LuaFileLoad = {
 		"Battle.Character.ZTCharaManager",
 
 		"Battle.Skill.SkillDefine",
+		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.Collider.ZTCollider",
-		"Battle.Skill.Effect.SkillEffect",
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionPlay",
@@ -80,6 +88,7 @@ local LuaFileLoad = {
 		"Battle.BattleUI.MoveJoystick",
 		"Battle.BattleUI.SkillJoystick",
 		"Battle.BattleUI.BattleUIMgr",
+		"Battle.BattleUI.HeadItemManager",
 		"Battle.BattleUI.BattleModel",
 		"Battle.BattleUI.MapScrollPanel",
 		"Battle.BattleUI.MapRadarPanel",
@@ -124,6 +133,15 @@ end
 
 --@brief 加载游戏逻辑lua文件
 function LuaFileLoad:LoadGameLua(loadDone)
+	--加载配置文件
+	for i=1, #(LuaFileLoad.G_tConfigList) do  
+    	local fileName = LuaFileLoad.G_tConfigList[i]
+    	if fileName and fileName ~= "" then
+    		require(fileName)
+    	end
+	end 
+
+	--加载游戏逻辑文件
 	for i=1, #(LuaFileLoad.G_tGameList) do  
     	local fileName = LuaFileLoad.G_tGameList[i]
     	if fileName and fileName ~= "" then

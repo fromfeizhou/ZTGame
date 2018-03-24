@@ -67,6 +67,7 @@ function Character:Init(battleData,container)
 	self.m_nAttack = battleData.attack
 
 	self.m_nState = 0
+	self.m_bIsDead = false
 	self.m_ztCollider =  ZTCollider:Create(0,BattleDefine.PlayerHeight,0,BattleDefine.PlayerRadius,BattleDefine.PlayerHeight)
 
 	self:UpdatePos(battleData.pos)
@@ -152,6 +153,7 @@ end
 
 --@brief 设置死亡
 function Character:SetDead(isDead)
+	-- CSLog("Character:SetDead",isDead)
 	if self.m_bIsDead == isDead then
 		return
 	end
@@ -219,15 +221,21 @@ function Character:SetHp(hp)
 	if self.m_nHp > self.m_nMaxHp then
 		self.m_nHp = self.m_nMaxHp
 	end
-
 	if self:IsInCamera() then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 	end
-	---test 临时代码begin 要服务器控制死亡装
-	if self.m_nHp <= 0 then
-		self:SetDead(true)
+
+	if GameConfig.IsSkillDebugScene then
+		if self.m_nHp <= 0 and not self:IsDead() then
+			self:SetDead(true)
+			local loopTimer = LoopTimer:Create(function()
+				self:SetHp(self:GetMaxHp())
+				self:SetDead(false)
+			end)
+			loopTimer:SetParam(5,1)
+			TimerManager:AddTimer(loopTimer)
+		end
 	end
-	---test 临时代码end
 end
 
 --@brief 最大血量
@@ -251,8 +259,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	local hurtInfo = {hurtType = 1,pos = self.m_tPos,value = value}
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTRE_POS,hurtInfo)
+	self:ChangeHp(value)
+
+	local hurtInfo = {hurtType = 1,pos = self.m_charaPos,value = value}
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
 
 

@@ -37,8 +37,8 @@ public class LuaMainScene : MonoBehaviour
 
     void Awake()
     {
-
-		luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
+        Application.targetFrameRate = 45;
+        luaEnv.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
 		luaEnv.AddBuildin("lpeg", XLua.LuaDLL.Lua.LoadLpeg);
 		luaEnv.AddBuildin("protobuf.c", XLua.LuaDLL.Lua.LoadProtobufC);
 

@@ -134,5 +134,5 @@ function MoveJoystick:_SendMoveCommand(dir)
 	end
 	-- CSLog("MoveJoystick:_SendMoveCommand")
 	self.m_sendDir = dir
-	BattleProtocol:SendMoveCommand(dir)
+	BattleCommandProtocol:SendMoveCommand(dir)
 end

@@ -1,0 +1,127 @@
+--HeadItemManager.txt
+--@breif 头像管理
+--@data 2018/03/23
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSGetWorldToScreenPoint = CS.GameTool.GetWorldToScreenPoint
+local CSText = CS.UnityEngine.UI.Text
+
+HeadItemManager = {
+	m_hurtGo = nil,		--飙血特效
+	m_canvas = nil,		--画布
+	m_container = nil,	--容器
+
+	m_tHurtNumList = nil,	--数字
+	m_nTiSpeed = nil,		--抛物线速度
+	m_nTiHorSpeedReduce = nil,	--水平减速度
+	m_nTiTime = nil,		--消失时间
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function HeadItemManager:Create()
+	local obj = {}
+	setmetatable( obj, { __index = HeadItemManager })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function HeadItemManager:Init()
+	CSLog("HeadItemManager:Init")
+	self.m_canvas = GlobalBattleCtrl:GetCanvasComp()
+	self.m_container = GlobalBattleCtrl:GetHeadContainer()
+	self.m_tHurtNumList = {}
+	self.m_nTiSpeed = 1.2
+	self.m_nTiHorSpeedReduce = 0.007
+	self.m_nTiTime = 0.9
+
+	self:_InitEvent()
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("HurtText"),function(target,path)
+		self.m_hurtGo = target
+	end)
+end
+
+--@brief 刷新
+function HeadItemManager:Update()
+	self:_UpdateHurtNum()
+end
+
+
+--@brief 移除
+function HeadItemManager:Destroy()
+	CSLog("HeadItemManager:Destroy")
+	self:_RemoveEvent()
+	self.m_hurtGo = nil
+	self.m_canvas = nil
+	self.m_container = nil
+	self.m_tHurtNumList = nil
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 监听事件
+function HeadItemManager:_InitEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum,self)
+end
+
+--@brief 移除事件
+function HeadItemManager:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum)
+end
+
+--@brief 添加伤害数字
+function HeadItemManager:_OnUpdateCharacterHurtNum(hurtInfo)
+	local hurtType,pos,value = hurtInfo.hurtType, hurtInfo.pos, hurtInfo.value
+	if self.m_hurtGo then
+		local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
+		local hurtGo = CSGameObject.Instantiate(self.m_hurtGo)
+		hurtGo.transform:SetParent(self.m_container,false)
+		hurtGo.transform.position = {x = uiPos.x, y = uiPos.y + 0.3, z = 0}
+		hurtGo.transform.localScale = {x = 1,y= 1,z = 1}
+		
+		local text = hurtGo:GetComponent(typeof(CSText))
+        text.text = value
+
+        local hurtNum = {
+        	text = text,
+        	oriPos = pos,
+        	time = self.m_nTiTime,		--消失时间
+        	horSpeed = math.random(8, 13)/10,	--水平速度随机值
+        	extent = 4,		--抛物线系数
+    	}
+    	table.insert(self.m_tHurtNumList,hurtNum)
+	end
+end
+
+--@brief 更新飙血动画
+function HeadItemManager:_UpdateHurtNum()
+	if not self.m_tHurtNumList then
+		return
+	end
+	local dt = 0.025
+	for i = #self.m_tHurtNumList ,1,-1 do
+		local hurtNum = self.m_tHurtNumList[i]
+		hurtNum.time = hurtNum.time - dt;
+		hurtNum.extent = hurtNum.extent - dt * self.m_nTiSpeed;
+		hurtNum.horSpeed = hurtNum.horSpeed - self.m_nTiHorSpeedReduce;
+		if hurtNum.time < 0.5 and hurtNum.time + dt > 0.5 then
+			hurtNum.text:CrossFadeAlpha(0,1,true)
+		end
+		if hurtNum.time <= 0 then
+			CSGameObject.Destroy(hurtNum.text.gameObject)
+			table.remove(self.m_tHurtNumList,i)
+			break
+		end
+		
+
+		local pos = CSGetWorldToScreenPoint(hurtNum.oriPos,self.m_canvas)
+		hurtNum.text.transform.position = {x = pos.x, y = pos.y + 0.3 + self.m_nTiTime - hurtNum.time, z = 0}
+	end
+end

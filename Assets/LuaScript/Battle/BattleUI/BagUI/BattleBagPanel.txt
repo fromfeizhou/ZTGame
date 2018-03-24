@@ -60,7 +60,9 @@ end
 
 --@brief 移除
 function BattleBagPanel:Destroy()
-	--CSLog("BattleBagPanel:Destroy")
+	CSLog("BattleBagPanel:Destroy")
+
+	self.mainRoot=nil
 
 end
 
@@ -97,15 +99,17 @@ function BattleBagPanel:_InitPanel()
 end
 
 --------------ui事件
-
+--点击背包按钮
 function BattleBagPanel:OnClickBagBtn()
 	self:UpdateEquip()
 	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
 end
 
+--刷新装备
 function  BattleBagPanel:UpdateEquip()
 
 	local  tempEquipDatas =GlobalBattleCtrl:GetBattleRoleEquipedList()
+	CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
 	for key, value in pairs(self.m_EquipList) do
 			value:UpdateCell(tempEquipDatas[key])
 	end
@@ -158,5 +162,5 @@ function BattleBagPanel:UnEquip(state,equipId)
 	local distance = self.m_nDistance
 	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
 
-	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
+	 BattleCommandProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
 end

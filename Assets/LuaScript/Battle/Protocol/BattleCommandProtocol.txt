@@ -1,0 +1,343 @@
+--BattleCommandProtocol.txt
+--@breif 战斗协议
+--@data 2018/03/13
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.CS.UnityEngine.Vector3
+
+
+BattleCommandProtocol = {
+	m_tCommandList = nil,		--操作集合
+
+	m_tstClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function BattleCommandProtocol:Init()
+	CSLog("BattleCommandProtocol:Init")
+
+	--@brief 监听协议
+	if not GameConfig.IsSkillDebugScene then
+		BattleCommandProtocol:_RegAll()
+	end
+end
+
+--@brief 移除
+function BattleCommandProtocol:Destroy()
+	CSLog("BattleCommandProtocol:Destroy")
+	--@brief 监听协议
+	if not GameConfig.IsSkillDebugScene then
+		BattleCommandProtocol:_UnRegAll()
+	end
+end
+
+
+--@brief 接收驱动帧
+function BattleCommandProtocol:ParseCommand(commands)
+	--数据存储
+	if commands then
+		for frame,commandList in pairs(commands) do
+			 GlobalBattleCtrl:AddCommandList(frame,commandList)
+		end
+	end
+	--驱动逻辑帧往前
+	 GlobalBattleCtrl:SetNextFrame()
+end
+
+--@brief 发送命令
+function BattleCommandProtocol:SendCommand(command)
+	local commandType = command.m_nType
+
+	--技能测试
+	if GameConfig.IsSkillDebugScene then
+		if commandType  == BattleCommandType.Collider then
+			GlobalBattleCtrl:AddColliderCommand(command)
+			return
+		end
+		BattleCommandProtocol:__TsClientInputCommand(command)
+		return
+	end
+
+	--发送给服务器
+
+	if commandType == BattleCommandType.Move then
+		BattleCommandProtocol:SendMoveFrameMsg(command)
+	elseif commandType == BattleCommandType.Skill then
+		BattleCommandProtocol:SendSkillFrameMsg(command)
+	elseif commandType == BattleCommandType.Collider then
+		BattleCommandProtocol:SendColliderFrameMsg(command)
+	end
+end
+
+--@brief 移动
+function BattleCommandProtocol:SendMoveCommand(dir)
+	local pos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),dir,pos)
+	BattleCommandProtocol:SendCommand(command)
+end
+
+--@brief 使用技能
+--@param skillId 技能id
+--@param pos 技能目标点
+function BattleCommandProtocol:SendSkillCommand(skillId,pos,targetId)
+	local command = BattleSkillCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,pos,targetId)
+	BattleCommandProtocol:SendCommand(command)
+end
+
+--@brief 
+--@param skillId 技能id
+--@param colliderPos 碰撞框中心
+--@param targetList 目标队列
+function BattleCommandProtocol:SendColliderCommand(skillId,colliderPos,targetList)
+	local command = BattleColliderCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,colliderPos,targetList)
+	BattleCommandProtocol:SendCommand(command)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 监听协议
+function BattleCommandProtocol:_RegAll()
+	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH, BattleCommandProtocol._OnSurvieMatch, BattleCommandProtocol)
+	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT, BattleCommandProtocol._OnSurvieFight, BattleCommandProtocol)
+	--地图相关协议
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT,BattleCommandProtocol._OnMapSight,BattleCommandProtocol)
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.FRAME,BattleCommandProtocol._OnMapFrame,BattleCommandProtocol)
+end
+
+--@brief 移除协议监听
+function BattleCommandProtocol:_UnRegAll()
+	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH)
+	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT)
+
+	--地图相关协议
+	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
+	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.FRAME)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************协议发送***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 发送匹配
+function BattleCommandProtocol:SendMath()
+	local pbData 	= {}
+	pbData.model 	= PB_SURVIVE.MODEL
+	pbData.command 	= PB_SURVIVE.MATCH
+	NetWorkManager:SendNetMsg(pbData)
+end
+
+--@brief 发送移动驱动帧消息
+function BattleCommandProtocol:SendMoveFrameMsg(command)
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+
+	local pbData = {}
+	pbData.model = PB_MAP.MODEL
+	pbData.command = PB_MAP.ROLE_FRAME
+	pbData.data = {}
+	pbData.data.frame_id = frame
+	pbData.data.type = command.m_nType
+	--发送服务器坐标转换
+	local pos = BattleDefine:GetServerPos(command.m_pos.x,command.m_pos.y,command.m_pos.z)
+	pbData.data.int_data = {command.m_nDir,pos.x,pos.y,pos.z}
+	pbData.data.str_data = ""
+	NetWorkManager:SendNetMsg(pbData)
+end
+
+--@brief 发送技能驱动帧消息
+function BattleCommandProtocol:SendSkillFrameMsg(command)
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local pbData = {}
+	pbData.model = PB_MAP.MODEL
+	pbData.command = PB_MAP.ROLE_FRAME
+	pbData.data = {}
+	pbData.data.frame_id = frame
+	pbData.data.type = command.m_nType
+	local pos = BattleDefine:GetServerPos(command.m_tSkillPos.x,command.m_tSkillPos.y,command.m_tSkillPos.z)
+	--技能id，技能操作x， y， z,指向目标id
+	pbData.data.int_data = {command.m_nSkillId,pos.x,pos.y,pos.z, command.m_nTargetId}
+	pbData.data.str_data = ""
+	NetWorkManager:SendNetMsg(pbData)
+end
+
+--@brief 发送碰撞驱动帧消息
+function BattleCommandProtocol:SendColliderFrameMsg(command)
+	local frame =GlobalBattleCtrl:GetCurCommandFrame()
+	local pbData = {}
+	pbData.model = PB_MAP.MODEL
+	pbData.command = PB_MAP.ROLE_FRAME
+	pbData.data = {}
+	pbData.data.frame_id = frame
+	pbData.data.type = command.m_nType
+	local pos = BattleDefine:GetServerPos(command.m_nColliderPos.x,command.m_nColliderPos.y,command.m_nColliderPos.z)
+	--技能id，碰撞x， y， z， 碰撞队列长度，碰撞队列id
+	local intData = {command.m_nSkillId,pos.x,pos.y,pos.z,#command.m_tTargetList}
+	for i = 1,#command.m_tTargetList do
+		table.insert(intData,command.m_tTargetList[i])
+	end
+	pbData.data.int_data = int_data
+	pbData.data.str_data = ""
+	NetWorkManager:SendNetMsg(pbData)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************协议接收***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 匹配返回
+function BattleCommandProtocol:_OnSurvieMatch(data)
+	CSLog("BattleCommandProtocol:_OnSurvieMatch",data.code)
+end
+
+--@brief 游戏开始
+function BattleCommandProtocol:_OnSurvieFight(data)
+	
+end
+
+--@brief 玩家信息
+function BattleCommandProtocol:_OnMapSight(data)
+	CSLog("BattleCommandProtocol:_OnMapSight",data.frame_id,SerializeTable(data.roles_enter))
+	if data.roles_enter then
+		local list = {}
+		for i,v in pairs(data.roles_enter) do
+			local data = {}
+			data.battleId = v.id
+			data.camp = v.team
+			data.hp = v.hp
+			data.pos = BattleDefine:GetClientPos(v.x,v.y,v.z)
+			list[data.battleId] = data
+		end
+
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.START_GAME,list)
+	end
+	--重置驱动帧管理器
+	GlobalBattleCtrl:ResetCommandList(data.frame_id,data.frame_id)
+	--[[
+	[1] = {
+    [hp] = 100
+    [y] = 0
+    [x] = 270
+    [job] = 0
+    [z] = 240
+    [level] = 1
+    [team] = 0
+    [d] = 0
+    [name] = 70459
+    [base_attr] = {
+        [hp_max] = 100
+        [defense_magical] = 0
+        [strength] = 0
+        [mp_rec] = 0
+        [hp_cur] = 0
+        [hp_rec] = 0
+        [speed] = 0
+        [defense_physical] = 0
+        [curse] = 0
+        [lucky] = 0
+        [attack] = 0
+        [magic] = 0
+        [wizard] = 0
+        }
+    [fight_point] = 2149
+    [sex] = 0
+    [shaping] = 0
+    [rank] = 3
+    [vip_level] = 0
+    [id] = 50485761
+    [state] = 0
+    }
+	]]
+end
+
+--@brief 接收驱动帧
+function BattleCommandProtocol:_OnMapFrame(sightData)
+	--data.start_id
+	--data.end_id
+	local commands = nil
+	if #sightData.data > 0 then
+		 --CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		commands = {}
+		for i,v in pairs(sightData.data) do
+			local command = nil
+			if v.type == BattleCommandType.Move then
+				local battleId,dir,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
+				command = BattleMoveCommand:CreateServer(battleId,dir,x,y,z)
+				if not commands[v.frame_id] then
+					commands[v.frame_id] = {}
+				end
+			elseif v.type == BattleCommandType.Skill then
+				local battleId,skillId,x,y,z,targetId = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],v.int_data[5]
+				command = BattleSkillCommand:CreateServer(battleId,skillId,x,y,z,targetId)
+
+			elseif v.type == BattleCommandType.Collider then
+				local battleId,skillId,x,y,z = v.role_id,v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
+				local list = {}
+				for i = 1,v.int_data[5] do
+					table.insert(list,v.int_data[5+i])
+				end
+				command = BattleColliderCommand:CreateServer(battleId,skillId,x,y,z,list)
+				--碰撞驱动帧优先处理 不塞入队列
+				if command then
+					GlobalBattleCtrl:AddColliderCommand(command)
+					command = nil
+				end
+			end
+			if command then
+				table.insert(commands[v.frame_id],command)
+			end
+		end
+	end
+	
+	BattleCommandProtocol:ParseCommand(commands)
+
+	--[[
+	[data] = {
+    [1] = {
+        [type] = 1
+        [int_data] = {
+            [1] = 5
+            [2] = 27000
+            [3] = 0
+            [4] = 24000
+            }
+        [str_data] = 
+        [frame_id] = 251
+        [role_id] = 50485761
+        }
+    }
+}
+	]]
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************测试代码***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brife 客户端模拟驱动帧发送(技能测试使用)
+function BattleCommandProtocol:__TsClientSendDriveCommand()
+	--发送驱动帧
+	if not BattleCommandProtocol.m_tstClientCommandList then
+		BattleCommandProtocol:ParseCommand({})
+	else
+		BattleCommandProtocol:ParseCommand(BattleCommandProtocol.m_tstClientCommandList)
+	end
+	BattleCommandProtocol.m_tstClientCommandList = {}
+end
+
+--@brife 客户端模拟塞入驱动帧
+function BattleCommandProtocol:__TsClientInputCommand(command)
+	--CSLog("BattleCommandProtocol:__TsClientInputCommand",SerializeTable(command))
+	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	if not BattleCommandProtocol.m_tstClientCommandList then
+		BattleCommandProtocol.m_tstClientCommandList = {}
+	end
+	if not BattleCommandProtocol.m_tstClientCommandList[frame] then
+		BattleCommandProtocol.m_tstClientCommandList[frame] = {}
+	end
+	table.insert( BattleCommandProtocol.m_tstClientCommandList[frame], command )
+end
+

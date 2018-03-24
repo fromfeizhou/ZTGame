@@ -26,7 +26,7 @@ BattleDefine = {
 	CommandStep = 3,		--驱动帧步伐
 
 	PlayerSpeed = 0.05,		--移动速度
-	PlayerRadius = 0.4,		--碰撞半径
+	PlayerRadius = 0.5,		--碰撞半径
 	PlayerHeight = 1,		--碰撞高度
 }
 
@@ -201,6 +201,9 @@ BATTLE_EVENT = {
 	START_GAME = "BATTLE_EVENT_START_GAME",				--开始游戏
 	UPDATE_CHARACTER_GLASS = "BATTLE_EVENT_UPDATE_CHARACTER_GLASS",	 --刷新草丛id
 	RUSH_MAP_POINT  = "BATTLE_EVENT_RUSH_MAP_POINT",		--刷新毒圈中心
+
+	SHOW_MAP_QUICKBAG_PANEL="BATTLE_EVENT_SHOW_MAP_QUICKBAG_PANEL",
+	BATTLE_MAP_ALL_ITEMS="BATTLE_EVENT_BATTLE_MAP_ALL_ITEMS",
 }
 --@breif 获取战斗事件管理器
 function GBattleEvent:GetDispatcher()

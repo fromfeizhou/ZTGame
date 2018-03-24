@@ -37,7 +37,7 @@ function SkillJoystick:Init(skillId,parent)
 	CSLog("SkillJoystick:Init")
 	self.m_ctrlContainer = parent
 	self.m_nSkillId = skillId
-	self.m_nDistance = 100
+	self.m_nDistance = 1
 	--加载预设件
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
@@ -103,5 +103,5 @@ function SkillJoystick:_SendSkillCommand(pos)
 	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
 	local targetPos = CSVector3(charaPos.x + distance * deltaVec.x, charaPos.y, distance * deltaVec.z + charaPos.z)
 	local targetId = GlobalBattleCtrl:GetOwnerId()
-	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos,targetId)
+	 BattleCommandProtocol:SendSkillCommand(self.m_nSkillId,targetPos,targetId)
 end

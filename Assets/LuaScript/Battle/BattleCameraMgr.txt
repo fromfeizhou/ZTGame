@@ -85,6 +85,7 @@ end
 --@brifef 移除事件
 function BattleCameraMgr:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+	
 end
 
 --@brief 刷新镜头

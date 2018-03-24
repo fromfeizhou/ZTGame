@@ -1,0 +1,94 @@
+--BattleMapView.txt
+
+--BattleMapView.txt
+--@breif 战斗背包
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+
+
+local cellName=nil
+local cellIcon=nil
+
+BattleMapView = {
+	
+	m_transform=nil,
+	m_testCubeObj=nil,
+
+	m_tAllViewObj=nil,
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleMapView:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleMapView })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function BattleMapView:Init()
+	CSLog("BattleMapView:Init")
+	local gameObject = CSGameObject("BattleMapPropRoot",typeof(CSRectTransform))
+
+	self.m_transform = gameObject.transform
+ 	self:_InitCell()
+	m_tAllViewObj={}
+	--test
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+
+ 	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("TestProp"),callback_loadfinish)
+end
+
+function BattleMapView:_LoadAsseFinish(target,path)
+	local prefab = target
+ 		if prefab then
+ 			self.m_testCubeObj = CSGameObject.Instantiate(target,self.m_transform)
+			CSLog("BattleMapView:GetEquipCell: prefab load finish!") 
+ 		else
+			CSLog("BattleMapView:GetEquipCell: prefab load Error!") 
+		end
+end
+
+--@brief 移除
+function BattleMapView:Destroy()
+	CSLog("BattleMapView:Destroy")
+	if self.m_transform then
+		CSGameObject.Destroy(self.m_transform.gameObject)
+		self.m_transform = nil
+	end
+end
+
+
+--创建预设
+function BattleMapView:UpdateMapView(data)
+
+	for key,value in pairs(data) do
+
+
+
+	end
+
+
+	--battleCtrl:GetMaItemLie（）
+	--licat 
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
