@@ -282,7 +282,7 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	--data.end_id
 	local commands = nil
 	if #sightData.data > 0 then
-		 --CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
 		commands = {}
 		for i,v in pairs(sightData.data) do
 			local command = nil
