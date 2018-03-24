@@ -65,15 +65,9 @@ end
 
 function BattleItemManager:OnUpdateAllItem(data)
 
-temptale={}
-temptale.id=11
-temptale.name=""
 
-m_MapItemList["kengd"]=temptale
-
-m_MapItemList={"kengd"=temptale}
 	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnUpdateScenePos)
-}
+
 end
 
 -- --@brief 
