@@ -1,4 +1,4 @@
-Equipment = {
+tab_Equipment = {
 [10001] = { id = 10001, name = '武器Lv.1', type = 1, description = '伤害增加30-50', professional = 0, sex = 0, superposition = 0, hp = 0, damage_min = 30, damage_max = 50, defense = 0, attack_speed = 0, life_back = 0, energy_max = 0, lucky = 0, curse = 0, move = 0, wound_deeper = 0, damage_reduction = 0, skills_cd = 0,  },
 [10002] = { id = 10002, name = '武器Lv.2', type = 1, description = '伤害增加50-70', professional = 0, sex = 0, superposition = 0, hp = 0, damage_min = 50, damage_max = 70, defense = 0, attack_speed = 0, life_back = 0, energy_max = 0, lucky = 0, curse = 0, move = 0, wound_deeper = 0, damage_reduction = 0, skills_cd = 0,  },
 [10003] = { id = 10003, name = '武器Lv.3', type = 1, description = '伤害增加70-90', professional = 0, sex = 0, superposition = 0, hp = 0, damage_min = 70, damage_max = 90, defense = 0, attack_speed = 0, life_back = 0, energy_max = 0, lucky = 0, curse = 0, move = 0, wound_deeper = 0, damage_reduction = 0, skills_cd = 0,  },
