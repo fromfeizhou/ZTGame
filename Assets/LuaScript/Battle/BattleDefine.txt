@@ -26,7 +26,7 @@ BattleDefine = {
 	CommandStep = 3,		--驱动帧步伐
 
 	PlayerSpeed = 0.05,		--移动速度
-	PlayerRadius = 0.4,		--碰撞半径
+	PlayerRadius = 0.5,		--碰撞半径
 	PlayerHeight = 1,		--碰撞高度
 }
 

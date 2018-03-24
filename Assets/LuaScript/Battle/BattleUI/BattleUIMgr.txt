@@ -10,9 +10,10 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLayerMask = CS.UnityEngine.LayerMask
 local CSLog = CS.GameTool.Log
-
+local CSCanvas = CS.UnityEngine.Canvas
 
 BattleUIMgr = {
+	m_canvasComp = nil,		--画布
 	m_mainUIContainer = nil,	--ui主容器
 	m_ctrlContainer = nil,		--控制UI容器
 	m_skillContainer = nil,		--技能UI容器
@@ -36,7 +37,9 @@ end
 --@brief 初始化
 function BattleUIMgr:Init()
 	CSLog("BattleUIMgr:Init")
-	local canvasTrans = CSGameObject.Find("Canvas").transform
+	local canvas = CSGameObject.Find("Canvas")
+	self.m_canvasComp = canvas:GetComponent(typeof(CSCanvas))
+	local canvasTrans = canvas.transform
 	self.m_mainUIContainer = self:_CreateContainer("MainUIContainer")
 	self.m_mainUIContainer:SetParent(canvasTrans,false)
 	--控制UI容器
@@ -103,6 +106,8 @@ function BattleUIMgr:Destroy()
 		CSGameObject.Destroy(self.m_BattleBagContainer.gameObject)
 		self.m_BattleBagContainer = nil
 	end
+
+	self.m_canvas = nil
 end
 
 --@brief 刷新ui容器 
@@ -110,6 +115,16 @@ function BattleUIMgr:Update()
 	if GameConfig.IsSkillDebugScene then
 		self:_UpdateKeyBoardControl()
 	end
+end
+
+--@brief 获得画布
+function BattleUIMgr:GetCanvasComp()
+	return self.m_canvasComp
+end
+
+--@brief 获取头像容器
+function BattleUIMgr:GetHeadContainer()
+	return self.m_hpContainer
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -170,7 +185,7 @@ function BattleUIMgr:_CreateMatchUI()
 		rectTrans.anchoredPosition = CSVector2(100,-100)
 
 		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
-			BattleProtocol:SendMath()
+			BattleCommandProtocol:SendMath()
 			gameObject:SetActive(false)
 		end)
 	end)
@@ -234,5 +249,5 @@ function BattleUIMgr:_SendMoveCommand(dir)
 	end
 	-- CSLog("MoveJoystick:_SendMoveCommand")
 	BattleUIMgr.m_sendDir = dir
-	BattleProtocol:SendMoveCommand(dir)
+	BattleCommandProtocol:SendMoveCommand(dir)
 end

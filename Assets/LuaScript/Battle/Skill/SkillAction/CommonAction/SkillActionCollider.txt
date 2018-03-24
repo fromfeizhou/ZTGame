@@ -134,7 +134,7 @@ function SkillActionCollider:_CheckCollider()
 		end
 	end
 	if self:IsHost() and #list > 0 then
-		return BattleProtocol:SendColliderCommand(self:GetSkillId(),self.m_ztCollider.m_tPos,list)
+		return BattleCommandProtocol:SendColliderCommand(self:GetSkillId(),self.m_ztCollider.m_tPos,list)
 	end
 end
 
