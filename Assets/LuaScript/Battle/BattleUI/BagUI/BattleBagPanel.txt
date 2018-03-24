@@ -99,15 +99,17 @@ function BattleBagPanel:_InitPanel()
 end
 
 --------------ui事件
-
+--点击背包按钮
 function BattleBagPanel:OnClickBagBtn()
 	self:UpdateEquip()
 	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
 end
 
+--刷新装备
 function  BattleBagPanel:UpdateEquip()
 
 	local  tempEquipDatas =GlobalBattleCtrl:GetBattleRoleEquipedList()
+	CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
 	for key, value in pairs(self.m_EquipList) do
 			value:UpdateCell(tempEquipDatas[key])
 	end

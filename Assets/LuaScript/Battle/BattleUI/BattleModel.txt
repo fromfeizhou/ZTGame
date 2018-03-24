@@ -74,6 +74,7 @@ end
 
 function BattleModel:OnShowQuickBagPanel(data)
 	if self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL] then
+		CSLog("BattleModel:OnShowQuickBagPanel")
 		self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL]:ShowQuickPanel(data)
 	end
 end

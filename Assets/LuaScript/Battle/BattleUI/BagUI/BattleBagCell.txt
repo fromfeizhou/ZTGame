@@ -56,21 +56,24 @@ function BattleBagCell:_InitCell()
 end
 
 -- 更新Cell
-function BattleBagCell:UpdateCell( table )
+function BattleBagCell:UpdateCell( itemId )
 
-	if table then
-		self:UpdateData(table)
+	CSLog("BattleBagCell:UpdateCell",itemId)
+	if itemId then
+		self:UpdateData(itemId)
 	else
 		self:HideCell()
 	end
 end
 
 --刷新数据
-function BattleBagCell:UpdateData(table)
-	self.cellName.text=table.Name
-	-- body
+function BattleBagCell:UpdateData(itemId)
+	
+	if tab_Equipment[itemId] then
+		self.cellName.text=tab_Equipment[itemId].name
+		self.m_transform.gameObject:SetActive(true)
+	end
 end
-
 
 --隐藏cell
 function BattleBagCell:HideCell()

@@ -61,17 +61,12 @@ PB_MAP = {
 	SIGHT = 3, 		--视野信息
 	ROLE_ENTER = 4, 		--玩家进入视野
 	ROLE_LEAVE = 5, 		--玩家离开视野
-	MOVE = 6, 		--玩家移动
 	MON_ENTER = 7, 		--怪物进入场景
 	MON_LEAVE = 8, 		--怪物离开场景
 	MON_MOVE = 9, 		--怪物移动
 	ROLE_UPDATE = 10, 		--更新P_MAP_ROLE部分数据
 	MON_UPDATE = 11, 		--更新P_MAP_MON部分数据
 	MON_DEAD = 12, 		--怪物死亡
-	ROLE_DEAD = 13, 		--角色死亡
-	FINISH = 14, 		--通关
-	TIME_CONTROL = 15, 		--副本时间控制
-	ATTACK = 16, 		--攻击
 	BUFF_POINT_ENTER = 17, 		--BUFF点进入场景
 	BUFF_POINT_LEAVE = 18, 		--BUFF点离开场景
 	BUFF_POINT_GET = 19, 		--获得BUFF点
@@ -80,7 +75,10 @@ PB_MAP = {
 	DEBUFF_POINT_GET = 22, 		--获得DEBUFF点
 	ROLE_FRAME = 23, 		--玩家帧消息
 	FRAME = 24, 		--驱动帧消息
-	BC_INFO = 25, 		--活动总信息
+	PICK_GOODS = 25, 		--捡起物品
+	DISCARD_GOODS = 26, 		--丢弃物品
+	USE_GOODS = 27, 		--使用物品道具
+	UPDATE_GOODS = 28, 		--物品更新
 }
 
 --@brife 物品

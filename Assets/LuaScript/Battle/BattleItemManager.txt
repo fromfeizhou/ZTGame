@@ -11,7 +11,7 @@ local CSLog = CS.GameTool.Log
 BattleMapItemDada = {
 	
 	itemPos=nil,
-	netId=nil,
+	id=nil,
 	itemId=nil,
 	itemNum=nil,
 }
@@ -42,12 +42,12 @@ end
 --@brief 初始化
 function BattleItemManager:Init()
 	CSLog("BattleItemManager:Init")
-	self.m_OwnerEquipList={}
-	self.m_OwnerEquipList[1]={Name="大刀"}
-	self.m_OwnerEquipList[2]={Name="护甲"}
-	--self.m_OwnerEquipList[3]={Name="宠物"}
-	self.m_OwnerEquipList[4]={Name="戒指"}
-	self.m_OwnerEquipList[5]={Name="项链"}
+	 self.m_OwnerEquipList={}
+	-- self.m_OwnerEquipList[1]={Name="大刀"}
+	-- self.m_OwnerEquipList[2]={Name="护甲"}
+	-- --self.m_OwnerEquipList[3]={Name="宠物"}
+	-- self.m_OwnerEquipList[4]={Name="戒指"}
+	-- self.m_OwnerEquipList[5]={Name="项链"}
 
 	self:_AddEvent()
 end
@@ -63,9 +63,41 @@ function BattleItemManager:_RemoveEvent()
 	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnUpdateScenePos)
 end
 
-function BattleItemManager:OnUpdateAllItem(data)
+function BattleItemManager:OnUpdateAllItem(map_sight_s2c)
+	CSLog("BattleItemManager:OnUpdateAllItem>>>>")
+	if map_sight_s2c then 
+		if map_sight_s2c.map_goods then  
+			self.m_MapItemList={}
+		 	for key,value in pairs(map_sight_s2c.map_goods) do
+	 			local tempItem = {}
+	 			tempItem.id=value.id
+	 			tempItem.itemId=value.type_id
+	 			tempItem.itemNum=value.num
+	 			tempItem.itemPos=CSVector3(value.x,value.y,value.z)
+	 			self.m_MapItemList[tempItem.id]=tempItem
+	 			--CSLog("BattleItemManager: GetAllItem Id: ",value.id)
+	 		end
+	 	end
 
-
+	 	if map_sight_s2c.roles_enter then
+	 		self.m_OwnerEquipList={}
+	 		local tempItem=map_sight_s2c.roles_enter.goods
+	 		if tempItem then
+	 			if tab_Equipment[tempItem.id] then
+	 				local itemData = tab_Equipment[tempItem.id]
+	 				if itemData.type~=6 then
+	 					self.m_OwnerEquipList[itemData.type]=tempItem.type_id
+	 					CSLog("BattleItemManager: RoleEquip Id: ",tempItem.type_id)
+					end
+				end
+	 		else
+	 			CSLog("没有数据：使用模拟数据")
+	 			self.m_OwnerEquipList[1]=10001
+				self.m_OwnerEquipList[2]=20001
+				self.m_OwnerEquipList[5]=50001
+	 		end
+	 	end
+	end		
 	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnUpdateScenePos)
 
 end
@@ -99,7 +131,7 @@ function GetCurMapBlockItem(pos)
 	for key,value in pairs(self.m_MapItemList) do
 		local  tempPos = value.itemPos
 		if(tempPos.x>=pos.min.x and tempPos<=pos.max.x and tempPos.y>=pos.min.y and tempPos.y<=pos.max.y) then
-			tempItems[value.netId]=value
+			tempItems[value.id]=value
 		end
 	end
 	return {}
