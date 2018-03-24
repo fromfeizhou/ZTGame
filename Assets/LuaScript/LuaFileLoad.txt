@@ -55,7 +55,7 @@ local LuaFileLoad = {
 		"Common.Animator.Animator",
 
 		--战斗关联
-		"Battle.Protocol.BattleProtocol",
+		"Battle.Protocol.BattleCommandProtocol",
 		"Battle.BattleDefine",
 		"Battle.BattleMapHeight",
 		"Battle.BattleCameraMgr",
@@ -73,8 +73,8 @@ local LuaFileLoad = {
 		"Battle.Character.ZTCharaManager",
 
 		"Battle.Skill.SkillDefine",
+		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.Collider.ZTCollider",
-		"Battle.Skill.Effect.SkillEffect",
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionPlay",
@@ -87,6 +87,7 @@ local LuaFileLoad = {
 		"Battle.BattleUI.MoveJoystick",
 		"Battle.BattleUI.SkillJoystick",
 		"Battle.BattleUI.BattleUIMgr",
+		"Battle.BattleUI.HeadItemManager",
 		"Battle.BattleUI.BattleModel",
 		"Battle.BattleUI.MapScrollPanel",
 		"Battle.BattleUI.MapRadarPanel",

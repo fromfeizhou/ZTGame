@@ -18,14 +18,15 @@ SkillEffectDefine = {
 function SkillEffectDefine:ParseEffect(userId,targetId,effectData,colliderPos)
 	local effectType = effectData[1]
 	if effectType == SkillEffectType.Hurt then
-		SkillEffectDefine:CalculateHurt(userId,targetId,effectData)
+		SkillEffectDefine:CalculateHurt(userId,targetId)
 	end
 end
 
 --@brief 计算伤害
-function SkillEffectDefine:CalculateHurt(userId,targetId,effectData)
+function SkillEffectDefine:CalculateHurt(userId,targetId)
 	local charaA = GlobalBattleCtrl:GetCharaById(userId)
 	local charaB = GlobalBattleCtrl:GetCharaById(targetId)
+
 	if not charaA or not charaB then
 		return
 	end

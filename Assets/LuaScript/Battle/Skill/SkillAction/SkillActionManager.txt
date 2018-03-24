@@ -93,8 +93,12 @@ end
 
 --@brief 碰撞按照服务器顺序优先处理
 function SkillActionManager:AddColliderCommand(colliderCommand)
-	local ownerId,skillId,pos = colliderCommand.m_nBattleId,colliderCommand.m_nSkillId,colliderCommand.m_nColliderPos
-	CSLog("colliderCommand - ",ownerId,skillId,pos)
+	local ownerId,skillId,pos,targetList = colliderCommand.m_nBattleId,colliderCommand.m_nSkillId,colliderCommand.m_nColliderPos,colliderCommand.m_tTargetList
+	local effectData = {SkillEffectType.Hurt}
+	for i=1,#targetList do
+		local targetId = targetList[i]
+		SkillEffectDefine:ParseEffect(ownerId,targetId,effectData,pos)
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

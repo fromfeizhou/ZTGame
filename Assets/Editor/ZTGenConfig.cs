@@ -64,6 +64,7 @@ public static class ExampleGenConfig
         typeof(Action<string,float,float>),
 		typeof(Action<int,ByteBuffer>),
         typeof(Action<Vector2>),
+        typeof(Func<Vector3,Canvas,Vector3>),
     };
 
 	//黑名单

@@ -60,7 +60,7 @@ function BattleCommandMgr:Update()
 	else
 		--技能测试
 		if GameConfig.IsSkillDebugScene then
-			BattleProtocol:__TsClientSendDriveCommand()
+			BattleCommandProtocol:__TsClientSendDriveCommand()
 		end 
 	end
 end

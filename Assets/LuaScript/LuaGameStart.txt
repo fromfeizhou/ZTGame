@@ -79,5 +79,6 @@ function LuaGameStart:_EnterSkillDebug()
 	luaFieLoad:LoadGameLua(function()
 		print("LuaGame:LoadGameLua")
 			ZTBattleScene:InitScene()
+			TimerManager:Create()
 	end)
 end

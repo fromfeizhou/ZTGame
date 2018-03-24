@@ -160,5 +160,5 @@ function BattleBagPanel:UnEquip(state,equipId)
 	local distance = self.m_nDistance
 	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
 
-	 BattleProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
+	 BattleCommandProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
 end

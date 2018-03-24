@@ -11,6 +11,7 @@ GlobalBattleCtrl = {
 	m_battleCommandMgr = nil,	--帧命令管理器
 	m_skillActionManager = nil,		--技能解析器
 	m_mapCircleManager = nil, --地图毒圈管理器
+	m_HeadItemManager = nil,	--头像管理
 	
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
@@ -46,6 +47,9 @@ function GlobalBattleCtrl:Init()
 
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
+
+	--头像管理
+	GlobalBattleCtrl.m_HeadItemManager = HeadItemManager:Create()
 	
 	--****************管理者初始化end************************************************
 
@@ -56,7 +60,7 @@ function GlobalBattleCtrl:Init()
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
 
 	--启动协议监听
-	BattleProtocol:Init()
+	BattleCommandProtocol:Init()
 end
 
 
@@ -92,11 +96,11 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_mapCircleManager:Destroy()
 		GlobalBattleCtrl.m_mapCircleManager = nil
 	end
-	
-	--主UI管理器(备注：最后移除)
-	if GlobalBattleCtrl.m_battleUIMgr then
-		GlobalBattleCtrl.m_battleUIMgr:Destroy()
-		GlobalBattleCtrl.m_battleUIMgr = nil
+
+	--头像管理
+	if GlobalBattleCtrl.m_HeadItemManager then
+		GlobalBattleCtrl.m_HeadItemManager:Destroy()
+		GlobalBattleCtrl.m_HeadItemManager = nil
 	end
 
 	--物资管理器
@@ -104,7 +108,13 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_BattleItemManager:Destroy()
 		GlobalBattleCtrl.m_BattleItemManager = nil
 	end
-	
+
+	--主UI管理器(备注：最后移除)
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Destroy()
+		GlobalBattleCtrl.m_battleUIMgr = nil
+	end
+
 	--清理全局事件管理器
 	GBattleEvent:RemoveDispatcher()
 end
@@ -157,6 +167,12 @@ function GlobalBattleCtrl:Update()
 	if GlobalBattleCtrl.m_mapCircleManager then
 		GlobalBattleCtrl.m_mapCircleManager:Update()
 	end
+
+	--头像管理
+	if GlobalBattleCtrl.m_HeadItemManager then
+		GlobalBattleCtrl.m_HeadItemManager:Update()
+	end
+	
 	BattleCameraMgr:Update()
 end
 
@@ -194,7 +210,9 @@ function GlobalBattleCtrl:MapGetCurMapBlock(pos)
 	return blockType,param
 end
 
-
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 对象管理相关接口begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 获得当前用户id
 function GlobalBattleCtrl:GetOwnerId()
@@ -228,6 +246,14 @@ end
 function GlobalBattleCtrl:GetOwnerTeamChara()
 	return GlobalBattleCtrl.m_ztCharaManager:GetOwnerTeamChara()
 end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 对象管理相关接口end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 帧命令相关接口begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 获得当前逻辑帧计数
 function GlobalBattleCtrl:GetCurCommandFrame()
@@ -288,6 +314,47 @@ function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)
 	end
 end
 
+function GlobalBattleCtrl:GetBattleRoleEquipedList()
+	if GlobalBattleCtrl.m_BattleItemManager then
+		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
+	end 
+	return {}
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 帧命令相关接口end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 容器相关接口begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief
+function GlobalBattleCtrl:GetUIModel()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		return GlobalBattleCtrl.m_battleUIMgr.m_UIModel
+	end
+end
+
+--@brief 获得h画布
+function GlobalBattleCtrl:GetCanvasComp()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		return GlobalBattleCtrl.m_battleUIMgr:GetCanvasComp()
+	end
+end
+
+--@brief 获得头像容器
+function GlobalBattleCtrl:GetHeadContainer()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		return GlobalBattleCtrl.m_battleUIMgr:GetHeadContainer()
+	end
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 容器相关接口end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 
 --@brief 获取目标对象
@@ -320,31 +387,6 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		end
 	end
 	return list
-end
-
---@brief
-function GlobalBattleCtrl:GetUIModel()
-	return GlobalBattleCtrl.m_battleUIMgr.m_UIModel
-end
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************全局控制器 End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************地图物资相关 Begin***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---获取当前地图块item数据
-function GlobalBattleCtrl:GetCurMapClockItem(pos)
-	return GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(pos)
-end
-
---获取人物装备
-function GlobalBattleCtrl:GetBattleRoleEquipedList()
-	if GlobalBattleCtrl.m_BattleItemManager then
-		return GlobalBattleCtrl.m_BattleItemManager.m_OwnerEquipList
-	end 
-	return {}
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

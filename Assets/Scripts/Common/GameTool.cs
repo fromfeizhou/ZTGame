@@ -71,7 +71,8 @@ public class GameTool
     {
         return gameObject == null && !ReferenceEquals(gameObject, null);
     }
-
+    
+    //获取两点夹角
     public static float SignedAngleBetween(Vector3 a, Vector3 b)
     {
         Vector3 n = Vector3.down;
@@ -79,5 +80,12 @@ public class GameTool
         float sign = Mathf.Sign(Vector3.Dot(n, Vector3.Cross(a, b)));
         float signed_angle = angle * sign;
         return (signed_angle < 0) ? 360 + signed_angle : signed_angle;
+    }
+
+    public static Vector3 GetWorldToScreenPoint(Vector3 scenePos,Canvas canvas)
+    {
+        Vector3 worldToScreenPoint = Camera.main.WorldToScreenPoint(scenePos);
+        Vector3 screenToWorldPoint = canvas.worldCamera.ScreenToWorldPoint(worldToScreenPoint);
+        return screenToWorldPoint;
     }
 }
