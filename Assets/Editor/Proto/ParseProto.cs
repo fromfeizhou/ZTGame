@@ -113,7 +113,7 @@ public class ParseProto{
 
 	}
 
-	private static List<cModule> ParseProtoToModuleList(){
+	public static List<cModule> ParseProtoToModuleList(){
 		List<cModule> moduleList = new List<cModule> ();
 		List<string> allLines = new List<string> (File.ReadAllLines (protoPath));
 		List<string> message = allLines.FindAll (a => a.Contains ("_s2c"));

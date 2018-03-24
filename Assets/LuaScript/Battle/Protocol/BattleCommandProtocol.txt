@@ -239,6 +239,8 @@ function BattleCommandProtocol:_OnMapSight(data)
 	end
 	--重置驱动帧管理器
 	GlobalBattleCtrl:ResetCommandList(data.frame_id,data.frame_id)
+
+	MapCircleManager:SetMapCircleCommand(data.circles)
 	--[[
 	[1] = {
     [hp] = 100
