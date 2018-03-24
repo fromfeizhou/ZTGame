@@ -61,7 +61,7 @@ end
 --@param name pb文件名字
 --@return string 地址
 function PathManager:GetBatteUINum(name)
-	return PathManager.m_sBattleUIPrefab .. name ..".prefab"
+	return PathManager.m_sBattleUINum .. name ..".prefab"
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
