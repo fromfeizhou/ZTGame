@@ -258,13 +258,13 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	--data.end_id
 	local commands = nil
 	if #sightData.data > 0 then
-		-- CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		 --CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
 		commands = {}
 		for i,v in pairs(sightData.data) do
 			local command = nil
 			if v.type == BattleCommandType.Move then
-				local battleId,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
-				command = BattleMoveCommand:CreateServer(battleId,x,y,z)
+				local battleId,dir,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
+				command = BattleMoveCommand:CreateServer(battleId,dir,x,y,z)
 				if not commands[v.frame_id] then
 					commands[v.frame_id] = {}
 				end

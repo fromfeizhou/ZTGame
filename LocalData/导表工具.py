@@ -114,7 +114,7 @@ def writeLua(fname):
 			excel_data_dict[cell_id.value] = row_data_list
 
  		# # export to lua file
- 		lua_export_file = open('../Assets/ResourcesLib/LuaScript/ALuaConfig/' + booksheet.name + '.txt', 'w')
+ 		lua_export_file = open('../Assets/LuaScript/ALuaConfig/' + booksheet.name + '.txt', 'w')
  		lua_export_file.write('%s = {\n' % booksheet.name)
  		# 遍历excel数据字典 按格式写入
  		for k, v in excel_data_dict.items():

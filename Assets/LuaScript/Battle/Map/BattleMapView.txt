@@ -19,7 +19,9 @@ local cellIcon=nil
 BattleMapView = {
 	
 	m_transform=nil,
+	m_testCubeObj=nil,
 
+	m_tAllViewObj=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -40,6 +42,23 @@ function BattleMapView:Init()
 
 	self.m_transform = gameObject.transform
  	self:_InitCell()
+	m_tAllViewObj={}
+	--test
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+
+ 	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("TestProp"),callback_loadfinish)
+end
+
+function BattleMapView:_LoadAsseFinish(target,path)
+	local prefab = target
+ 		if prefab then
+ 			self.m_testCubeObj = CSGameObject.Instantiate(target,self.m_transform)
+			CSLog("BattleMapView:GetEquipCell: prefab load finish!") 
+ 		else
+			CSLog("BattleMapView:GetEquipCell: prefab load Error!") 
+		end
 end
 
 --@brief 移除
@@ -54,6 +73,14 @@ end
 
 --创建预设
 function BattleMapView:UpdateMapView(data)
+
+	for key,value in pairs(data) do
+
+
+
+	end
+
+
 	--battleCtrl:GetMaItemLie（）
 	--licat 
 end

@@ -43,7 +43,7 @@ local LuaFileLoad = {
 
 --加载配置文件
 	G_tConfigList = {
-		"ALuaConfig.Equipment"
+		"ALuaConfig.tab_Equipment"
 
 
 	},
@@ -56,6 +56,7 @@ local LuaFileLoad = {
 
 		--战斗关联
 		"Battle.Protocol.BattleCommandProtocol",
+		"Battle.Protocol.BattleProtocol",
 		"Battle.BattleDefine",
 		"Battle.BattleMapHeight",
 		"Battle.BattleCameraMgr",

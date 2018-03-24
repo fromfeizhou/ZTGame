@@ -27,7 +27,7 @@ BattleMapMgr = {
 --@brief 初始化
 function BattleMapMgr:Init(pos)
 	CSLog("BattleMapMgr:Init")
-	m_nTimeCount=5
+	self.m_nTimeCount=5
 	self:UpdatePos(pos)
 	self.m_battleMapView=BattleMapView:Create()
 	BattleMapMgr:_AddEvent()
@@ -92,8 +92,8 @@ end
 
 --检测role可拾取item
 function BattleMapMgr:UpdateRoleDistance(pos)
-	m_nTimeCount=m_nTimeCount+1
-	if m_nTimeCount >5 then
+	self.m_nTimeCount=self.m_nTimeCount+1
+	if self.m_nTimeCount >5 then
 		local tempPockItems={}
 		for key,value in pairs(self.m_curMapBlockItem) do
 			local  distance = CSVector3.Distance(pos,value.itemPos)
@@ -103,9 +103,9 @@ function BattleMapMgr:UpdateRoleDistance(pos)
 			end
 		end
 		self:IsDisEvent(tempPockItems)
-		m_nTimeCount=m_nTimeCount%5
+		self.m_nTimeCount=self.m_nTimeCount%5
 	else
-		m_nTimeCount=m_nTimeCount+1
+		self.m_nTimeCount=self.m_nTimeCount+1
 	end
 end
 

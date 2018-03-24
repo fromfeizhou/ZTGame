@@ -61,6 +61,7 @@ function GlobalBattleCtrl:Init()
 
 	--启动协议监听
 	BattleCommandProtocol:Init()
+	BattleProtocol:Init()
 end
 
 
