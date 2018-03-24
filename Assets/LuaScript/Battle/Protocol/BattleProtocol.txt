@@ -1,0 +1,121 @@
+--BattleProtocol.txt
+--@breif 战斗协议
+--@data 2018/03/13
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.CS.UnityEngine.Vector3
+
+
+BattleProtocol = {
+	m_tCommandList = nil,		--操作集合
+
+	m_tstClientCommandList = nil,		--客户端模拟驱动帧(技能测试使用)
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function BattleProtocol:Init()
+	CSLog("BattleProtocol:Init")
+
+	--@brief 监听协议
+	if not GameConfig.IsSkillDebugScene then
+		BattleProtocol:_RegAll()
+	end
+end
+
+--@brief 移除
+function BattleProtocol:Destroy()
+	CSLog("BattleProtocol:Destroy")
+	--@brief 监听协议
+	if not GameConfig.IsSkillDebugScene then
+		BattleProtocol:_UnRegAll()
+	end
+end
+
+
+--@brief 发送命令
+function BattleProtocol:SendCommand(command)
+	local commandType = command.m_nType
+
+	--技能测试
+	if GameConfig.IsSkillDebugScene then
+		if commandType  == BattleCommandType.Collider then
+			GlobalBattleCtrl:AddColliderCommand(command)
+			return
+		end
+		BattleProtocol:__TsClientInputCommand(command)
+		return
+	end
+
+	--发送给服务器
+
+	if commandType == BattleCommandType.Move then
+		BattleProtocol:SendMoveFrameMsg(command)
+	elseif commandType == BattleCommandType.Skill then
+		BattleProtocol:SendSkillFrameMsg(command)
+	elseif commandType == BattleCommandType.Collider then
+		BattleProtocol:SendColliderFrameMsg(command)
+	end
+end
+
+--@brief 移动
+function BattleProtocol:SendMoveCommand(dir)
+	local pos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),dir,pos)
+	BattleProtocol:SendCommand(command)
+end
+
+--@brief 使用技能
+--@param skillId 技能id
+--@param pos 技能目标点
+function BattleProtocol:SendSkillCommand(skillId,pos,targetId)
+	local command = BattleSkillCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,pos,targetId)
+	BattleProtocol:SendCommand(command)
+end
+
+--@brief 
+--@param skillId 技能id
+--@param colliderPos 碰撞框中心
+--@param targetList 目标队列
+function BattleProtocol:SendColliderCommand(skillId,colliderPos,targetList)
+	local command = BattleColliderCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,colliderPos,targetList)
+	BattleProtocol:SendCommand(command)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 监听协议
+function BattleProtocol:_RegAll()
+
+	--视野信息,战斗推送
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT, BattleProtocol._OnGetBattleData, BattleProtocol)
+end
+
+--@brief 移除协议监听
+function BattleProtocol:_UnRegAll()
+	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************协议发送***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--推送战斗人物地图物品数据
+function BattleProtocol:_OnGetBattleData(map_sight_s2c)
+
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,map_sight_s2c)--）map_sight_s2c.map_Goods)
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************协议接收***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************测试代码***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
