@@ -205,6 +205,7 @@ function ZTCharaManager:_OnRemoveCharacter(battleId)
 	for i = 1,#self.m_tSortCharaList do
 		local chara = self.m_tSortCharaList[i]
 		if chara:GetBattleId() == battleId then
+			chara:Destroy()
 			table.remove(self.m_tSortCharaList,i)
 			break
 		end

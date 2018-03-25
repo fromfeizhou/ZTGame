@@ -106,7 +106,7 @@ end
 
 --@brief 设置方向
 function Character:SetDirection(dir)
-	--CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
+	-- CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
 		if self.m_nMoveDir == BattleDir.None then
@@ -177,6 +177,11 @@ function Character:GetColliderPos()
 	return self.m_ztCollider.m_tPos
 end
 
+--@brief 是否主机
+function Character:IsHost()
+	return GlobalBattleCtrl:GetOwnerId() == self.m_nBattleId
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 计算相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -202,6 +207,11 @@ function Character:ChangeHp(value)
 	local hp = self:GetHp()
 	hp  = hp + value
 	self:SetHp(hp)
+
+	--@brief 测试代码
+	if self:IsHost() and not GameConfig.IsSkillDebugScene then
+		BattleCommandProtocol:SendHpChange(value)
+	end
 end
 --@brief 血量
 function Character:GetHp()
