@@ -28,12 +28,22 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 注册
 function ZTProtocol:Register(model, command, delegates, target)
+	--技能测试
+	if GameConfig.IsSkillDebugScene then
+		return
+	end
+
 	local key = self:_GetKey(model,command)
 	self.m_eventDispatcher:AddEvent(key,delegates,target)
 end
 
 --@brief 注销
 function ZTProtocol:Unregister(model, command, delegates)
+	--技能测试
+	if GameConfig.IsSkillDebugScene then
+		return
+	end
+	
 	local key = self:_GetKey(model,command)
 	self.m_eventDispatcher:RemoveEvent(key,delegates)
 end

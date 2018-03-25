@@ -41,3 +41,18 @@ SkillEffectType = {
 	Arrtibute = 5,      --属性修改(改变血量等 一次性修改类型)
 }
 
+--@brief属性类型
+AttributeType = {
+	Hp = 1,		--血量
+	MaxHp = 2,	--最大血量
+	Attack = 3,		--攻击力
+}
+
+--@brief buff类型
+BuffType = {
+	Common = 1,	--通用类型
+	Attribute = 2, --额外属性固定值（纳入属性计算）
+	DynamicAttribute = 3, --动态属性（按某些计数 加成指定属性 例如按当前血量百分比 加攻击力）
+	CharaAttribute = 4,	--修改人物属性buff（中毒等 持续改变人物属性）
+	MagicShield = 5,--魔法盾
+}

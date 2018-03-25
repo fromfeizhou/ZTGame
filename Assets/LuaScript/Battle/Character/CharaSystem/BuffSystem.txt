@@ -1,0 +1,152 @@
+--BuffSystem.txt
+--@breif buff系统 
+--@data 2018/03/25
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+BuffSystem = {
+	m_chara = nil,		--buff系统挂钩着
+	m_tBuffList = nil,	--buff列表
+	m_attriSystem = nil,	--buff属性总加成
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BuffSystem:Create(chara)
+	local obj = {}
+	setmetatable( obj, { __index = BuffSystem })
+	obj:Init(chara)
+	return obj
+end
+
+--@brief 初始化
+function BuffSystem:Init(chara)
+	self.m_chara = chara
+	self.m_tBuffList = {}
+	self.m_attriSystem = AttributeSystem:Create()
+end
+
+
+--@brief 移除
+function BuffSystem:Destroy()
+	self.m_tBuffList = nil
+end
+
+--@brief 添加buff
+function BuffSystem:AddBuff( buffId )
+	local config = {id = 1,type = 2}
+	local buffType = config.type
+	
+	if not self.m_tBuffList[buffType] then
+		self.m_tBuffList[buffType] = {}
+	end
+
+	if not self.m_tBuffList[buffType][buffId] then
+		self.m_tBuffList[buffType][buffId] = {}
+	end
+
+	local buff = nil
+	if config.type == BuffType.Attribute then
+		buff = BuffAttribute:Create(owner,config)
+	elseif config.type == BuffType.ChangeAttribute then
+		buff = BuffChangeAttribute:Create(owner,config)
+	else
+		buff = BuffBase:Create(owner,config)
+	end
+
+	table.insert(self.m_tBuffList[buffType][buffId], buff )
+	--修改buff属性
+	self:ChangeBuffAttribute(buff,true)
+
+end
+
+--@brief 移除buff
+function BuffSystem:RemoveBuff(buff)
+	self:ChangeBuffAttribute(buff,false)
+	buff:Destroy()
+end
+
+--@brief 修改buff属性
+function BuffSystem:ChangeBuffAttribute(buff,isAdd)
+	if buff.m_nType == BuffType.Attribute then
+		local typeList = buff:GetArrtibuteTypes()
+		for i,attriType in pairs(typeList) do
+			local value = self.m_attriSystem:SetAttributeByType(attriType)
+			local buffValue = buff:SetAttributeByType(attriType)
+			if isAdd then
+				value = value + buffValue
+			else
+				value = value - buffValue
+			end
+			self.m_attriSystem:SetAttributeByType(attriType,value)
+		end
+	end
+end
+
+--@brief 添加buff
+function BuffSystem:RemoveBuffById( buffId )
+	local config = {id = 1,type = 2}
+	local buffType = config.type
+
+	if not self.m_tBuffList[buffType] then
+		return
+	end
+	if not self.m_tBuffList[buffType][buffId] then
+		return
+	end
+
+	local buffList = self.m_tBuffList[buffType][buffId]
+	for i,buff in pairs(buffList) do
+		self:RemoveBuff(buff)
+	end
+	self.m_tBuffList[buffType][buffId] = nil
+end
+
+--@brief 移除buff
+--@param buffType 类型
+function BuffSystem:RemoveBuffByType( buffType )
+	if not self.m_tBuffList[buffType] then
+		return
+	end
+	for buffType,buffList in pairs(self.m_tBuffList[buffType]) do
+		for i,buff in pairs(buffList) do
+			self:RemoveBuff(buff)
+		end
+	end
+	self.m_tBuffList[buffType] = nil
+end
+
+
+
+--@brief 清理buff
+function BuffSystem:ClearBuff()
+	self.m_tBuffList = nil
+end
+
+--@brief 添加buff
+function BuffSystem:UpdateCommand()
+	for buffType,buffTypeList in pairs(self.m_tBuffList) do
+		for buffId,buffList in pairs(buffTypeList) do
+			for i = #buffList, 1, -1 do
+				local buff = buffList[i]
+				buff:UpdateCommand()
+				if buff:IsFinish() then
+					self:RemoveBuff(buff)
+					table.remove(buffList,i)
+				end
+			end
+			self.m_tBuffList[buffType][buffId] = nil
+		end
+	end
+end
+
+--@brief 获取buff属性加成
+function BuffSystem:GetAttributeByType(attriType)
+	return self.m_attriSystem:GetAttributeByType(attriType)
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -129,6 +129,13 @@ end
 
 --@brife 发送移动操作
 function MoveJoystick:_SendMoveCommand(dir)
+	local owner = GlobalBattleCtrl:GetOwnerChara()
+	
+	if not owner or not owner:IsNormalState() then
+		return
+	end
+
+
 	if self.m_sendDir == dir then
 		return
 	end
