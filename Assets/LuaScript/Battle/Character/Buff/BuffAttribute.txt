@@ -1,0 +1,56 @@
+--BuffAttribute.txt
+--@breif 属性buff
+--@data 2018/03/25
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+BuffAttribute = {
+	m_tAttriTypes = nil,	--属性类型列表
+	m_tAttriList = nil,	--加成值
+}
+--@breif 继承SkillAction
+setmetatable( BuffAttribute, { __index = BuffBase})
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BuffAttribute:Create(owner,config)
+	local obj = {}
+	setmetatable( obj, { __index = BuffAttribute })
+	obj:Init(owner,config)
+	return obj
+end
+
+--@brief 初始化
+function BuffAttribute:Init(owner,config)
+	BuffBase.init(self,owner,config)
+	self.m_tAttriTypes = {AttributeType.Hp}
+	self.m_tAttriList = {}
+end
+
+--@brief 移除
+function BuffAttribute:Destroy()
+	
+end
+
+--@brief 获得属性列表
+function BuffAttribute:GetArrtibuteTypes()
+	return self.m_tAttriTypes
+end
+
+--@brief 获得属性
+function BuffAttribute:GetAttributeByType(attriType,value)
+	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
+		return 0
+	end
+	return self.m_tAttriList[attriType]
+end
+
+--@brief 设置属性
+function BuffAttribute:SetAttributeByType(attriType,value)
+	self.m_tAttriList[attriType] = value
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
