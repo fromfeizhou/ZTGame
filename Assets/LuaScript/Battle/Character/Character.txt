@@ -79,7 +79,7 @@ end
 
 --@brief 初始化属性系统
 function Character:InitArrtibuteSystem(battleData)
-	self.m_attriSystem = ArrtibuteSystem:Create()
+	self.m_attriSystem = AttributeSystem:Create()
 	self.m_attriSystem:SetArrtibuteByType(AttributeType.Hp,battleData.hp)
 	self.m_attriSystem:SetArrtibuteByType(AttributeType.MaxHp,battleData.maxHp)
 	self.m_attriSystem:SetArrtibuteByType(AttributeType.Attack,battleData.attack)

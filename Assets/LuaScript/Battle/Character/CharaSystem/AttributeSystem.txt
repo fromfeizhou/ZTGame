@@ -47,7 +47,7 @@ function AttributeSystem:SetArrtibuteByType(attriType,value)
 	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
 		return
 	end
-	return self.m_tAttriList[attriType] = value
+	self.m_tAttriList[attriType] = value
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

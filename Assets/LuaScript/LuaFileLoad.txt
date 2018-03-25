@@ -69,7 +69,14 @@ local LuaFileLoad = {
 		"Battle.BattleCommand.BattleCommandMgr",
 
 		"Battle.MapCircle.MapCircleManager",
-	
+
+		"Battle.Character.CharaSystem.AttributeSystem",
+		"Battle.Character.CharaSystem.BuffSystem",
+		"Battle.Character.Buff.BuffBase",
+		"Battle.Character.Buff.BuffAttribute",
+		"Battle.Character.Buff.BuffCharaAttribute",
+		"Battle.Character.Buff.BuffDynamicAttribute",
+
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
 
