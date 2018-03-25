@@ -154,11 +154,12 @@ function BuffSystem:GetAttributeByType(attriType)
 	local value = self.m_attriSystem:GetAttributeByType(attriType)
 	local buffTypeList = self.m_tBuffList[BuffType.DynamicAttribute]
 	local dynamicVal = 0
-
-	for buffId,buffList in pairs(buffTypeList) do
-		for i,buff in pairs(buffList) do
-			if not buff:IsFinish() then
-				dynamicVal = dynamicVal + buff:GetAttributeByType(attriType)
+	if buffTypeList then
+		for buffId,buffList in pairs(buffTypeList) do
+			for i,buff in pairs(buffList) do
+				if not buff:IsFinish() then
+					dynamicVal = dynamicVal + buff:GetAttributeByType(attriType)
+				end
 			end
 		end
 	end
