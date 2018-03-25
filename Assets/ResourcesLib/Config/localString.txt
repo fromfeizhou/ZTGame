@@ -1,5 +1,0 @@
-﻿Login:登录
-Name:名字AA
-Server:服务器\nBB
-COMMON_ICON:图标
-COMMON_SERVER:dddd
