@@ -284,24 +284,25 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	--data.end_id
 	local commands = nil
 	if #sightData.data > 0 then
-		CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		-- CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		-- CSLog("BattleCommandProtocol:_OnMapFrame",GlobalBattleCtrl:GetCurCommandFrame())
 		commands = {}
 		for i,v in pairs(sightData.data) do
+			if not commands[v.frame_id] then
+				commands[v.frame_id] = {}
+			end
+			
 			local command = nil
 			if v.type == BattleCommandType.Move then
 				local battleId,dir,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
 				command = BattleMoveCommand:CreateServer(battleId,dir,x,y,z)
-				--CSLog("BattleCommandProtocol:_OnMapFrame Move",v.frame_id,GlobalBattleCtrl:GetCurCommandFrame(),GlobalBattleCtrl:GetCurServerCommandFrame())
-				--CSLog("BattleCommandProtocol:_OnMapFrame Move",SerializeTable(command))
-				if not commands[v.frame_id] then
-					commands[v.frame_id] = {}
-				end
+				
 			elseif v.type == BattleCommandType.Skill then
 				local battleId,skillId,x,y,z,targetId = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4],v.int_data[5]
 				command = BattleSkillCommand:CreateServer(battleId,skillId,x,y,z,targetId)
 
 			elseif v.type == BattleCommandType.Collider then
-				local battleId,skillId,x,y,z = v.role_id,v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
+				local battleId,skillId,x,y,z = v.role_id,v.int_data[1],v.int_data[2],v.int_data[3],v.int_data[4]
 				local list = {}
 				for i = 1,v.int_data[5] do
 					table.insert(list,v.int_data[5+i])

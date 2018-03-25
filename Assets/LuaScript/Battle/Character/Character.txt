@@ -106,7 +106,7 @@ end
 
 --@brief 设置方向
 function Character:SetDirection(dir)
-	CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
+	-- CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
 		if self.m_nMoveDir == BattleDir.None then
