@@ -32,7 +32,7 @@ function BuffDynamicAttribute:Destroy()
 end
 
 --@brief 获得属性
-function BuffDynamicAttribute:SetAttributeByType(attriType)
+function BuffDynamicAttribute:GetAttributeByType(attriType)
 	return 0
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

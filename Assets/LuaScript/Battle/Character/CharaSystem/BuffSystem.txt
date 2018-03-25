@@ -108,10 +108,13 @@ end
 --@brief 移除buff
 --@param buffType 类型
 function BuffSystem:RemoveBuffByType( buffType )
-	if not self.m_tBuffList[buffType] then
+	local buffTypeList = self.m_tBuffList[buffType]
+
+	if not buffTypeList then
 		return
 	end
-	for buffType,buffList in pairs(self.m_tBuffList[buffType]) do
+
+	for buffId,buffList in pairs(buffTypeList) do
 		for i,buff in pairs(buffList) do
 			self:RemoveBuff(buff)
 		end
@@ -138,14 +141,28 @@ function BuffSystem:UpdateCommand()
 					table.remove(buffList,i)
 				end
 			end
-			self.m_tBuffList[buffType][buffId] = nil
+			--移除空列表
+			if #buffList == 0 then
+				self.m_tBuffList[buffType][buffId] = nil
+			end
 		end
 	end
 end
 
 --@brief 获取buff属性加成
 function BuffSystem:GetAttributeByType(attriType)
-	return self.m_attriSystem:GetAttributeByType(attriType)
+	local value = self.m_attriSystem:GetAttributeByType(attriType)
+	local buffTypeList = self.m_tBuffList[BuffType.DynamicAttribute]
+	local dynamicVal = 0
+
+	for buffId,buffList in pairs(buffTypeList) do
+		for i,buff in pairs(buffList) do
+			if not buff:IsFinish() then
+				dynamicVal = dynamicVal + buff:GetAttributeByType(attriType)
+			end
+		end
+	end
+	return value + dynamicVal
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
