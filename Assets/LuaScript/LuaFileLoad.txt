@@ -73,6 +73,10 @@ local LuaFileLoad = {
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
 
+		"Battle.Map.BattleMapMgr",
+		"Battle.Map.BattleMapView",
+
+
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.Collider.ZTCollider",

@@ -38,11 +38,10 @@ end
 --@brief 初始化
 function BattleMapView:Init()
 	CSLog("BattleMapView:Init")
-	local gameObject = CSGameObject("BattleMapPropRoot",typeof(CSRectTransform))
+	local gameObject = CSGameObject("BattleMapPropRoot")
 
 	self.m_transform = gameObject.transform
- 	self:_InitCell()
-	m_tAllViewObj={}
+	self.m_tAllViewObj={}
 	--test
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
@@ -74,12 +73,30 @@ end
 --创建预设
 function BattleMapView:UpdateMapView(data)
 
-	for key,value in pairs(data) do
+	CSLog("BattleMapView:UpdateMapView",#data)
+	local  needUnloadId = {}
 
 
-
+	for key,value in pairs(self.m_tAllViewObj) do
+		if  not data[key] then
+ 			table.insert(needUnloadId,key)
+		end
 	end
 
+	for key,value in pairs(needUnloadId) do
+		if self.m_tAllViewObj[key] then
+			CSGameObject.Destroy(self.m_tAllViewObj[key])
+			self.m_tAllViewObj[key]=nil
+		end
+	end
+
+	for key ,value in pairs(data) do
+		if not self.m_tAllViewObj[key] then
+			local  tempObj = CSGameObject.Instantiate(self.m_testCubeObj,self.m_transform)
+			tempObj.transform.position=value.itemPos
+			self.m_tAllViewObj[key]=tempObj
+		end
+	end
 
 	--battleCtrl:GetMaItemLie（）
 	--licat 

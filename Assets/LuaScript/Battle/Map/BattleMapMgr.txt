@@ -8,12 +8,10 @@ local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 local CSMathf = CS.UnityEngine.Mathf
 
-local  offset = 5
-local  radius = 10 --刷新物品距离
-local  interval = 0.3--可拾取距离
 
 BattleMapMgr = {
-	
+	m_nRadius=nil,--刷新物品距离
+	m_nInterval=nil,--可拾取距离
 	m_rolePos=nil,
 	m_curMapBlockItem=nil,
 	m_battleMapView=nil,
@@ -25,11 +23,15 @@ BattleMapMgr = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 初始化
-function BattleMapMgr:Init(pos)
+function BattleMapMgr:Init()
 	CSLog("BattleMapMgr:Init")
-	self.m_nTimeCount=5
-	self:UpdatePos(pos)
-	self.m_battleMapView=BattleMapView:Create()
+	BattleMapMgr.m_nRadius=10
+	BattleMapMgr.m_nViewRadius = 20
+	BattleMapMgr.m_nInterval=0.8
+	BattleMapMgr.m_nTimeCount=5
+	BattleMapMgr.m_rolePos=CSVector3.zero
+	BattleMapMgr.m_battleMapView=BattleMapView:Create()
+	BattleMapView.m_CanPickItem={}
 	BattleMapMgr:_AddEvent()
 end
 
@@ -46,6 +48,10 @@ function BattleMapMgr:Update()
 	end
 end
 
+--@brief 重置地图物品管理
+function BattleMapMgr:Reset( )
+	BattleMapMgr.m_rolePos = CSVector3.zero
+end
 
 
 
@@ -54,72 +60,116 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听事件
 function BattleMapMgr:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,BattleMapMgr._OnUpdateScenePos,BattleMapMgr)
+
 end
 
 --@brifef 移除事件
 function BattleMapMgr:_RemoveEvent()
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,BattleMapMgr._OnUpdateScenePos)
 end
 
 --@brief 事件刷新(role)
 function BattleMapMgr:_OnUpdateScenePos(pos)
 	-- CSLog("BattleMapMgr:_OnUpdateScenePos",pos)
-	BattleMapMgr:UpdatePos(pos)
-	BattleMapMgr:UpdateRoleDistance(pos)
+	BattleMapMgr:_UpdatePos(pos)
+	BattleMapMgr:_UpdateRoleDistance(pos)
 end
 
 --刷新位置
-function  BattleMapMgr:UpdatePos(pos)
-
+function  BattleMapMgr:_UpdatePos(pos)
+-- CSLog("BattleMapMgr:curPos  ",pos,BattleMapMgr.m_rolePos)
 	if not pos then 
 		pos=CSVector3.zero
 	end
 	
-	local  distanceX = CSMathf.Abs(pos.x-self.m_rolePos.x)
-	local distanceY = CSMathf.Abs(Pos.y-self.m_rolePos.y)
-	if distanceY>=self.radius and distanceX>=self.radius then
-		self.m_rolePos=pos
-		local  ranges = {}
-		ranges.min=CSVector2(pos.x-self.radius-self.offset,pos.x+self.radius+self.offset)
-		ranges.max=CSVector2(pos.y-self.radius-self.offset,pos.y+self.radius+self.offset)
+	local  distanceX = math.abs(pos.x - BattleMapMgr.m_rolePos.x)
+	local distanceZ = math.abs(pos.z - BattleMapMgr.m_rolePos.z)
+	if distanceZ>=BattleMapMgr.m_nRadius or distanceX>=BattleMapMgr.m_nRadius then
+		BattleMapMgr.m_rolePos = pos
+		ranges ={
+			lx = pos.x - BattleMapMgr.m_nViewRadius,
+			hx = pos.x + BattleMapMgr.m_nViewRadius,
+			lz = pos.z - BattleMapMgr.m_nViewRadius,
+			hz = pos.z + BattleMapMgr.m_nViewRadius,
+		}
+		BattleMapMgr.m_curMapBlockItem = GlobalBattleCtrl:GetCurMapClockItem(ranges)
+
+		if ZTableLen(BattleMapMgr.m_curMapBlockItem) > 0 then
+ 			BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
+		end
+	end
+end
+
+--
+function BattleMapMgr:UpdateMapItem(removeId,addItem)
+	
+	if BattleMapMgr.m_curMapBlockItem[removeId] then
+		BattleMapMgr.m_curMapBlockItem[removeId]=nil
+	end
+	if addItem then
+		local tempPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+		local ranges ={
+			lx = tempPos.x - BattleMapMgr.m_nViewRadius,
+			hx = tempPos.x + BattleMapMgr.m_nViewRadius,
+			lz = tempPos.z - BattleMapMgr.m_nViewRadius,
+			hz = tempPos.z + BattleMapMgr.m_nViewRadius,
+		}
+		if self:CheckInRang(addItem.itemPos,ranges) then
+			BattleMapMgr.m_curMapBlockItem[addItem.id]=addItem
+			BattleMapMgr.m_nTimeCount=5
+			self:_UpdateRoleDistance(tempPos)
+		end
+
+	end
+end
+
+--@brief 判断范围
+function BattleMapMgr:CheckInRang(pos,rangs)
+--	CSLog("BattleItemManager:CheckInRang",pos,SerializeTable(rangs))
+	if pos.x < rangs.lx then
+		return false
+	end
+	if pos.x > rangs.hx then
+		return false
+	end
+	if pos.z < rangs.lz then
+		return false
+	end
+	if pos.z > rangs.hz then
+		return false
 	end
 
-	self.m_curMapBlockItem=GlobalBattleCtrl:GetCurMapClockItem(ranges)
- 	self.m_battleMapView:UpdateMapView(self.m_curMapBlockItem)
-
+	return true
 end
 
 --检测role可拾取item
-function BattleMapMgr:UpdateRoleDistance(pos)
-	self.m_nTimeCount=self.m_nTimeCount+1
-	if self.m_nTimeCount >5 then
-		local tempPockItems={}
-		for key,value in pairs(self.m_curMapBlockItem) do
-			local  distance = CSVector3.Distance(pos,value.itemPos)
-			if distance <=self.interval then
-				local  temKey = value.netId
-				tempPockItems.temKey=value
+function BattleMapMgr:_UpdateRoleDistance(pos)
+	if BattleMapMgr.m_curMapBlockItem then
+		BattleMapMgr.m_nTimeCount=BattleMapMgr.m_nTimeCount + 1
+		if BattleMapMgr.m_nTimeCount >5 then
+			local tempPockItems={}
+			for key,value in pairs(BattleMapMgr.m_curMapBlockItem) do
+				local  distance = CSVector3.Distance(pos,value.itemPos)
+				if distance <=BattleMapMgr.m_nInterval then
+					local  temKey = value.id
+					tempPockItems[temKey] = value
+				end
 			end
+			BattleMapMgr:_IsDisEvent(tempPockItems)
+			BattleMapMgr.m_nTimeCount = BattleMapMgr.m_nTimeCount % 5
+		else
+			BattleMapMgr.m_nTimeCount = BattleMapMgr.m_nTimeCount + 1
 		end
-		self:IsDisEvent(tempPockItems)
-		self.m_nTimeCount=self.m_nTimeCount%5
-	else
-		self.m_nTimeCount=self.m_nTimeCount+1
 	end
 end
 
-
-function BattleMapMgr:IsDisEvent(newItem)
-	-- body
-	if #newItem ==#self.m_CanPickItem then
-		for key,value in pairs(newItem) do
-			if not self.m_CanPickItem.key then
-				GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL, newItem)
-				break
-			end
-		end
+--@brief 是否存在近距离物品
+function BattleMapMgr:_IsDisEvent(newItem)
+--CSLog("BattleMapMgr ",SerializeTable(newItem))
+	if ZTableLen(newItem) > 0 then
+		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.QUICKBAG,newItem)
 	else
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL, newItem)
+		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.QUICKBAG)
 	end
 end

@@ -11,13 +11,13 @@ local CSLog = CS.GameTool.Log
 local CSJoystick = CS.JoystickBase
 local  CSRectTransform = CS.UnityEngine.RectTransform
 
-local  testBtn =nil
-
 QuickBagPanel = {
 	
-	m_parent=nil,
-	m_gameObject=nil,
-	m_transform=nil,
+	m_parent=nil,--父节点
+	m_panelRoot=nil,--面板节点
+	m_transform=nil,--面板trans
+	m_quickPanelRoot=nil,--拾取界面
+	m_PagePanelRoot=nil,--包裹界面
 	m_ScrollView=nil,
 	m_Grid=nil,
 	m_ItemList=nil,
@@ -58,14 +58,12 @@ end
 function QuickBagPanel:_InitCell()
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("QuickBagPanel"),function(target,path)
  		if target then
- 			CSLog(">>>>>",target)
- 			self.m_gameObject = CSGameObject.Instantiate(target,self.m_parent)
- 			self.m_transform = self.m_gameObject.transform
- 			self.m_gameObject:SetActive(false)
+ 			self.m_panelRoot = CSGameObject.Instantiate(target,self.m_parent)
+ 			self.m_transform = self.m_panelRoot.transform
+ 			self.m_quickPanelRoot = self.m_transform:Find("ItemPanel")
+ 			self.m_quickPanelRoot.gameObject:SetActive(false)
 			self.m_ItemList={}
-			self.testBtn=PanelWidget:GetZTButton(self.m_transform,"TestBtn",function() self:Test() end)
  			--@brief 初始化登录界面UI控件
-	CSLog("QuickBagPanel:Init:>>>>>>",self.m_transform)
  			self.m_ScrollView=PanelWidget:GetScrollView(self.m_transform,"ItemPanel/ScrollView")
 			self.m_Grid=self.m_ScrollView.content
 
@@ -81,37 +79,21 @@ end
 
 
 --@brief 显示登录面板
-function QuickBagPanel:Show()
- 	CSLog("QuickBagPanel>>>>>",target)
-	self.m_gameObject:SetActive(true)
-end
+function QuickBagPanel:Show(items)
+	if not self.m_panelRoot then
+		return
+	end
 
+	if not items then
+		self:Hide()
+		return
+	end
 
---测试
-function QuickBagPanel:Test()
-	
-	local  tempData = {}
-	tempData[1]={itemId=1,itemNum=1,name="大刀"}
-	tempData[2]={itemId=2,itemNum=3,name="小刀"}
-	tempData[3]={itemId=3,itemNum=4,name="中刀"}
-	tempData[4]={itemId=4,itemNum=7,name="宠物"}
-	tempData[5]={itemId=5,itemNum=1,name="项链1"}
-	tempData[6]={itemId=6,itemNum=8,name="项链2"}
-	tempData[7]={itemId=7,itemNum=1,name="项链3"}
-	tempData[8]={itemId=8,itemNum=1,name="护甲1"}
-
-	for key,value in pairs(self.m_ItemList) do
-		CSLog("QuickBagPanel.Test: ",key,value)
-		value:UpdateCell(tempData[key])
-	end   
-
-end
-
-function QuickBagPanel:ShowQuickPanel( items )
+	self.m_quickPanelRoot.gameObject:SetActive(true)
 	local  tempIndex = 1;--先只刷新前10个后续加入循环scrollView后修改
 	for key,value in pairs(items) do
 		if tempIndex <= #self.m_ItemList then
-			self.m_ItemList[tempIndex]:UpdateData(value)
+			self.m_ItemList[tempIndex]:UpdateData(value.itemId)
 			tempIndex = tempIndex + 1
 		else
 			break
@@ -119,11 +101,14 @@ function QuickBagPanel:ShowQuickPanel( items )
 	end
 end
 
---点击cell
-function QuickBagPanel:OnClickCell( itemId,itemNum )
+--隐藏面板
+function QuickBagPanel:Hide()
+	self.m_quickPanelRoot.gameObject:SetActive(false)
+end
 
-	GCSLog("QuickBagPanel：OnclickCell>>>>",itemId,itemNum)
-	-- body
+--点击cell
+function QuickBagPanel:OnClickCell( netId )
+	BattleProtocol:SendMapPickItem(netId)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -50,18 +50,18 @@ function BattleBagPanel:Init(parent)
 	CSLog("BattleBagPanel:Init")
 	self.m_parentRoot = parent
 	self.m_EquipList={}
+	self:_AddEvents()
 	--加载预设件
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
-		
 	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleBagPanel"),callback_loadfinish)
 end
 
 --@brief 移除
 function BattleBagPanel:Destroy()
 	CSLog("BattleBagPanel:Destroy")
-
+	self:_RemoveEvent()
 	self.mainRoot=nil
 
 end
@@ -77,11 +77,7 @@ function BattleBagPanel:_LoadAsseFinish(target,path)
  			self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
  			self.m_gameObject = self.m_transform.gameObject
  			self:_InitPanel()
- 			self:_InitPanelEvent()
-			CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
- 		else
-			CSLog("BattleBagPanel:GetEquipCell: prefab load Error!") 
-		end
+ 		end
 end
 
 -- 初始化界面
@@ -94,73 +90,40 @@ function BattleBagPanel:_InitPanel()
 	CSLog("BattleBagPanel:GetEquipCell: value :"..value) 
 	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
 	end
-	self:UpdateEquip()
+	--self:UpdateEquip()
 
 end
-
---------------ui事件
---点击背包按钮
-function BattleBagPanel:OnClickBagBtn()
-	self:UpdateEquip()
-	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
-end
-
---刷新装备
-function  BattleBagPanel:UpdateEquip()
-
-	local  tempEquipDatas =GlobalBattleCtrl:GetBattleRoleEquipedList()
-	CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
-	for key, value in pairs(self.m_EquipList) do
-			value:UpdateCell(tempEquipDatas[key])
-	end
-	
-end
-
---------------ui事件end
-
 
 --添加全局事件
 --Event 
 function  BattleBagPanel:_AddEvents()
-	-- body
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip,self)
+end
+
+function  BattleBagPanel:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip)
+end
+
+-------添加全局事件end
+
+
+
+--------------ui事件
+--点击背包按钮
+function BattleBagPanel:OnClickBagBtn()
+	self:_UpdateEquip(GlobalBattleCtrl:GetBattleRoleEquipedList())
+	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
 end
 
 
---@brief 添加控制事件 
-function BattleBagPanel:_InitPanelEvent()
-	-- self.m_joystick.onJoystickDownEvent = function(pos)
-	-- 	self:_OnJoystickDown(pos)
-	-- end
+--------------ui事件end
 
-	-- self.m_joystick.onJoystickMoveEvent = function(pos)
-	-- 	self:_OnJoystickMove(pos)
-	-- end
-
-	-- self.m_joystick.onJoystickUpEvent = function(pos)
-	-- 	self:_OnJoystickUp(pos)
-	-- end
+--刷新装备
+function  BattleBagPanel:_UpdateEquip(tempEquipDatas)
+	tempEquipDatas = tempEquipDatas or {}
+	CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
+	for key, value in pairs(self.m_EquipList) do
+		value:UpdateCell(tempEquipDatas[key])
+	end
 end
 
---@brief 触摸点按下
-function BattleBagPanel:_OnJoystickDown(pos)
-end
-
---@brief 触摸点移动
-function BattleBagPanel:_OnJoystickMove(pos)
-end
-
---@brief 触摸点松开
-function BattleBagPanel:_OnJoystickUp(pos)
-	 self:_SendSkillCommand(pos);
-end
-
---@brife 发送移动操作
---@param 目标标点
-function BattleBagPanel:UnEquip(state,equipId)
-	-- CSLog("BattleBagPanel:_SendSkillCommand")
-	local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
-	local distance = self.m_nDistance
-	local targetPos = GlobalBattleCtrl:GetOwnerChara():GetPos() + CSVector3(distance * deltaVec.x, 0, distance * deltaVec.y)
-
-	 BattleCommandProtocol:SendSkillCommand(self.m_nSkillId,targetPos)
-end

@@ -26,6 +26,9 @@ function GlobalBattleCtrl:Init()
 	--****************管理者初始化begin************************************************
 	--镜头管理
 	BattleCameraMgr:Init()
+
+	--物资预设管理
+	BattleMapMgr:Init()
 	--高度读取
 	BattleMapHeight:Init()
 
@@ -73,6 +76,10 @@ function GlobalBattleCtrl:Destroy()
 	
 	--镜头管理
 	BattleCameraMgr:Destroy()
+
+	--物资预设管理
+	BattleMapMgr:Destroy()
+
 	--高度读取
 	BattleMapHeight:Destroy()
 
@@ -120,6 +127,9 @@ function GlobalBattleCtrl:Destroy()
 	GBattleEvent:RemoveDispatcher()
 end
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 数据相关管理相关begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@rife 初始化数据
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
@@ -131,7 +141,7 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 end
 
---@rife 初始化数据
+--@rife 初始化数据(进入游戏)
 function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GlobalBattleCtrl.m_nOwnerId = battleId
 	--对象数组
@@ -141,6 +151,7 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+	BattleMapMgr:Reset( )
 end
 
 --@rife 删除数据
@@ -150,6 +161,10 @@ function GlobalBattleCtrl:DestroyData()
 	GlobalBattleCtrl.m_tCharacterList = nil
 	GlobalBattleCtrl.m_comZtBattleScene = nil
 end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 数据相关管理相关end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 界面刷新
 function GlobalBattleCtrl:Update()
@@ -353,11 +368,12 @@ end
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 资源相关 begin
+--@brief 地图物资相关 begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --获取当前地图块item数据
 function GlobalBattleCtrl:GetCurMapClockItem(pos)
+	--CSLog(" GlobalBattleCtrl:GetCurMapClockItem ",pos)
 	return GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(pos)
 end
 
@@ -369,8 +385,32 @@ function GlobalBattleCtrl:GetBattleRoleEquipedList()
 	return {}
 end
 
+--@brief 获取战斗人物物资数据
+function GlobalBattleCtrl:GetBattleData(map_sight_s2c)
+	if GlobalBattleCtrl.m_BattleItemManager then
+		GlobalBattleCtrl.m_BattleItemManager:OnGetAllItem(map_sight_s2c)
+	end
+end
+
+--@brief 拾取item
+function GlobalBattleCtrl:PickBattleItem(map_pick_goods_s2c)
+	if GlobalBattleCtrl.m_BattleItemManager then
+		GlobalBattleCtrl.m_BattleItemManager:PickItem(map_pick_goods_s2c)
+	end
+end
+
+
+--@brief 更新地图Item
+function GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
+	if GlobalBattleCtrl.m_BattleItemManager then
+		GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(map_update_goods)
+	end
+end
+
+
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 资源相关 end
+--@brief 地图物资相关 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 

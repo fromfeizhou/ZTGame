@@ -46,6 +46,7 @@ end
 
 --@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
+	--CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
 	if not self.m_tServerCommand then
 		return
 	end
