@@ -20,6 +20,7 @@ BaseBagCell = {
 	m_transform=nil,
  	itemNum=nil,
  	itemId=nil,
+ 	id=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -69,7 +70,7 @@ end
 --cell点击回调
 function BaseBagCell:OnCellClick(callBack)
 	if self.m_transform.gameObject.activeSelf then
-		callBack(self.itemId,self.itemNum)
+		callBack(self.id,self.itemNum)
 	end
 end
 
@@ -84,15 +85,22 @@ function BaseBagCell:UpdateCell( table )
 end
 
 --刷新数据
-function BaseBagCell:UpdateData(table)
-CSLog(table.name,table.itemId)
+function BaseBagCell:UpdateData(itemId)
+	--CSLog("BaseBagCell:UpdateData",table.name,table.itemId)
 
-	self.itemId=table.itemId
-	self.itemNum=table.itemNum
+	if tab_Equipment[itemId] then
+		local  temp = tab_Equipment[itemId]
+		self.itemId = temp.itemId
+		self.itemNum = temp.itemNum
+		self.id=temp.id
 
-	self.cellName.text=table.name
-	self.cellNum.text=table.itemNum
-	self.m_transform.gameObject:SetActive(true)
+		self.cellNum.text=table.itemNum
+		self.cellName.text = temp.name
+		self.m_transform.gameObject:SetActive(true)
+	else
+		self.m_transform.gameObject:SetActive(false)
+	end
+
 	-- body
 end
 

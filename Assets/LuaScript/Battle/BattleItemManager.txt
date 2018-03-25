@@ -42,7 +42,8 @@ end
 --@brief 初始化
 function BattleItemManager:Init()
 	CSLog("BattleItemManager:Init")
-	 self.m_OwnerEquipList={}
+	self.m_MapItemList={}
+	self.m_OwnerEquipList={}
 	-- self.m_OwnerEquipList[1]={Name="大刀"}
 	-- self.m_OwnerEquipList[2]={Name="护甲"}
 	-- --self.m_OwnerEquipList[3]={Name="宠物"}
@@ -55,16 +56,23 @@ end
 
 --@brief 监听事件
 function BattleItemManager:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self.OnUpdateAllItem,self)
-end
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnGetAllItem,self)
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.PICK_ITEM,self._PickItem,self)
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_MAP_ITEMS,self._UpdateMapItems,self)
 
+
+end
 --@brifef 移除事件
 function BattleItemManager:_RemoveEvent()
-	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnUpdateScenePos)
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnGetAllItem)
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.PICK_ITEM,self._PickItem)
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_MAP_ITEMS,self._UpdateMapItems)
+
 end
 
-function BattleItemManager:OnUpdateAllItem(map_sight_s2c)
-	CSLog("BattleItemManager:OnUpdateAllItem>>>>")
+--@brifef 获取战斗数据（角色、物资）
+function BattleItemManager:OnGetAllItem(map_sight_s2c)
+	--CSLog("BattleItemManager:OnUpdateAllItem>>>>")
 	if map_sight_s2c then 
 		if map_sight_s2c.map_goods then  
 			self.m_MapItemList={}
@@ -73,7 +81,7 @@ function BattleItemManager:OnUpdateAllItem(map_sight_s2c)
 	 			tempItem.id=value.id
 	 			tempItem.itemId=value.type_id
 	 			tempItem.itemNum=value.num
-	 			tempItem.itemPos=CSVector3(value.x,value.y,value.z)
+	 			tempItem.itemPos= BattleDefine:GetClientPos(value.x,value.y,value.z)
 	 			self.m_MapItemList[tempItem.id]=tempItem
 	 			--CSLog("BattleItemManager: GetAllItem Id: ",value.id)
 	 		end
@@ -87,20 +95,52 @@ function BattleItemManager:OnUpdateAllItem(map_sight_s2c)
 	 				local itemData = tab_Equipment[tempItem.id]
 	 				if itemData.type~=6 then
 	 					self.m_OwnerEquipList[itemData.type]=tempItem.type_id
-	 					CSLog("BattleItemManager: RoleEquip Id: ",tempItem.type_id)
+	 					--CSLog("BattleItemManager: RoleEquip Id: ",tempItem.type_id)
 					end
 				end
 	 		else
-	 			CSLog("没有数据：使用模拟数据")
-	 			self.m_OwnerEquipList[1]=10001
-				self.m_OwnerEquipList[2]=20001
-				self.m_OwnerEquipList[5]=50001
+	 		-- 	CSLog("没有数据：使用模拟数据")
+	 		-- 	self.m_OwnerEquipList[1]=10001
+				-- self.m_OwnerEquipList[2]=20001
+				-- self.m_OwnerEquipList[5]=50001
 	 		end
 	 	end
 	end		
-	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,self._OnUpdateScenePos)
-
 end
+
+
+--@brief 拾取Item
+function BattleItemManager:PickItem(map_pick_goods_s2c)
+	local  pickItem = map_pick_goods_s2c.googs
+	local  baseItemData = tab_Equipment[pickItem.type_id]
+	if baseItemData then
+		self.m_OwnerEquipList[baseItemData.type]=pickItem.type_id	
+		--通知刷新身上装备
+		CSLog("DispatchEvent Role Change")
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self.m_OwnerEquipList)
+	end
+end
+
+--@brief 刷新地图item
+function BattleItemManager:UpdateMapItems(map_update_goods)
+	if self.m_MapItemList[map_update_goods.remove_id_list] then
+		self.m_MapItemList[map_update_goods.remove_id_list]=nil
+	end
+	local  mapItem = map_update_goods.add_goods_list
+	local tempItem = nil
+	if mapItem then 
+		tempItem = {}
+	 	tempItem.id=mapItem.id
+	 	tempItem.itemId=mapItem.type_id
+	 	tempItem.itemNum=mapItem.num
+	 	tempItem.itemPos= BattleDefine:GetClientPos(mapItem.x,mapItem.y,mapItem.z)
+		self.m_MapItemList[tempItem.id]=tempItem
+	end
+	--通知地圖預設刷新
+	BattleMapMgr:UpdateMapItem(map_update_goods.remove_id_list,tempItem)
+end
+
+
 
 -- --@brief 
 -- function BattleItemManager:UpdateCurItemDic(pos )
@@ -123,18 +163,39 @@ function BattleItemManager:Destroy()
 end
 
 
-function GetCurMapBlockItem(pos)
+function BattleItemManager:GetCurMapBlockItem(rangs)
 	if not self.m_MapItemList then
 		return {}
 	end
-	local  tempItems =nil
-	for key,value in pairs(self.m_MapItemList) do
-		local  tempPos = value.itemPos
-		if(tempPos.x>=pos.min.x and tempPos<=pos.max.x and tempPos.y>=pos.min.y and tempPos.y<=pos.max.y) then
-			tempItems[value.id]=value
+	local  tempItems = {}
+	for key,item in pairs(self.m_MapItemList) do
+		local  tempPos = item.itemPos
+		if self:CheckInRang(tempPos,rangs) then
+			tempItems[key]=item
+			--CSLog("BattleItemManager:GetCurMapBlockItem-one",SerializeTable(item))
 		end
 	end
-	return {}
+	--CSLog("BattleItemManager:GetCurMapBlockItem-two",SerializeTable(tempItems))
+	return tempItems
+end
+
+--@brief 判断范围
+function BattleItemManager:CheckInRang(pos,rangs)
+--	CSLog("BattleItemManager:CheckInRang",pos,SerializeTable(rangs))
+	if pos.x < rangs.lx then
+		return false
+	end
+	if pos.x > rangs.hx then
+		return false
+	end
+	if pos.z < rangs.lz then
+		return false
+	end
+	if pos.z > rangs.hz then
+		return false
+	end
+
+	return true
 end
 
 

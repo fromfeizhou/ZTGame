@@ -33,8 +33,6 @@ end
 function BattleModel:Init(parent)
 	self.m_parent = parent
 	self.m_tPanelList = {}
-
-	self:_AddEvent()
 end
 
 --@breif æ›´æ–°é¢æ¿
@@ -59,28 +57,10 @@ function BattleModel:Destroy()
 		end
 		self.m_tPanelList = nil
 	end
-	self:_RemoveEvent()
-end
-
-function BattleModel:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL,self.OnShowQuickBagPanel,self)
-end
-
---@brifef 移除事件
-function BattleModel:_RemoveEvent()
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.SHOW_MAP_QUICKBAG_PANEL,self.OnShowQuickBagPanel)
-end
-
-
-function BattleModel:OnShowQuickBagPanel(data)
-	if self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL] then
-		CSLog("BattleModel:OnShowQuickBagPanel")
-		self.m_tPanelList[BATTLE_UI_TYPE.MAP_SCROLL]:ShowQuickPanel(data)
-	end
 end
 
 --@breif æ˜¾ç¤ºé¢æ¿
-function BattleModel:ShowPanel( panelType)
+function BattleModel:ShowPanel( panelType,...)
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
@@ -97,7 +77,7 @@ function BattleModel:ShowPanel( panelType)
 	end
 
 	if panel then
-		panel:Show()
+		panel:Show(...)
 	end
 end
 

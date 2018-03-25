@@ -23,7 +23,7 @@ class DisableMaterialImport : AssetPostprocessor
 
         //}
         //else
-      //  modelImporter.importMaterials = false;
+        modelImporter.importMaterials = false;
     }
 
     void OnPostprocessModel(GameObject go)

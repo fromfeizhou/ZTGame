@@ -34,85 +34,66 @@ function BattleProtocol:Destroy()
 		BattleProtocol:_UnRegAll()
 	end
 end
-
-
---@brief 发送命令
-function BattleProtocol:SendCommand(command)
-	local commandType = command.m_nType
-
-	--技能测试
-	if GameConfig.IsSkillDebugScene then
-		if commandType  == BattleCommandType.Collider then
-			GlobalBattleCtrl:AddColliderCommand(command)
-			return
-		end
-		BattleProtocol:__TsClientInputCommand(command)
-		return
-	end
-
-	--发送给服务器
-
-	if commandType == BattleCommandType.Move then
-		BattleProtocol:SendMoveFrameMsg(command)
-	elseif commandType == BattleCommandType.Skill then
-		BattleProtocol:SendSkillFrameMsg(command)
-	elseif commandType == BattleCommandType.Collider then
-		BattleProtocol:SendColliderFrameMsg(command)
-	end
-end
-
---@brief 移动
-function BattleProtocol:SendMoveCommand(dir)
-	local pos = GlobalBattleCtrl:GetOwnerChara():GetPos()
-	local command = BattleMoveCommand:Create(GlobalBattleCtrl:GetOwnerId(),dir,pos)
-	BattleProtocol:SendCommand(command)
-end
-
---@brief 使用技能
---@param skillId 技能id
---@param pos 技能目标点
-function BattleProtocol:SendSkillCommand(skillId,pos,targetId)
-	local command = BattleSkillCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,pos,targetId)
-	BattleProtocol:SendCommand(command)
-end
-
---@brief 
---@param skillId 技能id
---@param colliderPos 碰撞框中心
---@param targetList 目标队列
-function BattleProtocol:SendColliderCommand(skillId,colliderPos,targetList)
-	local command = BattleColliderCommand:Create(GlobalBattleCtrl:GetOwnerId(),skillId,colliderPos,targetList)
-	BattleProtocol:SendCommand(command)
-end
-
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听协议
 function BattleProtocol:_RegAll()
-
 	--视野信息,战斗推送
 	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT, BattleProtocol._OnGetBattleData, BattleProtocol)
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.PICK_GOODS, BattleProtocol._OnPickItem, BattleProtocol)
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS, BattleProtocol._UpdateMapItem, BattleProtocol)
+
+
 end
 
 --@brief 移除协议监听
 function BattleProtocol:_UnRegAll()
 	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
+	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.PICK_GOODS)
+	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS)
+
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************协议发送***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---推送战斗人物地图物品数据
-function BattleProtocol:_OnGetBattleData(map_sight_s2c)
-
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,map_sight_s2c)--）map_sight_s2c.map_Goods)
+--@brief 拾取物品
+function BattleProtocol:SendMapPickItem(netId)
+	local package 	= {}
+	package.model 	= PB_MAP.MODEL
+	package.command = PB_MAP.PICK_GOODS
+	package.data = {
+		id=netId
+	}
+	CSLog("Send Pick Item", netId)
+	NetWorkManager:SendNetMsg(package)
 end
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************协议接收***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--推送战斗人物地图物品数据
+function BattleProtocol:_OnGetBattleData(map_sight_s2c)
+	GlobalBattleCtrl:GetBattleData(map_sight_s2c)
+	--GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,map_sight_s2c)
+end
+
+--@brief 拾取物品
+function BattleProtocol:_OnPickItem(map_pick_goods_s2c)
+	CSLog(" Battle pick item is success ")
+	GlobalBattleCtrl:PickBattleItem(map_pick_goods_s2c)
+	--GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.PICK_ITEM,map_pick_goods_s2c)
+end
+
+--@brieg 更新MapItem
+function  BattleProtocol:_UpdateMapItem(map_update_goods)
+	CSLog("BattleProtocol: Update Map Item  ")
+	GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
+	--GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_MAP_ITEMS,map_update_goods)
+end
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
