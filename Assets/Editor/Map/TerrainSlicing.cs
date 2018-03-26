@@ -5,7 +5,7 @@ using System;
 public class TerrainSlicing : Editor
 {
     private const string MapShader = "Custom/Environment/LightedTerrain";
-    private const string MapMaterialSavePath = "Assets/Map/Model/Materials/MapMaterial.mat";
+    private const string MapMaterialSavePath = "Assets/Map/Model/MapMaterials/MapMaterial.mat";
 
     //开始分割地形
     [MenuItem("Terrain/Slicing")]

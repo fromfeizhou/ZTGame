@@ -13,6 +13,7 @@ local CSJoystick = CS.JoystickBase
 
 
 BattleBagCell = {
+	m_netId=nil,
 	m_itemId=nil,
 	m_transform=nil,
 	m_textName=nil,
@@ -58,24 +59,23 @@ end
 
 function BattleBagCell:SetUIEvent(envetTable)
 	self.m_buttonBtn=PanelWidget:GetButton(self.m_transform,"Content/Icon",function()
-		self:_OnCellClick(envetTable.onClick)
+		self:_OnCellClick(envetTable.OnClick)
 	end )
 
 end
 
 --@brief 点击cell
 function BattleBagCell:_OnCellClick(event)
-	-- body
-	event()
+	if self.m_netId then
+		event(self.m_netId)
+	end
 end
 
 -- 更新Cell
 function BattleBagCell:UpdateCell( item )
 	if item then
-		CSLog(item,"     >>>>>>")
 		self:UpdateData(item)
 	else
-		CSLog(item,"     >>eee>>>>")
 		self:HideCell()
 	end
 end
@@ -83,7 +83,7 @@ end
 --刷新数据
 function BattleBagCell:UpdateData(item)
 	
-	CSLog(item,"     >>>>>>")
+	self.m_netId=item.id
 	if tab_Equipment[item.itemId] then
 		self.m_textName.text=tab_Equipment[item.itemId].name
 		self.m_transform.gameObject:SetActive(true)

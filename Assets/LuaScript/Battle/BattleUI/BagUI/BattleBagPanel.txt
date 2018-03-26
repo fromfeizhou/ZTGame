@@ -88,6 +88,10 @@ function BattleBagPanel:_InitPanel()
 
 	for key, value in pairs(RoleEquipType) do     
 	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
+		local events={}
+		events.OnClick=function(id) self:_OnClickEquip(id) end 
+
+		self.m_EquipList[value]:SetUIEvent(events)
 	end
 	--self:UpdateEquip()
 
@@ -114,6 +118,10 @@ function BattleBagPanel:OnClickBagBtn()
 	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
 end
 
+--点击武器
+function BattleBagPanel:_OnClickEquip(netId)
+	BattleProtocol:SendDiscardItem(netId)
+end
 
 --------------ui事件end
 

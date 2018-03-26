@@ -311,8 +311,8 @@ public class MapManager : Singleton<MapManager>
     private void LoadHeightBlockData(Object target, string path)
     {
         TextAsset txt = target as TextAsset;
-        if (txt != null)
-            SetMapBlockDic(txt.bytes, eMapBlockType.Height);
+      //  if (txt != null)
+          //  SetMapBlockDic(txt.bytes, eMapBlockType.Height);
     }
 
     private void SetMapBlockDic(byte[] datas, eMapBlockType type)
@@ -326,7 +326,7 @@ public class MapManager : Singleton<MapManager>
             ByteBuffer tempBuffer = new ByteBuffer(temp);
             tempData.row = tempBuffer.ReadInt16();
             tempData.col = tempBuffer.ReadInt16();
-            tempData.paramValue = tempBuffer.ReadInt16();
+            tempData.paramValue = (int) (tempBuffer.ReadInt16() * 0.01f);
             tempData.type = type;
             mapBlockDataDic[tempData.row + "_" + tempData.col] = tempData;
         }

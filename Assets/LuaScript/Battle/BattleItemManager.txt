@@ -129,8 +129,17 @@ end
 
 --@brief 丢弃item
 function BattleItemManager:DiscardItem(map_discard_goods_s2c)
-	if self.m_OwnerEquipList[map_discard_goods_s2c.id] then
-		self.m_OwnerEquipList[map_discard_goods_s2c.id]=nil
+	local  tempKey = nil
+	for key,value in pairs(self.m_OwnerEquipList) do
+		if value.id == map_discard_goods_s2c.id then
+			tempKey=key
+			break
+		end
+	end
+
+	if tempKey then
+		self.m_OwnerEquipList[tempKey]=nil
+		CSLog("DispatchEvent Role Change")
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self.m_OwnerEquipList)
 	end
 end

@@ -43,6 +43,7 @@ function BattleProtocol:_RegAll()
 	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT, BattleProtocol._OnGetBattleData, BattleProtocol)
 	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.PICK_GOODS, BattleProtocol._OnPickItem, BattleProtocol)
 	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS, BattleProtocol._UpdateMapItem, BattleProtocol)
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.DISCARD_GOODS, BattleProtocol._OnDiscardItem, BattleProtocol)
 
 
 end
@@ -52,6 +53,7 @@ function BattleProtocol:_UnRegAll()
 	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
 	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.PICK_GOODS)
 	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS)
+	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.DISCARD_GOODS)
 
 end
 
