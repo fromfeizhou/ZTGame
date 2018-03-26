@@ -11,13 +11,13 @@ local CSLog = CS.GameTool.Log
 local CSJoystick = CS.JoystickBase
 
 
-local cellName=nil
-local cellIcon=nil
 
 BattleBagCell = {
-	
+	m_itemId=nil,
 	m_transform=nil,
-
+	m_textName=nil,
+	m_imageIcon=nil,
+	m_buttonBtn=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -52,23 +52,40 @@ end
 --初始化面板组件
 function BattleBagCell:_InitCell()
 	-- body
-	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
+	self.m_textName=PanelWidget:GetText(self.m_transform,"Content/Name")
+	
+end
+
+function BattleBagCell:SetUIEvent(envetTable)
+	self.m_buttonBtn=PanelWidget:GetButton(self.m_transform,"Content/Icon",function()
+		self:_OnCellClick(envetTable.onClick)
+	end )
+
+end
+
+--@brief 点击cell
+function BattleBagCell:_OnCellClick(event)
+	-- body
+	event()
 end
 
 -- 更新Cell
-function BattleBagCell:UpdateCell( itemId )
-	if itemId then
-		self:UpdateData(itemId)
+function BattleBagCell:UpdateCell( item )
+	if item then
+		CSLog(item,"     >>>>>>")
+		self:UpdateData(item)
 	else
+		CSLog(item,"     >>eee>>>>")
 		self:HideCell()
 	end
 end
 
 --刷新数据
-function BattleBagCell:UpdateData(itemId)
+function BattleBagCell:UpdateData(item)
 	
-	if tab_Equipment[itemId] then
-		self.cellName.text=tab_Equipment[itemId].name
+	CSLog(item,"     >>>>>>")
+	if tab_Equipment[item.itemId] then
+		self.m_textName.text=tab_Equipment[item.itemId].name
 		self.m_transform.gameObject:SetActive(true)
 	end
 end

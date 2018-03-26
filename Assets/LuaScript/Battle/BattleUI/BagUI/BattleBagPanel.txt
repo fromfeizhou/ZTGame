@@ -120,7 +120,7 @@ end
 --刷新装备
 function  BattleBagPanel:_UpdateEquip(tempEquipDatas)
 	tempEquipDatas = tempEquipDatas or {}
-	--CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
+	--CSLog("BattleBagPanel:UpdateEquip ",SerializeTable(tempEquipDatas))
 	for key, value in pairs(self.m_EquipList) do
 		value:UpdateCell(tempEquipDatas[key])
 	end

@@ -406,6 +406,12 @@ function GlobalBattleCtrl:PickBattleItem(map_pick_goods_s2c)
 	end
 end
 
+--@brief 丢弃item
+function GlobalBattleCtrl:DiscardBattleItem(map_discard_goods_s2c)
+	if GlobalBattleCtrl.m_BattleItemManager then
+		GlobalBattleCtrl.m_BattleItemManager:DiscardItem(map_discard_goods_s2c)
+	end
+end
 
 --@brief 更新地图Item
 function GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
