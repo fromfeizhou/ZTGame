@@ -60,7 +60,7 @@ end
 
 --@brief 移除
 function BattleBagPanel:Destroy()
-	CSLog("BattleBagPanel:Destroy")
+	--CSLog("BattleBagPanel:Destroy")
 	self:_RemoveEvent()
 	self.mainRoot=nil
 
@@ -71,7 +71,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 预设加载成功
 function BattleBagPanel:_LoadAsseFinish(target,path)
-	CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
+	--CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
 	local prefab = target
  		if prefab then
  			self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
@@ -87,7 +87,6 @@ function BattleBagPanel:_InitPanel()
 	self.bagBtn=PanelWidget:GetButton(self.m_transform,"BagButton",function() self:OnClickBagBtn() end)	
 
 	for key, value in pairs(RoleEquipType) do     
-	CSLog("BattleBagPanel:GetEquipCell: value :"..value) 
 	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
 	end
 	--self:UpdateEquip()
@@ -121,7 +120,7 @@ end
 --刷新装备
 function  BattleBagPanel:_UpdateEquip(tempEquipDatas)
 	tempEquipDatas = tempEquipDatas or {}
-	CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
+	--CSLog("BattleBagPanel:UpdateEquip ",tempEquipDatas)
 	for key, value in pairs(self.m_EquipList) do
 		value:UpdateCell(tempEquipDatas[key])
 	end
