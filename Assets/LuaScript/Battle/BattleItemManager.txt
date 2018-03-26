@@ -17,6 +17,7 @@ BattleMapItemDada = {
 }
 
 
+
 BattleItemManager = {
 	m_MapItemList = nil,	--地图物品列表
 	m_OwnerPropList = nil,		--道具
@@ -77,32 +78,36 @@ function BattleItemManager:OnGetAllItem(map_sight_s2c)
 		if map_sight_s2c.map_goods then  
 			self.m_MapItemList={}
 		 	for key,value in pairs(map_sight_s2c.map_goods) do
-	 			local tempItem = {}
-	 			tempItem.id=value.id
-	 			tempItem.itemId=value.type_id
-	 			tempItem.itemNum=value.num
-	 			tempItem.itemPos= BattleDefine:GetClientPos(value.x,value.y,value.z)
-	 			self.m_MapItemList[tempItem.id]=tempItem
+		 		--CSLog(">>>>>>>>>",SerializeTable(value))
+	 			local tempItem = self:_CreateMapDataItem(value)
+	 			if tempItem then
+	 				self.m_MapItemList[tempItem.id]=tempItem
+	 				--CSLog(SerializeTable(tempItem))
+	 			end
+	 			-- tempItem.id=value.id
+	 			-- tempItem.itemId=value.type_id
+	 			-- tempItem.itemNum=value.num
+	 			-- tempItem.itemPos= BattleDefine:GetClientPos(value.x,value.y,value.z)
+	 			--self.m_MapItemList[tempItem.id]=tempItem
 	 			--CSLog("BattleItemManager: GetAllItem Id: ",value.id)
 	 		end
 	 	end
-
 	 	if map_sight_s2c.roles_enter then
 	 		self.m_OwnerEquipList={}
-	 		local tempItem=map_sight_s2c.roles_enter.goods
-	 		if tempItem then
-	 			if tab_Equipment[tempItem.id] then
-	 				local itemData = tab_Equipment[tempItem.id]
-	 				if itemData.type~=6 then
-	 					self.m_OwnerEquipList[itemData.type]=tempItem.type_id
-	 					--CSLog("BattleItemManager: RoleEquip Id: ",tempItem.type_id)
+	 		local tempItemList=map_sight_s2c.roles_enter.goods
+	 		if tempItemList then
+	 			for key,value in pairs(tempItemList) do
+	 				if tab_Equipment[tempItem.id] then
+	 					local itemData = tab_Equipment[tempItem.id]
+	 					if itemData.type~=6 then
+	 						local equip = self:_CreateMapDataItem(value)
+	 						if equip then
+	 						self.m_OwnerEquipList[itemData.type]=equip
+	 						end
+	 						--CSLog("BattleItemManager: RoleEquip Id: ",tempItem.type_id)
+						end
 					end
 				end
-	 		else
-	 		-- 	CSLog("没有数据：使用模拟数据")
-	 		-- 	self.m_OwnerEquipList[1]=10001
-				-- self.m_OwnerEquipList[2]=20001
-				-- self.m_OwnerEquipList[5]=50001
 	 		end
 	 	end
 	end		
@@ -114,9 +119,18 @@ function BattleItemManager:PickItem(map_pick_goods_s2c)
 	local  pickItem = map_pick_goods_s2c.goods
 	local  baseItemData = tab_Equipment[pickItem.type_id]
 	if baseItemData then
-		self.m_OwnerEquipList[baseItemData.type]=pickItem.type_id	
+		CSLog(SerializeTable(pickItem))
+		self.m_OwnerEquipList[baseItemData.type]=self:_CreateMapDataItem(pickItem)	
 		--通知刷新身上装备
 		CSLog("DispatchEvent Role Change")
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self.m_OwnerEquipList)
+	end
+end
+
+--@brief 丢弃item
+function BattleItemManager:DiscardItem(map_discard_goods_s2c)
+	if self.m_OwnerEquipList[map_discard_goods_s2c.id] then
+		self.m_OwnerEquipList[map_discard_goods_s2c.id]=nil
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self.m_OwnerEquipList)
 	end
 end
@@ -125,7 +139,7 @@ end
 function BattleItemManager:UpdateMapItems(map_update_goods)
 
 	local needRemoveList = map_update_goods.remove_id_list
-	CSLog("BattleItemManager: MapremoveItem", SerializeTable(needRemoveList),"addList: ",SerializeTable(map_update_goods.add_goods_list))
+	--CSLog("BattleItemManager: MapremoveItem", SerializeTable(needRemoveList),"addList: ",SerializeTable(map_update_goods.add_goods_list))
 	if needRemoveList then
 		for key,value in pairs(needRemoveList) do
 			if self.m_MapItemList[value] then
@@ -133,42 +147,21 @@ function BattleItemManager:UpdateMapItems(map_update_goods)
 			end			
 		end
 	end
-	
-
 	local  mapItemList = map_update_goods.add_goods_list
 	local tempAddItemList = {}
 	if mapItemList then  
 		for key,value in pairs(mapItemList) do
-			local tempItem = nil
-			tempItem = {}
-	 		tempItem.id=value.id
-	 		tempItem.itemId=value.type_id
-	 		tempItem.itemNum=value.num
-	 		tempItem.itemPos= BattleDefine:GetClientPos(value.x,value.y,value.z)
-			self.m_MapItemList[tempItem.id]=tempItem
-			tempAddItemList[tempItem.id]=tempItem
+			local tempItem = self:_CreateMapDataItem(value)	
+			if tempItem then
+				self.m_MapItemList[tempItem.id]=tempItem
+				tempAddItemList[tempItem.id]=tempItem
+			end
 		end
 	end
 	--通知地圖預設刷新
 	BattleMapMgr:UpdateMapItem(map_update_goods.remove_id_list,tempAddItemList)
 end
 
-
-
--- --@brief 
--- function BattleItemManager:UpdateCurItemDic(pos )
--- 	-- body
--- end
-
--- --@brief 
--- function BattleItemManager:UpdateCurItemById( ...,add )
--- 	-- body
--- end
-
--- rushView{
--- 	m_viewList[id]  = nil
--- 	m_viewList= Create
--- }
 --@brief 移除
 function BattleItemManager:Destroy()
 	CSLog("BattleItemManager:Destroy")
@@ -212,6 +205,18 @@ end
 
 
 
+--@brief 创建装备
+function BattleItemManager:_CreateMapDataItem( p_map_goods )
+	local  item = nil
+	if p_map_goods then
+		item = {}
+	 	item.id=p_map_goods.id
+	 	item.itemId=p_map_goods.type_id
+	 	item.num=p_map_goods.num
+	 	item.itemPos=BattleDefine:GetClientPos(p_map_goods.x,p_map_goods.y,p_map_goods.z)
+	end
+	return item
+end
 
 
 

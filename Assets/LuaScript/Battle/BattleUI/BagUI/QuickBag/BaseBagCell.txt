@@ -9,11 +9,6 @@ local CSLog = CS.GameTool.Log
 local CSJoystick = CS.JoystickBase
 
 
-local cellName=nil
-local cellIcon=nil
-local cellNum = 1
-local cellBtn = nil
-local cellContent = 1
 
 BaseBagCell = {
 	
@@ -21,6 +16,12 @@ BaseBagCell = {
  	itemNum=nil,
  	itemId=nil,
  	id=nil,
+
+	m_textNum=nil,
+ 	m_textName = nil,		--item名字
+ 	m_imgIcon = nil,		--图标
+ 	m_btn=nil,
+ 	m_tContent=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -58,10 +59,10 @@ end
 --初始化面板组件
 function BaseBagCell:_InitCell(callBack)
 	-- body
-	self.cellContent=self.m_transform:Find("Content")
-	self.cellName=PanelWidget:GetText(self.m_transform,"Content/Name")
-	self.cellNum=PanelWidget:GetText(self.m_transform,"Content/Num")
-	self.cellBtn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
+	self.m_tContent=self.m_transform:Find("Content")
+	self.m_textName=PanelWidget:GetText(self.m_transform,"Content/Name")
+	self.m_textNum=PanelWidget:GetText(self.m_transform,"Content/Num")
+	self.m_btn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
 		self:OnCellClick(callBack)
 	end )
 
@@ -93,8 +94,8 @@ function BaseBagCell:UpdateData(item)
 		self.itemNum = item.itemNum
 		self.id=item.id
 
-		self.cellNum.text=item.itemNum
-		self.cellName.text = temp.name
+		self.m_textNum.text=item.itemNum
+		self.m_textName.text = temp.name
 		self.m_transform.gameObject:SetActive(true)
 	else
 		self.m_transform.gameObject:SetActive(false)

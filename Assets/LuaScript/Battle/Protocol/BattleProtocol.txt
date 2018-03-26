@@ -78,7 +78,7 @@ function BattleProtocol:SendDiscardItem(netId)
 	package.data = {
 		id = netId
 	}
-	CSLog("Send Pick Item", netId)
+	CSLog(" Send discardItem Item", netId)
 	NetWorkManager:SendNetMsg(package)
 end
 
@@ -90,6 +90,12 @@ end
 function BattleProtocol:_OnGetBattleData(map_sight_s2c)
 	GlobalBattleCtrl:GetBattleData(map_sight_s2c)
 	--GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.BATTLE_MAP_ALL_ITEMS,map_sight_s2c)
+end
+
+--@brief 丢弃物品
+function BattleProtocol:_OnDiscardItem(map_discard_goods_s2c)
+	CSLog(" Battle discard item is success ")
+	GlobalBattleCtrl:DiscardBattleItem(map_discard_goods_s2c)
 end
 
 --@brief 拾取物品
