@@ -33,7 +33,7 @@ end
 
 --@brief 初始化
 function BattleBagCell:Init(transform)
-	CSLog("BattleBagCell:Init")
+	--CSLog("BattleBagCell:Init")
 	self.m_transform = transform
  	self:_InitCell()
 end
@@ -57,8 +57,6 @@ end
 
 -- 更新Cell
 function BattleBagCell:UpdateCell( itemId )
-
-	CSLog("BattleBagCell:UpdateCell",itemId)
 	if itemId then
 		self:UpdateData(itemId)
 	else

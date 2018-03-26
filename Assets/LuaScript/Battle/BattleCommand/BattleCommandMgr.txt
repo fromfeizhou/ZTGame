@@ -46,7 +46,7 @@ end
 
 --@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
-	--CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
+	-- CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
 	if not self.m_tServerCommand then
 		return
 	end
@@ -58,7 +58,10 @@ function BattleCommandMgr:Update()
 			self:_RunCommand()
 			self:_RunCommand()
 		end
-	else
+	
+	end
+
+	if self.m_nClientFrame == self.m_nServerFrame - 1 or self.m_nServerFrame == 0 then
 		--技能测试
 		if GameConfig.IsSkillDebugScene then
 			BattleCommandProtocol:__TsClientSendDriveCommand()

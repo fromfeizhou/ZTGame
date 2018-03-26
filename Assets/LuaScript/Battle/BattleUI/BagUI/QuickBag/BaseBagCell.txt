@@ -36,7 +36,7 @@ end
 
 --@brief 初始化
 function BaseBagCell:Init(transform,callBack)
-	CSLog("BaseBagCell:Init")
+	--CSLog("BaseBagCell:Init")
 	self.m_transform = transform
 	if  not transform then
 --
@@ -76,32 +76,29 @@ end
 
 -- 更新Cell
 function BaseBagCell:UpdateCell( table )
-	CSLog("BaseBagCell:UpdateCell")
 	if table then
 		self:UpdateData(table)
 	else
+		--CSLog("BaseBagCell hide")
 		self:HideCell()
 	end
 end
 
 --刷新数据
-function BaseBagCell:UpdateData(itemId)
+function BaseBagCell:UpdateData(item)
 	--CSLog("BaseBagCell:UpdateData",table.name,table.itemId)
+	if item and tab_Equipment[item.itemId] then
+		local  temp = tab_Equipment[item.itemId]
+		self.itemId = item.itemId
+		self.itemNum = item.itemNum
+		self.id=item.id
 
-	if tab_Equipment[itemId] then
-		local  temp = tab_Equipment[itemId]
-		self.itemId = temp.itemId
-		self.itemNum = temp.itemNum
-		self.id=temp.id
-
-		self.cellNum.text=table.itemNum
+		self.cellNum.text=item.itemNum
 		self.cellName.text = temp.name
 		self.m_transform.gameObject:SetActive(true)
 	else
 		self.m_transform.gameObject:SetActive(false)
 	end
-
-	-- body
 end
 
 

@@ -101,11 +101,16 @@ function  BattleMapMgr:_UpdatePos(pos)
 	end
 end
 
---
-function BattleMapMgr:UpdateMapItem(removeId,addItem)
+--@brief 地圖預設刷新
+function BattleMapMgr:UpdateMapItem(needRemoveList,addItem)
 	
-	if BattleMapMgr.m_curMapBlockItem[removeId] then
-		BattleMapMgr.m_curMapBlockItem[removeId]=nil
+	if needRemoveList then
+		for key,value in pairs(needRemoveList) do
+			if BattleMapMgr.m_curMapBlockItem[value] then
+				BattleMapMgr.m_curMapBlockItem[value]=nil
+				--CSLog("BattleMapMgr: removeId",value)
+			end			
+		end
 	end
 	if addItem then
 		local tempPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
@@ -115,12 +120,15 @@ function BattleMapMgr:UpdateMapItem(removeId,addItem)
 			lz = tempPos.z - BattleMapMgr.m_nViewRadius,
 			hz = tempPos.z + BattleMapMgr.m_nViewRadius,
 		}
-		if self:CheckInRang(addItem.itemPos,ranges) then
-			BattleMapMgr.m_curMapBlockItem[addItem.id]=addItem
-			BattleMapMgr.m_nTimeCount=5
-			self:_UpdateRoleDistance(tempPos)
+		--CSLog("地图预设添加",SerializeTable(addItem))
+		for key,value in pairs(addItem) do
+			if BattleMapMgr:CheckInRang(value.itemPos,ranges) then
+				BattleMapMgr.m_curMapBlockItem[value.id]=value
+			end
 		end
-
+		BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
+		BattleMapMgr.m_nTimeCount=5
+		BattleMapMgr:_UpdateRoleDistance(tempPos)
 	end
 end
 

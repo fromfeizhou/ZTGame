@@ -1,0 +1,91 @@
+--BuffBase.txt
+--@breif 基础buff
+--@data 2018/03/25
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+BuffBase = {
+	m_tOwner = nil,		--buff拥有者
+	m_tConfig = nil,	--配置
+	m_nId = nil,	--buffid
+	m_nType = nil,	--buff类型
+
+	m_nMaxTime = nil,	--总时间
+	m_nLifeTime = nil,	--持续时间
+	m_nInterval = nil,	--触发间隔
+
+	m_bIsFinish = nil,	--是否结束
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BuffBase:Create(owner,config)
+	local obj = {}
+	setmetatable( obj, { __index = BuffBase })
+	obj:Init(owner,config)
+	return obj
+end
+
+--@brief 初始化
+function BuffBase:Init(owner,config)
+	self.m_tOwner = owner
+	self.m_tConfig = config
+
+	self.m_nId = self.m_tConfig.id
+	self.m_nType = self.m_tConfig.type
+
+	self.m_nMaxTime = BattleDefine:GetFrameBySecond(30)
+	self.m_nLifeTime = 0
+	self.m_nInterval = BattleDefine:GetFrameBySecond(5)
+
+	self.m_bIsFinish = false
+end
+
+--@brief 刷新
+function BuffBase:UpdateCommand()
+	if self.m_bIsFinish then
+		return
+	end
+	self.m_nLifeTime = self.m_nLifeTime + 1
+	if self.m_nInterval ~= -1 then
+		if self.m_nLifeTime % self.m_nInterval == 0 then
+			self:UpdateActoin()
+		end
+	end
+
+	if self.m_nMaxTime > 0 and self.m_nLifeTime >= self.m_nMaxTime then
+		self.m_bIsFinish = true
+	end
+end
+
+--@brief buff起始行为
+function BuffBase:StartActoin()
+	-- body
+end
+
+--@brief buff更新行为
+function BuffBase:UpdateActoin()
+	
+end
+
+--@brief buff行为
+function BuffBase:DoActoin()
+	-- body
+end
+
+--@brief 移除
+function BuffBase:Destroy()
+	
+end
+
+--@brief 是否结束
+function BuffBase:IsFinish()
+	return self.m_bIsFinish
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

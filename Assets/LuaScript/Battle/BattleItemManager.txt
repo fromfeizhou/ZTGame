@@ -111,7 +111,7 @@ end
 
 --@brief 拾取Item
 function BattleItemManager:PickItem(map_pick_goods_s2c)
-	local  pickItem = map_pick_goods_s2c.googs
+	local  pickItem = map_pick_goods_s2c.goods
 	local  baseItemData = tab_Equipment[pickItem.type_id]
 	if baseItemData then
 		self.m_OwnerEquipList[baseItemData.type]=pickItem.type_id	
@@ -123,21 +123,34 @@ end
 
 --@brief 刷新地图item
 function BattleItemManager:UpdateMapItems(map_update_goods)
-	if self.m_MapItemList[map_update_goods.remove_id_list] then
-		self.m_MapItemList[map_update_goods.remove_id_list]=nil
+
+	local needRemoveList = map_update_goods.remove_id_list
+	CSLog("BattleItemManager: MapremoveItem", SerializeTable(needRemoveList),"addList: ",SerializeTable(map_update_goods.add_goods_list))
+	if needRemoveList then
+		for key,value in pairs(needRemoveList) do
+			if self.m_MapItemList[value] then
+				self.m_MapItemList[value]=nil
+			end			
+		end
 	end
-	local  mapItem = map_update_goods.add_goods_list
-	local tempItem = nil
-	if mapItem then 
-		tempItem = {}
-	 	tempItem.id=mapItem.id
-	 	tempItem.itemId=mapItem.type_id
-	 	tempItem.itemNum=mapItem.num
-	 	tempItem.itemPos= BattleDefine:GetClientPos(mapItem.x,mapItem.y,mapItem.z)
-		self.m_MapItemList[tempItem.id]=tempItem
+	
+
+	local  mapItemList = map_update_goods.add_goods_list
+	local tempAddItemList = {}
+	if mapItemList then  
+		for key,value in pairs(mapItemList) do
+			local tempItem = nil
+			tempItem = {}
+	 		tempItem.id=value.id
+	 		tempItem.itemId=value.type_id
+	 		tempItem.itemNum=value.num
+	 		tempItem.itemPos= BattleDefine:GetClientPos(value.x,value.y,value.z)
+			self.m_MapItemList[tempItem.id]=tempItem
+			tempAddItemList[tempItem.id]=tempItem
+		end
 	end
 	--通知地圖預設刷新
-	BattleMapMgr:UpdateMapItem(map_update_goods.remove_id_list,tempItem)
+	BattleMapMgr:UpdateMapItem(map_update_goods.remove_id_list,tempAddItemList)
 end
 
 
@@ -181,7 +194,6 @@ end
 
 --@brief 判断范围
 function BattleItemManager:CheckInRang(pos,rangs)
---	CSLog("BattleItemManager:CheckInRang",pos,SerializeTable(rangs))
 	if pos.x < rangs.lx then
 		return false
 	end

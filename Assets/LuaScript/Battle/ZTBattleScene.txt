@@ -79,6 +79,8 @@ end
 --@brief 监听事件
 function ZTBattleScene:_AddEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateRoleEquipObj,self)
+
 end
 
 --@brifef 移除事件

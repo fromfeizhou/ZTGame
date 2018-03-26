@@ -80,13 +80,15 @@ function BattleMapView:UpdateMapView(data)
 	for key,value in pairs(self.m_tAllViewObj) do
 		if  not data[key] then
  			table.insert(needUnloadId,key)
+ 			CSLog("MapView AddRemoveId",key)
 		end
 	end
-
+CSLog("MapView ",SerializeTable(needUnloadId))
 	for key,value in pairs(needUnloadId) do
-		if self.m_tAllViewObj[key] then
-			CSGameObject.Destroy(self.m_tAllViewObj[key])
-			self.m_tAllViewObj[key]=nil
+		if self.m_tAllViewObj[value] then
+			CSGameObject.Destroy(self.m_tAllViewObj[value])
+			self.m_tAllViewObj[value]=nil
+			CSLog("BattleMapView DestroyObj")
 		end
 	end
 
@@ -95,6 +97,7 @@ function BattleMapView:UpdateMapView(data)
 			local  tempObj = CSGameObject.Instantiate(self.m_testCubeObj,self.m_transform)
 			tempObj.transform.position=value.itemPos
 			self.m_tAllViewObj[key]=tempObj
+			CSLog("BattleMapView Create Obj")
 		end
 	end
 

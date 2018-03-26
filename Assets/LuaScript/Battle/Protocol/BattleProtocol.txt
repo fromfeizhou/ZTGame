@@ -70,6 +70,17 @@ function BattleProtocol:SendMapPickItem(netId)
 	NetWorkManager:SendNetMsg(package)
 end
 
+--@brief 丢弃
+function BattleProtocol:SendDiscardItem(netId)
+	local package 	= {}
+	package.model 	= PB_MAP.MODEL
+	package.command = PB_MAP.DISCARD_GOODS
+	package.data = {
+		id = netId
+	}
+	CSLog("Send Pick Item", netId)
+	NetWorkManager:SendNetMsg(package)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************协议接收***************************************************************

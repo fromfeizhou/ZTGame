@@ -1,0 +1,55 @@
+--AttributeSystem.txt
+--@breif 属性系统
+--@data 2018/03/25
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+AttributeSystem = {
+	m_tAttriList = nil,	--属性列表
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function AttributeSystem:Create()
+	local obj = {}
+	setmetatable( obj, { __index = AttributeSystem })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function AttributeSystem:Init()
+	self.m_tAttriList = {}
+	for i,v in pairs(AttributeType) do
+		self.m_tAttriList[v] = 0
+	end
+end
+
+--@brief 移除
+function AttributeSystem:Destroy()
+	self.m_tAttriList = nil
+	--CSLog("AttributeSystem:Destroy")
+end
+
+--@brief 获得属性
+function AttributeSystem:GetAttributeByType(attriType)
+	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
+		return 0
+	end
+	return self.m_tAttriList[attriType]
+end
+
+--@brief 获得属性
+function AttributeSystem:SetArrtibuteByType(attriType,value)
+	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
+		return
+	end
+	self.m_tAttriList[attriType] = value
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

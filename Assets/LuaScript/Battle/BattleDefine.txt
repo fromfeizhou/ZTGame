@@ -22,6 +22,8 @@ TransLevelDefine = {
 
 --@breif 战斗预定义
 BattleDefine = {
+	SecondToFrameRate = 45,	--秒转帧率帧率
+
 	PosRate = 100,		    --位置前后端转换系数
 	CommandStep = 3,		--驱动帧步伐
 
@@ -113,6 +115,16 @@ function BattleDefine:GetClientPos(tx,ty,tz)
 	local posX,posY,posZ = tx/BattleDefine.PosRate,ty/BattleDefine.PosRate,tz/BattleDefine.PosRate
 	
 	return CS.UnityEngine.Vector3(posX,posY,posZ)
+end
+
+--@brief 秒转换逻辑帧数
+--@param time 秒
+function BattleDefine:GetFrameBySecond(second)
+	if second <= 0 then
+		return second
+	end
+	
+	return math.floor(second * BattleDefine.SecondToFrameRate)
 end
 
 
