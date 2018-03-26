@@ -410,7 +410,7 @@ end
 --@brief 更新地图Item
 function GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
 	if GlobalBattleCtrl.m_BattleItemManager then
-		GlobalBattleCtrl.m_BattleItemManager:GetCurMapBlockItem(map_update_goods)
+		GlobalBattleCtrl.m_BattleItemManager:UpdateMapItems(map_update_goods)
 	end
 end
 
