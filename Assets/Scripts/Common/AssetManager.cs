@@ -18,7 +18,7 @@ public class AssetManager
             path = path.Replace('\\', '/');
         }
 
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
         //编辑器模式下 资源获取
         Object obj = null;
         if (null != type)
@@ -39,15 +39,27 @@ public class AssetManager
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         string abName = path.Replace(fileName, "").Replace('/', '_');
         abName = abName.Substring(0, abName.Length - 1).ToLower();
-        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies(abName); ;
-        //加载assetBundleManifest文件    
-        if (null != bundle)
-        {   
-            Object obj2 = bundle.LoadAsset(fileNameEx);
-            callback(obj2, path);
-            return;
-        }
-        callback(null, path);
+
+        //AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies(abName);
+        ////加载assetBundleManifest文件    
+        //if (null != bundle)
+        //{
+        //    Object obj2 = bundle.LoadAsset(fileNameEx);
+        //    callback(obj2, path);
+        //    return;
+        //}
+        //callback(null, path);
+
+        AssetBundleManager.GetInstance().LoadSyncAssetBundleAndDependencies(abName, fileNameEx, (Object gameObject) =>
+        {
+            //加载assetBundleManifest文件    
+            if (null != gameObject)
+            {
+                callback(gameObject, path);
+                return;
+            }
+            callback(null, path);
+        });
 #endif
     }
 
