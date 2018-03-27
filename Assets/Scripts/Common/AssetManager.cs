@@ -18,7 +18,7 @@ public class AssetManager
             path = path.Replace('\\', '/');
         }
 
-#if !UNITY_EDITOR
+#if UNITY_EDITOR
         //编辑器模式下 资源获取
         Object obj = null;
         if (null != type)
