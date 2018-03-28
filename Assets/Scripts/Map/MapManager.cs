@@ -20,6 +20,8 @@ public class MapDefine
     public const string MapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapPropPostionData.txt";
     public const string ClienMapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/ClienMapPropPostionData.txt";//临时
 
+    public const string MapHideBlockdfdfDataSavePath = "Assets/Map/Prefabs/MapBlockData/HideBolckdffData.bytes";
+
 
     public const int MapByteInterval = 6;
 
@@ -326,7 +328,10 @@ public class MapManager : Singleton<MapManager>
             ByteBuffer tempBuffer = new ByteBuffer(temp);
             tempData.row = tempBuffer.ReadInt16();
             tempData.col = tempBuffer.ReadInt16();
-            tempData.paramValue = (int) (tempBuffer.ReadInt16() * 0.01f);
+            int tempInt = tempBuffer.ReadInt16();
+            float tempFloat = tempInt * 0.01f;
+            tempInt = (int) tempFloat;
+            tempData.paramValue = tempInt;
             tempData.type = type;
             mapBlockDataDic[tempData.row + "_" + tempData.col] = tempData;
         }
@@ -396,15 +401,12 @@ public class MapManager : Singleton<MapManager>
                 tempData.col = col;
                 tempData.type = eMapBlockType.Collect;
             }
-               
-         //   Debug.LogError("row: " + row + " col :" + col + "Value " + value);
-          //  mapBlockDataDic[row + "_" + col] = tempData;
         }
         if (tempData == null)
         {
             if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
             {
-                //Debug.LogError(" Hide" + tempData.paramValue);
+               // Debug.LogError(" Hide" + tempData.paramValue);
                 return tempData;
             }
         }
