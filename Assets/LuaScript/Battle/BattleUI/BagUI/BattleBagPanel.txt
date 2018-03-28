@@ -23,6 +23,8 @@ BattleBagPanel = {
 	m_gameObject=nil,
 	m_EquipList=nil,
 
+	m_cellBg=nil,
+
 }
 
 RoleEquipType={
@@ -84,14 +86,19 @@ end
 function BattleBagPanel:_InitPanel()
 	-- body
 	self.mainRoot=self.m_transform:Find("Main");
+	CSLog(self.mainRoot)
 	self.bagBtn=PanelWidget:GetButton(self.m_transform,"BagButton",function() self:OnClickBagBtn() end)	
+	self.m_cellBg=self.mainRoot:Find("EquptRoot/Bg");
+	CSLog(self.m_cellBg," 1   ")
+	self.m_cellBg=self.m_cellBg:GetComponent("RectTransform")
+	CSLog(self.m_cellBg," 2   ")
 
 	for key, value in pairs(RoleEquipType) do     
 	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
 		local events={}
-		events.OnClick=function(id) self:_OnClickEquip(id) end 
-
-		self.m_EquipList[value]:SetUIEvent(events)
+		events.OnUnEquip=function(id) self:_OnClickEquip(id) end 
+CSLog("Cell ",m_cellBg)
+		self.m_EquipList[value]:SetUIEvent(events,self.m_cellBg)
 	end
 	--self:UpdateEquip()
 

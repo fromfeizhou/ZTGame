@@ -20,7 +20,8 @@ BattleUIMgr = {
 	m_playerContainer = nil,	--玩家容器
 	m_hpContainer = nil,		--hp容器
 	m_UIContainer = nil,		--地图容器
-	m_BattleBagContainer=nil 	--角色背包
+	m_BattleBagContainer=nil, 	--角色背包
+	m_MapItemUIContainer=nil, 	--地图物品UI容器
 };
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -57,6 +58,10 @@ function BattleUIMgr:Init()
 	--地图容器
 	self.m_UIContainer = self:_CreateContainer("UIContainer",self.m_mainUIContainer)
 
+	--地图物品UI容器
+	self.m_MapItemUIContainer = self:_CreateContainer("MapPropUIContainer",self.m_mainUIContainer)
+
+
 	--战斗UI模块
 	self.m_UIModel = BattleModel:Create(self.m_UIContainer)
 
@@ -92,6 +97,11 @@ function BattleUIMgr:Destroy()
 		self.m_playerContainer = nil
 	end
 
+	if self.m_MapItemUIContainer then
+		CSGameObject.Destroy(self.m_MapItemUIContainer.gameObject)
+		self.m_MapItemUIContainer = nil
+	end
+
 	if self.m_hpContainer then
 		CSGameObject.Destroy(self.m_hpContainer.gameObject)
 		self.m_hpContainer = nil
@@ -125,6 +135,11 @@ end
 --@brief 获取头像容器
 function BattleUIMgr:GetHeadContainer()
 	return self.m_hpContainer
+end
+
+--@brief 获取地图物品UI容器
+function BattleUIMgr:MapItemUIContainer()
+	return self.m_MapItemUIContainer
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

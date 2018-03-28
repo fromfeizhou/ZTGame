@@ -8,7 +8,7 @@ public class AssetBundleBuilder : MonoBehaviour
 {
     //资源存放路径
     static string assetsDir = Application.dataPath + "/ResourcesLib";
-    static string modelsDir = Application.dataPath + "/Models/TmpCharacter";
+    static string modelsDir = Application.dataPath + "/Models";
     static string prefabsDir = Application.dataPath + "/Prefabs";
     static string mapDir = Application.dataPath + "/Map";
     static string luaScript = Application.dataPath + "/LuaScript";

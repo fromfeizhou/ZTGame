@@ -6,6 +6,7 @@ PanelWidget = {
 function PanelWidget:GetButton(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("Button")
+
 	button.onClick:AddListener(onClick)
 	return button
 end
@@ -56,4 +57,9 @@ end
 function PanelWidget:GetZTCircle(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTCircle");
+end
+
+function PanelWidget:GetZTDargItem(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ZTDragItem");
 end
