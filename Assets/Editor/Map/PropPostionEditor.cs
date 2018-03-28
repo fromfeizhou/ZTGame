@@ -59,6 +59,7 @@ public class PropPostionEditor : Editor
             AssetDatabase.Refresh();
         }
 
+
     }
 
     private void CreatePropPostionByText()
@@ -85,8 +86,8 @@ public class PropPostionEditor : Editor
                     bool isNew = string.IsNullOrEmpty(temp[1]);
                     string name = isNew ? "New" : temp[1];
 
-                    Vector3 pos = new Vector3(float.Parse(posData[0]), float.Parse(posData[1]),
-                        float.Parse(posData[2]));
+                    Vector3 pos = new Vector3(float.Parse(posData[0])*0.01f, float.Parse(posData[1]) * 0.01f,
+                        float.Parse(posData[2]) * 0.01f);
                     GameObject tempObj = new GameObject(name);
                     tempObj.transform.SetParent(propPostionEditor.transform);
                     tempObj.transform.position = pos;
@@ -182,7 +183,6 @@ public class PropPostionEditor : Editor
             File.Delete(MapDefine.MapPropPostionDataSavePath);
         File.WriteAllText(MapDefine.MapPropPostionDataSavePath, tempStr.ToString());
     }
-
 
 }
 
