@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using XLua;
+using System;
 
 /// <summary>
 ///   资源管理器
@@ -62,6 +63,13 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
     /// 临时的AssetBundle
     /// </summary>
     private Dictionary<string, AssetBundle> _assetbundle_temporary;
+
+    /// <summary>
+    /// 异步加载
+    /// </summary>
+    private IEnumerator _loadSyncStart;
+    private Dictionary<string, List<Action<AssetBundle>>> _loadSyncAbList;
+    private List<string> _loadSyncAbNames;
 
     protected AssetBundleManager()
     { }
@@ -183,17 +191,144 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
         return LoadAssetBundle(assetbundlename);
     }
 
+    public void LoadSyncAssetBundleAndDependencies(string assetbundlename,string assetname, Action<UnityEngine.Object> callback)
+    {
+        if (assetbundlename == null)
+            callback(null);
+        if (MainManifest == null)
+            callback(null);
+        LoadSyncAssetBundle(assetbundlename, (AssetBundle assetBundle) =>
+        {
+            StartCoroutine(LoadAssetInAssetBundle(assetBundle, assetname, callback));
+        });
+    }
+
+    private IEnumerator LoadAssetInAssetBundle(AssetBundle assetBundle,string assetname, Action<UnityEngine.Object> callback)
+    {
+        AssetBundleRequest request = assetBundle.LoadAssetAsync(assetname);
+        while (!request.isDone)
+        {
+            yield return null;
+        }
+        callback(request.asset);
+    }
+
     private static List<string> _permanentList = new List<string> { "assets_resourceslib_config" };
     /// <summary>
     ///   加载AssetBundle
     /// </summary>
     AssetBundle LoadAssetBundle(string assetbundlename)
     {
-        if (assetbundlename == null)
-            return null;
-        if (MainManifest == null)
+        if (assetbundlename == null || MainManifest == null)
             return null;
 
+        AssetBundle ab = LoadInCahce(assetbundlename);
+        if (null != ab)
+            return ab;
+        string assetbundle_path = DownLoadCommon.GetFileFullName(assetbundlename);
+        if (System.IO.File.Exists(assetbundle_path))
+        {
+            ab = AssetBundle.LoadFromFile(assetbundle_path);
+            SaveInCahce(assetbundlename, ab);
+        }
+
+        return ab;
+    }
+
+
+    void LoadSyncAssetBundle(string assetbundlename, Action<AssetBundle> callback)
+    {
+        if (assetbundlename == null || MainManifest == null) {
+            callback(null);
+        }
+            
+        AssetBundle ab = LoadInCahce(assetbundlename);
+        if (null != ab)
+        {
+            callback(ab);
+            return;
+        }
+
+        string[] deps = MainManifest.GetAllDependencies(assetbundlename);
+        for (int index = 0; index < deps.Length; index++)
+        {
+            string depsName = deps[index];
+
+            if (!_loadSyncAbNames.Contains(depsName) && !CheckInCache(depsName))
+            {
+                _loadSyncAbNames.Add(depsName);
+            }
+        }
+        
+
+        if (!_loadSyncAbNames.Contains(assetbundlename))
+        {
+            _loadSyncAbNames.Add(assetbundlename);
+        }
+        if (!_loadSyncAbList.ContainsKey(assetbundlename))
+        {
+            _loadSyncAbList.Add(assetbundlename, new List<Action<AssetBundle>>());
+        }
+        _loadSyncAbList[assetbundlename].Add(callback);
+        if (null == _loadSyncStart)
+        {
+            _loadSyncStart = LoadAsyncCoroutineProcess(assetbundlename);
+            StartCoroutine(_loadSyncStart);
+        }
+    }
+
+    IEnumerator LoadAsyncCoroutineProcess(string assetbundlename)
+    {
+        while (_loadSyncAbNames.Count > 0)
+        {
+            yield return LoadAsyncCoroutine(_loadSyncAbNames[0]);
+        }
+       
+        _loadSyncStart = null;
+    }
+
+    IEnumerator LoadAsyncCoroutine(string assetbundlename)
+    {
+        string assetbundle_path = DownLoadCommon.GetFileFullName(assetbundlename);
+        AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(assetbundle_path);
+        //Debug.LogWarning(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + assetbundlename);
+        while (!abcr.isDone)
+        {
+            yield return null;
+        }
+        //Debug.LogWarning("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" + assetbundlename);
+        if (null != abcr.assetBundle)
+        {
+            SaveInCahce(assetbundlename, abcr.assetBundle);
+            _loadSyncAbNames.RemoveAt(0);
+        }
+
+        if (_loadSyncAbList.ContainsKey(assetbundlename))
+        {
+            List<Action<AssetBundle>> callbackList = _loadSyncAbList[assetbundlename];
+            for (int i = 0; i < callbackList.Count; i++)
+            {
+                Action<AssetBundle> callback = callbackList[i];
+                callback(abcr.assetBundle);
+            }
+            
+            _loadSyncAbList.Remove(assetbundlename);
+        }
+    }
+
+    bool CheckInCache(string assetbundlename)
+    {
+        if (_assetbundle_permanent.ContainsKey(assetbundlename))
+            return true;
+        if (_assetbundle_cache.ContainsKey(assetbundlename))
+            return true;
+        if (_assetbundle_temporary.ContainsKey(assetbundlename))
+            return true;
+        return false;
+    }
+
+    AssetBundle LoadInCahce(string assetbundlename)
+    {
         AssetBundle ab = null;
         if (_assetbundle_permanent.ContainsKey(assetbundlename))
         {
@@ -207,23 +342,17 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
         {
             ab = _assetbundle_temporary[assetbundlename];
         }
-        else
-        {
-            string assetbundle_path = DownLoadCommon.GetFileFullName(assetbundlename);
-            if (System.IO.File.Exists(assetbundle_path))
-            {
-                ab = AssetBundle.LoadFromFile(assetbundle_path);
-
-                //根据AssetBundleDescribe分别存放AssetBundle
-                if (_permanentList.Exists(a => a == assetbundlename))
-                    _assetbundle_permanent.Add(assetbundlename, ab);
-                else
-                    _assetbundle_temporary.Add(assetbundlename, ab);
-            }
-        }
-
         return ab;
     }
+    void SaveInCahce(string assetbundlename, AssetBundle ab)
+    {
+        //根据AssetBundleDescribe分别存放AssetBundle
+        if (_permanentList.Exists(a => a == assetbundlename))
+            _assetbundle_permanent.Add(assetbundlename, ab);
+        else
+            _assetbundle_temporary.Add(assetbundlename, ab);
+    }
+
 
     /// <summary>
     ///   释放常驻的AssetBundle
@@ -306,6 +435,10 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
         ErrorCode = EmErrorCode.None;
         StopAllCoroutines();
         StartCoroutine(Preprocess());
+
+        _loadSyncStart = null;
+        _loadSyncAbList = new Dictionary<string, List<Action<AssetBundle>>>();
+        _loadSyncAbNames = new List<string>();
     }
 
     /// <summary>
@@ -398,7 +531,7 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
         //拷贝所有配置文件
         yield return DownLoadCommon.StartCopyInitialFile(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
 
-		string initial_full_name = DownLoadCommon.GetFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
+        string initial_full_name = DownLoadCommon.GetFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         AssetBundleManifest initial = DownLoadCommon.LoadMainManifestByPath(initial_full_name);
         //拷贝AssetBundle文件
         string[] all_assetbundle = initial.GetAllAssetBundles();
