@@ -1,0 +1,76 @@
+--BattleMapPropUIMgr.txt
+--@breif 头像管理
+--@data 2018/03/23
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSGetWorldToScreenPoint = CS.GameTool.GetWorldToScreenPoint
+local CSText = CS.UnityEngine.UI.Text
+
+BattleMapPropUIMgr = {
+	
+	m_Panel=nil,
+	m_itemRoot=nil,
+	m_Item=nil,
+	m_itemList=nil,
+
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BattleMapPropUIMgr:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleMapPropUIMgr })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function BattleMapPropUIMgr:Init()
+	CSLog("BattleMapPropUIMgr:Init")
+	--self:_InitEvent()
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("MapItemUIRoot"),function(target,path)
+ 		self.m_Panel = CSTransform.Instantiate(target.transform,GlobalBattleCtrl:GetHeadContainer())
+		self._InitUI()
+	end)
+end
+
+--@brief 初始化组建
+function BattleMapPropUIMgr:_InitUI()
+	-- self.m_itemRoot = self.m_Panel:Find("Content")
+	-- local transform = self.m_itemRoot:Find("Item")
+	-- self.m_Item = transform.gameObject
+	-- self.m_Item:SetActive(false)
+end
+
+function BattleMapPropUIMgr:UpdateMapItemList(battleMapItemDatas)
+	for key,value in pairs(battleMapItemDatas) do
+
+
+
+	end
+
+end
+
+function BattleMapPropUIMgr:CreateItem(item)
+
+
+end
+
+
+--@brief 刷新
+function BattleMapPropUIMgr:Update()
+
+end
+
+
+
+--@brief 移除
+function BattleMapPropUIMgr:Destroy()
+	CSLog("BattleMapPropUIMgr:Destroy")
+
+end

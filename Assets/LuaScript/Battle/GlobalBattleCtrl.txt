@@ -15,6 +15,7 @@ GlobalBattleCtrl = {
 	
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
+	m_mapPropUIMgr=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -40,13 +41,15 @@ function GlobalBattleCtrl:Init()
 	--技能解析器
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
-	
 
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
 
 	--主UI管理器
 	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
+
+	--地图物品ui容器
+	GlobalBattleCtrl.m_mapPropUIMgr=BattleMapPropUIMgr:Create()
 
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
@@ -97,6 +100,12 @@ function GlobalBattleCtrl:Destroy()
 	if GlobalBattleCtrl.m_skillActionManager then
 		GlobalBattleCtrl.m_skillActionManager:Destroy()
 		GlobalBattleCtrl.m_skillActionManager = nil
+	end
+
+	--地图item(UI)解析器
+	if GlobalBattleCtrl.m_mapPropUIMgr then
+		GlobalBattleCtrl.m_mapPropUIMgr:Destroy()
+		GlobalBattleCtrl.m_mapPropUIMgr = nil
 	end
 
 	--地图毒圈管理器销毁
@@ -368,6 +377,13 @@ function GlobalBattleCtrl:GetHeadContainer()
 		return GlobalBattleCtrl.m_battleUIMgr:GetHeadContainer()
 	end
 end
+
+--@brief 获得地图ui容器
+function GlobalBattleCtrl:GetHeadContainer()
+	if GlobalBattleCtrl.m_battleUIMgr then
+		return GlobalBattleCtrl.m_battleUIMgr:MapItemUIContainer()
+	end
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 容器相关接口end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -417,6 +433,13 @@ end
 function GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
 	if GlobalBattleCtrl.m_BattleItemManager then
 		GlobalBattleCtrl.m_BattleItemManager:UpdateMapItems(map_update_goods)
+	end
+end
+
+--@brief 更新地图Item(UI)在地图上显示名字
+function GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapItemDatas)
+	if GlobalBattleCtrl.m_mapPropUIMgr then
+		GlobalBattleCtrl.m_mapPropUIMgr:UpdateMapItemList(BattleMapItemDatas)
 	end
 end
 
