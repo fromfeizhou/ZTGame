@@ -8,7 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
-local CSJoystick = CS.JoystickBase
+local CSZTDragItem = CS.ZTDragItem
 
 
 
@@ -19,6 +19,11 @@ BattleBagCell = {
 	m_textName=nil,
 	m_imageIcon=nil,
 	m_buttonBtn=nil,
+	m_ZTDragItem=nil,
+
+	m_iconRect=nil,--icon recttransfrom
+	m_iconV2=nil, --icon pos
+	m_DragRange=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -54,22 +59,52 @@ end
 function BattleBagCell:_InitCell()
 	-- body
 	self.m_textName=PanelWidget:GetText(self.m_transform,"Content/Name")
-	
+	local transform = self.m_transform:Find("Content/Icon")
+	self.m_iconRect=transform:GetComponent("RectTransform")
+	self.m_iconV2=self.m_iconRect.anchoredPosition
 end
 
-function BattleBagCell:SetUIEvent(envetTable)
-	self.m_buttonBtn=PanelWidget:GetButton(self.m_transform,"Content/Icon",function()
-		self:_OnCellClick(envetTable.OnClick)
-	end )
+function BattleBagCell:SetUIEvent(envetTable,target)
 
-end
+	 self.m_ZTDragItem=PanelWidget:GetZTDargItem(self.m_transform,"Content/Icon")
+	self.m_DragRange=target.sizeDelta*0.5
+	self.m_ZTDragItem:Init(target,self.m_iconRect)
+	self.m_ZTDragItem.OnDragEvent= function(pos)
+		self:_OnDargIcon(pos)
+	end
 
---@brief 点击cell
-function BattleBagCell:_OnCellClick(event)
-	if self.m_netId then
-		event(self.m_netId)
+	self.m_ZTDragItem.OnDragEndEvent= function(pos)
+		self:_OnDragEndEvent(pos,envetTable.OnUnEquip)
 	end
 end
+
+--@brief 拖拽icon
+function BattleBagCell:_OnDargIcon(pos)
+	self.m_iconRect.anchoredPosition=pos
+	-- body
+end
+
+--@brief 拖拽结束
+function BattleBagCell:_OnDragEndEvent(pos,OnUnequip)
+	
+	if math.abs(pos.x)>self.m_DragRange.x or math.abs(pos.y)>self.m_DragRange.y then
+		if self.m_netId then
+			OnUnequip(self.m_netId)
+			self.m_transform.gameObject:SetActive(false)
+			self.m_iconRect.anchoredPosition=self.m_iconV2
+		end
+	else	
+		self.m_iconRect.anchoredPosition=self.m_iconV2
+		self.m_transform.gameObject:SetActive(true)
+	end
+end
+
+-- --@brief 点击cell
+-- function BattleBagCell:_OnCellClick(event)
+-- 	if self.m_netId then
+-- 		event(self.m_netId)
+-- 	end
+-- end
 
 -- 更新Cell
 function BattleBagCell:UpdateCell( item )

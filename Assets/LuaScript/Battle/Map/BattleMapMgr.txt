@@ -96,7 +96,7 @@ function  BattleMapMgr:_UpdatePos(pos)
 		BattleMapMgr.m_curMapBlockItem = GlobalBattleCtrl:GetCurMapClockItem(ranges)
 
 		if ZTableLen(BattleMapMgr.m_curMapBlockItem) > 0 then
- 			BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
+ 			BattleMapMgr:_UpdateView()
 		end
 	end
 end
@@ -126,10 +126,16 @@ function BattleMapMgr:UpdateMapItem(needRemoveList,addItem)
 				BattleMapMgr.m_curMapBlockItem[value.id]=value
 			end
 		end
-		BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
+		BattleMapMgr:_UpdateView()
 		BattleMapMgr.m_nTimeCount=5
 		BattleMapMgr:_UpdateRoleDistance(tempPos)
 	end
+end
+
+--@brief 刷新地图预设跟ui提示
+function BattleMapMgr:_UpdateView()
+	BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
+	GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapMgr.m_curMapBlockItem)
 end
 
 --@brief 判断范围

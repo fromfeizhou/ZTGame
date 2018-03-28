@@ -90,7 +90,7 @@ public class BaseModelSprite
 {
     protected GameObject model;
     protected AnimationBase animator;
-    protected int transLv;
+    protected int transLv = -1;
 
     //创建
     public virtual void CreateModel(string path,Transform parent,int type) { }
@@ -121,6 +121,7 @@ public class RoleModelSprite : BaseModelSprite
                 GameObject go = GameObject.Instantiate(prefab, parent);
                 model = go;
                 animator = AnimationBase.GetAnimationBase(type, go);
+                ChangeTranslucence(0);
             }
         });
     }

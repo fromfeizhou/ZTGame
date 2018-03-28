@@ -14,7 +14,6 @@ public class MapColliderEditor : EditorWindow
     private static Dictionary<string, MapBlockData> MapHeightBlockDataDic;
     private static Dictionary<string, MapBlockData> MapHideBlockDataDic;
     private static byte[] blockBytesData;
-  
 
     [MenuItem("Terrain/CreateMapColliderData")]
     private static void CretateMapColliderData()
@@ -141,12 +140,12 @@ public class MapColliderEditor : EditorWindow
         }
 
 
-        if (!MapHideBlockDataDic.ContainsKey(key))
-        {
-            string[] datas = key.Split('_');
-            int paramValue = string.IsNullOrEmpty(param) ?  0 : (int)(float.Parse(param) * 100);
-            MapHideBlockDataDic[key] = new MapBlockData { row = int.Parse(datas[0]), col = int.Parse(datas[1]), type = mapBlockType, paramValue = paramValue };
-        }
+        //if (!MapHideBlockDataDic.ContainsKey(key))
+        //{
+        //    string[] datas = key.Split('_');
+        //    int paramValue = string.IsNullOrEmpty(param) ?  0 : (int)(float.Parse(param) * 100);
+        //    MapHideBlockDataDic[key] = new MapBlockData { row = int.Parse(datas[0]), col = int.Parse(datas[1]), type = mapBlockType, paramValue = paramValue };
+        //}
     }
 
 
