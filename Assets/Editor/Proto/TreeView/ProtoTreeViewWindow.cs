@@ -3,9 +3,9 @@ using UnityEditor.IMGUI.Controls;
 using System.Collections.Generic;
 
 
-namespace UnityEditor.TreeViewExamples
+namespace UnityEditor.ProtoTreeView
 {
-	class SimpleTreeViewWindow : EditorWindow
+	class ProtoTreeViewWindow : EditorWindow
 	{
 		// We are using SerializeField here to make sure view state is written to the window 
 		// layout file. This means that the state survives restarting Unity as long as the window
@@ -14,7 +14,7 @@ namespace UnityEditor.TreeViewExamples
 		[SerializeField] TreeViewState m_TreeViewState;
 
 		// The TreeView is not serializable it should be reconstructed from the tree data.
-		SimpleTreeView m_TreeView;
+		ProtoTreeView m_TreeView;
 		SearchField m_SearchField;
 
 		void OnEnable ()
@@ -24,7 +24,7 @@ namespace UnityEditor.TreeViewExamples
 			if (m_TreeViewState == null)
 				m_TreeViewState = new TreeViewState ();
 
-			m_TreeView = new SimpleTreeView(m_TreeViewState);
+			m_TreeView = new ProtoTreeView(m_TreeViewState);
 			m_TreeView.OnChangeItem = OnItemChange;
 			m_SearchField = new SearchField ();
 			m_SearchField.downOrUpArrowKeyPressed += m_TreeView.SetFocusAndEnsureSelectedItem;
@@ -38,17 +38,9 @@ namespace UnityEditor.TreeViewExamples
 
 		}
 		string tmpOutput = "";
-		void OnItemChange(TreeViewItem prev, TreeViewItem cur)
+		void OnItemChange(ProtoTreeViewItem selectItem)
 		{
-			cModule model = m_TreeView.GetModelData (cur);
-			string output = "output:\n";
-			if (model != null) {
-				output += model.GetDataTable ();
-			} else {
-				output += "Null";
-			}
-			tmpOutput = output;
-			Debug.Log(output);
+			Debug.Log (selectItem.displayName);
 		}
 
 		void DoToolbar()
@@ -71,9 +63,9 @@ namespace UnityEditor.TreeViewExamples
 		[MenuItem ("TreeView Examples/Simple Tree Window")]
 		static void ShowWindow ()
 		{
-			// Get existing open window or if none, make a new one:
-			var window = GetWindow<SimpleTreeViewWindow> ();
-			window.titleContent = new GUIContent ("My Window");
+			
+			ProtoTreeViewWindow window = EditorWindow.GetWindowWithRect<ProtoTreeViewWindow> (new Rect(0,0,512,512));
+			window.titleContent = new GUIContent ("ProtoBrowser");
 			window.Show ();
 		}
 
