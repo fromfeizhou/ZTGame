@@ -16,91 +16,71 @@ PB_LOGIN = {
 
 --@brife 角色
 PB_ROLE = {
-	MODEL = 3, 		--模块ID
+	MODEL = 2, 		--模块ID
 	INFO = 1, 		--角色信息
 	MOBILE = 2, 		--手机系统信息
 	INFO_OTHER = 3, 		--其他人信息（角色属性面板）
 	ATTR = 4, 		--属性更新
 	FORTUNE = 5, 		--财富更新
-	HP_MP_CHANGE = 6, 		--血蓝变化
-	VIP_GIFT = 7, 		--领取VIP礼包
-	GONGXUN = 8, 		--军功变化
-	EXP_INC = 10, 		--获得经验
-	UPGRADE = 11, 		--升级
-	SIGN = 12, 		--签到
-	SIGN_INFO = 13, 		--签到信息
-	GUIDE_LIST = 14, 		--已完成的新手引导列表
-	GUIDE_LATEST = 15, 		--最后完成的新手引导
-	GUIDE_COMPLETE = 16, 		--完成某新手引导
-	PAY_PACKAGE_INFO = 17, 		--充值信息
-	PAY_PACKAGE_BUY = 18, 		--充值
-	PAY_PACKAGE_REFUND = 19, 		--领取每日返还
-	REVIVE = 20, 		--复活
-	USE_CDKEY = 21, 		--使用CDKEY
-	PAY_PACKAGE_REQ = 22, 		--请求充值，获得订单号
-	ONLINE_TIME = 30, 		--角色在线时间
-	VIGOUR_BUY = 40, 		--购买体力
-	VIGOUR_INFO = 41, 		--体力信息
-	SYNC = 44, 		--状态同步（服务端只广播）
-	ACC_INFO = 45, 		--配件信息
-	BUY_GOLD = 46, 		--购买金币
-	BUY_GOLD_INFO = 47, 		--购买金币信息查询
-	ERROR = 48, 		--消息错误
-	BUY_ACTIVITY_GOODS = 49, 		--购买活动道具
-	ACTIVITY_CONDITION_INFO = 50, 		--活动前置条件
-	UPDATE_FIGHT_POINT = 51, 		--战力更新
-	ACTIVITY_ALL_INFO = 54, 		--活动总信息
-	BC_INFO = 55, 		--活动总信息
+	VIP_GIFT = 6, 		--领取VIP礼包
+	EXP_INC = 7, 		--获得经验
+	UPGRADE = 8, 		--升级
+	SIGN = 9, 		--签到
+	SIGN_INFO = 10, 		--签到信息
+	GUIDE_LIST = 11, 		--已完成的新手引导列表
+	GUIDE_LATEST = 12, 		--最后完成的新手引导
+	GUIDE_COMPLETE = 13, 		--完成某新手引导
+	PAY_PACKAGE_INFO = 14, 		--充值信息
+	PAY_PACKAGE_BUY = 15, 		--充值
+	PAY_PACKAGE_REFUND = 16, 		--领取每日返还
+	USE_CDKEY = 17, 		--使用CDKEY
+	PAY_PACKAGE_REQ = 18, 		--请求充值，获得订单号
+	ONLINE_TIME = 19, 		--角色在线时间
+	VIGOUR_BUY = 20, 		--购买体力
+	VIGOUR_INFO = 21, 		--体力信息
+	SYNC = 22, 		--状态同步（服务端只广播）
+	BUY_GOLD = 23, 		--购买金币
+	BUY_GOLD_INFO = 24, 		--购买金币信息查询
+	ERROR = 25, 		--消息错误
+	BUY_ACTIVITY_GOODS = 26, 		--购买活动道具
+	ACTIVITY_CONDITION_INFO = 27, 		--活动前置条件
+	UPDATE_FIGHT_POINT = 28, 		--战力更新
+	ACTIVITY_ALL_INFO = 29, 		--活动总信息
+	BC_INFO = 30, 		--活动总信息
 }
 
 --@brife 地图
 PB_MAP = {
-	MODEL = 4, 		--模块ID
+	MODEL = 3, 		--模块ID
 	SWITCH = 1, 		--请求场景切换(暂时没用)
 	ENTER = 2, 		--前端开始进入地图
 	SIGHT = 3, 		--视野信息
 	ROLE_ENTER = 4, 		--玩家进入视野
 	ROLE_LEAVE = 5, 		--玩家离开视野
-	MON_ENTER = 7, 		--怪物进入场景
-	MON_LEAVE = 8, 		--怪物离开场景
-	MON_MOVE = 9, 		--怪物移动
-	ROLE_UPDATE = 10, 		--更新P_MAP_ROLE部分数据
-	MON_UPDATE = 11, 		--更新P_MAP_MON部分数据
-	MON_DEAD = 12, 		--怪物死亡
-	BUFF_POINT_ENTER = 17, 		--BUFF点进入场景
-	BUFF_POINT_LEAVE = 18, 		--BUFF点离开场景
-	BUFF_POINT_GET = 19, 		--获得BUFF点
-	DEBUFF_POINT_ENTER = 20, 		--DEBUFF点进入场景
-	DEBUFF_POINT_LEAVE = 21, 		--DEBUFF点离开场景
-	DEBUFF_POINT_GET = 22, 		--获得DEBUFF点
-	ROLE_FRAME = 23, 		--玩家帧消息
-	FRAME = 24, 		--驱动帧消息
-	PICK_GOODS = 25, 		--捡起物品
-	DISCARD_GOODS = 26, 		--丢弃物品
-	USE_GOODS = 27, 		--使用物品道具
-	UPDATE_GOODS = 28, 		--物品更新
+	ROLE_UPDATE = 6, 		--更新P_MAP_ROLE部分数据
+	ROLE_FRAME = 7, 		--玩家帧消息
+	FRAME = 8, 		--驱动帧消息
+	PICK_GOODS = 9, 		--捡起物品
+	DISCARD_GOODS = 10, 		--丢弃物品
+	USE_GOODS = 11, 		--使用物品道具
+	UPDATE_GOODS = 12, 		--物品更新
 }
 
 --@brife 物品
 PB_GOODS = {
-	MODEL = 5, 		--模块ID
+	MODEL = 4, 		--模块ID
 	INFO = 1, 		--物品信息
 	DELETE = 2, 		--删除物品(支持多个)
 	USE = 3, 		--使用物品
-	PUTON = 4, 		--穿装备
-	TAKEOFF = 5, 		--卸装备
-	BATCH_USE = 6, 		--批量使用
-	RENEW_WEAPON = 7, 		--装备续费
-	OUTIMES_TIPS = 8, 		--过期物品提示(前端检测)
-	SALE_GOODS = 9, 		--出售物品
-	SET_VALID = 10, 		--设置装备生效
-	LOOK = 11, 		--查看物品
-	REPLACE = 12, 		--装备替换(只限于已经装备的装备互相替换)
+	BATCH_USE = 4, 		--批量使用
+	SALE_GOODS = 5, 		--出售物品
+	SET_VALID = 6, 		--设置装备生效
+	LOOK = 7, 		--查看物品
 }
 
 --@brife 聊天
 PB_CHAT = {
-	MODEL = 6, 		--模块ID
+	MODEL = 5, 		--模块ID
 	REQ = 1, 		--聊天请求，包含世界，场景，家族，队伍
 	PRIVATE_CHAT = 2, 		--私聊
 	CONTENT_PUSH = 3, 		--聊天内容推送
@@ -116,7 +96,7 @@ PB_CHAT = {
 
 --@brife 设置
 PB_SETTING = {
-	MODEL = 7, 		--模块ID
+	MODEL = 6, 		--模块ID
 	GET_ALL = 1, 		--获取设置
 	SET_ONE_SETTING = 2, 		--设置内容
 	PROTO_FORBID = 3, 		--禁止协议
@@ -124,7 +104,7 @@ PB_SETTING = {
 
 --@brife 邮件系统
 PB_MAIL = {
-	MODEL = 8, 		--模块ID
+	MODEL = 7, 		--模块ID
 	GET_BOX_LIST = 1, 		--获取邮件列表
 	DEL_MAIL = 2, 		--删除邮件
 	TAKE_ATTACH = 3, 		--提取邮件附件
@@ -136,7 +116,7 @@ PB_MAIL = {
 
 --@brife 成就
 PB_ACHIEVE = {
-	MODEL = 9, 		--模块ID
+	MODEL = 8, 		--模块ID
 	LIST = 1, 		--当前成就列表
 	REACH_CONDITION = 2, 		--达成条件列表
 	REWARD = 3, 		--领成就奖励
@@ -145,14 +125,14 @@ PB_ACHIEVE = {
 
 --@brife 排行榜
 PB_RANK = {
-	MODEL = 10, 		--模块ID
+	MODEL = 9, 		--模块ID
 	INFO = 1, 		--排行榜信息
 	ROLE_RANK_INFO = 2, 		--玩家的排行榜进度
 }
 
 --@brife 活动
 PB_ACTIVITY = {
-	MODEL = 11, 		--模块ID
+	MODEL = 10, 		--模块ID
 	ACTIVITY_LIST = 1, 		--活动列表
 	GET_ACTIVITY_REWARD = 2, 		--领奖
 	ACTIVITY_INFO = 3, 		--活动信息
@@ -161,34 +141,9 @@ PB_ACTIVITY = {
 	UPDATE_ACTIVITY = 6, 		--更新活动状态
 }
 
---@brife 排行榜
-PB_MISSION = {
-	MODEL = 12, 		--模块ID
-	LIST = 1, 		--日常任务列表
-	GET_MISSION_REWARD = 2, 		--领取任务奖励
-	REFRESH_MISSION_LIST = 3, 		--刷新任务列表
-	UPDATE_MISSION = 4, 		--更新任务
-}
-
---@brife 七天引导
-PB_SEVEN = {
-	MODEL = 13, 		--模块ID
-	GUIDE_LIST = 1, 		--七天引导列表
-	GUIDE_AWARD = 2, 		--引导领奖
-	GUIDE_UPDATE = 3, 		--引导更新
-}
-
---@brife 任务
-PB_TASK = {
-	MODEL = 14, 		--模块ID
-	LIST = 1, 		--任务列表
-	REWARD = 2, 		--领取任务奖励
-	UPDATE = 3, 		--批量更新任务
-}
-
 --@brife 大逃杀
 PB_SURVIVE = {
-	MODEL = 15, 		--模块ID
+	MODEL = 11, 		--模块ID
 	MATCH = 1, 		--开始匹配
 	FIGHT = 2, 		--开始游戏
 }

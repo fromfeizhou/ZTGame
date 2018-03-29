@@ -13,85 +13,65 @@ MODEL_PB = {
 		[10] = "login_share_config",
 	},
 
-	[3] = {
+	[2] = {
 		[1] = "role_info",
 		[2] = "role_mobile",
 		[3] = "role_info_other",
 		[4] = "role_attr",
 		[5] = "role_fortune",
-		[6] = "role_hp_mp_change",
-		[7] = "role_vip_gift",
-		[8] = "role_gongxun",
-		[10] = "role_exp_inc",
-		[11] = "role_upgrade",
-		[12] = "role_sign",
-		[13] = "role_sign_info",
-		[14] = "role_guide_list",
-		[15] = "role_guide_latest",
-		[16] = "role_guide_complete",
-		[17] = "role_pay_package_info",
-		[18] = "role_pay_package_buy",
-		[19] = "role_pay_package_refund",
-		[20] = "role_revive",
-		[21] = "role_use_cdkey",
-		[22] = "role_pay_package_req",
-		[30] = "role_online_time",
-		[40] = "role_vigour_buy",
-		[41] = "role_vigour_info",
-		[44] = "role_sync",
-		[45] = "role_acc_info",
-		[46] = "role_buy_gold",
-		[47] = "role_buy_gold_info",
-		[48] = "role_error",
-		[49] = "role_buy_activity_goods",
-		[50] = "role_activity_condition_info",
-		[51] = "role_update_fight_point",
-		[54] = "role_activity_all_info",
-		[55] = "role_bc_info",
+		[6] = "role_vip_gift",
+		[7] = "role_exp_inc",
+		[8] = "role_upgrade",
+		[9] = "role_sign",
+		[10] = "role_sign_info",
+		[11] = "role_guide_list",
+		[12] = "role_guide_latest",
+		[13] = "role_guide_complete",
+		[14] = "role_pay_package_info",
+		[15] = "role_pay_package_buy",
+		[16] = "role_pay_package_refund",
+		[17] = "role_use_cdkey",
+		[18] = "role_pay_package_req",
+		[19] = "role_online_time",
+		[20] = "role_vigour_buy",
+		[21] = "role_vigour_info",
+		[22] = "role_sync",
+		[23] = "role_buy_gold",
+		[24] = "role_buy_gold_info",
+		[25] = "role_error",
+		[26] = "role_buy_activity_goods",
+		[27] = "role_activity_condition_info",
+		[28] = "role_update_fight_point",
+		[29] = "role_activity_all_info",
+		[30] = "role_bc_info",
 	},
 
-	[4] = {
+	[3] = {
 		[1] = "map_switch",
 		[2] = "map_enter",
 		[3] = "map_sight",
 		[4] = "map_role_enter",
 		[5] = "map_role_leave",
-		[7] = "map_mon_enter",
-		[8] = "map_mon_leave",
-		[9] = "map_mon_move",
-		[10] = "map_role_update",
-		[11] = "map_mon_update",
-		[12] = "map_mon_dead",
-		[17] = "map_buff_point_enter",
-		[18] = "map_buff_point_leave",
-		[19] = "map_buff_point_get",
-		[20] = "map_debuff_point_enter",
-		[21] = "map_debuff_point_leave",
-		[22] = "map_debuff_point_get",
-		[23] = "map_role_frame",
-		[24] = "map_frame",
-		[25] = "map_pick_goods",
-		[26] = "map_discard_goods",
-		[27] = "map_use_goods",
-		[28] = "map_update_goods",
+		[6] = "map_role_update",
+		[7] = "map_role_frame",
+		[8] = "map_frame",
+		[9] = "map_pick_goods",
+		[10] = "map_discard_goods",
+		[11] = "map_use_goods",
+		[12] = "map_update_goods",
 	},
 
-	[5] = {
+	[4] = {
 		[1] = "goods_info",
 		[2] = "goods_delete",
 		[3] = "goods_use",
-		[4] = "goods_puton",
-		[5] = "goods_takeoff",
-		[6] = "goods_batch_use",
-		[7] = "goods_renew_weapon",
-		[8] = "goods_outimes_tips",
-		[9] = "goods_sale_goods",
-		[10] = "goods_set_valid",
-		[11] = "goods_look",
-		[12] = "goods_replace",
+		[4] = "goods_batch_use",
+		[5] = "goods_sale_goods",
+		[6] = "goods_set_valid",
+		[7] = "goods_look",
 	},
 
-	[6] = {
+	[5] = {
 		[1] = "chat_req",
 		[2] = "chat_private_chat",
 		[3] = "chat_content_push",
@@ -105,13 +85,13 @@ MODEL_PB = {
 		[11] = "chat_brocast_info",
 	},
 
-	[7] = {
+	[6] = {
 		[1] = "setting_get_all",
 		[2] = "setting_set_one_setting",
 		[3] = "setting_proto_forbid",
 	},
 
-	[8] = {
+	[7] = {
 		[1] = "mail_get_box_list",
 		[2] = "mail_del_mail",
 		[3] = "mail_take_attach",
@@ -121,19 +101,19 @@ MODEL_PB = {
 		[7] = "mail_take_attach_all",
 	},
 
-	[9] = {
+	[8] = {
 		[1] = "achieve_list",
 		[2] = "achieve_reach_condition",
 		[3] = "achieve_reward",
 		[4] = "achieve_update",
 	},
 
-	[10] = {
+	[9] = {
 		[1] = "rank_info",
 		[2] = "rank_role_rank_info",
 	},
 
-	[11] = {
+	[10] = {
 		[1] = "activity_activity_list",
 		[2] = "activity_get_activity_reward",
 		[3] = "activity_activity_info",
@@ -142,26 +122,7 @@ MODEL_PB = {
 		[6] = "activity_update_activity",
 	},
 
-	[12] = {
-		[1] = "mission_list",
-		[2] = "mission_get_mission_reward",
-		[3] = "mission_refresh_mission_list",
-		[4] = "mission_update_mission",
-	},
-
-	[13] = {
-		[1] = "seven_guide_list",
-		[2] = "seven_guide_award",
-		[3] = "seven_guide_update",
-	},
-
-	[14] = {
-		[1] = "task_list",
-		[2] = "task_reward",
-		[3] = "task_update",
-	},
-
-	[15] = {
+	[11] = {
 		[1] = "survive_match",
 		[2] = "survive_fight",
 	},
