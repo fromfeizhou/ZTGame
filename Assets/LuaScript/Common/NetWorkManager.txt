@@ -169,7 +169,6 @@ function NetWorkManager:_OnNetMessage(msgData)
 	local model_pb = "ztGame.proto." .. MODEL_PB[pId] .. "_s2c"
 	local decode = ZTProtoData:DeCode(model_pb , pbData)
 
-	GCSLog("[NetWorkManager:_OnNetMessage]","model:",model,"command:",command)
 	self:OnReceive(pId,decode);
 end
 
