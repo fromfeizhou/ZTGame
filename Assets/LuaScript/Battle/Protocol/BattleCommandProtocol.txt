@@ -308,12 +308,22 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 					table.insert(list,v.int_data[5+i])
 				end
 				command = BattleColliderCommand:CreateServer(battleId,skillId,x,y,z,list)
-				--碰撞驱动帧优先处理 不塞入队列
-				if command then
-					GlobalBattleCtrl:AddColliderCommand(command)
-					command = nil
+				-- --碰撞驱动帧优先处理 不塞入队列(废旧 保持队列一致性)
+				-- if command then
+				-- 	GlobalBattleCtrl:AddColliderCommand(command)
+				-- 	command = nil
+				-- end
+			elseif v.type == BattleCommandType.Attribute then
+				local list = {}
+				local battleId = int_data[1]
+				for i =2,#v.int_data,2 do
+					local attriType,value = v.int_data[i][i]
+					table.insert(list,{attriType,value})
 				end
+				command = BattleAttributeommand:Create(battleId,list)
 			end
+
+
 			if command then
 				table.insert(commands[v.frame_id],command)
 			end

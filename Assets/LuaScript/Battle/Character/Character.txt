@@ -306,7 +306,9 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	self:ChangeHp(value)
+	if GameConfig.IsSkillDebugScene then
+		self:ChangeHp(value)
+	end
 
 	local hurtInfo = {hurtType = 1,pos = self.m_charaPos,value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)

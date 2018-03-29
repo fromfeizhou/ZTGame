@@ -43,9 +43,19 @@ SkillEffectType = {
 
 --@brief属性类型
 AttributeType = {
-	Hp = 1,		--血量
-	MaxHp = 2,	--最大血量
-	Attack = 3,		--攻击力
+	MaxHp = 1,	--最大血量
+	EnergyMax = 2,	--能量最大值
+	AttackMin = 3,	--最小攻击力
+	AttackMax = 4, --最大攻击
+	Defense = 5,	--防御
+	MoveSpeed = 6,	-- 移速变动
+	HpRecover = 7,	--生命恢复
+
+	Luck = 12,		--幸运值
+	Curse = 13,		--诅咒
+	Hp = 14,		--血量
+	Energy = 15,	--能量
+	EnergyRecover = 16,		--能量回复
 }
 
 --@brief buff类型
@@ -53,6 +63,31 @@ BuffType = {
 	Common = 1,	--通用类型
 	Attribute = 2, --额外属性固定值（纳入属性计算）
 	DynamicAttribute = 3, --动态属性（按某些计数 加成指定属性 例如按当前血量百分比 加攻击力）
-	CharaAttribute = 4,	--修改人物属性buff（中毒等 持续改变人物属性）
-	MagicShield = 5,--魔法盾
+	CharaAttribute = 4,		--修改人物属性buff（中毒等 持续改变人物属性）
+	MagicShield = 5,	--魔法盾
 }
+
+--[[
+ 1 : hp_max变动
+ 2 : 能量最大值变动
+ 3 : 最小攻击力变动
+ 4 : 最大攻击力变动
+ 5 : 防御变动
+ 6 : 移速变动
+ 7 : 生命恢复 变动
+ 8 : 移速变动
+ 9 : 移速变动
+ 10 : 移速变动
+ 11 : 移速变动
+ 12 : 幸运值变动
+ 13 : 诅咒变动
+ 14 : 血量变动
+ 15 : 能量变动
+ 16 : 能量回复变动
+
+4.碰撞后，后端计算的具体扣血、死亡效果，map_frame_s2c里面的p_role_frame
+type = 5
+int_data :  <-- 效果id现在全部都是0
+  扣血: [53, 角色id, 效果id, 实际扣血值]
+  死亡: [55, 角色id, 效果id]
+]]

@@ -122,8 +122,10 @@ function BattleCommandMgr:_ParseCommand(commandList)
 			self:_ParseMove(command)
 		elseif command.m_nType == BattleCommandType.Skill then
 			self:_ParseSkill(command)
-		-- elseif command.m_nType == BattleCommandType.Collider then
-		-- 	self:_ParseCollider(command)
+		elseif command.m_nType == BattleCommandType.Collider then
+		 	self:_ParseCollider(command)
+		elseif command.m_nType == BattleCommandMgr.Attribute then
+			self:_ParseAttribute(command)
 		end
 	end
 end
@@ -140,8 +142,13 @@ function BattleCommandMgr:_ParseSkill(command)
 	GlobalBattleCtrl:AddSkillCommand(command)
 end
 
---@brief 碰撞命令优先处理 不在序列帧队列中
--- function BattleCommandMgr:_ParseCollider(command)
--- 	-- CSLog("BattleCommandMgr:_ParseCollider")
--- 	GlobalBattleCtrl:AddColliderCommand(command)
--- end
+--@brief 处理碰撞
+function BattleCommandMgr:_ParseCollider(command)
+	GlobalBattleCtrl:AddColliderCommand(command)
+end
+
+--@brief 处理属性
+function BattleCommandMgr:_ParseAttribute(command)
+	-- CSLog("BattleCommandMgr:_ParseAttribute")
+	GlobalBattleCtrl:AddAttributeCommand(command)
+end

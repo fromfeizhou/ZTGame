@@ -302,6 +302,13 @@ function GlobalBattleCtrl:AddCommandList(frame,commandList)
 	end
 end
 
+--@brief 属性变化
+function GlobalBattleCtrl:AddAttributeCommand(arrtibCommand)
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:AddAttributeCommand(colliderCommand)
+	end
+end
+
 --@brief 重置帧命令管理器
 function GlobalBattleCtrl:ResetCommandList(clientFrame,serverFrame)
 	if GlobalBattleCtrl.m_battleCommandMgr then
@@ -332,12 +339,14 @@ function GlobalBattleCtrl:AddSkillCommand(skillCommand)
 end
 
 
---@brief 碰撞按照服务器顺序优先处理
+--@brief 碰撞处理
 function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
 		GlobalBattleCtrl.m_skillActionManager:AddColliderCommand(colliderCommand)
 	end
 end
+
+
 
 --@brief 添加地图毒圈指令
 function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)

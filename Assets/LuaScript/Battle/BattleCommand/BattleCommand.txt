@@ -12,6 +12,9 @@ BattleCommandType = {
 	Move = 1,			--移动
 	Skill = 2,			--使用技能
 	Collider = 3,		--技能碰撞
+
+	Attribute = 4,		--属性变化
+
 	HpTest = 6,		--客户端通知扣血 临时
 }
 
@@ -153,3 +156,22 @@ end
 --*******************************************************技能命令 End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
+--碰撞
+BattleAttributeommand = {
+	m_nBattleId = nil,		--使用者
+	m_tAttriList = nil,
+}
+
+--@brief 拷贝原表
+function BattleAttributeommand:Create(battleId,list)
+	local obj = {}
+	setmetatable( obj, { __index = BattleAttributeommand })
+	obj:Init(battleId,list)
+	return obj
+end
+
+--@brief 初始化
+function BattleAttributeommand:Init(battleId,list)
+	self.m_nBattleId = battleId
+	self.m_tAttriList = list
+end
