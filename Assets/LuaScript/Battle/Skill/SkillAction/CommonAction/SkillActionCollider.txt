@@ -94,7 +94,7 @@ end
 function SkillActionCollider:_SetStartPos()
 	if self.m_skillLayer == SkillLayerType.Hero then
 		self.m_ztCollider:SetPos(self.m_tOwner:GetColliderPos())
-	elseif self.m_skillLayer == SkillLayerType.SkillPos then
+	else
 		self.m_ztCollider:SetPos(self.m_tSkillPos)
 	end
 	local face = self.m_tOwner:GetFacePos()

@@ -1,0 +1,8 @@
+SkillActionConfig = {
+	id_template = {
+		[ 0 ] = {
+				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 0, param = { "a" }},
+		},
+	},
+}

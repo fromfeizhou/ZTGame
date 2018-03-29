@@ -3,8 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 using XLua;
+
+public class ZtEdFrameData
+{
+    public int editorSel;
+    public int frame = -1;
+    public List<ZtEdSkillAction> actoinList;
+    public ZtEdFrameData()
+    {
+        editorSel = 0;
+        frame = -1;
+        actoinList = new List<ZtEdSkillAction>();
+    }
+}
+
+
+public class ZtEdSkillAction
+{
+    public int actionType;
+    public ArrayList param;
+    public ZtEdSkillAction()
+    {
+        actionType = -1;
+        param = new ArrayList();
+    }
+}
+
 
 public class ZTSkillLuaEditor
 {
@@ -45,11 +72,11 @@ public class ZTSkillLuaEditor
         return null;
     }
 
-    public void LoadSkillLua()
+    public List<ZtEdFrameData> LoadSkillLua()
     {
         DoString("Battle.Skill.SkillDefine");
-        DoString("ALuaConfig.SkillActoinConfig");
-        GetLuaData();
+        DoString("ALuaConfig.SkillActionConfigTmp");
+        return GetLuaData();
 
     }
     public void DoString(string luaPath)
@@ -57,23 +84,16 @@ public class ZTSkillLuaEditor
         string lua = string.Format("require('{0}')", luaPath);
         luaenv.DoString(lua);
     }
+   
+
+   
+
     string LuaKey = string.Empty;
-    LuaTable LuaTab = null;
-    Dictionary<int,List<ZtEdSkillAction>> framList;
+    List<ZtEdFrameData> framList;
 
-    public class ZtEdSkillAction{
-        public int actionType;
-        public ArrayList param;
-        public ZtEdSkillAction()
-        {
-            actionType = -1;
-            param = new ArrayList();
-        }
-    }
-
-    public void GetLuaData()
+    public List<ZtEdFrameData> GetLuaData()
     {
-        framList = new Dictionary<int, List<ZtEdSkillAction>>();
+        framList = new List<ZtEdFrameData>();
 
         GetGlobalKeyVal("SkillActionType");
         GetGlobalKeyVal("SkillLayerType");
@@ -84,22 +104,27 @@ public class ZTSkillLuaEditor
         GetGlobalKeyVal("BuffType");
 
         Debug.Log("Tabel>>>>>>>>>>>>>>>>>>>>>>>");
-        GetGlobalKeyTab("SkillActoinConfig");
-
-        SaveSkillTable();
+        GetGlobalKeyTab("SkillActionConfig");
+        return framList;
+        //SaveSkillTable();
     }
     
-    public void GetGlobalKeyTab(string tablename)
+    public void GetGlobalKeyTab(string tablename,string skillId = "id_template")
     {
         //Debug.Log("Tabel: " + tablename);
         LuaTable table = luaenv.Global.Get<LuaTable>(tablename);//映射到LuaTable，by ref
-        table.ForEach<string, LuaTable>((string key, LuaTable value) =>
+        LuaTable skillTab = table.Get<LuaTable>(skillId);
+        if(null != skillTab)
         {
-            //Debug.Log(key + " = ");
-            GetSkillTable(value);
-            LuaKey = key;
-            LuaTab = value;
-        });
+            GetSkillTable(skillTab);
+            LuaKey = skillId;
+        }
+        //table.ForEach<string, LuaTable>((string key, LuaTable value) =>
+        //{
+        //    //Debug.Log(key + " = ");
+        //    GetSkillTable(value);
+        //    LuaKey = key;
+        //});
 
     }
 
@@ -107,15 +132,16 @@ public class ZTSkillLuaEditor
     {
         table.ForEach<int, LuaTable>((int key, LuaTable value) =>
         {
-            List<ZtEdSkillAction> frame = new List<ZtEdSkillAction>();
-            framList.Add(key,frame);
+            ZtEdFrameData framedata = new ZtEdFrameData();
+            framedata.frame = key;
+            framList.Add(framedata);
 
             //Debug.Log("frame:" + key + " =>>>>>>>>>");
-            GetSkillParam(value,frame);
+            GetSkillParam(value, framedata);
         });
     }
 
-    public void GetSkillParam(LuaTable table, List<ZtEdSkillAction> frame)
+    public void GetSkillParam(LuaTable table, ZtEdFrameData framedata)
     {
         table.ForEach<int, LuaTable>((int key, LuaTable value) =>
         {
@@ -128,7 +154,7 @@ public class ZTSkillLuaEditor
             {
                 skillAction.param.Add(paramVal);
             });
-            frame.Add(skillAction);
+            framedata.actoinList.Add(skillAction);
 
         });
     }
@@ -141,31 +167,35 @@ public class ZTSkillLuaEditor
         //    Debug.Log(key + " = " + value);
         //});
     }
-    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/SkillActoinConfigTmp.txt";
+    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/SkillActionConfigTmp.txt";
     public void SaveSkillTable()
     {
         if (File.Exists(SkillTabSavePath))
             File.Delete(SkillTabSavePath);
 
         string scriptStr = string.Empty;
-        scriptStr =LuaKey + " = {\n";
-        foreach (int frame in framList.Keys)
+        scriptStr = "SkillActionConfig = {\n";
+        scriptStr += "\t" + LuaKey + " = {\n";
+        for(int index = 0; index < framList.Count; index++)
         {
-            List<ZtEdSkillAction> list = framList[frame];
-            scriptStr += string.Format("\t[ {0} ] = ",frame) + "{\n";
-            for(int i = 0; i < list.Count; i++)
+            ZtEdFrameData framedata = framList[index];
+            scriptStr += string.Format("\t\t[ {0} ] = ", framedata.frame) + "{\n";
+            for(int i = 0; i < framedata.actoinList.Count; i++)
             {
-                scriptStr += GetActcionStr(list[i]);
+                scriptStr += GetActcionStr(framedata.actoinList[i]);
             }
-            scriptStr += " \t\t},\n";
+            scriptStr += "\t\t},\n";
         }
             //for (int i = 0; i < moduleList.Count; i++)
             //{
             //    scriptStr += moduleList[i].GetDefine();
             //}
-            scriptStr += " }";
+            scriptStr += "\t},\n}";
 
         File.WriteAllText(SkillTabSavePath, scriptStr.Trim());
+
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     private string GetActcionStr(ZtEdSkillAction action)
@@ -187,13 +217,14 @@ public class ZTSkillLuaEditor
 
             }
         }
-        result += "\t\t{ " + string.Format("actionType = {0}, param = {1}", action.actionType, paramres) + " }},\n";
+        result += "\t\t\t\t{ " + string.Format("actionType = {0}, param = {1}", action.actionType, paramres) + " }},\n";
         return result;
     }
 
 
     public void Destroy()
     {
+        Debug.Log("ZTSkillLuaEditor Destroy");
         luaenv.Dispose();
         luaenv = null;
     }
