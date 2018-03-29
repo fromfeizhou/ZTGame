@@ -176,14 +176,9 @@ end
 --@brief 添加事件监听
 function MapCircleManager:_AddEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
-	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.LOGIN, self._Receive_Login_Login, self)
 end
 
 --@brief 移除事件监听
 function MapCircleManager:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter)
-
-	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.CREATE_ROLE, self._Receive_Create_Role)
-
-
 end
