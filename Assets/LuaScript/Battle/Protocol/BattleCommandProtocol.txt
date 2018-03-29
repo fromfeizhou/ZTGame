@@ -54,10 +54,6 @@ function BattleCommandProtocol:SendCommand(command)
 
 	--技能测试
 	if GameConfig.IsSkillDebugScene then
-		if commandType  == BattleCommandType.Collider then
-			GlobalBattleCtrl:AddColliderCommand(command)
-			return
-		end
 		BattleCommandProtocol:__TsClientInputCommand(command)
 		return
 	end
