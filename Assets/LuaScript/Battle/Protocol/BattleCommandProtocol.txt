@@ -101,37 +101,36 @@ end
 function BattleCommandProtocol:SendHpChange(value)
 	local frame = GlobalBattleCtrl:GetCurCommandFrame()
 
-	local pbData = {}
-	pbData.model = PB_MAP.MODEL
-	pbData.command = PB_MAP.ROLE_FRAME
-	pbData.data = {}
-	pbData.data.frame_id = frame
-	pbData.data.type = 6
+	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+	package.data = {}
+	package.data.frame_id = frame
+	package.data.type = 6
 	--发送服务器坐标转换
-	pbData.data.int_data = {value}
-	pbData.data.str_data = ""
-	NetWorkManager:SendNetMsg(pbData)
+	package.data.int_data = {value}
+	package.data.str_data = ""
+
+	NetWorkManager:SendNetMsg(package)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听协议
 function BattleCommandProtocol:_RegAll()
-	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH, BattleCommandProtocol._OnSurvieMatch, BattleCommandProtocol)
-	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT, BattleCommandProtocol._OnSurvieFight, BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.SURVIVE_MATCH, BattleCommandProtocol._OnSurvieMatch, BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.SURVIVE_FIGHT, BattleCommandProtocol._OnSurvieFight, BattleCommandProtocol)
 	--地图相关协议
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT,BattleCommandProtocol._OnMapSight,BattleCommandProtocol)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.FRAME,BattleCommandProtocol._OnMapFrame,BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_SIGHT,BattleCommandProtocol._OnMapSight,BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_FRAME,BattleCommandProtocol._OnMapFrame,BattleCommandProtocol)
 end
 
 --@brief 移除协议监听
 function BattleCommandProtocol:_UnRegAll()
-	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH)
-	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT)
+	ZTProtocol:Unregister(PROTOCOL.SURVIVE_MATCH)
+	ZTProtocol:Unregister(PROTOCOL.SURVIVE_FIGHT)
 
 	--地图相关协议
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.FRAME)
+	ZTProtocol:Unregister(PROTOCOL.MAP_SIGHT)
+	ZTProtocol:Unregister(PROTOCOL.MAP_FRAME)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -140,19 +139,14 @@ end
 
 --@brief 发送匹配
 function BattleCommandProtocol:SendMath()
-	local pbData 	= {}
-	pbData.model 	= PB_SURVIVE.MODEL
-	pbData.command 	= PB_SURVIVE.MATCH
-	NetWorkManager:SendNetMsg(pbData)
+	NetWorkManager:SendNetMsg(Package:Create(PROTOCOL.SURVIVE_MATCH))
 end
 
 --@brief 组织驱动帧内容发送
 function BattleCommandProtocol:SendCommandFrameMsg(data)
-	local pbData = {}
-	pbData.model = PB_MAP.MODEL
-	pbData.command = PB_MAP.ROLE_FRAME
-	pbData.data = data
-	NetWorkManager:SendNetMsg(pbData)
+	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+	package.data = data
+	NetWorkManager:SendNetMsg(package)
 end
 
 --@brief 发送移动驱动帧消息

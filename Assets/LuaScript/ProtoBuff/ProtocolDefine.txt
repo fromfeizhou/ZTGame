@@ -1,149 +1,119 @@
+PROTOCOL = {
 --@brife 登陆相关
-PB_LOGIN = {
-	MODEL = 1, 		--模块ID
-	HEART = 0, 		--心跳
-	LOGIN = 1, 		--登陆
-	SELECT_ROLE = 2, 		--选择角色
-	CREATE_ROLE = 3, 		--创建角色
-	REJECT = 4, 		--服务端主动断开链接
-	STOP = 5, 		--通知服务端将要断开
-	AUTH_KEY = 6, 		--加密参数
-	RELOGIN = 7, 		--重登陆
-	WAIT_INFO = 8, 		--排队信息
-	CONFIG = 9, 		--服务端配置
-	SHARE_CONFIG = 10, 		--分享的配置
-}
+	LOGIN_HEART = 1000,	--心跳
+	LOGIN_LOGIN = 1001,	--登陆
+	LOGIN_SELECT_ROLE = 1002,	--选择角色
+	LOGIN_CREATE_ROLE = 1003,	--创建角色
+	LOGIN_REJECT = 1004,	--服务端主动断开链接
+	LOGIN_STOP = 1005,	--通知服务端将要断开
+	LOGIN_AUTH_KEY = 1006,	--加密参数
+	LOGIN_RELOGIN = 1007,	--重登陆
+	LOGIN_WAIT_INFO = 1008,	--排队信息
+	LOGIN_CONFIG = 1009,	--服务端配置
+	LOGIN_SHARE_CONFIG = 1010,	--分享的配置
 
 --@brife 角色
-PB_ROLE = {
-	MODEL = 2, 		--模块ID
-	INFO = 1, 		--角色信息
-	MOBILE = 2, 		--手机系统信息
-	INFO_OTHER = 3, 		--其他人信息（角色属性面板）
-	ATTR = 4, 		--属性更新
-	FORTUNE = 5, 		--财富更新
-	VIP_GIFT = 6, 		--领取VIP礼包
-	EXP_INC = 7, 		--获得经验
-	UPGRADE = 8, 		--升级
-	SIGN = 9, 		--签到
-	SIGN_INFO = 10, 		--签到信息
-	GUIDE_LIST = 11, 		--已完成的新手引导列表
-	GUIDE_LATEST = 12, 		--最后完成的新手引导
-	GUIDE_COMPLETE = 13, 		--完成某新手引导
-	PAY_PACKAGE_INFO = 14, 		--充值信息
-	PAY_PACKAGE_BUY = 15, 		--充值
-	PAY_PACKAGE_REFUND = 16, 		--领取每日返还
-	USE_CDKEY = 17, 		--使用CDKEY
-	PAY_PACKAGE_REQ = 18, 		--请求充值，获得订单号
-	ONLINE_TIME = 19, 		--角色在线时间
-	VIGOUR_BUY = 20, 		--购买体力
-	VIGOUR_INFO = 21, 		--体力信息
-	SYNC = 22, 		--状态同步（服务端只广播）
-	BUY_GOLD = 23, 		--购买金币
-	BUY_GOLD_INFO = 24, 		--购买金币信息查询
-	ERROR = 25, 		--消息错误
-	BUY_ACTIVITY_GOODS = 26, 		--购买活动道具
-	ACTIVITY_CONDITION_INFO = 27, 		--活动前置条件
-	UPDATE_FIGHT_POINT = 28, 		--战力更新
-	ACTIVITY_ALL_INFO = 29, 		--活动总信息
-	BC_INFO = 30, 		--活动总信息
-}
+	ROLE_INFO = 2001,	--角色信息
+	ROLE_MOBILE = 2002,	--手机系统信息
+	ROLE_INFO_OTHER = 2003,	--其他人信息（角色属性面板）
+	ROLE_ATTR = 2004,	--属性更新
+	ROLE_FORTUNE = 2005,	--财富更新
+	ROLE_VIP_GIFT = 2006,	--领取VIP礼包
+	ROLE_EXP_INC = 2007,	--获得经验
+	ROLE_UPGRADE = 2008,	--升级
+	ROLE_SIGN = 2009,	--签到
+	ROLE_SIGN_INFO = 2010,	--签到信息
+	ROLE_GUIDE_LIST = 2011,	--已完成的新手引导列表
+	ROLE_GUIDE_LATEST = 2012,	--最后完成的新手引导
+	ROLE_GUIDE_COMPLETE = 2013,	--完成某新手引导
+	ROLE_PAY_PACKAGE_INFO = 2014,	--充值信息
+	ROLE_PAY_PACKAGE_BUY = 2015,	--充值
+	ROLE_PAY_PACKAGE_REFUND = 2016,	--领取每日返还
+	ROLE_USE_CDKEY = 2017,	--使用CDKEY
+	ROLE_PAY_PACKAGE_REQ = 2018,	--请求充值，获得订单号
+	ROLE_ONLINE_TIME = 2019,	--角色在线时间
+	ROLE_VIGOUR_BUY = 2020,	--购买体力
+	ROLE_VIGOUR_INFO = 2021,	--体力信息
+	ROLE_SYNC = 2022,	--状态同步（服务端只广播）
+	ROLE_BUY_GOLD = 2023,	--购买金币
+	ROLE_BUY_GOLD_INFO = 2024,	--购买金币信息查询
+	ROLE_ERROR = 2025,	--消息错误
+	ROLE_BUY_ACTIVITY_GOODS = 2026,	--购买活动道具
+	ROLE_ACTIVITY_CONDITION_INFO = 2027,	--活动前置条件
+	ROLE_UPDATE_FIGHT_POINT = 2028,	--战力更新
+	ROLE_ACTIVITY_ALL_INFO = 2029,	--活动总信息
+	ROLE_BC_INFO = 2030,	--活动总信息
 
 --@brife 地图
-PB_MAP = {
-	MODEL = 3, 		--模块ID
-	SWITCH = 1, 		--请求场景切换(暂时没用)
-	ENTER = 2, 		--前端开始进入地图
-	SIGHT = 3, 		--视野信息
-	ROLE_ENTER = 4, 		--玩家进入视野
-	ROLE_LEAVE = 5, 		--玩家离开视野
-	ROLE_UPDATE = 6, 		--更新P_MAP_ROLE部分数据
-	ROLE_FRAME = 7, 		--玩家帧消息
-	FRAME = 8, 		--驱动帧消息
-	PICK_GOODS = 9, 		--捡起物品
-	DISCARD_GOODS = 10, 		--丢弃物品
-	USE_GOODS = 11, 		--使用物品道具
-	UPDATE_GOODS = 12, 		--物品更新
-}
+	MAP_SWITCH = 3001,	--请求场景切换(暂时没用)
+	MAP_ENTER = 3002,	--前端开始进入地图
+	MAP_SIGHT = 3003,	--视野信息
+	MAP_ROLE_ENTER = 3004,	--玩家进入视野
+	MAP_ROLE_LEAVE = 3005,	--玩家离开视野
+	MAP_ROLE_UPDATE = 3006,	--更新p_map_role部分数据
+	MAP_ROLE_FRAME = 3007,	--玩家帧消息
+	MAP_FRAME = 3008,	--驱动帧消息
+	MAP_PICK_GOODS = 3009,	--捡起物品
+	MAP_DISCARD_GOODS = 3010,	--丢弃物品
+	MAP_USE_GOODS = 3011,	--使用物品道具
+	MAP_UPDATE_GOODS = 3012,	--物品更新
 
 --@brife 物品
-PB_GOODS = {
-	MODEL = 4, 		--模块ID
-	INFO = 1, 		--物品信息
-	DELETE = 2, 		--删除物品(支持多个)
-	USE = 3, 		--使用物品
-	BATCH_USE = 4, 		--批量使用
-	SALE_GOODS = 5, 		--出售物品
-	SET_VALID = 6, 		--设置装备生效
-	LOOK = 7, 		--查看物品
-}
+	GOODS_INFO = 4001,	--物品信息
+	GOODS_DELETE = 4002,	--删除物品(支持多个)
+	GOODS_USE = 4003,	--使用物品
+	GOODS_BATCH_USE = 4004,	--批量使用
+	GOODS_SALE_GOODS = 4005,	--出售物品
+	GOODS_SET_VALID = 4006,	--设置装备生效
+	GOODS_LOOK = 4007,	--查看物品
 
 --@brife 聊天
-PB_CHAT = {
-	MODEL = 5, 		--模块ID
-	REQ = 1, 		--聊天请求，包含世界，场景，家族，队伍
-	PRIVATE_CHAT = 2, 		--私聊
-	CONTENT_PUSH = 3, 		--聊天内容推送
-	SHOW_INFO = 4, 		--查看玩家展示信息
-	HORN_LENGTH = 5, 		--请求小喇叭队列长度
-	SYS_ANOUNCE = 6, 		--系统公告
-	RUMOR = 7, 		--传闻电视广播
-	GM_ADVICE = 8, 		--GM反馈
-	CLIENT_COMMIT_ERROR = 9, 		--客户端提交错误
-	BASIC_INFO_REQ = 10, 		--请求私聊基本信息
-	BROCAST_INFO = 11, 		--请求广播内容
-}
+	CHAT_REQ = 5001,	--聊天请求，包含世界，场景，家族，队伍
+	CHAT_PRIVATE_CHAT = 5002,	--私聊
+	CHAT_CONTENT_PUSH = 5003,	--聊天内容推送
+	CHAT_SHOW_INFO = 5004,	--查看玩家展示信息
+	CHAT_HORN_LENGTH = 5005,	--请求小喇叭队列长度
+	CHAT_SYS_ANOUNCE = 5006,	--系统公告
+	CHAT_RUMOR = 5007,	--传闻电视广播
+	CHAT_GM_ADVICE = 5008,	--GM反馈
+	CHAT_CLIENT_COMMIT_ERROR = 5009,	--客户端提交错误
+	CHAT_BASIC_INFO_REQ = 5010,	--请求私聊基本信息
+	CHAT_BROCAST_INFO = 5011,	--请求广播内容
 
 --@brife 设置
-PB_SETTING = {
-	MODEL = 6, 		--模块ID
-	GET_ALL = 1, 		--获取设置
-	SET_ONE_SETTING = 2, 		--设置内容
-	PROTO_FORBID = 3, 		--禁止协议
-}
+	SETTING_GET_ALL = 6001,	--获取设置
+	SETTING_SET_ONE_SETTING = 6002,	--设置内容
+	SETTING_PROTO_FORBID = 6003,	--禁止协议
 
 --@brife 邮件系统
-PB_MAIL = {
-	MODEL = 7, 		--模块ID
-	GET_BOX_LIST = 1, 		--获取邮件列表
-	DEL_MAIL = 2, 		--删除邮件
-	TAKE_ATTACH = 3, 		--提取邮件附件
-	NEW_MAIL_INFORM = 4, 		--新邮件通知
-	SEND = 5, 		--发送邮件
-	READ_MAIL = 6, 		--阅读邮件
-	TAKE_ATTACH_ALL = 7, 		--一键提取附件
-}
+	MAIL_GET_BOX_LIST = 7001,	--获取邮件列表
+	MAIL_DEL_MAIL = 7002,	--删除邮件
+	MAIL_TAKE_ATTACH = 7003,	--提取邮件附件
+	MAIL_NEW_MAIL_INFORM = 7004,	--新邮件通知
+	MAIL_SEND = 7005,	--发送邮件
+	MAIL_READ_MAIL = 7006,	--阅读邮件
+	MAIL_TAKE_ATTACH_ALL = 7007,	--一键提取附件
 
 --@brife 成就
-PB_ACHIEVE = {
-	MODEL = 8, 		--模块ID
-	LIST = 1, 		--当前成就列表
-	REACH_CONDITION = 2, 		--达成条件列表
-	REWARD = 3, 		--领成就奖励
-	UPDATE = 4, 		--更新通知
-}
+	ACHIEVE_LIST = 8001,	--当前成就列表
+	ACHIEVE_REACH_CONDITION = 8002,	--达成条件列表
+	ACHIEVE_REWARD = 8003,	--领成就奖励
+	ACHIEVE_UPDATE = 8004,	--更新通知
 
 --@brife 排行榜
-PB_RANK = {
-	MODEL = 9, 		--模块ID
-	INFO = 1, 		--排行榜信息
-	ROLE_RANK_INFO = 2, 		--玩家的排行榜进度
-}
+	RANK_INFO = 9001,	--排行榜信息
+	RANK_ROLE_RANK_INFO = 9002,	--玩家的排行榜进度
 
 --@brife 活动
-PB_ACTIVITY = {
-	MODEL = 10, 		--模块ID
-	ACTIVITY_LIST = 1, 		--活动列表
-	GET_ACTIVITY_REWARD = 2, 		--领奖
-	ACTIVITY_INFO = 3, 		--活动信息
-	ALL_OPEN_INFO = 4, 		--所有活动开关
-	UPDATE_OPEN_INFO = 5, 		--更新活动开关
-	UPDATE_ACTIVITY = 6, 		--更新活动状态
-}
+	ACTIVITY_ACTIVITY_LIST = 10001,	--活动列表
+	ACTIVITY_GET_ACTIVITY_REWARD = 10002,	--领奖
+	ACTIVITY_ACTIVITY_INFO = 10003,	--活动信息
+	ACTIVITY_ALL_OPEN_INFO = 10004,	--所有活动开关
+	ACTIVITY_UPDATE_OPEN_INFO = 10005,	--更新活动开关
+	ACTIVITY_UPDATE_ACTIVITY = 10006,	--更新活动状态
 
 --@brife 大逃杀
-PB_SURVIVE = {
-	MODEL = 11, 		--模块ID
-	MATCH = 1, 		--开始匹配
-	FIGHT = 2, 		--开始游戏
+	SURVIVE_MATCH = 11001,	--开始匹配
+	SURVIVE_FIGHT = 11002,	--开始游戏
+
 }
