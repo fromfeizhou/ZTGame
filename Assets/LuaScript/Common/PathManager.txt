@@ -13,7 +13,9 @@ PathManager = {
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
 
 	m_sAnimator = "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
-	m_sModel = "Assets/Models/"
+	m_sModel = "Assets/Models/",
+
+	m_sParticles = "Assets/Particles/MapParticles/",				--粒子地址
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -66,6 +68,11 @@ end
 --@return string 地址
 function PathManager:GetBatteUINum(name)
 	return PathManager.m_sBattleUINum .. name ..".prefab"
+end
+
+--@brief 地图粒子路径
+function PathManager:GetMapParticle(name)
+	return PathManager.m_sParticles .. name .."/".. name ..".prefab"
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

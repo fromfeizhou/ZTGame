@@ -101,7 +101,6 @@ function SkillJoystick:_SendSkillCommand(pos)
 	-- if not owner or not owner:IsNormalState() then
 	-- 	return
 	-- end
-
 	-- CSLog("SkillJoystick:_SendSkillCommand")
 	local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
 	local distance = self.m_nDistance

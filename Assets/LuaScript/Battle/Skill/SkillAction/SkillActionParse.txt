@@ -121,6 +121,11 @@ function SkillActionParse:_ParseConfig()
 			{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,SkillTargetType.Enemy,30,0,1}},
 		}
 	}
+
+	if GameConfig.IsSkillDebugScene then
+		config = self:GetTestConfig()
+	end
+
 	for frameCFG,listCFG in pairs(config) do
 		local frame = self.m_nStartFrame + frameCFG
 		for i,actionCFG in pairs(listCFG) do
@@ -175,4 +180,13 @@ function SkillActionParse:_GetColliderAction(frame,param)
 	local data = SkillActionColliderData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionCollider:Create(self,data)
 	return action
+end
+
+
+
+--@brief  测试 
+function SkillActionParse:GetTestConfig( )
+	package.loaded["ALuaConfig.SkillActionConfigTmp"] = nil
+	require 'ALuaConfig.SkillActionConfigTmp'
+	return SkillActionConfig.id_template
 end

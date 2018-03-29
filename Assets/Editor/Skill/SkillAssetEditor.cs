@@ -138,7 +138,7 @@ public class SkillAssetEditor : Editor
                             break;
                         //case SkillDefine.SkillActionType.FIGHT_EFFECT:
                         //    UpdateFightEffect(skillInfo.fightEffects);
-                            break;
+                            //break;
                     }
                     GUILayout.EndVertical();
 
