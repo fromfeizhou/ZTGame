@@ -7,6 +7,7 @@ local CSLog = CS.GameTool.Log
 local CSVector3 = CS.UnityEngine.Vector3
 local CSAngleBetween = CS.GameTool.SignedAngleBetween
 local CSQuaternion = CS.UnityEngine.Quaternion
+local CSGameObject = CS.UnityEngine.GameObject
 
 SkillActionCollider = {
 	m_nOffset = nil,	--偏移
@@ -16,8 +17,12 @@ SkillActionCollider = {
 
 	m_tInColliders = nil,	--已经碰撞队列
 	m_tColliderTargets = nil, --目标对象
+	m_nColliderMax = nil,	--碰撞总数
 
 	m_colliderView = nil,	--碰撞显示
+
+	m_spriteEffName = nil,	--特效名字
+	m_spriteEffGo = nil,	--特效实例
 }
 
 --@breif 继承SkillAction
@@ -45,6 +50,8 @@ function SkillActionCollider:Init(actionParse,actionData)
 	self.m_skillLayer = self.m_tActionData.m_skillLayer
 	self.m_targetType = self.m_tActionData.m_targetType
 	
+	self.m_nColliderMax = self.m_tActionData.m_nColliderMax
+	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
 	self:_GetTargetList()
 end
 
@@ -53,6 +60,7 @@ function SkillActionCollider:Start()
 	--继承实现
 	SkillAction.Start(self)
 	self:_SetStartPos()
+	self:_CreateEffect()
 end
 
 
@@ -62,6 +70,7 @@ function SkillActionCollider:Update()
 	SkillAction.Update(self)
 	self:_CheckCollider()
 	self:_UpdateColliderView()
+	self:_UpdateEffect()
 end
 
 --@brief 结束
@@ -78,6 +87,11 @@ function SkillActionCollider:Destroy()
 	if self.m_colliderView then
 		CS.UnityEngine.GameObject.Destroy(self.m_colliderView)
 		self.m_colliderView = nil
+	end
+
+	if self.m_spriteEffGo then
+		CS.UnityEngine.GameObject.Destroy(self.m_spriteEffGo)
+		self.m_spriteEffGo = nil
 	end
 end
 
@@ -146,6 +160,45 @@ function SkillActionCollider:_CheckInColliderList(battleId)
 		end
 	end
 	return false
+end
+
+--@brief 创建特效
+function SkillActionCollider:_CreateEffect()
+	if not self.m_spriteEffName then
+		return
+	end
+
+	self.m_spriteEffGo = CSGameObject("ColliderEffect")
+	CS.AssetManager.LoadAsset(PathManager:GetMapParticle(self.m_spriteEffName),function (target,path)
+		if target and self.m_spriteEffGo then
+			local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
+		end
+	end)
+end
+--[[
+ if (null == _colliderEffect)
+        {
+            _colliderEffect = new GameObject();
+            _colliderEffect.name = "EffectCon";
+            _colliderEffect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
+            _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
+            _colliderEffect.transform.SetParent(GameObject.Find("PlayerLayer").transform,false);
+        }
+        if(null !=_colliderInfo.EffectInfos && _colliderInfo.EffectInfos.Count > 0){
+            for (int i = 0; i < _colliderInfo.EffectInfos.Count; i++)
+            {
+                EffectInfo effectInfo = _colliderInfo.EffectInfos[i];
+                _effectCounter.AddEffect(effectInfo, _colliderEffect.transform);
+            }
+        }
+ ]]
+
+--@brife 更新特效位置
+function SkillActionCollider:_UpdateEffect()
+	if not self.m_spriteEffGo then
+		return
+	end
+	self.m_spriteEffGo.transform.position = self.m_ztCollider.m_tPos
 end
 
 --@brief 显示碰撞

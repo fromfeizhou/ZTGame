@@ -2,7 +2,10 @@ SkillActionConfig = {
 	id_template = {
 		[ 0 ] = {
 				{ actionType = 1, param = { "attack1" }},
-				{ actionType = 0, param = { "a" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 10 ] = {
+				{ actionType = 3, param = { 0.5, 1, 0, 0, 0, 2, 300, -1, "Senior" }},
 		},
 	},
 }

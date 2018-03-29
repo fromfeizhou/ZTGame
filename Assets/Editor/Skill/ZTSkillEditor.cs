@@ -153,7 +153,7 @@ public class ZTSkillEditor : EditorWindow
             }
             for(int i = 0; i < count; i++)
             {
-                actoin.param.Add(0);
+                actoin.param.Add("-1");
             }
             framedata.actoinList.Add(actoin);
         }

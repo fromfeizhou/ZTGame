@@ -46,7 +46,7 @@ public class ZTSkillLuaEditor
 
     public static bool IsUnsign(string value)
     {
-        return Regex.IsMatch(value, @"^\d*[.]?\d*$");
+        return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
     }
 
 
