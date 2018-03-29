@@ -56,7 +56,11 @@ function EventDispatcher:DispatchEvent(name,...)
 	end
 	for k,v in pairs(self.m_listeners[name]) do
 		local func = v.listener
-		func(v.target,...)
+		if func then
+			func(v.target,...) 
+		else
+			GCSLog("found out event. name:", name);
+		end
 	end    
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
