@@ -1,19 +1,12 @@
 package ztGame.proto;
-// protobuf的使用详情参考http://blog.csdn.net/yi_ya/article/details/40404231
-// 协议号 1 + 1, 1代表模块名, 1代表模块内协议号
+//#### protobuf的使用详情参考http://blog.csdn.net/yi_ya/article/details/40404231
+//#### 协议号 1 + 1, 1代表模块名, 1代表模块内协议号
 
-// 公共
+//##common_begin##公共##common_end##
 // 设置信息
 message p_setting_info {
     required uint32 key = 1; // 设置key
     required uint32 value = 2; // 设置值
-}
-
-message p_dir {
-    required int32 x = 1;
-    required int32 y = 2;
-    required int32 z = 3;
-    required int32 w = 4;
 }
 
 // 角色登陆信息
@@ -36,6 +29,7 @@ message p_item {
     repeated int32 value = 2; //值
 }
 
+// 物品
 message p_goods {
     required uint32 id = 1; //物品唯一id
     required uint32 goods_id = 2; //物品类型id
@@ -66,19 +60,22 @@ message p_role {
 
 // 基础属性信息
 message p_base_attr {
-    required uint32 hp_cur = 1; // 生命值
-    required uint32 hp_max = 2; // 最大血量
-    required uint32 attack = 3; // 攻击力
-    required uint32 speed = 4; // 移动
-    required uint32 strength = 5; // 力量，影响角色技能伤害和普通攻击
-    required uint32 magic = 6; // 法力，影响角色技能伤害和普通攻击
-    required uint32 wizard = 7; // 道术，影响角色技能伤害和普通攻击
-    required uint32 defense_physical = 8; // 物防防御力
-    required uint32 defense_magical = 9; // 魔法防御力
-    required uint32 hp_rec = 10; // 生命恢复
-    required uint32 mp_rec = 11; // 能量恢复
-    required uint32 lucky = 12; // 幸运值
-    required uint32 curse = 13; // 诅咒
+    required uint32 hp_max = 1; //  	最终生命=英雄生命+基础生命+装备生命；
+    required uint32 attack_min = 2; //  最终最大攻击=英雄最大攻击+基础攻击+装备攻击；
+    required uint32 attack_max = 3; //  最终最小攻击=英雄最小攻击+基础攻击+装备攻击；
+    required uint32 defense = 4; //  最终防御=英雄防御+基础防御+装备防御
+    required uint32 attack_speed = 5; // 最终攻速=英雄攻速+基础攻速+装备攻速
+    required uint32 hp_rec = 6; // 最终生命恢复=英雄生命恢复+基础生命恢复+装备生命恢复
+    required uint32 mp_max = 7; // 最终能量上限=英雄能量上限+基础能量上限+装备能量上限
+    required uint32 lucky = 8; // 最终幸运值=英雄幸运值+基础幸运值+装备幸运值
+    required uint32 curse = 9; // 最终诅咒值=英雄诅咒值+基础诅咒值+装备诅咒值
+    required uint32 speed = 10; //	最终移动=英雄移动+基础移动+装备移动
+    required uint32 attack_acc = 11; // 	最终伤害加成=英雄伤害加成+基础伤害加成+装备伤害加成
+    required uint32 hurt_dec = 12; // 最终伤害减免=英雄诅咒值+基础诅咒值+装备诅咒值
+    required uint32 cd_acc = 13; // 	最终技能冷却=英雄技能冷却+基础技能冷却+装备技能冷却
+    required uint32 hp = 14; // 当前血量
+    required uint32 mp = 15; // 当前能量
+    required uint32 mp_rec = 16; // 能量回复
 }
 
 //玩家属性信息
@@ -90,54 +87,20 @@ message p_role_attr {
     required uint32 cur_exp = 5; // 当前经验
     required uint32 next_lv_exp = 6; // 下一级经验
     required uint32 job = 7; // 职业
-    required uint32 gongxun = 8; // 当前功勋
-    required uint32 next_lv_gx = 9; // 下一级功勋
-    required uint32 gongxun_sum = 10; // 总功勋
-    required uint32 rank = 11; // 军衔
-    required uint32 silver = 12; // 银币
-    required uint32 gold = 13; // 金币
-    required uint32 coin = 14; // 挑战币
-    required uint32 has_combine = 15; // 是否已经合服(0未合服，1已合服)
-    required string custom_face = 16; // 自定义头像md5
-    required uint32 fight_point = 17; // 战斗力
-    required uint32 vigour = 18; // 体力
-    required uint32 vigour_full = 19; // 满体力
-    required uint32 vip_level = 20; // VIP等级
-    required uint32 vip_score = 21; // VIP积分
-    required uint32 shaping = 22; // 角色职业
-    required p_base_attr attr = 23; // 基础属性
-    repeated uint32 title_list = 24; // 称号列表
-    repeated uint32 vip_reward = 25; // 已VIP等级礼包
-}
-
-//buff刷新点信息
-message p_map_buff_point {
-    required uint32 id = 1; // 刷新点id
-    required int32 x = 2; // x
-    required int32 y = 3; // y
-    required int32 z = 4; // z
-    repeated uint32 buff_list = 5; // buffid列表
-}
-
-//buff信息
-message p_buff {
-    required uint32 id = 1; // buffid
-    required uint32 end_time = 2; // buff结束时间
-}
-
-//debuff刷新点信息
-message p_map_debuff_point {
-    required uint32 point_id = 1; // point_id
-    required uint32 map_debuff_id = 2; // map_debuff_id
-    required int32 x = 3; // x
-    required int32 y = 4; // y
-    required int32 z = 5; // z
-}
-
-//debuff信息
-message p_debuff {
-    required uint32 debuff_id = 1; // debuffid
-    required uint32 end_time = 2; // debuff结束时间
+    required uint32 rank = 8; // 军衔
+    required uint32 silver = 9; // 银币
+    required uint32 gold = 10; // 金币
+    required uint32 has_combine = 11; // 是否已经合服(0未合服，1已合服)
+    required string custom_face = 12; // 自定义头像md5
+    required uint32 fight_point = 13; // 战斗力
+    required uint32 vigour = 14; // 体力
+    required uint32 vigour_full = 15; // 满体力
+    required uint32 vip_level = 16; // VIP等级
+    required uint32 vip_score = 17; // VIP积分
+    required uint32 shaping = 18; // 角色职业
+    required p_base_attr attr = 19; // 基础属性
+    repeated uint32 title_list = 20; // 称号列表
+    repeated uint32 vip_reward = 21; // 已VIP等级礼包
 }
 
 // 玩家帧数据
@@ -161,14 +124,14 @@ message p_map_goods {
 
 // 安全圈
 message p_map_circle {
-    required int32 x = 1;
-    required int32 y = 2;
-    required int32 dx = 4;
-    required int32 dy = 5;
-    required uint32 begin_frame = 6;
-    required uint32 end_frame = 7;
-    required uint32 begin_radius = 8;
-    required uint32 end_radius = 9;
+    required int32 x = 1; // x
+    required int32 y = 2; // y
+    required int32 dx = 4; // 目标x
+    required int32 dy = 5; // 目标y
+    required uint32 begin_frame = 6; // 起始帧
+    required uint32 end_frame = 7; // 结束帧
+    required uint32 begin_radius = 8; // 起始半径
+    required uint32 end_radius = 9; // 结束半径
 }
 
 //角色地图信息
@@ -196,35 +159,6 @@ message p_map_role {
     repeated p_goods equips = 21; // 装备信息
 }
 
-//怪物地图信息
-message p_map_mon {
-    required uint32 id = 1; // 怪物id
-    required uint32 monid = 2; // 怪物类型
-    required uint32 lvl = 3; // 怪物等级
-    required p_dir dir = 4; // 方向
-    required int32 x = 5; // x
-    required int32 y = 6; // y
-    required int32 z = 7; // z
-    required uint32 hp = 8; // 血量
-    required uint32 hp_full = 9; // 血量
-    required uint32 speed = 10; // 速度
-    required uint32 born = 11; // 出生方式
-    required uint32 state = 12; // 状态
-    required uint32 mapping_id = 13; // 前端用到的映射ID
-    required int32 config_id = 14; // 前端用到的地图障碍物ID
-    required uint32 group_id = 15; // 前端用到的分组ID
-    required uint32 fight_point = 16; // 战斗力
-    required uint32 defense = 17; // 防御值
-}
-
-//简单怪物地图信息
-message p_simple_map_mon {
-    required uint32 id = 1; // 怪物id
-    required uint32 monid = 2; // 怪物类型
-    required uint32 mapping_id = 3; // 前端用到的映射ID
-    required int32 config_id = 4; // 前端用到的地图障碍物ID
-}
-
 //角色物品信息
 message p_chat_goods {
     required uint32 id = 1; // 物品唯一id
@@ -243,48 +177,10 @@ message p_chat_rank {
     required uint32 pos = 2; // 排名
 }
 
-//目标
-message p_target {
-    required uint32 id = 1; // id
-    required uint32 type = 2; // 类型
-}
-
-//伤害
-message p_damage {
-    required uint32 id = 1; // id
-    repeated int32 int_list = 2; // 参数，前三个元素是x,y,z
-}
-
 //kv结构
 message p_key_value {
     required uint32 key = 1; // key
     required uint32 val = 2; // val
-}
-
-//悬赏任务
-message p_recruit {
-    required uint32 id = 1; // 任务ID
-    required uint32 color = 2; // 任务品质
-}
-
-//好友信息
-message p_friend_info {
-    required uint32 role_id = 1; // 玩家id
-    required string name = 2; // 玩家名
-    required uint32 level = 3; // 等级
-    required uint32 vip_level = 4; // VIP等级
-    required uint32 rank = 5; // 军衔
-    required uint32 fight_point = 6; // 战斗力
-    required uint32 sex = 7; // 性别 1男 2女
-    required uint32 flag = 8; // 标志 1.好友 2.黑名单
-    required uint32 is_online = 9; // 是否在线
-    required uint32 can_rece_vigour_times = 10; // 可接收体力次数
-    required uint32 model = 13; // 形象
-    required uint32 last_give_time = 14; // 上次送体力给ta的时间
-    required uint32 relation = 15; // 好友度(给的id,拿配置)
-    required uint32 max_score = 16; // 无尽积分
-    required uint32 gongxun = 17; // 当前军功值
-    repeated p_goods equips = 18; // 装备
 }
 
 //角色邮件附件
@@ -444,56 +340,10 @@ message p_luck_draw_info {
     required uint32 total_free_times = 4; // 总共几次免费抽奖
 }
 
-//任务信息
-message p_mission {
-    required uint32 mission_id = 1; // 任务ID
-    required uint32 mission_type_id = 2; // 任务类型ID
-    required uint32 type_com_count = 3; // 该类型任务完成的次数
-    required uint32 type_all_count = 4; // 该类型任务可完成的次数
-    required uint32 state = 5; // 任务状态 0：未完成  1：完成  2：已经领取
-    required uint32 listener_cur_num = 6; // 当前任务进度，完成的数量
-    required uint32 listener_max_num = 7; // 当前进度，需要的数量
-}
-
-//武器升级系统材料
-message p_weapon_reinforce_goods {
-    required uint32 goods_id = 1; // 物品类型ID
-    required uint32 num = 2; // 物品数量
-}
-
-//武器升星材料
-message p_weapon_start_goods {
-    required uint32 goods_id = 1; // 物品唯一D
-    required uint32 num = 2; // 物品数量
-}
-
 //卖出物品
 message p_sale_goods {
     required uint32 goods_id = 1; // 唯一id
     required uint32 num = 2; // 物品数量
-}
-
-//任务信息
-message p_task {
-    required uint32 task_id = 1; // 任务ID
-    required uint32 task_type_id = 2; // 任务类型ID
-    required uint32 state = 3; // 任务状态 0：未完成  1：完成  2：已经领取
-    required uint32 listener_cur_num = 4; // 当前任务进度，完成的数量
-    required uint32 listener_max_num = 5; // 当前进度，需要的数量
-}
-
-//引导任务信息
-message p_guide_task {
-    required uint32 guide_id = 1; // 任务ID
-    required uint32 state = 2; // 任务状态 0：未完成  1：完成  2：已经领取
-    required uint32 listener_cur_num = 3; // 当前任务进度，完成的数量
-    required uint32 listener_max_num = 4; // 当前进度，需要的数量
-}
-
-//七天引导
-message p_seven_guide {
-    required uint32 day = 1; // 第几天
-    repeated p_guide_task guide_info = 2; // 引导任务
 }
 
 //活动前置条件
@@ -529,32 +379,8 @@ message p_chat_args {
 }
 
 
-// ##model_begin##rank##10##排行榜##model_end##
-// ##begin##rank##rank_info##10##1##排行榜信息##end##
-message rank_info_c2s {
-    required uint32 type = 1; // 排行榜类型ID
-}
-message rank_info_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 type = 2; // 排行榜类型ID
-    required p_rank info = 3; // 排行榜数据
-    required uint32 pos = 4; // 自己排名 0不在排行榜上
-    required int32 pos_change = 5; // 排名变化
-}
-
-// ##begin##rank##rank_role_rank_info##10##2##玩家的排行榜进度##end##
-message rank_role_rank_info_c2s {
-    required uint32 type = 1; // 排行榜类型ID
-}
-message rank_role_rank_info_s2c {
-    required uint32 type = 1; // 排行榜ID
-    required uint32 cur_rank = 2; // 当前排名
-    required uint32 cur_rate = 3; // 当前进度
-}
-
-
-// ##model_begin##activity##11##活动##model_end##
-// ##begin##activity##activity_activity_list##11##1##活动列表##end##
+// ##model_begin##activity##10##活动##model_end##
+// ##begin##activity##activity_activity_list##10##1##活动列表##end##
 message activity_activity_list_c2s {
     required uint32 type = 1; // 活动类型
 }
@@ -562,7 +388,7 @@ message activity_activity_list_s2c {
     required uint32 code = 1; // 错误码
     repeated p_activity_info activity_list = 2; // 活动列表
 }
-// ##begin##activity##activity_get_activity_reward##11##2##领奖##end##
+// ##begin##activity##activity_get_activity_reward##10##2##领奖##end##
 message activity_get_activity_reward_c2s {
     required uint32 activity_id = 1; // 活动ID
     required uint32 condition_id = 2; // 奖项
@@ -572,7 +398,7 @@ message activity_get_activity_reward_s2c {
     required uint32 condition_id = 2; // 奖项
     required uint32 code = 3; // 错误码
 }
-// ##begin##activity##activity_activity_info##11##3##活动信息##end##
+// ##begin##activity##activity_activity_info##10##3##活动信息##end##
 message activity_activity_info_c2s {
     required uint32 activity_id = 1; // 活动id
 }
@@ -580,16 +406,16 @@ message activity_activity_info_s2c {
     required uint32 code = 1; // 错误码
     required p_activity_info activity_info = 2; // 活动详情
 }
-// ##begin##activity##activity_all_open_info##11##4##所有活动开关##end##
+// ##begin##activity##activity_all_open_info##10##4##所有活动开关##end##
 message activity_all_open_info_c2s {}
 message activity_all_open_info_s2c {
     repeated p_activity_open activity_opens = 1; // 活动开关详情
 }
-// ##begin##activity##activity_update_open_info##11##5##更新活动开关##end##
+// ##begin##activity##activity_update_open_info##10##5##更新活动开关##end##
 message activity_update_open_info_s2c {
     repeated p_activity_open activity_opens = 1; // 活动开关详情
 }
-// ##begin##activity##activity_update_activity##11##6##更新活动状态##end##
+// ##begin##activity##activity_update_activity##10##6##更新活动状态##end##
 message activity_update_activity_s2c {
     required uint32 activity_id = 1; // 活动id
     required uint32 schedule = 2; // 活动进度
@@ -597,87 +423,14 @@ message activity_update_activity_s2c {
 }
 
 
-// ##model_begin##mission##12##排行榜##model_end##
-// ##begin##mission##mission_list##12##1##日常任务列表##end##
-message mission_list_c2s {}
-message mission_list_s2c {
-    required uint32 code = 1; // 错误码
-    required p_mission daily_mission_list = 2; // 任务列表
-}
-// ##begin##mission##mission_get_mission_reward##12##2##领取任务奖励##end##
-message mission_get_mission_reward_c2s {
-    required uint32 mission_id = 1; // 任务id
-}
-message mission_get_mission_reward_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 mission_id = 2; // 任务id
-}
-// ##begin##mission##mission_refresh_mission_list##12##3##刷新任务列表##end##
-message mission_refresh_mission_list_c2s {}
-message mission_refresh_mission_list_s2c {
-    required uint32 code = 1; // 返回码
-    required uint32 cur_free_times = 2; // 当前刷新次数
-    required uint32 total_free_times = 3; // 每日总共刷新次数
-    required p_mission daily_mission_list = 4; // 任务列表
-}
-// ##begin##mission##mission_update_mission##12##4##更新任务##end##
-message mission_update_mission_s2c {
-    required p_mission missions = 1; // 任务信息
-}
-
-
-// ##model_begin##seven##13##七天引导##model_end##
-// ##begin##seven##seven_guide_list##13##1##七天引导列表##end##
-message seven_guide_list_c2s {}
-message seven_guide_list_s2c {
-    required uint32 code = 1; // 返回码
-    required uint32 status = 2; // 是否全部完成 0没全部完成 1全部完成
-    required p_seven_guide seven_guide_list = 3; // 引导列表
-}
-// ##begin##seven##seven_guide_award##13##2##引导领奖##end##
-message seven_guide_award_c2s {
-    required uint32 day = 1; // 第几天
-}
-message seven_guide_award_s2c {
-    required uint32 code = 1; // 返回码
-    required uint32 day = 2; // 第几天
-}
-// ##begin##seven##seven_guide_update##13##3##引导更新##end##
-message seven_guide_update_c2s {}
-message seven_guide_update_s2c {
-    required p_seven_guide update_seven_guide_list = 1; // 更新引导列表
-}
-
-
-// ##model_begin##task##14##任务##model_end##
-// ##begin##task##task_list##14##1##任务列表##end##
-message task_list_c2s {}
-message task_list_s2c {
-    repeated p_task task_list = 1; // 任务列表
-}
-
-// ##begin##task##task_reward##14##2##领取任务奖励##end##
-message task_reward_c2s {
-    required uint32 task_id = 1; // 任务id
-}
-message task_reward_s2c {
-    required uint32 task_id = 1; // 任务id
-    required uint32 code = 2; // 错误码
-}
-
-// ##begin##task##task_update##14##3##批量更新任务##end##
-message task_update_s2c {
-    repeated p_task task_list = 1; // 批量任务列表
-}
-
-// ##model_begin##survive##15##大逃杀##model_end##
-// ##begin##survive##survive_match##15##1##开始匹配##end##
+// ##model_begin##survive##11##大逃杀##model_end##
+// ##begin##survive##survive_match##11##1##开始匹配##end##
 message survive_match_c2s {}
 message survive_match_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##survive##survive_fight##15##2##开始游戏##end##
+// ##begin##survive##survive_fight##11##2##开始游戏##end##
 message survive_fight_s2c {
     required uint32 map_id = 1; // 地图id
     required uint32 num = 2; // 人数
@@ -806,18 +559,18 @@ message login_share_config_s2c {
 
 
 
-// ##model_begin##role##3##角色##model_end##
+// ##model_begin##role##2##角色##model_end##
 
-// ##begin##role##role_info##3##1##角色信息##end##
+// ##begin##role##role_info##2##1##角色信息##end##
 message role_info_c2s { }
 message role_info_s2c {
     required p_role_attr role = 1; // 角色属性信息
 }
-// ##begin##role##role_mobile##3##2##手机系统信息##end##
+// ##begin##role##role_mobile##2##2##手机系统信息##end##
 message role_mobile_c2s {
     repeated uint32 client_info = 1; // 手机系统信息
 }
-// ##begin##role##role_info_other##3##3##其他人信息（角色属性面板）##end##
+// ##begin##role##role_info_other##2##3##其他人信息（角色属性面板）##end##
 message role_info_other_c2s {
     required uint32 id = 1; // 角色id
 }
@@ -826,24 +579,18 @@ message role_info_other_s2c {
     repeated p_role_attr role = 2; // 角色属性信息
     repeated p_goods goods_list = 3; // 装备信息
 }
-// ##begin##role##role_attr##3##4##属性更新##end##
+// ##begin##role##role_attr##2##4##属性更新##end##
 message role_attr_s2c {
     required p_base_attr attr = 1; // 基础属性信息
 }
-// ##begin##role##role_fortune##3##5##财富更新##end##
+// ##begin##role##role_fortune##2##5##财富更新##end##
 message role_fortune_c2s { }
 message role_fortune_s2c {
     required uint32 silver = 1; // 银币
     required uint32 gold = 2; // 金币
     required uint32 coupon = 3; // 礼券
-    required uint32 coin = 4; // 挑战币
 }
-// ##begin##role##role_hp_mp_change##3##6##血蓝变化##end##
-message role_hp_mp_change_c2s {
-    required uint32 hp = 1; // 血
-    required uint32 mp = 2; // 蓝
-}
-// ##begin##role##role_vip_gift##3##7##领取VIP礼包##end##
+// ##begin##role##role_vip_gift##2##6##领取VIP礼包##end##
 message role_vip_gift_c2s {
     required uint32 reward_lv = 1; // 领取VIP等级
 }
@@ -852,27 +599,18 @@ message role_vip_gift_s2c {
     required uint32 count = 3; // 剩余领取次数
     required uint32 ecode = 4; // 错误代码
 }
-// ##begin##role##role_gongxun##3##8##军功变化##end##
-message role_gongxun_s2c {
-    required uint32 gongxun = 1; // 当前功勋
-    required uint32 next_lv_gx = 2; // 下一等级需要的功勋
-    required uint32 rank = 3; // 当前军衔
-    required uint32 reward_silver = 4; // 升级获得金币总数
-    required uint32 reward_gold = 5; // 升级获得钻石总数
-    required uint32 last_rank = 6; // 上一等级军衔值
-}
-// ##begin##role##role_exp_inc##3##10##获得经验##end##
+// ##begin##role##role_exp_inc##2##7##获得经验##end##
 message role_exp_inc_s2c {
     required uint32 inc = 1; // 经验变化值
     required uint32 has_world_exp = 2; // 是否有世界等级加成.0没有1有
 }
-// ##begin##role##role_upgrade##3##11##升级##end##
+// ##begin##role##role_upgrade##2##8##升级##end##
 message role_upgrade_s2c {
     required uint32 lvl = 1; // 等级
     required double exp = 2; // 当前经验
     required double exp_full = 3; // 升级经验
 }
-// ##begin##role##role_sign##3##12##签到##end##
+// ##begin##role##role_sign##2##9##签到##end##
 message role_sign_c2s {
     required uint32 times = 1; // 签到次数
 }
@@ -885,7 +623,7 @@ message role_sign_s2c {
     required uint32 newer_times = 6; // 新手签到次数
     required uint32 schedule = 7; // 档期
 }
-// ##begin##role##role_sign_info##3##13##签到信息##end##
+// ##begin##role##role_sign_info##2##10##签到信息##end##
 message role_sign_info_c2s { }
 message role_sign_info_s2c {
     required uint32 today_times = 1; // 今日签到次数
@@ -893,7 +631,7 @@ message role_sign_info_s2c {
     required uint32 newer_times = 3; // 新手签到次数
     required uint32 schedule = 4; // 档期
 }
-// ##begin##role##role_guide_list##3##14##已完成的新手引导列表##end##
+// ##begin##role##role_guide_list##2##11##已完成的新手引导列表##end##
 message role_guide_list_c2s { }
 message role_guide_list_s2c {
     repeated uint32 list = 1; // id列表
@@ -901,13 +639,13 @@ message role_guide_list_s2c {
     repeated uint32 group_list = 3; // 组列表
     required uint32 lastest_group_id = 4; // 最后完成组id
 }
-// ##begin##role##role_guide_latest##3##15##最后完成的新手引导##end##
+// ##begin##role##role_guide_latest##2##12##最后完成的新手引导##end##
 message role_guide_latest_c2s { }
 message role_guide_latest_s2c {
     required uint32 id = 1; // id
     required uint32 group_id = 2; // 完成组id
 }
-// ##begin##role##role_guide_complete##3##16##完成某新手引导##end##
+// ##begin##role##role_guide_complete##2##13##完成某新手引导##end##
 message role_guide_complete_c2s {
     repeated uint32 ids = 1; // id列表
     repeated uint32 group_ids = 2; // 组id列表
@@ -918,12 +656,12 @@ message role_guide_complete_s2c {
     repeated uint32 ids = 2; // id列表
     repeated uint32 group_ids = 3; // 组id列表
 }
-// ##begin##role##role_pay_package_info##3##17##充值信息##end##
+// ##begin##role##role_pay_package_info##2##14##充值信息##end##
 message role_pay_package_info_c2s { }
 message role_pay_package_info_s2c {
     repeated p_pay_package_item list = 1; // key:充值id，value：过期时间
 }
-// ##begin##role##role_pay_package_buy##3##18##充值##end##
+// ##begin##role##role_pay_package_buy##2##15##充值##end##
 message role_pay_package_buy_c2s {
     required uint32 pay_id = 1; // 充值id
 }
@@ -931,7 +669,7 @@ message role_pay_package_buy_s2c {
     required uint32 code = 1; // 错误码
     required p_pay_package_item item = 2; // 有变化的那个充值
 }
-// ##begin##role##role_pay_package_refund##3##19##领取每日返还##end##
+// ##begin##role##role_pay_package_refund##2##16##领取每日返还##end##
 message role_pay_package_refund_c2s {
     required uint32 pay_id = 1; // 充值id
 }
@@ -939,17 +677,7 @@ message role_pay_package_refund_s2c {
     required uint32 code = 1; // 错误码
     required p_pay_package_item item = 2; // 有变化的那个充值
 }
-// ##begin##role##role_revive##3##20##复活##end##
-message role_revive_c2s {
-    required uint32 type = 1; // 复活类型1使用金币 2使用道具  3回城复活
-}
-message role_revive_s2c {
-    required uint32 code = 1; // 错误码
-    required int32 born_x = 2; // 出生X
-    required int32 born_y = 3; // 出生Y
-    required int32 born_z = 4; // 出生Z
-}
-// ##begin##role##role_use_cdkey##3##21##使用CDKEY##end##
+// ##begin##role##role_use_cdkey##2##17##使用CDKEY##end##
 message role_use_cdkey_c2s {
     required string cdkey = 1; // cdkey
 }
@@ -957,7 +685,7 @@ message role_use_cdkey_s2c {
     required uint32 code = 1; // 错误码
     required string cdkey = 2; // cdkey
 }
-// ##begin##role##role_pay_package_req##3##22##请求充值，获得订单号##end##
+// ##begin##role##role_pay_package_req##2##18##请求充值，获得订单号##end##
 message role_pay_package_req_c2s {
     required uint32 pay_id = 1; // 充值id
 }
@@ -966,17 +694,17 @@ message role_pay_package_req_s2c {
     required uint32 pay_id = 2; // id
     required string order_id = 3; // 订单id
 }
-// ##begin##role##role_online_time##3##30##角色在线时间##end##
+// ##begin##role##role_online_time##2##19##角色在线时间##end##
 message role_online_time_s2c {
     required uint32 time = 1; // 在线时间
     required uint32 cm = 2; // 防沉迷信息
 }
-// ##begin##role##role_vigour_buy##3##40##购买体力##end##
+// ##begin##role##role_vigour_buy##2##20##购买体力##end##
 message role_vigour_buy_c2s { }
 message role_vigour_buy_s2c {
     required uint32 code = 1; // 错误码
 }
-// ##begin##role##role_vigour_info##3##41##体力信息##end##
+// ##begin##role##role_vigour_info##2##21##体力信息##end##
 message role_vigour_info_c2s { }
 message role_vigour_info_s2c {
     required uint32 vigour = 1; // 体力值
@@ -984,13 +712,12 @@ message role_vigour_info_s2c {
     required uint32 buy_times = 3; // 购买次数
     required uint32 can_buy_times = 4; // 可购买次数
 }
-// ##begin##role##role_sync##3##44##状态同步（服务端只广播）##end##
+// ##begin##role##role_sync##2##22##状态同步（服务端只广播）##end##
 message role_sync_c2s {
     required uint32 state = 1; // 状态
     required int32 x = 2; // x坐标
     required int32 y = 3; // y坐标
     required int32 z = 4; // z坐标
-    required p_dir dir = 5; // 方向
 }
 message role_sync_s2c {
     required uint32 id = 1; // 角色ID
@@ -998,31 +725,26 @@ message role_sync_s2c {
     required int32 x = 3; // x坐标
     required int32 y = 4; // y坐标
     required int32 z = 5; // z坐标
-    required p_dir dir = 6; // 方向
 }
-// ##begin##role##role_acc_info##3##45##配件信息##end##
-message role_acc_info_c2s { }
-message role_acc_info_s2c {
-}
-// ##begin##role##role_buy_gold##3##46##购买金币##end##
+// ##begin##role##role_buy_gold##2##23##购买金币##end##
 message role_buy_gold_c2s { }
 message role_buy_gold_s2c {
     required uint32 code = 1; // 返回码
     required uint32 cur_buy_times = 2; // 当前购买次数
     required uint32 can_buy_times = 3; // 总共可购买次数
 }
-// ##begin##role##role_buy_gold_info##3##47##购买金币信息查询##end##
+// ##begin##role##role_buy_gold_info##2##24##购买金币信息查询##end##
 message role_buy_gold_info_c2s { }
 message role_buy_gold_info_s2c {
     required uint32 cur_buy_times = 1; // 当前购买次数
     required uint32 can_buy_times = 2; // 总共可购买次数
 }
-// ##begin##role##role_error##3##48##消息错误##end##
+// ##begin##role##role_error##2##25##消息错误##end##
 message role_error_s2c {
     required uint32 section_id = 1; // 模块id
     required uint32 method_id = 2; // 方法id
 }
-// ##begin##role##role_buy_activity_goods##3##49##购买活动道具##end##
+// ##begin##role##role_buy_activity_goods##2##26##购买活动道具##end##
 message role_buy_activity_goods_c2s {
     required uint32 activity_id = 1; // 活动id
     required uint32 sort_id = 2; // 类别id
@@ -1030,17 +752,17 @@ message role_buy_activity_goods_c2s {
 message role_buy_activity_goods_s2c {
     required uint32 code = 1; // 返回码
 }
-// ##begin##role##role_activity_condition_info##3##50##活动前置条件##end##
+// ##begin##role##role_activity_condition_info##2##27##活动前置条件##end##
 message role_activity_condition_info_c2s { }
 message role_activity_condition_info_s2c {
     repeated p_activity_condition activity_conditions = 1; // 活动前置条件信息
 }
-// ##begin##role##role_update_fight_point##3##51##战力更新##end##
+// ##begin##role##role_update_fight_point##2##28##战力更新##end##
 message role_update_fight_point_c2s { }
 message role_update_fight_point_s2c {
     required uint32 fight_point = 1; // 最新战力
 }
-// ##begin##role##role_activity_all_info##3##54##活动总信息##end##
+// ##begin##role##role_activity_all_info##2##29##活动总信息##end##
 message role_activity_all_info_c2s {
     required uint32 activity_id = 1; // 活动id
 }
@@ -1048,7 +770,7 @@ message role_activity_all_info_s2c {
     repeated p_activity_all_info all_infos = 1; // 活动总信息
 }
 
-// ##begin##role##role_bc_info##3##55##活动总信息##end##
+// ##begin##role##role_bc_info##2##30##活动总信息##end##
 message role_bc_info_c2s {
     required uint32 type = 1; // 数据类型
     required string data = 2; // 数据
@@ -1059,19 +781,17 @@ message role_bc_info_s2c {
     required string data = 3; // 数据
 }
 
-// ##model_begin##map##4##地图##model_end##
+// ##model_begin##map##3##地图##model_end##
 
-// ##begin##map##map_switch##4##1##请求场景切换(暂时没用)##end##
+// ##begin##map##map_switch##3##1##请求场景切换(暂时没用)##end##
 message map_switch_s2c {
     required uint32 code = 1; // 错误码
     required uint32 map_id = 2; // 地图id
     required int32 x = 3; // 当前x
     required int32 y = 4; // 当前y
     required int32 z = 5; // 当前z
-    repeated p_buff buffs = 6; // 玩家身上的buff
-    repeated p_debuff debuffs = 7; // 玩家身上的debuff
 }
-// ##begin##map##map_enter##4##2##前端开始进入地图##end##
+// ##begin##map##map_enter##3##2##前端开始进入地图##end##
 message map_enter_c2s { }
 message map_enter_s2c {
     required uint32 code = 1; // 错误码
@@ -1081,7 +801,7 @@ message map_enter_s2c {
     required int32 z = 5; // 当前z
     required p_map_role role_info = 6; // 当前角色信息
 }
-// ##begin##map##map_sight##4##3##视野信息##end##
+// ##begin##map##map_sight##3##3##视野信息##end##
 message map_sight_s2c {
     required uint32 frame_id = 1; // 当前帧id
     repeated p_map_role roles_enter = 2; // 玩家列表
@@ -1089,40 +809,18 @@ message map_sight_s2c {
     repeated p_map_circle circles = 4; // 安全区列表
 }
 
-// ##begin##map##map_role_enter##4##4##玩家进入视野##end##
+// ##begin##map##map_role_enter##3##4##玩家进入视野##end##
 message map_role_enter_s2c {
     repeated p_map_role roles = 1; // 玩家列表
     required int32 revive = 2; // 是否复活
 }
 
-// ##begin##map##map_role_leave##4##5##玩家离开视野##end##
+// ##begin##map##map_role_leave##3##5##玩家离开视野##end##
 message map_role_leave_s2c {
     repeated uint32 roles = 1; // 玩家列表
 }
 
-// ##begin##map##map_mon_enter##4##7##怪物进入场景##end##
-message map_mon_enter_s2c {
-    repeated p_map_mon mons = 1; // 怪物列表
-}
-
-// ##begin##map##map_mon_leave##4##8##怪物离开场景##end##
-message map_mon_leave_s2c {
-    repeated uint32 ids = 1; // 怪物列表
-}
-
-// ##begin##map##map_mon_move##4##9##怪物移动##end##
-message map_mon_move_s2c {
-    required uint32 id = 1; // 怪物id
-    required int32 x = 2; // x坐标
-    required int32 y = 3; // y坐标
-    required int32 z = 4; // z坐标
-    required uint32 i = 5; // 前端用到
-    required uint32 j = 6; // 前端用到
-    required uint32 move_status = 7; // 移动状态 0.正常移动 1.传送门
-    required uint32 speed = 8; // 速度
-}
-
-// ##begin##map##map_role_update##4##10##更新p_map_role部分数据##end##
+// ##begin##map##map_role_update##3##6##更新p_map_role部分数据##end##
 message map_role_update_c2s {
     required uint32 id = 1; // 角色id
     repeated p_item change_list = 2; // 变动列表
@@ -1132,92 +830,23 @@ message map_role_update_s2c {
     repeated p_item change_list = 2; // 变动列表
 }
 
-// ##begin##map##map_mon_update##4##11##更新p_map_mon部分数据##end##
-message map_mon_update_c2s {
-    required uint32 id = 1; // 怪物id
-    repeated p_item change_list = 2; // 变动列表
-}
-message map_mon_update_s2c {
-    required uint32 id = 1; // 怪物id
-    repeated p_item change_list = 2; // 变动列表
-}
-
-// ##begin##map##map_mon_dead##4##12##怪物死亡##end##
-message map_mon_dead_s2c {
-    required uint32 id = 1; // 怪物id
-    required uint32 code = 2; // 错误码
-}
-
-// ##begin##map##map_buff_point_enter##4##17##buff点进入场景##end##
-message map_buff_point_enter_s2c {
-    repeated p_map_buff_point buff_points = 1; // buff点列表
-}
-
-// ##begin##map##map_buff_point_leave##4##18##buff点离开场景##end##
-message map_buff_point_leave_s2c {
-    repeated uint32 ids = 1; // buff点列表
-}
-
-// ##begin##map##map_buff_point_get##4##19##获得buff点##end##
-message map_buff_point_get_c2s {
-    required uint32 point_id = 1; // buff点id
-    required uint32 type = 2; // 获得buff点类型(1:玩家 2:机器人)
-    required uint32 robot_id = 3; // 获得buff的机器人id
-}
-message map_buff_point_get_s2c {
-    required uint32 code = 1; // code
-    required uint32 type = 2; // 获得buff点类型(1:玩家 2:机器人)
-    required uint32 point_id = 3; // buff点id
-    required uint32 role_id = 4; // 获得buff的玩家id
-    required uint32 robot_id = 5; // 获得buff的机器人id
-    repeated p_buff buff_list = 6; // 获得的buff
-}
-
-// ##begin##map##map_debuff_point_enter##4##20##debuff点进入场景##end##
-message map_debuff_point_enter_s2c {
-    repeated p_map_debuff_point debuff_points = 1; // debuff点列表
-}
-
-// ##begin##map##map_debuff_point_leave##4##21##debuff点离开场景##end##
-message map_debuff_point_leave_s2c {
-    repeated uint32 point_ids = 1; // debuff点列表
-}
-
-// ##begin##map##map_debuff_point_get##4##22##获得debuff点##end##
-message map_debuff_point_get_c2s {
-    required uint32 point_id = 1; // debuff点id
-    required uint32 type = 2; // 获得方式类型 0触动获得 1碰撞获得 2debuff点消失获得
-}
-message map_debuff_point_get_s2c {
-    required uint32 code = 1; // code
-    required uint32 point_id = 2; // debuff点id
-    required uint32 role_id = 3; // 获得debuff的玩家id
-    repeated p_debuff debuff_list = 4; // 获得的debuff列表
-}
-
-// ##begin##map##map_role_frame##4##23##玩家帧消息##end##
+// ##begin##map##map_role_frame##3##7##玩家帧消息##end##
 message map_role_frame_c2s {
     required uint32 frame_id = 1; // 帧id
-    // 数据类型:
-    // 1.移动
-    // 2.使用技能
-    // 3.技能碰撞
-    // 4.生成buff
-    // 5.产生Effect
     // 所有数据均为int数据，组装进int_data数组里面
-    required uint32 type = 2;
+    required uint32 type = 2; // 数据类型: 1.移动 2.使用技能 3.技能碰撞 4.生成buff 5.产生Effect
     repeated int32 int_data = 3; // int数据
     required string str_data = 4;
 }
 
-// ##begin##map##map_frame##4##24##驱动帧消息##end##
+// ##begin##map##map_frame##3##8##驱动帧消息##end##
 message map_frame_s2c {
     required uint32 start_id = 1; // 起始id
     required uint32 end_id = 2; // 结束id
     repeated p_role_frame data = 3; // 玩家帧消息
 }
 
-// ##begin##map##map_pick_goods##4##25##捡起物品##end##
+// ##begin##map##map_pick_goods##3##9##捡起物品##end##
 message map_pick_goods_c2s {
     required uint32 id = 1; // 物品id
 }
@@ -1225,10 +854,10 @@ message map_pick_goods_s2c {
     required uint32 code = 1; // 结果码
     required uint32 id = 2; // 物品id
     required uint32 discard_id = 3; // 从身上扔下的id
-    required p_map_goods goods = 4; // 捡起来的物品
+    optional p_map_goods goods = 4; // 捡起来的物品
 }
 
-// ##begin##map##map_discard_goods##4##26##丢弃物品##end##
+// ##begin##map##map_discard_goods##3##10##丢弃物品##end##
 message map_discard_goods_c2s {
     required uint32 id = 1; // 物品id
 }
@@ -1237,7 +866,7 @@ message map_discard_goods_s2c {
     required uint32 id = 2; // 物品id
 }
 
-// ##begin##map##map_use_goods##4##27##使用物品道具##end##
+// ##begin##map##map_use_goods##3##11##使用物品道具##end##
 message map_use_goods_c2s {
     required uint32 id = 1; // 物品id
 }
@@ -1246,7 +875,7 @@ message map_use_goods_s2c {
     required uint32 id = 2; // 物品id
     required uint32 num = 3; // 物品数量
 }
-// ##begin##map##map_update_goods##4##28##物品更新##end##
+// ##begin##map##map_update_goods##3##12##物品更新##end##
 message map_update_goods_s2c {
     repeated uint32 remove_id_list = 1; // 要删除物品id列表
     repeated p_map_goods add_goods_list = 2; // 地图新增的物品列表
@@ -1254,8 +883,8 @@ message map_update_goods_s2c {
 
 
 
-// ##model_begin##goods##5##物品##model_end##
-// ##begin##goods##goods_info##5##1##物品信息##end##
+// ##model_begin##goods##4##物品##model_end##
+// ##begin##goods##goods_info##4##1##物品信息##end##
 message goods_info_c2s {
     required uint32 repos = 1; // 存放类型
 }
@@ -1264,13 +893,13 @@ message goods_info_s2c {
     repeated p_goods goods_info = 2; // 物品信息列表
 }
 
-// ##begin##goods##goods_delete##5##2##删除物品(支持多个)##end##
+// ##begin##goods##goods_delete##4##2##删除物品(支持多个)##end##
 message goods_delete_s2c {
     required uint32 repos = 1; // 存放类型
     repeated uint32 id = 2; // 物品id列表
 }
 
-// ##begin##goods##goods_use##5##3##使用物品##end##
+// ##begin##goods##goods_use##4##3##使用物品##end##
 message goods_use_c2s {
     required uint32 id = 1; // 物品唯一id
 }
@@ -1280,32 +909,7 @@ message goods_use_s2c {
     repeated p_luck_draw_goods goods = 3; // 使用物品得到的物品
 }
 
-// ##begin##goods##goods_puton##5##4##穿装备##end##
-message goods_puton_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 pos = 2; // 穿戴位置
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
-}
-message goods_puton_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-    required uint32 pos = 3; // 穿戴位置
-    required uint32 goods_id = 4; // 装备类型ID
-}
-
-// ##begin##goods##goods_takeoff##5##5##卸装备##end##
-message goods_takeoff_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 pos = 2; // 背包位置(为0时服务端给定任意一个空格)
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
-}
-message goods_takeoff_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-    required uint32 goods_id = 3; // 装备类型ID
-}
-
-// ##begin##goods##goods_batch_use##5##6##批量使用##end##
+// ##begin##goods##goods_batch_use##4##4##批量使用##end##
 message goods_batch_use_c2s {
     required uint32 id = 1; // 物品唯一id
     required uint32 count = 2; // 使用数量
@@ -1315,20 +919,7 @@ message goods_batch_use_s2c {
     required uint32 goods_id = 2; // 物品类型id
 }
 
-// ##begin##goods##goods_renew_weapon##5##7##装备续费##end##
-message goods_renew_weapon_c2s {
-    required uint32 weapon_id = 1; // 武器ID(配置里的类型id)
-}
-message goods_renew_weapon_s2c {
-    required uint32 code = 1; // 返回码
-}
-
-// ##begin##goods##goods_outimes_tips##5##8##过期物品提示(前端检测)##end##
-message goods_outimes_tips_c2s {
-    repeated uint32 ids = 1; // 物品的唯一id的列表
-}
-
-// ##begin##goods##goods_sale_goods##5##9##出售物品##end##
+// ##begin##goods##goods_sale_goods##4##5##出售物品##end##
 message goods_sale_goods_c2s {
     repeated p_sale_goods sale_goods = 1; // 卖出物品
 }
@@ -1336,7 +927,7 @@ message goods_sale_goods_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##goods##goods_set_valid##5##10##设置装备生效##end##
+// ##begin##goods##goods_set_valid##4##6##设置装备生效##end##
 message goods_set_valid_c2s {
     required uint32 goods_id = 1; // 装备唯一id
     required uint32 valid_value = 2; // 设置值，0：失效  1：生效
@@ -1347,25 +938,14 @@ message goods_set_valid_s2c {
     required uint32 valid_value = 3; // 设置值
 }
 
-// ##begin##goods##goods_look##5##11##查看物品##end##
+// ##begin##goods##goods_look##4##7##查看物品##end##
 message goods_look_c2s {
     required uint32 weapon_type = 1; // 武器类型
 }
 
-// ##begin##goods##goods_replace##5##12##装备替换(只限于已经装备的装备互相替换)##end##
-message goods_replace_c2s {
-    required uint32 id = 1; // 装备唯一id
-    required uint32 replace_id = 2; // 替换装备唯一id
-    required uint32 flag = 3; // 穿戴标识，前端传来，后端只管原样返回
-}
-message goods_replace_s2c {
-    required uint32 code = 1; // 错误码
-    required uint32 flag = 2; // 穿戴标识，前端传来，后端只管原样返回
-}
 
-
-// ##model_begin##chat##6##聊天##model_end##
-// ##begin##chat##chat_req##6##1##聊天请求，包含世界，场景，家族，队伍##end##
+// ##model_begin##chat##5##聊天##model_end##
+// ##begin##chat##chat_req##5##1##聊天请求，包含世界，场景，家族，队伍##end##
 message chat_req_c2s {
     required uint32 chat_type = 1; // 聊天类型
     required string content = 2; // 聊天内容
@@ -1376,7 +956,7 @@ message chat_req_s2c {
     required uint32 chat_type = 2; // 聊天类型
 }
 
-// ##begin##chat##chat_private_chat##6##2##私聊##end##
+// ##begin##chat##chat_private_chat##5##2##私聊##end##
 message chat_private_chat_c2s {
     required uint32 role_id = 1; // 玩家id
     required string content = 2; // 聊天内容
@@ -1388,7 +968,7 @@ message chat_private_chat_s2c {
     required string role_name = 3; // 角色名字
 }
 
-// ##begin##chat##chat_content_push##6##3##聊天内容推送##end##
+// ##begin##chat##chat_content_push##5##3##聊天内容推送##end##
 message chat_content_push_s2c {
     required uint32 chat_type = 1; // 聊天类型
     required uint32 sender_id = 2; // 发送者id
@@ -1407,7 +987,7 @@ message chat_content_push_s2c {
     repeated p_chat_rank chat_rank_list = 15; // 玩家排行
 }
 
-// ##begin##chat##chat_show_info##6##4##查看玩家展示信息##end##
+// ##begin##chat##chat_show_info##5##4##查看玩家展示信息##end##
 message chat_show_info_c2s {
     required uint32 id = 1; // 物品id
     required uint32 type = 2; // 物品类型
@@ -1418,20 +998,19 @@ message chat_show_info_s2c {
     repeated p_goods goods_info = 3; // 物品信息列表
 }
 
-// ##begin##chat##chat_horn_length##6##5##请求小喇叭队列长度##end##
+// ##begin##chat##chat_horn_length##5##5##请求小喇叭队列长度##end##
 message chat_horn_length_c2s { }
 message chat_horn_length_s2c {
     required uint32 length = 1; // 喇叭队列长度
 }
 
-
-// ##begin##chat##chat_sys_anounce##6##6##系统公告##end##
+// ##begin##chat##chat_sys_anounce##5##6##系统公告##end##
 message chat_sys_anounce_s2c {
     required string content = 1; // 内容
     required string http_link = 2; // http连接
 }
 
-// ##begin##chat##chat_rumor##6##7##传闻电视广播##end##
+// ##begin##chat##chat_rumor##5##7##传闻电视广播##end##
 message chat_rumor_s2c {
     required uint32 channel = 1; // 频道类型
     required uint32 type_id = 2; // 电视广播类型
@@ -1439,7 +1018,7 @@ message chat_rumor_s2c {
     required p_rumor content = 4; // 传闻数据
 }
 
-// ##begin##chat##chat_gm_advice##6##8##GM反馈##end##
+// ##begin##chat##chat_gm_advice##5##8##GM反馈##end##
 message chat_gm_advice_c2s {
     required string title = 1; // 标题
     required string content = 2; // 内容
@@ -1448,7 +1027,7 @@ message chat_gm_advice_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##chat##chat_client_commit_error##6##9##客户端提交错误##end##
+// ##begin##chat##chat_client_commit_error##5##9##客户端提交错误##end##
 message chat_client_commit_error_c2s {
     required uint32 err_type = 1; // 错误类型
     required string desc = 2; // 错误码描述(最多1K)
@@ -1457,7 +1036,7 @@ message chat_client_commit_error_s2c {
     required uint32 code = 1; // 错误码
 }
 
-// ##begin##chat##chat_basic_info_req##6##10##请求私聊基本信息##end##
+// ##begin##chat##chat_basic_info_req##5##10##请求私聊基本信息##end##
 message chat_basic_info_req_c2s {
     required uint32 role_id = 1; // 玩家id
 }
@@ -1469,7 +1048,7 @@ message chat_basic_info_req_s2c {
     required uint32 role_sex = 5; // 玩家性别
 }
 
-// ##begin##chat##chat_brocast_info##6##11##请求广播内容##end##
+// ##begin##chat##chat_brocast_info##5##11##请求广播内容##end##
 message chat_brocast_info_c2s {}
 message chat_brocast_info_s2c {
     required uint32 type = 1; // 广播类型（1是跑马灯2是传闻广播）
@@ -1477,15 +1056,15 @@ message chat_brocast_info_s2c {
     repeated p_rumor_brocast rumor_list = 3; // 传闻广播列表
 }
 
-// ##model_begin##setting##7##设置##model_end##
-// ##begin##setting##setting_get_all##7##1##获取设置##end##
+// ##model_begin##setting##6##设置##model_end##
+// ##begin##setting##setting_get_all##6##1##获取设置##end##
 message setting_get_all_c2s {}
 message setting_get_all_s2c {
     repeated uint32 key = 1; // 类型
     repeated uint32 val = 2; // 数据
 }
 
-// ##begin##setting##setting_set_one_setting##7##2##设置内容##end##
+// ##begin##setting##setting_set_one_setting##6##2##设置内容##end##
 message setting_set_one_setting_c2s {
     required uint32 key = 1; // 类型
     required uint32 value = 2; // 内容
@@ -1495,15 +1074,15 @@ message setting_set_one_setting_s2c {
     required uint32 key = 2; // 类型
 }
 
-// ##begin##setting##setting_proto_forbid##7##3##禁止协议##end##
+// ##begin##setting##setting_proto_forbid##6##3##禁止协议##end##
 message setting_proto_forbid_s2c {
     required uint32 section = 1; // id
     required uint32 method = 2; // id
 }
 
 
-// ##model_begin##mail##8##邮件系统##model_end##
-// ##begin##mail##mail_get_box_list##8##1##获取邮件列表##end##
+// ##model_begin##mail##7##邮件系统##model_end##
+// ##begin##mail##mail_get_box_list##7##1##获取邮件列表##end##
 message mail_get_box_list_c2s {}
 message mail_get_box_list_s2c {
     required uint32 code = 1; // 错误码
@@ -1512,7 +1091,7 @@ message mail_get_box_list_s2c {
     required p_mail_basic_info send_mail_list = 4; // 发送列表
 }
 
-// ##begin##mail##mail_del_mail##8##2##删除邮件##end##
+// ##begin##mail##mail_del_mail##7##2##删除邮件##end##
 message mail_del_mail_c2s {
     required uint32 mail_type = 1; // 删除的邮件类型 1：收到的邮件  2：发送的邮件
     required uint32 mail_ids = 2; // 邮件ids
@@ -1523,7 +1102,7 @@ message mail_del_mail_s2c {
     required uint32 mail_ids = 3; // 邮件ids
 }
 
-// ##begin##mail##mail_take_attach##8##3##提取邮件附件##end##
+// ##begin##mail##mail_take_attach##7##3##提取邮件附件##end##
 message mail_take_attach_c2s {
     required uint32 mail_id = 1; // 邮件id
 }
@@ -1532,12 +1111,12 @@ message mail_take_attach_s2c {
     required uint32 mail_id = 2; // 邮件id
 }
 
-// ##begin##mail##mail_new_mail_inform##8##4##新邮件通知##end##
+// ##begin##mail##mail_new_mail_inform##7##4##新邮件通知##end##
 message mail_new_mail_inform_s2c {
     required p_mail_basic_info new_mail = 1; // 新邮件
 }
 
-// ##begin##mail##mail_send##8##5##发送邮件##end##
+// ##begin##mail##mail_send##7##5##发送邮件##end##
 message mail_send_c2s {
     required uint32 recv_id = 1; // 接受方角色ID，如果不知道则为0
     required string recv_name = 2; // 接受方角色名
@@ -1551,7 +1130,7 @@ message mail_send_s2c {
     required uint32 mail_id = 2; // 邮件ID
     required p_mail_basic_info mail = 3; // 发出的邮件
 }
-// ##begin##mail##mail_read_mail##8##6##阅读邮件##end##
+// ##begin##mail##mail_read_mail##7##6##阅读邮件##end##
 message mail_read_mail_c2s {
     required uint32 mail_id = 1; // 邮件ID
 }
@@ -1559,15 +1138,15 @@ message mail_read_mail_s2c {
     required uint32 code = 1; // 错误码
     required uint32 mail_id = 2; // 邮件ID
 }
-// ##begin##mail##mail_take_attach_all##8##7##一键提取附件##end##
+// ##begin##mail##mail_take_attach_all##7##7##一键提取附件##end##
 message mail_take_attach_all_c2s {}
 message mail_take_attach_all_s2c {
     required uint32 ids = 1; // 邮件id列表
 }
 
 
-// ##model_begin##achieve##9##成就##model_end##
-// ##begin##achieve##achieve_list##9##1##当前成就列表##end##
+// ##model_begin##achieve##8##成就##model_end##
+// ##begin##achieve##achieve_list##8##1##当前成就列表##end##
 message achieve_list_c2s {}
 message achieve_list_s2c {
     required uint32 code = 1; // 错误码
@@ -1576,7 +1155,7 @@ message achieve_list_s2c {
     required uint32 reward = 4; // 可领奖的成就ID列表
     required p_key_value doing = 5; // 正在进行的成就列表 key成就id，value当前点数
 }
-// ##begin##achieve##achieve_reach_condition##9##2##达成条件列表##end##
+// ##begin##achieve##achieve_reach_condition##8##2##达成条件列表##end##
 message achieve_reach_condition_c2s {
     required p_key_value conditions = 1; // 达成条件列表
 }
@@ -1584,7 +1163,7 @@ message achieve_reach_condition_s2c {
     required uint32 code = 1; // 错误码
     required p_key_value conditions = 2; // 达成条件列表
 }
-// ##begin##achieve##achieve_reward##9##3##领成就奖励##end##
+// ##begin##achieve##achieve_reward##8##3##领成就奖励##end##
 message achieve_reward_c2s {
     required uint32 achieve_id = 1; // 成就id
 }
@@ -1592,12 +1171,36 @@ message achieve_reward_s2c {
     required uint32 code = 1; // 错误码
     required uint32 achieve_id = 2; // 成就id
 }
-// ##begin##achieve##achieve_update##9##4##更新通知##end##
+// ##begin##achieve##achieve_update##8##4##更新通知##end##
 message achieve_update_s2c {
     required uint32 done = 1; // 新增的完成列表
     required uint32 log = 2; // 最近完成的成就ID列表
     required uint32 reward = 3; // 可领奖的成就ID列表
     required p_key_value doing = 4; // 有变化的正在进行的成就列表 key成就id，value当前点数
+}
+
+
+// ##model_begin##rank##9##排行榜##model_end##
+// ##begin##rank##rank_info##9##1##排行榜信息##end##
+message rank_info_c2s {
+    required uint32 type = 1; // 排行榜类型ID
+}
+message rank_info_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 type = 2; // 排行榜类型ID
+    required p_rank info = 3; // 排行榜数据
+    required uint32 pos = 4; // 自己排名 0不在排行榜上
+    required int32 pos_change = 5; // 排名变化
+}
+
+// ##begin##rank##rank_role_rank_info##9##2##玩家的排行榜进度##end##
+message rank_role_rank_info_c2s {
+    required uint32 type = 1; // 排行榜类型ID
+}
+message rank_role_rank_info_s2c {
+    required uint32 type = 1; // 排行榜ID
+    required uint32 cur_rank = 2; // 当前排名
+    required uint32 cur_rate = 3; // 当前进度
 }
 
 

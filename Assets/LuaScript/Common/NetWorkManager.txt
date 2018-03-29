@@ -98,11 +98,13 @@ end
 function NetWorkManager:SendNetMsg(pbData)
 	local byteBuff = CSByteBuffer()
 	byteBuff:WriteUInt16(self:_GetCurMsgSeq())
+
 	byteBuff:WriteByte(pbData.model)
 	byteBuff:WriteByte(pbData.command)
 
 	if pbData.data then
-		local model_pb = "ztGame.proto." .. MODEL_PB[pbData.model][pbData.command] .. "_c2s"
+		local pId = pbData.model * 1000 + pbData.command
+		local model_pb = "ztGame.proto." .. MODEL_PB[pId] .. "_c2s"
 		local encode = ZTProtoData:EnCode(model_pb, pbData.data)
 		--local encode = ZTProtoData.m_pb.encode(model_pb, pbData.data)
 		byteBuff:WriteBytes(encode)	
@@ -162,34 +164,31 @@ function NetWorkManager:_OnNetMessage(msgData)
 	local command = msgData:ReadByte()
 	local len = msgData:GetLength ()
 	local pbData = msgData:ReadBytes(len - 2)
-	local model_pb = "ztGame.proto." .. MODEL_PB[model][command] .. "_s2c"
+
+	local pId = model * 1000 + command
+	local model_pb = "ztGame.proto." .. MODEL_PB[pId] .. "_s2c"
 	local decode = ZTProtoData:DeCode(model_pb , pbData)
-	self:OnReceive(model,command,decode);
+
+	self:OnReceive(pId,decode);
 end
 
 --@brief pb数据处理逻辑
-function NetWorkManager:OnReceive(model,command,pbData)
-	if model == PB_LOGIN.MODEL then
-		if command == PB_LOGIN.AUTH_KEY then
-			self:_Receive_Login_Auth_Key(pbData)
-		elseif command == PB_LOGIN.LOGIN then
-			local login_login_s2c = pbData
-			--开启心跳
-			_heartInterval = login_login_s2c.heart_interval
-			self:_OpenHeart()
-		end
+function NetWorkManager:OnReceive(pId,pbData)
+	if pId == PROTOCOL.LOGIN_AUTH_KEY then
+		self:_Receive_Login_Auth_Key(pbData)
+	elseif pId == PROTOCOL.LOGIN_LOGIN then
+		local login_login_s2c = pbData
+		--开启心跳
+		_heartInterval = login_login_s2c.heart_interval
+		self:_OpenHeart()
 	end
-	ZTProtocol:Invoking(model,command,pbData)
+	ZTProtocol:Invoking(pId,pbData)
 end
 
 --@brief 请求 - 登录验证
 function NetWorkManager:_Request_Login_Auth_Key( )
 	GCSLog("NetWorkManager:_Request_Login_Auth_Key")
-	local pbData 	= {}
-	pbData.model 	= PB_LOGIN.MODEL
-	pbData.command = PB_LOGIN.AUTH_KEY
-	pbData.data = {}
-	self:SendNetMsg(pbData)
+	NetWorkManager:SendNetMsg(Package:Create(PROTOCOL.LOGIN_AUTH_KEY))
 end
 
 --@brief 回复 - 登录验证
@@ -228,9 +227,5 @@ end
 
 --@brief 发送心跳
 function NetWorkManager:_SendHeart()
-	local pbData 	= {}
-	pbData.model 	= PB_LOGIN.MODEL
-	pbData.command 	= PB_LOGIN.HEART
-	pbData.data		= {}
-	self:SendNetMsg(pbData)
+	self:SendNetMsg(Package:Create(PROTOCOL.LOGIN_HEART))
 end

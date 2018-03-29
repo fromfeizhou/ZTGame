@@ -27,36 +27,27 @@ end
 --*******************************************************Public Start***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 注册
-function ZTProtocol:Register(model, command, delegates, target)
+function ZTProtocol:Register(pId, delegates, target)
 	if GameConfig.IsSkillDebugScene then
 		return
 	end
-
-	local key = self:_GetKey(model,command)
-	self.m_eventDispatcher:AddEvent(key,delegates,target)
+	GCSLog("==================[ZTProtocol:Register]",pId);
+	self.m_eventDispatcher:AddEvent(pId,delegates,target)
 end
 
 --@brief 注销
-function ZTProtocol:Unregister(model, command, delegates)
+function ZTProtocol:Unregister(pId, delegates)
 	if GameConfig.IsSkillDebugScene then
 		return
 	end
 	
-	local key = self:_GetKey(model,command)
-	self.m_eventDispatcher:RemoveEvent(key,delegates)
+	self.m_eventDispatcher:RemoveEvent(pId,delegates)
 end
 
 --@brief 调用
-function ZTProtocol:Invoking(model, command, pbData)
-	local key = self:_GetKey(model,command)
-	
-	--GCSLog("ZTProtocol:Invoking",key)
-	self.m_eventDispatcher:DispatchEvent(key,pbData)
+function ZTProtocol:Invoking(pId, pbData)
+	self.m_eventDispatcher:DispatchEvent(pId,pbData)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 获取Key值
-function ZTProtocol:_GetKey(model, command)
-	return model .. command
-end

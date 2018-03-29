@@ -125,13 +125,15 @@ function LoginMainPanel:_AddEvents()
 	GlobalData:GetNetEventDispatcher():AddEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish,self)
 	
 	--NetWork
-	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.LOGIN, self._Receive_Login_Login, self)
-	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.CREATE_ROLE, self._Receive_Create_Role, self)
-	ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role, self)
+	ZTProtocol:Register(PROTOCOL.LOGIN_LOGIN, self._Receive_Login_Login, self)
+	ZTProtocol:Register(PROTOCOL.LOGIN_CREATE_ROLE, self._Receive_Create_Role, self)
+	ZTProtocol:Register(PROTOCOL.LOGIN_SELECT_ROLE, self._Receive_Select_Role, self)
 
+end
 
-	
-	
+--@brief 创建角色回复
+function LoginMainPanel:_Receive_Create_Role(login_create_role)
+	GCSLog("LoginMainPanel:_Receive_Create_Role", login_create_role.code)
 end
 
 --@brief 移除事件
@@ -140,9 +142,9 @@ function LoginMainPanel:_RemoveEvents()
 	GlobalData:GetNetEventDispatcher():RemoveEvent(NET_EVENT.SERVER_FINISH,self._OnServerFinish)
 	
 	--NetWork
-	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.LOGIN, 		self._Receive_Login_Login)
-	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.CREATE_ROLE, self._Receive_Create_Role)
-	ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role)
+	ZTProtocol:Unregister(PROTOCOL.LOGIN_LOGIN,			self._Receive_Login_Login)
+	ZTProtocol:Unregister(PROTOCOL.LOGIN_CREATE_ROLE, 	self._Receive_Create_Role)
+	ZTProtocol:Unregister(PROTOCOL.LOGIN_SELECT_ROLE, 	self._Receive_Select_Role)
 
 end
 
@@ -232,10 +234,7 @@ end
 --@brief 请求 - 选择角色 - PB_LOGIN.MODEL - PB_LOGIN.SELECT_ROLE
 function LoginMainPanel:_Request_Select_Role(roleId)
     GCSLog("LoginMainPanel:_Request_Select_Role", roleId)
-
-    local package     = {}
-    package.model     = PB_LOGIN.MODEL
-    package.command = PB_LOGIN.SELECT_ROLE
+    local package = Package:Create(PROTOCOL.LOGIN_SELECT_ROLE)
     package.data = {
         id = roleId
     }

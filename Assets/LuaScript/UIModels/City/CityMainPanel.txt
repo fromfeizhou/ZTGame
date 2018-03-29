@@ -94,12 +94,10 @@ end
 --@brief 网络协议监听
 function CityMainPanel:_RegProtocol()
 	--NetWork
-	--ZTProtocol:Register(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role, self)
 end
 --@brief 移除网络协议监听
 function CityMainPanel:_UnRegProtocol()
 	--NetWork
-	--ZTProtocol:Unregister(PB_LOGIN.MODEL, PB_LOGIN.SELECT_ROLE, self._Receive_Select_Role)
 end
 
 --@brief 按钮 - 登录

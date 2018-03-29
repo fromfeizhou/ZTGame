@@ -91,23 +91,21 @@ end
 
 --@brief 请求 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
 function LoginModel:Request_Login()
-	local pbData 	= {}
-	pbData.model 	= PB_LOGIN.MODEL
-	pbData.command 	= PB_LOGIN.LOGIN
-	pbData.data = {}
-	pbData.data.accname 		= self.m_pAccname	-- 用户名
-	pbData.data.key 			= self.m_pKey		-- 验证key
-	pbData.data.fcm 			= 0 			-- 防沉迷信息(暂不使用)
-	pbData.data.serv_id 		= 0 			-- 服务器ID
-	pbData.data.platform		= 0 			-- 平台，为0则为本地开发
-	pbData.data.token			= "" 				-- 验证数据串
-	pbData.data.device_id		= ""				-- 设备ID
-	pbData.data.device_desc 	= "" 			-- 设备描述
-	pbData.data.product_code	= "" 			-- quickSDK产品code
-	pbData.data.uid 			= "" 			-- quickSDK的uid
-	pbData.data.nick_name		= "" 				-- 昵称
-	GCSLog("self.m_model:NetWork_RequestLogin","accname:",pbData.data.accname,"key",self.m_pKey)
-	NetWorkManager:SendNetMsg(pbData)
+	local package 	= Package:Create(PROTOCOL.LOGIN_LOGIN)
+	package.data = {}
+	package.data.accname 		= self.m_pAccname	-- 用户名
+	package.data.key 			= self.m_pKey		-- 验证key
+	package.data.fcm 			= 0 			-- 防沉迷信息(暂不使用)
+	package.data.serv_id 		= 0 			-- 服务器ID
+	package.data.platform		= 0 			-- 平台，为0则为本地开发
+	package.data.token			= "" 				-- 验证数据串
+	package.data.device_id		= ""				-- 设备ID
+	package.data.device_desc 	= "" 			-- 设备描述
+	package.data.product_code	= "" 			-- quickSDK产品code
+	package.data.uid 			= "" 			-- quickSDK的uid
+	package.data.nick_name		= "" 				-- 昵称
+	GCSLog("self.m_model:NetWork_RequestLogin","accname:",package.data.accname,"key",self.m_pKey)
+	NetWorkManager:SendNetMsg(package)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

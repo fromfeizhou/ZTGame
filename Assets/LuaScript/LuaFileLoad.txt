@@ -21,6 +21,7 @@ local LuaFileLoad = {
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
 		"ProtoBuff.ZTProtocol",
+		"ProtoBuff.Package",
 
 
 		"Global.GlobalData",

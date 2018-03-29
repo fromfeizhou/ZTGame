@@ -1,0 +1,21 @@
+--Package.txt
+--@breif 地址管理
+--@data 2018/2/27
+
+Package = {
+	modelId,
+	commandId,
+}
+
+function Package:Create( protocol )
+	local obj = {}
+	setmetatable( obj, { __index = Package })
+	obj:_Init(protocol)
+	return obj
+end
+
+--@brief 拷贝原表
+function Package:_Init(protocol)
+	self.model = math.modf(protocol * 0.001)
+	self.command = protocol % 1000
+end
