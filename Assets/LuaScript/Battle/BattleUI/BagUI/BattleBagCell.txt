@@ -66,7 +66,7 @@ end
 
 function BattleBagCell:SetUIEvent(envetTable,target)
 
-	 self.m_ZTDragItem=PanelWidget:GetZTDargItem(self.m_transform,"Content/Icon")
+	self.m_ZTDragItem=PanelWidget:GetZTDargItem(self.m_transform,"Content/Icon")
 	self.m_DragRange=target.sizeDelta*0.5
 	self.m_ZTDragItem:Init(target,self.m_iconRect)
 	self.m_ZTDragItem.OnDragEvent= function(pos)

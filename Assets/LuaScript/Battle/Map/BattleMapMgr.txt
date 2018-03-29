@@ -135,7 +135,7 @@ end
 --@brief 刷新地图预设跟ui提示
 function BattleMapMgr:_UpdateView()
 	BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
-
+	GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapMgr.m_curMapBlockItem)
 end
 
 --@brief 判断范围
