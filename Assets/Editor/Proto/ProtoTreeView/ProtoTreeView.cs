@@ -324,53 +324,43 @@ namespace UnityEditor.ProtoTreeView
 			}
 		}
 
-		private const string ProtocalDefine_SavePath = "Assets/LuaScript/ProtoBuff/ProtocolDefineNew.txt";
-		private const string NetProtocal_SavePath = "Assets/LuaScript/ProtoBuff/NetProtocolNew.txt";
+		private const string path_ProtocolDefine = "Assets/LuaScript/ProtoBuff/ProtocolDefine.txt";
+		private const string path_NetProtocol = "Assets/LuaScript/ProtoBuff/NetProtocol.txt";
 
 		public void Export()
 		{
-			Export_ProtocolDefine (ProtocalDefine_SavePath);
-			Export_NetProtocol(NetProtocal_SavePath);
-		}
-
-		private void Export_ProtocolDefine(string path)
-		{
-			string formatStr = "PROTOCOL = {{\n{0}}}\n";
-			string cmdStr = string.Empty;
+			string formatStr_NetProtocol = "MODEL_PB = {{\n{0}}}\n";
+			string formatLine_NetProtocol = "\t[{0}] = \"{1}\",\n";
+			string formatStr_ProtocolDefine = "PROTOCOL = {{\n{0}}}\n";
+			string formatLine_ProtocolDefine = "\t{0} = {1},\t--{2}\n";
+			string cmdStr_NetProtocol = string.Empty;
+			string cmdStr_ProtocolDefine = string.Empty;
 			for (int i = 0; i < modelList.Count; i++) {
-				cmdStr += "--@brife " + modelList [i].nameCn + "\n";
+				cmdStr_ProtocolDefine += "--@brife " + modelList [i].nameCn + "\n";
 				for (int j = 0; j < modelList [i].cmdList.Count; j++) {
-					int modelId = int.Parse( modelList [i].cmdList [j].modelId);
-					int commandId = int.Parse( modelList [i].cmdList [j].id);
-					cmdStr += "        " + modelList [i].cmdList [j].nameEn.ToUpper() + " = " + modelId * 1000 + commandId + "        --" + modelList [i].cmdList [j].nameCn + "\n";
+					sCommand command = modelList [i].cmdList [j];
+					int modelId = int.Parse( command.modelId);
+					int commandId = int.Parse( command.id);
+					int pId = modelId * 1000 + commandId;
+					cmdStr_ProtocolDefine += string.Format (formatLine_ProtocolDefine,command.nameEn.ToUpper(),pId,command.nameCn);
+					cmdStr_NetProtocol += string.Format (formatLine_NetProtocol, pId, command.nameEn);
 				}
-				cmdStr += "\n";
+				cmdStr_ProtocolDefine += "\n";
 			}
 
-			if (System.IO.File.Exists (path)) {
-				System.IO.File.Delete (path);
+			if (System.IO.File.Exists (path_ProtocolDefine)) {
+				System.IO.File.Delete (path_ProtocolDefine);
 			}
-			System.IO.File.WriteAllText (path,string.Format(formatStr,cmdStr).Trim());
+			System.IO.File.WriteAllText (path_ProtocolDefine,string.Format(formatStr_ProtocolDefine,cmdStr_ProtocolDefine).Trim());
+
+
+			if (System.IO.File.Exists (path_NetProtocol)) {
+				System.IO.File.Delete (path_NetProtocol);
+			}
+			System.IO.File.WriteAllText (path_NetProtocol,string.Format(formatStr_NetProtocol,cmdStr_NetProtocol).Trim());
 		}
 
-		private void Export_NetProtocol(string path)
-		{
-			string formatStr = "MODEL_PB = {{\n{0}}}\n";
-			string cmdStr = string.Empty;
-			for (int i = 0; i < modelList.Count; i++) {
-				for (int j = 0; j < modelList [i].cmdList.Count; j++) {
-					int modelId = int.Parse( modelList [i].cmdList [j].modelId);
-					int commandId = int.Parse( modelList [i].cmdList [j].id);
-					cmdStr += "        [" + modelId * 1000 + commandId + "] = \"" + modelList [i].cmdList[j].nameEn + "\",\n";
-				}
-			}
-
-			if (System.IO.File.Exists (path)) {
-				System.IO.File.Delete (path);
-			}
-			System.IO.File.WriteAllText (path,string.Format(formatStr,cmdStr).Trim());
-		}
-
+	
 	}
 }
 
