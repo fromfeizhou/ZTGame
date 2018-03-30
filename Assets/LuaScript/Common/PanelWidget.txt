@@ -32,6 +32,11 @@ function PanelWidget:GetText(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("Text");
 end
+--@brief 获取文本
+function PanelWidget:GetZTText(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ZTText");
+end
 
 --@brief 获取子物体
 function PanelWidget:GetChild(panel,path)
