@@ -31,7 +31,7 @@ function SkillEffectDefine:CalculateHurt(userId,targetId)
 		return
 	end
 
-	local value = -charaA:GetAttack()
+	local value = -charaA:GetAttackMin()
 	charaB:AddHurtNum(value)
 end
 
@@ -133,7 +133,7 @@ end
 --                 target.Attack += Mathf.CeilToInt(target.Attack * multi) + value;
 --                 break;
 --             case ATTRIBUTE.HP:
---                 int result =  Mathf.CeilToInt(target.MaxHp * multi) + value;
+--                 int result =  Mathf.CeilToInt(target.HpMax * multi) + value;
 --                 HurtInfo hurtInfo = new HurtInfo();
 --                 hurtInfo.Type = HURT_TYPE.NORMAL;
 --                 hurtInfo.BattleId = battleInfo.BattleId;
