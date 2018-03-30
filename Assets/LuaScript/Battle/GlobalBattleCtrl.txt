@@ -464,10 +464,10 @@ end
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	-- CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
 	if targetType == SkillTargetType.Appoint then
-		return {targetId}
+		return {GlobalBattleCtrl.m_tCharacterDic[targetId]}
 	end
 	if targetType == SkillTargetType.Self then
-		return {userId}
+		return {{GlobalBattleCtrl.m_tCharacterDic[userId]}
 	end
 
 	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]
