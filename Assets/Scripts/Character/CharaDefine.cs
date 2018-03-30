@@ -90,6 +90,13 @@ public struct PLAYER_AC_NAME
 
 public class CharaDefine
 {
+
+    public static Dictionary<EquipType, string> CharaPartParent = new Dictionary<EquipType, string>()
+    {
+        {EquipType.Equip, "Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Neck/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/weapon"}
+    };
+
+
     public static float PLAYER_SPEED = 0.05f;      //移动速度
     public static float PLAYER_RADIUS = 1f;       //碰撞半径
 
