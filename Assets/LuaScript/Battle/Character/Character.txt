@@ -259,7 +259,7 @@ function Character:ChangeHp(value)
 	self:SetHp(hp)
 
 	--@brief 测试代码
-	-- if self:IsHost() and not GameConfig.IsSkillDebugScene then
+	-- if self:IsHost() and not GameConfig.IsSingleScene then
 	-- 	BattleCommandProtocol:SendHpChange(value)
 	-- end
 end
@@ -289,7 +289,7 @@ function Character:SetHp(value)
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 	end
 
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		if self:GetHp() <= 0 and not self:IsDead() then
 			self:SetDead(true)
 			local loopTimer = LoopTimer:Create(function()
@@ -323,7 +323,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		self:ChangeHp(value)
 	end
 

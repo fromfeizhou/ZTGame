@@ -17,7 +17,7 @@ end
 --@brief 初始化
 function LuaGameStart:Init()
 	print("LuaGameStart:Init")
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		self:_EnterSkillDebug()
 	else
 		self:_EnterLoginModel()

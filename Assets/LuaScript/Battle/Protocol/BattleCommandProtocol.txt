@@ -21,7 +21,7 @@ function BattleCommandProtocol:Init()
 	CSLog("BattleCommandProtocol:Init")
 
 	--@brief 监听协议
-	if not GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSingleScene then
 		BattleCommandProtocol:_RegAll()
 	end
 end
@@ -30,7 +30,7 @@ end
 function BattleCommandProtocol:Destroy()
 	CSLog("BattleCommandProtocol:Destroy")
 	--@brief 监听协议
-	if not GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSingleScene then
 		BattleCommandProtocol:_UnRegAll()
 	end
 end
@@ -53,7 +53,7 @@ function BattleCommandProtocol:SendCommand(command)
 	local commandType = command.m_nType
 
 	--技能测试
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		BattleCommandProtocol:__TsClientInputCommand(command)
 		return
 	end
