@@ -80,7 +80,7 @@ function LoginCreateRolePanel:_InitPanel()
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_3/Button",function() self:_OnBtnClick_Confirm(3) end)
 end
 
---@brief 按钮 - 服务器列表
+--@brief 按钮 - 人物创建
 function LoginCreateRolePanel:_OnBtnClick_Confirm( roleId )
 	GCSLog("LoginCreateRolePanel:_OnBtnClick_Confirm",roleId)
 	self:_Request_Create_Role(roleId)
@@ -93,9 +93,7 @@ end
 --@brief 请求 - 创建角色
 function LoginCreateRolePanel:_Request_Create_Role(jobId)
 	GCSLog("LoginCreateRolePanel:_Request_Create_Role")
-	local package 	= {}
-	package.model 	= PB_LOGIN.MODEL
-	package.command = PB_LOGIN.CREATE_ROLE
+	local package 	= Package:Create(PROTOCOL.LOGIN_CREATE_ROLE)
 	package.data = {
 		name = self.m_model.m_pAccname, 	-- 人物名字
 		job = jobId,	-- 角色职业

@@ -95,6 +95,9 @@ SkillActionColliderData = {
 	m_ztCollider = nil,		--碰撞体
 	m_skillLayer = nil,		--位置类型(起点)
 	m_targetType = nil,		--目标类型
+	m_spriteEffName = nil,	--特效名字
+	m_nMoveActionId = nil,	--动作id
+	m_nColliderMax = nil,	--碰撞总数
 }
 --@breif SkillActionData
 setmetatable( SkillActionColliderData, { __index = SkillActionData})
@@ -108,18 +111,22 @@ function SkillActionColliderData:Create(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
---@brief 初始化
+--@brief 初始化{ "半径", "运动id", "层次", "偏移x", "偏移y","目标类型", "存在时间","碰撞总数","特效名字" };
 function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
-	local collider = ZTCollider:Create(0,0,0,param[1],param[2])
+	local radius = param[1] == -1 and 0.5 or param[1]
+	local collider = ZTCollider:Create(0,0,0,radius,0)
 	self.m_ztCollider = collider
+	self.m_nMoveActionId = param[2]
 	self.m_skillLayer = param[3] or SkillLayerType.Hero
-	self.m_targetType = param[4] or SkillTargetType.Target
-	self.m_nFrameMax = param[5] or -1
-	
-	self.m_nOffsetX = param[6] or 0
-	self.m_nOffsetZ = param[7] or 0
+	self.m_nOffsetX = param[4] or 0
+	self.m_nOffsetZ = param[5] or 0
+
+	self.m_targetType = param[6] or SkillTargetType.Target
+	self.m_nFrameMax = param[7] or -1
+	self.m_nColliderMax = param[8]
+	self.m_spriteEffName = param[9] == -1 and nil or param[9]
 
 end
 

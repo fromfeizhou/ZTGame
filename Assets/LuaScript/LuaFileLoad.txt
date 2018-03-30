@@ -21,6 +21,7 @@ local LuaFileLoad = {
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
 		"ProtoBuff.ZTProtocol",
+		"ProtoBuff.Package",
 
 
 		"Global.GlobalData",
@@ -43,9 +44,8 @@ local LuaFileLoad = {
 
 --加载配置文件
 	G_tConfigList = {
-		"ALuaConfig.tab_Equipment"
-
-
+		"ALuaConfig.SkillActionConfig",
+		"ALuaConfig.tab_Equipment",
 	},
 
 	--游戏lua文件

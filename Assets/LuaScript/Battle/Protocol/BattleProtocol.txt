@@ -40,20 +40,20 @@ end
 --@brief 监听协议
 function BattleProtocol:_RegAll()
 	--视野信息,战斗推送
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT, BattleProtocol._OnGetBattleData, BattleProtocol)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.PICK_GOODS, BattleProtocol._OnPickItem, BattleProtocol)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS, BattleProtocol._UpdateMapItem, BattleProtocol)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.DISCARD_GOODS, BattleProtocol._OnDiscardItem, BattleProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_SIGHT, BattleProtocol._OnGetBattleData, BattleProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_PICK_GOODS, BattleProtocol._OnPickItem, BattleProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_UPDATE_GOODS, BattleProtocol._UpdateMapItem, BattleProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_DISCARD_GOODS, BattleProtocol._OnDiscardItem, BattleProtocol)
 
 
 end
 
 --@brief 移除协议监听
 function BattleProtocol:_UnRegAll()
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.PICK_GOODS)
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.UPDATE_GOODS)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.DISCARD_GOODS)
+	ZTProtocol:Unregister(PROTOCOL.MAP_SIGHT)
+	ZTProtocol:Unregister(PROTOCOL.MAP_PICK_GOODS)
+	ZTProtocol:Unregister(PROTOCOL.MAP_UPDATE_GOODS)
+	ZTProtocol:Unregister(PROTOCOL.MAP_DISCARD_GOODS)
 
 end
 
@@ -62,9 +62,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拾取物品
 function BattleProtocol:SendMapPickItem(netId)
-	local package 	= {}
-	package.model 	= PB_MAP.MODEL
-	package.command = PB_MAP.PICK_GOODS
+	local package = Package:Create(PROTOCOL.MAP_PICK_GOODS)
 	package.data = {
 		id=netId
 	}
@@ -74,9 +72,7 @@ end
 
 --@brief 丢弃
 function BattleProtocol:SendDiscardItem(netId)
-	local package 	= {}
-	package.model 	= PB_MAP.MODEL
-	package.command = PB_MAP.DISCARD_GOODS
+	local package = Package:Create(PROTOCOL.MAP_DISCARD_GOODS)
 	package.data = {
 		id = netId
 	}

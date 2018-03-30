@@ -241,8 +241,8 @@ class CreatePrefabs
                         if (clip.name.StartsWith("__")) continue;//资源不规范会带出这类前缀的无效clip，过滤
                         tempState = machine.AddState(clip.name, new Vector3(300f + 30 * tempIndex, -250f + tempIndex * 50f, 0));
                         tempState.motion = clip;
-                        var temp = tempState.AddTransition(defaultState);
-                        temp.hasExitTime = true;
+                        var temp = defaultState.AddTransition(tempState);
+                        temp.hasExitTime = false;
                         tempIndex++;
                     }
                 }

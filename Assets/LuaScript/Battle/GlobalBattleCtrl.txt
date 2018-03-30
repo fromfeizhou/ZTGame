@@ -302,6 +302,13 @@ function GlobalBattleCtrl:AddCommandList(frame,commandList)
 	end
 end
 
+--@brief 效果同步
+function GlobalBattleCtrl:AddEffectCommand(effectCommand)
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:AddEffectCommand(effectCommand)
+	end
+end
+
 --@brief 重置帧命令管理器
 function GlobalBattleCtrl:ResetCommandList(clientFrame,serverFrame)
 	if GlobalBattleCtrl.m_battleCommandMgr then
@@ -332,12 +339,14 @@ function GlobalBattleCtrl:AddSkillCommand(skillCommand)
 end
 
 
---@brief 碰撞按照服务器顺序优先处理
+--@brief 碰撞处理
 function GlobalBattleCtrl:AddColliderCommand(colliderCommand)
 	if GlobalBattleCtrl.m_skillActionManager then
 		GlobalBattleCtrl.m_skillActionManager:AddColliderCommand(colliderCommand)
 	end
 end
+
+
 
 --@brief 添加地图毒圈指令
 function GlobalBattleCtrl:AddMapCircleCommand(mapCircleCommand)
@@ -455,10 +464,10 @@ end
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	-- CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
 	if targetType == SkillTargetType.Appoint then
-		return {targetId}
+		return {GlobalBattleCtrl.m_tCharacterDic[targetId]}
 	end
 	if targetType == SkillTargetType.Self then
-		return {userId}
+		return {GlobalBattleCtrl.m_tCharacterDic[userId]}
 	end
 
 	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]

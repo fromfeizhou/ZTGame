@@ -14,7 +14,7 @@ namespace UnityEditor.ProtoTreeView
 		public string type = string.Empty;
 		public string nameEn = string.Empty;
 		public string index = string.Empty;
-		public string nameCn = "缺失"; 
+		public string nameCn = string.Empty; 
 		public string defValue = string.Empty;
 
 		public static sVariable ValueOf(string str){
@@ -53,11 +53,11 @@ namespace UnityEditor.ProtoTreeView
 
 	}
 	public class sMessage{
-		public string modelId;
-		public string commandId;
-		public string id;
-		public string nameEn;
-		public string nameCn = "缺失"; 
+		public string modelId = string.Empty;
+		public string commandId = string.Empty;
+		public string id = string.Empty;
+		public string nameEn = string.Empty;
+		public string nameCn = string.Empty; 
 		private List<sVariable> varList = new List<sVariable>();
 		public static sMessage ValueOf(string msgStr)
 		{
@@ -81,12 +81,26 @@ namespace UnityEditor.ProtoTreeView
 
 		public override string ToString ()
 		{
-			string title = nameEn + " - " + nameCn;
+			string title = nameCn + "\n" + nameEn;
 			string output = string.Empty;
 			for (int i = 0; i < varList.Count; i++) {
-				output += "\t" + varList [i].ToString () + "\n";
+				output += "        " + varList [i].ToString () + "\n";
 			}
-			return string.Format ("{0}\n{{\n{1}}}",title,output);
+
+			string Split = "----------------------------------------------------------------\n";
+			return Split + string.Format ("{0}\n{{\n{1}}}",title,output);
+		}
+
+
+		public List<string> GetTypeDependent()
+		{
+			List<string> typeList = new List<string> ();
+			for (int i = 0; i < varList.Count; i++) {
+				if (typeList.Exists (a => a.Equals (varList [i].type)))
+					continue;
+				typeList.Add (varList [i].type);
+			}
+			return typeList;
 		}
 	}
 	public class sCommand{
@@ -104,6 +118,17 @@ namespace UnityEditor.ProtoTreeView
 			command.id = matchCol [4].Value;
 			command.nameCn = matchCol [5].Value;
 			return command;
+		}
+
+		public override string ToString ()
+		{
+			string output = string.Empty;
+			output += "----------------------------------------------------------------\n";
+			output += "指令信息:\n";
+			output += "    CommandId:" + id + "\n";
+			output += "    NameEn:" + nameEn + "\n";
+			output += "    NameCn:" + nameCn + "\n";
+			return output;
 		}
 	}
 	public class sModel{
@@ -130,6 +155,17 @@ namespace UnityEditor.ProtoTreeView
 			int scrModel = int.Parse (this.id);
 			return scrModel.CompareTo (destModel);
 		}
+
+		public override string ToString ()
+		{
+			string output = string.Empty;
+			output += "----------------------------------------------------------------\n";
+			output += "模块信息:\n";
+			output += "    ModelId:" + id + "\n";
+			output += "    NameEn:" + nameEn + "\n";
+			output += "    NameCn:" + nameCn + "\n";
+			return output;
+		}
 	}
 	public class sCommon{
 		public int id = 0;
@@ -141,49 +177,48 @@ namespace UnityEditor.ProtoTreeView
 		{
 			buffStr.Add (str);
 		}
-
-		public void OutPut(){
-			for (int i = 0; i < buffStr.Count; i++) {
-				//Debug.Log (i + ":" + buffStr [i]);
-			}
-		}
-
-		public void Parse(){
-
-		}
 	}
 	public class ProtoTreeView : TreeView
 	{
 		public System.Action<ProtoTreeViewItem> OnChangeItem;
+		private SearchField m_SearchField;
 
 		private const string protoPath = "BuildProto/protobuf.proto";
 		private Dictionary<int,ProtoTreeViewItem> itemDic = new Dictionary<int, ProtoTreeViewItem>();
-		List<sMessage> commonMsgList = new List<sMessage> ();
+		List<sMessage> commonMsgList = new List<sMessage>();
 		List<sModel> modelList = new List<sModel> ();
-		private int selected = -1;
+		private int selected;
 		public ProtoTreeView(TreeViewState treeViewState): base(treeViewState)
 		{
 			Reload();
+			m_SearchField = new SearchField ();
+			m_SearchField.downOrUpArrowKeyPressed += base.SetFocusAndEnsureSelectedItem;
 		}
+
 
 		protected override TreeViewItem BuildRoot ()
 		{
+			selected = -1;
+			Clear ();
 			LoadProto ();
 			TreeViewItem root = new TreeViewItem (){depth = -1};
+			SetupDepthsFromParentsAndChildren (root);
+
 			for (int i = 0; i < modelList.Count; i++) {
 				sModel model = modelList [i];
 				ProtoTreeViewItem modelItem = new ProtoTreeViewItem (model);
 				for(int j = 0;j<model.cmdList.Count;j++)
 				{
 					sCommand command = model.cmdList [j];
-					ProtoTreeViewItem commonItem = new ProtoTreeViewItem (command);
+
+					ProtoTreeViewItem commonItem = new ProtoTreeViewItem (model,command);
 					if (command.msg_c2s != null) {
-						ProtoTreeViewItem c2sItem = new ProtoTreeViewItem (command.msg_c2s);
+						ProtoTreeViewItem c2sItem = new ProtoTreeViewItem (model,command,command.msg_c2s);
 						commonItem.AddChild (c2sItem);
 						itemDic [c2sItem.id] = c2sItem;
 					}
 					if (command.msg_s2c != null) {
-						ProtoTreeViewItem s2cItem = new ProtoTreeViewItem (command.msg_s2c);
+						ProtoTreeViewItem s2cItem = new ProtoTreeViewItem (model,command,command.msg_s2c);
 						commonItem.AddChild (s2cItem);
 						itemDic [s2cItem.id] = s2cItem;
 					}
@@ -196,11 +231,11 @@ namespace UnityEditor.ProtoTreeView
 			}
 			SetupDepthsFromParentsAndChildren (root);
 			return root;
-		}
-
+   		}
 		public override void OnGUI (UnityEngine.Rect rect)
 		{
-			base.OnGUI (rect);
+			base.searchString = m_SearchField.OnToolbarGUI (new Rect(rect.x,rect.y,rect.width,17),base.searchString);
+			base.OnGUI (new Rect(rect.x,rect.y+17,rect.width,rect.height-17));
 			DoCheckSelect ();
 		}
 		private void DoCheckSelect(){
@@ -215,6 +250,31 @@ namespace UnityEditor.ProtoTreeView
 			}
 		}
 
+		public void CollectMsgDependent(sMessage scrMsg, List<sMessage> destMsgList){
+			List<string> msgDependentList = scrMsg.GetTypeDependent ();
+			for (int i = 0; i < msgDependentList.Count; i++) {
+				sMessage msg = commonMsgList.Find (a => a.nameEn.Equals (msgDependentList[i]));
+				if (msg != null) {
+					CollectMsgDependent (msg,destMsgList);
+					if(!destMsgList.Exists(a=>a.nameEn.Equals(msg.nameEn))){
+						destMsgList.Add (msg);
+					}
+				}
+			}
+		}
+
+		public void Clear(){
+			if (commonMsgList != null) {
+				commonMsgList.Clear ();
+			}
+			if (modelList != null) {
+				modelList.Clear ();
+			}
+
+			if (itemDic != null) {
+				itemDic.Clear ();
+			}
+		}
 		public void LoadProto(){
 			string allText = System.IO.File.ReadAllText (protoPath).Trim();
 			string patternMsgCommon = @"(//.\w+\n|)message p.\w+ \{[\s\S]*?\}";//匹配出“p_”开头的message，包含注释
@@ -243,6 +303,7 @@ namespace UnityEditor.ProtoTreeView
 				command.msg_c2s = modelMsgList.Find (a=>a.nameEn.Equals(command.nameEn + "_c2s"));
 				if (command.msg_c2s != null) {
 					command.msg_c2s.id = "1";
+					command.msg_c2s.nameCn = command.nameCn;
 					command.msg_c2s.modelId = command.modelId;
 					command.msg_c2s.commandId = command.id;
 				}
@@ -250,6 +311,7 @@ namespace UnityEditor.ProtoTreeView
 				command.msg_s2c = modelMsgList.Find (a=>a.nameEn.Equals(command.nameEn + "_s2c"));
 				if (command.msg_s2c != null) {
 					command.msg_s2c.id = "2";
+					command.msg_s2c.nameCn = command.nameCn;
 					command.msg_s2c.modelId = command.modelId;
 					command.msg_s2c.commandId = command.id;
 				}
@@ -261,6 +323,82 @@ namespace UnityEditor.ProtoTreeView
 					Debug.LogError ("found modelId:" + command.modelId);
 			}
 		}
+
+		private const string path_ProtocolDefine = "Assets/LuaScript/ProtoBuff/ProtocolDefine.txt";
+		private const string path_NetProtocol = "Assets/LuaScript/ProtoBuff/NetProtocol.txt";
+
+		public void Export()
+		{
+			string formatStr_NetProtocol = "MODEL_PB = {{\n{0}}}\n";
+			string formatLine_NetProtocol = "\t[{0}] = \"{1}\",\n";
+			string formatStr_ProtocolDefine = "PROTOCOL = {{\n{0}}}\n";
+			string formatLine_ProtocolDefine = "\t{0} = {1},\t--{2}\n";
+			string cmdStr_NetProtocol = string.Empty;
+			string cmdStr_ProtocolDefine = string.Empty;
+			for (int i = 0; i < modelList.Count; i++) {
+				cmdStr_ProtocolDefine += "--@brife " + modelList [i].nameCn + "\n";
+				for (int j = 0; j < modelList [i].cmdList.Count; j++) {
+					sCommand command = modelList [i].cmdList [j];
+					int modelId = int.Parse( command.modelId);
+					int commandId = int.Parse( command.id);
+					int pId = modelId * 1000 + commandId;
+					cmdStr_ProtocolDefine += string.Format (formatLine_ProtocolDefine,command.nameEn.ToUpper(),pId,command.nameCn);
+					cmdStr_NetProtocol += string.Format (formatLine_NetProtocol, pId, command.nameEn);
+				}
+				cmdStr_ProtocolDefine += "\n";
+			}
+
+			if (System.IO.File.Exists (path_ProtocolDefine)) {
+				System.IO.File.Delete (path_ProtocolDefine);
+			}
+			System.IO.File.WriteAllText (path_ProtocolDefine,string.Format(formatStr_ProtocolDefine,cmdStr_ProtocolDefine).Trim());
+
+
+			if (System.IO.File.Exists (path_NetProtocol)) {
+				System.IO.File.Delete (path_NetProtocol);
+			}
+			System.IO.File.WriteAllText (path_NetProtocol,string.Format(formatStr_NetProtocol,cmdStr_NetProtocol).Trim());
+
+			/** 编译 *.proto */
+			string batPath = Application.dataPath + @"\..\BuildProto\";
+			batPath = batPath.Replace("/","\\");
+			ProcessCommand ("build.bat",batPath);  
+			AssetDatabase.Refresh ();
+		}
+
+
+		/** 执行 bat 批处理 */
+		private static void ProcessCommand(string command, string workPath){
+			System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo (command);
+			info.CreateNoWindow = false;
+			info.ErrorDialog = true;
+			info.UseShellExecute = true;
+			info.WorkingDirectory = workPath;
+			if (info.UseShellExecute) {
+				info.RedirectStandardOutput = false;
+				info.RedirectStandardError = false;
+				info.RedirectStandardInput = false;
+			} else {
+				info.RedirectStandardOutput = true;
+				info.RedirectStandardError = true;
+				info.RedirectStandardInput = true;
+
+				info.StandardOutputEncoding = System.Text.UTF8Encoding.UTF8;
+				info.StandardErrorEncoding = System.Text.UTF8Encoding.UTF8;
+			}
+
+			System.Diagnostics.Process process = System.Diagnostics.Process.Start (info);
+
+			if (!info.UseShellExecute) {
+				Debug.Log (process.StandardOutput);
+				Debug.Log (process.StandardError);
+			}
+
+			process.WaitForExit ();
+			process.Close ();
+
+		}
+	
 	}
 }
 

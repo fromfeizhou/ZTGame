@@ -54,10 +54,6 @@ function BattleCommandProtocol:SendCommand(command)
 
 	--技能测试
 	if GameConfig.IsSkillDebugScene then
-		if commandType  == BattleCommandType.Collider then
-			GlobalBattleCtrl:AddColliderCommand(command)
-			return
-		end
 		BattleCommandProtocol:__TsClientInputCommand(command)
 		return
 	end
@@ -101,37 +97,36 @@ end
 function BattleCommandProtocol:SendHpChange(value)
 	local frame = GlobalBattleCtrl:GetCurCommandFrame()
 
-	local pbData = {}
-	pbData.model = PB_MAP.MODEL
-	pbData.command = PB_MAP.ROLE_FRAME
-	pbData.data = {}
-	pbData.data.frame_id = frame
-	pbData.data.type = 6
+	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+	package.data = {}
+	package.data.frame_id = frame
+	package.data.type = 6
 	--发送服务器坐标转换
-	pbData.data.int_data = {value}
-	pbData.data.str_data = ""
-	NetWorkManager:SendNetMsg(pbData)
+	package.data.int_data = {value}
+	package.data.str_data = ""
+
+	NetWorkManager:SendNetMsg(package)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听协议
 function BattleCommandProtocol:_RegAll()
-	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH, BattleCommandProtocol._OnSurvieMatch, BattleCommandProtocol)
-	ZTProtocol:Register(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT, BattleCommandProtocol._OnSurvieFight, BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.SURVIVE_MATCH, BattleCommandProtocol._OnSurvieMatch, BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.SURVIVE_FIGHT, BattleCommandProtocol._OnSurvieFight, BattleCommandProtocol)
 	--地图相关协议
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.SIGHT,BattleCommandProtocol._OnMapSight,BattleCommandProtocol)
-	ZTProtocol:Register(PB_MAP.MODEL, PB_MAP.FRAME,BattleCommandProtocol._OnMapFrame,BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_SIGHT,BattleCommandProtocol._OnMapSight,BattleCommandProtocol)
+	ZTProtocol:Register(PROTOCOL.MAP_FRAME,BattleCommandProtocol._OnMapFrame,BattleCommandProtocol)
 end
 
 --@brief 移除协议监听
 function BattleCommandProtocol:_UnRegAll()
-	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.MATCH)
-	ZTProtocol:Unregister(PB_SURVIVE.MODEL, PB_SURVIVE.FIGHT)
+	ZTProtocol:Unregister(PROTOCOL.SURVIVE_MATCH)
+	ZTProtocol:Unregister(PROTOCOL.SURVIVE_FIGHT)
 
 	--地图相关协议
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.SIGHT)
-	ZTProtocol:Unregister(PB_MAP.MODEL, PB_MAP.FRAME)
+	ZTProtocol:Unregister(PROTOCOL.MAP_SIGHT)
+	ZTProtocol:Unregister(PROTOCOL.MAP_FRAME)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -140,19 +135,14 @@ end
 
 --@brief 发送匹配
 function BattleCommandProtocol:SendMath()
-	local pbData 	= {}
-	pbData.model 	= PB_SURVIVE.MODEL
-	pbData.command 	= PB_SURVIVE.MATCH
-	NetWorkManager:SendNetMsg(pbData)
+	NetWorkManager:SendNetMsg(Package:Create(PROTOCOL.SURVIVE_MATCH))
 end
 
 --@brief 组织驱动帧内容发送
 function BattleCommandProtocol:SendCommandFrameMsg(data)
-	local pbData = {}
-	pbData.model = PB_MAP.MODEL
-	pbData.command = PB_MAP.ROLE_FRAME
-	pbData.data = data
-	NetWorkManager:SendNetMsg(pbData)
+	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+	package.data = data
+	NetWorkManager:SendNetMsg(package)
 end
 
 --@brief 发送移动驱动帧消息
@@ -208,7 +198,7 @@ function BattleCommandProtocol:SendColliderFrameMsg(command)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************协议接收***************************************************************
+--@brief 协议接收begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 匹配返回
@@ -230,8 +220,10 @@ function BattleCommandProtocol:_OnMapSight(data)
 			local data = {}
 			data.battleId = v.id
 			data.camp = v.team
-			data.hp = v.hp
+			--data.hp = v.hp
+			--data.career = v.jop
 			data.pos = BattleDefine:GetClientPos(v.x,v.y,v.z)
+			data.attritList = BattleCommandProtocol:_GetAttributeList(v.base_attr)
 			list[data.battleId] = data
 		end
 
@@ -308,12 +300,12 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 					table.insert(list,v.int_data[5+i])
 				end
 				command = BattleColliderCommand:CreateServer(battleId,skillId,x,y,z,list)
-				--碰撞驱动帧优先处理 不塞入队列
-				if command then
-					GlobalBattleCtrl:AddColliderCommand(command)
-					command = nil
-				end
+			
+			elseif v.type == BattleCommandType.EffectSync then
+				command = BattleCommandProtocol:_GetEffectSyncCommand(v.role_id,v.int_data)
 			end
+
+
 			if command then
 				table.insert(commands[v.frame_id],command)
 			end
@@ -321,24 +313,65 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	end
 	
 	BattleCommandProtocol:ParseCommand(commands)
+end
 
-	--[[
-	[data] = {
-    [1] = {
-        [type] = 1
-        [int_data] = {
-            [1] = 5
-            [2] = 27000
-            [3] = 0
-            [4] = 24000
-            }
-        [str_data] = 
-        [frame_id] = 251
-        [role_id] = 50485761
-        }
-    }
-}
-	]]
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief协议接收end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 获得属性列表
+function BattleCommandProtocol:_GetAttributeList(data)
+	local list = {}
+	table.insert(list, {AttributeType.HpMax, data.hp_max})
+	table.insert(list, {AttributeType.AttackMin, data.attack_min})
+	table.insert(list, {AttributeType.AttackMax, data.attack_max})
+	table.insert(list, {AttributeType.Defense, data.defense})
+	table.insert(list, {AttributeType.AttackSpeed, data.attack_speed})
+
+	table.insert(list, {AttributeType.HpRec, data.hp_rec})
+	table.insert(list, {AttributeType.MpMax, data.mp_max})
+	table.insert(list, {AttributeType.Luck, data.lucky})
+	table.insert(list, {AttributeType.Curse, data.curse})
+	table.insert(list, {AttributeType.MoveSpeed, data.speed})
+
+	table.insert(list, {AttributeType.AttackAcc, data.attack_acc})
+	table.insert(list, {AttributeType.HurtDec, data.hurt_dec})
+	table.insert(list, {AttributeType.CDAcc, data.cd_acc})
+	table.insert(list, {AttributeType.Hp, data.hp})
+	table.insert(list, {AttributeType.Mp, data.mp})
+
+	table.insert(list, {AttributeType.MpRec, data.mp_rec})
+	return list
+end
+
+--@brief 获得同步命令
+function BattleCommandProtocol:_GetEffectSyncCommand(role_id,int_data)
+
+	local syncType = int_data[1]
+	table.remove(int_data,1)
+
+	if syncType == EffectSyncType.Attribute then
+		--同步属性
+		return BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
+
+	elseif syncType == EffectSyncType.Dead then
+		--同步死亡
+		return BattleEffectSyncCommand:CreateDead(role_id)
+
+	end
+	
+end
+
+--@brief 属性同步
+function BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
+	local list = {}
+	local battleId = role_id
+	for i =1,#int_data,2 do
+		local attriType,value = int_data[i]
+		table.insert(list,{attriType,value})
+	end
+	local command = BattleEffectSyncCommand:CreateAttribute(battleId,list)
+
+	return command
 end
 
 
