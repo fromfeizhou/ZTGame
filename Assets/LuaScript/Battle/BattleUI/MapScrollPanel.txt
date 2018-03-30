@@ -18,12 +18,15 @@ MapScrollPanel = {
 	m_gameObject = nil,
 
 	m_scaleValue = 1,
+	m_showCircle = false,
 	
 	m_ScrollView = nil,
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
 
 	m_playerList = nil,
+	m_playerItemParent = nil,
+	m_prePlayerItem = nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -62,34 +65,30 @@ function MapScrollPanel:Init(parent)
 			self.m_ztCircleDest:SetColor(CSColor.red)
 
 			--玩家，队友
-			local playerItemParent = PanelWidget:GetChild(self.m_ScrollView.content,"PlayerList")
-			local prePlayerItem = PanelWidget:GetChild(playerItemParent,"PrePlayerItem")
-			self.m_playerList = {}
-			local team = GlobalBattleCtrl:GetOwnerTeamChara()
-			for i=1,#team do
-				local playTransform = CSTransform.Instantiate(prePlayerItem,playerItemParent)
-				local playerInfo = {
-					id = team[i].m_nBattleId,
-					rectTransform = playTransform:GetComponent("RectTransform"),
-				}
-
-				local ztImg = playTransform:GetComponent("ZTImage")
-				if ztImg then
-					if playerInfo.id == GlobalBattleCtrl:GetOwnerId() then
-						ztImg.color = CSColor.green;
-					else
-						ztImg.color = CSColor.yellow;
-					end
-				end
-				playerInfo.rectTransform.gameObject:SetActive(true)
-				self.m_playerList[team[i].m_nBattleId] = playerInfo
-			end
+			self.m_playerItemParent = PanelWidget:GetChild(self.m_ScrollView.content,"PlayerList")
+			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
 
 			self:_UpdatePlayer()
+			self:_AddEvent()
 		end
 	end)
 end
+function MapScrollPanel:_CreatePlayer( playerId )
+	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
+	local playRectTransform = playTransform:GetComponent("RectTransform")
+	playTransform.name = playerId
+	local ztImg = playTransform:GetComponent("ZTImage")
+	if ztImg then
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
+			ztImg.color = CSColor.green;
+		else
+			ztImg.color = CSColor.yellow;
+		end
+	end
 
+	playTransform.gameObject:SetActive(true)
+	return playRectTransform
+end
 --@brief 面板逻辑命令帧每帧刷新
 function MapScrollPanel:Update()
 	self:_UpdateCircle(false)
@@ -110,24 +109,52 @@ end
 
 --@brief 销毁登录面板
 function MapScrollPanel:Destroy()
+	self:_RemoveEvent()
 end
 
 
 function MapScrollPanel:_UpdatePlayer()
+	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
 	for k,v in pairs(team) do
-		local pos = v:GetPos(v:GetFaceAngle())
-		self.m_playerList[k].rectTransform.anchoredPosition = {x=pos.x, y = pos.z}
-		self.m_playerList[k].rectTransform.anchoredPosition = 512/2048 * self.m_scaleValue * self.m_playerList[k].rectTransform.anchoredPosition
-		self.m_playerList[k].rectTransform.localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+		local playerId = v:GetBattleId()
+		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
+		local pos = v:GetPos()
+		local tmpPos = CSVector2(pos.x,pos.z)
+		self.m_playerList[playerId].anchoredPosition = tmpPos * 512/2048 * self.m_scaleValue
+		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 	end
 end
 
+--@brief 添加事件监听
+function MapScrollPanel:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function MapScrollPanel:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+function MapScrollPanel:_OnStartGame(  )
+	GCSLog("===================MapScrollPanel:_OnStartGame()")
+	self:_ClearPlayer()
+end
+
+function MapScrollPanel:_ClearPlayer()
+	if not self.m_playerList then return end
+	for k,v in pairs(self.m_playerList) do
+		GCSLog("=========================MapScrollPanel:_ClearPlayer()",v)
+		CSGameObject.Destroy(v.gameObject)
+	end
+end
 
 function MapScrollPanel:_onValueChanged(value)
 	self.m_scaleValue = value
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
-	self:_UpdateCircle( true )
+	if self.m_showCircle then 
+		self:_UpdateCircle( true )
+	end
 end
 
 function MapScrollPanel:_UpdateCircle(force)
@@ -139,11 +166,13 @@ function MapScrollPanel:_UpdateCircle(force)
 end
 
 function MapScrollPanel:Show_Circle()
+	self.m_showCircle = true
 	self.m_ztCircleCur:Show()	
 	self.m_ztCircleDest:Show()
 end
 
 function MapScrollPanel:Hide_Circle()
+	self.m_showCircle = false
 	self.m_ztCircleCur:Hide()	
 	self.m_ztCircleDest:Hide()
 end

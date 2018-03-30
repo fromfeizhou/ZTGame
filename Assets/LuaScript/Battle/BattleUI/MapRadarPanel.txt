@@ -68,32 +68,52 @@ function MapRadarPanel:Init(parent)
 			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
 			
 			self:_UpdatePlayer()
+			self:_AddEvent()
 		end
 	end)
+end
+
+--@brief 添加事件监听
+function MapRadarPanel:_AddEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function MapRadarPanel:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+function MapRadarPanel:_OnStartGame()
+	GCSLog("=========================MapRadarPanel:_OnStartGame()")
+	self:_ClearPlayer()
+end
+
+function MapRadarPanel:_ClearPlayer()
+	if not self.m_playerList then return end
+	for k,v in pairs(self.m_playerList) do
+		GCSLog("=========================MapScrollPanel:_ClearPlayer()",v)
+		CSGameObject.Destroy(v.gameObject)
+	end
 end
 
 function MapRadarPanel:_OpenMap( )
 	self.m_model:ShowPanel(BATTLE_UI_TYPE.MAP_SCROLL)
 end
-
 function MapRadarPanel:_CreatePlayer( playerId )
 	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
-	local playerInfo = {
-		id = playerId,
-		rectTransform = playTransform:GetComponent("RectTransform"),
-	}
-
+	local playRectTransform = playTransform:GetComponent("RectTransform")
+	playTransform.name = playerId
 	local ztImg = playTransform:GetComponent("ZTImage")
 	if ztImg then
-		if playerInfo.id == GlobalBattleCtrl:GetOwnerId() then
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
 			ztImg.color = CSColor.green;
 		else
 			ztImg.color = CSColor.yellow;
 		end
 	end
 
-	playerInfo.rectTransform.gameObject:SetActive(true)
-	return playerInfo
+	playTransform.gameObject:SetActive(true)
+	return playRectTransform
 end
 
 --@brief 面板逻辑命令帧每帧刷新
@@ -116,6 +136,7 @@ end
 
 --@brief 销毁登录面板
 function MapRadarPanel:Destroy()
+	self:_RemoveEvent()
 end
 
 
@@ -123,18 +144,17 @@ function MapRadarPanel:_UpdatePlayer()
 	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
 	for k,v in pairs(team) do
+		local playerId = v:GetBattleId()
 
+		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 
-		if not self.m_playerList[k] then
-			self.m_playerList[k] = self:_CreatePlayer(v:GetBattleId())
-		end
+		local pos = v:GetPos()
+		--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
+		self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
+		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 
-		local pos = v:GetPos(v:GetFaceAngle())
-		self.m_playerList[k].rectTransform.anchoredPosition = {x=pos.x, y = pos.z}
-		self.m_playerList[k].rectTransform.localEulerAngles = v:GetFaceAngle() * CSVector3.forward
-
-		if k == GlobalBattleCtrl:GetOwnerId() then
-			self.m_mapContent.anchoredPosition = -self.m_playerList[k].rectTransform.anchoredPosition
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
+			self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
 		end
 	end
 end
