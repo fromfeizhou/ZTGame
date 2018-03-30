@@ -17,6 +17,8 @@ MapRadarPanel = {
 	m_transform = nil,
 	m_gameObject = nil,
 
+	m_ztTxt_waitTime = nil,
+
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
 
@@ -48,9 +50,9 @@ function MapRadarPanel:Init(parent)
  			self.m_transform = self.m_gameObject.transform
  			self.m_gameObject:SetActive(false)
 			
-			PanelWidget:GetZTButton(self.m_transform,"Mask/btnOpenMap",function () self:_OpenMap() end)
-
-			local mapConentTrans = PanelWidget:GetChild(self.m_transform,"Mask/Content")
+			PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OpenMap() end)
+			self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_transform,"ViewPort/ztTxt_WaitTime")
+			local mapConentTrans = PanelWidget:GetChild(self.m_transform,"ViewPort/Mask/Content")
 			self.m_mapContent = mapConentTrans:GetComponent("RectTransform")
 
 			--毒圈相关
@@ -138,9 +140,12 @@ function MapRadarPanel:_UpdatePlayer()
 end
 
 function MapRadarPanel:_UpdateCircle()
-	if MapCircleManager.m_circleMoveing then
-		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
-		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
+
+	if MapCircleManager.m_isWait then 
+		self.m_ztTxt_waitTime.text = MapCircleManager.m_waitTime
+	else
+		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
+		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
 		self:Show_Circle()
 	end
 end

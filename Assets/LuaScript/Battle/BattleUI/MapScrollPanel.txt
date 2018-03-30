@@ -92,7 +92,7 @@ end
 
 --@brief 面板逻辑命令帧每帧刷新
 function MapScrollPanel:Update()
-	self:_UpdateCircle()
+	self:_UpdateCircle(false)
 	self:_UpdatePlayer()
 end
 
@@ -127,13 +127,13 @@ end
 function MapScrollPanel:_onValueChanged(value)
 	self.m_scaleValue = value
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
-	self:_UpdateCircle()
+	self:_UpdateCircle( true )
 end
 
-function MapScrollPanel:_UpdateCircle()
-	if MapCircleManager.m_curCircleInfo then
-		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
-		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
+function MapScrollPanel:_UpdateCircle(force)
+	if not MapCircleManager.m_isWait or force then
+		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
+		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
 		self:Show_Circle()
 	end
 end

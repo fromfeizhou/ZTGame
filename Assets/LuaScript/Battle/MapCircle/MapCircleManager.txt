@@ -15,13 +15,16 @@ local CSLog = CS.GameTool.Log
 
 MapCircleManager = {
 	m_model,
-	m_circleInfo = nil,
-	m_circleMoveing = false,
-	m_curCircleInfo = nil,
-
 	m_fbxDuCircle = nil,
-	m_waitTime = nil,
-	m_circleData = nil,
+
+	m_circle = nil,--网络基础数据
+	m_curCircle = nil,--当前毒圈数据
+
+	m_scrCircle = nil,--原始圈信息
+	m_destCircle = nil,--目标圈信息
+
+	m_isWait = true,--状态，true等待，false移动
+	m_waitTime = nil,--等待时间
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -47,21 +50,25 @@ end
 --@brief 移除
 function MapCircleManager:Destroy()
 	CSLog("MapCircleManager:Destroy")
-	
 	self:RemoveEvent()
-
 end
+
 
 --@brief 更新
 function MapCircleManager:Update()
-	self:UpdateMapCircleCommand()
 	self.m_model:Update()
-	self:UpdateDuCircle()
+	self:UpdateCircleFBX()
 end
 
-function MapCircleManager:SetMapCircleCommand(p_map_circle)
 
-	self.m_circleData = {}
+--@brief 逻辑帧刷新
+function MapCircleManager:UpdateCommand()
+	self:CalculationCircle()
+end
+
+--@brief 收到服务器毒圈信息
+function MapCircleManager:SetMapCircleCommand(p_map_circle)
+	local circleData = {}
 	for i=1,#p_map_circle do
 		local netCircleData = p_map_circle[i]
 		local tmpCircleData = {
@@ -72,52 +79,89 @@ function MapCircleManager:SetMapCircleCommand(p_map_circle)
 			startRadius = netCircleData.begin_radius * 0.01,
 			endRadius = netCircleData.end_radius * 0.01,
 		}
-		table.insert(self.m_circleData,tmpCircleData)
+		table.insert(circleData,tmpCircleData)
 	end
+	self.m_circle = circleData
+
+	MapCircleManager.m_scrCircle = {}
+	MapCircleManager.m_destCircle = {}
 end
---@brief 增加地图指令
-function MapCircleManager:UpdateMapCircleCommand()
 
-	if not self.m_circleData then return end
 
+--@brief 计算毒圈数据
+function MapCircleManager:CalculationCircle()
+
+	if not self.m_circle then return end
+
+	--游戏当前帧数
 	local curFrameNum = GlobalBattleCtrl:GetCurCommandFrame()
 
-	if curFrameNum < self.m_circleData[1].startFrame then return end
-
-
-	for i=1,#self.m_circleData do
-		if curFrameNum >= self.m_circleData[i].startFrame and curFrameNum < self.m_circleData[i].endFrame then
-			MapCircleManager.m_circleInfo = self.m_circleData[i]
-			break
-		end
+	--获取当前帧对应的毒圈数据，所有毒圈数据用完之后，将清空
+	self.m_curCircle = self:_GetCurCircleData(curFrameNum)
+	if not self.m_curCircle then
+		self.m_circle = nil
+	 	return 
 	end
 
-	if MapCircleManager.m_circleInfo then 
-		if not MapCircleManager.m_curCircleInfo then
-			MapCircleManager.m_curCircleInfo = {}
-			MapCircleManager.m_curCircleInfo.Cur = {}
-			MapCircleManager.m_curCircleInfo.Dest = {}
-		end
+	MapCircleManager.m_isWait = curFrameNum < self.m_curCircle.startFrame
+
+	if MapCircleManager.m_isWait then 
+		--毒圈等待
+		local waitFrame = self.m_curCircle.startFrame - curFrameNum
+		MapCircleManager.m_waitTime = math.ceil(waitFrame/GameConfig.CommandFrameNum)
+	else
+		--毒圈移动
 		self:_UpdateCircleInfoCur()
 		self:_UpdateCircleInfoDest()
-
-		
-		if curFrameNum < MapCircleManager.m_circleInfo.endFrame then
-			local waitFrame = MapCircleManager.m_circleInfo.startFrame - curFrameNum
-			self.m_waitTime = waitFrame/120
-		end
-		
 	end
+
 end
 
 --@brief 场景毒圈移动
-function MapCircleManager:UpdateDuCircle()
-	if self.m_fbxDuCircle and  MapCircleManager.m_curCircleInfo and MapCircleManager.m_curCircleInfo.Cur then 
-		local curCircleInfo = MapCircleManager.m_curCircleInfo.Cur
+function MapCircleManager:UpdateCircleFBX()
+	if self.m_fbxDuCircle and not MapCircleManager.m_isWait then 
+		local curCircleInfo = MapCircleManager.m_scrCircle
 		self.m_fbxDuCircle.transform.position = CSVector3(curCircleInfo.pos.x,0,curCircleInfo.pos.y)
 		self.m_fbxDuCircle.transform.localScale = CSVector3.one * curCircleInfo.radius
 	end
 end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function MapCircleManager:_GetCurCircleData( frameNum )
+	for i=1,#self.m_circle do
+		if frameNum < self.m_circle[i].endFrame then 
+			return self.m_circle[i]
+		end
+	end
+	return nil
+end
+
+
+--@brief 更新当前圈数据
+function MapCircleManager:_UpdateCircleInfoCur()
+
+	--总帧数
+	local frameCnt = self.m_curCircle.endFrame - self.m_curCircle.startFrame
+	--当前缩圈帧索引
+	local progressFrame = GlobalBattleCtrl:GetCurCommandFrame() - self.m_curCircle.startFrame
+	local progress = progressFrame/frameCnt
+
+	--缩圈进度
+	if progress <= 1 then
+		MapCircleManager.m_scrCircle.pos = CSVector2.Lerp (self.m_curCircle.startPos,self.m_curCircle.endPos,progress)
+		MapCircleManager.m_scrCircle.radius = CSMathf.Lerp (self.m_curCircle.startRadius,self.m_curCircle.endRadius,progress)
+	end
+end
+
+--@briefF 更新目标圈数据
+function MapCircleManager:_UpdateCircleInfoDest()
+	MapCircleManager.m_destCircle.pos = self.m_curCircle.endPos
+	MapCircleManager.m_destCircle.radius = self.m_curCircle.endRadius
+end
+
 
 --@brief 场景毒圈加载
 function MapCircleManager:_LoadCircleFBX()
@@ -128,51 +172,6 @@ function MapCircleManager:_LoadCircleFBX()
 	end)
 end
 
---@brief 逻辑帧刷新
-function MapCircleManager:UpdateCommand()
-	if MapCircleManager.m_circleInfo then 
-
-		MapCircleManager.m_circleMoveing = (GlobalBattleCtrl:GetCurCommandFrame() < MapCircleManager.m_circleInfo.endFrame)
-
-		if MapCircleManager.m_circleMoveing then 
-			self:_UpdateCircleInfoCur()
-		end
-	end
-end
-
---@brief 获取当前读取数据（table.pos: 毒圈坐标，table.radius：毒圈半径）
-function MapCircleManager:GetCurCircleInfo()
-	if MapCircleManager.m_curCircleInfo and MapCircleManager.m_curCircleInfo.Cur then
-		return MapCircleManager.m_curCircleInfo.Cur
-	end
-	return nil
-end
-
---@brief 更新当前圈数据
-function MapCircleManager:_UpdateCircleInfoCur()
-
-	--总帧数
-	local frameCnt = MapCircleManager.m_circleInfo.endFrame - MapCircleManager.m_circleInfo.startFrame
-	--当前缩圈帧索引
-	local progressFrame = GlobalBattleCtrl:GetCurCommandFrame() - MapCircleManager.m_circleInfo.startFrame
-	local progress = progressFrame/frameCnt
-
-	--缩圈进度
-	MapCircleManager.m_curCircleInfo.Cur = {
-		pos = CSVector2.Lerp (MapCircleManager.m_circleInfo.startPos,MapCircleManager.m_circleInfo.endPos,progress),
-		radius = CSMathf.Lerp (MapCircleManager.m_circleInfo.startRadius,MapCircleManager.m_circleInfo.endRadius,progress),
-	}
-end
---@briefF 更新目标圈数据
-function MapCircleManager:_UpdateCircleInfoDest()
-	MapCircleManager.m_curCircleInfo.Dest = {
-		pos = MapCircleManager.m_circleInfo.endPos,
-		radius = MapCircleManager.m_circleInfo.endRadius,
-	}
-end
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加事件监听
 function MapCircleManager:_AddEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER,self._OnAddCharacter,self)
