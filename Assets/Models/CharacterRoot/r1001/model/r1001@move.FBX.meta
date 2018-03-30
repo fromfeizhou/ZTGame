@@ -66,7 +66,7 @@ ModelImporter:
     400056: r1001
     400058: //RootNode
     4300000: r1001
-    7400000: Take 001
+    7400000: move
     9500000: //RootNode
     13700000: r1001
   materials:
@@ -93,7 +93,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: move
       takeName: Take 001
       firstFrame: 0
       lastFrame: 22
