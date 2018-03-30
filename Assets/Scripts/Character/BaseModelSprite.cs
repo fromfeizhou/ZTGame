@@ -8,6 +8,7 @@ using Object = UnityEngine.Object;
 
 public enum EquipType
 {
+    Node=0,
     Main = 1,
     Equip
 }
@@ -175,6 +176,19 @@ public class RoleModelSprite : BaseModelSprite
         return path;
     }
 
+    private bool GetCurTypeByLoadingIndex(out EquipType type)
+    {
+        type = EquipType.Node;
+        int index = loadIndex + 1;
+        if (!System.Enum.IsDefined(typeof(ZTAnimationType), index))
+            return false;
+        else
+        {
+            type = (EquipType) index;
+            return true;
+        }
+    }
+
     private void LoadNextAsset()
     {
         if (loadIndex >= assetPaths.Count)
@@ -183,9 +197,9 @@ public class RoleModelSprite : BaseModelSprite
                 assetCallbackList[loadIndex](null, null);
             return;
         }
-        if (!System.Enum.IsDefined(typeof(ZTAnimationType), loadIndex))
+        EquipType type;
+        if (!GetCurTypeByLoadingIndex(out type))
             return;
-        EquipType type = (EquipType)loadIndex;
         if (string.IsNullOrEmpty(assetPaths[loadIndex]) || assetPaths[loadIndex].Equals(GetPathByType(modelPartPath, type)))
         {
             loadIndex++;
@@ -213,15 +227,15 @@ public class RoleModelSprite : BaseModelSprite
 
     public void OnLoadObjCallback(Object target, string path)
     {
-        if (!System.Enum.IsDefined(typeof(ZTAnimationType), loadIndex))
+        EquipType type;
+        if (!GetCurTypeByLoadingIndex(out type))
             return;
-        EquipType type = (EquipType)loadIndex;
 
         if (!modelPartPath[type].Equals(path)) return;
         GameObject prefab = target as GameObject;
-        if (null != prefab) return;
+        if (null == prefab) return;
         GameObject go = GameObject.Instantiate(prefab, modelParent);
-        if (type == EquipType.Equip)
+        if (type == EquipType.Main)
         {
             model = go;
             animator = AnimationBase.GetAnimationBase(animationType, go);
@@ -320,10 +334,10 @@ public class RoleModelSprite : BaseModelSprite
         else
         {
             model.SetActive(true);
-            SkinnedMeshRenderer[] renders = model.transform.GetComponentsInChildren<SkinnedMeshRenderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+            Renderer[] renders = model.transform.GetComponentsInChildren<Renderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
             for (int index = 0; index < renders.Length; index++)
             {
-                SkinnedMeshRenderer render = renders[index];
+                Renderer render = renders[index];
                 if (transLv == 0)
                 {
                     render.material.shader = Shader.Find("Custom/PengLuOccTransVF");

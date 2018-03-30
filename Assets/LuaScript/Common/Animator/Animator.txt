@@ -77,7 +77,8 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetAnimatorPath())
+	CSLog("Animator:Crate role>>>>>>>>>>>>>>>>>>>>")
+	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/r1001/prefab/r1001.prefab","Assets/Models/CharacterRoot/r1001/prefab/r1001Equip.prefab"	)--self.m_animData:GetAnimatorPath())
 end
 
 --@brief 移除形象
