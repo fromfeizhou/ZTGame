@@ -28,4 +28,92 @@ SkillActionConfig = {
 				{ actionType = 3, param = { 1, -1, 0, 0, 2, 2, 18, 300, "HitBlood3" }},
 		},
 	},
+
+	id_11001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { 11051 }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 1 ] = {
+				{ actionType = 3, param = { 10, 1, 0, 0, 0, 0, 1000, -1, "Bomb5" }},
+		},
+	},
+
+	id_11002 = {
+		[ 5 ] = {
+				{ actionType = 1, param = { 11031 }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 10 ] = {
+				{ actionType = 3, param = { 15, 2, 0, 0, 0, 0, 1000, -1, "Bomb5" }},
+		},
+	},
+
+	id_11003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { 11041 }},
+				{ actionType = 0, param = { 0 }},
+				{ actionType = 3, param = { -1, -1, 0, -1, -1, -1, 100, -1, "Bomb1" }},
+		},
+	},
+
+	id_20001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_20002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack2" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_20003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack3" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 3, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_21001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill02" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_IceArea1" }},
+		},
+	},
+
+	id_21002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill03" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Pulse1" }},
+		},
+	},
+
+	id_21003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill04" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Rock1" }},
+		},
+	},
 }

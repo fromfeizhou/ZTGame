@@ -135,7 +135,6 @@ function SkillActionCollider:_CheckCollider()
 	local list = {}
 	for i,chara in pairs(self.m_tColliderTargets) do
 		local battleId = chara:GetBattleId()
-
 		local isInCollider = self:_CheckInColliderList(battleId)
 		if  isInCollider then
 			break

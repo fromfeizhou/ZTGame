@@ -118,7 +118,7 @@ function SkillActionParse:_ParseConfig()
 			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
 		},
 	[1] = {
-			{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,SkillTargetType.Enemy,30,0,1}},
+			{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,0,1,SkillTargetType.Self,30}},
 		}
 	}
 
@@ -175,8 +175,7 @@ end
 
 --@brief 获得碰撞Action
 function SkillActionParse:_GetColliderAction(frame,param)
-	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
-	--[1]圆半径 [2]高度 [3]层次 [4]目标类型 [5]存在时间[6]偏移x [7]偏移y
+	--CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
 	local data = SkillActionColliderData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionCollider:Create(self,data)
 	return action

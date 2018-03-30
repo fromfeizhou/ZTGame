@@ -80,7 +80,7 @@ end
 --@brief 初始化属性系统
 function Character:InitAttributeSystem(battleData)
 	self.m_attriSystem = AttributeSystem:Create()
-	self.m_attriSystem:SetAttributeByType(battleData.attriList)
+	self:SetAttributeByList(battleData.attriList)
 end
 
 --@brief 初始化buff系统
@@ -107,7 +107,7 @@ end
 --@brief 刷新数据
 function Character:SetData(data)
 	self:UpdatePos(data.pos)
-	self:SetAttributeByList(v.attritList)
+	self:SetAttributeByList(data.attritList)
 end
 
 --@brief 刷新逻辑帧
@@ -198,6 +198,17 @@ function Character:IsHost()
 	return GlobalBattleCtrl:GetOwnerId() == self.m_nBattleId
 end
 
+--@brief 状态回切动作判断
+function Character:CheckStateAnima()
+	if self:IsNormalState() then
+		if self.m_nMoveDir ~= BattleDir.None then
+			self:Play(AnimatorName.Move)
+		else
+			self:Play(AnimatorName.Idle)
+		end
+	end
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -210,6 +221,8 @@ end
 --@brief 设置玩家状态
 function Character:OutState(state)
 	self.m_nState = self.m_nState & ~state
+
+	self:CheckStateAnima()
 	--CSLog("Character:OutState",self.m_nState)
 end
 
@@ -246,9 +259,9 @@ function Character:ChangeHp(value)
 	self:SetHp(hp)
 
 	--@brief 测试代码
-	if self:IsHost() and not GameConfig.IsSkillDebugScene then
-		BattleCommandProtocol:SendHpChange(value)
-	end
+	-- if self:IsHost() and not GameConfig.IsSkillDebugScene then
+	-- 	BattleCommandProtocol:SendHpChange(value)
+	-- end
 end
 --@brief 血量
 function Character:GetHp(isBase)

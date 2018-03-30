@@ -179,7 +179,7 @@ function ZTCharaManager:_RemoveEvent()
 end
 
 --brief 游戏开始刷新所有对象
-function ZTCharaManager:_OnStartGame(playerList)
+function ZTCharaManager:_OnStartGame(playerList,ownerId)
 	
 	--移除玩家
 	for i,v in pairs(self.m_tCharaList) do
@@ -198,9 +198,7 @@ function ZTCharaManager:_OnStartGame(playerList)
 		end
 	end
 
-	--test(测试代码)
-	local chara = self.m_tSortCharaList[1]
-	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
+	GlobalBattleCtrl:SetMainCharacter(ownerId or self.m_tSortCharaList[1]:GetBattleId())
 
 end
 

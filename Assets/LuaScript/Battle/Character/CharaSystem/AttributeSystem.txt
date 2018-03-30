@@ -47,12 +47,15 @@ function AttributeSystem:SetAttributeByType(attriType,value)
 	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
 		return
 	end
+	CSLog("AttributeSystem:SetAttributeByList",self.m_tAttriList[attriType],value)
+
 	self.m_tAttriList[attriType] = value
 end
 
 --@brife 设置属性
 function AttributeSystem:SetAttributeByList(list)
 	for i = 1,#list do
+		CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
 		self:SetAttributeByType(list[i][1],list[i][2])
 	end
 end
