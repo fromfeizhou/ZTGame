@@ -37,7 +37,7 @@ end
 
 
 --@brief 接收驱动帧
-function BattleCommandProtocol:ParseCommand(commands)
+function BattleCommandProtocol:ParseCommand(commands,endId)
 	--数据存储
 	if commands then
 		for frame,commandList in pairs(commands) do
@@ -45,7 +45,7 @@ function BattleCommandProtocol:ParseCommand(commands)
 		end
 	end
 	--驱动逻辑帧往前
-	 GlobalBattleCtrl:SetNextFrame()
+	 GlobalBattleCtrl:SetNextFrame(endId)
 end
 
 --@brief 发送命令
@@ -143,6 +143,7 @@ function BattleCommandProtocol:SendCommandFrameMsg(data)
 	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
 	package.data = data
 	NetWorkManager:SendNetMsg(package)
+	--CSLog("BattleCommandProtocol:SendCommandFrameMsg",SerializeTable(data))
 end
 
 --@brief 发送移动驱动帧消息
@@ -191,7 +192,7 @@ function BattleCommandProtocol:SendColliderFrameMsg(command)
 		table.insert(intData,command.m_tTargetList[i])
 	end
 
-	data.int_data = int_data
+	data.int_data = intData
 	data.str_data = ""
 
 	BattleCommandProtocol:SendCommandFrameMsg(data)
@@ -230,44 +231,9 @@ function BattleCommandProtocol:_OnMapSight(data)
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.START_GAME,list,data.role_id)
 	end
 	--重置驱动帧管理器
-	GlobalBattleCtrl:ResetCommandList(data.frame_id,data.frame_id)
+	GlobalBattleCtrl:ResetCommandList(data.frame_id,math.floor(data.frame_id / BattleDefine.CommandStep)* BattleDefine.CommandStep)
 
 	MapCircleManager:SetMapCircleCommand(data.circles)
-	--[[
-	[1] = {
-    [hp] = 100
-    [y] = 0
-    [x] = 270
-    [job] = 0
-    [z] = 240
-    [level] = 1
-    [team] = 0
-    [d] = 0
-    [name] = 70459
-    [base_attr] = {
-        [hp_max] = 100
-        [defense_magical] = 0
-        [strength] = 0
-        [mp_rec] = 0
-        [hp_cur] = 0
-        [hp_rec] = 0
-        [speed] = 0
-        [defense_physical] = 0
-        [curse] = 0
-        [lucky] = 0
-        [attack] = 0
-        [magic] = 0
-        [wizard] = 0
-        }
-    [fight_point] = 2149
-    [sex] = 0
-    [shaping] = 0
-    [rank] = 3
-    [vip_level] = 0
-    [id] = 50485761
-    [state] = 0
-    }
-	]]
 end
 
 --@brief 接收驱动帧
@@ -276,7 +242,7 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	--data.end_id
 	local commands = nil
 	if #sightData.data > 0 then
-		-- CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
 		-- CSLog("BattleCommandProtocol:_OnMapFrame",GlobalBattleCtrl:GetCurCommandFrame())
 		commands = {}
 		for i,v in pairs(sightData.data) do
@@ -312,7 +278,7 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 		end
 	end
 	
-	BattleCommandProtocol:ParseCommand(commands)
+	BattleCommandProtocol:ParseCommand(commands,sightData.end_id)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -348,7 +314,7 @@ function BattleCommandProtocol:_GetEffectSyncCommand(role_id,int_data)
 
 	local syncType = int_data[1]
 	table.remove(int_data,1)
-
+	--CSLog("BattleCommandProtocol:_GetEffectSyncComman",syncType)
 	if syncType == EffectSyncType.Attribute then
 		--同步属性
 		return BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
@@ -366,7 +332,7 @@ function BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
 	local list = {}
 	local battleId = role_id
 	for i =1,#int_data,2 do
-		local attriType,value = int_data[i]
+		local attriType,value = int_data[i],int_data[i + 1]
 		table.insert(list,{attriType,value})
 	end
 	local command = BattleEffectSyncCommand:CreateAttribute(battleId,list)

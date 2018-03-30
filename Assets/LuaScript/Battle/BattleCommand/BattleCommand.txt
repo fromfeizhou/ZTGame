@@ -137,6 +137,7 @@ end
 
 --@brief 拷贝原表
 function BattleColliderCommand:CreateServer(battleId,skillId,tx,ty,tz,targetList)
+	--CSLog("BattleColliderCommand:CreateServer",battleId,skillId,tx,ty,tz,targetList)
 	local obj = {}
 	setmetatable( obj, { __index = BattleColliderCommand })
 	local  pos = BattleDefine:GetClientPos(tx,ty,tz)
@@ -161,7 +162,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 EffectSyncType = {
 	Dead = 55,	--死亡
-	Attribute = 56,	--属性
+	Attribute = 57,	--属性
 }
 
 --效果同步
@@ -177,8 +178,8 @@ end
 
 --@brief 同步属性
 function BattleEffectSyncCommand:CreateAttribute(battleId,list)
+	--CSLog("BattleEffectSyncCommand:CreateAttribute",battleId)
 	local obj = BattleEffectSyncCommand:GetBaseObj(battleId)
-
 	obj.m_nEffSyncType = EffectSyncType.Attribute
 	obj.m_tAttriList = list
 	return obj
@@ -188,6 +189,7 @@ end
 function BattleEffectSyncCommand:CreateDead(battleId)
 	local obj = BattleEffectSyncCommand:GetBaseObj(battleId)
 	obj.m_nEffSyncType = EffectSyncType.Dead
+	return obj
 end
 
 

@@ -317,9 +317,9 @@ function GlobalBattleCtrl:ResetCommandList(clientFrame,serverFrame)
 end
 
 --@brief 帧命令往前驱动
-function GlobalBattleCtrl:SetNextFrame()
+function GlobalBattleCtrl:SetNextFrame(endId)
 	if GlobalBattleCtrl.m_battleCommandMgr then
-		GlobalBattleCtrl.m_battleCommandMgr:SetNextFrame()
+		GlobalBattleCtrl.m_battleCommandMgr:SetNextFrame(endId)
 	end
 end
 

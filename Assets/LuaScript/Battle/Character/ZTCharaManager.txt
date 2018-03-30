@@ -113,11 +113,11 @@ end
 
 --@brief 处理死亡
 function ZTCharaManager:SyncDead(command)
-	local battleId = moveCommand.m_nBattleId,moveCommand.m_tAttriList
+	local battleId = command.m_nBattleId
 	local chara = self.m_tCharaList[battleId]
 	-- CSLog("ZTCharaManager:SyncDead",battleId)
 	if chara then
-		char:SetDead(true)
+		chara:SetDead(true)
 	end
 end
 
