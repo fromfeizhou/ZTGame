@@ -28,6 +28,26 @@ public class ZTAnimator : MonoBehaviour {
         modelSprite.CreateModel(path,this.transform,type);
     }
 
+    //创建形象
+    public void CreateAnimatorView(int modelType,int animationType, string rolePath,string equipPath )
+    {
+        if (modelSprite == null)
+            modelSprite = new RoleModelSprite();
+
+        Dictionary<EquipType, string> tempPathDic = new Dictionary<EquipType, string>()
+        {
+            {EquipType.Main, rolePath},
+            {EquipType.Equip, equipPath}
+        };
+
+        modelSprite.CreateModel(this.transform, animationType,tempPathDic);
+        
+
+    }
+
+
+
+
     public void SetEquips(List<int> equips)
     {
         if (modelSprite == null) return;
