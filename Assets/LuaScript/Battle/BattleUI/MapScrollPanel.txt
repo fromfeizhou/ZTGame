@@ -27,6 +27,9 @@ MapScrollPanel = {
 	m_playerList = nil,
 	m_playerItemParent = nil,
 	m_prePlayerItem = nil,
+
+	m_isShow = false,
+
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -51,7 +54,7 @@ function MapScrollPanel:Init(parent)
 			
 			
  			--@brief 初始化登录界面UI控件
-			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:_Hide() end)
+			PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:Hide() end)
 
 			PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 			self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
@@ -69,7 +72,7 @@ function MapScrollPanel:Init(parent)
 			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
 
 			self:_UpdatePlayer()
-			self:_AddEvent()
+			self:_Rush()
 		end
 	end)
 end
@@ -97,16 +100,31 @@ end
 
 --@brief 显示登录面板
 function MapScrollPanel:Show()
-	self.m_gameObject:SetActive(true)
-	LoginModel.m_pIsOpenedCreatePanel = true
+	self.m_isShow = true
+	self:_Rush()
 end
 
 --@brief 隐藏登录面板
-function MapScrollPanel:_Hide()
-	self.m_gameObject:SetActive(false)
-	LoginModel.m_pIsOpenedCreatePanel = false
+function MapScrollPanel:Hide()
+	self.m_isShow = false
+	self:_Rush()
 end
 
+
+function MapScrollPanel:_Rush()
+	if not self.m_gameObject then return end
+	if self.m_isShow then
+		self.m_gameObject:SetActive(true)
+		self:_UpdateView()
+		self:_AddEvents()
+	else
+		self.m_gameObject:SetActive(false)
+	end
+end
+
+
+function MapScrollPanel:_UpdateView()
+end
 --@brief 销毁登录面板
 function MapScrollPanel:Destroy()
 	self:_RemoveEvent()
@@ -127,12 +145,12 @@ function MapScrollPanel:_UpdatePlayer()
 end
 
 --@brief 添加事件监听
-function MapScrollPanel:_AddEvent()
+function MapScrollPanel:_AddEvents()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
 end
 
 --@brief 移除事件监听
-function MapScrollPanel:_RemoveEvent()
+function MapScrollPanel:_RemoveEvents()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
 end
 

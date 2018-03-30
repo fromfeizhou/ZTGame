@@ -14,6 +14,8 @@ SystemLockPanel = {
 	m_gameObject = nil,
 
 	--m_Notice = nil,
+	m_isShow = false,
+
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -33,6 +35,8 @@ function SystemLockPanel:Init()
 	self.m_model = model
 	local callback_loadfinish = function(target,path)
 		self:_LoadAssetPanelFinish(target,path)
+		self:_Rush()
+		
 	end
 		
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("SystemLockPanel"),callback_loadfinish)
@@ -44,14 +48,30 @@ end
 
 --@brief 显示登录面板
 function SystemLockPanel:Show()
-	self.m_gameObject:SetActive(true)
+	self.m_isShow = true
+	self:_Rush()
 end
 
 --@brief 隐藏登录面板
 function SystemLockPanel:Hide()
-	self.m_gameObject:SetActive(false)
+	self.m_isShow = false
+	self:_Rush()
 end
 
+
+function SystemLockPanel:_Rush()
+	if not self.m_gameObject then return end
+	if self.m_isShow then
+		self.m_gameObject:SetActive(true)
+		self:_UpdateView()
+	else
+		self.m_gameObject:SetActive(false)
+	end
+end
+
+
+function SystemLockPanel:_UpdateView()
+end
 --@brief 销毁登录面板
 function SystemLockPanel:Destroy()
 end
