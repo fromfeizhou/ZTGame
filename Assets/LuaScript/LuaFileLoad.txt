@@ -45,7 +45,8 @@ local LuaFileLoad = {
 --加载配置文件
 	G_tConfigList = {
 		"ALuaConfig.SkillActionConfig",
-		"ALuaConfig.tab_Equipment",
+		"ALuaConfig.Tab_Equipment",
+		"ALuaConfig.Tab_Skill",
 	},
 
 	--游戏lua文件

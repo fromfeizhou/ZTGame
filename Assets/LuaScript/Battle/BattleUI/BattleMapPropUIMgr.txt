@@ -166,8 +166,8 @@ end
 
 --@brief 刷新UIItem数据
 function BattleMapPropUIMgr:_UpdateItemData(mapUIItem,BattleMapItemDada)
-	if tab_Equipment[BattleMapItemDada.itemId] then
-		local  tempBaseData = tab_Equipment[BattleMapItemDada.itemId]
+	if Tab_Equipment[BattleMapItemDada.itemId] then
+		local  tempBaseData = Tab_Equipment[BattleMapItemDada.itemId]
 		local uiPos = CSGetWorldToScreenPoint(BattleMapItemDada.itemPos,self.m_canvas)
 		mapUIItem.tempText.text = tempBaseData.name
 		mapUIItem.gameObject.transform.position = {x = uiPos.x, y = uiPos.y , z = 0}
