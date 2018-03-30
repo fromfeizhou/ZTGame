@@ -61,7 +61,7 @@ function BattleCommandMgr:Update()
 	
 	end
 	--技能测试
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		if self.m_nClientFrame == self.m_nServerFrame - 1 or self.m_nServerFrame == 0 then
 		
 			BattleCommandProtocol:__TsClientSendDriveCommand()

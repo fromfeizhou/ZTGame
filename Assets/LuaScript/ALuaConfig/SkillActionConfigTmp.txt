@@ -1,4 +1,4 @@
-SkillActionConfig = {
+SkillActionConfigTest = {
 	id_template = {
 	[0] = {
 			{actionType = SkillActionType.Play,param = {"attack1"}},

@@ -8,6 +8,8 @@ SkillActionType = {
 	Play = 1,		--播放动作
 	Sound = 2,		--播放声音
 	Collider = 3,	--碰撞
+
+	Position = 4,	--玩家位移
 }
 
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
@@ -16,7 +18,7 @@ SkillLayerType = {
 	Scene = 1,	--场景
 	SkillPos = 2,	--技能位置（场景）
 }
---@brief 技能朝向
+--@brief 技能朝向(操作点)
 SkillFaceType = {
 	UpSkill = 0,	--朝向技能点
 	BackSkill = 1,	--背向技能点

@@ -112,19 +112,24 @@ end
 
 --@brief 解析配置
 function SkillActionParse:_ParseConfig()
-	local config = {
-	[0] = {
-			{actionType = SkillActionType.Play,param = {"attack1"}},
-			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
-		},
-	[1] = {
-			{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,0,1,SkillTargetType.Self,30}},
-		}
-	}
+	-- local config = {
+	-- [0] = {
+	-- 		{actionType = SkillActionType.Play,param = {"attack1"}},
+	-- 		{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
+	-- 	},
+	-- [1] = {
+	-- 		{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,0,1,SkillTargetType.Self,30}},
+	-- 	}
+	-- }
+	local skillCfg = Tab_Skill[self.m_nSkillId]
+	local actoinId = skillCfg.actionId
+	local config = SkillActionConfig["id_"..actoinId] or SkillActionConfig["id_".."10001"]
 
 	if GameConfig.IsSkillDebugScene then
 		config = self:GetTestConfig()
 	end
+
+	CSLog(SerializeTable(config))
 
 	for frameCFG,listCFG in pairs(config) do
 		local frame = self.m_nStartFrame + frameCFG
@@ -187,5 +192,5 @@ end
 function SkillActionParse:GetTestConfig( )
 	package.loaded["ALuaConfig.SkillActionConfigTmp"] = nil
 	require 'ALuaConfig.SkillActionConfigTmp'
-	return SkillActionConfig.id_template
+	return SkillActionConfigTest.id_template
 end

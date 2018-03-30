@@ -168,29 +168,12 @@ function SkillActionCollider:_CreateEffect()
 	end
 
 	self.m_spriteEffGo = CSGameObject("ColliderEffect")
-	CS.AssetManager.LoadAsset(PathManager:GetMapParticle(self.m_spriteEffName),function (target,path)
+	CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
 		if target and self.m_spriteEffGo then
 			local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
 		end
 	end)
 end
---[[
- if (null == _colliderEffect)
-        {
-            _colliderEffect = new GameObject();
-            _colliderEffect.name = "EffectCon";
-            _colliderEffect.transform.localRotation = Quaternion.Euler(Vector3.up * _collider.rotate);
-            _colliderEffect.transform.localPosition = new Vector3(_collider.x, 0.1f, _collider.y);
-            _colliderEffect.transform.SetParent(GameObject.Find("PlayerLayer").transform,false);
-        }
-        if(null !=_colliderInfo.EffectInfos && _colliderInfo.EffectInfos.Count > 0){
-            for (int i = 0; i < _colliderInfo.EffectInfos.Count; i++)
-            {
-                EffectInfo effectInfo = _colliderInfo.EffectInfos[i];
-                _effectCounter.AddEffect(effectInfo, _colliderEffect.transform);
-            }
-        }
- ]]
 
 --@brife 更新特效位置
 function SkillActionCollider:_UpdateEffect()
@@ -202,7 +185,7 @@ end
 
 --@brief 显示碰撞
 function SkillActionCollider:_UpdateColliderView()
-	if not GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSingleScene then
 		return
 	end
 	if not self.m_colliderView then
