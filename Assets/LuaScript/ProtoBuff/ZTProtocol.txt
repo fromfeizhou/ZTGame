@@ -31,7 +31,6 @@ function ZTProtocol:Register(pId, delegates, target)
 	if GameConfig.IsSkillDebugScene then
 		return
 	end
-	GCSLog("==================[ZTProtocol:Register]",pId);
 	self.m_eventDispatcher:AddEvent(pId,delegates,target)
 end
 
