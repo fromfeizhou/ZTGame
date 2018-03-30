@@ -467,7 +467,7 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		return {GlobalBattleCtrl.m_tCharacterDic[targetId]}
 	end
 	if targetType == SkillTargetType.Self then
-		return {{GlobalBattleCtrl.m_tCharacterDic[userId]}
+		return {GlobalBattleCtrl.m_tCharacterDic[userId]}
 	end
 
 	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]
