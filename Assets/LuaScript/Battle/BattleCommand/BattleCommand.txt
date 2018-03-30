@@ -13,7 +13,7 @@ BattleCommandType = {
 	Skill = 2,			--使用技能
 	Collider = 3,		--技能碰撞
 
-	Attribute = 4,		--属性变化
+	EffectSync = 5,		--效果同步
 
 	HpTest = 6,		--客户端通知扣血 临时
 }
@@ -156,22 +156,42 @@ end
 --*******************************************************技能命令 End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
---碰撞
-BattleAttributeommand = {
-	m_nBattleId = nil,		--使用者
-	m_tAttriList = nil,
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************技能效果同步begin***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+EffectSyncType = {
+	Dead = 55,	--死亡
+	Attribute = 56,	--属性
 }
 
---@brief 拷贝原表
-function BattleAttributeommand:Create(battleId,list)
+--效果同步
+BattleEffectSyncCommand = {
+}
+
+function BattleEffectSyncCommand:GetBaseObj(battleId)
 	local obj = {}
-	setmetatable( obj, { __index = BattleAttributeommand })
-	obj:Init(battleId,list)
+	obj.m_nType = BattleCommandType.EffectSync
+	obj.m_nBattleId = battleId
 	return obj
 end
 
---@brief 初始化
-function BattleAttributeommand:Init(battleId,list)
-	self.m_nBattleId = battleId
-	self.m_tAttriList = list
+--@brief 同步属性
+function BattleEffectSyncCommand:CreateAttribute(battleId,list)
+	local obj = BattleEffectSyncCommand:GetBaseObj(battleId)
+
+	obj.m_nEffSyncType = EffectSyncType.Attribute
+	obj.m_tAttriList = list
+	return obj
 end
+
+--@brifef 同步死亡状态
+function BattleEffectSyncCommand:CreateDead(battleId)
+	local obj = BattleEffectSyncCommand:GetBaseObj(battleId)
+	obj.m_nEffSyncType = EffectSyncType.Dead
+end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************技能效果同步End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

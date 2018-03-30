@@ -302,10 +302,10 @@ function GlobalBattleCtrl:AddCommandList(frame,commandList)
 	end
 end
 
---@brief 属性变化
-function GlobalBattleCtrl:AddAttributeCommand(arrtibCommand)
+--@brief 效果同步
+function GlobalBattleCtrl:AddEffectCommand(effectCommand)
 	if GlobalBattleCtrl.m_ztCharaManager then
-		GlobalBattleCtrl.m_ztCharaManager:AddAttributeCommand(colliderCommand)
+		GlobalBattleCtrl.m_ztCharaManager:AddEffectCommand(effectCommand)
 	end
 end
 

@@ -71,18 +71,16 @@ function Character:Init(battleData,container)
 	self.m_bIsDead = false
 	self.m_ztCollider =  ZTCollider:Create(0,BattleDefine.PlayerHeight,0,BattleDefine.PlayerRadius,BattleDefine.PlayerHeight)
 
-	self:InitArrtibuteSystem(battleData)
+	self:InitAttributeSystem(battleData)
 	self:InitBuffSystem()
 
 	self:UpdatePos(battleData.pos)
 end
 
 --@brief 初始化属性系统
-function Character:InitArrtibuteSystem(battleData)
+function Character:InitAttributeSystem(battleData)
 	self.m_attriSystem = AttributeSystem:Create()
-	self.m_attriSystem:SetArrtibuteByType(AttributeType.Hp,battleData.hp)
-	self.m_attriSystem:SetArrtibuteByType(AttributeType.MaxHp,battleData.maxHp)
-	self.m_attriSystem:SetArrtibuteByType(AttributeType.Attack,battleData.attack)
+	self.m_attriSystem:SetAttributeByType(battleData.attriList)
 end
 
 --@brief 初始化buff系统
@@ -109,6 +107,7 @@ end
 --@brief 刷新数据
 function Character:SetData(data)
 	self:UpdatePos(data.pos)
+	self:SetAttributeByList(v.attritList)
 end
 
 --@brief 刷新逻辑帧
@@ -231,8 +230,13 @@ function Character:GetAttributeByType(type,isBase)
 end
 
 --@brief 根据类型设置属性
-function Character:SetArrtibuteByType(type,value)
-	self.m_attriSystem:SetArrtibuteByType(type,value)
+function Character:SetAttributeByType(type,value)
+	self.m_attriSystem:SetAttributeByType(type,value)
+end
+
+--@brief 设置属性
+function Character:SetAttributeByList(list)
+	self.m_attriSystem:SetAttributeByList(list)
 end
 
 --@brief 修改血量
@@ -257,16 +261,16 @@ function Character:SetHp(value)
 	if value < 0 then
 		value = 0
 	end
-	local maxHp = self:GetMaxHp()
-	if value > maxHp then
-		value = maxHp
+	local HpMax = self:GetHpMax()
+	if value > HpMax then
+		value = HpMax
 	end
 
 	if self:GetHp() == value then
 		return
 	end
 
-	self:SetArrtibuteByType(AttributeType.Hp,value)
+	self:SetAttributeByType(AttributeType.Hp,value)
 
 	if self:IsInCamera() then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
@@ -276,7 +280,7 @@ function Character:SetHp(value)
 		if self:GetHp() <= 0 and not self:IsDead() then
 			self:SetDead(true)
 			local loopTimer = LoopTimer:Create(function()
-				self:SetHp(self:GetMaxHp())
+				self:SetHp(self:GetHpMax())
 				self:SetDead(false)
 			end)
 			loopTimer:SetParam(5,1)
@@ -286,13 +290,13 @@ function Character:SetHp(value)
 end
 
 --@brief 最大血量
-function Character:GetMaxHp(isBase)
-	return self:GetAttributeByType(AttributeType.MaxHp,isBase)
+function Character:GetHpMax(isBase)
+	return self:GetAttributeByType(AttributeType.HpMax,isBase)
 end
 
 --@brief 获得攻击力
-function Character:GetAttack(isBase)
-	return self:GetAttributeByType(AttributeType.Attack,isBase)
+function Character:GetAttackMin(isBase)
+	return self:GetAttributeByType(AttributeType.AttackMin,isBase)
 end
 
 

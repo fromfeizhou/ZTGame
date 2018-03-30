@@ -43,19 +43,24 @@ SkillEffectType = {
 
 --@brief属性类型
 AttributeType = {
-	MaxHp = 1,	--最大血量
-	EnergyMax = 2,	--能量最大值
-	AttackMin = 3,	--最小攻击力
-	AttackMax = 4, --最大攻击
-	Defense = 5,	--防御
-	MoveSpeed = 6,	-- 移速变动
-	HpRecover = 7,	--生命恢复
+	HpMax = 1,	--最大血量
+	AttackMin = 2,	--最小攻击力
+	AttackMax = 3, --最大攻击
+	Defense = 4,	--防御
+	AttackSpeed = 5, --攻速
 
-	Luck = 12,		--幸运值
-	Curse = 13,		--诅咒
-	Hp = 14,		--血量
-	Energy = 15,	--能量
-	EnergyRecover = 16,		--能量回复
+	HpRec = 6,	--生命恢复
+	MpMax = 7,		--能量
+	Luck = 8,		--幸运值
+	Curse = 9,		--诅咒
+	MoveSpeed = 10,	-- 移速变动
+
+	AttackAcc = 11,		--伤害加成
+	HurtDec = 12,	--伤害减免
+	CDAcc = 13,		--技能冷却加成
+	Hp = 14,		--当前血量
+	Mp = 15,		--当前能量
+	MpRec = 16,		--能量回复
 }
 
 --@brief buff类型

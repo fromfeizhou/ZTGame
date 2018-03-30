@@ -124,8 +124,8 @@ function BattleCommandMgr:_ParseCommand(commandList)
 			self:_ParseSkill(command)
 		elseif command.m_nType == BattleCommandType.Collider then
 		 	self:_ParseCollider(command)
-		elseif command.m_nType == BattleCommandMgr.Attribute then
-			self:_ParseAttribute(command)
+		elseif command.m_nType == BattleCommandMgr.EffectSync then
+			self:_ParseEffectSync(command)
 		end
 	end
 end
@@ -148,7 +148,7 @@ function BattleCommandMgr:_ParseCollider(command)
 end
 
 --@brief 处理属性
-function BattleCommandMgr:_ParseAttribute(command)
+function BattleCommandMgr:_ParseEffectSync(command)
 	-- CSLog("BattleCommandMgr:_ParseAttribute")
-	GlobalBattleCtrl:AddAttributeCommand(command)
+	GlobalBattleCtrl:AddEffectCommand(command)
 end

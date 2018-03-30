@@ -68,6 +68,16 @@ end
 function ZTCharaManager:Update()
 end
 
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 帧同步操作 start
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 逻辑帧刷新
+function ZTCharaManager:UpdateCommand()
+	for i = 1,#self.m_tSortCharaList do
+		self.m_tSortCharaList[i]:UpdateCommand()
+	end
+end
+
 --@brief 逻辑帧刷新
 --@param 使用者id
 --@param 移动方向
@@ -81,25 +91,40 @@ function ZTCharaManager:AddMoveCommand(moveCommand)
 end
 
 --@brief 逻辑帧刷新
---@param 使用者id
---@param 修改属性列表
-function ZTCharaManager:AddAttributeCommand(attributeCommand)
-	local battleId,list = moveCommand.m_nBattleId,moveCommand.m_tAttriList
-	local chara = self.m_tCharaList[battleId]
-	-- CSLog("ZTCharaManager:AddAttributeCommand",battleId,dir,chara)
-	if chara then
-		for i = 1,#list do
-			chara:SetArrtibuteByType(list[i][1],list[i][2])
-		end
+--@param 效果同步
+function ZTCharaManager:AddEffectCommand(command)
+	local syncType  = command.m_nEffSyncType
+	if syncType == EffectSyncType.Attribute then
+		self:SyncAttribute(command)
+	elseif syncType == EffectSyncType.Dead then
+		self:SyncDead(command)
 	end
 end
 
---@brief 逻辑帧刷新
-function ZTCharaManager:UpdateCommand()
-	for i = 1,#self.m_tSortCharaList do
-		self.m_tSortCharaList[i]:UpdateCommand()
+--@brief 处理属性
+function ZTCharaManager:SyncAttribute(command)
+	local battleId,list = command.m_nBattleId,command.m_tAttriList
+	local chara = self.m_tCharaList[battleId]
+	-- CSLog("ZTCharaManager:SyncAttribute")
+	if chara then
+		chara:SetAttributeByList(list)
 	end
 end
+
+--@brief 处理死亡
+function ZTCharaManager:SyncDead(command)
+	local battleId = moveCommand.m_nBattleId,moveCommand.m_tAttriList
+	local chara = self.m_tCharaList[battleId]
+	-- CSLog("ZTCharaManager:SyncDead",battleId)
+	if chara then
+		char:SetDead(true)
+	end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+----@brief 帧同步操作 end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 --@brief 获得对象字典
 function ZTCharaManager:GetCharacterDic()
@@ -166,7 +191,7 @@ function ZTCharaManager:_OnStartGame(playerList)
 	--添加玩家
 	for i,v in pairs(playerList) do
 		if not self.m_tCharaList[v.battleId] then
-			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp)
+			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp,v.attritList)
 			self:_OnAddCharacter(data)
 		else
 			chara:SetData(v)
@@ -235,11 +260,37 @@ function ZTCharaManager:_InitSkillTest()
 	table.remove(list,index)
 	
 
-	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1)
+
+	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1,self:_GetAttributeList())
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 	
 	index = math.random(1,#list)
 	pos = list[index]
-	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2)
+	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2,self:_GetAttributeList())
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+end
+
+--@brief 获得属性列表
+function ZTCharaManager:_GetAttributeList()
+	local list = {}
+	table.insert(list, {AttributeType.HpMax, 100 })
+	table.insert(list, {AttributeType.AttackMin, 10 })
+	table.insert(list, {AttributeType.AttackMax, 20 })
+	table.insert(list, {AttributeType.Defense, 10 })
+	table.insert(list, {AttributeType.AttackSpeed, 10 })
+
+	table.insert(list, {AttributeType.HpRec, 10 })
+	table.insert(list, {AttributeType.MpMax, 100 })
+	table.insert(list, {AttributeType.Luck, 10 })
+	table.insert(list, {AttributeType.Curse, 10 })
+	table.insert(list, {AttributeType.MoveSpeed, 10 })
+
+	table.insert(list, {AttributeType.AttackAcc, 10 })
+	table.insert(list, {AttributeType.HurtDec, 10 })
+	table.insert(list, {AttributeType.CDAcc, 10 })
+	table.insert(list, {AttributeType.Hp, 100 })
+	table.insert(list, {AttributeType.Mp, 100 })
+
+	table.insert(list, {AttributeType.MpRec, 10 })
+	return list
 end

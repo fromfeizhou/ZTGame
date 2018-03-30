@@ -198,7 +198,7 @@ function BattleCommandProtocol:SendColliderFrameMsg(command)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************协议接收***************************************************************
+--@brief 协议接收begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 匹配返回
@@ -220,8 +220,10 @@ function BattleCommandProtocol:_OnMapSight(data)
 			local data = {}
 			data.battleId = v.id
 			data.camp = v.team
-			data.hp = v.hp
+			--data.hp = v.hp
+			--data.career = v.jop
 			data.pos = BattleDefine:GetClientPos(v.x,v.y,v.z)
+			data.attritList = BattleCommandProtocol:_GetAttributeList(v.base_attr)
 			list[data.battleId] = data
 		end
 
@@ -298,19 +300,9 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 					table.insert(list,v.int_data[5+i])
 				end
 				command = BattleColliderCommand:CreateServer(battleId,skillId,x,y,z,list)
-				-- --碰撞驱动帧优先处理 不塞入队列(废旧 保持队列一致性)
-				-- if command then
-				-- 	GlobalBattleCtrl:AddColliderCommand(command)
-				-- 	command = nil
-				-- end
-			elseif v.type == BattleCommandType.Attribute then
-				local list = {}
-				local battleId = int_data[1]
-				for i =2,#v.int_data,2 do
-					local attriType,value = v.int_data[i][i]
-					table.insert(list,{attriType,value})
-				end
-				command = BattleAttributeommand:Create(battleId,list)
+			
+			elseif v.type == BattleCommandType.EffectSync then
+				command = BattleCommandProtocol:_GetEffectSyncCommand(v.role_id,v.int_data)
 			end
 
 
@@ -321,24 +313,65 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	end
 	
 	BattleCommandProtocol:ParseCommand(commands)
+end
 
-	--[[
-	[data] = {
-    [1] = {
-        [type] = 1
-        [int_data] = {
-            [1] = 5
-            [2] = 27000
-            [3] = 0
-            [4] = 24000
-            }
-        [str_data] = 
-        [frame_id] = 251
-        [role_id] = 50485761
-        }
-    }
-}
-	]]
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief协议接收end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 获得属性列表
+function BattleCommandProtocol:_GetAttributeList(data)
+	local list = {}
+	table.insert(list, {AttributeType.HpMax, data.hp_max})
+	table.insert(list, {AttributeType.AttackMin, data.attack_min})
+	table.insert(list, {AttributeType.AttackMax, data.attack_max})
+	table.insert(list, {AttributeType.Defense, data.defense})
+	table.insert(list, {AttributeType.AttackSpeed, data.attack_speed})
+
+	table.insert(list, {AttributeType.HpRec, data.hp_rec})
+	table.insert(list, {AttributeType.MpMax, data.mp_max})
+	table.insert(list, {AttributeType.Luck, data.lucky})
+	table.insert(list, {AttributeType.Curse, data.curse})
+	table.insert(list, {AttributeType.MoveSpeed, data.speed})
+
+	table.insert(list, {AttributeType.AttackAcc, data.attack_acc})
+	table.insert(list, {AttributeType.HurtDec, data.hurt_dec})
+	table.insert(list, {AttributeType.CDAcc, data.cd_acc})
+	table.insert(list, {AttributeType.Hp, data.hp})
+	table.insert(list, {AttributeType.Mp, data.mp})
+
+	table.insert(list, {AttributeType.MpRec, data.mp_rec})
+	return list
+end
+
+--@brief 获得同步命令
+function BattleCommandProtocol:_GetEffectSyncCommand(role_id,int_data)
+
+	local syncType = int_data[1]
+	table.remove(int_data,1)
+
+	if syncType == EffectSyncType.Attribute then
+		--同步属性
+		return BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
+
+	elseif syncType == EffectSyncType.Dead then
+		--同步死亡
+		return BattleEffectSyncCommand:CreateDead(role_id)
+
+	end
+	
+end
+
+--@brief 属性同步
+function BattleCommandProtocol:_GetAttributeCommand(role_id,int_data)
+	local list = {}
+	local battleId = role_id
+	for i =1,#int_data,2 do
+		local attriType,value = int_data[i]
+		table.insert(list,{attriType,value})
+	end
+	local command = BattleEffectSyncCommand:CreateAttribute(battleId,list)
+
+	return command
 end
 
 
