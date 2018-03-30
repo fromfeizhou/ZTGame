@@ -31,6 +31,11 @@ public class AnimationBase
 {
     public virtual void Play(string name) { }
 
+    public virtual void Play(string name, int layout, int index)
+    {
+        Debug.LogError("非Animator不可使用该接口");
+    }
+
     public static AnimationBase GetAnimationBase(int type, GameObject go)
     {
         ZTAnimationType animationType = ZTAnimationType.Animator;
@@ -66,6 +71,12 @@ public class AnimatorAction : AnimationBase
     {
         if (animator != null)
             animator.Play(name);
+    }
+
+    public override void Play(string name, int layout, int index)
+    {
+        if (animator != null)
+            animator.Play(name,layout,index);
     }
 }
 
@@ -284,7 +295,7 @@ public class RoleModelSprite : BaseModelSprite
     public override void Play(string animationName)
     {
         if (null == animator) return;
-        animator.Play(animationName);
+        animator.Play(animationName,0,0);
     }
 
     public override void ChangeTranslucence(int level)
