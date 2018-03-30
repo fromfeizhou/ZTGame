@@ -358,8 +358,46 @@ namespace UnityEditor.ProtoTreeView
 				System.IO.File.Delete (path_NetProtocol);
 			}
 			System.IO.File.WriteAllText (path_NetProtocol,string.Format(formatStr_NetProtocol,cmdStr_NetProtocol).Trim());
+
+			/** 编译 *.proto */
+			string batPath = Application.dataPath + @"\..\BuildProto\";
+			batPath = batPath.Replace("/","\\");
+			ProcessCommand ("build.bat",batPath);  
+			AssetDatabase.Refresh ();
 		}
 
+
+		/** 执行 bat 批处理 */
+		private static void ProcessCommand(string command, string workPath){
+			System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo (command);
+			info.CreateNoWindow = false;
+			info.ErrorDialog = true;
+			info.UseShellExecute = true;
+			info.WorkingDirectory = workPath;
+			if (info.UseShellExecute) {
+				info.RedirectStandardOutput = false;
+				info.RedirectStandardError = false;
+				info.RedirectStandardInput = false;
+			} else {
+				info.RedirectStandardOutput = true;
+				info.RedirectStandardError = true;
+				info.RedirectStandardInput = true;
+
+				info.StandardOutputEncoding = System.Text.UTF8Encoding.UTF8;
+				info.StandardErrorEncoding = System.Text.UTF8Encoding.UTF8;
+			}
+
+			System.Diagnostics.Process process = System.Diagnostics.Process.Start (info);
+
+			if (!info.UseShellExecute) {
+				Debug.Log (process.StandardOutput);
+				Debug.Log (process.StandardError);
+			}
+
+			process.WaitForExit ();
+			process.Close ();
+
+		}
 	
 	}
 }
