@@ -28,6 +28,9 @@ MapRadarPanel = {
 	m_prePlayerItem = nil,
 
 	m_mapContent = nil,
+
+	m_isShow = false,
+	
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -68,18 +71,18 @@ function MapRadarPanel:Init(parent)
 			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
 			
 			self:_UpdatePlayer()
-			self:_AddEvent()
+			self:_Rush()
 		end
 	end)
 end
 
 --@brief 添加事件监听
-function MapRadarPanel:_AddEvent()
+function MapRadarPanel:_AddEvents()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
 end
 
 --@brief 移除事件监听
-function MapRadarPanel:_RemoveEvent()
+function MapRadarPanel:_RemoveEvents()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
 end
 
@@ -124,19 +127,35 @@ end
 
 --@brief 显示登录面板
 function MapRadarPanel:Show()
-	self.m_gameObject:SetActive(true)
-	LoginModel.m_pIsOpenedCreatePanel = true
+	self.m_isShow = true
+	self:_Rush()
 end
 
 --@brief 隐藏登录面板
-function MapRadarPanel:_Hide()
-	self.m_gameObject:SetActive(false)
-	LoginModel.m_pIsOpenedCreatePanel = false
+function MapRadarPanel:Hide()
+	self.m_isShow = false
+	self:_Rush()
+end
+
+
+function MapRadarPanel:_Rush()
+	if not self.m_gameObject then return end
+	if self.m_isShow then
+		self.m_gameObject:SetActive(true)
+		self:_UpdateView()
+		self:_AddEvents()
+	else
+		self.m_gameObject:SetActive(false)
+	end
+end
+
+
+function MapRadarPanel:_UpdateView()
 end
 
 --@brief 销毁登录面板
 function MapRadarPanel:Destroy()
-	self:_RemoveEvent()
+	self:_RemoveEvents()
 end
 
 
