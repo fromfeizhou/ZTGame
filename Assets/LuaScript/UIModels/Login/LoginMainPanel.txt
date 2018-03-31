@@ -19,6 +19,8 @@ LoginMainPanel = {
 	m_serverListPanelParent = nil,
 	m_curSelectAddress = nil,
 	m_tServerItemList = nil,
+
+	m_isShow = false,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -34,20 +36,12 @@ end
 
 --@brief 初始化登录界面（加载面板资源）
 function LoginMainPanel:Init(model)
-	
 	self.m_model = model
 	local callback_loadfinish = function(target,path)
 		self:_LoadAssetPanelFinish(target,path)
+		self:_Rush()
 	end
-		
 	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("LoginMainPanel"),callback_loadfinish)
-	self:_AddEvents()
-	self:_RegProtocol()
-end
-
-function LoginMainPanel:_RegProtocol()
-end
-function LoginMainPanel:_UnRegProtocol()
 end
 
 
@@ -60,19 +54,36 @@ end
 
 --@brief 显示登录面板
 function LoginMainPanel:Show()
-	self.m_gameObject:SetActive(true)
-	NetWorkManager:InitServerList();
+	self.m_isShow = true
+	self:_Rush()
 end
 
 --@brief 隐藏登录面板
 function LoginMainPanel:Hide()
-	self.m_gameObject:SetActive(false)
+	self.m_isShow = false
+	self:_Rush()
+end
+
+
+function LoginMainPanel:_Rush()
+	if not self.m_gameObject then return end
+	if self.m_isShow then
+		self.m_gameObject:SetActive(true)
+		self:_UpdateView()
+		self:_AddEvents()
+	else
+		self.m_gameObject:SetActive(false)
+	end
+end
+
+
+function LoginMainPanel:_UpdateView()
+	NetWorkManager:InitServerList()
 end
 
 --@brief 销毁登录面板
 function LoginMainPanel:Destroy()
 	self:_RemoveEvents()
-	self:_UnRegProtocol()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -128,7 +139,6 @@ function LoginMainPanel:_AddEvents()
 	ZTProtocol:Register(PROTOCOL.LOGIN_LOGIN, self._Receive_Login_Login, self)
 	ZTProtocol:Register(PROTOCOL.LOGIN_CREATE_ROLE, self._Receive_Create_Role, self)
 	ZTProtocol:Register(PROTOCOL.LOGIN_SELECT_ROLE, self._Receive_Select_Role, self)
-
 end
 
 --@brief 创建角色回复
@@ -177,7 +187,7 @@ end
 
 --@brief 按钮 - 登录
 function LoginMainPanel:_OnBtnClick_Login()
-	GameConfig.IsSkillDebugScene = false
+	GameConfig.IsSingleScene = false
 
 	self.m_model.m_pAccname 	= self.m_inputAccount.text
 	self.m_model.m_pKey		= self.m_inputKey.text
@@ -187,7 +197,7 @@ end
 --@brief 按钮 - 无网络登录
 function LoginMainPanel:_OnBtnClick_LoginNoNet()
 	GCSLog("LoginMainPanel:_OnBtnClick_LoginNoNet()")
-	GameConfig.IsSkillDebugScene = true
+	GameConfig.IsSingleScene = true
 	self.m_model:LoginFinish()
 end
 

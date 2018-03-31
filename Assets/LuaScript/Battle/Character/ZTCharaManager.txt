@@ -197,7 +197,8 @@ function ZTCharaManager:_OnStartGame(playerList,ownerId)
 			chara:SetData(v)
 		end
 	end
-
+	self.m_tCharaTeamList = nil
+	
 	GlobalBattleCtrl:SetMainCharacter(ownerId or self.m_tSortCharaList[1]:GetBattleId())
 
 end
