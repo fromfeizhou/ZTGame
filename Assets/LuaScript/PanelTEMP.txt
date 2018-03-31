@@ -1,3 +1,9 @@
+--[[
+这部分可Copy之后删除.
+复制该文件所有内容到新的脚本中。
+替换XXXXPanel，即可。(Ctrl+H)
+--]]
+
 --XXXXPanel.txt
 --@breif lua入口
 --@data 2018/3/5
