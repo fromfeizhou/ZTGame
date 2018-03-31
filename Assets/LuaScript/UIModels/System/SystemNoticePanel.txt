@@ -8,78 +8,49 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 SystemNoticePanel = {
-	m_model = nil,
-	
-	m_transform = nil,
-	m_gameObject = nil,
-
 	m_Notice = nil,
 }
 
+setmetatable( SystemNoticePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function SystemNoticePanel:Create(model)
-	local obj = {}
-	setmetatable( obj, { __index = SystemNoticePanel })
-	obj:Init(model)
-	return obj
+--@brief 面板数据初始化
+function SystemNoticePanel:onInitPanelData()
+	self.m_panelName = "SystemNoticePanel"
 end
 
---@brief 初始化登录界面（加载面板资源）
-function SystemNoticePanel:Init(model)
-	m_model = model
-	local callback_loadfinish = function(target,path)
-		self:_LoadAssetPanelFinish(target,path)
-	end
-		
-	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("SystemNoticePanel"),callback_loadfinish)
-end
-
---@brief 面板每帧刷新
-function SystemNoticePanel:Update(deltaTime)
-	--GCSLog("SystemNoticePanel:Update")
-end
-
---@brief 显示登录面板
-function SystemNoticePanel:Show()
-	self.m_gameObject:SetActive(true)
-end
-
---@brief 隐藏登录面板
-function SystemNoticePanel:Hide()
-	self.m_gameObject:SetActive(false)
-end
-
---@brief 销毁登录面板
-function SystemNoticePanel:Destroy()
-end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 预设加载成功
-function SystemNoticePanel:_LoadAssetPanelFinish(target,path)
-	local prefab = target
- 		if prefab then
-			local canvas = CSGameObject.Find("Canvas").transform
- 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self.m_transform.gameObject:SetActive(false)
- 			self:_InitPanel()
-		end
-end
-
---@brief 初始化登录界面UI控件
-function SystemNoticePanel:_InitPanel()	
+--@brief 面板被创建
+function SystemNoticePanel:onCreatePanel()	
 	-- 按钮 - 用户确认
-	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:_OnClick_Confirm() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:Hide() end)
 	-- 文本 - 用户提示
 	self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
 end
+--@brief 面板初始化
+function SystemNoticePanel:onInitPanel()
+end
 
---@brief 确认按钮
-function SystemNoticePanel:_OnClick_Confirm()
-	self:Hide()
+--@brief 面板每帧更新
+function SystemNoticePanel:onUpdatePanel(deltaTime)
+end
+
+--@brief 销毁登录面板
+function SystemNoticePanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function SystemNoticePanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function SystemNoticePanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function SystemNoticePanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function SystemNoticePanel:_UnRegNetFacade()
 end

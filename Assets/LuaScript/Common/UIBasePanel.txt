@@ -1,0 +1,122 @@
+
+
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSAssetManager = CS.AssetManager
+
+UIBasePanel = {
+	m_model,
+	m_isShow,
+
+	m_gameObject,
+	m_transform,
+	m_rectTransform,
+
+	m_panelName,
+}
+
+
+function UIBasePanel:Create(parent, model)
+
+	GCSLog("==============================",type(self))
+	self:onInitPanelData()
+	local callback_loadfinish = function(target,path)
+ 		if target then
+ 			self.m_gameObject = CSGameObject.Instantiate(target,parent)
+ 			self.m_transform = self.m_gameObject.transform
+ 			self.m_rectTransform = self.m_transform:GetComponent("RectTransform")
+
+			self:_OnCreatePanel()
+			self:_InitPanel()
+			self:_Rush()
+		else
+			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
+		end
+	end
+	CSAssetManager.LoadAsset(PathManager:GetUIPanel(self.m_panelName),callback_loadfinish)
+	self.m_model = model
+	return self
+end
+
+--@brief 显示面板
+function UIBasePanel:Show()
+	self.m_isShow = true
+	self:_Rush()
+end
+
+--@brief 隐藏面板
+function UIBasePanel:Hide()
+	self.m_isShow = false
+	self:_Rush()
+end
+
+--@brief 刷新面板
+function UIBasePanel:_Rush()
+	if not self.m_gameObject then return end
+	self.m_gameObject:SetActive(self.m_isShow)
+end
+
+--@brief 面板创建后
+function UIBasePanel:_OnCreatePanel( panelGo )
+	self:onCreatePanel()
+	self:_AddEvents()
+	self:_RegNetFacade()
+end
+
+--@brief 面板初始化
+function UIBasePanel:_InitPanel()
+	self:onInitPanel()
+end
+
+--@brief 面板每帧刷新
+function UIBasePanel:Update(deltaTime)
+	self:onUpdatePanel(deltaTime)
+end
+
+--@brief 销毁面板
+function UIBasePanel:Destroy()
+	self:_RemoveEvents()
+	self:_UnRegNetFacade()
+	self:onDestroy()
+end
+
+
+
+
+--@brief 子类重写 - 面板数据初始化
+function UIBasePanel:onInitPanelData()
+end
+
+--@brief 子类重写 - 面板被创建
+function UIBasePanel:onCreatePanel()
+end
+
+--@brief 子类重写 - 面板初始化
+function UIBasePanel:onInitPanel()
+end
+
+--@brief 子类重写 - 面板每帧更新
+function UIBasePanel:onUpdatePanel(deltaTime)
+end
+
+--@brief 子类重写 - 面板被销毁
+function UIBasePanel:onDestroy()
+end
+
+
+
+--@brief 子类重写 - 添加事件监听
+function UIBasePanel:_AddEvents( )
+end
+
+--@brief 子类重写 - 移除事件监听
+function UIBasePanel:_RemoveEvents( )
+end
+
+--@brief 子类重写 - 注册网络门户
+function UIBasePanel:_RegNetFacade( )
+end
+
+--@brief 子类重写 - 注销网络门户
+function UIBasePanel:_UnRegNetFacade( )
+end

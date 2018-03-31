@@ -17,6 +17,7 @@ local LuaFileLoad = {
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
+		"Common.UIBasePanel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",

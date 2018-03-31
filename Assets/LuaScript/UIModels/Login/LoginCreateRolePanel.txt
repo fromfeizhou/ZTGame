@@ -9,105 +9,62 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginCreateRolePanel = {
-	m_model = nil,
-
-	m_transform = nil,
-	m_gameObject = nil,
-	m_isShow = false,
-
 }
 
+setmetatable( LoginCreateRolePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function LoginCreateRolePanel:Create(model)
-	local obj = {}
-	setmetatable( obj, { __index = LoginCreateRolePanel })
-	obj:Init(model)
-	return obj
+--@brief 面板数据初始化
+function LoginCreateRolePanel:onInitPanelData()
+	self.m_panelName = "LoginCreateRolePanel"
 end
 
---@brief 初始化登录界面（加载面板资源）
-function LoginCreateRolePanel:Init(model)
-	self.m_model = model
-	local callback_loadfinish = function(target,path)
-		self:_LoadAssetPanelFinish(target,path)
-		self:_Rush()
-	end
-		
-	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("LoginCreateRolePanel"),callback_loadfinish)
-end
-
---@brief 面板每帧刷新
-function LoginCreateRolePanel:Update(deltaTime)
-end
-
---@brief 显示登录面板
-function LoginCreateRolePanel:Show()
-	self.m_isShow = true
-	self:_Rush()
-end
-
---@brief 隐藏登录面板
-function LoginCreateRolePanel:Hide()
-	self.m_isShow = false
-	self:_Rush()
-end
-
-
-function LoginCreateRolePanel:_Rush()
-	self.m_model.m_pIsOpenedCreatePanel = self.m_isShow
-	if not self.m_gameObject then return end
-	if self.m_isShow then
-		self.m_gameObject:SetActive(true)
-		self:_UpdateView()
-	else
-		self.m_gameObject:SetActive(false)
-	end
-end
-
-
-function LoginCreateRolePanel:_UpdateView()
-end
-
-
-
-
---@brief 销毁登录面板
-function LoginCreateRolePanel:Destroy()
-end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 预设加载成功
-function LoginCreateRolePanel:_LoadAssetPanelFinish(target,path)
-	local prefab = target
- 		if prefab then
-			local canvas = CSGameObject.Find("Canvas").transform
- 			self.m_transform = CSTransform.Instantiate(target.transform,canvas)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self.m_transform.gameObject:SetActive(false)
- 			self:_InitPanel()
-		end
-end
-
---@brief 初始化登录界面UI控件
-function LoginCreateRolePanel:_InitPanel()	
+--@brief 面板被创建
+function LoginCreateRolePanel:onCreatePanel()	
 	-- 按钮 - 服务器列表
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_0/Button",function() self:_OnBtnClick_Confirm(0) end)
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_1/Button",function() self:_OnBtnClick_Confirm(1) end)
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_2/Button",function() self:_OnBtnClick_Confirm(2) end)
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Item_3/Button",function() self:_OnBtnClick_Confirm(3) end)
 end
+--@brief 面板初始化
+function LoginCreateRolePanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function LoginCreateRolePanel:onUpdatePanel(deltaTime)
+end
+
+--@brief 销毁登录面板
+function LoginCreateRolePanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function LoginCreateRolePanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function LoginCreateRolePanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function LoginCreateRolePanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function LoginCreateRolePanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 --@brief 按钮 - 人物创建
 function LoginCreateRolePanel:_OnBtnClick_Confirm( roleId )
 	GCSLog("LoginCreateRolePanel:_OnBtnClick_Confirm",roleId)
 	self:_Request_Create_Role(roleId)
 end
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request Start***************************************************************
@@ -127,13 +84,4 @@ end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Request End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Receive Start***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Receive End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
