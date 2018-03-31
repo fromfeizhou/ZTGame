@@ -1,0 +1,56 @@
+--XXXXPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+XXXXPanel = {
+	
+}
+
+setmetatable( XXXXPanel, { __index = UIBasePanel})
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板数据初始化
+function XXXXPanel:onInitPanelData()
+	self.m_panelName = "XXXXPanel"
+end
+
+--@brief 面板被创建
+function XXXXPanel:onCreatePanel()	
+end
+
+--@brief 面板初始化
+function XXXXPanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function XXXXPanel:onUpdatePanel(deltaTime)
+end
+
+--@brief 销毁登录面板
+function XXXXPanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function XXXXPanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function XXXXPanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function XXXXPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function XXXXPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
