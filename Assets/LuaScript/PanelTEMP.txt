@@ -27,11 +27,13 @@ function XXXXPanel:onInitPanelData()
 end
 
 --@brief 面板被创建
-function XXXXPanel:onCreatePanel()	
+function XXXXPanel:onCreatePanel()
+	--获取UI控件代码
 end
 
 --@brief 面板初始化
 function XXXXPanel:onInitPanel()
+	--获取数据，更新UI控件
 end
 
 --@brief 面板每帧更新
