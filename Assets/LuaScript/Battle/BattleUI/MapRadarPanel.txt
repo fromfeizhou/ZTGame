@@ -96,7 +96,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 游戏开始时
 function MapRadarPanel:_OnStartGame()
-	GCSLog("=========================MapRadarPanel:_OnStartGame()")
 	self:_ClearPlayer()
 end
 
@@ -104,7 +103,6 @@ end
 function MapRadarPanel:_ClearPlayer()
 	if not self.m_playerList then return end
 	for k,v in pairs(self.m_playerList) do
-		GCSLog("=========================MapScrollPanel:_ClearPlayer()",v)
 		CSGameObject.Destroy(v.gameObject)
 	end
 end

@@ -62,10 +62,8 @@ function LoginModel:ShowPanel( panelType )
 	else 
 		local parent = self.m_panelRoot_Canvas
 		if panelType == LOGIN_TYPE.MAIN then
-			GCSLog("==================LoginMainPanel:ShowPanel",parent)
 			panel = LoginMainPanel:Create(parent,self)
 		elseif panelType == LOGIN_TYPE.CREATEROLE then
-			GCSLog("==================LoginCreateRolePanel:ShowPanel",parent)
 			panel = LoginCreateRolePanel:Create(parent,self)
 		end
 		self.m_tPanelList[panelType] = panel

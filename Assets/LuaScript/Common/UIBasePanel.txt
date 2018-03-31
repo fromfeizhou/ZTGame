@@ -17,8 +17,6 @@ UIBasePanel = {
 
 
 function UIBasePanel:Create(parent, model)
-
-	GCSLog("==============================",type(self))
 	self:onInitPanelData()
 	local callback_loadfinish = function(target,path)
  		if target then
