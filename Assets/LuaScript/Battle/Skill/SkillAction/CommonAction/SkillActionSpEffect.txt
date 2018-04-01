@@ -1,0 +1,92 @@
+--SkillActoinSpEffect.txt
+--@breif 添加特效
+--@data 2018/03/31
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.UnityEngine.Vector3
+local CSGameObject = CS.UnityEngine.GameObject
+
+SkillActoinSpEffect = {
+	m_sAnimName = nil,  --动作名
+
+	m_spriteEffName = nil,	--特效名字
+	m_spriteEffGo = nil,	--特效实例
+}
+
+--@breif 继承SkillAction
+setmetatable( SkillActoinSpEffect, { __index = SkillAction})
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillActoinSpEffect:Create(actionParse,actionData)
+	local obj = {}
+	setmetatable( obj, { __index = SkillActoinSpEffect })
+	obj:Init(actionParse,actionData)
+	return obj
+end
+
+
+--@brief 初始化
+function SkillActoinSpEffect:Init(actionParse,actionData)
+	--继承实现
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nActionType = SkillActionType.SpEffect
+	self.m_nOffset = self.m_tActionData.m_nOffset
+	self.m_skillLayer = self.m_tActionData.m_skillLayer
+	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
+end
+
+--@brief 开始
+function SkillActoinSpEffect:Start()
+	--继承实现
+	SkillAction.Start(self)
+	self:_CreateEffect()
+end
+
+--@brief 结束
+function SkillActoinSpEffect:Done()
+	--继承实现
+	SkillAction.Done(self)
+end
+
+--@brief 移除
+function SkillActoinSpEffect:Destroy()
+	--继承实现
+	SkillAction.Destroy(self)
+
+	if self.m_spriteEffGo then
+		CS.UnityEngine.GameObject.Destroy(self.m_spriteEffGo)
+		self.m_spriteEffGo = nil
+	end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 创建特效
+function SkillActoinSpEffect:_CreateEffect()
+	if not self.m_spriteEffName then
+		return
+	end
+	self.m_spriteEffGo = CSGameObject("ColliderEffect")
+	if self.m_skillLayer == SkillLayerType.Hero then
+		--玩家特效容器
+		local effectCon = self.m_tOwner:GetEffectCon()
+		if effectCon then
+			self.m_spriteEffGo.transform:SetParent(effectCon,false)
+		end
+	else
+		local pos = SkillDefine:GetStartPosByLayer(self.m_tOwner,self.m_nOffset,self.m_skillLayer,self.m_tSkillPos)
+		self.m_spriteEffGo.transform.localPosition = pos
+	end
+	
+
+	CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
+		if target and self.m_spriteEffGo then
+			local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
+		end
+	end)
+end

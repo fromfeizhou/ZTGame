@@ -122,30 +122,33 @@ function SkillActionParse:_ParseConfig()
 	-- 	}
 	-- }
 	local skillCfg = Tab_Skill[self.m_nSkillId]
-	local actoinId = skillCfg.actionId
-	local config = SkillActionConfig["id_"..actoinId] or SkillActionConfig["id_".."10001"]
+	local actionId = skillCfg.actionId
+	local config = SkillActionConfig["id_"..actionId] or SkillActionConfig["id_".."10001"]
 
 	if GameConfig.IsSkillDebugScene then
 		config = self:GetTestConfig()
 	end
-
-	CSLog(SerializeTable(config))
 
 	for frameCFG,listCFG in pairs(config) do
 		local frame = self.m_nStartFrame + frameCFG
 		for i,actionCFG in pairs(listCFG) do
 			local param = actionCFG.param
 			local action = nil
-			if actionCFG.actionType == SkillActionType.Face then
+			local actionType = actionCFG.actionType
+			if actionType == SkillActionType.Face then
 				action = self:_GetRotateAction(frame,param)
 
-			elseif actionCFG.actionType == SkillActionType.Play then
+			elseif actionType == SkillActionType.Play then
 				action = self:_GetPlayAction(frame,param)
 
-			elseif actionCFG.actionType == SkillActionType.Collider then
+			elseif actionType == SkillActionType.Collider then
 				action = self:_GetColliderAction(frame,param)
+			elseif actionType == SkillActionType.SpEffect then
+				action = self:_GetSpEffectActoin(frame,param)
+			elseif actionType == SkillActionType.PlayerMove then
+				action = self:_GetPlayerMoveActoin(frame,param)
 
-			elseif actionCFG.actionType == SkillActionType.Sound then
+			elseif actionType == SkillActionType.Sound then
 
 			end
 
@@ -172,7 +175,6 @@ end
 --@brief 获得播放Action
 function SkillActionParse:_GetPlayAction(frame,param)
 	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
-	--[1]动作名
 	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionPlay:Create(self,data)
 	return action
@@ -186,6 +188,19 @@ function SkillActionParse:_GetColliderAction(frame,param)
 	return action
 end
 
+--@brief 获得特效action
+function SkillActionParse:_GetSpEffectActoin(frame,param)
+	local data = SkillActionSpEffData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActoinSpEffect:Create(self,data)
+	return action
+end
+
+--@brief 获得位移action
+function SkillActionParse:_GetPlayerMoveActoin(frame,param)
+	local data = SkillActionMoveData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionMove:Create(self,data)
+	return action
+end
 
 
 --@brief  测试 

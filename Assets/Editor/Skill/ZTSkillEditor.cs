@@ -109,6 +109,7 @@ public class ZTSkillEditor : EditorWindow
     private Vector2 scrollPos = Vector2.zero;
     void DrawZtEdFrameDataList()
     {
+        if (null == frameList) return;
 
         GUILayout.BeginVertical("HelpBox");
 
@@ -119,7 +120,7 @@ public class ZTSkillEditor : EditorWindow
             ZtEdFrameData framedata = frameList[i];
             DrawFrameData(framedata);
         }
-
+        
         EditorGUILayout.EndScrollView();
 
         GUILayout.EndVertical();

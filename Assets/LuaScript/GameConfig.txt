@@ -2,7 +2,7 @@ GameConfig = {
 	IsOpenNetWork = true,		--网络开启
 	IsDebug = true,		--是否调试模式
 	IsSingleScene = false,	--单机模式
-	IsSkillDebugScene = false,	--技能调试
+	IsSkillDebugScene = true,	--技能调试
 
 	CommandFrameNum = 45, --每秒指令帧率
 }
