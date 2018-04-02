@@ -196,21 +196,28 @@ public class ZTSkillEditor : EditorWindow
 
     }
 
-    private string[] dirDes = { "方向" };
-    private string[] playDes = { "动作名" };
-    private string[] soundDes = { "声音" };
-    private string[] colliderDes = { "半径", "运动id", "层次", "偏移x", "偏移y","目标类型", "存在时间","碰撞总数","特效名字" };
-    private string[] typeDes = { "朝向","动作播放","声音播放","碰撞"};
+    private string[] typeDes = { "朝向","动作播放","声音播放","碰撞","特效","位移"};
     private Dictionary<int,string[]> typeList;
     bool DrawActoin(ZtEdSkillAction action,ZtEdFrameData framedata)
     {
+        //初始化
         if(null == typeList)
         {
-            typeList = new Dictionary<int, string[]>();
-            typeList.Add(0, dirDes);
-            typeList.Add(1,playDes);
-            typeList.Add(2, soundDes);
-            typeList.Add(3,colliderDes);
+            string[] dirDes = { "方向" };
+            string[] playDes = { "动作名" };
+            string[] soundDes = { "声音" };
+            string[] colliderDes = { "半径", "运动id", "层次", "偏移x", "偏移y", "目标类型", "存在时间-帧", "碰撞总数", "特效名字" };
+            string[] spEffectDes = { "特效名字", "层次", "存在时间-帧", "偏移x", "偏移y" };
+            string[] moveDes = { "运动id" };
+
+            typeList = new Dictionary<int, string[]>() {
+                { 0 ,dirDes },
+                { 1 ,playDes },
+                { 2 ,soundDes },
+                { 3 ,colliderDes },
+                { 4 ,spEffectDes },
+                { 5 ,moveDes },
+            };
         }
 
         GUILayout.BeginVertical("HelpBox");
@@ -221,7 +228,6 @@ public class ZTSkillEditor : EditorWindow
             framedata.actoinList.Remove(action);
             return true;
         }
-
 
         GUILayout.Label(typeDes[action.actionType] + "：");
         for (int i = 0; i < action.param.Count; i++)
