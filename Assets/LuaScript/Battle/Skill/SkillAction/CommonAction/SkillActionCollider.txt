@@ -23,6 +23,8 @@ SkillActionCollider = {
 
 	m_spriteEffName = nil,	--特效名字
 	m_spriteEffGo = nil,	--特效实例
+
+	m_nMoveActionId = nil,	--运动id
 }
 
 --@breif 继承SkillAction
@@ -45,13 +47,15 @@ function SkillActionCollider:Init(actionParse,actionData)
 	SkillAction.Init(self,actionParse,actionData)
 	self.m_nActionType = SkillActionType.Collider
 
-	self.m_nOffset = CSVector3(self.m_tActionData.m_nOffsetX,0,self.m_tActionData.m_nOffsetZ)
+	self.m_nOffset = self.m_tActionData.m_nOffset
 	self.m_ztCollider = self.m_tActionData.m_ztCollider
 	self.m_skillLayer = self.m_tActionData.m_skillLayer
 	self.m_targetType = self.m_tActionData.m_targetType
 	
 	self.m_nColliderMax = self.m_tActionData.m_nColliderMax
 	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
+
+	self.m_nMoveActionId = self.m_tActionData.m_nMoveActionId
 	self:_GetTargetList()
 end
 
@@ -61,6 +65,14 @@ function SkillActionCollider:Start()
 	SkillAction.Start(self)
 	self:_SetStartPos()
 	self:_CreateEffect()
+
+	--碰撞位移
+	if self.m_nMoveActionId ~= -1 and MoveActionConfig[self.m_nMoveActionId] then
+		local owner = self.m_tOwner
+		local dir = owner:GetFaceDir()
+		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
+		self.m_tMoveAction = MoveActoinDefine:GetMoveAction(self.m_ztCollider,self.m_nMoveActionId,dir,targetPos,targetId)
+	end
 end
 
 
@@ -71,6 +83,17 @@ function SkillActionCollider:Update()
 	self:_CheckCollider()
 	self:_UpdateColliderView()
 	self:_UpdateEffect()
+
+	if self.m_tMoveAction then
+		--永久存在碰撞 通过判断 运动结为结束标记 否则 以碰撞时间为准
+		if self.m_nFrameMax == -1 and self.m_tMoveAction.isFinish then
+			self:Done()
+			return
+		end
+		if not self.m_tMoveAction.isFinish then
+			MoveActoinDefine:UpdateMoveData(self.m_tMoveAction)
+		end
+	end
 end
 
 --@brief 结束
@@ -106,21 +129,14 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 设置起始位置
 function SkillActionCollider:_SetStartPos()
-	if self.m_skillLayer == SkillLayerType.Hero then
-		self.m_ztCollider:SetPos(self.m_tOwner:GetColliderPos())
-	else
-		self.m_ztCollider:SetPos(self.m_tSkillPos)
-	end
-	local face = self.m_tOwner:GetFacePos()
-	local angle = CSAngleBetween(face,CSVector3.forward)
- 	
-	local rot = CSQuaternion.Euler(0, angle, 0)
-	self.m_nOffset =  rot * self.m_nOffset
-
-	self.m_ztCollider.m_tPos.x = self.m_ztCollider.m_tPos.x + self.m_nOffset.x
-	self.m_ztCollider.m_tPos.z = self.m_ztCollider.m_tPos.z + self.m_nOffset.z
-
+	local pos = SkillDefine:GetStartPosByLayer(self.m_tOwner,self.m_nOffset,self.m_skillLayer,self.m_tSkillPos)
+	self.m_ztCollider:SetPos(pos)
 	self:_UpdateColliderView()
+end
+
+--@brief 刷新位置
+function SkillActionCollider:_updateColliderMoveAction()
+	-- body
 end
 
 --@brief 获得方向

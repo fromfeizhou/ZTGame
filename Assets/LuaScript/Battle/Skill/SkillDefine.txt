@@ -8,8 +8,8 @@ SkillActionType = {
 	Play = 1,		--播放动作
 	Sound = 2,		--播放声音
 	Collider = 3,	--碰撞
-
-	Position = 4,	--玩家位移
+	SpEffect = 4,	--特效
+	PlayerMove = 5,	--玩家位移
 }
 
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
@@ -62,6 +62,7 @@ AttributeType = {
 	CDAcc = 13,		--技能冷却加成
 	Hp = 14,		--当前血量
 	Mp = 15,		--当前能量
+	
 	MpRec = 16,		--能量回复
 }
 
@@ -73,3 +74,37 @@ BuffType = {
 	CharaAttribute = 4,		--修改人物属性buff（中毒等 持续改变人物属性）
 	MagicShield = 5,	--魔法盾
 }
+
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.UnityEngine.Vector3
+local CSAngleBetween = CS.GameTool.SignedAngleBetween
+local CSQuaternion = CS.UnityEngine.Quaternion
+--@brief 技能解析全局方法
+SkillDefine = {
+	
+}
+
+--@brief 获得起始位置
+--@param owner	添加角色
+--@param offset  偏移量
+--@param layerType 技能层次类型
+--@param skillPos 技能位置
+function SkillDefine:GetStartPosByLayer(owner,offset,layerType,skillPos)
+	local pos = nil
+	if layerType == SkillLayerType.Hero then
+		pos = owner:GetColliderPos()
+	else
+		pos = skillPos
+	end
+	--CSLog("SkillDefine:GetStartPosByLayer",layerType,pos,skillPos)
+	local face = owner:GetFaceDir()
+	local angle = CSAngleBetween(face,CSVector3.forward)
+ 	
+	local rot = CSQuaternion.Euler(0, angle, 0)
+	offset =  rot * offset
+	pos.x = pos.x + offset.x
+	pos.z = pos.z + offset.z
+	return pos
+end

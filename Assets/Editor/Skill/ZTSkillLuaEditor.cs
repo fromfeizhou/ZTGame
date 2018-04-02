@@ -104,7 +104,7 @@ public class ZTSkillLuaEditor
         GetGlobalKeyVal("BuffType");
 
         Debug.Log("Tabel>>>>>>>>>>>>>>>>>>>>>>>");
-        GetGlobalKeyTab("SkillActionConfig");
+        GetGlobalKeyTab("SkillActionConfigTest");
         return framList;
         //SaveSkillTable();
     }

@@ -1,0 +1,173 @@
+--MoveActoinDefine.txt
+--@breif 位移预定义
+--@data 2018/04/01
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+local CSVector3 = CS.UnityEngine.Vector3
+local CSAngleBetween = CS.GameTool.SignedAngleBetween
+local CSQuaternion = CS.UnityEngine.Quaternion
+
+--@brief 位移控制实例
+ZTSkillMoveAction = {
+	owner = nil,	--控制者
+	dir = nil,		--方向单位向量(取反 * -1)
+	targetId = nil,	--目标id
+	targetPos = nil, 	--目标位置 
+	time = 0,	--运动时间
+	maxTime = -1,	--总时间
+	isFinish = false,	--运动结束标记
+}
+function ZTSkillMoveAction:Create()
+	local obj = {}
+	setmetatable( obj, { __index = ZTSkillMoveAction })
+	return obj
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 位移预定义
+MoveActoinDefine = {
+
+}
+
+--@brief 创建位移数据
+function MoveActoinDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
+	local moveAction = ZTSkillMoveAction:Create()
+	moveAction.owner = owner	--控制者
+	moveAction.dir = dir		--方向单位向量(取反 * -1)
+	moveAction.targetId = targetId	--目标id
+	moveAction.targetPos = targetPos 	--目标位置 
+	moveAction.time = 0	--运动时间
+	moveAction.isFinish = false	--运动结束标记
+
+	local moveCfg = MoveActionConfig[moveId] or MoveActionConfig[1]
+	local actionType = moveCfg.actionType --碰撞类型
+	moveAction.actionType = actionType --碰撞类型
+
+	if actionType == MoveActoinType.Line or actionType == MoveActoinType.LineToPos or actionType == MoveActoinType.LineToTarget then
+		moveAction.speed = moveCfg.param[1]
+		moveAction.maxTime = moveCfg.param[2]
+	end
+	--CSLog("MoveActoinDefine:GetMoveAction",dir)
+	return moveAction
+end
+
+--@brief 位移移动
+function MoveActoinDefine:UpdateMoveData(moveAction)
+	if moveAction.isFinish then
+		return 
+	end
+	--非永久运动类型 进入时间计数
+	if moveAction.maxTime ~= -1 then
+		if moveAction.time >= moveAction.maxTime then
+			moveAction.isFinish = true
+			return
+		else
+			moveAction.time = moveAction.time + 1
+		end
+	end
+
+	-- 直线运动功
+	if moveAction.actionType == MoveActoinType.Line then
+		MoveActoinDefine:_Line(moveAction)
+	elseif moveAction.actionType == MoveActoinType.LineToPos then
+		MoveActoinDefine:_LineToPos(moveAction)
+	elseif moveAction.actionType == MoveActoinType.LineToTarget then
+		MoveActoinDefine:_LineToTarget(moveAction)
+
+	-- 闪现
+	elseif moveAction.actionType == MoveActoinType.FlashToPos then
+		moveAction.owner:SetPos(moveAction.targetPos)
+		moveAction.isFinish = true
+	elseif moveAction.actionType == MoveActoinType.FlashToTarget then
+		local chara = GlobalBattleCtrl:GetCharaById(moveAction.targetId)
+		if chara then
+			moveAction.owner:SetPos(chara:GetPos())
+		end
+		moveAction.isFinish = true
+
+	--跟随玩家
+	elseif moveAction.actionType == MoveActoinType.FollowPlayer then
+		local chara = GlobalBattleCtrl:GetCharaById(moveAction.targetId)
+		if chara then
+			moveAction.owner:SetPos(chara:GetPos())
+		end
+	end
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 获取方向的 移动pos
+function MoveActoinDefine:_GetDirPos(speed,dir)
+	return speed * dir * (1 / dir.magnitude)
+end
+
+--@brief 直线移动
+function MoveActoinDefine:_Line(moveAction)
+	--第一次进入 计算速度
+	if not moveAction.speedPos then
+		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,moveAction.dir)
+	end
+	local owner = moveAction.owner
+	local pos = owner:GetPos() + moveAction.speedPos
+	owner:SetPos(pos)
+end
+
+
+--@brief 直线移动2
+function MoveActoinDefine:_LineToPos(moveAction)
+	local owner = moveAction.owner
+	local targetPos = moveAction.targetPos
+	--容错处理
+	if not owner or not targetPos then
+		moveAction.isFinish = true
+		return
+	end
+
+	--第一次进入 计算速度
+	if not moveAction.speedPos then
+		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,moveAction.dir)
+		moveAction.speedPosDis = speedPos.magnitude
+	end
+
+	local  speedPos,speedPosDis = moveAction.speedPos, moveAction.speedPosDis
+
+	local pos = owner:GetPos() + speedPos
+
+	if CSVector3.Distance(pos, targetPos) > speedPosDis then
+		owner:SetPos(pos)
+	else
+		owner:SetPos(targetPos)
+		moveAction.isFinish = true
+	end
+end
+
+--@brief 直线移动3
+function MoveActoinDefine:_LineToTarget(moveAction)
+	local owner = moveAction.owner
+	local target = GlobalBattleCtrl:GetCharaById(moveAction.targetId)
+	--容错处理
+	if not owner or not target then
+		moveAction.isFinish = true
+		return
+	end
+
+	--计算新的方向
+	local dir = (chara:GetPos() - moveAction.owner:GetPos()).normalized
+	local speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,dir)
+	local speedPosDis = speedPos.magnitude
+	
+	local targetPos = target:GetPos()
+
+	local pos = owner:GetPos() + speedPos
+	if CSVector3.Distance(pos,targetPos) > speedPosDis then
+		owner:SetPos(pos)
+	else
+		owner:SetPos(targetPos)
+		moveAction.isFinish = true
+	end
+end
+
