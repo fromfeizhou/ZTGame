@@ -481,7 +481,7 @@ public class MapColliderEditor : EditorWindow
                     MapBlockData tempBlock = GetCollider(index, i);
                     if (tempBlock != null && (MapBlockType == eMapBlockType.Hide || MapBlockType == eMapBlockType.Event))
                     {
-                        tempBlock.param = "1";
+                       // tempBlock.param = "1";
                     }
                 }
             }
@@ -529,15 +529,15 @@ public class MapColliderEditor : EditorWindow
 
         if (GUI.Button(new Rect(100, 650, 50, 18), "填充全部"))
         {
-            Test();
+          //  Test();
         }
 
         MapBlockType = (eMapBlockType)EditorGUI.EnumPopup(new Rect(0, 670, 200, 18), "事件类型选择", MapBlockType);
         if (isEditMapEvent)
         {
-            string labelName = string.Format("参数设置:当前坐标 => x:{0}, y:{1}", curSelectMapBlockData.row, curSelectMapBlockData.col);
-            GUI.Label(new Rect(0, 690, 200, 18), labelName);
-            curSelectMapBlockData.param = EditorGUI.TextField(new Rect(0, 710, 200, 18), curSelectMapBlockData.param);
+            //string labelName = string.Format("参数设置:当前坐标 => x:{0}, y:{1}", curSelectMapBlockData.row, curSelectMapBlockData.col);
+            //GUI.Label(new Rect(0, 690, 200, 18), labelName);
+            //curSelectMapBlockData.param = EditorGUI.TextField(new Rect(0, 710, 200, 18), curSelectMapBlockData.param);
         }
 
     }
@@ -661,10 +661,8 @@ public class MapColliderEditor : EditorWindow
 
         for (int i = ScrRow; i < ScrRow + _gridCnt_Edit; i++)
         {
-
             for (int j = ScrCol; j < ScrCol + _gridCnt_Edit; j++)
             {
-
                 int index = i + j * 10240;
                 int byteRow = index / 8;
                 int byteCol = index % 8;
@@ -678,22 +676,8 @@ public class MapColliderEditor : EditorWindow
                         MapDefine.MapBlockTypeColor[1]);
                   //  Debug.LogError(i + "   " + j);
                 }
-
-
             }
         }
-
-
-        List<MapBlockData> tmpBlockData = _mapBlockData.FindAll(a => a.IsInBlock(_gridCnt_Edit, ScrRow, ScrCol));
-        //for (int i = 0; i < tmpBlockData.Count; i++)
-        //{
-        //    if (tmpBlockData[i].type != eMapBlockType.None)
-        //    {
-        //        Vector2 pos = new Vector2(tmpBlockData[i].row % _gridCnt_Edit * MapDefine.GridSize_Edit + MapViewSize.x * 2, (_gridCnt_Edit - 1 - tmpBlockData[i].col % _gridCnt_Edit) * MapDefine.GridSize_Edit);
-        //        EditorGUI.DrawRect(new Rect(pos, MapDefine.GridSize_Edit * Vector2.one),
-        //            MapDefine.MapBlockTypeColor[(int)tmpBlockData[i].type]);
-        //    }
-        //}
     }
 
     private void AddCollider(int row, int col, eMapBlockType mapBlockType)
