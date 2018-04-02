@@ -51,7 +51,7 @@ function MoveActoinDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
 		moveAction.speed = moveCfg.param[1]
 		moveAction.maxTime = moveCfg.param[2]
 	end
-	CSLog("MoveActoinDefine:GetMoveAction",dir)
+	--CSLog("MoveActoinDefine:GetMoveAction",dir)
 	return moveAction
 end
 

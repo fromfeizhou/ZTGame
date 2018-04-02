@@ -54,7 +54,7 @@ function SkillActionCollider:Init(actionParse,actionData)
 	
 	self.m_nColliderMax = self.m_tActionData.m_nColliderMax
 	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
-	
+
 	self.m_nMoveActionId = self.m_tActionData.m_nMoveActionId
 	self:_GetTargetList()
 end
@@ -65,6 +65,14 @@ function SkillActionCollider:Start()
 	SkillAction.Start(self)
 	self:_SetStartPos()
 	self:_CreateEffect()
+
+	--碰撞位移
+	if self.m_nMoveActionId ~= -1 and MoveActionConfig[self.m_nMoveActionId] then
+		local owner = self.m_tOwner
+		local dir = owner:GetFaceDir()
+		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
+		self.m_tMoveAction = MoveActoinDefine:GetMoveAction(self.m_ztCollider,self.m_nMoveActionId,dir,targetPos,targetId)
+	end
 end
 
 
@@ -75,6 +83,17 @@ function SkillActionCollider:Update()
 	self:_CheckCollider()
 	self:_UpdateColliderView()
 	self:_UpdateEffect()
+
+	if self.m_tMoveAction then
+		--永久存在碰撞 通过判断 运动结为结束标记 否则 以碰撞时间为准
+		if self.m_nFrameMax == -1 and self.m_tMoveAction.isFinish then
+			self:Done()
+			return
+		end
+		if not self.m_tMoveAction.isFinish then
+			MoveActoinDefine:UpdateMoveData(self.m_tMoveAction)
+		end
+	end
 end
 
 --@brief 结束
