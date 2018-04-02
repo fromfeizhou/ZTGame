@@ -1,15 +1,16 @@
 SkillActionConfigTest = {
 	id_template = {
-	[0] = {
-			{actionType = SkillActionType.Play,param = {"attack1"}},
-			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
+		[ 0 ] = {
+				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 0, param = { 0 }},
 		},
-	[1] = {
-			{actionType = SkillActionType.Collider,param = {0.5,0,2,0,0,SkillTargetType.Self,30}},
-			{actionType = SkillActionType.SpEffect,param = {"Bomb5",2,200,0,0}},
+		[ 1 ] = {
+				{ actionType = 3, param = { 0.5, 0, 2, 0, 0, 0, 30 }},
+				{ actionType = 4, param = { "Bomb5", 3, 200, 0, 0 }},
 		},
-	[10] = {
-			{actionType = SkillActionType.PlayerMove,param = {1}},
-		}
-	}
+		[ 10 ] = {
+				{ actionType = 5, param = { 1 }},
+				{ actionType = 4, param = { -1, 1, -1, -1, -1 }},
+		},
+	},
 }

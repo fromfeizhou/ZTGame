@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class ZTSkillEditor : EditorWindow
 
     private static ZTSkillEditor GetSkillEditor()
     {
-        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(500, 500, 1100, 630));
+        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1100, 630));
         wnd.Show();
 
         return wnd;
@@ -144,6 +145,8 @@ public class ZTSkillEditor : EditorWindow
 
         GUILayout.FlexibleSpace();
         framedata.editorSel = GUILayout.Toolbar(framedata.editorSel, typeDes);
+        //framedata.editorSel = EditorGUILayout.Popup(framedata.editorSel, typeDes,GUILayout.Width(100),GUILayout.Height(20));
+
         if (GUILayout.Button("添加action", GUILayout.Width(100),GUILayout.Height(20))) {
             ZtEdSkillAction actoin = new ZtEdSkillAction();
             actoin.actionType = framedata.editorSel;
@@ -234,8 +237,16 @@ public class ZTSkillEditor : EditorWindow
         {
             if (typeList.ContainsKey(action.actionType))
             {
-                GUILayout.Label(typeList[action.actionType][i]);
-                action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
+                string labelName = typeList[action.actionType][i];
+                GUILayout.Label(labelName);
+                if(labelName == "层次")
+                {
+                    action.param[i] = DrawLayerPop(action.param[i] as string);
+                }
+                else
+                {
+                    action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
+                }
             }
         }
         GUILayout.FlexibleSpace();
@@ -244,6 +255,18 @@ public class ZTSkillEditor : EditorWindow
         GUILayout.EndVertical();
 
         return false;
+    }
+
+    private ArrayList LayerType = new ArrayList() { "1", "2", "3" };
+    private string[] LayerTypeNames = {"玩家", "场景", "操作点" };
+    string DrawLayerPop(string value)
+    {
+        int key = LayerType.IndexOf(value);
+        key = key >= 0 ? key : 0;
+       
+        key = EditorGUILayout.Popup(key, LayerTypeNames, GUILayout.Width(60));
+
+        return LayerType[key] as string;
     }
 
     void AddFrameList()
