@@ -5,7 +5,7 @@ SkillActionConfigTest = {
 			{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
 		},
 	[1] = {
-			{actionType = SkillActionType.Collider,param = {0.5,1,2,0,0,SkillTargetType.Self,30}},
+			{actionType = SkillActionType.Collider,param = {0.5,0,2,0,0,SkillTargetType.Self,30}},
 			{actionType = SkillActionType.SpEffect,param = {"Bomb5",2,200,0,0}},
 		},
 	[10] = {

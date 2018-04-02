@@ -3,9 +3,9 @@
 --@data 2018/04/01
 --@brief 移动对象类型
 MoveActoinType = {
-	Line = 1,		--直线运动 : [类型，速度，运动时间]
-	LineToPos = 2,	--直线到目标点(固定速度) :	[类型，速度，运动时间]
-	LineToTarget = 3,		--直线到目标id（固定速度）:	[类型，速度，运动时间]
+	Line = 1,		--直线运动 : [速度，存在时间]
+	LineToPos = 2,	--直线到目标点(固定速度) :	[速度，存在时间]
+	LineToTarget = 3,		--直线到目标id（固定速度）:	[速度，存在时间]
 
 	FlashToPos = 100,		--闪到目标点
 	FlashToTarget = 101,	--闪到目标对象
@@ -17,4 +17,6 @@ MoveActoinType = {
 
 MoveActionConfig = {
 	[1] = {actionType = 1,param = {1,10}},
+	[2] = {actionType = 2,param = {1,10}},
+	[3] = {actionType = 3,param = {1,10}},
 }
