@@ -19,7 +19,7 @@ CommonSkillBtn = {
 
 	m_nCurIndex = nil,		--技能id
 	m_tSkillList = nil,		--下一个技能
-	m_nDistance = nil,		--技能距离
+	m_tDistances = nil,		--技能距离
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -75,13 +75,16 @@ function CommonSkillBtn:_ParseSkillConfig(skillId)
 	local baseSkillId = skillId
 	local config = Tab_Skill[skillId] or Tab_Skill[1001]
 	self.m_tSkillList = {skillId}
+	self.m_tDistances = {config.operaDistance}
 
 	while config and config.nextSkillId ~= -1 and config.nextSkillId ~= baseSkillId do
 		table.insert( self.m_tSkillList, config.nextSkillId )
+		table.insert( self.m_tDistances, config.operaDistance )
+
 		config = Tab_Skill[config.nextSkillId]
 	end
 
-	self.m_nDistance = 3
+	
 end
 
 
@@ -121,7 +124,7 @@ end
 --@brief 技能按钮
 function CommonSkillBtn:_OnSkillBtnHandler()
 	local skillId = self:_GetCurSkillId()
-	
+	CSLog("CommonSkillBtn:_OnSkillBtnHandler",skillId)
 	--普通连招
 	self.m_nCurIndex = self.m_nCurIndex + 1
 	if self.m_nCurIndex > #self.m_tSkillList then
@@ -135,7 +138,7 @@ function CommonSkillBtn:_OnSkillBtnHandler()
 	-- CSLog("SkillJoystick:_SendSkillCommand")
 	--local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
 	local pos = CSVector2.zero
-	local distance = self.m_nDistance
+	local distance = self:_GetCurSkillDic()
 	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
 	local targetPos = CSVector3(charaPos.x + distance * pos.x, charaPos.y, distance * pos.y + charaPos.z)
 	
@@ -147,4 +150,10 @@ end
 function CommonSkillBtn:_GetCurSkillId()
 	local skillId = self.m_tSkillList[self.m_nCurIndex]
 	return skillId
+end
+
+--@brief 获取技能距离
+function CommonSkillBtn:_GetCurSkillDic()
+	local distance = self.m_tDistances[self.m_nCurIndex] > 0 and self.m_tDistances[self.m_nCurIndex] or 0
+	return distance
 end

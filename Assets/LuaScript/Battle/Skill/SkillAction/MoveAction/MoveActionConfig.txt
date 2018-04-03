@@ -16,7 +16,11 @@ MoveActoinType = {
 }
 
 MoveActionConfig = {
-	[1] = {actionType = 1,param = {1,10}},
-	[2] = {actionType = 2,param = {1,10}},
+	[1] = {actionType = 2,param = {1,10}},
+	[2] = {actionType = 1,param = {-1,10}},
 	[3] = {actionType = 3,param = {1,10}},
+
+	[1001] = {actionType = 1,param = {0.1,10}},
+	[1002] = {actionType = 1,param = {0.1,20}},
+	[1003] = {actionType = 2,param = {0.1,50}},
 }
