@@ -82,6 +82,12 @@ end
 --@brief 移除
 function BattleUIMgr:Destroy()
 	CSLog("BattleUIMgr:Destroy")
+	if self.m_UIModel then
+		self.m_UIModel:Destroy()
+		self.m_UIModel = nil
+	end
+
+
 	if self.m_ctrlContainer then
 		CSGameObject.Destroy(self.m_ctrlContainer.gameObject)
 		self.m_ctrlContainer = nil
@@ -124,6 +130,9 @@ end
 function BattleUIMgr:Update()
 	if GameConfig.IsSingleScene then
 		self:_UpdateKeyBoardControl()
+	end
+	if self.m_UIModel then
+		self.m_UIModel:Update()
 	end
 end
 
@@ -191,18 +200,27 @@ end
 
 --@brief 创建匹配ui
 function BattleUIMgr:_CreateMatchUI()
-	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButton"),function(target,path)
+	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButtonTxt"),function(target,path)
 		local gameObject = CSGameObject.Instantiate(target)
+		local text = gameObject:GetComponentInChildren(typeof(CS.ZTText))
 		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
 		rectTrans:SetParent(self.m_ctrlContainer,false)
 		rectTrans.pivot = CSVector2(0.5,0.5)
 		rectTrans.anchorMin = CSVector2(0,1)
 		rectTrans.anchorMax = CSVector2(0,1)
 		rectTrans.anchoredPosition = CSVector2(500,-100)
-
+		text.text = "匹配"
+		self.m_bMatch = true
 		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
-			BattleCommandProtocol:SendMath()
-			gameObject:SetActive(false)
+			if self.m_bMatch then
+				self.m_bMatch = false
+				BattleCommandProtocol:SendMath()
+				text.text = "退出"
+			else
+				text.text = "匹配"
+				GlobalBattleCtrl:ExitBattle()
+				self.m_bMatch = true
+			end
 		end)
 	end)
 end

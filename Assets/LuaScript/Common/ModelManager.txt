@@ -78,7 +78,7 @@ function ModelManager:_OnHandle_Hide(panelData)
 	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
 		model:HidePanel(panelData.panelType)
-		ModelManager:_TryCleanModel()
+		ModelManager:_TryCleanModel(modelType)
 	else
 		GCSLog("ModelManager:_OnHandle_Hide found out ",panelData.panelType)
 	end
@@ -100,10 +100,10 @@ end
 
 
 --@breif 尝试清理模块
-function ModelManager:_TryCleanModel(model)
+function ModelManager:_TryCleanModel(modelType)
 	if not model then return end
 	if model.m_tPanelList == nil or #model.m_tPanelList == 0 then
-		ModelManager:_RemoveModel(model);
+		ModelManager:_RemoveModel(modelType)
 	end
 end
 
@@ -146,8 +146,8 @@ function ModelManager:_AddModel(modelType, model )
 end
 
 --@breif 从缓存列表中移除模块
-function ModelManager:_RemoveModel(model)
-	if not ModelManager.m_modelList[model] then return end
-	ModelManager.m_modelList[model]:Destroy()
-	ModelManager.m_modelList[model] = nil
+function ModelManager:_RemoveModel(modelType)
+	if not ModelManager.m_modelList[modelType] then return end
+	ModelManager.m_modelList[modelType]:Destroy()
+	ModelManager.m_modelList[modelType] = nil
 end

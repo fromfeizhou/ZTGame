@@ -73,6 +73,9 @@ end
 
 --@brief 移除
 function GlobalBattleCtrl:Destroy()
+	BattleCommandProtocol:Destroy()
+	BattleProtocol:Destroy()
+
 	--全局数据引用初始化
 	GlobalBattleCtrl:DestroyData()
 	
@@ -139,6 +142,12 @@ end
 --@brief 数据相关管理相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@rife 初始化数据
+function GlobalBattleCtrl:ExitBattle()
+	GlobalBattleCtrl:Destroy()
+	ZTCityScene:InitScene()
+end
+
+--@rife 初始化数据
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
 	GlobalBattleCtrl.m_nOwnerId = 1
@@ -164,14 +173,13 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 
-	
-	BattleMapMgr:Reset( )
-
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
 	
 	--数据初始化完成
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+
+	BattleMapMgr:Reset( )
 end
 
 --@rife 删除数据
@@ -200,9 +208,9 @@ function GlobalBattleCtrl:Update()
 		GlobalBattleCtrl.m_battleCommandMgr:Update()
 	end
 	
-	if GlobalBattleCtrl.m_mapCircleManager then
-		GlobalBattleCtrl.m_mapCircleManager:Update()
-	end
+	-- if GlobalBattleCtrl.m_mapCircleManager then
+	-- 	GlobalBattleCtrl.m_mapCircleManager:Update()
+	-- end
 
 	--头像管理
 	if GlobalBattleCtrl.m_HeadItemManager then
