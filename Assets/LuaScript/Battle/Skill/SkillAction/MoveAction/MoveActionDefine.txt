@@ -136,7 +136,6 @@ function MoveActoinDefine:_LineToPos(moveAction)
 	local  speedPos,speedPosDis = moveAction.speedPos, moveAction.speedPosDis
 
 	local pos = owner:GetPos() + speedPos
-
 	if CSVector3.Distance(pos, targetPos) > speedPosDis then
 		owner:SetPos(pos)
 	else
