@@ -27,7 +27,7 @@ function BattleMapMgr:Init()
 	CSLog("BattleMapMgr:Init")
 	BattleMapMgr.m_nRadius=10
 	BattleMapMgr.m_nViewRadius = 20
-	BattleMapMgr.m_nInterval=0.8
+	BattleMapMgr.m_nInterval=1.2
 	BattleMapMgr.m_nTimeCount=5
 	BattleMapMgr.m_rolePos=CSVector3.zero
 	BattleMapMgr.m_battleMapView=BattleMapView:Create()

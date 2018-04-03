@@ -54,13 +54,13 @@ function BattleMapPropUIMgr:Destroy()
 end
 
 function BattleMapPropUIMgr:_AddEvent()
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos,self)
 
 end
 
 --@brifef 移除事件
 function BattleMapPropUIMgr:_RemoveEvent()
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self._OnUpdateScenePos)
 end
 
 --@brief 初始化组建
@@ -98,6 +98,11 @@ end
 --@brief 地图物资数据刷新调用
 function BattleMapPropUIMgr:UpdateMapItemList(battleMapItemDatas)
 
+	if true then
+		return ail
+	end
+
+	
 	if not self.m_itemList then
 		return
 	end

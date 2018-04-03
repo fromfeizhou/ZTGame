@@ -2,7 +2,7 @@ PanelWidget = {
 	
 }
 
---@brief 获取按钮
+--@brief 禄帽脠隆掳麓脜楼
 function PanelWidget:GetButton(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("Button")
@@ -11,7 +11,7 @@ function PanelWidget:GetButton(panel,path,onClick)
 	return button
 end
 
---@brief 获取zt按钮
+--@brief 禄帽脠隆zt掳麓脜楼
 function PanelWidget:GetZTButton(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("ZTButton")
@@ -19,7 +19,14 @@ function PanelWidget:GetZTButton(panel,path,onClick)
 	return button
 end
 
---@brief 获取输入框
+--@brief 鑾峰彇Ztimage
+function PanelWidget:GetZTImage(panel,path)
+	local transform = panel:Find(path)
+	local image = transform:GetComponent("ZTImage")
+	return image
+end
+
+--@brief 禄帽脠隆脢盲脠毛驴貌
 function PanelWidget:GetInputField(panel,path,onEndEdit)
 	local transform = panel:Find(path)
 	local inputField = transform:GetComponent("InputField")
@@ -27,18 +34,18 @@ function PanelWidget:GetInputField(panel,path,onEndEdit)
 	return inputField
 end
 
---@brief 获取文本
+--@brief 禄帽脠隆脦脛卤戮
 function PanelWidget:GetText(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("Text");
 end
---@brief 获取文本
+--@brief 禄帽脠隆脦脛卤戮
 function PanelWidget:GetZTText(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTText");
 end
 
---@brief 获取子物体
+--@brief 禄帽脠隆脳脫脦茂脤氓
 function PanelWidget:GetChild(panel,path)
 	return panel:Find(path)
 end
@@ -48,7 +55,7 @@ function PanelWidget:GetScrollView(panel,path)
 	return transform:GetComponent("ScrollRect");
 end
 
---@brief 获取滑动条
+--@brief 禄帽脠隆禄卢露炉脤玫
 function PanelWidget:GetZTSlider(panel,path,onValueChanged)
 	local transform = panel:Find(path)
 	local slider = transform:GetComponent("ZTSlider")
@@ -58,7 +65,7 @@ function PanelWidget:GetZTSlider(panel,path,onValueChanged)
 	return slider
 end
 
---@brief 获取滑动条
+--@brief 禄帽脠隆禄卢露炉脤玫
 function PanelWidget:GetZTCircle(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTCircle");

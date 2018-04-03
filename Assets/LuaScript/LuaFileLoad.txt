@@ -104,14 +104,21 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.SkillActionParse",
 		"Battle.Skill.SkillAction.SkillActionManager",
 		
-		"Battle.BattleUI.MoveJoystick",
-		"Battle.BattleUI.SkillJoystick",
+		
 		"Battle.BattleUI.BattleUIMgr",
 		"Battle.BattleUI.HeadItemManager",
+		
+		"Battle.BattleUI.SkillBtn.CommonSkillBtn",
+		"Battle.BattleUI.SkillBtn.MoveJoystick",
+		"Battle.BattleUI.SkillBtn.SkillJoystick",
+
 		"Battle.BattleUI.BattleModel",
+
 		"Battle.BattleUI.MapScrollPanel",
 		"Battle.BattleUI.MapRadarPanel",
 		"Battle.BattleUI.BattleMapPropUIMgr",
+		
+		"Battle.BattleUI.Panel.BattleHUD",
 
 		"Battle.BattleUI.BagUI.BattleBagPanel",
 		"Battle.BattleUI.BagUI.BattleBagCell",
