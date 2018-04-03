@@ -128,7 +128,8 @@ function MoveActoinDefine:_LineToPos(moveAction)
 	end
 	--第一次进入 计算速度
 	if not moveAction.speedPos then
-		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,moveAction.dir)
+		local dir = (targetPos - owner:GetPos()).normalized
+		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,dir)
 		moveAction.speedPosDis = moveAction.speedPos.magnitude
 	end
 
@@ -155,7 +156,7 @@ function MoveActoinDefine:_LineToTarget(moveAction)
 	end
 
 	--计算新的方向
-	local dir = (chara:GetPos() - moveAction.owner:GetPos()).normalized
+	local dir = (target:GetPos() - owner:GetPos()).normalized
 	local speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,dir)
 	local speedPosDis = speedPos.magnitude
 	
