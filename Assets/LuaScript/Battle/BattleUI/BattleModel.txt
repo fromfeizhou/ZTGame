@@ -10,6 +10,8 @@ BATTLE_UI_TYPE = {
 	MAP_SCROLL = 1,	--å¤§åœ°å›¾
 	MAP_RADAR = 2,	--é›·è¾¾å›¾
 	QUICKBAG=3,
+
+	BATTLE_HUD = 100,	--全局控制面板
 }
 
 --@brief c#å¼•ç”¨
@@ -38,7 +40,9 @@ end
 --@breif æ›´æ–°é¢æ¿
 function BattleModel:Update()
 	for i,panel in pairs(self.m_tPanelList) do
-		panel:Update(deltaTime)
+		if panel.Update then
+			panel:Update(deltaTime)
+		end
 	end
 end
 
@@ -71,12 +75,14 @@ function BattleModel:ShowPanel( panelType,...)
 			panel = MapRadarPanel:Create(self.m_parent,self)
 		elseif panelType== BATTLE_UI_TYPE.QUICKBAG then
 			panel=QuickBagPanel:Create(self.m_parent,self)
+		elseif panelType == BATTLE_UI_TYPE.BATTLE_HUD then
+			panel = BattleHUD:Create(self.m_parent,self)
 		end
 		
 		self.m_tPanelList[panelType] = panel
 	end
 
-	if panel then
+	if panel and panel.Show then
 		panel:Show(...)
 	end
 end

@@ -1,81 +1,79 @@
---SkillActionFace.txt
---@breif 朝向调整
---@data 2018/03/19
+--BattleHUD.txt
+--@breif 战斗ui
+--@data 2018/04/03
 
 --@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 
 
-SkillActionFace = {
-	m_nFaceType = nil,  --朝向
+BattleHUD = {
+	m_parentRoot=nil,
+	m_transform=nil,
+	m_gameObject=nil,
 }
-
---@breif 继承SkillAction
-setmetatable( SkillActionFace, { __index = SkillAction})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function SkillActionFace:Create(actionParse,actionData)
+function BattleHUD:Create(parent)
 	local obj = {}
-	setmetatable( obj, { __index = SkillActionFace })
-	obj:Init(actionParse,actionData)
+	setmetatable( obj, { __index = BattleHUD })
+	obj:Init(parent)
 	return obj
 end
 
 --@brief 初始化
-function SkillActionFace:Init(actionParse,actionData)
-	--继承实现
-	SkillAction.Init(self,actionParse,actionData)
-	self.m_nActionType = SkillActionType.Face
-	
-	self.m_nFaceType = self.m_tActionData.m_nFaceType
-end
-
---@brief 开始
-function SkillActionFace:Start()
-	--继承实现
-	SkillAction.Start(self)
-	local charaPos = self.m_tOwner:GetPos()
-	local dir = nil
-	if self.m_nFaceType == SkillFaceType.UpSkill then
-		dir = self:_GetDir(charaPos,self.m_tSkillPos)
-	elseif self.m_nFaceType == SkillFaceType.BackSkill then
-		dir = self:_GetDir(self.m_tSkillPos,charaPos)
+function BattleHUD:Init(parent)
+	self.m_parentRoot = parent
+	--加载预设件
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
 	end
-	if dir then
-		self.m_tOwner:UpdateRotate(dir)
-	end
-	self:Done()
-end
-
-
--- --@brief 更新
--- function SkillActionFace:Update()
--- 	--继承实现
--- 	SkillAction.Update(self)
--- end
-
---@brief 结束
-function SkillActionFace:Done()
-	--继承实现
-	SkillAction.Done(self)
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleHUD"),callback_loadfinish)
 end
 
 --@brief 移除
-function SkillActionFace:Destroy()
-	--继承实现
-	SkillAction.Destroy(self)
+function BattleHUD:Destroy()
+	--CSLog("BattleHUD:Destroy")
+	self.m_gameObject=nil
+	self.m_parentRoot = nil
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 获得方向
-function SkillActionFace:_GetDir(posBegin,posEnd)
-	if posBegin:Equals(posEnd) then
-		return self.m_tOwner:GetFaceDir()
+--@brief 预设加载成功
+function BattleHUD:_LoadAsseFinish(target,path)
+	-- CSLog("BattleHUD:_LoadAsseFinish",target,path) 
+	local prefab = target
+	if prefab and self.m_parentRoot then
+		self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
+		self.m_gameObject = self.m_transform.gameObject
+		self:_InitSkillBtn()
 	end
-	return (posEnd - posBegin).normalized
+end
+
+-- 初始化界面
+function BattleHUD:_InitSkillBtn()
+	local testSkillId = {1001,1101,1102,1103}
+
+	for i = 1, #testSkillId do
+		--CSLog(string.format("SkillBtnNode/SkillBtn%02d",i))
+		if i % 2 == 0 then
+			SkillJoystick:Create(testSkillId[i],self:_GetSkillBtnNode(i))
+		else
+			CommonSkillBtn:Create(testSkillId[i],self:_GetSkillBtnNode(i))
+		end 
+	end
+end
+
+--@brief 
+function BattleHUD:_GetSkillBtnNode( index )
+	local transform =  self.m_transform:Find(string.format("SkillBtnNode/SkillBtn%02d",index))
+	return transform
 end

@@ -6,72 +6,97 @@ using System;
 
 public class SkillJoystick : JoystickBase
 {
+    RectTransform innerCircleTrans;
+    RectTransform _rectTransform;
 
-    public int SkillId;
-
-    private bool _skillDownState;
+    private Image _imgBg;
+    private Image _imgTouch;
 
     public override void Start()
     {
-        base.Start();
-        SkillId = 10001;
-        this.onJoystickDownEvent += OnJoystickDownEvent;
-        this.onJoystickUpEvent += OnJoystickUpEvent;
+        _rectTransform = this.gameObject.GetComponent<RectTransform>();
+        _imgBg = this.gameObject.GetComponent<Image>();
 
-        _skillDownState = false;
+        innerCircleTrans = transform.Find("InnerCircle") as RectTransform;
+        _imgTouch = innerCircleTrans.gameObject.GetComponent<Image>();
+
+        _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        _isDownTouch = false;
+        SetVisibleOpacity(false);
     }
 
-    public override void OnDestroy()
-    {
-        this.onJoystickDownEvent -= OnJoystickDownEvent;
-        this.onJoystickUpEvent += OnJoystickUpEvent;
-        base.OnDestroy();
-    }
 
-    void OnJoystickDownEvent(Vector2 deltaVec)
+    /// <summary>
+    /// 按下
+    /// </summary>
+    public override void OnPointerDown(PointerEventData eventData)
     {
-        if (ZTBattleSceneManager.GetInstance().MyPlayer.CanUseSkill())
+        _isDownTouch = true;
+        Vector2 pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
+        _rectTransform.anchoredPosition = pos;
+        innerCircleTrans.anchoredPosition = Vector2.zero;
+        if (onJoystickDownEvent != null)
         {
-            _skillDownState = true;
+            onJoystickDownEvent(Vector2.zero);
         }
+        SetVisibleOpacity(true);
     }
 
-    void OnJoystickUpEvent(Vector2 deltaVec)
+    /// <summary>
+    /// 抬起
+    /// </summary>
+    public override void OnPointerUp(PointerEventData eventData)
     {
-        if (!_skillDownState)
+        if (!_isDownTouch) return;
+        _isDownTouch = false;
+        if (onJoystickUpEvent != null)
+            onJoystickUpEvent(innerCircleTrans.anchoredPosition / outerCircleRadius);
+        //ui位置重置
+        innerCircleTrans.anchoredPosition = Vector2.zero;
+        _rectTransform.anchoredPosition = Vector2.zero;
+        SetVisibleOpacity(false);
+    }
+
+
+    /// <summary>
+    /// 滑动
+    /// </summary>
+    public override void OnDrag(PointerEventData eventData)
+    {
+        if (!_isDownTouch)
         {
             return;
         }
-        _skillDownState = false;
+        Vector2 pos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, eventData.position, _canvas.worldCamera, out pos);
+        if (Vector3.Distance(pos, Vector2.zero) < outerCircleRadius)
+            innerCircleTrans.anchoredPosition = pos;
+        else
+            innerCircleTrans.anchoredPosition = pos.normalized * outerCircleRadius;
 
-        int distance = 6;
-
-        //---------------test------------------------//
-
-		SkillId = FightModule.GetInstance().CurSkillId;
-        if (ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId > 0)
+        if (Vector2.Distance(innerCircleTrans.anchoredPosition, Vector2.zero) >= activeMoveDistance)
         {
-            SkillId = ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId;
-            ZTBattleSceneManager.GetInstance().MyPlayer.ActivateSkillId = -1;
+            if (onJoystickMoveEvent != null)
+                onJoystickMoveEvent(innerCircleTrans.anchoredPosition / outerCircleRadius);
         }
 
-        Vector3 targetPos =ZTBattleSceneManager.GetInstance().MyPlayer.MovePos + new Vector3(distance * deltaVec.x, 0, distance * deltaVec.y);
-        Vector3 dir = new Vector3(deltaVec.x, 0, deltaVec.y).normalized;
-
-        //选择最近目标
-        uint targetId =0;
-        if (SkillId == 1001)
-        {
-            ICharaBattle battleInfo = SkillMethod.GetNearestTarget(ZTBattleSceneManager.GetInstance().MyPlayer, SkillDefine.ColliderTarget.ENEMY);
-            if (null == battleInfo || Vector3.Distance(ZTBattleSceneManager.GetInstance().MyPlayer.MovePos, battleInfo.MovePos) > 6) return;
-
-            targetId = battleInfo.BattleId;
-            dir = (battleInfo.MovePos - ZTBattleSceneManager.GetInstance().MyPlayer.MovePos).normalized;
-        }
-        BattleProtocol.GetInstance().SendSkillCommand(ZTBattleSceneManager.GetInstance().MyPlayer.BattleId, SkillId, dir, targetPos, targetId);
-        //---------------test------------------------//
-        
-        //SkillCommand command = FightDefine.GetSkillCommand(ZTBattleSceneManager.GetInstance().MyPlayer.BattleId,ZTBattleSceneManager.GetInstance().SceneFrame, SkillId, dir, targetPos, targetId);
-        //SceneEvent.GetInstance().dispatchEvent(SCENE_EVENT.ADD_COMMAND, new Notification(command));
     }
+
+
+    private void SetVisibleOpacity(bool isShow)
+    {
+        if (isShow)
+        {
+            _imgBg.color = new Color32(255, 255, 255, 255);
+            _imgTouch.color = new Color32(0, 213, 255, 255);
+        }
+        else
+        {
+            _imgBg.color = new Color32(255, 255, 255, 1);
+            _imgTouch.color = new Color32(0, 213, 255, 1);
+        }
+    }
+
+
 }
