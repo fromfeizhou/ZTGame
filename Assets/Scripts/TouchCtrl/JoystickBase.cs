@@ -15,8 +15,8 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public Action<Vector2> onJoystickUpEvent;     // 抬起事件
     public Action<Vector2> onJoystickMoveEvent;     // 滑动事件
 
-    private bool _isDownTouch;
-    private Canvas _canvas;
+    protected bool _isDownTouch;
+    protected Canvas _canvas;
 
     public virtual void Start()
     {
@@ -34,7 +34,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     /// <summary>
     /// 按下
     /// </summary>
-    public void OnPointerDown(PointerEventData eventData)
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
         _isDownTouch = true;
         Vector2 pos;
@@ -50,7 +50,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     /// <summary>
     /// 抬起
     /// </summary>
-    public void OnPointerUp(PointerEventData eventData)
+    public virtual void OnPointerUp(PointerEventData eventData)
     {
         if (!_isDownTouch) return;
         _isDownTouch = false;
@@ -65,7 +65,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     /// <summary>
     /// 滑动
     /// </summary>
-    public void OnDrag(PointerEventData eventData)
+    public virtual void OnDrag(PointerEventData eventData)
     {
         if (!_isDownTouch)
         {

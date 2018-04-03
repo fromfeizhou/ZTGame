@@ -65,7 +65,7 @@ function BattleBagCell:_InitCell()
 end
 
 function BattleBagCell:SetUIEvent(envetTable,target)
-
+	self.m_imageIcon=PanelWidget:GetZTImage(self.m_transform,"Content/Icon")
 	self.m_ZTDragItem=PanelWidget:GetZTDargItem(self.m_transform,"Content/Icon")
 	self.m_DragRange=target.sizeDelta*0.5
 	self.m_ZTDragItem:Init(target,self.m_iconRect)
@@ -120,6 +120,9 @@ function BattleBagCell:UpdateData(item)
 	
 	self.m_netId=item.id
 	if Tab_Equipment[item.itemId] then
+	--	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleBagPanel"),function setImage(target,path)
+			--self.m_imageIcon.Sprite=target
+		--end,typeof(CS.UnityEngine.Sprite))
 		self.m_textName.text=Tab_Equipment[item.itemId].name
 		self.m_transform.gameObject:SetActive(true)
 	end

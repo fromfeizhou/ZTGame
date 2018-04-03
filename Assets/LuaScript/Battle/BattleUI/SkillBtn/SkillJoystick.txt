@@ -8,7 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
-local CSJoystick = CS.JoystickBase
+local CSJoystick = CS.SkillJoystick
 
 
 SkillJoystick = {
@@ -36,7 +36,7 @@ end
 --@brief 初始化
 function SkillJoystick:Init(skillId,parent)
 	CSLog("SkillJoystick:Init",skillId)
-	self:ParseSkillConfig(skillId)
+	self:_ParseSkillConfig(skillId)
 
 	self.m_ctrlContainer = parent
 	--加载预设件
@@ -44,12 +44,13 @@ function SkillJoystick:Init(skillId,parent)
 		self:_LoadAsseFinish(target,path)
 	end
 		
-	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillJoystick"),callback_loadfinish)
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillJoyBtn"),callback_loadfinish)
 end
 
 --@brief 移除
 function SkillJoystick:Destroy()
 	CSLog("SkillJoystick:Destroy")
+	self.m_imgSkillIcon = nil
 
 end
 
@@ -57,14 +58,15 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 解析技能
-function SkillJoystick:ParseSkillConfig(skillId)
+function SkillJoystick:_ParseSkillConfig(skillId)
 	self.m_nCurIndex = 1
-	local baseSkillId = skillId
 	local config = Tab_Skill[skillId] or Tab_Skill[1001]
+	local baseSkillId = config.id
+
 	self.m_tSkillList = {skillId}
 
 	while config and config.nextSkillId ~= -1 and config.nextSkillId ~= baseSkillId do
-		CSLog("SkillJoystick:ParseSkillConfig",config.nextSkillId,baseSkillId)
+		--CSLog("SkillJoystick:ParseSkillConfig",config.nextSkillId,baseSkillId)
 		table.insert( self.m_tSkillList, config.nextSkillId )
 		config = Tab_Skill[config.nextSkillId]
 	end
@@ -77,10 +79,24 @@ function SkillJoystick:_LoadAsseFinish(target,path)
  		if prefab then
  			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
  			self.m_gameObject = self.m_transform.gameObject
- 			self.m_joystick = self.m_gameObject:GetComponent(typeof(CSJoystick))
+ 			self.m_joystick = self.m_gameObject:GetComponentInChildren(typeof(CSJoystick))
+
+ 			self.m_imgSkillIcon = self.m_gameObject:GetComponentInChildren(typeof(CS.ZTImage))
  			self:_InitJoyEvent()
+ 			self:_LoadSkillIcon()
 		end
 end
+
+--@brief 加载技能图标
+function SkillJoystick:_LoadSkillIcon()
+	local callback = function(target,path)
+		if self.m_imgSkillIcon then
+			self.m_imgSkillIcon.sprite = target
+		end
+	end
+	CS.AssetManager.LoadAsset(PathManager:GetSkillIcon(self:_GetCurSkillId()),callback,typeof(CS.UnityEngine.Sprite))
+end
+
 
 --@brief 添加控制事件 
 function SkillJoystick:_InitJoyEvent()
@@ -113,7 +129,7 @@ end
 --@brife 发送移动操作
 --@param 目标标点
 function SkillJoystick:_SendSkillCommand(pos)
-	local skillId = self.m_tSkillList[self.m_nCurIndex]
+	local skillId = self:_GetCurSkillId()
 	
 	--普通连招
 	self.m_nCurIndex = self.m_nCurIndex + 1
@@ -131,5 +147,11 @@ function SkillJoystick:_SendSkillCommand(pos)
 	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
 	local targetPos = CSVector3(charaPos.x + distance * pos.x, charaPos.y, distance * pos.y + charaPos.z)
 	local targetId = GlobalBattleCtrl:GetOwnerId()
-	 BattleCommandProtocol:SendSkillCommand(skillId,targetPos,targetId)
+	BattleCommandProtocol:SendSkillCommand(skillId,targetPos,targetId)
+end
+
+--@brief 获取技能id
+function SkillJoystick:_GetCurSkillId()
+	local skillId = self.m_tSkillList[self.m_nCurIndex]
+	return skillId
 end
