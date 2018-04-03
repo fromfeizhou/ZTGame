@@ -41,9 +41,7 @@ namespace subjectnerdagreement.psdexport
 		{
 			var wnd = GetWindow<PSDEditorWindow>();
 			wnd.Setup();
-
 			wnd.Show();
-
 			return wnd;
 		}
 
@@ -88,7 +86,6 @@ namespace subjectnerdagreement.psdexport
 
 		private int extIndex = -1;
 		private UiImgConstructor uiConstructor;
-		private SpriteConstructor spriteConstructor;
 		private IPsdConstructor[] constructorExtensions = null;
 		private GUIContent[] constructorNames;
 		private GUIContent extLabel = new GUIContent("Create with Extension");
@@ -114,15 +111,12 @@ namespace subjectnerdagreement.psdexport
 		void BuildConstructorExtensions()
 		{
 			uiConstructor = new UiImgConstructor();
-			spriteConstructor = new SpriteConstructor();
 
 			Type targetType = typeof(IPsdConstructor);
-			Type sprType = typeof(SpriteConstructor);
 			Type uiType = typeof(UiImgConstructor);
 			Type[] constructorTypes = AppDomain.CurrentDomain.GetAssemblies()
 				.SelectMany(s => s.GetTypes())
-				.Where(p => targetType.IsAssignableFrom(p) && p.IsClass &&
-						!(p == sprType || p == uiType))
+				.Where(p => targetType.IsAssignableFrom(p) && p.IsClass && p != uiType)
 				.ToArray();
 
 			List<IPsdConstructor> constructors = new List<IPsdConstructor>();
@@ -376,10 +370,6 @@ namespace subjectnerdagreement.psdexport
 					{
 						PsdBuilder.BuildUiImages(targetObject, selectedGroup, settings, fileInfo, createAlign);
 					}
-					else
-					{
-						PsdBuilder.BuildSprites(targetObject, selectedGroup, settings, fileInfo, createAlign);
-					}
 				}
 			}
 		}
@@ -471,12 +461,7 @@ namespace subjectnerdagreement.psdexport
 			{
 				Layer layer = psd.Layers[i];
 
-				//var instanceInfo = fileInfo.GetInstancedLayer(i);
-				//if (instanceInfo != null && doDebug)
-				//	Debug.LogFormat("Layer {0}, index {1}, is instance of {2}", layer.Name, i, instanceInfo.instanceLayer);
-
-				// Layer set seems to appear in the photoshop layers
-				// no idea what it does but doesn't seem to be relevant
+			
 				if (layer.Name.Equals("</Layer set>"))
 					continue;
 
@@ -786,7 +771,11 @@ namespace subjectnerdagreement.psdexport
 
 		private void ImportLayers()
 		{
-			PSDExporter.Export(settings, fileInfo);
+			//PSDExporter.CreateSprite(settings, 8);
+			PsdFile psd = settings.Psd;
+			Layer layer = psd.Layers[8];
+			PSDExporter.CreateTexture(layer);
+			//PSDExporter.Export(settings, fileInfo);
 		}
 		#endregion
 

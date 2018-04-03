@@ -18,14 +18,6 @@ namespace subjectnerdagreement.psdexport
 			BuildPsd(root, group, settings, fileInfo,
 					createAlign, new UiImgConstructor());
 		}
-
-		public static void BuildSprites(GameObject root, PSDLayerGroupInfo group,
-										PsdExportSettings settings, PsdFileInfo fileInfo,
-										SpriteAlignment createAlign)
-		{
-			BuildPsd(root, group, settings, fileInfo,
-					createAlign, new SpriteConstructor());
-		}
 		#endregion
 
 		#region General handler
