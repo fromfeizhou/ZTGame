@@ -186,6 +186,10 @@ function Character:SetDead(isDead)
 		self:Play(AnimatorName.Idle)
 		self:OutState(CharacterState.Die)
 	end
+
+	if self.m_bIsDead then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.CHARACTER_DEAD,self:GetBattleId())
+	end
 end
 
 --@brief 获取碰撞体
@@ -325,6 +329,10 @@ function Character:GetAttackMin(isBase)
 	return self:GetAttributeByType(AttributeType.AttackMin,isBase)
 end
 
+--@brief 获得攻击力
+function Character:GetAttackMax(isBase)
+	return self:GetAttributeByType(AttributeType.AttackMax,isBase)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关end
