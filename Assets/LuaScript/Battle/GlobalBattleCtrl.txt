@@ -317,9 +317,9 @@ function GlobalBattleCtrl:ResetCommandList(clientFrame,serverFrame)
 end
 
 --@brief 帧命令往前驱动
-function GlobalBattleCtrl:SetNextFrame()
+function GlobalBattleCtrl:SetNextFrame(endId)
 	if GlobalBattleCtrl.m_battleCommandMgr then
-		GlobalBattleCtrl.m_battleCommandMgr:SetNextFrame()
+		GlobalBattleCtrl.m_battleCommandMgr:SetNextFrame(endId)
 	end
 end
 
@@ -462,7 +462,13 @@ end
 
 --@brief 获取目标对象
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
-	-- CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
+	--CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
+	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]
+	if not chara then
+		return {}
+	end
+
+
 	if targetType == SkillTargetType.Appoint then
 		return {GlobalBattleCtrl.m_tCharacterDic[targetId]}
 	end
@@ -470,11 +476,7 @@ function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 		return {GlobalBattleCtrl.m_tCharacterDic[userId]}
 	end
 
-	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]
-	if not chara then
-		return {}
-	end
-
+	
 	local camp = chara.m_nCampId
 	local list = {}
 	for i = 1,#GlobalBattleCtrl.m_tCharacterList do

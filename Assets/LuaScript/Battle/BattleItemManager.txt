@@ -97,8 +97,8 @@ function BattleItemManager:OnGetAllItem(map_sight_s2c)
 	 		local tempItemList=map_sight_s2c.roles_enter.goods
 	 		if tempItemList then
 	 			for key,value in pairs(tempItemList) do
-	 				if tab_Equipment[tempItem.id] then
-	 					local itemData = tab_Equipment[tempItem.id]
+	 				if Tab_Equipment[tempItem.id] then
+	 					local itemData = Tab_Equipment[tempItem.id]
 	 					if itemData.type~=6 then
 	 						local equip = self:_CreateMapDataItem(value)
 	 						if equip then
@@ -117,7 +117,7 @@ end
 --@brief 拾取Item
 function BattleItemManager:PickItem(map_pick_goods_s2c)
 	local  pickItem = map_pick_goods_s2c.goods
-	local  baseItemData = tab_Equipment[pickItem.type_id]
+	local  baseItemData = Tab_Equipment[pickItem.type_id]
 	if baseItemData then
 		CSLog(SerializeTable(pickItem))
 		self.m_OwnerEquipList[baseItemData.type]=self:_CreateMapDataItem(pickItem)	

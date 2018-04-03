@@ -15,6 +15,7 @@ Animator = {
 	m_ztAnima, --C#动作接口引用
 	m_animData,		--动画data
 	m_bIsInCamera,	--是否进入场景范围
+	m_conSpEffect, --特效容器
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -36,6 +37,10 @@ function Animator:Init(animaData,container)
 	self.m_goAnima.transform:SetParent(container,false)
 	self.m_ztAnima = self.m_goAnima:AddComponent(typeof(CSZTAnimator))
 	self.m_animData = animaData or  AnimatorData:Create()
+
+	self.m_conSpEffect = CSGameObject("EffectCon").transform
+	self.m_conSpEffect:SetParent(self.m_goAnima.transform,false)
+
 	self:_AddEvent()
 end
 
@@ -48,9 +53,15 @@ function Animator:Destroy()
 	end
 
 	self:_RemoveEvent()
+	self.m_conSpEffect = nil
 	self.m_animData = nil
 end
 
+
+--@brief 获取特效容器
+function Animator:GetEffectCon()
+	return self.m_conSpEffect
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -77,7 +88,8 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetAnimatorPath())
+	CSLog("Animator:Crate role>>>>>>>>>>>>>>>>>>>>")
+	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/r1001/prefab/r1001.prefab","Assets/Models/CharacterRoot/r1001/prefab/r1001Equip.prefab"	)--self.m_animData:GetAnimatorPath())
 end
 
 --@brief 移除形象

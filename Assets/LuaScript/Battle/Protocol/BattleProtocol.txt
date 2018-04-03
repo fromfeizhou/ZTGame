@@ -21,7 +21,7 @@ function BattleProtocol:Init()
 	CSLog("BattleProtocol:Init")
 
 	--@brief 监听协议
-	if not GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSingleScene then
 		BattleProtocol:_RegAll()
 	end
 end
@@ -30,7 +30,7 @@ end
 function BattleProtocol:Destroy()
 	CSLog("BattleProtocol:Destroy")
 	--@brief 监听协议
-	if not GameConfig.IsSkillDebugScene then
+	if not GameConfig.IsSingleScene then
 		BattleProtocol:_UnRegAll()
 	end
 end

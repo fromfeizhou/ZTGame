@@ -1,5 +1,5 @@
 
-Êz
+Ûz
 protobuf.protoztGame.proto",
 p_setting_info
 key (
@@ -586,12 +586,13 @@ section_id (
 x (	
 y (	
 z (+
-	role_info (2.ztGame.proto.p_map_role"«
+	role_info (2.ztGame.proto.p_map_role"¼
 map_sight_s2c
-frame_id (-
-roles_enter (2.ztGame.proto.p_map_role,
-	map_goods (2.ztGame.proto.p_map_goods+
-circles (2.ztGame.proto.p_map_circle"M
+frame_id (
+role_id (-
+roles_enter (2.ztGame.proto.p_map_role,
+	map_goods (2.ztGame.proto.p_map_goods+
+circles (2.ztGame.proto.p_map_circle"M
 map_role_enter_s2c'
 roles (2.ztGame.proto.p_map_role
 revive ("#
@@ -623,7 +624,7 @@ section_id (
 id (
 
 discard_id ((
-goods (2.ztGame.proto.p_map_goods"#
+goods (2.ztGame.proto.p_map_goods"#
 map_discard_goods_c2s
 
 id ("1

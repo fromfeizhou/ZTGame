@@ -113,11 +113,11 @@ end
 
 --@brief 处理死亡
 function ZTCharaManager:SyncDead(command)
-	local battleId = moveCommand.m_nBattleId,moveCommand.m_tAttriList
+	local battleId = command.m_nBattleId
 	local chara = self.m_tCharaList[battleId]
 	-- CSLog("ZTCharaManager:SyncDead",battleId)
 	if chara then
-		char:SetDead(true)
+		chara:SetDead(true)
 	end
 end
 
@@ -179,7 +179,7 @@ function ZTCharaManager:_RemoveEvent()
 end
 
 --brief 游戏开始刷新所有对象
-function ZTCharaManager:_OnStartGame(playerList)
+function ZTCharaManager:_OnStartGame(playerList,ownerId)
 	
 	--移除玩家
 	for i,v in pairs(self.m_tCharaList) do
@@ -197,10 +197,9 @@ function ZTCharaManager:_OnStartGame(playerList)
 			chara:SetData(v)
 		end
 	end
-
-	--test(测试代码)
-	local chara = self.m_tSortCharaList[1]
-	GlobalBattleCtrl:SetMainCharacter(chara.m_nBattleId)
+	self.m_tCharaTeamList = nil
+	
+	GlobalBattleCtrl:SetMainCharacter(ownerId or self.m_tSortCharaList[1]:GetBattleId())
 
 end
 

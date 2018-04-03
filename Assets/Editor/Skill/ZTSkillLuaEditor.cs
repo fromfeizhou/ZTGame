@@ -104,7 +104,7 @@ public class ZTSkillLuaEditor
         GetGlobalKeyVal("BuffType");
 
         Debug.Log("Tabel>>>>>>>>>>>>>>>>>>>>>>>");
-        GetGlobalKeyTab("SkillActionConfig");
+        GetGlobalKeyTab("SkillActionConfigTest");
         return framList;
         //SaveSkillTable();
     }
@@ -174,7 +174,7 @@ public class ZTSkillLuaEditor
             File.Delete(SkillTabSavePath);
 
         string scriptStr = string.Empty;
-        scriptStr = "SkillActionConfig = {\n";
+        scriptStr = "SkillActionConfigTest = {\n";
         scriptStr += "\t" + LuaKey + " = {\n";
         for(int index = 0; index < framList.Count; index++)
         {

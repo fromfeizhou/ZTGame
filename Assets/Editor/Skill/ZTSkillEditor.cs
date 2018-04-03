@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class ZTSkillEditor : EditorWindow
 
     private static ZTSkillEditor GetSkillEditor()
     {
-        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(500, 500, 1100, 630));
+        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1100, 630));
         wnd.Show();
 
         return wnd;
@@ -109,6 +110,7 @@ public class ZTSkillEditor : EditorWindow
     private Vector2 scrollPos = Vector2.zero;
     void DrawZtEdFrameDataList()
     {
+        if (null == frameList) return;
 
         GUILayout.BeginVertical("HelpBox");
 
@@ -119,7 +121,7 @@ public class ZTSkillEditor : EditorWindow
             ZtEdFrameData framedata = frameList[i];
             DrawFrameData(framedata);
         }
-
+        
         EditorGUILayout.EndScrollView();
 
         GUILayout.EndVertical();
@@ -143,6 +145,8 @@ public class ZTSkillEditor : EditorWindow
 
         GUILayout.FlexibleSpace();
         framedata.editorSel = GUILayout.Toolbar(framedata.editorSel, typeDes);
+        //framedata.editorSel = EditorGUILayout.Popup(framedata.editorSel, typeDes,GUILayout.Width(100),GUILayout.Height(20));
+
         if (GUILayout.Button("添加action", GUILayout.Width(100),GUILayout.Height(20))) {
             ZtEdSkillAction actoin = new ZtEdSkillAction();
             actoin.actionType = framedata.editorSel;
@@ -195,21 +199,28 @@ public class ZTSkillEditor : EditorWindow
 
     }
 
-    private string[] dirDes = { "方向" };
-    private string[] playDes = { "动作名" };
-    private string[] soundDes = { "声音" };
-    private string[] colliderDes = { "半径", "运动id", "层次", "偏移x", "偏移y","目标类型", "存在时间","碰撞总数","特效名字" };
-    private string[] typeDes = { "朝向","动作播放","声音播放","碰撞"};
+    private string[] typeDes = { "朝向","动作播放","声音播放","碰撞","特效","位移"};
     private Dictionary<int,string[]> typeList;
     bool DrawActoin(ZtEdSkillAction action,ZtEdFrameData framedata)
     {
+        //初始化
         if(null == typeList)
         {
-            typeList = new Dictionary<int, string[]>();
-            typeList.Add(0, dirDes);
-            typeList.Add(1,playDes);
-            typeList.Add(2, soundDes);
-            typeList.Add(3,colliderDes);
+            string[] dirDes = { "方向" };
+            string[] playDes = { "动作名" };
+            string[] soundDes = { "声音" };
+            string[] colliderDes = { "半径", "运动id", "层次", "偏移x", "偏移y", "目标类型", "存在时间-帧", "碰撞总数", "特效名字" };
+            string[] spEffectDes = { "特效名字", "层次", "存在时间-帧", "偏移x", "偏移y" };
+            string[] moveDes = { "运动id" };
+
+            typeList = new Dictionary<int, string[]>() {
+                { 0 ,dirDes },
+                { 1 ,playDes },
+                { 2 ,soundDes },
+                { 3 ,colliderDes },
+                { 4 ,spEffectDes },
+                { 5 ,moveDes },
+            };
         }
 
         GUILayout.BeginVertical("HelpBox");
@@ -221,14 +232,21 @@ public class ZTSkillEditor : EditorWindow
             return true;
         }
 
-
         GUILayout.Label(typeDes[action.actionType] + "：");
         for (int i = 0; i < action.param.Count; i++)
         {
             if (typeList.ContainsKey(action.actionType))
             {
-                GUILayout.Label(typeList[action.actionType][i]);
-                action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
+                string labelName = typeList[action.actionType][i];
+                GUILayout.Label(labelName);
+                if(labelName == "层次")
+                {
+                    action.param[i] = DrawLayerPop(action.param[i] as string);
+                }
+                else
+                {
+                    action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
+                }
             }
         }
         GUILayout.FlexibleSpace();
@@ -237,6 +255,18 @@ public class ZTSkillEditor : EditorWindow
         GUILayout.EndVertical();
 
         return false;
+    }
+
+    private ArrayList LayerType = new ArrayList() { "1", "2", "3" };
+    private string[] LayerTypeNames = {"玩家", "场景", "操作点" };
+    string DrawLayerPop(string value)
+    {
+        int key = LayerType.IndexOf(value);
+        key = key >= 0 ? key : 0;
+       
+        key = EditorGUILayout.Popup(key, LayerTypeNames, GUILayout.Width(60));
+
+        return LayerType[key] as string;
     }
 
     void AddFrameList()

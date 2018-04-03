@@ -88,8 +88,8 @@ end
 --刷新数据
 function BaseBagCell:UpdateData(item)
 	--CSLog("BaseBagCell:UpdateData",table.name,table.itemId)
-	if item and tab_Equipment[item.itemId] then
-		local  temp = tab_Equipment[item.itemId]
+	if item and Tab_Equipment[item.itemId] then
+		local  temp = Tab_Equipment[item.itemId]
 		self.itemId = item.itemId
 		self.itemNum = item.itemNum
 		self.id=item.id

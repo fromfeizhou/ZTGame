@@ -3,6 +3,7 @@
 --@data 2018/3/5
 CityModel = {
 	m_tPanelList = nil,
+	m_panelRoot_Canvas = nil,
 }
 
 --@brief c#引用
@@ -25,6 +26,7 @@ end
 --@brief 初始化
 function CityModel:Init()
 	self.m_tPanelList = {}
+	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -50,10 +52,9 @@ function CityModel:ShowPanel( panelType )
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
+		local parent = self.m_panelRoot_Canvas
 		if panelType == CITY_TYPE.MAIN then
-			panel = CityMainPanel:Create(self)
-		--elseif panelType == LOGIN_TYPE.CREATEROLE then
-			--panel = LoginCreateRolePanel:Create()
+			panel = CityMainPanel:Create(parent,self)
 		end
 		self.m_tPanelList[panelType] = panel
 	end

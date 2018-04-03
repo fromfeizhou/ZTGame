@@ -134,7 +134,7 @@ public class PlayerBattleInfo : CharaPlayerInfo, ICharaBattle
                     //草丛判断
                     if (_mapBlockData.type == eMapBlockType.Hide)
                     {
-                        GrassId = int.Parse(_mapBlockData.param);
+                      //  GrassId = int.Parse(_mapBlockData.param);
                     }
                     else
                     {

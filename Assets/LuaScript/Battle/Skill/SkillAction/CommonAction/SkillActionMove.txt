@@ -1,0 +1,77 @@
+--SkillActionMove.txt
+--@breif 玩家位移
+--@data 2018/04/01
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillActionMove = {
+	m_nMoveActionId = nil,  --动作名
+	m_tMoveAction = nil,	--运动action
+}
+
+--@breif 继承SkillAction
+setmetatable( SkillActionMove, { __index = SkillAction})
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillActionMove:Create(actionParse,actionData)
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionMove })
+	obj:Init(actionParse,actionData)
+	return obj
+end
+
+--@brief 初始化
+function SkillActionMove:Init(actionParse,actionData)
+	--继承实现
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nActionType = SkillActionType.PlayerMove
+	
+	self.m_nMoveActionId = self.m_tActionData.m_nMoveActionId
+	
+end
+
+--@brief 开始
+function SkillActionMove:Start()
+	--继承实现
+	SkillAction.Start(self)
+
+	if self.m_nMoveActionId ~= -1 and MoveActionConfig[self.m_nMoveActionId] then
+		local owner = self.m_tOwner
+		local dir = owner:GetFaceDir()
+		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
+		self.m_tMoveAction = MoveActoinDefine:GetMoveAction(owner,self.m_nMoveActionId,dir,targetPos,targetId)
+	end
+end
+
+
+--@brief 更新
+function SkillActionMove:Update()
+	--继承实现
+	SkillAction.Update(self)
+	if not self.m_tMoveAction or self.m_tMoveAction.isFinish then
+		self:Done()
+	else
+		MoveActoinDefine:UpdateMoveData(self.m_tMoveAction)
+	end
+end
+
+--@brief 结束
+function SkillActionMove:Done()
+	--继承实现
+	SkillAction.Done(self)
+end
+
+--@brief 移除
+function SkillActionMove:Destroy()
+	--继承实现
+	SkillAction.Destroy(self)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

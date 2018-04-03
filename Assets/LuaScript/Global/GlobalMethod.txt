@@ -43,7 +43,9 @@ function SerializeTable(tTable,index)
     for i = 1,index do
         space = space .. "    "
     end
-
+    if index > 5 then
+        return "[over len table]"
+    end
     for key,value in pairs(tTable) do
 		local res = tostring(value)
 		if value and type(value) == "table" then

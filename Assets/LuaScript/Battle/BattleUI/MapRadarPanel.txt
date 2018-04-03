@@ -12,10 +12,7 @@ local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapRadarPanel = {
-	m_model = nil,
-	
-	m_transform = nil,
-	m_gameObject = nil,
+	m_ztTxt_waitTime = nil,
 
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
@@ -27,156 +24,161 @@ MapRadarPanel = {
 
 	m_mapContent = nil,
 }
+setmetatable( MapRadarPanel, { __index = UIBasePanel})
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板数据初始化
+function MapRadarPanel:onInitPanelData()
+	self.m_panelName = "MapRadarPanel"
+end
+
+--@brief 面板被创建
+function MapRadarPanel:onCreatePanel()	
+	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OpenMap() end)
+	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_transform,"ViewPort/ztTxt_WaitTime")
+	local mapConentTrans = PanelWidget:GetChild(self.m_transform,"ViewPort/Mask/Content")
+	self.m_mapContent = mapConentTrans:GetComponent("RectTransform")
+
+	--毒圈相关
+	self.m_ztCircleCur = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleCur")
+	self.m_ztCircleCur:Init(50)
+	self.m_ztCircleCur:SetColor(CSColor.green)
+	self.m_ztCircleDest = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleDest")
+	self.m_ztCircleDest:Init(50)
+	self.m_ztCircleDest:SetColor(CSColor.red)
+
+	--玩家，队友
+	self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
+	self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+	
+end
+
+--@brief 面板初始化
+function MapRadarPanel:onInitPanel()
+	self:_UpdatePlayer()
+end
+
+--@brief 面板每帧更新
+function MapRadarPanel:onUpdatePanel(deltaTime)
+	self:_UpdateCircle()
+	self:_UpdatePlayer()
+end
+
+--@brief 销毁登录面板
+function MapRadarPanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function MapRadarPanel:_AddEvents()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function MapRadarPanel:_RemoveEvents()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--@brief 注册网络门户
+function MapRadarPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function MapRadarPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function MapRadarPanel:Create(parent,model)
-	local obj = {}
-	setmetatable( obj, { __index = MapRadarPanel })
-	obj.m_model = model
-	obj:Init(parent)
-	return obj
+--@brief 游戏开始时
+function MapRadarPanel:_OnStartGame()
+	self:_ClearPlayer()
 end
 
---@brief 初始化登录界面（加载面板资源）
-function MapRadarPanel:Init(parent)
-	CS.AssetManager.LoadAsset(PathManager:GetUIPanel("MapRadarPanel"),function(target,path)
- 		if target then
- 			self.m_gameObject = CSGameObject.Instantiate(target,parent)
- 			self.m_transform = self.m_gameObject.transform
- 			self.m_gameObject:SetActive(false)
-			
-			PanelWidget:GetZTButton(self.m_transform,"Mask/btnOpenMap",function () self:_OpenMap() end)
-
-			local mapConentTrans = PanelWidget:GetChild(self.m_transform,"Mask/Content")
-			self.m_mapContent = mapConentTrans:GetComponent("RectTransform")
-
-			--毒圈相关
-			self.m_ztCircleCur = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleCur")
-			self.m_ztCircleCur:Init(50)
-			self.m_ztCircleCur:SetColor(CSColor.green)
-			self.m_ztCircleDest = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleDest")
-			self.m_ztCircleDest:Init(50)
-			self.m_ztCircleDest:SetColor(CSColor.red)
-
-			--玩家，队友
-			self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
-			self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
-			
-			self:_UpdatePlayer()
-		end
-	end)
+--@brief 清除地图上的玩家
+function MapRadarPanel:_ClearPlayer()
+	if not self.m_playerList then return end
+	for k,v in pairs(self.m_playerList) do
+		CSGameObject.Destroy(v.gameObject)
+	end
 end
 
+--@brief 打开地图卷轴
 function MapRadarPanel:_OpenMap( )
 	self.m_model:ShowPanel(BATTLE_UI_TYPE.MAP_SCROLL)
 end
 
+--@brief 在地图上创建一个玩家标识
 function MapRadarPanel:_CreatePlayer( playerId )
 	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
-	local playerInfo = {
-		id = playerId,
-		rectTransform = playTransform:GetComponent("RectTransform"),
-	}
-
+	local playRectTransform = playTransform:GetComponent("RectTransform")
+	playTransform.name = playerId
 	local ztImg = playTransform:GetComponent("ZTImage")
 	if ztImg then
-		if playerInfo.id == GlobalBattleCtrl:GetOwnerId() then
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
 			ztImg.color = CSColor.green;
 		else
 			ztImg.color = CSColor.yellow;
 		end
 	end
 
-	playerInfo.rectTransform.gameObject:SetActive(true)
-	return playerInfo
+	playTransform.gameObject:SetActive(true)
+	return playRectTransform
 end
 
---@brief 面板逻辑命令帧每帧刷新
-function MapRadarPanel:Update()
-	self:_UpdateCircle()
-	self:_UpdatePlayer()
-end
-
---@brief 显示登录面板
-function MapRadarPanel:Show()
-	self.m_gameObject:SetActive(true)
-	LoginModel.m_pIsOpenedCreatePanel = true
-end
-
---@brief 隐藏登录面板
-function MapRadarPanel:_Hide()
-	self.m_gameObject:SetActive(false)
-	LoginModel.m_pIsOpenedCreatePanel = false
-end
-
---@brief 销毁登录面板
-function MapRadarPanel:Destroy()
-end
-
-
+--@brief 刷新地图上，玩家信息（角度，坐标）
 function MapRadarPanel:_UpdatePlayer()
 	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
 	for k,v in pairs(team) do
+		local playerId = v:GetBattleId()
 
+		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 
-		if not self.m_playerList[k] then
-			self.m_playerList[k] = self:_CreatePlayer(v:GetBattleId())
-		end
+		local pos = v:GetPos()
+		--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
+		self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
+		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 
-		local pos = v:GetPos(v:GetFaceAngle())
-		self.m_playerList[k].rectTransform.anchoredPosition = {x=pos.x, y = pos.z}
-		self.m_playerList[k].rectTransform.localEulerAngles = v:GetFaceAngle() * CSVector3.forward
-
-		if k == GlobalBattleCtrl:GetOwnerId() then
-			self.m_mapContent.anchoredPosition = -self.m_playerList[k].rectTransform.anchoredPosition
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
+			self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
 		end
 	end
 end
 
+--@brief 刷新毒圈
 function MapRadarPanel:_UpdateCircle()
-	if MapCircleManager.m_circleMoveing then
-		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_curCircleInfo.Cur)
-		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_curCircleInfo.Dest)
+
+	if MapCircleManager.m_isWait then 
+		self.m_ztTxt_waitTime.text = MapCircleManager.m_waitTime
+	else
+		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
+		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
 		self:Show_Circle()
 	end
 end
 
+--@brief 显示毒圈
 function MapRadarPanel:Show_Circle()
 	self.m_ztCircleCur:Show()	
 	self.m_ztCircleDest:Show()
 end
 
+--@brief 隐藏毒圈
 function MapRadarPanel:Hide_Circle()
 	self.m_ztCircleCur:Hide()	
 	self.m_ztCircleDest:Hide()
 end
-	
+
+--@brief 设置毒圈参数
 function MapRadarPanel:_SetCircle(circle, circleInfo)
 	circle:SetRadius(circleInfo.radius)
 	circle.rectTransform.anchoredPosition = circleInfo.pos
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Request Start***************************************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Request End*****************************************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Receive Start***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---********************NetWork Receive End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

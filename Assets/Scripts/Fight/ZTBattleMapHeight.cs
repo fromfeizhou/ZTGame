@@ -42,6 +42,12 @@ public class ZTBattleMapHeight{
     {
         if (null == _mapHeightCacheA && null == _mapHeightCacheB) return 0;
 
+        float tempHeight = 0;
+        if (MapManager.GetInstance().GetCurMapBlockHeight(pos, ref tempHeight))
+        {
+            return tempHeight;
+        }
+
         int row = Mathf.FloorToInt(pos.x / MapHeightGap);
         int column = Mathf.FloorToInt(pos.z / MapHeightGap);
         if (null != _mapHeightCacheA && _mapHeightCacheA.ContainsKey(row) && _mapHeightCacheA[row].ContainsKey(column))

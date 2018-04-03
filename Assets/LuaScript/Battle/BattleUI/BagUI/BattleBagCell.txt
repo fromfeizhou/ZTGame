@@ -119,8 +119,8 @@ end
 function BattleBagCell:UpdateData(item)
 	
 	self.m_netId=item.id
-	if tab_Equipment[item.itemId] then
-		self.m_textName.text=tab_Equipment[item.itemId].name
+	if Tab_Equipment[item.itemId] then
+		self.m_textName.text=Tab_Equipment[item.itemId].name
 		self.m_transform.gameObject:SetActive(true)
 	end
 end

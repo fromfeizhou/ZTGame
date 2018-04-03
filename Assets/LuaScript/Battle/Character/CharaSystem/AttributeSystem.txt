@@ -5,6 +5,11 @@
 --@brief c#引用
 local CSLog = CS.GameTool.Log
 
+local AttributeNames = {"最大血量","最小攻击力","最大攻击","防御","攻速",
+"生命恢复","能量","幸运值","诅咒","移速变动",
+"伤害加成","伤害减免","技能冷却加成","当前血量","当前能量",
+"能量回复",}
+
 
 AttributeSystem = {
 	m_tAttriList = nil,	--属性列表
@@ -47,12 +52,15 @@ function AttributeSystem:SetAttributeByType(attriType,value)
 	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
 		return
 	end
+	CSLog("AttributeSystem:SetAttributeByType",AttributeNames[attriType],value)
+
 	self.m_tAttriList[attriType] = value
 end
 
 --@brife 设置属性
 function AttributeSystem:SetAttributeByList(list)
 	for i = 1,#list do
+		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
 		self:SetAttributeByType(list[i][1],list[i][2])
 	end
 end

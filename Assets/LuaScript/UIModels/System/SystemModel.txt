@@ -10,6 +10,8 @@ local CSLog = CS.GameTool.Log
 
 SystemModel = {
 	m_tPanelList = nil,
+	m_panelRoot_Canvas = nil,
+
 }
 
 
@@ -28,6 +30,7 @@ end
 --@brief 初始化
 function SystemModel:Init()
 	self.m_tPanelList = {}
+	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -52,10 +55,11 @@ function SystemModel:ShowPanel( panelType )
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
+		local parent = self.m_panelRoot_Canvas
 		if panelType == SYSTEM_TYPE.NOTICE then
-			panel = SystemNoticePanel:Create(self)
+			panel = SystemNoticePanel:Create(parent,self)
 		elseif panelType == SYSTEM_TYPE.LOCK then
-			panel = SystemLockPanel:Create(self)
+			panel = SystemLockPanel:Create(parent,self)
 		else
 			GCSLog("SystemModel:ShowPanel found out",panelType)
 		end

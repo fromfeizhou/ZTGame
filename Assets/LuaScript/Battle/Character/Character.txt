@@ -80,7 +80,7 @@ end
 --@brief 初始化属性系统
 function Character:InitAttributeSystem(battleData)
 	self.m_attriSystem = AttributeSystem:Create()
-	self.m_attriSystem:SetAttributeByType(battleData.attriList)
+	self:SetAttributeByList(battleData.attriList)
 end
 
 --@brief 初始化buff系统
@@ -107,7 +107,7 @@ end
 --@brief 刷新数据
 function Character:SetData(data)
 	self:UpdatePos(data.pos)
-	self:SetAttributeByList(v.attritList)
+	self:SetAttributeByList(data.attritList)
 end
 
 --@brief 刷新逻辑帧
@@ -142,13 +142,13 @@ function Character:SetDirection(dir)
 end
 
 --@brief 获取朝向
-function Character:GetFacePos()
+function Character:GetFaceDir()
 	return self.m_rotatePos.normalized
 end
 
 --@brief 获取面向角度
 function Character:GetFaceAngle()
-	local faceDir = self:GetFacePos()
+	local faceDir = self:GetFaceDir()
 	local tmpVector2 = CSVector3.Angle(CSVector3.forward, faceDir)
 	if faceDir.x <= 0 then 
 		tmpVector2 = 360 - tmpVector2
@@ -160,6 +160,11 @@ end
 --@brief 获得位置
 function Character:GetPos()
 	return self.m_charaPos
+end
+
+--@brief 获得位置
+function Character:SetPos(pos)
+	self:UpdatePos(pos)
 end
 
 --@brief 是否死亡
@@ -198,6 +203,25 @@ function Character:IsHost()
 	return GlobalBattleCtrl:GetOwnerId() == self.m_nBattleId
 end
 
+--@brief 状态回切动作判断
+function Character:CheckStateAnima()
+	if self:IsNormalState() then
+		if self.m_nMoveDir ~= BattleDir.None then
+			self:Play(AnimatorName.Move)
+		else
+			self:Play(AnimatorName.Idle)
+		end
+	end
+end
+
+--@brief 获取特效容器
+function Character:GetEffectCon()
+	if self.m_animator then
+		return self.m_animator:GetEffectCon()
+	end
+	return nil
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -210,6 +234,8 @@ end
 --@brief 设置玩家状态
 function Character:OutState(state)
 	self.m_nState = self.m_nState & ~state
+
+	self:CheckStateAnima()
 	--CSLog("Character:OutState",self.m_nState)
 end
 
@@ -246,9 +272,9 @@ function Character:ChangeHp(value)
 	self:SetHp(hp)
 
 	--@brief 测试代码
-	if self:IsHost() and not GameConfig.IsSkillDebugScene then
-		BattleCommandProtocol:SendHpChange(value)
-	end
+	-- if self:IsHost() and not GameConfig.IsSingleScene then
+	-- 	BattleCommandProtocol:SendHpChange(value)
+	-- end
 end
 --@brief 血量
 function Character:GetHp(isBase)
@@ -276,7 +302,7 @@ function Character:SetHp(value)
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 	end
 
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		if self:GetHp() <= 0 and not self:IsDead() then
 			self:SetDead(true)
 			local loopTimer = LoopTimer:Create(function()
@@ -310,7 +336,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		self:ChangeHp(value)
 	end
 
@@ -404,7 +430,7 @@ function Character:_UpdateMoveCommand()
 		local hitPos 
 		local canMove = false
 		for i =1,#list do
-			hitPos = self.m_charaPos + list[i] * BattleDefine.PlayerSpeed
+			hitPos = self.m_charaPos +  list[i] * (1/list[i].magnitude) * BattleDefine.PlayerSpeed
 			local hitType,param = GlobalBattleCtrl:MapGetCurMapBlock(hitPos)
 			if hitType == BlockType.None or hitType == BlockType.Hide then
 				canMove = true

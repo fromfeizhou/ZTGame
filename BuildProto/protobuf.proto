@@ -804,9 +804,10 @@ message map_enter_s2c {
 // ##begin##map##map_sight##3##3##视野信息##end##
 message map_sight_s2c {
     required uint32 frame_id = 1; // 当前帧id
-    repeated p_map_role roles_enter = 2; // 玩家列表
-    repeated p_map_goods map_goods = 3; // 场景物品列表
-    repeated p_map_circle circles = 4; // 安全区列表
+    required uint32 role_id = 2; // 玩家自己的角色id
+    repeated p_map_role roles_enter = 3; // 玩家列表
+    repeated p_map_goods map_goods = 4; // 场景物品列表
+    repeated p_map_circle circles = 5; // 安全区列表
 }
 
 // ##begin##map##map_role_enter##3##4##玩家进入视野##end##
@@ -854,7 +855,7 @@ message map_pick_goods_s2c {
     required uint32 code = 1; // 结果码
     required uint32 id = 2; // 物品id
     required uint32 discard_id = 3; // 从身上扔下的id
-    optional p_map_goods goods = 4; // 捡起来的物品
+    required p_map_goods goods = 4; // 捡起来的物品
 }
 
 // ##begin##map##map_discard_goods##3##10##丢弃物品##end##

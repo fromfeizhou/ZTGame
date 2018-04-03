@@ -3,12 +3,15 @@
 --@data 2018/3/5
 LoginModel = {
 	m_tPanelList = nil,
+	m_panelRoot_Canvas = nil,
+	
 	m_nlogin_create_role_s2c = nil,
 	m_nlogin_select_role_s2c = nil,
 
 	m_pIsOpenedCreatePanel = false,
 	m_pAccname = nil,
 	m_pKey = nil,
+
 }
 
 --@brief c#引用
@@ -31,6 +34,7 @@ end
 --@brief 初始化
 function LoginModel:Init()
 	self.m_tPanelList = {}
+	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -55,11 +59,12 @@ function LoginModel:ShowPanel( panelType )
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
-	else
+	else 
+		local parent = self.m_panelRoot_Canvas
 		if panelType == LOGIN_TYPE.MAIN then
-			panel = LoginMainPanel:Create(self)
+			panel = LoginMainPanel:Create(parent,self)
 		elseif panelType == LOGIN_TYPE.CREATEROLE then
-			panel = LoginCreateRolePanel:Create(self)
+			panel = LoginCreateRolePanel:Create(parent,self)
 		end
 		self.m_tPanelList[panelType] = panel
 	end

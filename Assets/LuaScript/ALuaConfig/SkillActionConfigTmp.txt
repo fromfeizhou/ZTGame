@@ -1,11 +1,16 @@
-SkillActionConfig = {
+SkillActionConfigTest = {
 	id_template = {
 		[ 0 ] = {
 				{ actionType = 1, param = { "attack1" }},
 				{ actionType = 0, param = { 0 }},
 		},
+		[ 1 ] = {
+				{ actionType = 3, param = { 0.5, 0, 2, 0, 0, 0, 30 }},
+				{ actionType = 4, param = { "Bomb5", 3, 200, 0, 0 }},
+		},
 		[ 10 ] = {
-				{ actionType = 3, param = { 0.5, 1, 0, 0, 0, 2, 300, -1, "Senior" }},
+				{ actionType = 5, param = { 1 }},
+				{ actionType = 4, param = { -1, 1, -1, -1, -1 }},
 		},
 	},
 }

@@ -94,28 +94,14 @@ public class MapBlockData
     public int row;
     public int col;
     public eMapBlockType type;
-    private string _param;
-
     public int paramValue;
-
     private ByteBuffer btyeBuffer;
 
-    //编辑器不灵活配置 暂时草类型的id统一为1
-    public string param
-    {
-        set
-        {
-            _param = value;
-        }
-        get
-        {
-            return _param;
-        }
-    }
+   
     public override string ToString()
     {
         if (type == eMapBlockType.Event || type == eMapBlockType.Hide)
-            return string.Format("{0}:{1}:{2}:{3}", row, col, (int)type, param);
+            return string.Format("{0}:{1}:{2}:{3}", row, col, (int)type, paramValue);
         return string.Format("{0}:{1}:{2}", row, col, (int)type);
     }
 
@@ -128,8 +114,6 @@ public class MapBlockData
         tmpData.type = (eMapBlockType)System.Enum.Parse(typeof(eMapBlockType), contents[2]);
         return tmpData;
     }
-
-
 
     public void SetByteBuffer()
     {
@@ -144,19 +128,11 @@ public class MapBlockData
             btyeBuffer.WriteInt16(paramData, false);
         }
     }
-
     public byte[] GetBytes()
     {
         SetByteBuffer();
         return btyeBuffer.ToBytes();
     }
-
-#if UNITY_EDITOR
-    public bool IsInBlock(int rand, int scrRow, int scrCol)
-    {
-        return row >= scrRow && row < scrRow + rand && col >= scrCol && col < scrCol + rand;
-    }
-#endif
 }
 
 //地图 格子位置
@@ -222,6 +198,7 @@ public class MapManager : Singleton<MapManager>
     private byte[] hideDatas;
     private byte[] heightDatas;
     private Dictionary<string, MapBlockData> mapBlockDataDic;
+    private Dictionary<string, MapBlockData> mapHeightBlockData;
 
     private List<string> LoadTipsText = new List<string>()
     {
@@ -245,6 +222,7 @@ public class MapManager : Singleton<MapManager>
     {
         _isInit = false;
         mapBlockDataDic = new Dictionary<string, MapBlockData>();
+        mapHeightBlockData=new Dictionary<string, MapBlockData>();
         Debug.Log("MapManager:Init");
         mapView = new MapElementView();
         mapView.SetBigMapKey(pos);
@@ -308,16 +286,16 @@ public class MapManager : Singleton<MapManager>
     {
         TextAsset txt = target as TextAsset;
         if (txt != null)
-            SetMapBlockDic(txt.bytes, eMapBlockType.Hide);
+            SetMapBlockDic(txt.bytes, eMapBlockType.Hide, mapBlockDataDic);
     }
     private void LoadHeightBlockData(Object target, string path)
     {
         TextAsset txt = target as TextAsset;
-      //  if (txt != null)
-          //  SetMapBlockDic(txt.bytes, eMapBlockType.Height);
+        if (txt != null)
+            SetMapBlockDic(txt.bytes, eMapBlockType.Height, mapHeightBlockData);
     }
 
-    private void SetMapBlockDic(byte[] datas, eMapBlockType type)
+    private void SetMapBlockDic(byte[] datas, eMapBlockType type,Dictionary<string,MapBlockData> dic)
     {
         int count = datas.Length / MapDefine.MapByteInterval;
         for (int index = 0; index < count; index++)
@@ -329,11 +307,16 @@ public class MapManager : Singleton<MapManager>
             tempData.row = tempBuffer.ReadInt16();
             tempData.col = tempBuffer.ReadInt16();
             int tempInt = tempBuffer.ReadInt16();
-            float tempFloat = tempInt * 0.01f;
-            tempInt = (int) tempFloat;
-            tempData.paramValue = tempInt;
+            if (type == eMapBlockType.Hide)
+            {
+                float tempFloat = tempInt * 0.01f;
+                tempInt = (int)tempFloat;
+                tempData.paramValue = tempInt;
+            }
+            else//高度float，取数据时候转
+                tempData.paramValue = tempInt;
             tempData.type = type;
-            mapBlockDataDic[tempData.row + "_" + tempData.col] = tempData;
+            dic[tempData.row + "_" + tempData.col] = tempData;
         }
     }
     #endregion
@@ -354,41 +337,16 @@ public class MapManager : Singleton<MapManager>
         return eMapBlockType.None;
     }
 
+    //获取草丛或者碰撞数据
     public MapBlockData GetCurMapBlock(Vector3 pos)
     {
         int row = Mathf.RoundToInt(pos.x / MapDefine.MapMinGridSize);
         int col = Mathf.RoundToInt(pos.z / MapDefine.MapMinGridSize);
-
-        //MapBlockData tempData;
-        //if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
-        //{
-        //    return tempData;
-        //}
-        //else
-        //{
-        //    int index = row + col * 10240;
-        //    int byteRow = index / 8;
-        //    int byteCol = index % 8;
-        //    if (byteRow < ColliderDatas.Length)
-        //    {
-        //        byte curByte = ColliderDatas[byteRow];
-        //        byte temp = (byte)Mathf.Pow(2, byteCol);
-        //        int value = curByte & temp;
-        //        tempData = new MapBlockData();
-        //        tempData.row = row;
-        //        tempData.col = col;
-        //        tempData.type = value >= 1 ? eMapBlockType.Collect : eMapBlockType.None;
-        //        Debug.LogError("row: " + row + " col :" + col + "Value " + value);
-        //        mapBlockDataDic[row + "_" + col] = tempData;
-        //    }
-        //}
-
-
         MapBlockData tempData = null;
         int index = row + col * 10240;
         int byteRow = index / 8;
         int byteCol = index % 8;
-        if (byteRow < ColliderDatas.Length)
+        if (byteRow < ColliderDatas.Length)//取碰撞
         {
             byte curByte = ColliderDatas[byteRow];
             byte temp = (byte)Mathf.Pow(2, byteCol);
@@ -402,15 +360,27 @@ public class MapManager : Singleton<MapManager>
                 tempData.type = eMapBlockType.Collect;
             }
         }
-        if (tempData == null)
+        if (tempData == null)//取草丛
         {
             if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
             {
-              //  Debug.LogError(tempData.type+" " + tempData.paramValue);
                 return tempData;
             }
         }
          return tempData;
+    }
+
+    public bool GetCurMapBlockHeight(Vector3 pos,ref float height)
+    {
+        int row = Mathf.RoundToInt(pos.x / MapDefine.MapMinGridSize);
+        int col = Mathf.RoundToInt(pos.z / MapDefine.MapMinGridSize);
+        MapBlockData tempData = null;
+        if (mapHeightBlockData.TryGetValue(row + "_" + col, out tempData))
+        {
+            height = tempData.paramValue * 0.01f;
+            return true;
+        }
+        return false;
     }
 
     public override void Destroy()

@@ -28,7 +28,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 注册
 function ZTProtocol:Register(pId, delegates, target)
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		return
 	end
 	self.m_eventDispatcher:AddEvent(pId,delegates,target)
@@ -36,7 +36,7 @@ end
 
 --@brief 注销
 function ZTProtocol:Unregister(pId, delegates)
-	if GameConfig.IsSkillDebugScene then
+	if GameConfig.IsSingleScene then
 		return
 	end
 	

@@ -17,6 +17,7 @@ local LuaFileLoad = {
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
+		"Common.UIBasePanel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
@@ -45,7 +46,8 @@ local LuaFileLoad = {
 --加载配置文件
 	G_tConfigList = {
 		"ALuaConfig.SkillActionConfig",
-		"ALuaConfig.tab_Equipment",
+		"ALuaConfig.Tab_Equipment",
+		"ALuaConfig.Tab_Skill",
 	},
 
 	--游戏lua文件
@@ -90,7 +92,13 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionPlay",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
+
+		"Battle.Skill.SkillAction.MoveAction.MoveActionConfig",
+		"Battle.Skill.SkillAction.MoveAction.MoveActionDefine",
+
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",
 		"Battle.Skill.SkillAction.SkillActionParse",

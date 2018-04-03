@@ -46,7 +46,7 @@ end
 
 --@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
-	-- CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
+	--CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
 	if not self.m_tServerCommand then
 		return
 	end
@@ -60,18 +60,25 @@ function BattleCommandMgr:Update()
 		end
 	
 	end
-
-	if self.m_nClientFrame == self.m_nServerFrame - 1 or self.m_nServerFrame == 0 then
-		--技能测试
-		if GameConfig.IsSkillDebugScene then
+	--技能测试
+	if GameConfig.IsSingleScene then
+		if self.m_nClientFrame == self.m_nServerFrame - 1 or self.m_nServerFrame == 0 then
+		
 			BattleCommandProtocol:__TsClientSendDriveCommand()
 		end 
 	end
 end
 
 --@brife 设置下一驱动帧
-function BattleCommandMgr:SetNextFrame()
-	self.m_nServerFrame = self.m_nServerFrame + BattleDefine.CommandStep
+function BattleCommandMgr:SetNextFrame(endId)
+	if endId then
+		self.m_nServerFrame = endId
+	else
+		self.m_nServerFrame = self.m_nServerFrame + BattleDefine.CommandStep
+	end
+	-- if ZTableLen(self.m_tServerCommand) > 0 then
+	-- 	CSLog(string.format("BattleCommandMgr:SetNextFrame==%d==%d==>>>\n",self.m_nClientFrame,self.m_nServerFrame),SerializeTable(self.m_tServerCommand))
+	-- end
 end
 
 --@brief 添加命令
@@ -118,13 +125,14 @@ end
 function BattleCommandMgr:_ParseCommand(commandList)
 	for i = 1, #commandList do
 		local command = commandList[i]
+		--CSLog("BattleCommandMgr:_ParseCommand",command.m_nType)
 		if command.m_nType == BattleCommandType.Move then
 			self:_ParseMove(command)
 		elseif command.m_nType == BattleCommandType.Skill then
 			self:_ParseSkill(command)
 		elseif command.m_nType == BattleCommandType.Collider then
 		 	self:_ParseCollider(command)
-		elseif command.m_nType == BattleCommandMgr.EffectSync then
+		elseif command.m_nType == BattleCommandType.EffectSync then
 			self:_ParseEffectSync(command)
 		end
 	end
@@ -144,11 +152,12 @@ end
 
 --@brief 处理碰撞
 function BattleCommandMgr:_ParseCollider(command)
+	--CSLog("BattleCommandMgr:_ParseCollider")
 	GlobalBattleCtrl:AddColliderCommand(command)
 end
 
 --@brief 处理属性
 function BattleCommandMgr:_ParseEffectSync(command)
-	-- CSLog("BattleCommandMgr:_ParseAttribute")
+	--CSLog("BattleCommandMgr:_ParseEffectSync")
 	GlobalBattleCtrl:AddEffectCommand(command)
 end
