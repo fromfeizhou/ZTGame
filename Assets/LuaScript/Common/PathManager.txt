@@ -6,8 +6,6 @@ PathManager = {
 	g_sAssetPath = "Assets",		--资源根目录地址
 	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
 	m_sUIWidgets = "Assets/Prefabs/UIWidgets/",		--ui组件地址
-	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
-	m_sBattleUINum = "Assets/Prefabs/UI/Battle/",					--战斗ui数字
 
 	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
 	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
@@ -15,7 +13,11 @@ PathManager = {
 	m_sAnimator = "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
 	m_sModel = "Assets/Models/",
 
-	m_sSkillParticles = "Assets/Particles/Skill/",				--粒子地址
+	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
+	m_sBattleUINum = "Assets/Prefabs/UI/Battle/",					--战斗ui数字
+	m_sSkillParticles = "Assets/Particles/Skill/",				--技能粒子地址
+	m_sSkillIcon = "Assets/ResourcesLib/Images/PanelPng/Fight/SkillIcon/", --技能图标地址
+
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -73,6 +75,11 @@ end
 --@brief 地图粒子路径
 function PathManager:GetSkillParticle(name)
 	return PathManager.m_sSkillParticles .. name .."/".. name ..".prefab"
+end
+
+--@brief 获得技能图标
+function PathManager:GetSkillIcon(name)
+	return PathManager.m_sSkillIcon .. name ..".png"
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

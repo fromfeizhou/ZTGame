@@ -179,8 +179,9 @@ end
 
 --@brief 创建技能按钮
 function BattleUIMgr:_CreateSkillJoystick()
-	local testSkillId = 1001
-	SkillJoystick:Create(testSkillId,self.m_ctrlContainer)
+
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.BATTLE_HUD)
+	
 end
 
 -- 创建背包
