@@ -13,6 +13,8 @@ UIBasePanel = {
 	m_rectTransform,
 
 	m_panelName,
+
+	m_LoadFinish = false,
 }
 
 --@brief 拷贝原表
@@ -36,6 +38,7 @@ function UIBasePanel:_LoadAssetPanel(parent, model)
 			self:_OnCreatePanel()
 			self:_InitPanel()
 			self:_Rush()
+			self.m_LoadFinish = true
 		else
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
 		end
@@ -84,7 +87,9 @@ end
 
 --@brief 面板每帧刷新
 function UIBasePanel:Update(deltaTime)
-	self:onUpdatePanel(deltaTime)
+	if self.m_LoadFinish then 
+		self:onUpdatePanel(deltaTime)
+	end
 end
 
 --@brief 销毁面板
