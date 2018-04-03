@@ -93,6 +93,7 @@ function SkillJoystick:_LoadSkillIcon()
 	local callback = function(target,path)
 		if self.m_imgSkillIcon then
 			self.m_imgSkillIcon.sprite = target
+			self.m_imgSkillIcon:SetNativeSize()
 		end
 	end
 	CS.AssetManager.LoadAsset(PathManager:GetSkillIcon(self:_GetCurSkillId()),callback,typeof(CS.UnityEngine.Sprite))
