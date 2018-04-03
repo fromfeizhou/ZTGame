@@ -42,7 +42,7 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 14 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 10, 1, "HitBloo1" }},
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 10, 1, "HitBlood1" }},
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 55 ] = {
