@@ -55,7 +55,7 @@ end
 
 --@brief 检查是否执行起始帧
 function SkillAction:CheckStart()
-	if self.m_bIsStart then
+	if self.m_bIsStart or self.m_tOwner:IsDead() then
 		return
 	end
 	if GlobalBattleCtrl:GetCurCommandFrame() >= self.m_nStartFrame then

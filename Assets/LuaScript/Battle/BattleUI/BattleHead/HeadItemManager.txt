@@ -19,6 +19,8 @@ HeadItemManager = {
 	m_nTiSpeed = nil,		--抛物线速度
 	m_nTiHorSpeedReduce = nil,	--水平减速度
 	m_nTiTime = nil,		--消失时间
+
+	m_headItem = nil,	--玩家血槽
 }
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -61,6 +63,8 @@ function HeadItemManager:Destroy()
 	self.m_canvas = nil
 	self.m_container = nil
 	self.m_tHurtNumList = nil
+
+	self.m_headItem = nil
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -69,11 +73,13 @@ end
 --@brief 监听事件
 function HeadItemManager:_InitEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnInitDataComplete,self)
 end
 
 --@brief 移除事件
 function HeadItemManager:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnInitDataComplete)
 end
 
 --@brief 添加伤害数字
@@ -124,4 +130,14 @@ function HeadItemManager:_UpdateHurtNum()
 		local pos = CSGetWorldToScreenPoint(hurtNum.oriPos,self.m_canvas)
 		hurtNum.text.transform.position = {x = pos.x, y = pos.y + 0.3 + self.m_nTiTime - hurtNum.time, z = 0}
 	end
+end
+
+--@brief 数据初始化完成
+function HeadItemManager:_OnInitDataComplete()
+	if self.m_headItem then
+		self.m_headItem:Destroy()
+		self.m_headItem = nil
+	end
+	CSLog("HeadItemManager:_OnInitDataComplete",self.m_container.name)
+	self.m_headItem =  BattleHeadItem:Create(self.m_container)
 end

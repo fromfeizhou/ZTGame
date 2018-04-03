@@ -88,7 +88,6 @@ function Character:InitBuffSystem()
 	self.m_buffSystem = BuffSystem:Create(self)
 end
 
-
 --@brief 移除
 function Character:Destroy()
 	CSLog("Character:Destroy")
@@ -433,6 +432,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
+	if self:isDead() then
+		return
+	end
+	
 	if self.m_nMoveDir ~= BattleDir.None then
 		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
 		local hitPos 

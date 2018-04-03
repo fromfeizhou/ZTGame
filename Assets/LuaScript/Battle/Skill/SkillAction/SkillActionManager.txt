@@ -115,6 +115,7 @@ function SkillActionManager:ClearSkillParseById(battleId)
 		local data = self.m_tSortList[i]
 		--技能队列为0 清除
 		if data.id == battleId then
+			self:_ClearList(data.list)
 			table.remove(self.m_tSortList,i)
 			break
 		end
@@ -134,5 +135,14 @@ function SkillActionManager:_UpdateList(list)
 		else
 			actionParse:Update()
 		end
+	end
+end
+
+--@brief del技能队列
+function SkillActionManager:_ClearList(list)
+	for i = #list,1,-1 do
+		local actionParse = list[i]
+		actionParse:Destroy()
+		table.remove(list,i)
 	end
 end

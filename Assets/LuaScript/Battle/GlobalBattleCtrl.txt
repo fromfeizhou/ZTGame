@@ -148,6 +148,8 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 end
 
 --@rife 初始化数据(进入游戏)
@@ -159,8 +161,11 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+	
 	BattleMapMgr:Reset( )
+	
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 end
 
 --@rife 删除数据
@@ -388,7 +393,7 @@ function GlobalBattleCtrl:GetHeadContainer()
 end
 
 --@brief 获得地图ui容器
-function GlobalBattleCtrl:GetHeadContainer()
+function GlobalBattleCtrl:MapItemUIContainer()
 	if GlobalBattleCtrl.m_battleUIMgr then
 		return GlobalBattleCtrl.m_battleUIMgr:MapItemUIContainer()
 	end
