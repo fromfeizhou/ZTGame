@@ -61,7 +61,6 @@ end
 function SkillJoystick:_ParseSkillConfig(skillId)
 	self.m_nCurIndex = 1
 	local config = Tab_Skill[skillId] or Tab_Skill[1001]
-	CSLog("SkillJoystick:_ParseSkillConfig",skillId,config.id)
 	local baseSkillId = config.id
 
 	self.m_tSkillList = {skillId}
