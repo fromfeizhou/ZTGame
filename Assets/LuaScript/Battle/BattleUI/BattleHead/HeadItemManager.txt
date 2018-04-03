@@ -138,6 +138,6 @@ function HeadItemManager:_OnInitDataComplete()
 		self.m_headItem:Destroy()
 		self.m_headItem = nil
 	end
-	CSLog("HeadItemManager:_OnInitDataComplete",self.m_container.name)
+	--CSLog("HeadItemManager:_OnInitDataComplete",self.m_container.name)
 	self.m_headItem =  BattleHeadItem:Create(self.m_container)
 end

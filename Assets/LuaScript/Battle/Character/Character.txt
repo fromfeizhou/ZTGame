@@ -259,13 +259,22 @@ function Character:GetAttributeByType(type,isBase)
 end
 
 --@brief 根据类型设置属性
-function Character:SetAttributeByType(type,value)
-	self.m_attriSystem:SetAttributeByType(type,value)
+function Character:SetAttributeByType(attriType,value)
+	self.m_attriSystem:SetAttributeByType(attriType,value)
+
+	--发送血量变化事件
+	if attriType ==  AttributeType.Hp and self:IsInCamera() then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+	end
 end
 
 --@brief 设置属性
 function Character:SetAttributeByList(list)
-	self.m_attriSystem:SetAttributeByList(list)
+	for i = 1,#list do
+		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
+		self:SetAttributeByType(list[i][1],list[i][2])
+	end
+
 end
 
 --@brief 修改血量
@@ -301,9 +310,7 @@ function Character:SetHp(value)
 
 	self:SetAttributeByType(AttributeType.Hp,value)
 
-	if self:IsInCamera() then
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
-	end
+	
 
 	if GameConfig.IsSingleScene then
 		if self:GetHp() <= 0 and not self:IsDead() then

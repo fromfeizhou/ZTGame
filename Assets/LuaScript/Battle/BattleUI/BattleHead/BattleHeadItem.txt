@@ -67,12 +67,7 @@ function BattleHeadItem:_LoadAsseFinish(target,path)
 		self.m_slider = self.m_gameObject:GetComponentInChildren(typeof(CS.UnityEngine.UI.Slider))
         self.m_hpText = self.m_gameObject:GetComponentInChildren(typeof(CS.ZTText))
 
-        local chara = GlobalBattleCtrl:GetOwnerChara()
-		local curHp = chara:GetHp()
-		local maxHp = chara:GetHpMax()
-		self.m_slider.maxValue = maxHp
-        self.m_slider.value = curHp
-
+	    self:_onUpdateCharacterHp(GlobalBattleCtrl:GetOwnerId())
         self:_OnUpdateCamera()
 	end
 end
