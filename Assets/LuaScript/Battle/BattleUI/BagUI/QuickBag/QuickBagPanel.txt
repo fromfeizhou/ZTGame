@@ -94,9 +94,8 @@ function QuickBagPanel:Show(items)
 	end
 
 	self.m_quickPanelRoot.gameObject:SetActive(true)
-	local  tempIndex = 1;--先只刷新前10个后续加入循环scrollView后修改
+	local  tempIndex = 1;--先只刷新前20个后续加入循环scrollView后修改
 	for key,value in pairs(items) do
-		
 		if tempIndex <= #self.m_ItemList then
 		--	CSLog("QuickBagPanel: UpdateCell")
 			self.m_ItemList[tempIndex]:UpdateCell(value)
@@ -105,6 +104,8 @@ function QuickBagPanel:Show(items)
 			break
 		end
 	end
+	self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 90 * tempIndex}
+
 end
 
 --隐藏面板

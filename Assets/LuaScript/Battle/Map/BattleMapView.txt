@@ -75,35 +75,25 @@ end
 
 --创建预设
 function BattleMapView:UpdateMapView(data)
-
-	CSLog("BattleMapView:UpdateMapView",#data)
 	local  needUnloadId = {}
-
-
 	for key,value in pairs(self.m_tAllViewObj) do
 		if  not data[key] then
  			table.insert(needUnloadId,key)
- 			CSLog("MapView AddRemoveId",key)
+ 			--CSLog("MapView AddRemoveId",key)
 		end
 	end
-	CSLog("MapView ",SerializeTable(data))
+--	CSLog("MapView ",SerializeTable(data))
 	for key,value in pairs(needUnloadId) do
 		if self.m_tAllViewObj[value] then
 			CSGameObject.Destroy(self.m_tAllViewObj[value])
 			self.m_tAllViewObj[value]=nil
 		end
 	end
-
 	for key ,value in pairs(data) do
 		if not self.m_tAllViewObj[key] then
-
 			if Tab_Equipment[value.itemId] then
 				local  tempObj = CSGameObject.Instantiate(self.m_dTestCubeObjDic[Tab_Equipment[value.itemId].Lv],self.m_transform)
-    			--CSLog(value.itemPos,">>>>>>>>>>>>>>>>>>>>>")
-
 				tempObj.transform.position = {x = value.itemPos.x + (0.5-math.random(1,15) * 0.1),y = value.itemPos.y + (0.5-math.random(1,15) * 0.1),z = value.itemPos.z + (0.5-math.random(1,15) * 0.1)}
-    			--CSLog(tempObj.transform.position,">>>>>>>>>>>>>>>>>>>>>")
-				
 				self.m_tAllViewObj[key] = tempObj
 			end
 		end
