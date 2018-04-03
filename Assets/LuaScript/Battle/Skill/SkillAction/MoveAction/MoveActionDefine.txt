@@ -126,11 +126,10 @@ function MoveActoinDefine:_LineToPos(moveAction)
 		moveAction.isFinish = true
 		return
 	end
-
 	--第一次进入 计算速度
 	if not moveAction.speedPos then
 		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,moveAction.dir)
-		moveAction.speedPosDis = speedPos.magnitude
+		moveAction.speedPosDis = moveAction.speedPos.magnitude
 	end
 
 	local  speedPos,speedPosDis = moveAction.speedPos, moveAction.speedPosDis
