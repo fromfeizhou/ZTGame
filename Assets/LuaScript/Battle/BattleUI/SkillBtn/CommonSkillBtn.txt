@@ -104,7 +104,6 @@ end
 --@brief 加载技能图标
 function CommonSkillBtn:_LoadSkillIcon()
 	local callback = function(target,path)
-		CSLog("CommonSkillBtn:_LoadSkillIcon",target,path)
 		if self.m_imgSkillIcon then
 			self.m_imgSkillIcon.sprite = target
 		end
