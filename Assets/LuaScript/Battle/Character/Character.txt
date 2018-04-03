@@ -432,10 +432,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
-	if self:isDead() then
+	if self:IsDead() then
 		return
 	end
-	
+
 	if self.m_nMoveDir ~= BattleDir.None then
 		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
 		local hitPos 
