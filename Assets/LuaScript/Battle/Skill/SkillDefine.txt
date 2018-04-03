@@ -93,10 +93,11 @@ SkillDefine = {
 --@param skillPos 技能位置
 function SkillDefine:GetStartPosByLayer(owner,offset,layerType,skillPos)
 	local pos = nil
+
 	if layerType == SkillLayerType.Hero then
-		pos = owner:GetColliderPos()
+		pos = GetPosTab(owner:GetColliderPos())
 	else
-		pos = skillPos
+		pos = GetPosTab(skillPos)
 	end
 	--CSLog("SkillDefine:GetStartPosByLayer",layerType,pos,skillPos)
 	local face = owner:GetFaceDir()

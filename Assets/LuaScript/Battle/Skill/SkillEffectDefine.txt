@@ -31,7 +31,7 @@ function SkillEffectDefine:CalculateHurt(userId,targetId)
 		return
 	end
 
-	local value = -charaA:GetAttackMin()
+	local value = -charaA:GetAttackMax()
 	charaB:AddHurtNum(value)
 end
 

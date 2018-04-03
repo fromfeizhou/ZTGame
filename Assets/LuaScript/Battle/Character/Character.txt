@@ -88,7 +88,6 @@ function Character:InitBuffSystem()
 	self.m_buffSystem = BuffSystem:Create(self)
 end
 
-
 --@brief 移除
 function Character:Destroy()
 	CSLog("Character:Destroy")
@@ -186,6 +185,10 @@ function Character:SetDead(isDead)
 		self:Play(AnimatorName.Idle)
 		self:OutState(CharacterState.Die)
 	end
+
+	if self.m_bIsDead then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.CHARACTER_DEAD,self:GetBattleId())
+	end
 end
 
 --@brief 获取碰撞体
@@ -256,13 +259,22 @@ function Character:GetAttributeByType(type,isBase)
 end
 
 --@brief 根据类型设置属性
-function Character:SetAttributeByType(type,value)
-	self.m_attriSystem:SetAttributeByType(type,value)
+function Character:SetAttributeByType(attriType,value)
+	self.m_attriSystem:SetAttributeByType(attriType,value)
+
+	--发送血量变化事件
+	if attriType ==  AttributeType.Hp and self:IsInCamera() then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+	end
 end
 
 --@brief 设置属性
 function Character:SetAttributeByList(list)
-	self.m_attriSystem:SetAttributeByList(list)
+	for i = 1,#list do
+		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
+		self:SetAttributeByType(list[i][1],list[i][2])
+	end
+
 end
 
 --@brief 修改血量
@@ -298,9 +310,7 @@ function Character:SetHp(value)
 
 	self:SetAttributeByType(AttributeType.Hp,value)
 
-	if self:IsInCamera() then
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
-	end
+	
 
 	if GameConfig.IsSingleScene then
 		if self:GetHp() <= 0 and not self:IsDead() then
@@ -325,6 +335,10 @@ function Character:GetAttackMin(isBase)
 	return self:GetAttributeByType(AttributeType.AttackMin,isBase)
 end
 
+--@brief 获得攻击力
+function Character:GetAttackMax(isBase)
+	return self:GetAttributeByType(AttributeType.AttackMax,isBase)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关end
@@ -425,6 +439,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
+	if self:IsDead() then
+		return
+	end
+
 	if self.m_nMoveDir ~= BattleDir.None then
 		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
 		local hitPos 

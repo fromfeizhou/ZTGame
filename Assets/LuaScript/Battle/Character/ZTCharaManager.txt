@@ -29,7 +29,7 @@ end
 
 --@brief 初始化
 function ZTCharaManager:Init()
-	CSLog("ZTCharaManager:Init")
+	
 	--战斗对象容器
 	self.m_ztCharaContainer = CSGameObject("CharaContainer").transform
 	self.m_tCharaList = {}
@@ -46,13 +46,17 @@ end
 function ZTCharaManager:Destroy()
 	CSLog("ZTCharaManager:Destroy")
 	
-	self:RemoveEvent()
+	self:_RemoveEvent()
 
+	self:ClearChara()
+end
+
+function ZTCharaManager:ClearChara( )
 	if self.m_tCharaList then
 		for i,v in pairs(self.m_tCharaList) do
 			v:Destroy()
 		end
-		self.m_tCharaList = nil
+		self.m_tCharaList = {}
 	end
 
 	--清理战斗对象容器
@@ -138,7 +142,7 @@ end
 
 --@brief 获得队友
 function ZTCharaManager:GetOwnerTeamChara()
-	if  self.m_tCharaTeamList then
+	if  self.m_tCharaTeamList and #self.m_tCharaTeamList > 0 then
 		return self.m_tCharaTeamList
 	end
 
@@ -151,6 +155,7 @@ function ZTCharaManager:GetOwnerTeamChara()
 				table.insert(self.m_tCharaTeamList,tmpChara)
 			end
 		end
+
 		return self.m_tCharaTeamList
 	end
 	return {}

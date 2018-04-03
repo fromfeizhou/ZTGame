@@ -62,8 +62,7 @@ function GlobalBattleCtrl:Init()
 	--全局数据引用初始化
 	GlobalBattleCtrl:InitData()
 
-	--第一次初始化通知镜头刷新
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+	
 
 	--启动协议监听
 	BattleCommandProtocol:Init()
@@ -74,6 +73,9 @@ end
 
 --@brief 移除
 function GlobalBattleCtrl:Destroy()
+	BattleCommandProtocol:Destroy()
+	BattleProtocol:Destroy()
+
 	--全局数据引用初始化
 	GlobalBattleCtrl:DestroyData()
 	
@@ -140,6 +142,12 @@ end
 --@brief 数据相关管理相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@rife 初始化数据
+function GlobalBattleCtrl:ExitBattle()
+	GlobalBattleCtrl:Destroy()
+	ZTCityScene:InitScene()
+end
+
+--@rife 初始化数据
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
 	GlobalBattleCtrl.m_nOwnerId = 1
@@ -148,6 +156,12 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	
+	--第一次初始化通知镜头刷新
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 end
 
 --@rife 初始化数据(进入游戏)
@@ -159,7 +173,12 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
 
+	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+	
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+
 	BattleMapMgr:Reset( )
 end
 
@@ -189,9 +208,9 @@ function GlobalBattleCtrl:Update()
 		GlobalBattleCtrl.m_battleCommandMgr:Update()
 	end
 	
-	if GlobalBattleCtrl.m_mapCircleManager then
-		GlobalBattleCtrl.m_mapCircleManager:Update()
-	end
+	-- if GlobalBattleCtrl.m_mapCircleManager then
+	-- 	GlobalBattleCtrl.m_mapCircleManager:Update()
+	-- end
 
 	--头像管理
 	if GlobalBattleCtrl.m_HeadItemManager then
@@ -388,7 +407,7 @@ function GlobalBattleCtrl:GetHeadContainer()
 end
 
 --@brief 获得地图ui容器
-function GlobalBattleCtrl:GetHeadContainer()
+function GlobalBattleCtrl:MapItemUIContainer()
 	if GlobalBattleCtrl.m_battleUIMgr then
 		return GlobalBattleCtrl.m_battleUIMgr:MapItemUIContainer()
 	end

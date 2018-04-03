@@ -114,6 +114,7 @@ end
 function BattleCameraMgr:_UpdateCameraPos(pos)
 	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
 	BattleCameraMgr.m_carmeraTrans.position = pos
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CAMERA,pos)
 end
 
 --@brief 镜头缓动
@@ -127,6 +128,8 @@ function BattleCameraMgr:_UpdateCameraActoin()
 		BattleCameraMgr.m_bMoveAction = nil
 		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
 	end
+
+
 end
 
 --@brief 获得镜头与目标点距离

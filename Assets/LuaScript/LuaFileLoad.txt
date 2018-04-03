@@ -106,7 +106,8 @@ local LuaFileLoad = {
 		
 		
 		"Battle.BattleUI.BattleUIMgr",
-		"Battle.BattleUI.HeadItemManager",
+		"Battle.BattleUI.BattleHead.BattleHeadItem",
+		"Battle.BattleUI.BattleHead.HeadItemManager",
 		
 		"Battle.BattleUI.SkillBtn.CommonSkillBtn",
 		"Battle.BattleUI.SkillBtn.MoveJoystick",

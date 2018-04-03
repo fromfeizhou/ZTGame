@@ -21,6 +21,8 @@ ZTBattleScene = {
 --@brief 切换战斗场景
 function ZTBattleScene:InitScene()
 	CSLog("ZTBattleScene:InitScene")
+	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
+	
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 

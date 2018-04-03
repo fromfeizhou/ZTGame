@@ -1,4 +1,4 @@
---BattleHUD.txt
+--BattleHeadItem.txt
 --@breif 战斗ui
 --@data 2018/04/03
 
@@ -8,9 +8,9 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
+local CSGetWorldToScreenPoint = CS.GameTool.GetWorldToScreenPoint
 
-
-BattleHUD = {
+BattleHeadItem = {
 	m_parentRoot=nil,
 	m_transform=nil,
 	m_gameObject=nil,
@@ -20,27 +20,36 @@ BattleHUD = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleHUD:Create(parent)
+function BattleHeadItem:Create(parent)
 	local obj = {}
-	setmetatable( obj, { __index = BattleHUD })
+	setmetatable( obj, { __index = BattleHeadItem })
 	obj:Init(parent)
 	return obj
 end
 
 --@brief 初始化
-function BattleHUD:Init(parent)
+function BattleHeadItem:Init(parent)
 	self.m_parentRoot = parent
+	self.m_canvas = GlobalBattleCtrl:GetCanvasComp()
+
 	--加载预设件
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
-	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleHUD"),callback_loadfinish)
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleHead"),callback_loadfinish)
+
+	self:_InitEvent()
 end
 
 --@brief 移除
-function BattleHUD:Destroy()
-	--CSLog("BattleHUD:Destroy")
-	self.m_gameObject=nil
+function BattleHeadItem:Destroy()
+	--CSLog("BattleHeadItem:Destroy")
+	self:_RemoveEvent()
+
+	if self.m_gameObject then
+		CSGameObject.Destroy(self.m_gameObject)
+		self.m_gameObject=nil
+	end
 	self.m_parentRoot = nil
 end
 
@@ -48,34 +57,57 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 预设加载成功
-function BattleHUD:_LoadAsseFinish(target,path)
-	-- CSLog("BattleHUD:_LoadAsseFinish",target,path) 
+function BattleHeadItem:_LoadAsseFinish(target,path)
+	-- CSLog("BattleHeadItem:_LoadAsseFinish",target,path) 
 	local prefab = target
 	if prefab and self.m_parentRoot then
-		self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
-		self.m_gameObject = self.m_transform.gameObject
-		self:_InitSkillBtn()
+		self.m_gameObject = CSGameObject.Instantiate(target)
+		self.m_gameObject.transform:SetParent(self.m_parentRoot,false)
+
+		self.m_slider = self.m_gameObject:GetComponentInChildren(typeof(CS.UnityEngine.UI.Slider))
+        self.m_hpText = self.m_gameObject:GetComponentInChildren(typeof(CS.ZTText))
+
+	    self:_onUpdateCharacterHp(GlobalBattleCtrl:GetOwnerId())
+        self:_OnUpdateCamera()
 	end
 end
 
--- 初始化界面
-function BattleHUD:_InitSkillBtn()
-	local testSkillId = {1001,1101,1102,1103}
 
-	for i = 1, #testSkillId do
-		local skillId = testSkillId[i]
-		local template = Tab_Skill[skillId] or Tab_Skill[1001]
-		CSLog("BattleHUD:_InitSkillBtn",skillId,template.operaDistance)
-		if template.operaDistance > 0 then
-			SkillJoystick:Create(skillId,self:_GetSkillBtnNode(i))
-		else
-			CommonSkillBtn:Create(skillId,self:_GetSkillBtnNode(i))
-		end 
-	end
+--@brief 监听事件
+function BattleHeadItem:_InitEvent()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self._onUpdateCharacterHp,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera,self)
 end
 
---@brief 
-function BattleHUD:_GetSkillBtnNode( index )
-	local transform =  self.m_transform:Find(string.format("SkillBtnNode/SkillBtn%02d",index))
-	return transform
+--@brief 移除事件
+function BattleHeadItem:_RemoveEvent()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self._onUpdateCharacterHp,self)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera)
+end
+
+function BattleHeadItem:_onUpdateCharacterHp(battleId)
+	if not self.m_gameObject then
+		return
+	end
+	if not battleId == GlobalBattleCtrl:GetOwnerId() then
+		return
+	end
+
+
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	local curHp = chara:GetHp()
+	local maxHp = chara:GetHpMax()
+	self.m_slider.maxValue = maxHp
+    self.m_slider.value = curHp
+    self.m_hpText.text = curHp .. " / " .. maxHp
+end
+
+function BattleHeadItem:_OnUpdateCamera()
+	if not self.m_gameObject then
+		return
+	end
+	local pos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
+	--CSLog("BattleHeadItem:_OnUpdateScenePos",pos,uiPos)
+	self.m_gameObject.transform.position = {x = uiPos.x, y = uiPos.y + 1.2, z = 0}
 end

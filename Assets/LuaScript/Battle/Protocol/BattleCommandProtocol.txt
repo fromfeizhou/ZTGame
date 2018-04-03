@@ -50,6 +50,9 @@ end
 
 --@brief 发送命令
 function BattleCommandProtocol:SendCommand(command)
+	if GlobalBattleCtrl:GetOwnerChara():IsDead() then
+		return
+	end
 	local commandType = command.m_nType
 
 	--技能测试
