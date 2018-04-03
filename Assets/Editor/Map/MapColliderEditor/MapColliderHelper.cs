@@ -21,13 +21,9 @@ public class MapColliderHelper
             File.Delete(MapDefine.MapDataSavePath);
         File.WriteAllBytes(MapDefine.MapDataSavePath, clolliderdata);
 
-        //  获取当前实例测量得出的总时间
+        ////  获取当前实例测量得出的总时间
         System.TimeSpan timespan = stopwatch.Elapsed;
-        //   double hours = timespan.TotalHours; // 总小时
-        //    double minutes = timespan.TotalMinutes;  // 总分钟
-        //    double seconds = timespan.TotalSeconds;  //  总秒数
         double milliseconds = timespan.TotalMilliseconds;  //  总毫秒数
-        //打印代码执行时间
         Debug.Log("生成碰撞文件 用时：" + milliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         stopwatch = new System.Diagnostics.Stopwatch();
@@ -41,23 +37,18 @@ public class MapColliderHelper
             Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
         }
         File.WriteAllBytes(MapDefine.MapHideBlockDataSavePath, hideTytes);
-
         stopwatch.Stop();
         timespan = stopwatch.Elapsed;
         Debug.Log("生成草地隐藏文件 用时：" + timespan.TotalMilliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      
+
         stopwatch = new System.Diagnostics.Stopwatch();
         stopwatch.Start();
-
         if (File.Exists(MapDefine.MapHeightBlockDataSavePath))
             File.Delete(MapDefine.MapHeightBlockDataSavePath);
-
         hideTytes = new byte[heightData.Count * MapDefine.MapByteInterval];
         index = 0;
         foreach (KeyValuePair<string, MapBlockData> item in heightData)
-        {
             Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
-        }
         File.WriteAllBytes(MapDefine.MapHeightBlockDataSavePath, hideTytes);
         stopwatch.Stop();
         timespan = stopwatch.Elapsed;
