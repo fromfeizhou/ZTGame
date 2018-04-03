@@ -3,7 +3,6 @@
 --@data 2018/3/5
 CityModel = {
 	m_tPanelList = nil,
-	m_panelRoot_Canvas = nil,
 }
 
 --@brief c#引用
@@ -26,7 +25,6 @@ end
 --@brief 初始化
 function CityModel:Init()
 	self.m_tPanelList = {}
-	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -47,12 +45,13 @@ end
 
 
 --@breif 显示面板
-function CityModel:ShowPanel( panelType )
+function CityModel:ShowPanel( panelData )
+	local panelType = panelData.panelType
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
-		local parent = self.m_panelRoot_Canvas
+		local parent = CSGameObject.Find("Canvas").transform
 		if panelType == CITY_TYPE.MAIN then
 			panel = CityMainPanel:Create(parent,self)
 		end
@@ -60,13 +59,13 @@ function CityModel:ShowPanel( panelType )
 	end
 
 	if panel then
-		panel:Show()
+		panel:Show(panelData)
 	end
 end
 
 --@breif 隐藏面板
-function CityModel:HidePanel(panelType)
-
+function CityModel:HidePanel(panelData)
+	local panelType = panelData.panelType
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
@@ -75,7 +74,7 @@ function CityModel:HidePanel(panelType)
 	end
 
 	if panel then
-		panel:Hide()
+		panel:Hide(panelData)
 	end
 end
 

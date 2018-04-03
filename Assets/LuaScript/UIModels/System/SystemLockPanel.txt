@@ -15,6 +15,15 @@ setmetatable( SystemLockPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 拷贝原表
+function SystemLockPanel:Create(parent, model)
+	local obj = {}
+	setmetatable( obj, { __index = SystemLockPanel })
+	obj:_LoadAssetPanel(parent, model)
+	return obj
+end
+
 --@brief 面板数据初始化
 function SystemLockPanel:onInitPanelData()
 	self.m_panelName = "SystemLockPanel"

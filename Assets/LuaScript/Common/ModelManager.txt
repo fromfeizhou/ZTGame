@@ -60,14 +60,14 @@ end
 function ModelManager:_RemoveEvents()
 	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show)
 	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide)
-
 end
 
 --@breif 事件句柄 显示面板
 function ModelManager:_OnHandle_Show(panelData)
+	GCSLog("ModelManager:_OnHandle_Show",panelData.modelType,panelData.panelType)
 	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
-		model:ShowPanel(panelData.panelType)
+		model:ShowPanel(panelData)
 	else
 		GCSLog("ModelManager:_OnHandle_Show found out ",panelData.panelType)
 	end
@@ -77,7 +77,7 @@ end
 function ModelManager:_OnHandle_Hide(panelData)
 	local model = ModelManager:_GetModel(panelData.modelType)
 	if model then
-		model:HidePanel(panelData.panelType)
+		model:HidePanel(panelData)
 		ModelManager:_TryCleanModel()
 	else
 		GCSLog("ModelManager:_OnHandle_Hide found out ",panelData.panelType)

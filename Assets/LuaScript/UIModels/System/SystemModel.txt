@@ -10,8 +10,6 @@ local CSLog = CS.GameTool.Log
 
 SystemModel = {
 	m_tPanelList = nil,
-	m_panelRoot_Canvas = nil,
-
 }
 
 
@@ -20,7 +18,6 @@ SystemModel = {
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
 function SystemModel:Create()
-	GCSLog("SystemModel:Create")
 	local obj = {}
 	setmetatable( obj, { __index = SystemModel })
 	obj:Init()
@@ -30,7 +27,6 @@ end
 --@brief 初始化
 function SystemModel:Init()
 	self.m_tPanelList = {}
-	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -50,12 +46,14 @@ function SystemModel:Destroy()
 end
 
 --@breif 显示面板
-function SystemModel:ShowPanel( panelType )
+function SystemModel:ShowPanel( panelData )
+	local panelType = panelData.panelType
+	GCSLog("--------------------SystemModel:ShowPanel",panelData.modelType,panelType)
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else
-		local parent = self.m_panelRoot_Canvas
+		local parent = CSGameObject.Find("Canvas").transform
 		if panelType == SYSTEM_TYPE.NOTICE then
 			panel = SystemNoticePanel:Create(parent,self)
 		elseif panelType == SYSTEM_TYPE.LOCK then
@@ -67,13 +65,15 @@ function SystemModel:ShowPanel( panelType )
 	end
 
 	if panel then
-		panel:Show()
+		panel:Show(panelData)
+	else
+		GCSLog("found out panel","panelType",panelType)
 	end
 end
 
 
-function SystemModel:HidePanel(panelType)
-
+function SystemModel:HidePanel(panelData)
+	local panelType = panelData.panelType
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
@@ -82,7 +82,7 @@ function SystemModel:HidePanel(panelType)
 	end
 
 	if panel then
-		panel:Hide()
+		panel:Hide(panelData)
 	end
 end
 

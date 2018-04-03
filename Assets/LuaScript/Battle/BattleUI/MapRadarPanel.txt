@@ -25,6 +25,15 @@ MapRadarPanel = {
 	m_mapContent = nil,
 }
 setmetatable( MapRadarPanel, { __index = UIBasePanel})
+
+
+--@brief 拷贝原表
+function MapRadarPanel:Create(parent, model)
+	local obj = {}
+	setmetatable( obj, { __index = MapRadarPanel })
+	obj:_LoadAssetPanel(parent, model)
+	return obj
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -67,6 +76,7 @@ end
 
 --@brief 销毁登录面板
 function MapRadarPanel:onDestroy()
+	
 end
 
 --@brief 添加事件监听

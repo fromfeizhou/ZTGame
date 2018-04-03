@@ -15,9 +15,18 @@ UIBasePanel = {
 	m_panelName,
 }
 
-
+--@brief 拷贝原表
 function UIBasePanel:Create(parent, model)
+	local obj = {}
+	setmetatable( obj, { __index = UIBasePanel })
+	obj:_LoadAssetPanel(parent, model)
+	return obj
+end
+
+function UIBasePanel:_LoadAssetPanel(parent, model)
 	self:onInitPanelData()
+	GCSLog("UIBasePanel:Create",self.m_panelName)
+
 	local callback_loadfinish = function(target,path)
  		if target then
  			self.m_gameObject = CSGameObject.Instantiate(target,parent)
@@ -37,21 +46,28 @@ function UIBasePanel:Create(parent, model)
 end
 
 --@brief 显示面板
-function UIBasePanel:Show()
+function UIBasePanel:Show(panelData)
+	GCSLog("UIBasePanel:Show",self.m_panelName)
 	self.m_isShow = true
-	self:_Rush()
+	self:_Rush(panelData)
 end
 
 --@brief 隐藏面板
-function UIBasePanel:Hide()
+function UIBasePanel:Hide(panelData)
+	GCSLog("UIBasePanel:Hide",self.m_panelName)
 	self.m_isShow = false
-	self:_Rush()
+	self:_Rush(panelData)
 end
 
 --@brief 刷新面板
-function UIBasePanel:_Rush()
+function UIBasePanel:_Rush(panelData)
 	if not self.m_gameObject then return end
 	self.m_gameObject:SetActive(self.m_isShow)
+	if self.m_isShow then
+		self:onShow(panelData)
+	else
+		self:onHide(panelData)
+	end
 end
 
 --@brief 面板创建后
@@ -101,6 +117,13 @@ end
 function UIBasePanel:onDestroy()
 end
 
+--@brief 子类重写 - 显示面板
+function UIBasePanel:onShow( panelData )
+end
+
+--@brief 子类重写 - 隐藏面板
+function UIBasePanel:onHide( panelData )
+end
 
 
 --@brief 子类重写 - 添加事件监听

@@ -3,7 +3,6 @@
 --@data 2018/3/5
 LoginModel = {
 	m_tPanelList = nil,
-	m_panelRoot_Canvas = nil,
 	
 	m_nlogin_create_role_s2c = nil,
 	m_nlogin_select_role_s2c = nil,
@@ -34,7 +33,6 @@ end
 --@brief 初始化
 function LoginModel:Init()
 	self.m_tPanelList = {}
-	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
 end
 
 --@brief 更新
@@ -55,12 +53,13 @@ end
 
 
 --@breif 显示面板
-function LoginModel:ShowPanel( panelType )
+function LoginModel:ShowPanel( panelData )
+	local panelType = panelData.panelType
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
 	else 
-		local parent = self.m_panelRoot_Canvas
+		local parent = CSGameObject.Find("Canvas").transform
 		if panelType == LOGIN_TYPE.MAIN then
 			panel = LoginMainPanel:Create(parent,self)
 		elseif panelType == LOGIN_TYPE.CREATEROLE then
@@ -68,15 +67,15 @@ function LoginModel:ShowPanel( panelType )
 		end
 		self.m_tPanelList[panelType] = panel
 	end
-
 	if panel then
-		panel:Show()
+		GCSLog("LoginModel:ShowPanel",panelData)
+		panel:Show(panelData)
 	end
 end
 
 --@breif 隐藏面板
-function LoginModel:HidePanel(panelType)
-
+function LoginModel:HidePanel(panelData)
+	local panelType = panelData.panelType
 	local panel = nil
 	if self.m_tPanelList[panelType] then
 		panel = self.m_tPanelList[panelType]
@@ -85,7 +84,7 @@ function LoginModel:HidePanel(panelType)
 	end
 
 	if panel then
-		panel:Hide()
+		panel:Hide(panelData)
 	end
 end
 

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class ZTButton : Button,IWidget,IPointerExitHandler
 {
-	#if UNITY_EDITOR 
+	#if UNITY_EDITOR
 	public void InitEditor (string paramStr)
 	{
 	}
@@ -13,6 +13,7 @@ public class ZTButton : Button,IWidget,IPointerExitHandler
 
 	public void Init (string paramStr)
 	{
+		
 	}
 
 	private WidgetAnimation _WidgetAnim;
