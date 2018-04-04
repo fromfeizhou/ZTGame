@@ -9,7 +9,7 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public float outerCircleRadius = 100;
     public float activeMoveDistance = 20;
-    RectTransform innerCircleTrans;
+    public RectTransform innerCircleTrans;
 
     public Action<Vector2> onJoystickDownEvent;     // 按下事件
     public Action<Vector2> onJoystickUpEvent;     // 抬起事件

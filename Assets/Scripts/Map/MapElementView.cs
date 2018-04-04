@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class MapElementView
         new Dictionary<string, Dictionary<string, MapElementGrid>>();
     //视野内预设列表
     private Dictionary<string, MapElement> visionElementDic = new Dictionary<string, MapElement>();
-
+    private List<string> createElementList = new List<string>();    //创建列表
+    private List<string> removeElementList = new List<string>();      //移除列表
     private Dictionary<string, GameObject> loadedObj = new Dictionary<string, GameObject>();
 
 
@@ -37,6 +39,8 @@ public class MapElementView
     {
         mapKey = (int)pos.x / MapDefine.MAPITEMTOTALSIZE + "" + (int)pos.z / MapDefine.MAPITEMTOTALSIZE;
     }
+
+    private IEnumerator _OnUpdateElementHandler;
     //初始化
     public void InitMapElementView(MapAsset data)
     {
@@ -64,7 +68,6 @@ public class MapElementView
 
 
         InitTerrainView();
-
     }
     //地图建筑数据
     private void InitData()
@@ -229,36 +232,113 @@ public class MapElementView
         }
         var needClearElementDic = visionElementDic.Keys.Except(elementDic.Keys);
         var needLoadElementDic = elementDic.Keys.Except(visionElementDic.Keys);
+
+        createElementList.Clear();
+        removeElementList.Clear();
+
         foreach (var key in needLoadElementDic)
         {
-            MapElement elementData = elementDic[key];
-            MapElementInfo elementInfo = elementData.elementInfo;
-            string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
-            AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
-            {
-                if (obj != null)
-                {
-                    GameObject assetTree = obj as GameObject;
-                    Transform element = GameObject.Instantiate(assetTree).transform;
-                    element.SetParent(elementRoot.transform);
-                    element.position = elementInfo.Pos;
-                    element.eulerAngles = elementInfo.Angle;
-                    element.localScale = elementInfo.Scale;
+            //MapElement elementData = elementDic[key];
+            //MapElementInfo elementInfo = elementData.elementInfo;
+            //string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
+            //AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
+            //{
+            //    if (obj != null)
+            //    {
+            //        GameObject assetTree = obj as GameObject;
+            //        Transform element = GameObject.Instantiate(assetTree).transform;
+            //        element.SetParent(elementRoot.transform);
+            //        element.position = elementInfo.Pos;
+            //        element.eulerAngles = elementInfo.Angle;
+            //        element.localScale = elementInfo.Scale;
 
-                    loadedObj[elementData.elementKey] = element.gameObject;
-                }
-            });
+            //        loadedObj[elementData.elementKey] = element.gameObject;
+            //    }
+            //});
+            createElementList.Add(key);
+
+
         }
         foreach (var key in needClearElementDic)
         {
-            if (loadedObj.ContainsKey(key))
-            {
-                GameObject tempObj = loadedObj[key];
-                GameObject.Destroy(tempObj);
-                loadedObj.Remove(key);
-            }
+            //if (loadedObj.ContainsKey(key))
+            //{
+            //    GameObject tempObj = loadedObj[key];
+            //    GameObject.Destroy(tempObj);
+            //    loadedObj.Remove(key);
+            //}
+            removeElementList.Add(key);
         }
         visionElementDic = elementDic;
+
+        if(createElementList.Count > 0 || removeElementList.Count > 0)
+        {
+            if (null == _OnUpdateElementHandler)
+            {
+                _OnUpdateElementHandler = OnUpdateElement();
+                ZTSceneManager.GetInstance().StartCoroutine(_OnUpdateElementHandler);
+            }
+        }
     }
 
+    IEnumerator OnUpdateElement()
+    {
+        while (createElementList.Count > 0 || removeElementList.Count > 0)
+        {
+            Update();
+            yield return null;
+        }
+        _OnUpdateElementHandler = null;
+    }
+
+    public void Update()
+    {
+        ClearElementInList();
+        CreateElementInList();
+    }
+
+    public void ClearElementInList()
+    {
+        if(removeElementList == null || removeElementList.Count == 0)
+        {
+            return;
+        }
+        string key = removeElementList[0];
+        removeElementList.RemoveAt(0);
+
+        if(loadedObj.ContainsKey(key))
+        {
+            GameObject tempObj = loadedObj[key];
+            GameObject.Destroy(tempObj);
+            loadedObj.Remove(key);
+        }
+    }
+
+    public void CreateElementInList()
+    {
+        if (createElementList == null || createElementList.Count == 0)
+        {
+            return;
+        }
+        string key = createElementList[0];
+        createElementList.RemoveAt(0);
+
+        MapElement elementData = visionElementDic[key];
+        MapElementInfo elementInfo = elementData.elementInfo;
+        string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
+        AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
+        {
+            if (obj != null )//&& visionElementDic.ContainsKey(key))
+            {
+                GameObject assetTree = obj as GameObject;
+                Transform element = GameObject.Instantiate(assetTree).transform;
+                element.SetParent(elementRoot.transform);
+                element.position = elementInfo.Pos;
+                element.eulerAngles = elementInfo.Angle;
+                element.localScale = elementInfo.Scale;
+
+                loadedObj[elementData.elementKey] = element.gameObject;
+            }
+        });
+    }
 }
