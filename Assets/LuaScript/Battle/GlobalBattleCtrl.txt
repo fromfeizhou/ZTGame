@@ -16,6 +16,8 @@ GlobalBattleCtrl = {
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
 	m_mapPropUIMgr=nil,
+
+	m_bGameOver = nil,		--游戏结束标记
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -67,6 +69,7 @@ function GlobalBattleCtrl:Init()
 	--启动协议监听
 	BattleCommandProtocol:Init()
 	BattleProtocol:Init()
+
 end
 
 
@@ -162,6 +165,9 @@ function GlobalBattleCtrl:InitData()
 
 	--数据初始化完成
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+
+	GlobalBattleCtrl.m_bGameOver = false
+
 end
 
 --@rife 初始化数据(进入游戏)
@@ -180,6 +186,9 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 
 	BattleMapMgr:Reset( )
+
+
+	GlobalBattleCtrl.m_bGameOver = false
 end
 
 --@rife 删除数据

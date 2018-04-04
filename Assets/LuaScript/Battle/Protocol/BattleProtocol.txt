@@ -45,6 +45,7 @@ function BattleProtocol:_RegAll()
 	ZTProtocol:Register(PROTOCOL.MAP_UPDATE_GOODS, BattleProtocol._UpdateMapItem, BattleProtocol)
 	ZTProtocol:Register(PROTOCOL.MAP_DISCARD_GOODS, BattleProtocol._OnDiscardItem, BattleProtocol)
 
+	ZTProtocol:Register(PROTOCOL.SURVIVE_END, BattleProtocol._OnSurvieEnd, BattleProtocol)
 
 end
 
@@ -55,6 +56,7 @@ function BattleProtocol:_UnRegAll()
 	ZTProtocol:Unregister(PROTOCOL.MAP_UPDATE_GOODS)
 	ZTProtocol:Unregister(PROTOCOL.MAP_DISCARD_GOODS)
 
+	ZTProtocol:Unregister(PROTOCOL.SURVIVE_END)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -110,6 +112,12 @@ function  BattleProtocol:_UpdateMapItem(map_update_goods)
 	--GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_MAP_ITEMS,map_update_goods)
 end
 
+
+--@brief 游戏结束
+function BattleProtocol:_OnSurvieEnd(survive_end_s2c)
+	local data = survive_end_s2c
+	CSLog("BattleProtocol:_OnSurvieEnd",data.win)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************测试代码***************************************************************

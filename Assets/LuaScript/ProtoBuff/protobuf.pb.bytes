@@ -1,5 +1,5 @@
 
-Ûz
+ïz
 protobuf.protoztGame.proto",
 p_setting_info
 key (
@@ -47,7 +47,7 @@
 x (	
 y	 (	
 z
- ("—
+ ("ÿ
 p_base_attr
 hp_max (
 
@@ -65,12 +65,8 @@ attack_max (
 
 attack_acc (
 hurt_dec (
-cd_acc (
-
-hp (
-
-mp (
-mp_rec ("Ž
+cd_acc (
+mp_rec ("Ž
 p_role_attr
 
 id (
@@ -122,7 +118,7 @@ vip_reward ("c
 	end_frame (
 begin_radius (
 
-end_radius	 ("Ï
+end_radius	 ("Û
 
 p_map_role
 
@@ -140,15 +136,17 @@ p_map_role
 d (
 state (
 
-hp (
-	vip_level (
-shaping (
-fight_point (,
-	base_attr (2.ztGame.proto.p_base_attr1
-moving_frames (2.ztGame.proto.p_role_frame0
-skill_frames (2.ztGame.proto.p_role_frame(
-goods (2.ztGame.proto.p_map_goods%
-equips (2.ztGame.proto.p_goods")
+hp (
+
+mp (
+	vip_level (
+shaping (
+fight_point (,
+	base_attr (2.ztGame.proto.p_base_attr1
+moving_frames (2.ztGame.proto.p_role_frame0
+skill_frames (2.ztGame.proto.p_role_frame(
+goods (2.ztGame.proto.p_map_goods%
+equips (2.ztGame.proto.p_goods")
 p_chat_goods
 
 id (
@@ -333,7 +331,9 @@ admin_time ("¡
 code ("0
 survive_fight_s2c
 map_id (
-num ("
+num ("
+survive_end_s2c
+win ("
 login_heart_c2s"&
 login_heart_s2c
 server_time ("Ì

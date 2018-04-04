@@ -73,9 +73,7 @@ message p_base_attr {
     required uint32 attack_acc = 11; // 	最终伤害加成=英雄伤害加成+基础伤害加成+装备伤害加成
     required uint32 hurt_dec = 12; // 最终伤害减免=英雄诅咒值+基础诅咒值+装备诅咒值
     required uint32 cd_acc = 13; // 	最终技能冷却=英雄技能冷却+基础技能冷却+装备技能冷却
-    required uint32 hp = 14; // 当前血量
-    required uint32 mp = 15; // 当前能量
-    required uint32 mp_rec = 16; // 能量回复
+    required uint32 mp_rec = 14; // 能量回复
 }
 
 //玩家属性信息
@@ -149,14 +147,15 @@ message p_map_role {
     required uint32 d = 11; // d
     required uint32 state = 12; // 状态
     required uint32 hp = 13; // 血量
-    required uint32 vip_level = 14; // VIP等级
-    required uint32 shaping = 15; // 外型id
-    required uint32 fight_point = 16; // 战斗力
-    required p_base_attr base_attr = 17; // 基础属性
-    repeated p_role_frame moving_frames = 18; // 移动帧
-    repeated p_role_frame skill_frames = 19; // 技能帧
-    repeated p_map_goods goods = 20; // 场景道具
-    repeated p_goods equips = 21; // 装备信息
+    required uint32 mp = 14; // 能量
+    required uint32 vip_level = 15; // VIP等级
+    required uint32 shaping = 16; // 外型id
+    required uint32 fight_point = 17; // 战斗力
+    required p_base_attr base_attr = 18; // 基础属性
+    repeated p_role_frame moving_frames = 19; // 移动帧
+    repeated p_role_frame skill_frames = 20; // 技能帧
+    repeated p_map_goods goods = 21; // 场景道具
+    repeated p_goods equips = 22; // 装备信息
 }
 
 //角色物品信息
@@ -434,6 +433,11 @@ message survive_match_s2c {
 message survive_fight_s2c {
     required uint32 map_id = 1; // 地图id
     required uint32 num = 2; // 人数
+}
+
+// ##begin##survive##survive_end##11##3##游戏结束##end##
+message survive_end_s2c {
+    required uint32 win = 1; // 0.输 1.赢
 }
 
 

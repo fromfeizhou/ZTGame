@@ -71,6 +71,7 @@ end
 
 --@brife 设置下一驱动帧
 function BattleCommandMgr:SetNextFrame(endId)
+-- CSLog("BattleCommandMgr:SetNextFrame",endId)
 	if endId then
 		self.m_nServerFrame = endId
 	else

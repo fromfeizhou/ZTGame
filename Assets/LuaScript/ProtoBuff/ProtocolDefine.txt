@@ -115,5 +115,6 @@ PROTOCOL = {
 --@brife 大逃杀
 	SURVIVE_MATCH = 11001,	--开始匹配
 	SURVIVE_FIGHT = 11002,	--开始游戏
+	SURVIVE_END = 11003,	--游戏结束
 
 }

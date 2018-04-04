@@ -43,6 +43,12 @@ function EventDispatcher:RemoveEvent(name,listener)
 	if self.m_listeners[name] == nil then
 	    return
 	end
+	--整个移除
+	if not listener then
+		self.m_listeners[name] = nil
+		return
+	end
+
 	local existIndex = self:_GetEventIndex(name,listener)
 	if existIndex == -1 then return end
 	table.remove(self.m_listeners[name],existIndex)
