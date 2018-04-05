@@ -125,7 +125,7 @@ function NetWorkManager:_GetCurMsgSeq()
 			_curMsgSeq = _loginAuthKey.unique_id
 		end
 	end
-	return _curMsgSeq;
+	return _curMsgSeq
 end
 
 --@brief 网络消息回调
