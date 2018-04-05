@@ -68,7 +68,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 	/// <summary>
 	/// 交给Command，这里不想关心发给谁。
 	/// </summary>
-	void Update ()
+	void FixedUpdate()
 	{
 		if (mEvents.Count > 0) {
 			while (mEvents.Count > 0) {
