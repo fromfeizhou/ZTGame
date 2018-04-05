@@ -9,7 +9,7 @@ public class ZTSkillEditor : EditorWindow
 
     private static ZTSkillEditor GetSkillEditor()
     {
-        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1100, 630));
+        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1200, 630));
         wnd.Show();
 
         return wnd;
@@ -41,6 +41,7 @@ public class ZTSkillEditor : EditorWindow
     {
         luaEditor = new ZTSkillLuaEditor();
         frameList = luaEditor.LoadSkillLua();
+        SortFrameData();
     }
 
     public void OnGUI()
@@ -101,6 +102,7 @@ public class ZTSkillEditor : EditorWindow
         }
         if (GUILayout.Button("保存动作记录", GUILayout.Width(100), GUILayout.Height(30)))
         {
+            SortFrameData();
             luaEditor.SaveSkillTable();
         }
         GUILayout.Space(30);
@@ -114,7 +116,7 @@ public class ZTSkillEditor : EditorWindow
 
         GUILayout.BeginVertical("HelpBox");
 
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(1100), GUILayout.Height(580));
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(1200), GUILayout.Height(580));
 
         for (int i = 0; i < frameList.Count; i++)
         {
@@ -131,7 +133,7 @@ public class ZTSkillEditor : EditorWindow
     void DrawFrameData(ZtEdFrameData framedata)
     {
         #region 垂直窗口
-        GUILayout.BeginVertical("Frame" + framedata.frame, "window", GUILayout.Width(1100), GUILayout.MinHeight(50));
+        GUILayout.BeginVertical("Frame" + framedata.frame, "window", GUILayout.Width(1180), GUILayout.MinHeight(50));
 
         #region 水平标题
         GUILayout.BeginHorizontal();
@@ -144,16 +146,16 @@ public class ZTSkillEditor : EditorWindow
         framedata.frame = EditorGUILayout.IntField(framedata.frame, GUILayout.Width(50));
 
         GUILayout.FlexibleSpace();
-        framedata.editorSel = GUILayout.Toolbar(framedata.editorSel, typeDes);
-        //framedata.editorSel = EditorGUILayout.Popup(framedata.editorSel, typeDes,GUILayout.Width(100),GUILayout.Height(20));
+        framedata.editorSel = GUILayout.Toolbar(framedata.editorSel, ZTSkillEditorDefine.TypeDes);
+        //framedata.editorSel = EditorGUILayout.Popup(framedata.editorSel, ZTSkillEditorDefine.TypeDes,GUILayout.Width(100),GUILayout.Height(20));
 
         if (GUILayout.Button("添加action", GUILayout.Width(100),GUILayout.Height(20))) {
             ZtEdSkillAction actoin = new ZtEdSkillAction();
             actoin.actionType = framedata.editorSel;
             int count = 1;
-            if(typeList != null && typeList.ContainsKey(actoin.actionType))
+            if(ZTSkillEditorDefine.TypeList != null && ZTSkillEditorDefine.TypeList.ContainsKey(actoin.actionType))
             {
-                count = typeList[actoin.actionType].Length;
+                count = ZTSkillEditorDefine.TypeList[actoin.actionType].Length;
             }
             for(int i = 0; i < count; i++)
             {
@@ -172,9 +174,9 @@ public class ZTSkillEditor : EditorWindow
             if (isRemove) break;
         }
 
-       
-
         GUILayout.EndVertical();
+        GUILayout.Space(10);
+
         #endregion
     }
 
@@ -198,31 +200,9 @@ public class ZTSkillEditor : EditorWindow
     {
 
     }
-
-    private string[] typeDes = { "朝向","动作播放","声音播放","碰撞","特效","位移"};
-    private Dictionary<int,string[]> typeList;
+   
     bool DrawActoin(ZtEdSkillAction action,ZtEdFrameData framedata)
     {
-        //初始化
-        if(null == typeList)
-        {
-            string[] dirDes = { "方向" };
-            string[] playDes = { "动作名" };
-            string[] soundDes = { "声音" };
-            string[] colliderDes = { "半径", "运动id", "层次", "偏移x", "偏移y", "目标类型", "存在时间-帧", "碰撞总数", "特效名字" };
-            string[] spEffectDes = { "特效名字", "层次", "存在时间-帧", "偏移x", "偏移y" };
-            string[] moveDes = { "运动id" };
-
-            typeList = new Dictionary<int, string[]>() {
-                { 0 ,dirDes },
-                { 1 ,playDes },
-                { 2 ,soundDes },
-                { 3 ,colliderDes },
-                { 4 ,spEffectDes },
-                { 5 ,moveDes },
-            };
-        }
-
         GUILayout.BeginVertical("HelpBox");
 
         GUILayout.BeginHorizontal();
@@ -232,42 +212,62 @@ public class ZTSkillEditor : EditorWindow
             return true;
         }
 
-        GUILayout.Label(typeDes[action.actionType] + "：");
+        GUILayout.Label(ZTSkillEditorDefine.TypeDes[action.actionType] + "：");
         for (int i = 0; i < action.param.Count; i++)
         {
-            if (typeList.ContainsKey(action.actionType))
+            if (ZTSkillEditorDefine.TypeList.ContainsKey(action.actionType))
             {
-                string labelName = typeList[action.actionType][i];
+                string labelName = ZTSkillEditorDefine.TypeList[action.actionType][i];
                 GUILayout.Label(labelName);
-                if(labelName == "层次")
-                {
-                    action.param[i] = DrawLayerPop(action.param[i] as string);
+                switch (labelName) {
+                    case "方向":
+                        action.param[i] = DrawFacePop(action.param[i] as string);
+                        break;
+                    case "层次":
+                        action.param[i] = DrawLayerPop(action.param[i] as string);
+                        break;
+                    case "目标类型":
+                        action.param[i] = DrawTargetPop(action.param[i] as string);
+                        break;
+                    default:
+                        action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
+                        break;
                 }
-                else
-                {
-                    action.param[i] = (string)EditorGUILayout.TextField(action.param[i] as string);
-                }
+                
             }
         }
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-
         GUILayout.EndVertical();
 
         return false;
     }
 
-    private ArrayList LayerType = new ArrayList() { "1", "2", "3" };
-    private string[] LayerTypeNames = {"玩家", "场景", "操作点" };
+    //方向调整
+    string DrawFacePop(string value)
+    {
+        int key = ZTSkillEditorDefine.FaceType.IndexOf(value);
+        key = key >= 0 ? key : 0;
+        key = EditorGUILayout.Popup(key, ZTSkillEditorDefine.FaceTypeNames, GUILayout.Width(100));
+        return ZTSkillEditorDefine.FaceType[key] as string;
+    }
+    //层次选择
     string DrawLayerPop(string value)
     {
-        int key = LayerType.IndexOf(value);
+        int key = ZTSkillEditorDefine.LayerType.IndexOf(value);
         key = key >= 0 ? key : 0;
-       
-        key = EditorGUILayout.Popup(key, LayerTypeNames, GUILayout.Width(60));
-
-        return LayerType[key] as string;
+        key = EditorGUILayout.Popup(key, ZTSkillEditorDefine.LayerTypeNames, GUILayout.Width(60));
+        return ZTSkillEditorDefine.LayerType[key] as string;
     }
+    //目标类型选择
+    string DrawTargetPop(string value)
+    {
+        int key = ZTSkillEditorDefine.TargetType.IndexOf(value);
+        key = key >= 0 ? key : 0;
+        key = EditorGUILayout.Popup(key, ZTSkillEditorDefine.TargetTypeNames, GUILayout.Width(60));
+        return ZTSkillEditorDefine.TargetType[key] as string;
+    }
+
 
     void AddFrameList()
     {
