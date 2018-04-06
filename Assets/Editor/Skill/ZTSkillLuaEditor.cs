@@ -35,15 +35,6 @@ public class ZtEdSkillAction
 
 public class ZTSkillLuaEditor
 {
-    //public static bool IsNumeric(string value)
-    //{
-    //    return Regex.IsMatch(value, "^[+-]?/d*[.]?/d*$");
-    //}
-    //public static bool IsInt(string value)
-    //{
-    //    return Regex.IsMatch(value, "^[+-]?/d*$");
-    //}
-
     public static bool IsUnsign(string value)
     {
         return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
@@ -72,78 +63,62 @@ public class ZTSkillLuaEditor
         return null;
     }
 
-    public List<ZtEdFrameData> LoadSkillLua()
-    {
-        DoString("Battle.Skill.SkillDefine");
-        DoString("ALuaConfig.SkillActionConfigTmp");
-        return GetLuaData();
-
-    }
     public void DoString(string luaPath)
     {
-        string lua = string.Format("require('{0}')", luaPath);
+        string lua = string.Format("package.loaded['{0}'] = nil", luaPath);
+        luaenv.DoString(lua);
+        lua = string.Format("require('{0}')", luaPath);
         luaenv.DoString(lua);
     }
-   
 
-   
 
-    string LuaKey = string.Empty;
-    List<ZtEdFrameData> framList;
+    string CurLuaKey = string.Empty;
+    List<ZtEdFrameData> CurFrameList;
+    LuaTable SkillConfigTab;
 
-    public List<ZtEdFrameData> GetLuaData()
+    public List<ZtEdFrameData> LoadSkillLua(string skillId = "id_10001")
     {
-        framList = new List<ZtEdFrameData>();
+        //DoString("Battle.Skill.SkillDefine");
+        DoString("ALuaConfig.SkillActionConfig");
+        //DoString("Battle.skill.MoveAction.MoveActionConfig");
+        SkillConfigTab = luaenv.Global.Get<LuaTable>("SkillActionConfig");//映射到LuaTable，by ref
 
-        GetGlobalKeyVal("SkillActionType");
-        GetGlobalKeyVal("SkillLayerType");
-        GetGlobalKeyVal("SkillFaceType");
-        GetGlobalKeyVal("SkillTargetType");
-        GetGlobalKeyVal("SkillEffectType");
-        GetGlobalKeyVal("AttributeType");
-        GetGlobalKeyVal("BuffType");
+        CurLuaKey = skillId;
+        CurFrameList = GetSkillFrameList(skillId);
+        return CurFrameList;
+    }
 
-        Debug.Log("Tabel>>>>>>>>>>>>>>>>>>>>>>>");
-        GetGlobalKeyTab("SkillActionConfigTest");
-        return framList;
+    public List<ZtEdFrameData> GetSkillFrameList(string skillId)
+    {
+        List<ZtEdFrameData>  frameList = new List<ZtEdFrameData>();
+        GetGlobalKeyTab(skillId, frameList);
+        return frameList;
         //SaveSkillTable();
     }
-    
-    public void GetGlobalKeyTab(string tablename,string skillId = "id_template")
+
+    public void GetGlobalKeyTab(string skillId, List<ZtEdFrameData> frameList)
     {
-        //Debug.Log("Tabel: " + tablename);
-        LuaTable table = luaenv.Global.Get<LuaTable>(tablename);//映射到LuaTable，by ref
-        LuaTable skillTab = table.Get<LuaTable>(skillId);
+        LuaTable skillTab = SkillConfigTab.Get<LuaTable>(skillId);
         if(null != skillTab)
         {
-            GetSkillTable(skillTab);
-            LuaKey = skillId;
+            GetSkillTable(skillTab,frameList);
         }
-        //table.ForEach<string, LuaTable>((string key, LuaTable value) =>
-        //{
-        //    //Debug.Log(key + " = ");
-        //    GetSkillTable(value);
-        //    LuaKey = key;
-        //});
-
     }
 
-    public void GetSkillTable(LuaTable table)
+    public void GetSkillTable(LuaTable skillTab, List<ZtEdFrameData> frameList)
     {
-        table.ForEach<int, LuaTable>((int key, LuaTable value) =>
+        skillTab.ForEach<int, LuaTable>((int key, LuaTable value) =>
         {
             ZtEdFrameData framedata = new ZtEdFrameData();
             framedata.frame = key;
-            framList.Add(framedata);
-
-            //Debug.Log("frame:" + key + " =>>>>>>>>>");
+            frameList.Add(framedata);
             GetSkillParam(value, framedata);
         });
     }
 
-    public void GetSkillParam(LuaTable table, ZtEdFrameData framedata)
+    public void GetSkillParam(LuaTable actiontable, ZtEdFrameData framedata)
     {
-        table.ForEach<int, LuaTable>((int key, LuaTable value) =>
+        actiontable.ForEach<int, LuaTable>((int key, LuaTable value) =>
         {
 
             LuaTable paramTab = value.Get<LuaTable>("param");
@@ -162,40 +137,67 @@ public class ZTSkillLuaEditor
     public void GetGlobalKeyVal(string tablename)
     {
         LuaTable table = luaenv.Global.Get<LuaTable>(tablename);//映射到LuaTable，by ref
-        //table.ForEach<string, int>((string key, int value) =>
-        //{
-        //    Debug.Log(key + " = " + value);
-        //});
+       
     }
-    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/SkillActionConfigTmp.txt";
+    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/SkillActionConfig.txt";
     public void SaveSkillTable()
     {
         if (File.Exists(SkillTabSavePath))
             File.Delete(SkillTabSavePath);
 
         string scriptStr = string.Empty;
-        scriptStr = "SkillActionConfigTest = {\n";
-        scriptStr += "\t" + LuaKey + " = {\n";
-        for(int index = 0; index < framList.Count; index++)
+        scriptStr = "SkillActionConfig = {\n";
+
+        //排序
+        List<string> list = new List<string>();
+        SkillConfigTab.ForEach<string, LuaTable>((string key, LuaTable value) =>
         {
-            ZtEdFrameData framedata = framList[index];
-            scriptStr += string.Format("\t\t[ {0} ] = ", framedata.frame) + "{\n";
-            for(int i = 0; i < framedata.actoinList.Count; i++)
+            list.Add(key);
+        });
+        list.Sort();
+        for (int i = 0; i < list.Count; i++)
+        {
+            string key = list[i];
+            if (key == CurLuaKey)
             {
-                scriptStr += GetActcionStr(framedata.actoinList[i]);
+                scriptStr += GetFrameStr(key, CurFrameList);
             }
-            scriptStr += "\t\t},\n";
+            else
+            {
+                List<ZtEdFrameData> frameList = GetSkillFrameList(key);
+                frameList.Sort((x, y) => { return x.frame < y.frame ? -1 : 1; });
+                scriptStr += GetFrameStr(key, frameList);
+            }
         }
-            //for (int i = 0; i < moduleList.Count; i++)
-            //{
-            //    scriptStr += moduleList[i].GetDefine();
-            //}
-            scriptStr += "\t},\n}";
+
+        scriptStr += "}";
 
         File.WriteAllText(SkillTabSavePath, scriptStr.Trim());
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
+    }
+
+    private string GetFrameStr(string key,List<ZtEdFrameData> frameList)
+    {
+        string scriptStr = string.Empty;
+        scriptStr += "\t" + key + " = {\n";
+        for (int index = 0; index < frameList.Count; index++)
+        {
+            ZtEdFrameData framedata = frameList[index];
+            scriptStr += string.Format("\t\t[ {0} ] = ", framedata.frame) + "{\n";
+            for (int i = 0; i < framedata.actoinList.Count; i++)
+            {
+                scriptStr += GetActcionStr(framedata.actoinList[i]);
+            }
+            scriptStr += "\t\t},\n";
+        }
+        //for (int i = 0; i < moduleList.Count; i++)
+        //{
+        //    scriptStr += moduleList[i].GetDefine();
+        //}
+        scriptStr += "\t},\n\n";
+        return scriptStr;
     }
 
     private string GetActcionStr(ZtEdSkillAction action)

@@ -18,7 +18,7 @@ SkillActionConfig = {
 				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 18, 1, "HitBlood2" }},
 		},
 	},
-	
+
 	id_10003 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack3" }},
@@ -132,4 +132,5 @@ SkillActionConfig = {
 				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Rock1" }},
 		},
 	},
+
 }

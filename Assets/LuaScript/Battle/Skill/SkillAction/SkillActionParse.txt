@@ -216,7 +216,10 @@ end
 
 --@brief  测试 
 function SkillActionParse:GetTestConfig( )
-	package.loaded["ALuaConfig.SkillActionConfigTmp"] = nil
-	require 'ALuaConfig.SkillActionConfigTmp'
-	return SkillActionConfigTest.id_template
+	--测试技能id
+	local skillId = "id_10001"
+
+	package.loaded["ALuaConfig.SkillActionConfig"] = nil
+	require 'ALuaConfig.SkillActionConfig'
+	return SkillActionConfig[skillId]
 end
