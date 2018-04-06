@@ -223,6 +223,7 @@ public class ZTSkillEditor : EditorWindow
         GUILayout.BeginVertical("HelpBox");
 
         GUILayout.BeginHorizontal();
+        GUILayout.Space(5);
         if (GUILayout.Button("—", GUILayout.Width(25), GUILayout.Height(15)))
         {
             framedata.actoinList.Remove(action);
@@ -232,6 +233,11 @@ public class ZTSkillEditor : EditorWindow
         GUILayout.Label(ZTSkillEditorDefine.TypeDes[action.actionType] + "：");
         for (int i = 0; i < action.param.Count; i++)
         {
+            if(i == 6)
+            {
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+            }
             if (ZTSkillEditorDefine.TypeList.ContainsKey(action.actionType))
             {
                 string labelName = ZTSkillEditorDefine.TypeList[action.actionType][i];
