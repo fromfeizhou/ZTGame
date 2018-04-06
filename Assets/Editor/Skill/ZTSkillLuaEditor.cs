@@ -12,6 +12,7 @@ public class ZtEdFrameData
     public int editorSel;
     public int frame = -1;
     public List<ZtEdSkillAction> actoinList;
+
     public ZtEdFrameData()
     {
         editorSel = 0;
@@ -19,7 +20,6 @@ public class ZtEdFrameData
         actoinList = new List<ZtEdSkillAction>();
     }
 }
-
 
 public class ZtEdSkillAction
 {
@@ -32,7 +32,6 @@ public class ZtEdSkillAction
     }
 }
 
-
 public class ZTSkillLuaEditor
 {
     public static bool IsUnsign(string value)
@@ -42,6 +41,8 @@ public class ZTSkillLuaEditor
 
 
     LuaEnv luaenv = null;
+    public List<string> SkillIdList;
+
     // Use this for initialization
     public ZTSkillLuaEditor()
     {
@@ -72,11 +73,10 @@ public class ZTSkillLuaEditor
     }
 
 
-    string CurLuaKey = string.Empty;
+    public string CurLuaKey = string.Empty;
     List<ZtEdFrameData> CurFrameList;
     LuaTable SkillConfigTab;
-
-    public List<ZtEdFrameData> LoadSkillLua(string skillId = "id_10001")
+    public List<ZtEdFrameData> LoadSkillLua(string skillId)
     {
         //DoString("Battle.Skill.SkillDefine");
         DoString("ALuaConfig.SkillActionConfig");
@@ -85,6 +85,15 @@ public class ZTSkillLuaEditor
 
         CurLuaKey = skillId;
         CurFrameList = GetSkillFrameList(skillId);
+        if(SkillIdList == null)
+        {
+            SkillIdList = new List<string>();
+            SkillConfigTab.ForEach<string, LuaTable>((string key, LuaTable value) =>
+            {
+                SkillIdList.Add(key);
+            });
+            SkillIdList.Sort();
+        }
         return CurFrameList;
     }
 
@@ -149,15 +158,10 @@ public class ZTSkillLuaEditor
         scriptStr = "SkillActionConfig = {\n";
 
         //排序
-        List<string> list = new List<string>();
-        SkillConfigTab.ForEach<string, LuaTable>((string key, LuaTable value) =>
+        SkillIdList.Sort();
+        for (int i = 0; i < SkillIdList.Count; i++)
         {
-            list.Add(key);
-        });
-        list.Sort();
-        for (int i = 0; i < list.Count; i++)
-        {
-            string key = list[i];
+            string key = SkillIdList[i];
             if (key == CurLuaKey)
             {
                 scriptStr += GetFrameStr(key, CurFrameList);

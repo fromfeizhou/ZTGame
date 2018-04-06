@@ -9,7 +9,7 @@ public class ZTSkillEditor : EditorWindow
 
     private static ZTSkillEditor GetSkillEditor()
     {
-        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1200, 630));
+        var wnd = GetWindowWithRect<ZTSkillEditor>(new Rect(600, 800, 1200, 700));
         wnd.Show();
 
         return wnd;
@@ -40,7 +40,12 @@ public class ZTSkillEditor : EditorWindow
     public void Setup()
     {
         luaEditor = new ZTSkillLuaEditor();
-        frameList = luaEditor.LoadSkillLua();
+        LoadSkillConfig();
+    }
+
+    public void LoadSkillConfig(string skillId = "id_10001")
+    {
+        frameList = luaEditor.LoadSkillLua(skillId);
         SortFrameData();
     }
 
@@ -52,7 +57,7 @@ public class ZTSkillEditor : EditorWindow
     }
 
     private bool styleIsSetup = false;
-    private GUIStyle styleHeader, styleLabelLeft, styleBoldFoldout, styleLayerSelected, styleLayerNormal;
+    private GUIStyle styleHeader, styleLabelLeft, styleBoldFoldout, styleLayerSelected, styleLayerNormal, stylePop;
     void SetupStyles()
     {
         if (styleIsSetup)
@@ -61,13 +66,15 @@ public class ZTSkillEditor : EditorWindow
         styleHeader = new GUIStyle(GUI.skin.label)
         {
             alignment = TextAnchor.MiddleCenter,
-            fontStyle = FontStyle.Bold
+            fontStyle = FontStyle.Bold,
+           
         };
 
         styleLabelLeft = new GUIStyle(GUI.skin.label)
         {
             alignment = TextAnchor.MiddleLeft,
-            padding = new RectOffset(0, 0, 0, 0)
+            padding = new RectOffset(0, 0, 0, 0),
+            fontSize = 22,
         };
 
         styleBoldFoldout = new GUIStyle(EditorStyles.foldout)
@@ -79,7 +86,13 @@ public class ZTSkillEditor : EditorWindow
         {
             margin = new RectOffset(0, 0, 0, 0),
             padding = new RectOffset(0, 0, 0, 0),
-            contentOffset = new Vector2(0, 0)
+            contentOffset = new Vector2(0.5f, 0.5f)
+        };
+
+        stylePop = new GUIStyle(GUI.skin.box)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fixedHeight = 30,
         };
 
         styleLayerNormal = new GUIStyle();
@@ -87,6 +100,7 @@ public class ZTSkillEditor : EditorWindow
         styleIsSetup = true;
     }
 
+    int skillselIndex;
     void DrawButton()
     {
         GUILayout.BeginHorizontal();
@@ -96,6 +110,13 @@ public class ZTSkillEditor : EditorWindow
             AddFrameList();
         }
         GUILayout.FlexibleSpace();
+
+        skillselIndex = EditorGUILayout.Popup(skillselIndex, luaEditor.SkillIdList.ToArray(), stylePop,GUILayout.Width(100),GUILayout.Height(30));
+        if (GUILayout.Button("加载技能配置", GUILayout.Width(100), GUILayout.Height(30)))
+        {
+            LoadSkillConfig(luaEditor.SkillIdList[skillselIndex]);
+        }
+
         if (GUILayout.Button("排序", GUILayout.Width(100), GUILayout.Height(30)))
         {
             SortFrameData();
@@ -115,8 +136,8 @@ public class ZTSkillEditor : EditorWindow
         if (null == frameList) return;
 
         GUILayout.BeginVertical("HelpBox");
-
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(1200), GUILayout.Height(580));
+        GUILayout.Label("当前编辑id: " + luaEditor.CurLuaKey, styleLabelLeft);
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(1200), GUILayout.Height(620));
 
         for (int i = 0; i < frameList.Count; i++)
         {
@@ -195,11 +216,7 @@ public class ZTSkillEditor : EditorWindow
             frameList.Sort((x, y) => { return x.frame < y.frame ? -1 : 1; });
         }
     }
-
-    void DrawFrameData()
-    {
-
-    }
+    
    
     bool DrawActoin(ZtEdSkillAction action,ZtEdFrameData framedata)
     {
