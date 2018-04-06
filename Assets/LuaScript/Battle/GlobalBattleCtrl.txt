@@ -488,7 +488,7 @@ end
 
 
 
---@brief 获取目标对象
+--@brief 获取目标对象(必须有序对象列表)
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	--CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
 	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]

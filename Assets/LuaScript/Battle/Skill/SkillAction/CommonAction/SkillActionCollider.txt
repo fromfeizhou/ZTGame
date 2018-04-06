@@ -56,6 +56,7 @@ function SkillActionCollider:Init(actionParse,actionData)
 	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
 
 	self.m_nMoveActionId = self.m_tActionData.m_nMoveActionId
+
 	self:_GetTargetList()
 end
 
@@ -147,7 +148,11 @@ end
 
 --@brief checkCollider
 function SkillActionCollider:_CheckCollider()
-
+	--碰撞总数记录
+	if self.m_nColliderMax ~= -1 and #self.m_tInColliders >= self.m_nColliderMax then
+		return
+	end
+	
 	local list = {}
 	for i,chara in pairs(self.m_tColliderTargets) do
 		local battleId = chara:GetBattleId()
