@@ -43,7 +43,7 @@ function MoveActoinDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
 	moveAction.time = 0	--运动时间
 	moveAction.isFinish = false	--运动结束标记
 
-	local moveCfg = MoveActionConfig[moveId] or MoveActionConfig[1]
+	local moveCfg = SkillActionMoveConfig[moveId] or SkillActionMoveConfig[1]
 	local actionType = moveCfg.actionType --碰撞类型
 	moveAction.actionType = actionType --碰撞类型
 

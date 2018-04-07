@@ -46,6 +46,7 @@ local LuaFileLoad = {
 --加载配置文件
 	G_tConfigList = {
 		"ALuaConfig.SkillActionConfig",
+		"ALuaConfig.SkillActionMoveConfig",
 		"ALuaConfig.Tab_Equipment",
 		"ALuaConfig.Tab_Skill",
 	},
@@ -88,6 +89,7 @@ local LuaFileLoad = {
 
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
+		"Battle.Skill.SkillAction.MoveActionDefine",
 		"Battle.Skill.Collider.ZTCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
@@ -95,9 +97,6 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
-
-		"Battle.Skill.SkillAction.MoveAction.MoveActionConfig",
-		"Battle.Skill.SkillAction.MoveAction.MoveActionDefine",
 
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",

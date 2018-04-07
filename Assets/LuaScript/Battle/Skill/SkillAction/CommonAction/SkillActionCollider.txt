@@ -68,7 +68,7 @@ function SkillActionCollider:Start()
 	self:_CreateEffect()
 
 	--碰撞位移
-	if self.m_nMoveActionId ~= -1 and MoveActionConfig[self.m_nMoveActionId] then
+	if self.m_nMoveActionId ~= -1 and SkillActionMoveConfig[self.m_nMoveActionId] then
 		local owner = self.m_tOwner
 		local dir = owner:GetFaceDir()
 		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId

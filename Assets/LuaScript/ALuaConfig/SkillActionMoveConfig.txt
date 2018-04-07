@@ -15,7 +15,7 @@ MoveActoinType = {
 	Boomerang = 10000,		--回力标(写死)
 }
 
-MoveActionConfig = {
+SkillActionMoveConfig = {
 	[1] = {actionType = 2,param = {1,10}},
 	[2] = {actionType = 1,param = {-1,10}},
 	[3] = {actionType = 3,param = {1,10}},
