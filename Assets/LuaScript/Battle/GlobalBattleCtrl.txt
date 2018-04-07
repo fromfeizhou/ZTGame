@@ -212,10 +212,6 @@ function GlobalBattleCtrl:Update()
 	if GlobalBattleCtrl.m_ztCharaManager then
 		GlobalBattleCtrl.m_ztCharaManager:Update()
 	end
-
-	if GlobalBattleCtrl.m_battleCommandMgr then
-		GlobalBattleCtrl.m_battleCommandMgr:Update()
-	end
 	
 	-- if GlobalBattleCtrl.m_mapCircleManager then
 	-- 	GlobalBattleCtrl.m_mapCircleManager:Update()
@@ -229,7 +225,12 @@ function GlobalBattleCtrl:Update()
 	BattleCameraMgr:Update()
 end
 
-
+--@brief 逻辑刷新
+function GlobalBattleCtrl:FixedUpdate()
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		GlobalBattleCtrl.m_battleCommandMgr:Update()
+	end
+end
 
 --@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)
 function GlobalBattleCtrl:CommandUpdate()

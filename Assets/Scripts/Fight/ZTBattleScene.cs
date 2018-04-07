@@ -14,6 +14,12 @@ public class ZTBattleScene : MonoBehaviour {
         _update = update;
     }
 
+    private Action _fixedUpdate;
+    public void SetFixedUpdate(Action update)
+    {
+        _fixedUpdate = update;
+    }
+
     public void SetMapProcess(Action<string, float, float> mapUpdateProcess)
     {
         _mapUpdateProcess = mapUpdateProcess;
@@ -34,6 +40,14 @@ public class ZTBattleScene : MonoBehaviour {
             _update();
         }
 	}
+
+    void FixedUpdate()
+    {
+        if(null != _fixedUpdate)
+        {
+            _fixedUpdate();
+        }        
+    }
 
     void OnDestroy()
     {
