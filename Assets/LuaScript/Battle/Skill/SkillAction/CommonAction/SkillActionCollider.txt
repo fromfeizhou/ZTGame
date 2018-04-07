@@ -72,7 +72,7 @@ function SkillActionCollider:Start()
 		local owner = self.m_tOwner
 		local dir = owner:GetFaceDir()
 		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
-		self.m_tMoveAction = MoveActoinDefine:GetMoveAction(self.m_ztCollider,self.m_nMoveActionId,dir,targetPos,targetId)
+		self.m_tMoveAction = SkillMoveDefine:GetMoveAction(self.m_ztCollider,self.m_nMoveActionId,dir,targetPos,targetId)
 	end
 end
 
@@ -92,7 +92,7 @@ function SkillActionCollider:Update()
 			return
 		end
 		if not self.m_tMoveAction.isFinish then
-			MoveActoinDefine:UpdateMoveData(self.m_tMoveAction)
+			SkillMoveDefine:UpdateMoveData(self.m_tMoveAction)
 		end
 	end
 end

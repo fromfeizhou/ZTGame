@@ -44,7 +44,7 @@ function SkillActionMove:Start()
 		local owner = self.m_tOwner
 		local dir = owner:GetFaceDir()
 		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
-		self.m_tMoveAction = MoveActoinDefine:GetMoveAction(owner,self.m_nMoveActionId,dir,targetPos,targetId)
+		self.m_tMoveAction = SkillMoveDefine:GetMoveAction(owner,self.m_nMoveActionId,dir,targetPos,targetId)
 	end
 end
 
@@ -56,7 +56,7 @@ function SkillActionMove:Update()
 	if not self.m_tMoveAction or self.m_tMoveAction.isFinish then
 		self:Done()
 	else
-		MoveActoinDefine:UpdateMoveData(self.m_tMoveAction)
+		SkillMoveDefine:UpdateMoveData(self.m_tMoveAction)
 	end
 end
 

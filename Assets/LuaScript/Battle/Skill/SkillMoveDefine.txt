@@ -1,4 +1,4 @@
---MoveActoinDefine.txt
+--SkillMoveDefine.txt
 --@breif 位移预定义
 --@data 2018/04/01
 
@@ -29,12 +29,12 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 位移预定义
-MoveActoinDefine = {
+SkillMoveDefine = {
 
 }
 
 --@brief 创建位移数据
-function MoveActoinDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
+function SkillMoveDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
 	local moveAction = ZTSkillMoveAction:Create()
 	moveAction.owner = owner	--控制者
 	moveAction.dir = dir		--方向单位向量(取反 * -1)
@@ -51,12 +51,12 @@ function MoveActoinDefine:GetMoveAction(owner,moveId,dir,targetPos,targetId)
 		moveAction.speed = moveCfg.param[1]
 		moveAction.maxTime = moveCfg.param[2]
 	end
-	--CSLog("MoveActoinDefine:GetMoveAction",dir)
+	--CSLog("SkillMoveDefine:GetMoveAction",dir)
 	return moveAction
 end
 
 --@brief 位移移动
-function MoveActoinDefine:UpdateMoveData(moveAction)
+function SkillMoveDefine:UpdateMoveData(moveAction)
 	if moveAction.isFinish then
 		return 
 	end
@@ -72,11 +72,11 @@ function MoveActoinDefine:UpdateMoveData(moveAction)
 
 	-- 直线运动功
 	if moveAction.actionType == MoveActoinType.Line then
-		MoveActoinDefine:_Line(moveAction)
+		SkillMoveDefine:_Line(moveAction)
 	elseif moveAction.actionType == MoveActoinType.LineToPos then
-		MoveActoinDefine:_LineToPos(moveAction)
+		SkillMoveDefine:_LineToPos(moveAction)
 	elseif moveAction.actionType == MoveActoinType.LineToTarget then
-		MoveActoinDefine:_LineToTarget(moveAction)
+		SkillMoveDefine:_LineToTarget(moveAction)
 
 	-- 闪现
 	elseif moveAction.actionType == MoveActoinType.FlashToPos then
@@ -101,15 +101,15 @@ end
 --*******************************************************Public End*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 获取方向的 移动pos
-function MoveActoinDefine:_GetDirPos(speed,dir)
+function SkillMoveDefine:_GetDirPos(speed,dir)
 	return speed * dir * (1 / dir.magnitude)
 end
 
 --@brief 直线移动
-function MoveActoinDefine:_Line(moveAction)
+function SkillMoveDefine:_Line(moveAction)
 	--第一次进入 计算速度
 	if not moveAction.speedPos then
-		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,moveAction.dir)
+		moveAction.speedPos = SkillMoveDefine:_GetDirPos(moveAction.speed,moveAction.dir)
 	end
 	local owner = moveAction.owner
 	local pos = owner:GetPos() + moveAction.speedPos
@@ -118,7 +118,7 @@ end
 
 
 --@brief 直线移动2
-function MoveActoinDefine:_LineToPos(moveAction)
+function SkillMoveDefine:_LineToPos(moveAction)
 	local owner = moveAction.owner
 	local targetPos = moveAction.targetPos
 	--容错处理
@@ -129,7 +129,7 @@ function MoveActoinDefine:_LineToPos(moveAction)
 	--第一次进入 计算速度
 	if not moveAction.speedPos then
 		local dir = (targetPos - owner:GetPos()).normalized
-		moveAction.speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,dir)
+		moveAction.speedPos = SkillMoveDefine:_GetDirPos(moveAction.speed,dir)
 		moveAction.speedPosDis = moveAction.speedPos.magnitude
 	end
 
@@ -145,7 +145,7 @@ function MoveActoinDefine:_LineToPos(moveAction)
 end
 
 --@brief 直线移动3
-function MoveActoinDefine:_LineToTarget(moveAction)
+function SkillMoveDefine:_LineToTarget(moveAction)
 	local owner = moveAction.owner
 	local target = GlobalBattleCtrl:GetCharaById(moveAction.targetId)
 	--容错处理
@@ -156,7 +156,7 @@ function MoveActoinDefine:_LineToTarget(moveAction)
 
 	--计算新的方向
 	local dir = (target:GetPos() - owner:GetPos()).normalized
-	local speedPos = MoveActoinDefine:_GetDirPos(moveAction.speed,dir)
+	local speedPos = SkillMoveDefine:_GetDirPos(moveAction.speed,dir)
 	local speedPosDis = speedPos.magnitude
 	
 	local targetPos = target:GetPos()
