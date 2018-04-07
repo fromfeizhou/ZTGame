@@ -222,7 +222,6 @@ function GlobalBattleCtrl:Update()
 		GlobalBattleCtrl.m_HeadItemManager:Update()
 	end
 	
-	BattleCameraMgr:Update()
 end
 
 --@brief 逻辑刷新
@@ -230,6 +229,7 @@ function GlobalBattleCtrl:FixedUpdate()
 	if GlobalBattleCtrl.m_battleCommandMgr then
 		GlobalBattleCtrl.m_battleCommandMgr:Update()
 	end
+	BattleCameraMgr:Update()
 end
 
 --@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)

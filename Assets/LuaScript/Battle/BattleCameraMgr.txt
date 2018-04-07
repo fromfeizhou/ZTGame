@@ -112,7 +112,7 @@ end
 
 --@brief 刷新镜头位置
 function BattleCameraMgr:_UpdateCameraPos(pos)
-	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
+	--CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
 	BattleCameraMgr.m_carmeraTrans.position = pos
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CAMERA,pos)
 end
