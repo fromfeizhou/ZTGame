@@ -18,18 +18,21 @@ public class MapElementView
     //视野内预设列表
     private Dictionary<string, MapElement> visionElementDic = new Dictionary<string, MapElement>();
     private List<string> createElementList = new List<string>();    //创建列表
-    private List<string> removeElementList = new List<string>();      //移除列表
-    private Dictionary<string, GameObject> loadedObj = new Dictionary<string, GameObject>();
-
-
+    private List<string> disableElementList = new List<string>();      //移除列表
+    private Dictionary<string, GameObject> activeObj = new Dictionary<string, GameObject>();//激活的elementObj
+    private List<GameObject> disabelObj = new List<GameObject>();//Element隐藏列表
     private GameObject mapRoot;
     private GameObject elementRoot;
 
     private List<MapTileView> _mapViewList = null;
-
-
-    private Dictionary<string, GameObject> _mapTerrainPrefabDic = null;    //地形预设
     private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
+
+
+    private List<string> createMapTileViewList = new List<string>();
+    private Dictionary<string, MapTileView> activeMapTileViewDic = new Dictionary<string, MapTileView>();
+    private Dictionary<string, MapTileView> disableMapTileViewDic = new Dictionary<string, MapTileView>();
+
+
 
     private Transform lastRayObj;
     private Transform rayObj;
@@ -48,7 +51,6 @@ public class MapElementView
         InitData();
         mapRoot = new GameObject("SceneMap");
         elementRoot = new GameObject("MapElement");
-        _mapTerrainPrefabDic = new Dictionary<string, GameObject>();
 
         int intevar = MapDefine.MAPITEMTOTALSIZE / MapDefine.MAPITEMSIZE;
         int MapCount = intevar * intevar;
@@ -111,9 +113,30 @@ public class MapElementView
         }
     }
 
+    private int smallInterval = MapDefine.MAPITEMSIZE / 4;
+    //public void UpdateTerrainView(Vector3 pos, int row, int col)
+    //{
+    //    List<Vector2> posList = new List<Vector2>();
+    //    posList.Add(new Vector2(pos.x, pos.z));
+    //    posList.Add(new Vector2(pos.x, pos.z + smallInterval));
+    //    posList.Add(new Vector2(pos.x, pos.z - smallInterval));
+    //    posList.Add(new Vector2(pos.x + smallInterval, pos.z));
+    //    posList.Add(new Vector2(pos.x - smallInterval, pos.z));
+
+    //    List<string> tempKeyList = new List<string>();
+    //    for (int index = 0; index < posList.Count; index++)
+    //    {
+    //        int tempRow = Mathf.FloorToInt(posList[index].y / smallInterval);
+    //        int tempcol = Mathf.FloorToInt(posList[index].x / smallInterval);
+    //        string tempKey = tempRow + "_" + tempcol;
+    //        if (!createMapTileViewList.Contains(tempKey))
+    //            createMapTileViewList.Add(tempKey);
+    //    }
+    //}
+
+
     public void UpdateTerrainView(int row, int col)
     {
-
         int beginX = row - 1;
         int beginY = col - 1;
         int endX = row + 1;
@@ -158,9 +181,9 @@ public class MapElementView
     //射线检测（建筑屋顶逻辑）
     public void UpdateRoleRay(Vector3 pos)
     {
-       
+
         Vector3 targetPos = pos + 100 * Vector3.up;
-        Vector3 temp = pos-targetPos;
+        Vector3 temp = pos - targetPos;
         RaycastHit[] hit;
         hit = Physics.RaycastAll(targetPos, temp.normalized, 10000f, LayerMask.GetMask("Roof"));
         if (hit.Length > 0) //建筑屋顶 
@@ -181,9 +204,9 @@ public class MapElementView
 
     }
 
-    private void SetRayObjEnabel(Transform obj,bool isShow)
+    private void SetRayObjEnabel(Transform obj, bool isShow)
     {
-        if(obj==null)return;
+        if (obj == null) return;
         for (int index = 0; index < obj.childCount; index++)
         {
             obj.GetChild(index).gameObject.SetActive(isShow);
@@ -230,48 +253,20 @@ public class MapElementView
                 }
             }
         }
-        var needClearElementDic = visionElementDic.Keys.Except(elementDic.Keys);
-        var needLoadElementDic = elementDic.Keys.Except(visionElementDic.Keys);
-
+        var needClearElementDic = activeObj.Keys.Except(elementDic.Keys);
+        var needLoadElementDic = elementDic.Keys.Except(activeObj.Keys);
         createElementList.Clear();
-        removeElementList.Clear();
-
+        disableElementList.Clear();
         foreach (var key in needLoadElementDic)
-        {
-            //MapElement elementData = elementDic[key];
-            //MapElementInfo elementInfo = elementData.elementInfo;
-            //string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
-            //AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
-            //{
-            //    if (obj != null)
-            //    {
-            //        GameObject assetTree = obj as GameObject;
-            //        Transform element = GameObject.Instantiate(assetTree).transform;
-            //        element.SetParent(elementRoot.transform);
-            //        element.position = elementInfo.Pos;
-            //        element.eulerAngles = elementInfo.Angle;
-            //        element.localScale = elementInfo.Scale;
-
-            //        loadedObj[elementData.elementKey] = element.gameObject;
-            //    }
-            //});
             createElementList.Add(key);
 
-
-        }
         foreach (var key in needClearElementDic)
-        {
-            //if (loadedObj.ContainsKey(key))
-            //{
-            //    GameObject tempObj = loadedObj[key];
-            //    GameObject.Destroy(tempObj);
-            //    loadedObj.Remove(key);
-            //}
-            removeElementList.Add(key);
-        }
-        visionElementDic = elementDic;
+            disableElementList.Add(key);
 
-        if(createElementList.Count > 0 || removeElementList.Count > 0)
+        visionElementDic = elementDic;
+        if (disableElementList.Count > 0)
+            ClearElementInList();
+        if (createElementList.Count > 0)
         {
             if (null == _OnUpdateElementHandler)
             {
@@ -279,11 +274,17 @@ public class MapElementView
                 ZTSceneManager.GetInstance().StartCoroutine(_OnUpdateElementHandler);
             }
         }
+        if (disabelObj.Count > 100)
+        {
+            List<GameObject> tempDisableList = disabelObj.GetRange(0, disabelObj.Count / 2);
+            disabelObj.RemoveRange(0, disabelObj.Count / 2);
+            ZTSceneManager.GetInstance().StartCoroutine(DestroyElementList(tempDisableList));
+        }
     }
 
     IEnumerator OnUpdateElement()
     {
-        while (createElementList.Count > 0 || removeElementList.Count > 0)
+        while (createElementList.Count > 0 || disableElementList.Count > 0)
         {
             Update();
             yield return null;
@@ -293,25 +294,31 @@ public class MapElementView
 
     public void Update()
     {
-        ClearElementInList();
+        //ClearElementInList();//active转disable
         CreateElementInList();
     }
 
     public void ClearElementInList()
     {
-        if(removeElementList == null || removeElementList.Count == 0)
+        if (disableElementList == null || disableElementList.Count == 0)
         {
             return;
         }
-        string key = removeElementList[0];
-        removeElementList.RemoveAt(0);
-
-        if(loadedObj.ContainsKey(key))
+        for (int index = 0; index < disableElementList.Count; index++)
         {
-            GameObject tempObj = loadedObj[key];
-            GameObject.Destroy(tempObj);
-            loadedObj.Remove(key);
+            string key = disableElementList[index];
+            if (activeObj.ContainsKey(key))
+            {
+                GameObject tempObj = activeObj[key];
+                if (tempObj != null)
+                {
+                    tempObj.SetActive(false);
+                    disabelObj.Add(tempObj);
+                }
+                activeObj.Remove(key);
+            }
         }
+        disableElementList.Clear();
     }
 
     public void CreateElementInList()
@@ -322,23 +329,67 @@ public class MapElementView
         }
         string key = createElementList[0];
         createElementList.RemoveAt(0);
-
         MapElement elementData = visionElementDic[key];
         MapElementInfo elementInfo = elementData.elementInfo;
-        string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
-        AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
-        {
-            if (obj != null )//&& visionElementDic.ContainsKey(key))
-            {
-                GameObject assetTree = obj as GameObject;
-                Transform element = GameObject.Instantiate(assetTree).transform;
-                element.SetParent(elementRoot.transform);
-                element.position = elementInfo.Pos;
-                element.eulerAngles = elementInfo.Angle;
-                element.localScale = elementInfo.Scale;
+        activeObj[elementData.elementKey] = null;
 
-                loadedObj[elementData.elementKey] = element.gameObject;
-            }
-        });
+        GameObject tempObj = GetObjByDisable(elementData.elementType);
+        if (tempObj != null)
+        {
+            tempObj.transform.position = elementInfo.Pos;
+            tempObj.transform.eulerAngles = elementInfo.Angle;
+            tempObj.transform.localScale = elementInfo.Scale;
+            tempObj.SetActive(true);
+            activeObj[elementData.elementKey] = tempObj;
+        }
+        else
+        {
+            string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
+            AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
+            {
+                if (obj != null)//&& visionElementDic.ContainsKey(key))
+                {
+                    if (activeObj.ContainsKey(elementData.elementKey))
+                    {
+                        GameObject assetTree = obj as GameObject;
+                        Transform element = GameObject.Instantiate(assetTree).transform;
+                        element.SetParent(elementRoot.transform);
+                        element.position = elementInfo.Pos;
+                        element.eulerAngles = elementInfo.Angle;
+                        element.localScale = elementInfo.Scale;
+                        activeObj[elementData.elementKey] = element.gameObject;
+                    }
+                }
+            });
+        }
     }
+    //从缓存获取
+    private GameObject GetObjByDisable(string elementType)
+    {
+        GameObject tempObj = null;
+        for (int index = 0; index < disabelObj.Count; index++)
+        {
+            if (disabelObj[index].name.Contains(elementType))
+            {
+                tempObj = disabelObj[index];
+                disabelObj.RemoveAt(index);
+                return tempObj;
+            }
+        }
+        return tempObj;
+    }
+
+    IEnumerator DestroyElementList(List<GameObject> destroyList)
+    {
+        if (destroyList == null)
+            yield break;
+        for (int index = 0; index < destroyList.Count; index++)
+        {
+            GameObject destroyObj = destroyList[index];
+            GameObject.Destroy(destroyObj);
+            yield return null;
+        }
+        destroyList.Clear();
+    }
+
 }
