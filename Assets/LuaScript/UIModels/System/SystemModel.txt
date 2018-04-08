@@ -9,12 +9,17 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
 SystemModel = {
-	m_tPanelList = nil,
 }
 
+setmetatable( SystemModel, { __index = BaseModel})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
 function SystemModel:Create()
@@ -24,70 +29,24 @@ function SystemModel:Create()
 	return obj
 end
 
---@brief 初始化
-function SystemModel:Init()
-	self.m_tPanelList = {}
+--@brief 子类重写 - 模块初始化
+function SystemModel:onInitModel()
+	self.m_panelDefine[SYSTEM_TYPE.NOTICE] = SystemNoticePanel
+	self.m_panelDefine[SYSTEM_TYPE.LOCK] = SystemLockPanel
 end
 
---@brief 更新
-function SystemModel:Update()
-	GCSLog("SystemModel:Update")
+--@brief 子类重写 - 添加事件监听
+function SystemModel:_AddEvents( )
 end
 
---@brief 移除
-function SystemModel:Destroy()
-	print("SystemModel:Destroy")
-	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			panel:Destroy()
-		end
-		self.m_tPanelList = nil
-	end
+--@brief 子类重写 - 移除事件监听
+function SystemModel:_RemoveEvents( )
 end
 
---@breif 显示面板
-function SystemModel:ShowPanel( panelData )
-	local panelType = panelData.panelType
-	GCSLog("--------------------SystemModel:ShowPanel",panelData.modelType,panelType)
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		local parent = CSGameObject.Find("Canvas").transform
-		if panelType == SYSTEM_TYPE.NOTICE then
-			panel = SystemNoticePanel:Create(parent,self)
-		elseif panelType == SYSTEM_TYPE.LOCK then
-			panel = SystemLockPanel:Create(parent,self)
-		else
-			GCSLog("SystemModel:ShowPanel found out",panelType)
-		end
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel then
-		panel:Show(panelData)
-	else
-		GCSLog("found out panel","panelType",panelType)
-	end
+--@brief 子类重写 - 注册网络门户
+function SystemModel:_RegNetFacade( )
 end
 
-
-function SystemModel:HidePanel(panelData)
-	local panelType = panelData.panelType
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("SystemModel:HidePanel","found out",panelType)
-	end
-
-	if panel then
-		panel:Hide(panelData)
-	end
+--@brief 子类重写 - 注销网络门户
+function SystemModel:_UnRegNetFacade( )
 end
-
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-

@@ -181,9 +181,14 @@ end
 --@brief 是否存在近距离物品
 function BattleMapMgr:_IsDisEvent(newItem)
 --CSLog("BattleMapMgr ",SerializeTable(newItem))
+	local panelData = {
+		panelType = BATTLE_UI_TYPE.QUICKBAG,
+	}
+
 	if ZTableLen(newItem) > 0 then
-		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.QUICKBAG,newItem)
-	else
-		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.QUICKBAG)
+		panelData.items = newItem
 	end
+
+	GlobalBattleCtrl:GetUIModel():ShowPanel(panelData)
+
 end

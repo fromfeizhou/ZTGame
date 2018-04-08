@@ -89,11 +89,7 @@ end
 function ModelManager:_UpdatePanel( deltaTime )
 	if ModelManager.m_modelList then
 		for k,model in pairs(ModelManager.m_modelList) do
-			if model.m_tPanelList then
-				for i,panel in pairs(model.m_tPanelList) do
-					panel:Update(deltaTime)
-				end
-			end
+			model:Update(deltaTime)
 		end
 	end
 end
