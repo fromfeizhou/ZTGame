@@ -43,10 +43,16 @@ function BattleCommandMgr:Destroy()
 	self.m_nServerFrame = 0
 	CSLog("BattleCommandMgr:Destroy")
 end
-
+-- local socket = require "socket"
 --@brief 刷新(每帧刷新检测帧命令往前)
 function BattleCommandMgr:Update()
-	--CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
+	-- if not g_time then
+	-- 	g_time = socket.gettime()
+	-- else
+	-- 	g_curTime = socket.gettime()
+	-- 	CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame,math.floor((g_curTime - g_time)*1000))
+	-- 	g_time = g_curTime
+	-- end
 	if not self.m_tServerCommand then
 		return
 	end
@@ -55,7 +61,7 @@ function BattleCommandMgr:Update()
 		self:_RunCommand()
 		--比驱动帧慢 加速
 		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStep then
-			self:_RunCommand()
+			-- CSLog("BattleCommandMgr:Update>>>>>>>>>>>>>>>>>>>>")
 			self:_RunCommand()
 		end
 	
