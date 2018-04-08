@@ -231,6 +231,7 @@ public class MapElementView
             {
                 if (j < 0) continue;
                 string gridKey = i + "_" + j;
+                Debug.LogError(gridKey+"gridKey>>>>>>>>>>>>>>>>");
                 Dictionary<string, MapElementGrid> tempGridDataDic;
                 if (AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
                 {
@@ -264,9 +265,9 @@ public class MapElementView
             disableElementList.Add(key);
 
         visionElementDic = elementDic;
-        if (disableElementList.Count > 0)
-            ClearElementInList();
-        if (createElementList.Count > 0)
+       // if (disableElementList.Count > 0)
+        //    ClearElementInList();
+        if (createElementList.Count > 0|| disableElementList.Count > 0)
         {
             if (null == _OnUpdateElementHandler)
             {
@@ -274,7 +275,7 @@ public class MapElementView
                 ZTSceneManager.GetInstance().StartCoroutine(_OnUpdateElementHandler);
             }
         }
-        if (disabelObj.Count > 100)
+        if (disabelObj.Count > 500)
         {
             List<GameObject> tempDisableList = disabelObj.GetRange(0, disabelObj.Count / 2);
             disabelObj.RemoveRange(0, disabelObj.Count / 2);
@@ -294,7 +295,7 @@ public class MapElementView
 
     public void Update()
     {
-        //ClearElementInList();//active转disable
+        ClearElementInList();//active转disable
         CreateElementInList();
     }
 
@@ -304,21 +305,18 @@ public class MapElementView
         {
             return;
         }
-        for (int index = 0; index < disableElementList.Count; index++)
+        string key = disableElementList[0];
+        disableElementList.RemoveAt(0);
+        if (activeObj.ContainsKey(key))
         {
-            string key = disableElementList[index];
-            if (activeObj.ContainsKey(key))
+            GameObject tempObj = activeObj[key];
+            if (tempObj != null)
             {
-                GameObject tempObj = activeObj[key];
-                if (tempObj != null)
-                {
-                    tempObj.SetActive(false);
-                    disabelObj.Add(tempObj);
-                }
-                activeObj.Remove(key);
+                tempObj.SetActive(false);
+                disabelObj.Add(tempObj);
             }
+            activeObj.Remove(key);
         }
-        disableElementList.Clear();
     }
 
     public void CreateElementInList()
