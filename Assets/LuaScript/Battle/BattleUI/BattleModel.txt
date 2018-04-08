@@ -12,9 +12,9 @@ BattleModel = {
 }
 
 BATTLE_UI_TYPE = {
-	MAP_SCROLL = 1,	--大地图
-	MAP_RADAR = 2,	--地图卷轴
-	QUICKBAG=3,
+	MAP_SCROLL 	= 1,	--大地图
+	MAP_RADAR 	= 2,	--地图卷轴
+	QUICKBAG 	= 3,	--快速背包
 
 	BATTLE_HUD = 100,	--全局控制面板
 }

@@ -1,0 +1,132 @@
+--BaseModel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+BaseModel = {
+	m_tPanelList = nil,
+	m_panelDefine = nil,
+	m_canvasRoot = nil,
+	m_canvasName = "Canvas",
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function BaseModel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BaseModel })
+	obj:Init()
+	return obj
+end
+
+--@brief 初始化
+function BaseModel:Init()
+	self.m_tPanelList = {}
+	self.m_panelDefine = {}
+	self:onInitModel()
+	self:_AddEvents()
+	self:_RegNetFacade()
+end
+
+--@brief 更新
+function BaseModel:Update()
+	for i,panel in pairs(self.m_tPanelList) do
+		if panel.Update then
+			panel:Update(deltaTime)
+		end
+	end
+end
+
+--@brief 移除
+function BaseModel:Destroy()
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			panel:Destroy()
+		end
+		self.m_tPanelList = nil
+	end
+
+	self:_RemoveEvents()
+	self:_UnRegNetFacade()
+end
+
+
+--@brief 获取面板节点
+function BaseModel:_GetCanvasRoot()
+	if not self.m_canvasRoot then
+		self.m_canvasRoot = CSGameObject.Find(self.m_canvasName).transform
+	end
+	return self.m_canvasRoot
+end
+
+--@brief 设置面板节点
+function BaseModel:SetCanvasRoot(parent)
+	self.m_canvasRoot = parent
+end
+
+--@breif 显示面板
+function BaseModel:ShowPanel( panelData )
+	local panelType = panelData.panelType
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		local parent = self:_GetCanvasRoot()
+		panel = self.m_panelDefine[panelType]:Create(parent,self)
+		self.m_tPanelList[panelType] = panel
+	end
+
+	if panel.Show then
+		panel:Show(panelData)
+	else
+		GCSLog("found out panel","panelType",panelType)
+	end
+end
+
+
+function BaseModel:HidePanel(panelData)
+	local panelType = panelData.panelType
+	local panel = nil
+	if self.m_tPanelList[panelType] then
+		panel = self.m_tPanelList[panelType]
+	else
+		GCSLog("BaseModel:HidePanel","found out",panelType)
+	end
+
+	if panel.Hide then
+		panel:Hide(panelData)
+	end
+end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 子类重写 - 模块初始化
+function BaseModel:onInitModel()
+end
+
+--@brief 子类重写 - 添加事件监听
+function BaseModel:_AddEvents( )
+end
+
+--@brief 子类重写 - 移除事件监听
+function BaseModel:_RemoveEvents( )
+end
+
+--@brief 子类重写 - 注册网络门户
+function BaseModel:_RegNetFacade( )
+end
+
+--@brief 子类重写 - 注销网络门户
+function BaseModel:_UnRegNetFacade( )
+end
