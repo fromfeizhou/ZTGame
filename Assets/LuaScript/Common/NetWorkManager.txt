@@ -8,13 +8,12 @@ local CSByteBuffer = CS.ByteBuffer
 
 
 NetWorkManager = {
-	m_instance,
+	m_instance = nil,		--C#实例
+
+	m_loginAuthKey = nil,	--当前次登录验证信息
 }
 
 
-
---@brief 当前次登录验证信息
-local _loginAuthKey = nil
 --@brief 当前消息序号
 local _curMsgSeq = 0
 --@brief 心跳定时器
@@ -119,10 +118,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 获取当前消息序号
 function NetWorkManager:_GetCurMsgSeq()
-	if _loginAuthKey then
-		_curMsgSeq = _curMsgSeq + _loginAuthKey.unique_add;
-		if _curMsgSeq > _loginAuthKey.max_unique_id then
-			_curMsgSeq = _loginAuthKey.unique_id
+	if NetWorkManager.m_loginAuthKey then
+		_curMsgSeq = _curMsgSeq + NetWorkManager.m_loginAuthKey.unique_add;
+		if _curMsgSeq > NetWorkManager.m_loginAuthKey.max_unique_id then
+			_curMsgSeq = NetWorkManager.m_loginAuthKey.unique_id
 		end
 	end
 	return _curMsgSeq
@@ -174,9 +173,7 @@ end
 
 --@brief pb数据处理逻辑
 function NetWorkManager:OnReceive(pId,pbData)
-	if pId == PROTOCOL.LOGIN_AUTH_KEY then
-		self:_Receive_Login_Auth_Key(pbData)
-	elseif pId == PROTOCOL.LOGIN_LOGIN then
+	if pId == PROTOCOL.LOGIN_LOGIN then
 		local login_login_s2c = pbData
 		--开启心跳
 		_heartInterval = login_login_s2c.heart_interval
@@ -191,23 +188,7 @@ function NetWorkManager:_Request_Login_Auth_Key( )
 	NetWorkManager:SendNetMsg(Package:Create(PROTOCOL.LOGIN_AUTH_KEY))
 end
 
---@brief 回复 - 登录验证
-function NetWorkManager:_Receive_Login_Auth_Key(pbData)
-	GCSLog("NetWorkManager:_Receive_Login_Auth_Key")
-	_loginAuthKey = pbData
-	GCSLog(SerializeTable(pbData))
 
-	--隐藏锁屏面板
-	local dispatcher = GlobalData:GetMdlEventDispatcher()
-	local panelData = {}
-	panelData.modelType = MODEL_TYPE.SYSTEM
-	panelData.panelType = SYSTEM_TYPE.LOCK
-	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
-	
-	--请求登录服务器
-	local loginModel = ModelManager:_GetModel(MODEL_TYPE.LOGIN)
-	if loginModel then loginModel:Request_Login() end
-end
 
 --@brief 开启心跳
 function NetWorkManager:_OpenHeart()

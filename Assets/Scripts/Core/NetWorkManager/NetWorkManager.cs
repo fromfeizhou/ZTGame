@@ -75,8 +75,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 				KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue ();
 				if(_onReceiveMsg != null)
 				{
-					if(_onReceiveMsg != null)
-						_onReceiveMsg(_event.Key,_event.Value);
+					_onReceiveMsg(_event.Key,_event.Value);
 				}
 			}
 		}

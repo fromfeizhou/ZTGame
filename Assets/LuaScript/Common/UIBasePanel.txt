@@ -50,14 +50,14 @@ end
 
 --@brief 显示面板
 function UIBasePanel:Show(panelData)
-	GCSLog("UIBasePanel:Show",self.m_panelName)
+	--GCSLog("UIBasePanel:Show",self.m_panelName)
 	self.m_isShow = true
 	self:_Rush(panelData)
 end
 
 --@brief 隐藏面板
 function UIBasePanel:Hide(panelData)
-	GCSLog("UIBasePanel:Hide",self.m_panelName)
+	--GCSLog("UIBasePanel:Hide",self.m_panelName)
 	self.m_isShow = false
 	self:_Rush(panelData)
 end

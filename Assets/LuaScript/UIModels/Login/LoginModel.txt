@@ -48,19 +48,40 @@ end
 function LoginModel:_RemoveEvents( )
 end
 
---@brief 子类重写 - 注册网络门户
-function LoginModel:_RegNetFacade( )
+--@brief 注册网络门户
+function LoginModel:_RegNetFacade()
+	ZTProtocol:Register(PROTOCOL.LOGIN_AUTH_KEY, self._Receive_Login_Auth_Key, self)
 end
 
---@brief 子类重写 - 注销网络门户
-function LoginModel:_UnRegNetFacade( )
+--@brief 注销网络门户
+function LoginModel:_UnRegNetFacade()
+	ZTProtocol:Unregister(PROTOCOL.LOGIN_AUTH_KEY,self._Receive_Login_Auth_Key)
 end
-
 
 
 function LoginModel:LoginFinish()
 	GCSLog("登录完成，进入游戏")
 	LuaGameStart:EnterGameCity()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 回复 - 登录验证
+function LoginModel:_Receive_Login_Auth_Key(pbData)
+	GCSLog("LoginModel:_Receive_Login_Auth_Key")
+	NetWorkManager.m_loginAuthKey = pbData
+	GCSLog(SerializeTable(pbData))
+
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local panelData = {}
+	panelData.modelType = MODEL_TYPE.SYSTEM
+	panelData.panelType = SYSTEM_TYPE.LOCK
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	
+	--请求登录服务器
+	self:Request_Login()
 end
 
 --@brief 请求 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
@@ -81,6 +102,3 @@ function LoginModel:Request_Login()
 	GCSLog("self.m_model:NetWork_RequestLogin","accname:",package.data.accname,"key",self.m_pKey)
 	NetWorkManager:SendNetMsg(package)
 end
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
