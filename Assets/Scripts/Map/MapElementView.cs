@@ -231,7 +231,6 @@ public class MapElementView
             {
                 if (j < 0) continue;
                 string gridKey = i + "_" + j;
-                Debug.LogError(gridKey+"gridKey>>>>>>>>>>>>>>>>");
                 Dictionary<string, MapElementGrid> tempGridDataDic;
                 if (AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
                 {
