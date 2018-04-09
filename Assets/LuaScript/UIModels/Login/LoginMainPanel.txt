@@ -22,11 +22,11 @@ setmetatable( LoginMainPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Base Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
 --@brief 拷贝原表
-function LoginMainPanel:Create(parent, model)
+function LoginMainPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = LoginMainPanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end

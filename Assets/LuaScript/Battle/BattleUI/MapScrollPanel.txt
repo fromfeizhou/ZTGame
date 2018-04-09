@@ -29,9 +29,10 @@ setmetatable( MapScrollPanel, { __index = UIBasePanel})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function MapScrollPanel:Create(parent, model)
+function MapScrollPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = MapScrollPanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end

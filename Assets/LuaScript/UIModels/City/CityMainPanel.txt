@@ -19,9 +19,10 @@ setmetatable( CityMainPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 拷贝原表
-function CityMainPanel:Create(parent, model)
+function CityMainPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = CityMainPanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end

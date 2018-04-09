@@ -28,9 +28,10 @@ setmetatable( MapRadarPanel, { __index = UIBasePanel})
 
 
 --@brief 拷贝原表
-function MapRadarPanel:Create(parent, model)
+function MapRadarPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = MapRadarPanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end

@@ -15,11 +15,11 @@ setmetatable( SystemNoticePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
 --@brief 拷贝原表
-function SystemNoticePanel:Create(parent, model)
+function SystemNoticePanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = SystemNoticePanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end
@@ -65,7 +65,7 @@ function SystemNoticePanel:_UnRegNetFacade()
 end
 
 --@brief 显示面板
-function SystemNoticePanel:onShow(panelData)
-	self.m_Notice.text = panelData.noticeStr
+function SystemNoticePanel:onShow()
+	self.m_Notice.text = self.m_tPanelData.noticeStr
 end
 
