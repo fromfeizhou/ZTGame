@@ -161,7 +161,7 @@ public class MapTileViewMgr
         }
         else
         {
-            Debug.LogError("Load Begin:" + name);
+            //Debug.LogError("Load Begin:" + name);
             GameObject gameObject = new GameObject();
             gameObject.name = name;
             gameObject.transform.localPosition = new Vector3(col * MapDefine.MapWidth, 0, row * MapDefine.MapHeight);

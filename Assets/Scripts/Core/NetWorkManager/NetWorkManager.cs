@@ -11,7 +11,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 	private string _host;
 	private int _port;
 	
-	private SocketClient _socketClient;
+	private ZTTcpClient _socketClient;
 	static readonly object m_lockObject = new object ();
 	static Queue<KeyValuePair<int, ByteBuffer>> mEvents = new Queue<KeyValuePair<int, ByteBuffer>> ();
 
@@ -53,7 +53,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 
 	public override void Init ()
 	{
-		_socketClient = new SocketClient ();
+		_socketClient = new ZTTcpClient();
 		_socketClient.OnRegister ();
 	}
       
