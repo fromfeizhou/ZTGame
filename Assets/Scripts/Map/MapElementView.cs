@@ -8,6 +8,7 @@ using XLua;
 [LuaCallCSharp]
 public class MapElementView
 {
+    private MapTileViewMgr mapTileViewMgr;
 
     private MapAsset mapAsset;
     private Dictionary<string, Dictionary<string, MapElement>> AllMapElementDic =
@@ -24,16 +25,6 @@ public class MapElementView
     private GameObject mapRoot;
     private GameObject elementRoot;
 
-    private List<MapTileView> _mapViewList = null;
-    private Dictionary<int, Dictionary<int, MapTileData>> _mapDataDic = null;
-
-
-    private List<string> createMapTileViewList = new List<string>();
-    private Dictionary<string, MapTileView> activeMapTileViewDic = new Dictionary<string, MapTileView>();
-    private Dictionary<string, MapTileView> disableMapTileViewDic = new Dictionary<string, MapTileView>();
-
-
-
     private Transform lastRayObj;
     private Transform rayObj;
 
@@ -49,27 +40,9 @@ public class MapElementView
     {
         mapAsset = data;
         InitData();
-        mapRoot = new GameObject("SceneMap");
         elementRoot = new GameObject("MapElement");
+        mapTileViewMgr=new MapTileViewMgr();
 
-        int intevar = MapDefine.MAPITEMTOTALSIZE / MapDefine.MAPITEMSIZE;
-        int MapCount = intevar * intevar;
-        _mapDataDic = new Dictionary<int, Dictionary<int, MapTileData>>();
-        for (int i = 0; i < MapCount; i++)
-        {
-            MapTileData tileData = new MapTileData();
-            tileData.MapId = i + 1;
-            tileData.Row = Mathf.FloorToInt(i / intevar);
-            tileData.Column = i % intevar;
-            if (!_mapDataDic.ContainsKey(tileData.Row))
-            {
-                _mapDataDic[tileData.Row] = new Dictionary<int, MapTileData>();
-            }
-            _mapDataDic[tileData.Row][tileData.Column] = tileData;
-        }
-
-
-        InitTerrainView();
     }
     //地图建筑数据
     private void InitData()
@@ -97,87 +70,13 @@ public class MapElementView
         }
     }
 
-    private void InitTerrainView()
-    {
-        if (null == _mapViewList)
-        {
-            _mapViewList = new List<MapTileView>();
-            for (int i = 0; i < MapDefine.MaxViewRowNum * MapDefine.MaxViewColumnNum; i++)
-            {
-                GameObject gameObject = new GameObject();
-                gameObject.transform.localPosition = new Vector3((i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth, 0, Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight);
-                gameObject.transform.parent = mapRoot.transform;
-                MapTileView tempTileView = gameObject.AddComponent<MapTileView>();
-                _mapViewList.Add(tempTileView);
-            }
-        }
-    }
 
     private int smallInterval = MapDefine.MAPITEMSIZE / 4;
-    //public void UpdateTerrainView(Vector3 pos, int row, int col)
-    //{
-    //    List<Vector2> posList = new List<Vector2>();
-    //    posList.Add(new Vector2(pos.x, pos.z));
-    //    posList.Add(new Vector2(pos.x, pos.z + smallInterval));
-    //    posList.Add(new Vector2(pos.x, pos.z - smallInterval));
-    //    posList.Add(new Vector2(pos.x + smallInterval, pos.z));
-    //    posList.Add(new Vector2(pos.x - smallInterval, pos.z));
-
-    //    List<string> tempKeyList = new List<string>();
-    //    for (int index = 0; index < posList.Count; index++)
-    //    {
-    //        int tempRow = Mathf.FloorToInt(posList[index].y / smallInterval);
-    //        int tempcol = Mathf.FloorToInt(posList[index].x / smallInterval);
-    //        string tempKey = tempRow + "_" + tempcol;
-    //        if (!createMapTileViewList.Contains(tempKey))
-    //            createMapTileViewList.Add(tempKey);
-    //    }
-    //}
-
-
-    public void UpdateTerrainView(int row, int col)
+    public void UpdateTerrainView(Vector3 pos, int row, int col)
     {
-        int beginX = row - 1;
-        int beginY = col - 1;
-        int endX = row + 1;
-        int endY = col + 1;
-        List<MapTileView> tempTileViews = new List<MapTileView>();
-        for (int k = 0; k < _mapViewList.Count; k++)
-        {
-            MapTileView floor = _mapViewList[k];
-            if (floor.IsNeedClear(beginX, endX, beginY, endY))
-                tempTileViews.Add(floor);
-        }
-        int tempIndex = 0;
-        for (int index = beginX; index <= endX; index++)
-        {
-            if (index < 0) continue;
-            for (int j = beginY; j <= endY; j++)
-            {
-                if (j < 0) continue;
-                bool isShow = false;
-                for (int k = 0; k < _mapViewList.Count; k++)
-                {
-                    MapTileView tileView = _mapViewList[k];
-                    MapTileData data = tileView.GetMapData();
-                    if (data != null && tileView.IsLoad && data.Column == j && data.Row == index)
-                    {
-                        isShow = true;
-                        break;
-                    }
-                }
-                if (isShow) continue;
-                if (tempIndex < tempTileViews.Count)
-                {
-                    MapTileData targetTileData = _mapDataDic[index][j];
-                    tempTileViews[tempIndex].setMapData(targetTileData);
-                    tempTileViews[tempIndex].transform.position = new Vector3(MapDefine.MapWidth * j, 0, MapDefine.MapWidth * index);
-                    tempIndex++;
-                    continue;
-                }
-            }
-        }
+        mapTileViewMgr.UpdateViewByPos(pos, row, col);
     }
+   
     //射线检测（建筑屋顶逻辑）
     public void UpdateRoleRay(Vector3 pos)
     {
