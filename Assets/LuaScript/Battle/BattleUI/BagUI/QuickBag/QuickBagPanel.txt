@@ -23,14 +23,15 @@ setmetatable( QuickBagPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
 --@brief 拷贝原表
-function QuickBagPanel:Create(parent, model)
+function QuickBagPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = QuickBagPanel })
+	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end
+
 --@brief 面板数据初始化
 function QuickBagPanel:onInitPanelData()
 	self.m_panelName = "QuickBagPanel"
@@ -55,12 +56,12 @@ function QuickBagPanel:onCreatePanel()
 end
 
 --@brief 显示登录面板
-function QuickBagPanel:onShow(panelData)
+function QuickBagPanel:onShow()
 	if not self.m_gameObject then
 		return
 	end
 	
-	if not panelData.items then
+	if not self.m_tPanelData.items then
 		self:Hide()
 		return
 	end
@@ -71,7 +72,7 @@ function QuickBagPanel:onShow(panelData)
 
 	self.m_quickPanelRoot.gameObject:SetActive(true)
 	local  tempIndex = 1;--先只刷新前20个后续加入循环scrollView后修改
-	for key,value in pairs(panelData.items) do
+	for key,value in pairs(self.m_tPanelData.items) do
 		if tempIndex <= #self.m_ItemList then
 		--	CSLog("QuickBagPanel: UpdateCell")
 			self.m_ItemList[tempIndex]:UpdateCell(value)

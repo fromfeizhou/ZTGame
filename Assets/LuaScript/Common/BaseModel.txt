@@ -79,12 +79,12 @@ function BaseModel:ShowPanel( panelData )
 		panel = self.m_tPanelList[panelType]
 	else
 		local parent = self:_GetCanvasRoot()
-		panel = self.m_panelDefine[panelType]:Create(parent,self)
+		panel = self.m_panelDefine[panelType]:Create(parent,self,panelData)
 		self.m_tPanelList[panelType] = panel
 	end
 
 	if panel.Show then
-		panel:Show(panelData)
+		panel:Show()
 	else
 		GCSLog("found out panel","panelType",panelType)
 	end
@@ -101,7 +101,7 @@ function BaseModel:HidePanel(panelData)
 	end
 
 	if panel.Hide then
-		panel:Hide(panelData)
+		panel:Hide()
 	end
 end
 
