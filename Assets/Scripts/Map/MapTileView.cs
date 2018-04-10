@@ -41,14 +41,6 @@ public class MapTileView : MonoBehaviour {
             GameObject mapGo = obj as GameObject;
             CreateTrrain(mapGo);
         });
-
-
-        //MapManager.GetInstance().SafeGetTrrainPrefab(_mapTileData.Row, _mapTileData.Column, go =>
-        //{
-        //    if (_terrain == null)
-        //        CreateTrrain(go);
-        //    UpdateMapItem();
-        //});
     }
 
     private int _gridCnt = MapDefine.MAPITEMSIZE * 4;
@@ -78,49 +70,7 @@ public class MapTileView : MonoBehaviour {
     }
     private Vector3 aaa = new Vector3(0.2f, 0.0f, 0.2f);
 
-    private void UpdateMapItem()
-    {
-        //Transform tempParent = null;
-        //_mapInfo = MapManager.GetInstance().GetMapInfiByPos(_mapTileData.Row, _mapTileData.Column);
-        //if (_mapInfo == null)
-        //{
-        //    return;
-        //}
-
-        //for (int i = 0; i < _mapInfo.MapItemList.Count; i++)
-        //{
-        //    string tempAssetPath = "";
-        //    MapItemInfo tempItem = _mapInfo.MapItemList[i];
-
-        //    string tempName=(tempItem.MapItemType ).ToString();
-        //    tempParent = _terrain.transform.Find(string.Format("[{0}]", tempName));
-        //    if (tempParent == null) continue;
-        //    tempAssetPath = string.Format(MapDefine.MapElementPath, tempName);
-
-        //    for (int j = 0; j < _mapInfo.MapItemList[i].MapItemInfoList.Count; j++)
-        //    {
-        //        AssetManager.LoadAsset(tempAssetPath, (obj, str) =>
-        //        {
-        //            GameObject assetTree = obj as GameObject;
-        //            Transform tree = Instantiate(assetTree).transform;
-        //            tree.SetParent(tempParent);
-        //            tree.position = _mapInfo.MapItemList[i].MapItemInfoList[j].Pos;
-        //            tree.eulerAngles = _mapInfo.MapItemList[i].MapItemInfoList[j].Angle;
-        //            tree.localScale = _mapInfo.MapItemList[i].MapItemInfoList[j].Scale;
-        //            trees.Add(tree.gameObject);
-        //            BuildingZTCollider tempcollider = tree.GetComponent<BuildingZTCollider>();
-        //            if(tempcollider!=null){
-        //                ICharaBattle tempBattle = ZTSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-        //            if (tempBattle != null)
-        //                tempcollider.SetTarget(tempBattle.Collider);
-        //            }
-                        
-        //        });
-        //    }
-        //}
-    }
-
-    private MapInfo _mapInfo;
+   
 
 
     private void CreateTrrain(GameObject go)
@@ -167,4 +117,20 @@ public class MapTileView : MonoBehaviour {
         _terrain.transform.localScale = Vector3.one;
         _terrain.AddComponent<MeshCollider>();
     }
+
+    private string mapKey;
+    public string MapKey
+    {
+        get { return mapKey; }
+        set { mapKey = value; }
+    }
+
+    public void SetTileObj(GameObject go)
+    {
+        _terrain = go;
+        _terrain.layer = LayerMask.NameToLayer("Terrain");
+        UpdateTrrain();
+    }
+
+
 }

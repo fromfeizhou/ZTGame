@@ -14,47 +14,7 @@ public class MapColliderHelper
         SaveMapBlockFile,
     }
 
-    public static void SaveMapBytesFile(byte[] clolliderdata, Dictionary<string, MapBlockData> hideData, Dictionary<string, MapBlockData> heightData)
-    {
-        System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-        if (File.Exists(MapDefine.MapDataSavePath))
-            File.Delete(MapDefine.MapDataSavePath);
-        File.WriteAllBytes(MapDefine.MapDataSavePath, clolliderdata);
-
-        ////  获取当前实例测量得出的总时间
-        System.TimeSpan timespan = stopwatch.Elapsed;
-        double milliseconds = timespan.TotalMilliseconds;  //  总毫秒数
-        Debug.Log("生成碰撞文件 用时：" + milliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-        stopwatch = new System.Diagnostics.Stopwatch();
-        stopwatch.Start();
-        if (File.Exists(MapDefine.MapHideBlockDataSavePath))
-            File.Delete(MapDefine.MapHideBlockDataSavePath);
-        byte[] hideTytes = new byte[hideData.Count * MapDefine.MapByteInterval];
-        int index = 0;
-        foreach (KeyValuePair<string, MapBlockData> item in hideData)
-        {
-            Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
-        }
-        File.WriteAllBytes(MapDefine.MapHideBlockDataSavePath, hideTytes);
-        stopwatch.Stop();
-        timespan = stopwatch.Elapsed;
-        Debug.Log("生成草地隐藏文件 用时：" + timespan.TotalMilliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
-        stopwatch = new System.Diagnostics.Stopwatch();
-        stopwatch.Start();
-        if (File.Exists(MapDefine.MapHeightBlockDataSavePath))
-            File.Delete(MapDefine.MapHeightBlockDataSavePath);
-        hideTytes = new byte[heightData.Count * MapDefine.MapByteInterval];
-        index = 0;
-        foreach (KeyValuePair<string, MapBlockData> item in heightData)
-            Array.Copy(item.Value.GetBytes(), 0, hideTytes, index++ * MapDefine.MapByteInterval, MapDefine.MapByteInterval);
-        File.WriteAllBytes(MapDefine.MapHeightBlockDataSavePath, hideTytes);
-        stopwatch.Stop();
-        timespan = stopwatch.Elapsed;
-        Debug.Log("生成高度隐藏文件 用时：" + timespan.TotalMilliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    }
-
+   
     public static void SaveMapBlockFile(List<MapBlockData> _mapBlockData)
     {
         if (_mapBlockData != null)
