@@ -5,6 +5,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSAssetManager = CS.AssetManager
 
 UIBasePanel = {
+
 	m_model,
 	m_isShow,
 
@@ -27,7 +28,6 @@ function UIBasePanel:Create(parent, model, panelData)
 end
 
 function UIBasePanel:_LoadAssetPanel(parent, model)
-	self:onInitPanelData()
 	GCSLog("UIBasePanel:Create",self.m_panelName)
 
 	local callback_loadfinish = function(target,path)
@@ -103,10 +103,6 @@ function UIBasePanel:Destroy()
 	self:onDestroy()
 end
 
-
---@brief 子类重写 - 面板数据初始化
-function UIBasePanel:onInitPanelData()
-end
 
 --@brief 子类重写 - 面板被创建
 function UIBasePanel:onCreatePanel()

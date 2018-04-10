@@ -9,6 +9,7 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginMainPanel = {
+	m_panelName = "LoginMainPanel",
 	m_inputAccount = nil,
 	m_serverItem_Prefab = nil,
 	m_txtCurServerName = nil,
@@ -29,11 +30,6 @@ function LoginMainPanel:Create(parent, model, panelData)
 	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
-end
-
---@brief 面板数据初始化
-function LoginMainPanel:onInitPanelData()
-	self.m_panelName = "LoginMainPanel"
 end
 
 --@brief 面板被创建

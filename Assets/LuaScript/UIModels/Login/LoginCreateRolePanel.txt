@@ -9,6 +9,7 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginCreateRolePanel = {
+	m_panelName = "LoginCreateRolePanel",
 }
 
 setmetatable( LoginCreateRolePanel, { __index = UIBasePanel})
@@ -24,10 +25,6 @@ function LoginCreateRolePanel:Create(parent, model, panelData)
 	return obj
 end
 
---@brief 面板数据初始化
-function LoginCreateRolePanel:onInitPanelData()
-	self.m_panelName = "LoginCreateRolePanel"
-end
 
 --@brief 面板被创建
 function LoginCreateRolePanel:onCreatePanel()	

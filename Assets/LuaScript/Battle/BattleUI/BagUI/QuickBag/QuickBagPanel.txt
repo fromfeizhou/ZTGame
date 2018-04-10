@@ -12,6 +12,7 @@ local CSJoystick = CS.JoystickBase
 local  CSRectTransform = CS.UnityEngine.RectTransform
 
 QuickBagPanel = {
+	m_panelName = "QuickBagPanel",
 	m_quickPanelRoot=nil,--拾取界面
 	m_PagePanelRoot=nil,--包裹界面
 	m_ScrollView=nil,
@@ -31,11 +32,6 @@ function QuickBagPanel:Create(parent, model, panelData)
 	--CSLog("QuickBagPanel:panelData.Items>>>>>>>>>>",SerializeTable(panelDatan.items ))
 	obj:_LoadAssetPanel(parent, model)
 	return obj
-end
-
---@brief 面板数据初始化
-function QuickBagPanel:onInitPanelData()
-	self.m_panelName = "QuickBagPanel"
 end
 
 

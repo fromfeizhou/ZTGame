@@ -8,6 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 SystemNoticePanel = {
+	m_panelName = "SystemNoticePanel",
 	m_Notice = nil,
 }
 
@@ -24,10 +25,6 @@ function SystemNoticePanel:Create(parent, model, panelData)
 	return obj
 end
 
---@brief 面板数据初始化
-function SystemNoticePanel:onInitPanelData()
-	self.m_panelName = "SystemNoticePanel"
-end
 
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	

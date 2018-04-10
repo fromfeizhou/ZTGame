@@ -12,9 +12,8 @@ local CSLog = CS.GameTool.Log
 local  CSUnityScrollView = CS.UnityEngine.ScrollRect
 
 
-
-
 BattleBagPanel = {
+	m_panelName = "BattleBagPanel",
 	
 	m_parentRoot=nil,
 	m_transform=nil,
@@ -46,11 +45,6 @@ function BattleBagPanel:Create(parent,model,panelData)
 	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent,model)
 	return obj
-end
-
---@brief 面板数据初始化
-function BattleBagPanel:onInitPanelData()
-	self.m_panelName="BattleBagPanel"
 end
 
 --@brief 面板被创建

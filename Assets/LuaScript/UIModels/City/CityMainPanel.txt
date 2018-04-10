@@ -9,6 +9,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 CityMainPanel = {
+	m_panelName = "CityMainPanel",
 	m_txtNickName,
 	m_txtName,
 }
@@ -27,11 +28,6 @@ function CityMainPanel:Create(parent, model, panelData)
 	return obj
 end
 
-
---@brief 面板数据初始化
-function CityMainPanel:onInitPanelData()
-	self.m_panelName = "CityMainPanel"
-end
 
 --@brief 面板被创建
 function CityMainPanel:onCreatePanel()	

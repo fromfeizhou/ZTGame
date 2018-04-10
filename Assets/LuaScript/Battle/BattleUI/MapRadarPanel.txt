@@ -12,6 +12,7 @@ local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapRadarPanel = {
+	m_panelName = "MapRadarPanel",
 	m_ztTxt_waitTime = nil,
 
 	m_ztCircleCur = nil,
@@ -38,11 +39,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function MapRadarPanel:onInitPanelData()
-	self.m_panelName = "MapRadarPanel"
-end
-
 --@brief 面板被创建
 function MapRadarPanel:onCreatePanel()	
 	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OpenMap() end)

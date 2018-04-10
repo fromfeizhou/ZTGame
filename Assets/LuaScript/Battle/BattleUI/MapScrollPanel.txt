@@ -12,6 +12,7 @@ local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapScrollPanel = {
+	m_panelName = "MapScrollPanel",
 	m_scaleValue = 1,
 	m_showCircle = false,
 	
@@ -35,11 +36,6 @@ function MapScrollPanel:Create(parent, model, panelData)
 	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
-end
-
---@brief 面板数据初始化
-function MapScrollPanel:onInitPanelData()
-	self.m_panelName = "MapScrollPanel"
 end
 
 --@brief 面板被创建

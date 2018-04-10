@@ -8,6 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 SystemLockPanel = {
+	m_panelName = "SystemLockPanel",
 	
 }
 
@@ -22,11 +23,6 @@ function SystemLockPanel:Create(parent, model, panelData)
 	obj.m_tPanelData = panelData
 	obj:_LoadAssetPanel(parent, model)
 	return obj
-end
-
---@brief 面板数据初始化
-function SystemLockPanel:onInitPanelData()
-	self.m_panelName = "SystemLockPanel"
 end
 
 --@brief 面板被创建
