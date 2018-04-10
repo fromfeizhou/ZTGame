@@ -12,8 +12,7 @@ local CSLog = CS.GameTool.Log
 local  CSUnityScrollView = CS.UnityEngine.ScrollRect
 
 
-local mainRoot=nil;
-local bagBtn=nil;
+
 
 BattleBagPanel = {
 	
@@ -35,54 +34,32 @@ RoleEquipType={
 	Pet=5,--宠物
 }
 
+setmetatable( BattleBagPanel, { __index = UIBasePanel})
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleBagPanel:Create(parent)
+function BattleBagPanel:Create(parent,model,panelData)
 	local obj = {}
 	setmetatable( obj, { __index = BattleBagPanel })
-	obj:Init(parent)
+	obj.m_tPanelData = panelData
+	obj:_LoadAssetPanel(parent,model)
 	return obj
 end
 
---@brief 初始化
-function BattleBagPanel:Init(parent)
+--@brief 面板数据初始化
+function BattleBagPanel:onInitPanelData()
+	self.m_panelName="BattleBagPanel"
+end
+
+--@brief 面板被创建
+function BattleBagPanel:onCreatePanel()	
+	
 	CSLog("BattleBagPanel:Init")
 	self.m_parentRoot = parent
 	self.m_EquipList={}
-	self:_AddEvents()
-	--加载预设件
-	local callback_loadfinish = function(target,path)
-		self:_LoadAsseFinish(target,path)
-	end
-	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("BattleBagPanel"),callback_loadfinish)
-end
 
---@brief 移除
-function BattleBagPanel:Destroy()
-	--CSLog("BattleBagPanel:Destroy")
-	self:_RemoveEvent()
-	self.mainRoot=nil
-
-end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 预设加载成功
-function BattleBagPanel:_LoadAsseFinish(target,path)
-	--CSLog("BattleBagPanel:GetEquipCell: prefab load finish!") 
-	local prefab = target
- 		if prefab then
- 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
- 			self.m_gameObject = self.m_transform.gameObject
- 			self:_InitPanel()
- 		end
-end
-
--- 初始化界面
-function BattleBagPanel:_InitPanel()
 	self.mainRoot=self.m_transform:Find("Main");
 	self.bagBtn=PanelWidget:GetButton(self.m_transform,"BagButton",function() self:OnClickBagBtn() end)	
 	self.m_cellBg=self.mainRoot:Find("EquptRoot/Bg");
@@ -93,22 +70,52 @@ function BattleBagPanel:_InitPanel()
 		events.OnUnEquip=function(id) self:_OnClickEquip(id) end 
 		self.m_EquipList[value]:SetUIEvent(events,self.m_cellBg)
 	end
-	--self:UpdateEquip()
-
 end
 
---添加全局事件
---Event 
-function  BattleBagPanel:_AddEvents()
+--@brief 显示面板
+function BattleBagPanel:onShow()
+
+	if not self.m_gameObject then
+		return
+	end
+
+	if self.m_tPanelData.isFirstCreate then--临时变量创建预设不show
+		self:Hide()
+	else
+		self:_UpdateEquip(GlobalBattleCtrl:GetBattleRoleEquipedList())
+		self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
+	end
+end
+
+
+--@brief 添加事件监听
+function BattleBagPanel:_AddEvents()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip,self)
 end
 
-function  BattleBagPanel:_RemoveEvent()
+--@brief 移除事件监听
+function BattleBagPanel:_RemoveEvents()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip)
 end
 
--------添加全局事件end
+--@brief 注册网络门户
+function BattleBagPanel:_RegNetFacade()
+end
 
+--@brief 注销网络门户
+function BattleBagPanel:_UnRegNetFacade()
+end
+
+--@brief 销毁面板
+function BattleBagPanel:onDestroy()
+	--CSLog("BattleBagPanel:Destroy")
+	self:_RemoveEvent()
+	self.mainRoot=nil
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 
 --------------ui事件
