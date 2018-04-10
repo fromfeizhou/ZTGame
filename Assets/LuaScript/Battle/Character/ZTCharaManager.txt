@@ -69,7 +69,10 @@ function ZTCharaManager:ClearChara( )
 end
 
 --@brief 更新
-function ZTCharaManager:Update()
+function ZTCharaManager:Update(dt)
+	for i = 1,#self.m_tSortCharaList do
+		self.m_tSortCharaList[i]:Update(dt)
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

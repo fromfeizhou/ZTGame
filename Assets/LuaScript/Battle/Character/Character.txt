@@ -55,6 +55,7 @@ function Character:Init(battleData,container)
 	-- CSLog("Character:Init",battleData.pos)
 	self.m_nBattleId = battleData.battleId or 1
 	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
+	self.m_animData:SetDelayAction(true)
 	self.m_animator = Animator:Create(self.m_animData,container)
 	self.m_bInCamera = false
 
@@ -107,6 +108,13 @@ end
 function Character:SetData(data)
 	self:UpdatePos(data.pos)
 	self:SetAttributeByList(data.attritList)
+end
+
+--@brief 刷新动画
+function Character:Update(dt)
+	if not self:IsDead() and self:IsInCamera() then
+		self.m_animData:UpdateDelayView(dt)
+	end
 end
 
 --@brief 刷新逻辑帧
@@ -172,12 +180,12 @@ function Character:IsDead()
 end
 
 --@brief 设置死亡
-function Character:SetDead(isDead)
+function Character:SetDead(value)
 	-- CSLog("Character:SetDead",isDead)
-	if self.m_bIsDead == isDead then
+	if self.m_bIsDead == value then
 		return
 	end
-	self.m_bIsDead = isDead
+	self.m_bIsDead = value
 	if self.m_bIsDead then
 		self:Play(AnimatorName.Die)
 		self:InState(CharacterState.Die)
