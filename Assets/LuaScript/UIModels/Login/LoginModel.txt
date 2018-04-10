@@ -75,10 +75,12 @@ function LoginModel:_Receive_Login_Auth_Key(pbData)
 
 	--隐藏锁屏面板
 	local dispatcher = GlobalData:GetMdlEventDispatcher()
-	local panelData = {}
-	panelData.modelType = MODEL_TYPE.SYSTEM
-	panelData.panelType = SYSTEM_TYPE.LOCK
-	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+	local modelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.LOCK,
+	}
+	GCSLog("+++++++++++++++++LoginModel:_Receive_Login_Auth_Key,",SYSTEM_TYPE.LOCK)
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
 	
 	--请求登录服务器
 	self:Request_Login()

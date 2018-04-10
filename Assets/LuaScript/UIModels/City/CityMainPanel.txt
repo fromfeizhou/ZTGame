@@ -64,7 +64,7 @@ function CityMainPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function CityMainPanel:onUpdatePanel(deltaTime)
+function CityMainPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

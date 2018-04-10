@@ -34,7 +34,7 @@ function SystemLockPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function SystemLockPanel:onUpdatePanel(deltaTime)
+function SystemLockPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

@@ -38,7 +38,7 @@ function SystemNoticePanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function SystemNoticePanel:onUpdatePanel(deltaTime)
+function SystemNoticePanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

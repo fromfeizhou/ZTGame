@@ -39,7 +39,7 @@ function LoginCreateRolePanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function LoginCreateRolePanel:onUpdatePanel(deltaTime)
+function LoginCreateRolePanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

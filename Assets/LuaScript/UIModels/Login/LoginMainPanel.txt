@@ -65,7 +65,7 @@ function LoginMainPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function LoginMainPanel:onUpdatePanel(deltaTime)
+function LoginMainPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板
@@ -217,18 +217,18 @@ function LoginMainPanel:_Receive_Login_Login(login_login_s2c)
 		--显示创角界面
 		local dispatcher = GlobalData:GetMdlEventDispatcher()
 		
-		local panelData_CreateRole = {
+		local modelData_CreateRole = {
 			modelType = MODEL_TYPE.LOGIN,
 			panelType = LOGIN_TYPE.CREATEROLE
 		}
-		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData_CreateRole)
+		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData_CreateRole)
 
 			
-		local panelData_LoginRole = {
+		local modelData_LoginRole = {
 			modelType = MODEL_TYPE.LOGIN,
 			panelType = LOGIN_TYPE.MAIN,
 		}
-		dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData_LoginRole)
+		dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData_LoginRole)
 
 		
 	elseif login_login_s2c.code == 20 then
@@ -243,11 +243,11 @@ function LoginMainPanel:_Receive_Select_Role(login_select_role_s2c)
 	self.m_nlogin_select_role_s2c = login_select_role_s2c
 	
 	if self.m_model.m_pIsOpenedCreatePanel then 
-		local panelData = {
+		local modelData = {
 			modelType = MODEL_TYPE.LOGIN,
 			panelType = LOGIN_TYPE.CREATEROLE,
 		}
-		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,panelData)
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
 	end
 	self.m_model:LoginFinish()
 end

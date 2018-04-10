@@ -37,7 +37,7 @@ end
 
 --@brief 更新模块列表中的模块逻辑
 function ModelManager:Update()
-	ModelManager:_UpdatePanel(CSTime.deltaTime)
+	ModelManager:_TickPanel(CSTime.deltaTime)
 end
 
 --@breif 移除
@@ -86,10 +86,10 @@ end
 
 
 --@brief 刷新当前缓存中的面板
-function ModelManager:_UpdatePanel( deltaTime )
+function ModelManager:_TickPanel( deltaTime )
 	if ModelManager.m_modelList then
 		for k,model in pairs(ModelManager.m_modelList) do
-			model:Update(deltaTime)
+			model:Tick(deltaTime)
 		end
 	end
 end

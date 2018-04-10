@@ -66,7 +66,7 @@ function MapRadarPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function MapRadarPanel:onUpdatePanel(deltaTime)
+function MapRadarPanel:onTick(deltaTime)
 	self:_UpdateCircle()
 	self:_UpdatePlayer()
 end

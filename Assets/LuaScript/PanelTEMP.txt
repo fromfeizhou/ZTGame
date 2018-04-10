@@ -37,7 +37,7 @@ function XXXXPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function XXXXPanel:onUpdatePanel(deltaTime)
+function XXXXPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

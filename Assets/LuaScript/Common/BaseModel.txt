@@ -36,10 +36,10 @@ function BaseModel:Init()
 end
 
 --@brief 更新
-function BaseModel:Update()
+function BaseModel:Tick()
 	for i,panel in pairs(self.m_tPanelList) do
 		if panel.Update then
-			panel:Update(deltaTime)
+			panel:Tick(deltaTime)
 		end
 	end
 end

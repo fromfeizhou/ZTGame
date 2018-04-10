@@ -128,7 +128,7 @@ function BattleUIMgr:Update()
 		self:_UpdateKeyBoardControl()
 	end
 	if self.m_UIModel then
-		self.m_UIModel:Update()
+		self.m_UIModel:Tick()
 	end
 end
 

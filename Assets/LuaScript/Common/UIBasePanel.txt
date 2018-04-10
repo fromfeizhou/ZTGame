@@ -63,8 +63,8 @@ end
 
 --@brief 隐藏面板
 function UIBasePanel:Hide()
-		self.m_isShow = false
-		self:_Rush()
+	self.m_isShow = false
+	self:_Rush()
 end
 
 --@brief 刷新面板
@@ -91,9 +91,9 @@ function UIBasePanel:_InitPanel()
 end
 
 --@brief 面板每帧刷新
-function UIBasePanel:Update(deltaTime)
+function UIBasePanel:Tick(deltaTime)
 	if self.m_LoadFinish then 
-		self:onUpdatePanel(deltaTime)
+		self:onTick(deltaTime)
 	end
 end
 
@@ -114,7 +114,7 @@ function UIBasePanel:onInitPanel()
 end
 
 --@brief 子类重写 - 面板每帧更新
-function UIBasePanel:onUpdatePanel(deltaTime)
+function UIBasePanel:onTick(deltaTime)
 end
 
 --@brief 子类重写 - 面板被销毁
