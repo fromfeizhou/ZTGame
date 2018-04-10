@@ -52,10 +52,10 @@ function MapRadarPanel:onCreatePanel()
 
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleCur")
-	self.m_ztCircleCur:Init(50)
+	self.m_ztCircleCur:Init(80,false,3.0)
 	self.m_ztCircleCur:SetColor(CSColor.green)
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleDest")
-	self.m_ztCircleDest:Init(50)
+	self.m_ztCircleDest:Init(80,false,3.0)
 	self.m_ztCircleDest:SetColor(CSColor.red)
 
 	--玩家，队友
@@ -190,8 +190,7 @@ end
 
 --@brief 设置毒圈参数
 function MapRadarPanel:_SetCircle(circle, circleInfo)
-	circle:SetRadius(circleInfo.radius)
-	circle.rectTransform.anchoredPosition = circleInfo.pos
+	circle:SetCircle(circleInfo.pos,circleInfo.radius)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
