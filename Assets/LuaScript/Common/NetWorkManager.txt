@@ -55,11 +55,12 @@ function NetWorkManager:RequestConnect( addressData )
 
 	--显示锁屏界面
 	local dispatcher = GlobalData:GetMdlEventDispatcher()
-	local panelData = {}
-	panelData.modelType = MODEL_TYPE.SYSTEM
-	panelData.panelType = SYSTEM_TYPE.LOCK
-	dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
-
+	local modelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.LOCK,
+	}
+	GCSLog("+++++++++++++++++NetWorkManager:RequestConnect,",SYSTEM_TYPE.LOCK)
+	dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 	self.m_instance:RequestConnect()
 end
 

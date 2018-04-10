@@ -63,24 +63,24 @@ function ModelManager:_RemoveEvents()
 end
 
 --@breif 事件句柄 显示面板
-function ModelManager:_OnHandle_Show(panelData)
-	GCSLog("ModelManager:_OnHandle_Show",panelData.modelType,panelData.panelType)
-	local model = ModelManager:_GetModel(panelData.modelType)
+function ModelManager:_OnHandle_Show(modelData)
+	GCSLog("ModelManager:_OnHandle_Show-----------------",modelData.modelType,modelData.panelType)
+	local model = ModelManager:_GetModel(modelData.modelType)
 	if model then
-		model:ShowPanel(panelData)
+		model:ShowPanel(modelData.panelType,modelData.panelData)
 	else
-		GCSLog("ModelManager:_OnHandle_Show found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Show found out ",modelData.panelType)
 	end
 end
 
 --@breif 事件句柄 隐藏面板
-function ModelManager:_OnHandle_Hide(panelData)
-	local model = ModelManager:_GetModel(panelData.modelType)
+function ModelManager:_OnHandle_Hide(modelData)
+	local model = ModelManager:_GetModel(modelData.modelType)
 	if model then
-		model:HidePanel(panelData)
+		model:HidePanel(modelData.panelType)
 		ModelManager:_TryCleanModel()
 	else
-		GCSLog("ModelManager:_OnHandle_Hide found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Hide found out ",modelData.panelType)
 	end
 end
 

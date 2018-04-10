@@ -94,10 +94,8 @@ end
 function BattleHUD:_OnClickBagBtn( )
 
 	local panelData = {
-		panelType = BATTLE_UI_TYPE.BATTLEBAG,
-		isFirstCreate = false
+		isFirstCreate = false,
 	}
-	--CSLog("BattleMapMgr ",SerializeTable(newItem))
 	CSLog("KKJJKJK")
-	GlobalBattleCtrl:GetUIModel():ShowPanel(panelData)
+	GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.BATTLEBAG,panelData)
 end

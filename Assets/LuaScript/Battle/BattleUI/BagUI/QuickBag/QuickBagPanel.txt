@@ -29,7 +29,6 @@ function QuickBagPanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = QuickBagPanel })
 	obj.m_tPanelData = panelData
-	--CSLog("QuickBagPanel:panelData.Items>>>>>>>>>>",SerializeTable(panelDatan.items ))
 	obj:_LoadAssetPanel(parent, model)
 	return obj
 end
@@ -40,8 +39,8 @@ function QuickBagPanel:onCreatePanel()
 	self.m_quickPanelRoot = self.m_transform:Find("ItemPanel")
 	self.m_quickPanelRoot.gameObject:SetActive(false)
 	self.m_ItemList={}
-		--@brief 初始化登录界面UI控件
-		self.m_ScrollView=PanelWidget:GetScrollView(self.m_transform,"ItemPanel/ScrollView")
+	--@brief 初始化登录界面UI控件
+	self.m_ScrollView=PanelWidget:GetScrollView(self.m_transform,"ItemPanel/ScrollView")
 	self.m_Grid=self.m_ScrollView.content
 
 	for i=1,20 do
@@ -54,12 +53,11 @@ end
 
 --@brief 显示登录面板
 function QuickBagPanel:onShow()
-	--CSLog("OnShowPanel:>>>>>>",self.m_tPanelData.items)
 	if not self.m_gameObject then
 		return
 	end
 	
-	if not self.m_tPanelData.items then
+	if not self.m_tPanelData or not self.m_tPanelData.items then
 		self:Hide()
 		return
 	end

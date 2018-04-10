@@ -184,34 +184,25 @@ end
 
 --@brief 创建技能按钮
 function BattleUIMgr:_CreateSkillJoystick()
-	local panelData = {
-		panelType = BATTLE_UI_TYPE.BATTLE_HUD,
-	}
-	self.m_UIModel:ShowPanel(panelData)
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.BATTLE_HUD)
 end
 
 -- 创建背包
 function BattleUIMgr:_CreateBattleBagPanel()
 	local panelData = {
-		panelType = BATTLE_UI_TYPE.BATTLEBAG,
 		isFirstCreate = true
 	}
-	self.m_UIModel:ShowPanel(panelData)
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.BATTLEBAG, panelData)
 end
 
 --@brief 显示雷达地图
 function BattleUIMgr:_CreateMapRaderPanel()
-	local panelData = {
-		panelType = BATTLE_UI_TYPE.MAP_RADAR,
-	}
-	self.m_UIModel:ShowPanel(panelData)
+	
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.MAP_RADAR)
 end
 
 function BattleUIMgr:_CreateQuickBag( )
-	local panelData = {
-		panelType = BATTLE_UI_TYPE.QUICKBAG,
-	}
-	self.m_UIModel:ShowPanel(panelData)
+	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.QUICKBAG)
 end
 
 

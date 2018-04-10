@@ -51,8 +51,9 @@ end
 
 --@brief 显示面板
 function UIBasePanel:Show(panelData)
-		self.m_isShow = true
-		self:_Rush()
+	if panelData then self.m_tPanelData = panelData end
+	self.m_isShow = true
+	self:_Rush()
 end
 
 
