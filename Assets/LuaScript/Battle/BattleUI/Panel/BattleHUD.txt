@@ -14,6 +14,7 @@ BattleHUD = {
 	m_parentRoot=nil,
 	m_transform=nil,
 	m_gameObject=nil,
+	m_bagBtn=nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -55,10 +56,18 @@ function BattleHUD:_LoadAsseFinish(target,path)
 		self.m_transform = CSTransform.Instantiate(target.transform,self.m_parentRoot)
 		self.m_gameObject = self.m_transform.gameObject
 		self:_InitSkillBtn()
+		self:_InitComponent()
 	end
 end
 
 -- 初始化界面
+
+function BattleHUD:_InitComponent()
+	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
+end
+
+
+
 function BattleHUD:_InitSkillBtn()
 	local testSkillId = {1001,1101,1102,1103}
 
@@ -78,4 +87,17 @@ end
 function BattleHUD:_GetSkillBtnNode( index )
 	local transform =  self.m_transform:Find(string.format("SkillBtnNode/SkillBtn%02d",index))
 	return transform
+end
+
+-- 组件Event
+
+function BattleHUD:_OnClickBagBtn( )
+
+	local panelData = {
+		panelType = BATTLE_UI_TYPE.BATTLEBAG,
+		isFirstCreate = false
+	}
+	--CSLog("BattleMapMgr ",SerializeTable(newItem))
+	CSLog("KKJJKJK")
+	GlobalBattleCtrl:GetUIModel():ShowPanel(panelData)
 end

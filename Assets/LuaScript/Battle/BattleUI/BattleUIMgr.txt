@@ -20,7 +20,7 @@ BattleUIMgr = {
 	m_playerContainer = nil,	--玩家容器
 	m_hpContainer = nil,		--hp容器
 	m_UIContainer = nil,		--地图容器
-	m_BattleBagContainer=nil, 	--角色背包
+	--m_BattleBagContainer=nil, 	--角色背包
 	m_MapItemUIContainer=nil, 	--地图物品UI容器
 };
 
@@ -67,7 +67,7 @@ function BattleUIMgr:Init()
 	self.m_UIModel:SetCanvasRoot(self.m_UIContainer)
 
 	--战斗背包
-	self.m_BattleBagContainer=self:_CreateContainer("BattleBagContainer",self.m_mainUIContainer)
+	--self.m_BattleBagContainer=self:_CreateContainer("BattleBagContainer",self.m_mainUIContainer)
 	
 	--创建战斗ui
 	self:_CreateBattleUI()
@@ -117,11 +117,6 @@ function BattleUIMgr:Destroy()
 	if self.m_UIContainer then
 		CSGameObject.Destroy(self.m_UIContainer.gameObject)
 		self.m_UIContainer = nil
-	end
-
-	if self.m_BattleBagContainer then
-		CSGameObject.Destroy(self.m_BattleBagContainer.gameObject)
-		self.m_BattleBagContainer = nil
 	end
 
 	self.m_canvas = nil
@@ -197,7 +192,11 @@ end
 
 -- 创建背包
 function BattleUIMgr:_CreateBattleBagPanel()
-	BattleBagPanel:Create(self.m_BattleBagContainer)
+	local panelData = {
+		panelType = BATTLE_UI_TYPE.BATTLEBAG,
+		isFirstCreate = true
+	}
+	self.m_UIModel:ShowPanel(panelData)
 end
 
 --@brief 显示雷达地图

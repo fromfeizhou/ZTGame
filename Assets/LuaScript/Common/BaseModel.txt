@@ -84,6 +84,7 @@ function BaseModel:ShowPanel( panelData )
 	end
 
 	if panel.Show then
+		if panelData then panel:SetPanelData(panelData) end
 		panel:Show(panelData)
 	else
 		GCSLog("found out panel","panelType",panelType)
