@@ -7,21 +7,21 @@ using System.Text;
 using System.Threading;
 using System;
 using LuaFramework;
+using System.IO;
 
 public class ZTTcpClient
 {
-    string editString = "hello wolrd"; //编辑框文字
 
     Socket serverSocket; //服务器端socket
-   
-    string recvStr; //接收的字符串
-    string sendStr; //发送的字符串
-    int recvLen; //接收的数据长度
     Thread connectThread; //连接线程
+    byte[] clientBuffer = new byte[8192];
+    private MemoryStream memStream;
+    private BinaryReader reader;
 
     public void ConnectServer(string ip, int port)
     {
         SocketQuit();
+      
 
         //定义套接字类型,必须在子线程中定义
         serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -30,16 +30,115 @@ public class ZTTcpClient
         IPEndPoint ipEnd = new IPEndPoint(ipAddress, port);
         serverSocket.Connect(ipEnd);
 
-        //输出初次连接收到的字符串
-        //recvLen = serverSocket.Receive(recvData);
-        //recvStr = Encoding.ASCII.GetString(recvData, 0, recvLen);
-
         //开启一个线程连接，必须的，否则主线程卡死
         connectThread = new Thread(new ThreadStart(SocketReceive));
         connectThread.Start();
 
+        //ZTSceneManager.GetInstance().StartCoroutine(OnReceiveCoroutine());
+        //serverSocket.BeginReceive(clientBuffer, 0, this.clientBuffer.Length, SocketFlags.None,
+        //   new System.AsyncCallback(clientReceive), this.serverSocket);
         NetWorkManager.AddEvent(Protocal.Connect, new ByteBuffer());
 
+    }
+
+    IEnumerator OnReceiveCoroutine()
+    {
+        while (true)
+        {
+            int byteCount = 0;
+            try
+            {
+                //结束接受数据 完成储存  
+                byteCount = serverSocket.Receive(clientBuffer);
+
+            }
+            catch (SocketException ex)
+            {
+            }
+            Debug.Log(byteCount);
+            if (byteCount > 0)
+            {
+                //发送数据  
+                OnReceiveSync(clientBuffer, byteCount);
+                Array.Clear(clientBuffer, 0, clientBuffer.Length);   //清空数组
+            }
+            yield return null;
+        }
+    }
+
+    void clientReceive(System.IAsyncResult ar)
+    {
+        //获取一个客户端正在接受数据的对象  
+        Socket workingSocket = ar.AsyncState as Socket;
+        int byteCount = 0;
+        string content = "";
+        try
+        {
+            //结束接受数据 完成储存  
+            byteCount = workingSocket.EndReceive(ar);
+
+        }
+        catch (SocketException ex)
+        {
+            ////如果接受消息失败  
+            //clientReceiveCallBack(ex.ToString());
+        }
+        if (byteCount > 0)
+        {
+            //发送数据  
+            OnReceiveSync(clientBuffer, byteCount);
+            Array.Clear(clientBuffer, 0, clientBuffer.Length);   //清空数组
+        }
+       
+        //接受下一波数据  
+        serverSocket.BeginReceive(clientBuffer, 0, this.clientBuffer.Length, SocketFlags.None,
+           new System.AsyncCallback(clientReceive), this.serverSocket);
+
+    }
+    /// <summary>
+    /// 接收到消息
+    /// </summary>
+    void OnReceiveSync(byte[] bytes, int length)
+    {
+        memStream.Seek(0, SeekOrigin.End);
+        memStream.Write(bytes, 0, length);
+        //Reset to beginning
+        memStream.Seek(0, SeekOrigin.Begin);
+        while (RemainingBytes() > 4)
+        {
+            byte[] msgLenData = reader.ReadBytes(2);
+            Array.Reverse(msgLenData);
+            ushort messageLen = BitConverter.ToUInt16(msgLenData, 0);
+            if (RemainingBytes() >= messageLen)
+            {
+                MemoryStream ms = new MemoryStream();
+                BinaryWriter writer = new BinaryWriter(ms);
+                writer.Write(reader.ReadBytes(messageLen));
+                ms.Seek(0, SeekOrigin.Begin);
+                BinaryReader r = new BinaryReader(ms);
+                byte[] message = r.ReadBytes((int)(ms.Length - ms.Position));
+
+                OnReceive(message);
+            }
+            else
+            {
+                //Back up the position two bytes
+                memStream.Position = memStream.Position - 2;
+                break;
+            }
+        }
+        //Create a new stream with any leftover bytes
+        byte[] leftover = reader.ReadBytes((int)RemainingBytes());
+        memStream.SetLength(0);     //Clear
+        memStream.Write(leftover, 0, leftover.Length);
+    }
+
+    /// <summary>
+    /// 剩余的字节
+    /// </summary>
+    private long RemainingBytes()
+    {
+        return memStream.Length - memStream.Position;
     }
 
     //public void SocketSend(string sendStr)
@@ -203,11 +302,15 @@ public class ZTTcpClient
 
     public void OnRegister()
     {
-
+        memStream = new MemoryStream();
+        reader = new BinaryReader(memStream);
     }
 
     public void OnRemove()
     {
         SocketQuit();
+
+        reader.Close();
+        memStream.Close();
     }
 }
