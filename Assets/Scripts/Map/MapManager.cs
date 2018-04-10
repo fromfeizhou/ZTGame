@@ -12,9 +12,9 @@ public enum eMapBlockType
     None,   //无
     Collect,//碰撞区域
     Hide,   //隐藏区域
+    Height,
     Event,  //事件
     PlayerPoint,
-    Height
 
     //Count,  //总数
 }

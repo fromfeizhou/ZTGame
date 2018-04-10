@@ -8,6 +8,7 @@ using XLua;
 [LuaCallCSharp]
 public class MapElementView
 {
+    //地图块加载逻辑
     private MapTileViewMgr mapTileViewMgr;
 
     private MapAsset mapAsset;
@@ -22,7 +23,6 @@ public class MapElementView
     private List<string> disableElementList = new List<string>();      //移除列表
     private Dictionary<string, GameObject> activeObj = new Dictionary<string, GameObject>();//激活的elementObj
     private List<GameObject> disabelObj = new List<GameObject>();//Element隐藏列表
-    private GameObject mapRoot;
     private GameObject elementRoot;
 
     private Transform lastRayObj;
@@ -69,9 +69,8 @@ public class MapElementView
             Debug.LogError("MapAsset is null!!");
         }
     }
-
-
-    private int smallInterval = MapDefine.MAPITEMSIZE / 4;
+   
+    //刷新地图块
     public void UpdateTerrainView(Vector3 pos, int row, int col)
     {
         mapTileViewMgr.UpdateViewByPos(pos, row, col);
@@ -102,7 +101,7 @@ public class MapElementView
         }
 
     }
-
+    //处理被射线照射的go
     private void SetRayObjEnabel(Transform obj, bool isShow)
     {
         if (obj == null) return;
@@ -113,6 +112,7 @@ public class MapElementView
 
     }
 
+    //刷新地图元素
     public void UpdateElementView(Vector3 pos, int gridX, int gridY)
     {
         Dictionary<string, MapElement> elementDic = new Dictionary<string, MapElement>();
@@ -180,7 +180,7 @@ public class MapElementView
             ZTSceneManager.GetInstance().StartCoroutine(DestroyElementList(tempDisableList));
         }
     }
-
+    //分帧加载或者清理地图元素
     IEnumerator OnUpdateElement()
     {
         while (createElementList.Count > 0 || disableElementList.Count > 0)
@@ -197,6 +197,7 @@ public class MapElementView
         CreateElementInList();
     }
 
+    //清理地图元素（放入未激活列表）
     public void ClearElementInList()
     {
         if (disableElementList == null || disableElementList.Count == 0)
@@ -216,7 +217,7 @@ public class MapElementView
             activeObj.Remove(key);
         }
     }
-
+    //创建地图元素
     public void CreateElementInList()
     {
         if (createElementList == null || createElementList.Count == 0)
@@ -275,6 +276,7 @@ public class MapElementView
         return tempObj;
     }
 
+    //销毁多余地图元素
     IEnumerator DestroyElementList(List<GameObject> destroyList)
     {
         if (destroyList == null)

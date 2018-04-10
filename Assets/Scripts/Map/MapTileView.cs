@@ -16,32 +16,6 @@ public class MapTileView : MonoBehaviour {
             return _terrain != null;
         }
     }
-    public void setMapData(MapTileData data)
-    {
-        if (data==_mapTileData&&IsLoad)
-            return;
-        _mapTileData = data;
-        _mapId = _mapTileData.MapId;
-        name = data.Row + "_" + data.Column;
-        UpdateTileView();
-    }
-
-    public MapTileData GetMapData()
-    {
-        return _mapTileData;
-    }
-
-    private void UpdateTileView()
-    {
-        ClearTrrain();
-        string mapKey = string.Format("{0}_{1}", _mapTileData.Row, _mapTileData.Column);
-        string assetPath = MapDefine.TERRAIN_PREFAB_PATH + mapKey + ".prefab";
-        AssetManager.LoadAsset(assetPath, (obj, str) =>
-        {
-            GameObject mapGo = obj as GameObject;
-            CreateTrrain(mapGo);
-        });
-    }
 
     private int _gridCnt = MapDefine.MAPITEMSIZE * 4;
     private List<MapBlockData> mapBlock;
@@ -70,44 +44,7 @@ public class MapTileView : MonoBehaviour {
     }
     private Vector3 aaa = new Vector3(0.2f, 0.0f, 0.2f);
 
-   
 
-
-    private void CreateTrrain(GameObject go)
-    {
-        _terrain = GameObject.Instantiate(go);
-        _terrain.layer = LayerMask.NameToLayer("Terrain");
-        UpdateTrrain();
-    }
-
-    public bool IsNeedClear(int minRow,int maxRow,int minCol,int maxCol)
-    {
-        if (_mapTileData == null || !IsLoad ||  (_mapTileData.Row > maxRow || _mapTileData.Row < minRow || _mapTileData.Column > maxCol || _mapTileData.Column < minCol))
-        {
-            ClearTrrain();
-            return true;
-        }
-        return false;
-    }
-
-    public void ClearTrrain()
-    {
-        if (null != _terrain)
-        {
-            GameObject.DestroyObject(_terrain);
-            _terrain = null;
-        }
-
-        for(int i = 0;i< trees.Count;i++)
-            GameObject.DestroyObject(trees[i]);
-        trees.Clear();
-
-
-    }
-
-    private List<GameObject> trees = new List<GameObject>();
-
- 
 
     private void UpdateTrrain()
     {

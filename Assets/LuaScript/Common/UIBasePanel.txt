@@ -50,11 +50,17 @@ function UIBasePanel:_LoadAssetPanel(parent, model)
 end
 
 --@brief 显示面板
-function UIBasePanel:Show()
+function UIBasePanel:Show(panelData)
 	if not self.m_isShow then
+		if panelData then self:SetPanelData(panelData) end
 		self.m_isShow = true
 		self:_Rush()
 	end
+end
+
+
+function UIBasePanel:SetPanelData(panelData)
+	self.m_tPanelData = panelData
 end
 
 --@brief 隐藏面板
