@@ -410,9 +410,9 @@ function Character:UpdatePos(pos)
 		--动画刷新通知
 		self.m_animData:UpdatePos(pos)
 		--CS.GameTool.LogError("Character:UpdatePos")
-		if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
-			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
-		end
+		-- if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
+		-- 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
+		-- end
 		if self:IsInCamera() then
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTRE_POS,self.m_nBattleId)
 		end
