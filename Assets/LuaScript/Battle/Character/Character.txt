@@ -241,7 +241,7 @@ end
 --@brief 锁定移动
 function Character:SetMoveLocked(value)
 	self.m_bMoveLocked = value
-	self:CheckStateAnima()
+	--self:CheckStateAnima()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
