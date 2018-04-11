@@ -15,9 +15,15 @@ BaseModel = {
 	m_canvasName = "Canvas",
 }
 
+function  BaseModel:GetName()
+	return "BaseModel"
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
 --@brief 拷贝原表
 function BaseModel:Create()
 	local obj = {}
@@ -78,12 +84,9 @@ function BaseModel:ShowPanel( panelType, panelData )
 			self.m_tPanelList[panelType]:Show(panelData)
 		end
 	else
-		local parent = self:_GetCanvasRoot()
-		panel = self.m_panelDefine[panelType]:Create(parent, self, panelData)
-		self.m_tPanelList[panelType] = panel
+		self.m_tPanelList[panelType] = self:CreatePanel(panelType, panelData)
 	end
 end
-
 
 function BaseModel:HidePanel(panelType)
 	if self.m_tPanelList[panelType] then
@@ -96,6 +99,12 @@ function BaseModel:HidePanel(panelType)
 end
 
 
+function BaseModel:CreatePanel(panelType, panelData)
+	local panel = {}
+	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
+	panel:_LoadAssetPanel(self:_GetCanvasRoot(), self, panelData)
+	return panel
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

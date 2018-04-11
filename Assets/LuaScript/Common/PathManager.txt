@@ -3,21 +3,21 @@
 --@data 2018/2/27
 
 PathManager = {
-	g_sAssetPath = "Assets",		--资源根目录地址
-	m_sUIPrefab = "Assets/Prefabs/UI/",		--ui预设地址
-	m_sUIWidgets = "Assets/Prefabs/UIWidgets/",		--ui组件地址
+	g_sAssetPath 	= "Assets",		--资源根目录地址
+	m_sUIPrefab 	= "Assets/Prefabs/UI/",		--ui预设地址
+	m_sUIWidgets 	= "Assets/Prefabs/UIWidgets/",		--ui组件地址
 
-	m_sUIPanel = "Assets/Prefabs/Panel/",	--面板预设地址
-	m_sPbFile = "Assets/LuaScript/ProtoBuff/",
+	m_sUIPanel 		= "Assets/Prefabs/Model/",	--面板预设地址
+	m_sPbFile 		= "Assets/LuaScript/ProtoBuff/",
 
-	m_sAnimator = "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
-	m_sModel = "Assets/Models/",
+	m_sAnimator 	= "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
+	m_sModel 		= "Assets/Models/",
 
-	m_sBattleUIPrefab = "Assets/Prefabs/UI/Battle/",		--战斗ui预设地址
-	m_sBattleUINum = "Assets/Prefabs/UI/Battle/",					--战斗ui数字
-	m_sSkillParticles = "Assets/Particles/Skill/",				--技能粒子地址
-	m_sSkillIcon = "Assets/ResourcesLib/Images/PanelPng/Fight/SkillIcon/", --技能图标地址
-	m_sItemIcon="Assets/ResourcesLib/Images/ItemIcon/"   					--物品图标地址
+	m_sBattleUIPrefab 	= "Assets/Prefabs/Model/Battle/",		--战斗ui预设地址
+	m_sBattleUINum 		= "Assets/Prefabs/Model/Battle/",		--战斗ui数字
+	m_sSkillParticles 	= "Assets/Particles/Skill/",				--技能粒子地址
+	m_sSkillIcon 		= "Assets/ResourcesLib/Images/PanelPng/Fight/SkillIcon/", --技能图标地址
+	m_sItemIcon			= "Assets/ResourcesLib/Images/ItemIcon/"   					--物品图标地址
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

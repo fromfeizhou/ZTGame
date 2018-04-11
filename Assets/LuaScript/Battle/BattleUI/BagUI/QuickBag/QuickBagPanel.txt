@@ -12,7 +12,6 @@ local CSJoystick = CS.JoystickBase
 local  CSRectTransform = CS.UnityEngine.RectTransform
 
 QuickBagPanel = {
-	m_panelName = "QuickBagPanel",
 	m_quickPanelRoot=nil,--拾取界面
 	m_PagePanelRoot=nil,--包裹界面
 	m_ScrollView=nil,
@@ -21,18 +20,19 @@ QuickBagPanel = {
 }
 
 setmetatable( QuickBagPanel, { __index = UIBasePanel})
+
+function QuickBagPanel:GetName()
+	return "QuickBagPanel"
+end
+
+--@brief 面板资源相对模块路径
+function QuickBagPanel:GetRelativePath()
+	return "Panel/"
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function QuickBagPanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = QuickBagPanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
-end
-
-
 --@brief 面板被创建
 function QuickBagPanel:onCreatePanel()	
 	self.m_quickPanelRoot = self.m_transform:Find("ItemPanel")

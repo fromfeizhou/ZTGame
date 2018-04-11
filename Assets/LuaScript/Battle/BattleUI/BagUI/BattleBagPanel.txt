@@ -13,8 +13,6 @@ local  CSUnityScrollView = CS.UnityEngine.ScrollRect
 
 
 BattleBagPanel = {
-	m_panelName = "BattleBagPanel",
-	
 	m_parentRoot=nil,
 	m_transform=nil,
 	m_gameObject=nil,
@@ -34,17 +32,17 @@ RoleEquipType={
 }
 
 setmetatable( BattleBagPanel, { __index = UIBasePanel})
+function BattleBagPanel:GetName()
+	return "BattleBagPanel"
+end
 
+--@brief 面板资源相对模块路径
+function BattleBagPanel:GetRelativePath()
+	return "Panel/"
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function BattleBagPanel:Create(parent,model,panelData)
-	local obj = {}
-	setmetatable( obj, { __index = BattleBagPanel })
-	obj:_LoadAssetPanel(parent,model,panelData)
-	return obj
-end
 
 --@brief 面板被创建
 function BattleBagPanel:onCreatePanel()	

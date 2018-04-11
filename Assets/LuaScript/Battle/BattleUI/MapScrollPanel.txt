@@ -29,14 +29,14 @@ setmetatable( MapScrollPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function MapScrollPanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = MapScrollPanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+function MapScrollPanel:GetName()
+	return "MapScrollPanel"
 end
 
+--@brief 面板资源相对模块路径
+function MapScrollPanel:GetRelativePath()
+	return "Panel/"
+end
 --@brief 面板被创建
 function MapScrollPanel:onCreatePanel()	
 	--@brief 初始化登录界面UI控件

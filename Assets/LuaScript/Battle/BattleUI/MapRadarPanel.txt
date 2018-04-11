@@ -26,14 +26,13 @@ MapRadarPanel = {
 	m_mapContent = nil,
 }
 setmetatable( MapRadarPanel, { __index = UIBasePanel})
+function MapRadarPanel:GetName()
+	return "MapRadarPanel"
+end
 
-
---@brief 拷贝原表
-function MapRadarPanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = MapRadarPanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+--@brief 面板资源相对模块路径
+function MapRadarPanel:GetRelativePath()
+	return "Panel/"
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************

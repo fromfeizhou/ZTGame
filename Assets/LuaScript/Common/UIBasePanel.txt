@@ -3,28 +3,27 @@ local CSTransform = CS.UnityEngine.Transform
 local CSAssetManager = CS.AssetManager
 
 UIBasePanel = {
-
-	m_model,
+	m_model = nil,
 	m_isShow = false,
-
 	m_tPanelData = nil,
-	m_gameObject,
-	m_transform,
-	m_rectTransform,
-
-	m_panelName,
-
+	m_gameObject = nil,
+	m_transform = nil,
+	m_rectTransform = nil,
+	m_panelName = nil,
 	m_LoadFinish = false,
 }
 
---@brief 拷贝原表
-function UIBasePanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = UIBasePanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+--@brief 面板资源相对模块路径
+function UIBasePanel:GetRelativePath()
+	return ""
 end
 
+function UIBasePanel:GetName()
+	return "UIBasePanel"
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 	local callback_loadfinish = function(target,path)
  		if target then
@@ -42,7 +41,10 @@ function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
 		end
 	end
-	CSAssetManager.LoadAsset(PathManager:GetUIPanel(self.m_panelName),callback_loadfinish)
+
+	local panelName = model:GetName() .."/"..self:GetRelativePath() .. self:GetName()
+	GCSLog("UIBasePanel:_LoadAssetPanel>>>>>>>>>>>>>>>>>>>>>>>>>>>",panelName)
+	CSAssetManager.LoadAsset(PathManager:GetUIPanel(panelName),callback_loadfinish)
 	self.m_model = model
 	return self
 end
