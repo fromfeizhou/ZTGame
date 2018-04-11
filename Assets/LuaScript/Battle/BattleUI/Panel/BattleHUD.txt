@@ -92,10 +92,16 @@ end
 -- 组件Event
 
 function BattleHUD:_OnClickBagBtn( )
-
-	local panelData = {
-		isFirstCreate = false,
-	}
-	CSLog("KKJJKJK")
-	GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.BATTLEBAG,panelData)
+	local panelType = BATTLE_UI_TYPE.BATTLEBAG
+	local panel = GlobalBattleCtrl:GetUIModel().m_tPanelList[panelType]
+	if panel then
+		CSLog("BattleHUD:_OnClickBagBtn",panel.m_isShow)
+		if panel.m_isShow == true then
+			panel:Hide()
+		else
+			panel:Show()
+		end
+	else
+		GlobalBattleCtrl:GetUIModel():ShowPanel(panelType)
+	end
 end

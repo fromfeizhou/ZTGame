@@ -7,7 +7,7 @@ local CSAssetManager = CS.AssetManager
 UIBasePanel = {
 
 	m_model,
-	m_isShow,
+	m_isShow = false,
 
 	m_tPanelData = nil,
 	m_gameObject,
@@ -23,13 +23,11 @@ UIBasePanel = {
 function UIBasePanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = UIBasePanel })
-	obj:_LoadAssetPanel(parent, model)
+	obj:_LoadAssetPanel(parent, model, panelData)
 	return obj
 end
 
-function UIBasePanel:_LoadAssetPanel(parent, model)
-	GCSLog("UIBasePanel:Create",self.m_panelName)
-
+function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 	local callback_loadfinish = function(target,path)
  		if target then
  			self.m_gameObject = CSGameObject.Instantiate(target,parent)
@@ -38,8 +36,10 @@ function UIBasePanel:_LoadAssetPanel(parent, model)
 
 			self:_OnCreatePanel()
 			self:_InitPanel()
-			self:_Rush()
 			self.m_LoadFinish = true
+
+			self:Show(panelData)
+
 		else
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
 		end
@@ -51,29 +51,23 @@ end
 
 --@brief 显示面板
 function UIBasePanel:Show(panelData)
-	if panelData then self.m_tPanelData = panelData end
-	self.m_isShow = true
-	self:_Rush()
-end
+	GCSLog(self.m_panelName .. ":Show()")
 
-
-function UIBasePanel:SetPanelData(panelData)
-	self.m_tPanelData = panelData
+	self:Update(panelData)
+	if self.m_gameObject and self.m_isShow == false then 
+		self.m_isShow = true
+		self.m_gameObject:SetActive(self.m_isShow)
+		self:onShow()
+	end
 end
 
 --@brief 隐藏面板
 function UIBasePanel:Hide()
-	self.m_isShow = false
-	self:_Rush()
-end
+	GCSLog(self.m_panelName .. ":Hide()")
 
---@brief 刷新面板
-function UIBasePanel:_Rush()
-	if not self.m_gameObject then return end
-	self.m_gameObject:SetActive(self.m_isShow)
-	if self.m_isShow then
-		self:onShow()
-	else
+	if self.m_gameObject and self.m_isShow == true then 
+		self.m_isShow = false
+		self.m_gameObject:SetActive(self.m_isShow)
 		self:onHide()
 	end
 end
@@ -88,6 +82,12 @@ end
 --@brief 面板初始化
 function UIBasePanel:_InitPanel()
 	self:onInitPanel()
+end
+
+function UIBasePanel:Update(panelData)
+	self.m_tPanelData = panelData
+	self:onUpdate()
+	-- body
 end
 
 --@brief 面板每帧刷新
@@ -111,6 +111,9 @@ end
 
 --@brief 子类重写 - 面板初始化
 function UIBasePanel:onInitPanel()
+end
+
+function UIBasePanel:onUpdate()
 end
 
 --@brief 子类重写 - 面板每帧更新

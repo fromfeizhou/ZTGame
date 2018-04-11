@@ -73,40 +73,24 @@ end
 
 --@breif 显示面板
 function BaseModel:ShowPanel( panelType, panelData )
-	local panel = nil
 	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
+		if self.m_tPanelList[panelType].Show then
+			GCSLog("BaseModel:ShowPanel",panelData.items)
+			self.m_tPanelList[panelType]:Show(panelData)
+		end
 	else
 		local parent = self:_GetCanvasRoot()
-		GCSLog("=======================panelType:",panelType)
-		GCSLog("----------------",SerializeTable(self.m_panelDefine))
-		GCSLog(self.m_panelDefine[panelType])
-		GCSLog(self.m_panelDefine[panelType].Create)
-		GCSLog(parent)
-		GCSLog(panelData)
 		panel = self.m_panelDefine[panelType]:Create(parent, self, panelData)
 		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel.Show then
-		if modelData then panel:SetPanelData(panelData) end
-		panel:Show(panelData)
-	else
-		GCSLog("found out panel","panelType",panelType)
 	end
 end
 
 
 function BaseModel:HidePanel(panelType)
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
+	if self.m_tPanelList[panelType] and self.m_tPanelList[panelType].Hide then
+		self.m_tPanelList[panelType]:Hide()
 	else
 		GCSLog("BaseModel:HidePanel","found out",panelType)
-	end
-
-	if panel.Hide then
-		panel:Hide()
 	end
 end
 

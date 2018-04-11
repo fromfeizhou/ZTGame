@@ -172,9 +172,7 @@ end
 function BattleUIMgr:_CreateBattleUI()
 	self:_CreateMoveJoystick()
 	self:_CreateSkillJoystick()
-	self:_CreateBattleBagPanel()
 	self:_CreateMapRaderPanel()
-	self:_CreateQuickBag()
 end
 
 --@brief 创建移动摇杆
@@ -187,25 +185,10 @@ function BattleUIMgr:_CreateSkillJoystick()
 	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.BATTLE_HUD)
 end
 
--- 创建背包
-function BattleUIMgr:_CreateBattleBagPanel()
-	local panelData = {
-		isFirstCreate = true
-	}
-	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.BATTLEBAG, panelData)
-end
-
 --@brief 显示雷达地图
 function BattleUIMgr:_CreateMapRaderPanel()
-	
 	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.MAP_RADAR)
 end
-
-function BattleUIMgr:_CreateQuickBag( )
-	self.m_UIModel:ShowPanel(BATTLE_UI_TYPE.QUICKBAG)
-end
-
-
 
 --@brief 创建匹配ui
 function BattleUIMgr:_CreateMatchUI()
