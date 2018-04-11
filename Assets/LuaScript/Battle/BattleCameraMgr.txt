@@ -89,18 +89,24 @@ function BattleCameraMgr:_RemoveEvent()
 end
 
 --@brief 刷新镜头
-function BattleCameraMgr:_OnUpdateScenePos(pos)
+function BattleCameraMgr:_OnUpdateScenePos(pos,isAction)
 	-- CSLog("BattleCameraMgr:_OnUpdateScenePos",pos)
-	BattleCameraMgr:_SetFocus(pos)
+	BattleCameraMgr:_SetFocus(pos,isAction)
 end
 
 --@brief 设置镜头焦点
-function BattleCameraMgr:_SetFocus(pos)
+function BattleCameraMgr:_SetFocus(pos,isAction)
 	if not BattleCameraMgr.m_carmeraTrans then
 		return
 	end
-
 	BattleCameraMgr.m_tTargetPos = pos + BattleCameraMgr.m_tOffsetPos
+
+	if not isAction then
+		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
+		return
+	end
+
+
 	local distance = BattleCameraMgr:_GetDistanceForTarget()
 
 	if distance > 10 then
@@ -112,8 +118,9 @@ end
 
 --@brief 刷新镜头位置
 function BattleCameraMgr:_UpdateCameraPos(pos)
-	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
+	--CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
 	BattleCameraMgr.m_carmeraTrans.position = pos
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CAMERA,pos)
 end
 
 --@brief 镜头缓动
@@ -123,10 +130,12 @@ function BattleCameraMgr:_UpdateCameraActoin()
 	BattleCameraMgr:_UpdateCameraPos(curPos)
 
 	local distance = BattleCameraMgr:_GetDistanceForTarget()
-	if distance < 0.1 then
+	if distance <= 0.01 then
 		BattleCameraMgr.m_bMoveAction = nil
 		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
 	end
+
+
 end
 
 --@brief 获得镜头与目标点距离

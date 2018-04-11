@@ -3,7 +3,6 @@
 --@data 2018/3/5
 CityModel = {
 	m_tPanelList = nil,
-	m_panelRoot_Canvas = nil,
 }
 
 --@brief c#引用
@@ -12,8 +11,15 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = GCSLog
 
+setmetatable( CityModel, { __index = BaseModel})
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
 function CityModel:Create()
@@ -23,62 +29,23 @@ function CityModel:Create()
 	return obj
 end
 
---@brief 初始化
-function CityModel:Init()
-	self.m_tPanelList = {}
-	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
+--@brief 子类重写 - 模块初始化
+function CityModel:onInitModel()
+	self.m_panelDefine[CITY_TYPE.MAIN] = CityMainPanel
 end
 
---@brief 更新
-function CityModel:Update()
+--@brief 子类重写 - 添加事件监听
+function CityModel:_AddEvents( )
 end
 
-
---@brief 移除
-function CityModel:Destroy()
-	print("CityModel:Destroy")
-	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			panel:Destroy()
-		end
-		self.m_tPanelList = nil
-	end
+--@brief 子类重写 - 移除事件监听
+function CityModel:_RemoveEvents( )
 end
 
-
---@breif 显示面板
-function CityModel:ShowPanel( panelType )
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		local parent = self.m_panelRoot_Canvas
-		if panelType == CITY_TYPE.MAIN then
-			panel = CityMainPanel:Create(parent,self)
-		end
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel then
-		panel:Show()
-	end
+--@brief 子类重写 - 注册网络门户
+function CityModel:_RegNetFacade( )
 end
 
---@breif 隐藏面板
-function CityModel:HidePanel(panelType)
-
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("CityModel:HidePanel","found out",panelType)
-	end
-
-	if panel then
-		panel:Hide()
-	end
+--@brief 子类重写 - 注销网络门户
+function CityModel:_UnRegNetFacade( )
 end
-
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

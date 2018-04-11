@@ -50,6 +50,9 @@ end
 
 --@brief 发送命令
 function BattleCommandProtocol:SendCommand(command)
+	if GlobalBattleCtrl:GetOwnerChara():IsDead() then
+		return
+	end
 	local commandType = command.m_nType
 
 	--技能测试
@@ -121,6 +124,7 @@ end
 
 --@brief 移除协议监听
 function BattleCommandProtocol:_UnRegAll()
+	CSLog("BattleCommandProtocol:_UnRegAll")
 	ZTProtocol:Unregister(PROTOCOL.SURVIVE_MATCH)
 	ZTProtocol:Unregister(PROTOCOL.SURVIVE_FIGHT)
 
@@ -225,6 +229,10 @@ function BattleCommandProtocol:_OnMapSight(data)
 			--data.career = v.jop
 			data.pos = BattleDefine:GetClientPos(v.x,v.y,v.z)
 			data.attritList = BattleCommandProtocol:_GetAttributeList(v.base_attr)
+
+			table.insert(data.attritList, {AttributeType.Hp, v.hp})
+			table.insert(data.attritList, {AttributeType.Mp, v.mp})
+
 			list[data.battleId] = data
 		end
 
@@ -241,8 +249,9 @@ function BattleCommandProtocol:_OnMapFrame(sightData)
 	--data.start_id
 	--data.end_id
 	local commands = nil
+	--CSLog("BattleCommandProtocol:_OnMapFrame=====>>>",sightData.start_id,sightData.end_id)
 	if #sightData.data > 0 then
-		CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
+		--CSLog("BattleCommandProtocol:_OnMapFrame",SerializeTable(sightData))
 		-- CSLog("BattleCommandProtocol:_OnMapFrame",GlobalBattleCtrl:GetCurCommandFrame())
 		commands = {}
 		for i,v in pairs(sightData.data) do
@@ -302,8 +311,7 @@ function BattleCommandProtocol:_GetAttributeList(data)
 	table.insert(list, {AttributeType.AttackAcc, data.attack_acc})
 	table.insert(list, {AttributeType.HurtDec, data.hurt_dec})
 	table.insert(list, {AttributeType.CDAcc, data.cd_acc})
-	table.insert(list, {AttributeType.Hp, data.hp})
-	table.insert(list, {AttributeType.Mp, data.mp})
+	
 
 	table.insert(list, {AttributeType.MpRec, data.mp_rec})
 	return list
@@ -347,6 +355,7 @@ end
 
 --@brife 客户端模拟驱动帧发送(技能测试使用)
 function BattleCommandProtocol:__TsClientSendDriveCommand()
+	--CSLog("BattleCommandProtocol:__TsClientSendDriveCommand")
 	--发送驱动帧
 	if not BattleCommandProtocol.m_tstClientCommandList then
 		BattleCommandProtocol:ParseCommand({})

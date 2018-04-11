@@ -10,6 +10,7 @@ LoopTimer = {
 	m_tickTime,
 	m_startTime,
 }
+setmetatable( LoopTimer, { __index = Timer})
 
 --@brief 创建
 function LoopTimer:Create(handle, target)

@@ -9,35 +9,61 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 CityMainPanel = {
-	m_model = nil,
-
-	m_transform = nil,
-	m_gameObject = nil,
-	m_isShow = false,
-	
+	m_panelName = "CityMainPanel",
+	m_txtNickName,
+	m_txtName,
 }
 
 setmetatable( CityMainPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function CityMainPanel:onInitPanelData()
-	self.m_panelName = "CityMainPanel"
+
+--@brief 拷贝原表
+function CityMainPanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = CityMainPanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
 end
+
 
 --@brief 面板被创建
 function CityMainPanel:onCreatePanel()	
 	
 	-- 按钮 - 服务器列表
-	PanelWidget:GetButton(self.m_transform,"ViewPort/BtnEnterGame",function() ZTBattleScene:InitScene() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/TeamList/Btn_Confirm",function() ZTBattleScene:InitScene() end)
+
+	-- 按钮 - 技能提示
+	PanelWidget:GetButton(self.m_transform,"ViewPort/SkillList/Skill_0",function() self:_OnClick_Skill_0() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/SkillList/Skill_1",function() self:_OnClick_Skill_1() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/SkillList/Skill_2",function() self:_OnClick_Skill_2() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/SkillList/Skill_3",function() self:_OnClick_Skill_3() end)
+
+	-- 按钮 - 英雄选择
+	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_0/ZTButtonImg",function() self:_OnClick_Hero_0() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_1/ZTButtonImg",function() self:_OnClick_Hero_1() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_2/ZTButtonImg",function() self:_OnClick_Hero_2() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_3/ZTButtonImg",function() self:_OnClick_Hero_3() end)
+
+
+	-- 按钮 - 菜单
+	PanelWidget:GetButton(self.m_transform,"ViewPort/MenuList/LeftUpRoot/ShopItem/ZTButtonImg",function() self:_OnClick_Shop() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/MenuList/LeftBottomRoot/TalkItem/ZTButtonImg",function() self:_OnClick_Talk() end)
+
+	-- 按钮 - 菜单
+	self.m_txtNickName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtNickName")
+	self.m_txtName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtName")
+
 end
+
 --@brief 面板初始化
 function CityMainPanel:onInitPanel()
+	self:_SelectHero(0)
 end
 
 --@brief 面板每帧更新
-function CityMainPanel:onUpdatePanel(deltaTime)
+function CityMainPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板
@@ -60,3 +86,91 @@ end
 function CityMainPanel:_UnRegNetFacade()
 end
 	
+
+
+--@brief 按钮点击 - 选择英雄-0
+function CityMainPanel:_OnClick_Hero_0()
+	self:_SelectHero(0)
+end
+
+--@brief 按钮点击 - 选择英雄-1
+function CityMainPanel:_OnClick_Hero_1()
+	self:_SelectHero(1)
+end
+
+--@brief 按钮点击 - 选择英雄-2
+function CityMainPanel:_OnClick_Hero_2()
+	self:_SelectHero(2)
+end
+
+--@brief 按钮点击 - 选择英雄-3
+function CityMainPanel:_OnClick_Hero_3()
+	self:_SelectHero(3)
+end
+
+
+--@brief 按钮点击 - 技能点击-0
+function CityMainPanel:_OnClick_Skill_0()
+	self:_ShowNotice("敬请期待 - 技能点击-0 ")
+end
+
+--@brief 按钮点击 - 技能点击-1
+function CityMainPanel:_OnClick_Skill_1()
+	self:_ShowNotice("敬请期待 - 技能点击-1 ")
+end
+
+--@brief 按钮点击 - 技能点击-2
+function CityMainPanel:_OnClick_Skill_2()
+	self:_ShowNotice("敬请期待 - 技能点击-2 ")
+end
+
+--@brief 按钮点击 - 技能点击-3
+function CityMainPanel:_OnClick_Skill_3()
+	self:_ShowNotice("敬请期待 - 技能点击-3 ")
+end
+
+
+--@brief 按钮点击 - 商城
+function CityMainPanel:_OnClick_Shop()
+	self:_ShowNotice("敬请期待 - 商城 ")
+end
+
+
+--@brief 按钮点击 - 聊天
+function CityMainPanel:_OnClick_Talk()
+	self:_ShowNotice("敬请期待 - 聊天 ")
+end
+
+
+
+
+
+--@brief 显示提示
+function CityMainPanel:_ShowNotice(noticeStr)
+	GCSLog("CityMainPanel:_ShowNotice",noticeStr)
+	local panelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.NOTICE,
+		noticeStr = noticeStr,
+	}
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,panelData)
+end
+
+--@brief 选择角色
+function CityMainPanel:_SelectHero(roleId)
+	if roleId == 0 then
+		self.m_txtNickName.text = "昵称：1"
+		self.m_txtName.text = "风风"
+	elseif roleId == 1 then
+		self.m_txtNickName.text = "昵称：2"
+		self.m_txtName.text = "火火"
+	elseif roleId == 2 then
+		self.m_txtNickName.text = "昵称：3"
+		self.m_txtName.text = "雷雷"
+	elseif roleId == 3 then
+		self.m_txtNickName.text = "昵称：4"
+		self.m_txtName.text = "电电"
+	else
+		GCSLog("CityMainPanel:_SelectHero,Error!  found out RoleID:",roleId)
+	end
+end

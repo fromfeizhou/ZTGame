@@ -19,7 +19,7 @@ SkillJoystick = {
 
 	m_nCurIndex = nil,		--技能id
 	m_tSkillList = nil,		--下一个技能
-	m_nDistance = nil,		--技能距离
+	m_tDistances = nil,		--技能距离
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -64,14 +64,15 @@ function SkillJoystick:_ParseSkillConfig(skillId)
 	local baseSkillId = config.id
 
 	self.m_tSkillList = {skillId}
+	self.m_tDistances = {config.operaDistance}
 
 	while config and config.nextSkillId ~= -1 and config.nextSkillId ~= baseSkillId do
 		--CSLog("SkillJoystick:ParseSkillConfig",config.nextSkillId,baseSkillId)
 		table.insert( self.m_tSkillList, config.nextSkillId )
+		table.insert( self.m_tDistances, config.operaDistance )
+
 		config = Tab_Skill[config.nextSkillId]
 	end
-
-	self.m_nDistance = 3
 end
 --@brief 预设加载成功
 function SkillJoystick:_LoadAsseFinish(target,path)
@@ -92,6 +93,7 @@ function SkillJoystick:_LoadSkillIcon()
 	local callback = function(target,path)
 		if self.m_imgSkillIcon then
 			self.m_imgSkillIcon.sprite = target
+			self.m_imgSkillIcon:SetNativeSize()
 		end
 	end
 	CS.AssetManager.LoadAsset(PathManager:GetSkillIcon(self:_GetCurSkillId()),callback,typeof(CS.UnityEngine.Sprite))
@@ -143,7 +145,7 @@ function SkillJoystick:_SendSkillCommand(pos)
 
 	-- CSLog("SkillJoystick:_SendSkillCommand")
 	--local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
-	local distance = self.m_nDistance
+	local distance = self:_GetCurSkillDic()
 	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
 	local targetPos = CSVector3(charaPos.x + distance * pos.x, charaPos.y, distance * pos.y + charaPos.z)
 	local targetId = GlobalBattleCtrl:GetOwnerId()
@@ -154,4 +156,10 @@ end
 function SkillJoystick:_GetCurSkillId()
 	local skillId = self.m_tSkillList[self.m_nCurIndex]
 	return skillId
+end
+
+--@brief 获取技能id
+function SkillJoystick:_GetCurSkillDic()
+	local distance = self.m_tDistances[self.m_nCurIndex] > 0 and self.m_tDistances[self.m_nCurIndex] or 0
+	return distance
 end

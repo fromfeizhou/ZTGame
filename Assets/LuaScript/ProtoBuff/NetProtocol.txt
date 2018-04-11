@@ -94,4 +94,5 @@ MODEL_PB = {
 	[10006] = "activity_update_activity",
 	[11001] = "survive_match",
 	[11002] = "survive_fight",
+	[11003] = "survive_end",
 }

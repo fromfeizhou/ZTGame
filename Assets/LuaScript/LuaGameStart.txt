@@ -55,10 +55,10 @@ end
 
 --@brief 显示登录界面
 function LuaGameStart:_ShowPanel_Login()
-	local loginPanelData = {}
-	loginPanelData.modelType = MODEL_TYPE.LOGIN
-	loginPanelData.panelType = LOGIN_TYPE.MAIN
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
+	local modelData = {}
+	modelData.modelType = MODEL_TYPE.LOGIN
+	modelData.panelType = LOGIN_TYPE.MAIN
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
 --@brief 进入主城场景

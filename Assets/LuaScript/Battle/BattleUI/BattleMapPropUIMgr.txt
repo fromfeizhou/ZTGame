@@ -34,7 +34,7 @@ function BattleMapPropUIMgr:Init()
 	CSLog("BattleMapPropUIMgr:Init")
 	--self:_InitEvent()
 	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("MapItemUIRoot"),function(target,path)
- 		self.m_Panel = CSTransform.Instantiate(target.transform,GlobalBattleCtrl:GetHeadContainer())
+ 		self.m_Panel = CSTransform.Instantiate(target.transform,GlobalBattleCtrl:MapItemUIContainer())
 		self:_InitUI()
 	end)
 end

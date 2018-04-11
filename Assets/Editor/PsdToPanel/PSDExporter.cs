@@ -46,7 +46,8 @@ namespace subjectnerdagreement.psdexport
 		public static void Export(PsdExportSettings settings, PsdFileInfo fileInfo, bool exportExisting = true)
 		{
 			List<int> layerIndices = GetExportLayers(settings, fileInfo);
-
+			for (int i = 0; i < layerIndices.Count; i++)
+				Debug.Log ("Export:" + layerIndices[i]);
 			// If not going to export existing, filter out layers with existing files
 			if (exportExisting == false)
 			{
@@ -68,7 +69,6 @@ namespace subjectnerdagreement.psdexport
 
 				EditorUtility.DisplayProgressBar(fileString, infoString, progress);
 				
-				CreateSprite(settings, layerIndex);
 				exportCount++;
 			}
 
@@ -79,8 +79,13 @@ namespace subjectnerdagreement.psdexport
 
 		public static Sprite CreateSprite(PsdExportSettings settings, int layerIndex)
 		{
+			Debug.Log ("CreateSprite:" + layerIndex);
 			var layer = settings.Psd.Layers[layerIndex];
+			Debug.Log ("layer:" + layer.Name);
 			Texture2D tex = CreateTexture(layer);
+			Debug.Log ("Texture2D:" + tex);
+
+			return null;
 			if (tex == null)
 				return null;
 			Sprite sprite = SaveAsset(settings, tex, layerIndex);
@@ -89,10 +94,11 @@ namespace subjectnerdagreement.psdexport
 			return sprite;
 		}
 
-		private static Texture2D CreateTexture(Layer layer)
+		public static Texture2D CreateTexture(Layer layer)
 		{
 			if ((int)layer.Rect.width == 0 || (int)layer.Rect.height == 0)
 				return null;
+			Debug.Log ("CreateTexture:" + layer.Name);
 
 			// For possible clip to document functionality
 			//int fileWidth = psd.ColumnCount;

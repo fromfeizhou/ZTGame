@@ -50,20 +50,20 @@ end
 --@brief 移除
 function MapCircleManager:Destroy()
 	CSLog("MapCircleManager:Destroy")
-	self:RemoveEvent()
+	self:_RemoveEvent()
 end
 
 
 --@brief 更新
-function MapCircleManager:Update()
-	self.m_model:Update()
-	self:UpdateCircleFBX()
-end
+-- function MapCircleManager:Update()
+-- 	--self.m_model:Update()
+-- end
 
 
 --@brief 逻辑帧刷新
 function MapCircleManager:UpdateCommand()
 	self:CalculationCircle()
+	self:UpdateCircleFBX()
 end
 
 --@brief 收到服务器毒圈信息

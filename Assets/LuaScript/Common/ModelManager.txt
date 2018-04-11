@@ -37,7 +37,7 @@ end
 
 --@brief 更新模块列表中的模块逻辑
 function ModelManager:Update()
-	ModelManager:_UpdatePanel(CSTime.deltaTime)
+	ModelManager:_TickPanel(CSTime.deltaTime)
 end
 
 --@breif 移除
@@ -60,40 +60,35 @@ end
 function ModelManager:_RemoveEvents()
 	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show)
 	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide)
-
 end
 
 --@breif 事件句柄 显示面板
-function ModelManager:_OnHandle_Show(panelData)
-	local model = ModelManager:_GetModel(panelData.modelType)
+function ModelManager:_OnHandle_Show(modelData)
+	local model = ModelManager:_GetModel(modelData.modelType)
 	if model then
-		model:ShowPanel(panelData.panelType)
+		model:ShowPanel(modelData.panelType,modelData.panelData)
 	else
-		GCSLog("ModelManager:_OnHandle_Show found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Show found out ",modelData.panelType)
 	end
 end
 
 --@breif 事件句柄 隐藏面板
-function ModelManager:_OnHandle_Hide(panelData)
-	local model = ModelManager:_GetModel(panelData.modelType)
+function ModelManager:_OnHandle_Hide(modelData)
+	local model = ModelManager:_GetModel(modelData.modelType)
 	if model then
-		model:HidePanel(panelData.panelType)
+		model:HidePanel(modelData.panelType)
 		ModelManager:_TryCleanModel()
 	else
-		GCSLog("ModelManager:_OnHandle_Hide found out ",panelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Hide found out ",modelData.panelType)
 	end
 end
 
 
 --@brief 刷新当前缓存中的面板
-function ModelManager:_UpdatePanel( deltaTime )
+function ModelManager:_TickPanel( deltaTime )
 	if ModelManager.m_modelList then
 		for k,model in pairs(ModelManager.m_modelList) do
-			if model.m_tPanelList then
-				for i,panel in pairs(model.m_tPanelList) do
-					panel:Update(deltaTime)
-				end
-			end
+			model:Tick(deltaTime)
 		end
 	end
 end

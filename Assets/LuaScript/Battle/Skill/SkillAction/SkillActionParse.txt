@@ -54,6 +54,17 @@ end
 --@brief 移除
 function SkillActionParse:Destroy()
 	CSLog("SkillActionParse:Destroy")
+	if self.m_tActionList then
+
+		for frame,actionList in pairs(self.m_tActionList) do
+			for i = #actionList,1,-1 do
+				action = actionList[i]
+				action:Destroy()
+			end
+		end
+
+		self.m_tActionList = nil
+	end
 end
 
 --@brief 刷新
@@ -205,7 +216,9 @@ end
 
 --@brief  测试 
 function SkillActionParse:GetTestConfig( )
-	package.loaded["ALuaConfig.SkillActionConfigTmp"] = nil
-	require 'ALuaConfig.SkillActionConfigTmp'
-	return SkillActionConfigTest.id_template
+	--测试技能id
+	package.loaded["ALuaConfig.SkillActionConfig"] = nil
+	require 'ALuaConfig.SkillActionConfig'
+	CSLog("SkillActionParse:GetTestConfig",SkillActionConfig.TestSkillId)
+	return SkillActionConfig[SkillActionConfig.TestSkillId]
 end

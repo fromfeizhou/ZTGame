@@ -18,6 +18,7 @@ local LuaFileLoad = {
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
 		"Common.UIBasePanel",
+		"Common.BaseModel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
@@ -46,6 +47,7 @@ local LuaFileLoad = {
 --加载配置文件
 	G_tConfigList = {
 		"ALuaConfig.SkillActionConfig",
+		"ALuaConfig.SkillActionMoveConfig",
 		"ALuaConfig.Tab_Equipment",
 		"ALuaConfig.Tab_Skill",
 	},
@@ -79,6 +81,7 @@ local LuaFileLoad = {
 		"Battle.Character.Buff.BuffCharaAttribute",
 		"Battle.Character.Buff.BuffDynamicAttribute",
 
+		"Battle.Character.BattleAnimatorData",
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
 
@@ -88,6 +91,7 @@ local LuaFileLoad = {
 
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
+		"Battle.Skill.SkillMoveDefine",
 		"Battle.Skill.Collider.ZTCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
@@ -96,9 +100,6 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
 
-		"Battle.Skill.SkillAction.MoveAction.MoveActionConfig",
-		"Battle.Skill.SkillAction.MoveAction.MoveActionDefine",
-
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",
 		"Battle.Skill.SkillAction.SkillActionParse",
@@ -106,7 +107,8 @@ local LuaFileLoad = {
 		
 		
 		"Battle.BattleUI.BattleUIMgr",
-		"Battle.BattleUI.HeadItemManager",
+		"Battle.BattleUI.BattleHead.BattleHeadItem",
+		"Battle.BattleUI.BattleHead.HeadItemManager",
 		
 		"Battle.BattleUI.SkillBtn.CommonSkillBtn",
 		"Battle.BattleUI.SkillBtn.MoveJoystick",

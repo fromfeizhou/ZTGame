@@ -6,8 +6,7 @@ using System;
 
 public class SkillJoystick : JoystickBase
 {
-    RectTransform innerCircleTrans;
-    RectTransform _rectTransform;
+    private RectTransform _rectTransform;
 
     private Image _imgBg;
     private Image _imgTouch;

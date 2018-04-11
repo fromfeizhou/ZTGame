@@ -7,82 +7,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
-public class MapDefine
-{
-    public const string MapAssetFileName = "/MapAsset{0}.asset";
-    public const string MapAssetFolderPath = "Assets/Map/Prefabs/MapData/MapAsset{0}";
-    public const string MapAssetFilePath = "Assets/Map/Prefabs/MapData/MapAsset{0}/MapAsset{1}.asset";
-    public const string TERRAIN_ASSET_PATH = "Assets/Map/Model/TerrainRes/";
-    public const string TERRAIN_PREFAB_PATH = "Assets/Map/Prefabs/MapItem/";
-    public const string MapDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapData.bytes";
-    public const string MapHideBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HideBolckData.bytes";
-    public const string MapHeightBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HeightBolckData.bytes";
-    public const string MapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapPropPostionData.txt";
-    public const string ClienMapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/ClienMapPropPostionData.txt";//临时
-
-    public const string MapHideBlockdfdfDataSavePath = "Assets/Map/Prefabs/MapBlockData/HideBolckdffData.bytes";
-
-
-    public const int MapByteInterval = 6;
-
-
-    public const string MapRoleCreatePointSavePath = "Assets/RoleCreatePosData.txt";
-    public const string MapElementPath = "Assets/Map/Prefabs/MapElementPrefabs/{0}.prefab";
-    public const string MapElementFilePath = "/Map/Prefabs/MapElementPrefabs/";//地图元素生成文件路劲
-
-    public const string MAPKEYNAME = "{0}_{1}";
-    public const string EXTENSION = ".asset";
-    public const int MAPITEMTOTALSIZE = 2048;
-    public const int MAPITEMSIZE = 256;//地图切割大小
-
-    public const int MapElementSize = 16;//预设格子大小
-
-    public const float MapBlockSize = 0.2f;
-
-    //格子大小
-    public const float GridSize_Main = 20;
-    public const float GridSize_Port = 40;
-    public const float GridSize_Edit = 32;
-
-    public const float MinEditMapRange = 4f;//地图编辑的最小范围4米（编辑器MapEditView）
-
-    public static int MapWidth = MAPITEMSIZE;
-    public static int MapHeight = MAPITEMSIZE;
-
-    public static int MapViewRow = 1; //单屏行数
-    public static int MapViewColumn = 1; //单屏列数
-
-    public static int MaxViewRowNum = 3; //创建最大行数
-    public static int MaxViewColumnNum = 3; //创建最大列数
-
-    public static Color[] MapBlockTypeColor = {
-        new Color(0, 0, 0, 0.0f),
-        new Color(0, 1, 0, 0.4f),
-        new Color(1, 1, 1, 0.4f),
-        new Color(0, 0, 1, 0.4f),
-        new Color(0.5f, 0,0.5f , 0.6f)
-    };
-
-    //最小格子的宽
-    public static float GetMinInterval
-    {
-        get
-        {
-            return MinEditMapRange / (640f / GridSize_Edit);
-        }
-    }
-    //最小格子的宽
-    public static float MapMinGridSize = 0.2f;
-}
-
 public enum eMapBlockType
 {
     None,   //无
     Collect,//碰撞区域
     Hide,   //隐藏区域
+    Height,
     Event,  //事件
     PlayerPoint,
-    Height
 
     //Count,  //总数
 }
@@ -360,10 +292,14 @@ public class MapManager : Singleton<MapManager>
                 tempData.type = eMapBlockType.Collect;
             }
         }
+        
         if (tempData == null)//取草丛
         {
+          //  Debug.LogError(col + "  " + row + " asdfasd");
+
             if (mapBlockDataDic.TryGetValue(row + "_" + col, out tempData))
             {
+              //  Debug.LogError(tempData.col+"  "+tempData.row+"  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                 return tempData;
             }
         }
@@ -408,6 +344,7 @@ public class MapManager : Singleton<MapManager>
         SetMapCenterPos(pos);
     }
 
+    private float maptileInterval = MapDefine.MapWidth / 4f;
     public void SetMapCenterPos(Vector3 pos)
     {
         int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
@@ -416,19 +353,17 @@ public class MapManager : Singleton<MapManager>
         {
             currElementGrid.x = tempX;
             currElementGrid.y = tempY;
-            // UpdateElementView(pos);
             mapView.UpdateElementView(pos, tempX, tempY);
         }
 
-        if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / MapDefine.MapWidth)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / MapDefine.MapHeight)) >= 1)
+        if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / maptileInterval)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / maptileInterval)) >= 1)
         {
             if (_mapTilePosCenter == null)
                 _mapTilePosCenter = new MapTilePos();
-            _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / MapDefine.MapHeight);
-            _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / MapDefine.MapWidth);
+            _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / maptileInterval);
+            _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / maptileInterval);
 
-            //Debug.LogError("Map change Pos>>>>>>>>>>");
-            mapView.UpdateTerrainView(_mapTilePosCenter.Row, _mapTilePosCenter.Column);
+            mapView.UpdateTerrainView(pos,_mapTilePosCenter.Row, _mapTilePosCenter.Column);
         }
         mapView.UpdateRoleRay(pos);
     }

@@ -16,11 +16,26 @@ namespace subjectnerdagreement.psdexport
 
 		public GameObject CreateGameObject(string name, GameObject parent)
 		{
-			GameObject go = SpriteConstructor.GOFactory(name, parent);
-			// Unity UI objects need Rect Transforms,
-			// add the component after creating the base object
+			GameObject go = GOFactory(name, parent);
 			go.AddComponent<RectTransform>();
 			return go;
+		}
+		public static GameObject GOFactory(string name, GameObject parent)
+		{
+			GameObject spriteGO = new GameObject(name);
+			Transform spriteT = spriteGO.transform;
+
+			if (parent != null)
+			{
+				spriteT.SetParent(parent.transform);
+				spriteGO.layer = parent.layer;
+				spriteGO.tag = parent.tag;
+			}
+
+			spriteT.localPosition = Vector3.zero;
+			spriteT.localScale = Vector3.one;
+
+			return spriteGO;
 		}
 
 		public void AddComponents(int layerIndex, GameObject imageObject, Sprite sprite, TextureImporterSettings settings)

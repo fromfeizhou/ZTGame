@@ -8,6 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 SystemLockPanel = {
+	m_panelName = "SystemLockPanel",
 	
 }
 
@@ -15,9 +16,12 @@ setmetatable( SystemLockPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function SystemLockPanel:onInitPanelData()
-	self.m_panelName = "SystemLockPanel"
+--@brief 拷贝原表
+function SystemLockPanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = SystemLockPanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
 end
 
 --@brief 面板被创建
@@ -29,7 +33,7 @@ function SystemLockPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function SystemLockPanel:onUpdatePanel(deltaTime)
+function SystemLockPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

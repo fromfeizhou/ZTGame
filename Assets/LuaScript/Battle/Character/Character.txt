@@ -54,7 +54,7 @@ end
 function Character:Init(battleData,container)
 	-- CSLog("Character:Init",battleData.pos)
 	self.m_nBattleId = battleData.battleId or 1
-	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
+	self.m_animData = BattleAnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
 	self.m_bInCamera = false
 
@@ -88,7 +88,6 @@ function Character:InitBuffSystem()
 	self.m_buffSystem = BuffSystem:Create(self)
 end
 
-
 --@brief 移除
 function Character:Destroy()
 	CSLog("Character:Destroy")
@@ -108,6 +107,13 @@ end
 function Character:SetData(data)
 	self:UpdatePos(data.pos)
 	self:SetAttributeByList(data.attritList)
+end
+
+--@brief 刷新动画
+function Character:Update(dt)
+	if not self:IsDead() and self:IsInCamera() then
+		self.m_animData:UpdateDelayView(dt)
+	end
 end
 
 --@brief 刷新逻辑帧
@@ -167,24 +173,33 @@ function Character:SetPos(pos)
 	self:UpdatePos(pos)
 end
 
+--@brief 获取动画位置
+function Character:GetViewPos()
+	return self.m_animData.m_tCurPos
+end
+
 --@brief 是否死亡
 function Character:IsDead()
 	return self.m_nState == CharacterState.Die
 end
 
 --@brief 设置死亡
-function Character:SetDead(isDead)
+function Character:SetDead(value)
 	-- CSLog("Character:SetDead",isDead)
-	if self.m_bIsDead == isDead then
+	if self.m_bIsDead == value then
 		return
 	end
-	self.m_bIsDead = isDead
+	self.m_bIsDead = value
 	if self.m_bIsDead then
 		self:Play(AnimatorName.Die)
 		self:InState(CharacterState.Die)
 	else
 		self:Play(AnimatorName.Idle)
 		self:OutState(CharacterState.Die)
+	end
+
+	if self.m_bIsDead then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.CHARACTER_DEAD,self:GetBattleId())
 	end
 end
 
@@ -256,13 +271,22 @@ function Character:GetAttributeByType(type,isBase)
 end
 
 --@brief 根据类型设置属性
-function Character:SetAttributeByType(type,value)
-	self.m_attriSystem:SetAttributeByType(type,value)
+function Character:SetAttributeByType(attriType,value)
+	self.m_attriSystem:SetAttributeByType(attriType,value)
+
+	--发送血量变化事件
+	if attriType ==  AttributeType.Hp and self:IsInCamera() then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+	end
 end
 
 --@brief 设置属性
 function Character:SetAttributeByList(list)
-	self.m_attriSystem:SetAttributeByList(list)
+	for i = 1,#list do
+		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
+		self:SetAttributeByType(list[i][1],list[i][2])
+	end
+
 end
 
 --@brief 修改血量
@@ -298,9 +322,7 @@ function Character:SetHp(value)
 
 	self:SetAttributeByType(AttributeType.Hp,value)
 
-	if self:IsInCamera() then
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
-	end
+	
 
 	if GameConfig.IsSingleScene then
 		if self:GetHp() <= 0 and not self:IsDead() then
@@ -325,6 +347,10 @@ function Character:GetAttackMin(isBase)
 	return self:GetAttributeByType(AttributeType.AttackMin,isBase)
 end
 
+--@brief 获得攻击力
+function Character:GetAttackMax(isBase)
+	return self:GetAttributeByType(AttributeType.AttackMax,isBase)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关end
@@ -340,7 +366,7 @@ function Character:AddHurtNum(value)
 		self:ChangeHp(value)
 	end
 
-	local hurtInfo = {hurtType = 1,pos = self.m_charaPos,value = value}
+	local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
 
@@ -364,6 +390,10 @@ end
 function Character:IsInCamera()
 	return self.m_bInCamera
 end
+--@brief 设置镜头跟随
+function Character:SetCameraFollow(value)
+	self.m_animData:SetCameraFollow(value)
+end
 
 --@brief 刷新位置
 --@param vector3 pos
@@ -380,9 +410,9 @@ function Character:UpdatePos(pos)
 		--动画刷新通知
 		self.m_animData:UpdatePos(pos)
 		--CS.GameTool.LogError("Character:UpdatePos")
-		if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
-			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
-		end
+		-- if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
+		-- 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
+		-- end
 		if self:IsInCamera() then
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTRE_POS,self.m_nBattleId)
 		end
@@ -425,6 +455,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
+	if self:IsDead() then
+		return
+	end
+
 	if self.m_nMoveDir ~= BattleDir.None then
 		local list = BattleDirDefine:GetDirList(self.m_nMoveDir)
 		local hitPos 

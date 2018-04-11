@@ -7,9 +7,9 @@ using XLua;
 [CSharpCallLua]
 public class ZTBattleScene : MonoBehaviour {
     private bool IsInit;
-    private Action _update;
+    private Action<float> _update;
     private Action<string, float, float> _mapUpdateProcess;
-    public void SetUpdate(Action update)
+    public void SetUpdate(Action<float> update)
     {
         _update = update;
     }
@@ -31,9 +31,10 @@ public class ZTBattleScene : MonoBehaviour {
 	void Update () {
         if (null != _update)
         {
-            _update();
+            _update(Time.deltaTime);
         }
 	}
+
 
     void OnDestroy()
     {

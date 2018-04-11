@@ -12,6 +12,7 @@ local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapScrollPanel = {
+	m_panelName = "MapScrollPanel",
 	m_scaleValue = 1,
 	m_showCircle = false,
 	
@@ -28,9 +29,12 @@ setmetatable( MapScrollPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function MapScrollPanel:onInitPanelData()
-	self.m_panelName = "MapScrollPanel"
+--@brief 拷贝原表
+function MapScrollPanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = MapScrollPanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
 end
 
 --@brief 面板被创建
@@ -43,10 +47,10 @@ function MapScrollPanel:onCreatePanel()
 
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
-	self.m_ztCircleCur:Init(50)
+	self.m_ztCircleCur:Init(80,false,4.0)
 	self.m_ztCircleCur:SetColor(CSColor.green)
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleDest")
-	self.m_ztCircleDest:Init(50)
+	self.m_ztCircleDest:Init(80,false,4.0)
 	self.m_ztCircleDest:SetColor(CSColor.red)
 
 	--玩家，队友
@@ -61,7 +65,7 @@ function MapScrollPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function MapScrollPanel:onUpdatePanel(deltaTime)
+function MapScrollPanel:onTick(deltaTime)
 		self:_UpdateCircle(false)
 	self:_UpdatePlayer()
 end
@@ -176,8 +180,9 @@ end
 --@brief 设置毒圈参数
 function MapScrollPanel:_SetCircle(circle, circleInfo)
 	local _mapProportion = 512/2048 * self.m_scaleValue
-	circle:SetRadius(circleInfo.radius * _mapProportion)
-	circle.rectTransform.anchoredPosition = circleInfo.pos  * _mapProportion
+	local pos = circleInfo.pos  * _mapProportion
+	local radius = circleInfo.radius * _mapProportion
+	circle:SetCircle(pos,radius)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

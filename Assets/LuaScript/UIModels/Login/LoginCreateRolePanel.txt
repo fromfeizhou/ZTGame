@@ -9,16 +9,21 @@ local CSVector3 = CS.UnityEngine.Vector3
 
 
 LoginCreateRolePanel = {
+	m_panelName = "LoginCreateRolePanel",
 }
 
 setmetatable( LoginCreateRolePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function LoginCreateRolePanel:onInitPanelData()
-	self.m_panelName = "LoginCreateRolePanel"
+--@brief 拷贝原表
+function LoginCreateRolePanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = LoginCreateRolePanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
 end
+
 
 --@brief 面板被创建
 function LoginCreateRolePanel:onCreatePanel()	
@@ -33,7 +38,7 @@ function LoginCreateRolePanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function LoginCreateRolePanel:onUpdatePanel(deltaTime)
+function LoginCreateRolePanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板

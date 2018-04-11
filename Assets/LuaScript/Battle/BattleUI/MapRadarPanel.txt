@@ -12,6 +12,7 @@ local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 
 MapRadarPanel = {
+	m_panelName = "MapRadarPanel",
 	m_ztTxt_waitTime = nil,
 
 	m_ztCircleCur = nil,
@@ -25,14 +26,18 @@ MapRadarPanel = {
 	m_mapContent = nil,
 }
 setmetatable( MapRadarPanel, { __index = UIBasePanel})
+
+
+--@brief 拷贝原表
+function MapRadarPanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = MapRadarPanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function MapRadarPanel:onInitPanelData()
-	self.m_panelName = "MapRadarPanel"
-end
-
 --@brief 面板被创建
 function MapRadarPanel:onCreatePanel()	
 	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OpenMap() end)
@@ -42,10 +47,10 @@ function MapRadarPanel:onCreatePanel()
 
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleCur")
-	self.m_ztCircleCur:Init(50)
+	self.m_ztCircleCur:Init(80,false,4.0)
 	self.m_ztCircleCur:SetColor(CSColor.green)
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(mapConentTrans,"Circles/ZTCircleDest")
-	self.m_ztCircleDest:Init(50)
+	self.m_ztCircleDest:Init(80,false,4.0)
 	self.m_ztCircleDest:SetColor(CSColor.red)
 
 	--玩家，队友
@@ -60,13 +65,14 @@ function MapRadarPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function MapRadarPanel:onUpdatePanel(deltaTime)
+function MapRadarPanel:onTick(deltaTime)
 	self:_UpdateCircle()
 	self:_UpdatePlayer()
 end
 
 --@brief 销毁登录面板
 function MapRadarPanel:onDestroy()
+	
 end
 
 --@brief 添加事件监听
@@ -176,8 +182,7 @@ end
 
 --@brief 设置毒圈参数
 function MapRadarPanel:_SetCircle(circle, circleInfo)
-	circle:SetRadius(circleInfo.radius)
-	circle.rectTransform.anchoredPosition = circleInfo.pos
+	circle:SetCircle(circleInfo.pos,circleInfo.radius)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

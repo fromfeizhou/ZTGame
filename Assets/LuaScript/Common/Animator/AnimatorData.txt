@@ -88,6 +88,7 @@ function AnimatorData:UpdatePos(pos)
 	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
 end
 
+
 --@brief 更新角度
 --@param vector3 dir
 function AnimatorData:UpdateRotate(dir)
@@ -102,6 +103,7 @@ function AnimatorData:ChangeTranslucence(transLv)
 	self.m_tTransLv = transLv
 	self:DispatchEvent(AnimaEvent.ChangeTranslucence,self.m_tTransLv)
 end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

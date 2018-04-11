@@ -1,9 +1,16 @@
 ﻿--LoginModel.txt
 --@breif lua入口
 --@data 2018/3/5
+
+
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = GCSLog
+
 LoginModel = {
-	m_tPanelList = nil,
-	m_panelRoot_Canvas = nil,
 	
 	m_nlogin_create_role_s2c = nil,
 	m_nlogin_select_role_s2c = nil,
@@ -13,12 +20,7 @@ LoginModel = {
 	m_pKey = nil,
 
 }
-
---@brief c#引用
-local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
-local CSLog = GCSLog
+setmetatable( LoginModel, { __index = BaseModel})
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -31,67 +33,57 @@ function LoginModel:Create()
 	return obj
 end
 
---@brief 初始化
-function LoginModel:Init()
-	self.m_tPanelList = {}
-	self.m_panelRoot_Canvas = CSGameObject.Find("Canvas").transform
-end
-
---@brief 更新
-function LoginModel:Update()
+--@brief 子类重写 - 模块初始化
+function LoginModel:onInitModel()
+	self.m_panelDefine[LOGIN_TYPE.MAIN] = LoginMainPanel
+	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] = LoginCreateRolePanel
 end
 
 
---@brief 移除
-function LoginModel:Destroy()
-	print("LoginModel:Destroy")
-	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			panel:Destroy()
-		end
-		self.m_tPanelList = nil
-	end
+--@brief 子类重写 - 添加事件监听
+function LoginModel:_AddEvents( )
 end
 
-
---@breif 显示面板
-function LoginModel:ShowPanel( panelType )
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else 
-		local parent = self.m_panelRoot_Canvas
-		if panelType == LOGIN_TYPE.MAIN then
-			panel = LoginMainPanel:Create(parent,self)
-		elseif panelType == LOGIN_TYPE.CREATEROLE then
-			panel = LoginCreateRolePanel:Create(parent,self)
-		end
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel then
-		panel:Show()
-	end
+--@brief 子类重写 - 移除事件监听
+function LoginModel:_RemoveEvents( )
 end
 
---@breif 隐藏面板
-function LoginModel:HidePanel(panelType)
-
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("LoginModel:HidePanel","found out",panelType)
-	end
-
-	if panel then
-		panel:Hide()
-	end
+--@brief 注册网络门户
+function LoginModel:_RegNetFacade()
+	ZTProtocol:Register(PROTOCOL.LOGIN_AUTH_KEY, self._Receive_Login_Auth_Key, self)
 end
+
+--@brief 注销网络门户
+function LoginModel:_UnRegNetFacade()
+	ZTProtocol:Unregister(PROTOCOL.LOGIN_AUTH_KEY,self._Receive_Login_Auth_Key)
+end
+
 
 function LoginModel:LoginFinish()
 	GCSLog("登录完成，进入游戏")
 	LuaGameStart:EnterGameCity()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 回复 - 登录验证
+function LoginModel:_Receive_Login_Auth_Key(pbData)
+	GCSLog("LoginModel:_Receive_Login_Auth_Key")
+	NetWorkManager.m_loginAuthKey = pbData
+	GCSLog(SerializeTable(pbData))
+
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local modelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.LOCK,
+	}
+	GCSLog("+++++++++++++++++LoginModel:_Receive_Login_Auth_Key,",SYSTEM_TYPE.LOCK)
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
+	
+	--请求登录服务器
+	self:Request_Login()
 end
 
 --@brief 请求 - 登录服务器 - PB_LOGIN.MODEL - PB_LOGIN.LOGIN
@@ -112,6 +104,3 @@ function LoginModel:Request_Login()
 	GCSLog("self.m_model:NetWork_RequestLogin","accname:",package.data.accname,"key",self.m_pKey)
 	NetWorkManager:SendNetMsg(package)
 end
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

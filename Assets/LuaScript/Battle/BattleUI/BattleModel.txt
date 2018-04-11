@@ -1,105 +1,68 @@
 --BattleModel.txt
---@breif luaæˆ˜æ–—æ¨¡å—
+--@breif 战斗模块
 --@data 2018/3/5
-BattleModel = {
-	m_tPanelList = nil,
-	m_parent = nil,
-}
 
-BATTLE_UI_TYPE = {
-	MAP_SCROLL = 1,	--å¤§åœ°å›¾
-	MAP_RADAR = 2,	--é›·è¾¾å›¾
-	QUICKBAG=3,
 
-	BATTLE_HUD = 100,	--全局控制面板
-}
-
---@brief c#å¼•ç”¨
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = GCSLog
 
+BattleModel = {
+}
+
+BATTLE_UI_TYPE = {
+	MAP_SCROLL 	= 1,	--大地图
+	MAP_RADAR 	= 2,	--地图卷轴
+	QUICKBAG 	= 3,	--快速背包
+	BATTLEBAG	= 4,
+
+	BATTLE_HUD = 100,	--全局控制面板
+}
+
+setmetatable( BattleModel, { __index = BaseModel})
+
 ----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public Begin***************************************************************
 ----------------------------------------------------------------------------------------------------------------------------------
---@brief åˆ›å»º
-function BattleModel:Create(parent)
+--@brief 拷贝原表
+function BattleModel:Create()
 	local obj = {}
 	setmetatable( obj, { __index = BattleModel })
-	obj:Init(parent)
+	obj:Init()
 	return obj
 end
 
---@brief åˆå§‹åŒ–
-function BattleModel:Init(parent)
-	self.m_parent = parent
-	self.m_tPanelList = {}
+--@brief 模块初始化
+function BattleModel:onInitModel()
+	self.m_panelDefine[BATTLE_UI_TYPE.MAP_SCROLL] = MapScrollPanel
+	self.m_panelDefine[BATTLE_UI_TYPE.MAP_RADAR] = MapRadarPanel
+	self.m_panelDefine[BATTLE_UI_TYPE.QUICKBAG] = QuickBagPanel
+	self.m_panelDefine[BATTLE_UI_TYPE.BATTLEBAG] = BattleBagPanel
+	self.m_panelDefine[BATTLE_UI_TYPE.BATTLE_HUD] = BattleHUD
 end
 
---@breif æ›´æ–°é¢æ¿
-function BattleModel:Update()
-	for i,panel in pairs(self.m_tPanelList) do
-		if panel.Update then
-			panel:Update(deltaTime)
-		end
-	end
+--@brief 添加事件监听
+function BattleModel:_AddEvents( )
 end
 
---@brief å‘½ä»¤å¸§æ›´æ–°
+--@brief 移除事件监听
+function BattleModel:_RemoveEvents( )
+end
+
+--@brief 注册网络门户
+function BattleModel:_RegNetFacade( )
+end
+
+--@brief 注销网络门户
+function BattleModel:_UnRegNetFacade( )
+end
+
+--@brief 指令帧更新
 function BattleModel:UpdateCommand()
 	self:_UpdateCommandPanel()
 end
 
-
---@brief é”€æ¯
-function BattleModel:Destroy()
-	print("BattleModel:Destroy")
-	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			panel:Destroy()
-		end
-		self.m_tPanelList = nil
-	end
-end
-
---@breif æ˜¾ç¤ºé¢æ¿
-function BattleModel:ShowPanel( panelType,...)
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		if panelType == BATTLE_UI_TYPE.MAP_SCROLL then
-			panel = MapScrollPanel:Create(self.m_parent,self)
-		elseif panelType == BATTLE_UI_TYPE.MAP_RADAR then
-			panel = MapRadarPanel:Create(self.m_parent,self)
-		elseif panelType== BATTLE_UI_TYPE.QUICKBAG then
-			panel=QuickBagPanel:Create(self.m_parent,self)
-		elseif panelType == BATTLE_UI_TYPE.BATTLE_HUD then
-			panel = BattleHUD:Create(self.m_parent,self)
-		end
-		
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel and panel.Show then
-		panel:Show(...)
-	end
-end
-
---@breif éšè—é¢æ¿
-function BattleModel:HidePanel(panelType)
-	local panel = nil
-	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("BattleModel:HidePanel","found out",panelType)
-	end
-
-	if panel then
-		panel:Hide()
-	end
-end
 
 ----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public End***************************************************************

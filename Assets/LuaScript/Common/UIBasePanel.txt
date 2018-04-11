@@ -1,23 +1,31 @@
-
-
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSAssetManager = CS.AssetManager
 
 UIBasePanel = {
-	m_model,
-	m_isShow,
 
+	m_model,
+	m_isShow = false,
+
+	m_tPanelData = nil,
 	m_gameObject,
 	m_transform,
 	m_rectTransform,
 
 	m_panelName,
+
+	m_LoadFinish = false,
 }
 
+--@brief 拷贝原表
+function UIBasePanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = UIBasePanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
+end
 
-function UIBasePanel:Create(parent, model)
-	self:onInitPanelData()
+function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 	local callback_loadfinish = function(target,path)
  		if target then
  			self.m_gameObject = CSGameObject.Instantiate(target,parent)
@@ -26,7 +34,10 @@ function UIBasePanel:Create(parent, model)
 
 			self:_OnCreatePanel()
 			self:_InitPanel()
-			self:_Rush()
+			self.m_LoadFinish = true
+
+			self:Show(panelData)
+
 		else
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
 		end
@@ -37,21 +48,22 @@ function UIBasePanel:Create(parent, model)
 end
 
 --@brief 显示面板
-function UIBasePanel:Show()
-	self.m_isShow = true
-	self:_Rush()
+function UIBasePanel:Show(panelData)
+	self:Update(panelData)
+	if self.m_gameObject and self.m_isShow == false then 
+		self.m_isShow = true
+		self.m_gameObject:SetActive(self.m_isShow)
+		self:onShow()
+	end
 end
 
 --@brief 隐藏面板
 function UIBasePanel:Hide()
-	self.m_isShow = false
-	self:_Rush()
-end
-
---@brief 刷新面板
-function UIBasePanel:_Rush()
-	if not self.m_gameObject then return end
-	self.m_gameObject:SetActive(self.m_isShow)
+	if self.m_gameObject and self.m_isShow == true then 
+		self.m_isShow = false
+		self.m_gameObject:SetActive(self.m_isShow)
+		self:onHide()
+	end
 end
 
 --@brief 面板创建后
@@ -66,9 +78,17 @@ function UIBasePanel:_InitPanel()
 	self:onInitPanel()
 end
 
+--@brief 更新面板
+function UIBasePanel:Update(panelData)
+	self.m_tPanelData = panelData
+	self:onUpdate()
+end
+
 --@brief 面板每帧刷新
-function UIBasePanel:Update(deltaTime)
-	self:onUpdatePanel(deltaTime)
+function UIBasePanel:Tick(deltaTime)
+	if self.m_LoadFinish then 
+		self:onTick(deltaTime)
+	end
 end
 
 --@brief 销毁面板
@@ -79,12 +99,6 @@ function UIBasePanel:Destroy()
 end
 
 
-
-
---@brief 子类重写 - 面板数据初始化
-function UIBasePanel:onInitPanelData()
-end
-
 --@brief 子类重写 - 面板被创建
 function UIBasePanel:onCreatePanel()
 end
@@ -93,15 +107,25 @@ end
 function UIBasePanel:onInitPanel()
 end
 
+--@brief 子类重写 - 面板更新
+function UIBasePanel:onUpdate()
+end
+
 --@brief 子类重写 - 面板每帧更新
-function UIBasePanel:onUpdatePanel(deltaTime)
+function UIBasePanel:onTick(deltaTime)
 end
 
 --@brief 子类重写 - 面板被销毁
 function UIBasePanel:onDestroy()
 end
 
+--@brief 子类重写 - 显示面板
+function UIBasePanel:onShow()
+end
 
+--@brief 子类重写 - 隐藏面板
+function UIBasePanel:onHide()
+end
 
 --@brief 子类重写 - 添加事件监听
 function UIBasePanel:_AddEvents( )

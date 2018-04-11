@@ -21,13 +21,16 @@ ZTBattleScene = {
 --@brief 切换战斗场景
 function ZTBattleScene:InitScene()
 	CSLog("ZTBattleScene:InitScene")
+	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
+	
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 
-function ZTBattleScene:Update()
+function ZTBattleScene:Update(dt)
 	--CSLog("ZTBattleScene:Update")
-	GlobalBattleCtrl:Update()
+	GlobalBattleCtrl:Update(dt)
 end
+
 
 function ZTBattleScene:Destroy()
 	self:_UnInt()
@@ -47,8 +50,9 @@ function ZTBattleScene:_Init()
 	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
 	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
 	self.m_comZtBattleScene:MapInit(CSVector3(270,0,270))
-	self.m_comZtBattleScene:SetUpdate(function() self:Update()
+	self.m_comZtBattleScene:SetUpdate(function(dt) self:Update(dt)
 	end)
+	
 
 	--全局控制器初始化
 	GlobalBattleCtrl:Init()

@@ -22,6 +22,10 @@ TransLevelDefine = {
 
 --@breif 战斗预定义
 BattleDefine = {
+	CommandTime = 0.024,	--逻辑帧刷新时间
+	RendererTime = 0.012,		--渲染帧刷新时间
+	RendererDelay = 2,		--动画延迟
+
 	SecondToFrameRate = 45,	--秒转帧率帧率
 
 	PosRate = 100,		    --位置前后端转换系数
@@ -208,9 +212,13 @@ BATTLE_EVENT = {
 	UPDATE_CHARACTER_HP = "BATTLE_EVENT_UPDATE_CHARACTER_HP",	--刷新玩家hp 
 	ADD_CHARACTER_HURT_NUM = "BATTLE_EVENT_ADD_CHARACTER_HURT_NUM",	--添加飚血动画
 
+	CHARACTER_DEAD = "BATTLE_EVENT_CHARACTER_DEAD",	--玩家死亡
+
 	UPDATE_CAMERA = "BATTLE_EVENT_UPDATE_CAMERA",		--刷新镜头
 	UPDATE_SCENE_POS = "BATTLE_EVENT_UPDATE_SCENE_POS",	--刷新场景中心点	
 	START_GAME = "BATTLE_EVENT_START_GAME",				--开始游戏
+	INIT_DATA_COMPLETE = "BATTLE_EVENT_INIT_DATA_COMPLETE",	--数据初始化完成
+
 	UPDATE_CHARACTER_GLASS = "BATTLE_EVENT_UPDATE_CHARACTER_GLASS",	 --刷新草丛id
 	RUSH_MAP_POINT  = "BATTLE_EVENT_RUSH_MAP_POINT",		--刷新毒圈中心
 

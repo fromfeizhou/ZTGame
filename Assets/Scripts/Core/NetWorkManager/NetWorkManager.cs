@@ -53,7 +53,7 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 
 	public override void Init ()
 	{
-		_socketClient = new SocketClient ();
+		_socketClient = new SocketClient();
 		_socketClient.OnRegister ();
 	}
       
@@ -68,15 +68,14 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 	/// <summary>
 	/// 交给Command，这里不想关心发给谁。
 	/// </summary>
-	void Update ()
+	void FixedUpdate()
 	{
 		if (mEvents.Count > 0) {
 			while (mEvents.Count > 0) {
 				KeyValuePair<int, ByteBuffer> _event = mEvents.Dequeue ();
 				if(_onReceiveMsg != null)
 				{
-					if(_onReceiveMsg != null)
-						_onReceiveMsg(_event.Key,_event.Value);
+					_onReceiveMsg(_event.Key,_event.Value);
 				}
 			}
 		}

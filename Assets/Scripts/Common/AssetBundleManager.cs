@@ -191,7 +191,7 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
         return LoadAssetBundle(assetbundlename);
     }
 
-    public void LoadSyncAssetBundleAndDependencies(string assetbundlename,string assetname, Action<UnityEngine.Object> callback)
+    public void LoadSyncAssetBundleAndDependencies(string assetbundlename,string assetname, Action<UnityEngine.Object> callback, System.Type type = null)
     {
         if (assetbundlename == null)
             callback(null);
@@ -199,18 +199,35 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
             callback(null);
         LoadSyncAssetBundle(assetbundlename, (AssetBundle assetBundle) =>
         {
-            StartCoroutine(LoadAssetInAssetBundle(assetBundle, assetname, callback));
+            StartCoroutine(LoadAssetInAssetBundle(assetBundle, assetname, callback,type));
         });
     }
 
-    private IEnumerator LoadAssetInAssetBundle(AssetBundle assetBundle,string assetname, Action<UnityEngine.Object> callback)
+    private IEnumerator LoadAssetInAssetBundle(AssetBundle assetBundle,string assetname, Action<UnityEngine.Object> callback, System.Type type = null)
     {
-        AssetBundleRequest request = assetBundle.LoadAssetAsync(assetname);
+        if(assetBundle == null)
+        {
+            callback(null);
+            yield break;
+        }
+
+
+        AssetBundleRequest request;
+        if (null != type)
+        {
+            request = assetBundle.LoadAssetAsync(assetname, type);
+        }
+        else
+        {
+            request = assetBundle.LoadAssetAsync(assetname);
+        }
+      
         while (!request.isDone)
         {
             yield return null;
         }
         callback(request.asset);
+       
     }
 
     private static List<string> _permanentList = new List<string> { "assets_resourceslib_config" };
@@ -289,6 +306,25 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
 
     IEnumerator LoadAsyncCoroutine(string assetbundlename)
     {
+        //临时
+        if (!IsExist(assetbundlename))
+        {
+            _loadSyncAbNames.RemoveAt(0);
+            if (_loadSyncAbList.ContainsKey(assetbundlename))
+            {
+                List<Action<AssetBundle>> callbackList = _loadSyncAbList[assetbundlename];
+                for (int i = 0; i < callbackList.Count; i++)
+                {
+                    Action<AssetBundle> callback = callbackList[i];
+                    callback(null);
+                }
+
+                _loadSyncAbList.Remove(assetbundlename);
+            }
+
+            yield break;
+        }
+
         string assetbundle_path = DownLoadCommon.GetFileFullName(assetbundlename);
         AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(assetbundle_path);
         //Debug.LogWarning(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + assetbundlename);

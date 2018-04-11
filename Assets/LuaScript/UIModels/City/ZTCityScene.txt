@@ -32,7 +32,7 @@ end
 --@brief 场景加载完毕
 function ZTCityScene:_SceneReplaceComplete()
 	self:_Init()
-	
+	GCSLog("------------------------------------ZTCityScene:_SceneReplaceComplete")
 	--显示场景主面板
 	local loginPanelData = {}
 	loginPanelData.modelType = MODEL_TYPE.CITY

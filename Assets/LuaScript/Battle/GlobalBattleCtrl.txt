@@ -16,6 +16,11 @@ GlobalBattleCtrl = {
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
 	m_mapPropUIMgr=nil,
+
+	m_bGameOver = nil,		--游戏结束标记
+
+	m_nRendererTime = nil,		--渲染刷新
+	m_nCommandTime = nil,	--逻辑刷新
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -62,18 +67,23 @@ function GlobalBattleCtrl:Init()
 	--全局数据引用初始化
 	GlobalBattleCtrl:InitData()
 
-	--第一次初始化通知镜头刷新
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+	
 
 	--启动协议监听
 	BattleCommandProtocol:Init()
 	BattleProtocol:Init()
+
+	GlobalBattleCtrl.m_nRendererTime = 0
+	GlobalBattleCtrl.m_nCommandTime = 0
 end
 
 
 
 --@brief 移除
 function GlobalBattleCtrl:Destroy()
+	BattleCommandProtocol:Destroy()
+	BattleProtocol:Destroy()
+
 	--全局数据引用初始化
 	GlobalBattleCtrl:DestroyData()
 	
@@ -140,6 +150,12 @@ end
 --@brief 数据相关管理相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@rife 初始化数据
+function GlobalBattleCtrl:ExitBattle()
+	GlobalBattleCtrl:Destroy()
+	ZTCityScene:InitScene()
+end
+
+--@rife 初始化数据
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
 	GlobalBattleCtrl.m_nOwnerId = 1
@@ -148,6 +164,16 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
+	
+	--第一次初始化通知镜头刷新
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+
+	GlobalBattleCtrl.m_bGameOver = false
+
 end
 
 --@rife 初始化数据(进入游戏)
@@ -158,10 +184,20 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
 
+	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
+		
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+
 	BattleMapMgr:Reset( )
+
+
+	GlobalBattleCtrl.m_bGameOver = false
 end
+
 
 --@rife 删除数据
 function GlobalBattleCtrl:DestroyData()
@@ -176,31 +212,35 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 界面刷新
-function GlobalBattleCtrl:Update()
-	if GlobalBattleCtrl.m_battleUIMgr then
-		GlobalBattleCtrl.m_battleUIMgr:Update()
+function GlobalBattleCtrl:Update(dt)
+	--GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime + dt
+	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
+	--逻辑刷新
+	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
+		GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime - BattleDefine.CommandTime
+		if GlobalBattleCtrl.m_battleCommandMgr then
+			GlobalBattleCtrl.m_battleCommandMgr:Update()
+		end
 	end
+	--界面刷新
+	--while GlobalBattleCtrl.m_nRendererTime >= BattleDefine.RendererTime do
+		GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime - BattleDefine.RendererTime
+		if GlobalBattleCtrl.m_battleUIMgr then
+			GlobalBattleCtrl.m_battleUIMgr:Update()
+		end
 
-	if GlobalBattleCtrl.m_ztCharaManager then
-		GlobalBattleCtrl.m_ztCharaManager:Update()
-	end
+		if GlobalBattleCtrl.m_ztCharaManager then
+			GlobalBattleCtrl.m_ztCharaManager:Update()
+		end
+		
+		BattleCameraMgr:Update()
 
-	if GlobalBattleCtrl.m_battleCommandMgr then
-		GlobalBattleCtrl.m_battleCommandMgr:Update()
-	end
-	
-	if GlobalBattleCtrl.m_mapCircleManager then
-		GlobalBattleCtrl.m_mapCircleManager:Update()
-	end
-
-	--头像管理
-	if GlobalBattleCtrl.m_HeadItemManager then
-		GlobalBattleCtrl.m_HeadItemManager:Update()
-	end
-	
-	BattleCameraMgr:Update()
+		--头像管理
+		if GlobalBattleCtrl.m_HeadItemManager then
+			GlobalBattleCtrl.m_HeadItemManager:Update()
+		end
+	--end
 end
-
 
 
 --@brief 数据刷新(通过命令管理器更新 保证逻辑帧运算)
@@ -388,7 +428,7 @@ function GlobalBattleCtrl:GetHeadContainer()
 end
 
 --@brief 获得地图ui容器
-function GlobalBattleCtrl:GetHeadContainer()
+function GlobalBattleCtrl:MapItemUIContainer()
 	if GlobalBattleCtrl.m_battleUIMgr then
 		return GlobalBattleCtrl.m_battleUIMgr:MapItemUIContainer()
 	end
@@ -460,7 +500,7 @@ end
 
 
 
---@brief 获取目标对象
+--@brief 获取目标对象(必须有序对象列表)
 function GlobalBattleCtrl:GetTargetList(userId,targetType,targetId)
 	--CSLog("GlobalBattleCtrl:GetTargetList",userId,targetType,targetId)
 	local chara = GlobalBattleCtrl.m_tCharacterDic[userId]

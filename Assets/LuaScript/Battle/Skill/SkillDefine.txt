@@ -20,8 +20,8 @@ SkillLayerType = {
 }
 --@brief 技能朝向(操作点)
 SkillFaceType = {
-	UpSkill = 0,	--朝向技能点
-	BackSkill = 1,	--背向技能点
+	UpSkill = 0,	--朝向操作点
+	BackSkill = 1,	--背向操作点
 }
 
 --@brief 技能目标类型（技能效果 或技能操作指向）
@@ -93,10 +93,11 @@ SkillDefine = {
 --@param skillPos 技能位置
 function SkillDefine:GetStartPosByLayer(owner,offset,layerType,skillPos)
 	local pos = nil
+
 	if layerType == SkillLayerType.Hero then
-		pos = owner:GetColliderPos()
+		pos = GetPosTab(owner:GetColliderPos())
 	else
-		pos = skillPos
+		pos = GetPosTab(skillPos)
 	end
 	--CSLog("SkillDefine:GetStartPosByLayer",layerType,pos,skillPos)
 	local face = owner:GetFaceDir()
