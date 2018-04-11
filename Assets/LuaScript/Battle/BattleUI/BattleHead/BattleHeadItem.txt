@@ -106,8 +106,8 @@ function BattleHeadItem:_OnUpdateCamera()
 	if not self.m_gameObject then
 		return
 	end
-	local pos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local pos = GlobalBattleCtrl:GetOwnerChara():GetViewPos()
 	local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
-	--CSLog("BattleHeadItem:_OnUpdateScenePos",pos,uiPos)
+	-- CSLog("BattleHeadItem:_OnUpdateScenePos",pos,uiPos)
 	self.m_gameObject.transform.position = {x = uiPos.x, y = uiPos.y + 1.2, z = 0}
 end

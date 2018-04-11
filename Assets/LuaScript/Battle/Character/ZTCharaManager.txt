@@ -75,6 +75,20 @@ function ZTCharaManager:Update(dt)
 	end
 end
 
+
+--@brief 刷新镜头跟随对象
+function ZTCharaManager:RushCameraFollow()
+	for i = 1,#self.m_tSortCharaList do
+		local chara = self.m_tSortCharaList[i]
+		if chara:GetBattleId() == GlobalBattleCtrl:GetOwnerId() then
+			chara:SetCameraFollow(true)
+		else
+			chara:SetCameraFollow(false)
+		end
+
+	end
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 帧同步操作 start
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

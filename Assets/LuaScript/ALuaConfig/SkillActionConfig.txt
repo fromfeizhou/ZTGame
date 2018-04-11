@@ -134,3 +134,5 @@ SkillActionConfig = {
 	},
 
 }
+
+SkillActionConfig.TestSkillId = "id_10001"

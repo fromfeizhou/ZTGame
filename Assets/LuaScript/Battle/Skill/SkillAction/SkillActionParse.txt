@@ -217,9 +217,8 @@ end
 --@brief  测试 
 function SkillActionParse:GetTestConfig( )
 	--测试技能id
-	local skillId = "id_10001"
-
 	package.loaded["ALuaConfig.SkillActionConfig"] = nil
 	require 'ALuaConfig.SkillActionConfig'
-	return SkillActionConfig[skillId]
+	CSLog("SkillActionParse:GetTestConfig",SkillActionConfig.TestSkillId)
+	return SkillActionConfig[SkillActionConfig.TestSkillId]
 end
