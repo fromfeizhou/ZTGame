@@ -19,7 +19,7 @@ GlobalBattleCtrl = {
 
 	m_bGameOver = nil,		--游戏结束标记
 
-	m_nViewTime = nil,		--显示刷新
+	m_nRendererTime = nil,		--渲染刷新
 	m_nCommandTime = nil,	--逻辑刷新
 }
 
@@ -73,7 +73,7 @@ function GlobalBattleCtrl:Init()
 	BattleCommandProtocol:Init()
 	BattleProtocol:Init()
 
-	GlobalBattleCtrl.m_nViewTime = 0
+	GlobalBattleCtrl.m_nRendererTime = 0
 	GlobalBattleCtrl.m_nCommandTime = 0
 end
 
@@ -213,7 +213,7 @@ end
 
 --@brief 界面刷新
 function GlobalBattleCtrl:Update(dt)
-	GlobalBattleCtrl.m_nViewTime = GlobalBattleCtrl.m_nViewTime + dt
+	GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime + dt
 	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
 	--逻辑刷新
 	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
@@ -222,10 +222,9 @@ function GlobalBattleCtrl:Update(dt)
 			GlobalBattleCtrl.m_battleCommandMgr:Update()
 		end
 	end
-
 	--界面刷新
-	while GlobalBattleCtrl.m_nViewTime >= BattleDefine.ViewTime do
-		GlobalBattleCtrl.m_nViewTime = GlobalBattleCtrl.m_nViewTime - BattleDefine.ViewTime
+	while GlobalBattleCtrl.m_nRendererTime >= BattleDefine.RendererTime do
+		GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime - BattleDefine.RendererTime
 		if GlobalBattleCtrl.m_battleUIMgr then
 			GlobalBattleCtrl.m_battleUIMgr:Update()
 		end

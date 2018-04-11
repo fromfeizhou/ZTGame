@@ -119,17 +119,15 @@ end
 
 --@brief 镜头缓动
 function BattleCameraMgr:_UpdateCameraActoin()
-	local pos = BattleCameraMgr.m_carmeraTrans.position
-	local curPos = pos + (BattleCameraMgr.m_tTargetPos - pos)/10
-	BattleCameraMgr:_UpdateCameraPos(curPos)
-
 	local distance = BattleCameraMgr:_GetDistanceForTarget()
 	if distance <= 0.01 then
 		BattleCameraMgr.m_bMoveAction = nil
 		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
+		return
 	end
-
-
+	local pos = BattleCameraMgr.m_carmeraTrans.position
+	local curPos = pos + (BattleCameraMgr.m_tTargetPos - pos)/10
+	BattleCameraMgr:_UpdateCameraPos(curPos)
 end
 
 --@brief 获得镜头与目标点距离
