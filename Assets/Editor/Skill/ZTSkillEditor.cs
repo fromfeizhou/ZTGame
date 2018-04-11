@@ -47,6 +47,8 @@ public class ZTSkillEditor : EditorWindow
     {
         frameList = luaEditor.LoadSkillLua(skillId);
         SortFrameData();
+
+        luaEditor.SaveSkillTable();
     }
 
     public void OnGUI()

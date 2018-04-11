@@ -90,7 +90,8 @@ public class ZTSkillLuaEditor
             SkillIdList = new List<string>();
             SkillConfigTab.ForEach<string, LuaTable>((string key, LuaTable value) =>
             {
-                SkillIdList.Add(key);
+                if(key != "TestSkillId")
+                    SkillIdList.Add(key);
             });
             SkillIdList.Sort();
         }
@@ -174,7 +175,9 @@ public class ZTSkillLuaEditor
             }
         }
 
-        scriptStr += "}";
+        scriptStr += "}\n\n";
+
+        scriptStr += "SkillActionConfig.TestSkillId = " + "\"" + CurLuaKey + "\"";
 
         File.WriteAllText(SkillTabSavePath, scriptStr.Trim());
 
