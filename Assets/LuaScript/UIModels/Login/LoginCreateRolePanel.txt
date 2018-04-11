@@ -20,8 +20,7 @@ setmetatable( LoginCreateRolePanel, { __index = UIBasePanel})
 function LoginCreateRolePanel:Create(parent, model, panelData)
 	local obj = {}
 	setmetatable( obj, { __index = LoginCreateRolePanel })
-	obj.m_tPanelData = panelData
-	obj:_LoadAssetPanel(parent, model)
+	obj:_LoadAssetPanel(parent, model, panelData)
 	return obj
 end
 

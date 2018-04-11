@@ -14,51 +14,65 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
 XXXXPanel = {
-	
+	self.m_panelName = "XXXXPanel"
 }
 
 setmetatable( XXXXPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 面板数据初始化
-function XXXXPanel:onInitPanelData()
-	self.m_panelName = "XXXXPanel"
+--@brief 子类重写 - 拷贝原表
+function XXXXPanel:Create(parent, model, panelData)
+	local obj = {}
+	setmetatable( obj, { __index = XXXXPanel })
+	obj:_LoadAssetPanel(parent, model, panelData)
+	return obj
 end
 
---@brief 面板被创建
+--@brief 子类重写 - 面板被创建
 function XXXXPanel:onCreatePanel()
-	--获取UI控件代码
 end
 
---@brief 面板初始化
+--@brief 子类重写 - 面板初始化
 function XXXXPanel:onInitPanel()
-	--获取数据，更新UI控件
 end
 
---@brief 面板每帧更新
+--@brief 子类重写 - 面板更新
+function XXXXPanel:onUpdate()
+end
+
+--@brief 子类重写 - 面板每帧更新
 function XXXXPanel:onTick(deltaTime)
 end
 
---@brief 销毁登录面板
+--@brief 子类重写 - 面板被销毁
 function XXXXPanel:onDestroy()
 end
 
---@brief 添加事件监听
-function XXXXPanel:_AddEvents()
+--@brief 子类重写 - 显示面板
+function XXXXPanel:onShow()
 end
 
---@brief 移除事件监听
-function XXXXPanel:_RemoveEvents()
+--@brief 子类重写 - 隐藏面板
+function XXXXPanel:onHide()
 end
 
---@brief 注册网络门户
-function XXXXPanel:_RegNetFacade()
+--@brief 子类重写 - 添加事件监听
+function XXXXPanel:_AddEvents( )
 end
 
---@brief 注销网络门户
-function XXXXPanel:_UnRegNetFacade()
+--@brief 子类重写 - 移除事件监听
+function XXXXPanel:_RemoveEvents( )
 end
+
+--@brief 子类重写 - 注册网络门户
+function XXXXPanel:_RegNetFacade( )
+end
+
+--@brief 子类重写 - 注销网络门户
+function XXXXPanel:_UnRegNetFacade( )
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
