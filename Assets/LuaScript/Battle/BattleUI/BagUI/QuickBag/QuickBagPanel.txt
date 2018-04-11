@@ -54,7 +54,6 @@ end
 --@brief 显示登录面板
 function QuickBagPanel:onUpdate()
 	if self.m_tPanelData and self.m_tPanelData.items then
-		GCSLog(self.m_panelName .. ":onUpdate()")
 		for key,value in pairs(self.m_ItemList) do
 			self.m_ItemList[key]:UpdateCell(nil)
 		end

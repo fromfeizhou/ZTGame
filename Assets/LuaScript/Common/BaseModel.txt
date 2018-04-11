@@ -75,7 +75,6 @@ end
 function BaseModel:ShowPanel( panelType, panelData )
 	if self.m_tPanelList[panelType] then
 		if self.m_tPanelList[panelType].Show then
-			GCSLog("BaseModel:ShowPanel",panelData.items)
 			self.m_tPanelList[panelType]:Show(panelData)
 		end
 	else
@@ -87,8 +86,10 @@ end
 
 
 function BaseModel:HidePanel(panelType)
-	if self.m_tPanelList[panelType] and self.m_tPanelList[panelType].Hide then
-		self.m_tPanelList[panelType]:Hide()
+	if self.m_tPanelList[panelType] then
+		if self.m_tPanelList[panelType].Hide then
+			self.m_tPanelList[panelType]:Hide()
+		end
 	else
 		GCSLog("BaseModel:HidePanel","found out",panelType)
 	end

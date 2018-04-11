@@ -51,8 +51,7 @@ end
 
 --@brief 显示面板
 function UIBasePanel:Show(panelData)
-	GCSLog(self.m_panelName .. ":Show()")
-
+	--GCSLog(self.m_panelName .. ":Show()")
 	self:Update(panelData)
 	if self.m_gameObject and self.m_isShow == false then 
 		self.m_isShow = true
@@ -63,8 +62,7 @@ end
 
 --@brief 隐藏面板
 function UIBasePanel:Hide()
-	GCSLog(self.m_panelName .. ":Hide()")
-
+	--GCSLog(self.m_panelName .. ":Hide()")
 	if self.m_gameObject and self.m_isShow == true then 
 		self.m_isShow = false
 		self.m_gameObject:SetActive(self.m_isShow)

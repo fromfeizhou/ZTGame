@@ -184,10 +184,8 @@ function BattleMapMgr:_IsDisEvent(newItem)
 		local panelData = {
 			items = newItem,
 		}
-		GCSLog("BattleMapMgr:_IsDisEvent =>>ShowPanel",panelData.items)
 		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_UI_TYPE.QUICKBAG,panelData)
 	else
-		GCSLog("BattleMapMgr:_IsDisEvent =>>HidePanel")
 		GlobalBattleCtrl:GetUIModel():HidePanel(BATTLE_UI_TYPE.QUICKBAG)
 	end
 end
