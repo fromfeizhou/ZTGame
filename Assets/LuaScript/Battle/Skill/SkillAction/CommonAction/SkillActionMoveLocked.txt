@@ -1,0 +1,65 @@
+--SkillActionMoveLocked.txt
+--@breif 移动锁定
+--@data 2018/04/11
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillActionMoveLocked = {
+	
+}
+
+--@breif 继承SkillAction
+setmetatable( SkillActionMoveLocked, { __index = SkillAction})
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillActionMoveLocked:Create(actionParse,actionData)
+	CSLog("SkillActionMoveLocked:Create")
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionMoveLocked })
+	obj:Init(actionParse,actionData)
+	return obj
+end
+
+-- --@brief 初始化
+-- function SkillActionMoveLocked:Init(actionParse,actionData)
+-- 	--继承实现
+-- 	SkillAction.Init(self,actionParse,actionData)
+-- end
+
+--@brief 开始
+function SkillActionMoveLocked:Start()
+	--继承实现
+	SkillAction.Start(self)
+	
+	self.m_tOwner:SetMoveLocked(true)
+end
+
+
+-- --@brief 更新
+-- function SkillActionMoveLocked:Update()
+-- 	--继承实现
+-- 	SkillAction.Update(self)
+-- end
+
+-- --@brief 结束
+-- function SkillActionMoveLocked:Done()
+-- 	--继承实现
+-- 	SkillAction.Done(self)
+-- end
+
+--@brief 移除
+function SkillActionMoveLocked:Destroy()
+	self.m_tOwner:SetMoveLocked(false)
+	
+	--继承实现
+	SkillAction.Destroy(self)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

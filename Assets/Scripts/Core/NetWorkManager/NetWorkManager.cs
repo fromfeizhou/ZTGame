@@ -64,7 +64,13 @@ public class NetWorkManager : MonoSingleton<NetWorkManager>
 			mEvents.Enqueue (new KeyValuePair<int, ByteBuffer> (_event, data));
 		}
 	}
+	void Update(){
 
+		if (_socketClient != null && _socketClient.isConnect) {
+			_socketClient.OnReadZt ();
+		}
+
+	}
 	/// <summary>
 	/// 交给Command，这里不想关心发给谁。
 	/// </summary>

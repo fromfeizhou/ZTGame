@@ -64,7 +64,6 @@ end
 
 --@breif 事件句柄 显示面板
 function ModelManager:_OnHandle_Show(modelData)
-	GCSLog("ModelManager:_OnHandle_Show-----------------",modelData.modelType,modelData.panelType)
 	local model = ModelManager:_GetModel(modelData.modelType)
 	if model then
 		model:ShowPanel(modelData.panelType,modelData.panelData)

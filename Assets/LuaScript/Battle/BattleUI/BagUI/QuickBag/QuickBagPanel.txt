@@ -12,7 +12,6 @@ local CSJoystick = CS.JoystickBase
 local  CSRectTransform = CS.UnityEngine.RectTransform
 
 QuickBagPanel = {
-	m_panelName = "QuickBagPanel",
 	m_quickPanelRoot=nil,--拾取界面
 	m_PagePanelRoot=nil,--包裹界面
 	m_ScrollView=nil,
@@ -21,19 +20,19 @@ QuickBagPanel = {
 }
 
 setmetatable( QuickBagPanel, { __index = UIBasePanel})
+
+function QuickBagPanel:GetName()
+	return "QuickBagPanel"
+end
+
+--@brief 面板资源相对模块路径
+function QuickBagPanel:GetRelativePath()
+	return "Panel/"
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function QuickBagPanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = QuickBagPanel })
-	obj.m_tPanelData = panelData
-	obj:_LoadAssetPanel(parent, model)
-	return obj
-end
-
-
 --@brief 面板被创建
 function QuickBagPanel:onCreatePanel()	
 	self.m_quickPanelRoot = self.m_transform:Find("ItemPanel")
@@ -52,33 +51,26 @@ function QuickBagPanel:onCreatePanel()
 end
 
 --@brief 显示登录面板
-function QuickBagPanel:onShow()
-	if not self.m_gameObject then
-		return
-	end
-	
-	if not self.m_tPanelData or not self.m_tPanelData.items then
-		self:Hide()
-		return
-	end
-
-	for key,value in pairs(self.m_ItemList) do
-		self.m_ItemList[key]:UpdateCell(nil)
-	end
-
-	self.m_quickPanelRoot.gameObject:SetActive(true)
-	local  tempIndex = 1;--先只刷新前20个后续加入循环scrollView后修改
-	for key,value in pairs(self.m_tPanelData.items) do
-		if tempIndex <= #self.m_ItemList then
-		--	CSLog("QuickBagPanel: UpdateCell")
-			self.m_ItemList[tempIndex]:UpdateCell(value)
-			tempIndex = tempIndex + 1
-		else
-			break
+function QuickBagPanel:onUpdate()
+	if self.m_tPanelData and self.m_tPanelData.items then
+		for key,value in pairs(self.m_ItemList) do
+			self.m_ItemList[key]:UpdateCell(nil)
 		end
-	end
-	self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 90 * tempIndex}
 
+		self.m_quickPanelRoot.gameObject:SetActive(true)
+		local  tempIndex = 1;--先只刷新前20个后续加入循环scrollView后修改
+		for key,value in pairs(self.m_tPanelData.items) do
+			if tempIndex <= #self.m_ItemList then
+			--	CSLog("QuickBagPanel: UpdateCell")
+				self.m_ItemList[tempIndex]:UpdateCell(value)
+				tempIndex = tempIndex + 1
+			else
+				break
+			end
+		end
+		self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 90 * tempIndex}
+
+	end
 end
 
 --点击cell

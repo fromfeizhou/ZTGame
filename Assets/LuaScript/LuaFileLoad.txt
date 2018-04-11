@@ -99,6 +99,7 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionMoveLocked",
 
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",

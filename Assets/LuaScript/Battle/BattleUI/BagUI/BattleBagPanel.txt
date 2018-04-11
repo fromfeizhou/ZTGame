@@ -13,8 +13,6 @@ local  CSUnityScrollView = CS.UnityEngine.ScrollRect
 
 
 BattleBagPanel = {
-	m_panelName = "BattleBagPanel",
-	
 	m_parentRoot=nil,
 	m_transform=nil,
 	m_gameObject=nil,
@@ -34,18 +32,17 @@ RoleEquipType={
 }
 
 setmetatable( BattleBagPanel, { __index = UIBasePanel})
+function BattleBagPanel:GetName()
+	return "BattleBagPanel"
+end
 
+--@brief 面板资源相对模块路径
+function BattleBagPanel:GetRelativePath()
+	return "Panel/"
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function BattleBagPanel:Create(parent,model,panelData)
-	local obj = {}
-	setmetatable( obj, { __index = BattleBagPanel })
-	obj.m_tPanelData = panelData
-	obj:_LoadAssetPanel(parent,model)
-	return obj
-end
 
 --@brief 面板被创建
 function BattleBagPanel:onCreatePanel()	
@@ -54,12 +51,10 @@ function BattleBagPanel:onCreatePanel()
 	self.m_parentRoot = parent
 	self.m_EquipList={}
 
-	self.mainRoot=self.m_transform:Find("Main");
-	self.bagBtn=PanelWidget:GetButton(self.m_transform,"BagButton",function() self:OnClickBagBtn() end)	
-	self.m_cellBg=self.mainRoot:Find("EquptRoot/Bg");
+	self.m_cellBg=self.m_transform:Find("EquptRoot/Bg")
 	self.m_cellBg=self.m_cellBg:GetComponent("RectTransform")
 	for key, value in pairs(RoleEquipType) do     
-	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("Main/EquptRoot/Equip"..value))
+	    self.m_EquipList[value]=BattleBagCell:Create(self.m_transform:Find("EquptRoot/Equip"..value))
 		local events={}
 		events.OnUnEquip=function(id) self:_OnClickEquip(id) end 
 		self.m_EquipList[value]:SetUIEvent(events,self.m_cellBg)
@@ -68,17 +63,7 @@ end
 
 --@brief 显示面板
 function BattleBagPanel:onShow()
-
-	if not self.m_gameObject then
-		return
-	end
-
-	if self.m_tPanelData.isFirstCreate then--临时变量创建预设不show
-		self:Hide()
-	else
-		self:_UpdateEquip(GlobalBattleCtrl:GetBattleRoleEquipedList())
-		self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
-	end
+	self:_UpdateEquip(GlobalBattleCtrl:GetBattleRoleEquipedList())
 end
 
 
@@ -104,7 +89,6 @@ end
 function BattleBagPanel:onDestroy()
 	--CSLog("BattleBagPanel:Destroy")
 	self:_RemoveEvent()
-	self.mainRoot=nil
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -113,12 +97,6 @@ end
 
 
 --------------ui事件
---点击背包按钮
-function BattleBagPanel:OnClickBagBtn()
-	self:_UpdateEquip(GlobalBattleCtrl:GetBattleRoleEquipedList())
-	self.mainRoot.gameObject:SetActive( not self.mainRoot.gameObject.activeSelf)
-end
-
 --点击武器
 function BattleBagPanel:_OnClickEquip(netId)
 	BattleProtocol:SendDiscardItem(netId)

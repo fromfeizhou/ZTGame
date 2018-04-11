@@ -15,9 +15,15 @@ BaseModel = {
 	m_canvasName = "Canvas",
 }
 
+function  BaseModel:GetName()
+	return "BaseModel"
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
 --@brief 拷贝原表
 function BaseModel:Create()
 	local obj = {}
@@ -73,44 +79,32 @@ end
 
 --@breif 显示面板
 function BaseModel:ShowPanel( panelType, panelData )
-	local panel = nil
 	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
+		if self.m_tPanelList[panelType].Show then
+			self.m_tPanelList[panelType]:Show(panelData)
+		end
 	else
-		local parent = self:_GetCanvasRoot()
-		GCSLog("=======================panelType:",panelType)
-		GCSLog("----------------",SerializeTable(self.m_panelDefine))
-		GCSLog(self.m_panelDefine[panelType])
-		GCSLog(self.m_panelDefine[panelType].Create)
-		GCSLog(parent)
-		GCSLog(panelData)
-		panel = self.m_panelDefine[panelType]:Create(parent, self, panelData)
-		self.m_tPanelList[panelType] = panel
-	end
-
-	if panel.Show then
-		if modelData then panel:SetPanelData(panelData) end
-		panel:Show(panelData)
-	else
-		GCSLog("found out panel","panelType",panelType)
+		self.m_tPanelList[panelType] = self:CreatePanel(panelType, panelData)
 	end
 end
-
 
 function BaseModel:HidePanel(panelType)
-	local panel = nil
 	if self.m_tPanelList[panelType] then
-		panel = self.m_tPanelList[panelType]
-	else
-		GCSLog("BaseModel:HidePanel","found out",panelType)
-	end
-
-	if panel.Hide then
-		panel:Hide()
+		if self.m_tPanelList[panelType].Hide then
+			self.m_tPanelList[panelType]:Hide()
+		end
+	--else
+		--GCSLog("BaseModel:HidePanel","found out",panelType)
 	end
 end
 
 
+function BaseModel:CreatePanel(panelType, panelData)
+	local panel = {}
+	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
+	panel:_LoadAssetPanel(self:_GetCanvasRoot(), self, panelData)
+	return panel
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

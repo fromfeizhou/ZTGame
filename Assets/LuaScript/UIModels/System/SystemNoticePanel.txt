@@ -16,16 +16,9 @@ setmetatable( SystemNoticePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function SystemNoticePanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = SystemNoticePanel })
-	obj.m_tPanelData = panelData
-	obj:_LoadAssetPanel(parent, model)
-	return obj
+function SystemNoticePanel:GetName()
+	return "SystemNoticePanel"
 end
-
-
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	
 	-- 按钮 - 用户确认

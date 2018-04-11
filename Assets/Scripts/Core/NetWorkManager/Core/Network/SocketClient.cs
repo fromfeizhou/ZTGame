@@ -94,16 +94,109 @@ public class SocketClient {
             Close(); Debug.LogError(e.Message);
         }
     }
+	private int msgLen;
+	private byte[] _receiveBuff = new byte[8 * 1024];
+
+	private byte[] _dataBuff;
+	private int _dataLen;
+	public void OnReadZt ()
+	{
+		NetworkStream ns = client.GetStream();
+		while (ns.DataAvailable) {
+			try {
+				int receiveLen = ns.Read (_receiveBuff, 0, _receiveBuff.Length);
+				if (receiveLen > 0) {
+
+					EnsureCapacity (receiveLen);
+					Array.Copy (_receiveBuff, 0, _dataBuff, _dataLen, receiveLen);
+
+					int readLen = 0;
+					_dataLen += receiveLen;
+					msgLen = GetMsgLen (0);
+					while (msgLen > 0 && _dataLen >= msgLen) {
+						byte[] msgData = new byte[msgLen-2];
+						Array.Copy (_dataBuff, readLen+2, msgData, 0, msgData.Length);
+						NetWorkManager.AddEvent(Protocal.NetMessage,new ByteBuffer(msgData));
+
+						readLen += msgLen;
+						_dataLen -= msgLen;
+						msgLen = GetMsgLen (readLen);
+					}
+					Array.Copy (_dataBuff, readLen , _dataBuff, 0, _dataLen);
+				}
+			} catch (Exception e) {
+				Debug.LogError ("NetWorkManager:" + e.Message);
+			}
+		}
+	}
+
+	/** 待优化项：确保缓存容量 */
+	private void EnsureCapacity (int readLen)
+	{
+		if (_dataBuff == null) {
+			_dataBuff = new byte[_dataLen + readLen];
+			return;
+		}
+
+		int _dataFreeLen = _dataBuff.Length - _dataLen;
+
+		if (_dataFreeLen < readLen) {
+			byte[] tmpDataBuff = new byte[_dataLen + readLen];
+			Array.Copy (_dataBuff, 0, tmpDataBuff, 0, _dataLen);
+			_dataBuff = tmpDataBuff;
+		}
+	}
+
+	private int GetMsgLen (int readLen)
+	{
+		if (_dataLen <= MsgLen.SC_HEADLEN) {
+			return 0;
+		}
+
+		byte[] msgLen = new byte[2];
+		Array.Copy (_dataBuff, readLen, msgLen, 0, msgLen.Length);
+		Array.Reverse (msgLen);
+		return BitConverter.ToInt16 (msgLen,0) + MsgLen.PACKERLEN;
+	}
+
+
+	public class MsgLen
+	{
+		//Server To Client
+		public static int SC_HEADLEN {
+			get {
+				return MODULE + COMMAND;
+			}
+		}
+
+		//Client To Server
+		public static int CS_HEADLEN {
+			get {
+				return SEQNUM + MODULE + COMMAND;
+			}
+		}
+
+		//包长
+		public const int PACKERLEN = 2;
+		//序号
+		private const int SEQNUM = 2;
+		//门面
+		private const int MODULE = 1;
+		//指令
+		private const int COMMAND = 1;
+	}
+
 
     /// <summary>
     /// 连接上服务器
     /// </summary>
     void OnConnect(IAsyncResult asr) {
         outStream = client.GetStream();
-        client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
+		isConnect = true;
+        //client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
         NetWorkManager.AddEvent(Protocal.Connect, new ByteBuffer());
     }
-
+	public bool isConnect = false;
     /// <summary>
     /// 写数据
     /// </summary>

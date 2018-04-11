@@ -16,15 +16,9 @@ setmetatable( LoginCreateRolePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function LoginCreateRolePanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = LoginCreateRolePanel })
-	obj.m_tPanelData = panelData
-	obj:_LoadAssetPanel(parent, model)
-	return obj
+function LoginCreateRolePanel:GetName()
+	return "LoginCreateRolePanel"
 end
-
 
 --@brief 面板被创建
 function LoginCreateRolePanel:onCreatePanel()	
