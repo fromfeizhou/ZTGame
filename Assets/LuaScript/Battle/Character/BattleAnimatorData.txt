@@ -56,6 +56,7 @@ function BattleAnimatorData:Play(name)
 	if name == AnimatorName.Idle then
 		self:_SetPlayDelay(name)
 	else
+		self.m_nPlayCount = nil
 		AnimatorData.Play(self,name)
 	end
 end
@@ -72,6 +73,7 @@ end
 
 --@brief 刷新当前位置
 function BattleAnimatorData:_UpdateCurPos(pos)
+	--CSLog("BattleAnimatorData:_UpdateCurPos",pos)
 	AnimatorData.UpdatePos(self,pos)
 	self.m_tCurPos = pos
 	self:_UpdateCameraPos()
