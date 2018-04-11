@@ -159,6 +159,7 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
 	
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
@@ -178,10 +179,11 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
+	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
 
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
-	
+		
 	--数据初始化完成
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 
@@ -190,6 +192,7 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 	GlobalBattleCtrl.m_bGameOver = false
 end
+
 
 --@rife 删除数据
 function GlobalBattleCtrl:DestroyData()

@@ -7,10 +7,11 @@ local CSLog = CS.GameTool.Log
 local CSVector3 = CS.UnityEngine.Vector3
 
 BattleAnimatorData = {
+	m_bCameraFollow = nil,	--镜头跟随
 	m_tCurPos = nil,		--当前位置
 	m_tTargetPos = nil,		--目标位置
 }
---@breif 继承SkillAction
+--@breif 继承AnimatorData
 setmetatable( BattleAnimatorData, { __index = AnimatorData})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -23,55 +24,73 @@ function BattleAnimatorData:Create(animaType,careerType)
 	return obj
 end
 
---@brief 初始化
-function BattleAnimatorData:Init(animaType,careerType)
-	AnimatorData.Init(self,animaType,careerType)
-end
+-- --@brief 初始化
+-- function BattleAnimatorData:Init(animaType,careerType)
 
+-- 	AnimatorData.Init(self,animaType,careerType)
+-- end
+
+--@brief 设置镜头跟随
+function BattleAnimatorData:SetCameraFollow(value)
+	self.m_bCameraFollow = true
+end
 
 --@brief 刷新位置
 --@param vector3 pos
 function BattleAnimatorData:UpdatePos(pos)
-	self:SetPosDelay(pos)
+	self:_SetPosDelay(pos)
+end
+
+--@brief 补间动画更新(界面刷新调用)
+function BattleAnimatorData:UpdateDelayView(dt)
+	self:_UpdatePosDelay(dt)
 end
 
 
-function BattleAnimatorData:SetPosDelay(pos)
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 主角色调用
+function BattleAnimatorData:_UpdateCameraPos()
+	if self.m_bCameraFollow then
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,self.m_tCurPos)
+	end
+end
+
+--@brief 刷新当前位置
+function BattleAnimatorData:_UpdateCurPos(pos)
+	self.m_tCurPos = pos
+	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
+	self:_UpdateCameraPos()
+end
+
+--@brief 初始化位置补间动画
+function BattleAnimatorData:_SetPosDelay(pos)
 	if not self.m_tCurPos then
-		self.m_tCurPos = pos
+		self:_UpdateCurPos(pos)
+		return
 	end
 	self.m_tTargetPos = pos
 	--大于10米 直接跑
 	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > 10 then
-		self.m_tCurPos = pos
-		self:DispatchEvent(AnimaEvent.UpdatePos,pos)
+		self:_UpdateCurPos(pos)
 	else
 		self.m_bDelayPosSpeed = (self.m_tTargetPos - self.m_tCurPos)/10
 		self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
 	end
 end
 
-
---@brief 补间动画更新
-function BattleAnimatorData:UpdateDelayView(dt)
-	self:UpdatePosDelay(dt)
-end
-
-
-function BattleAnimatorData:UpdatePosDelay(dt)
+--@brief 更新位置补间动画
+function BattleAnimatorData:_UpdatePosDelay(dt)
 	if not self.m_bDelayPosSpeed then
 		return
 	end
-
+	local pos = nil
 	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > self.m_nDelayPosLenght then
-		self.m_tCurPos = self.m_tCurPos + self.m_bDelayPosSpeed
-		self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
+		pos = self.m_tCurPos + self.m_bDelayPosSpeed
 	else
-		self.m_tCurPos = self.m_tTargetPos
-		self.m_bDelayPosSpeed = false
+		pos = self.m_tTargetPos
+		self.m_bDelayPosSpeed = nil
 	end
-	self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
+	self:_UpdateCurPos(pos)
 end
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---*******************************************************Public End***************************************************************
---————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

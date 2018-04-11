@@ -173,6 +173,11 @@ function Character:SetPos(pos)
 	self:UpdatePos(pos)
 end
 
+--@brief 获取动画位置
+function Character:GetViewPos()
+	return self.m_animData.m_tCurPos
+end
+
 --@brief 是否死亡
 function Character:IsDead()
 	return self.m_nState == CharacterState.Die
@@ -361,7 +366,7 @@ function Character:AddHurtNum(value)
 		self:ChangeHp(value)
 	end
 
-	local hurtInfo = {hurtType = 1,pos = self.m_charaPos,value = value}
+	local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
 
@@ -384,6 +389,10 @@ end
 --@brief 是否在镜头范围内
 function Character:IsInCamera()
 	return self.m_bInCamera
+end
+--@brief 设置镜头跟随
+function Character:SetCameraFollow(value)
+	self.m_animData:SetCameraFollow(value)
 end
 
 --@brief 刷新位置
