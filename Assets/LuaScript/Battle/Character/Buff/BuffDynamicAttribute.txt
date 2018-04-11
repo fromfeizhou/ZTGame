@@ -23,7 +23,7 @@ end
 
 --@brief 初始化
 function BuffDynamicAttribute:Init(owner,config)
-	BuffBase.init(self,owner,config)
+	BuffBase.Init(self,owner,config)
 end
 
 --@brief 移除

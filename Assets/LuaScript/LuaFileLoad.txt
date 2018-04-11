@@ -81,6 +81,7 @@ local LuaFileLoad = {
 		"Battle.Character.Buff.BuffCharaAttribute",
 		"Battle.Character.Buff.BuffDynamicAttribute",
 
+		"Battle.Character.BattleAnimatorData",
 		"Battle.Character.Character",
 		"Battle.Character.ZTCharaManager",
 

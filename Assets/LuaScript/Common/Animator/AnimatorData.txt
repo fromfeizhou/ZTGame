@@ -28,9 +28,6 @@ AnimatorName = {
 AnimatorData = {
 	m_nType = nil,	--动画类型
 	m_nCareerType = nil,	--职业类型
-
-	m_tCurPos = nil,		--当前位置
-	m_tTargetPos = nil,		--目标位置
 }
 
 --@breif 继承EventDispatcher
@@ -84,36 +81,13 @@ function AnimatorData:SetInCamera(inCamera)
 	self:DispatchEvent(AnimaEvent.InCamera,inCamera)
 end
 
---@brief 设置补间动画
-function AnimatorData:SetDelayAction(value)
-	self.m_bDelayAction = value
-end
-
 --@brief 刷新位置
 --@param vector3 pos
 function AnimatorData:UpdatePos(pos)
-	if self.m_bDelayAction then
-		self:SetPosDelay(pos)
-		return
-	end
 	-- CSLog("AnimatorData:UpdatePos",pos)
 	self:DispatchEvent(AnimaEvent.UpdatePos,pos)
 end
 
-function AnimatorData:SetPosDelay(pos)
-	if not self.m_tCurPos then
-		self.m_tCurPos = pos
-	end
-	self.m_tTargetPos = pos
-	--大于10米 直接跑
-	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > 10 then
-		self.m_tCurPos = pos
-		self:DispatchEvent(AnimaEvent.UpdatePos,pos)
-	else
-		self.m_bDelayPosSpeed = (self.m_tTargetPos - self.m_tCurPos)/10
-		self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
-	end
-end
 
 --@brief 更新角度
 --@param vector3 dir
@@ -130,28 +104,6 @@ function AnimatorData:ChangeTranslucence(transLv)
 	self:DispatchEvent(AnimaEvent.ChangeTranslucence,self.m_tTransLv)
 end
 
-
---@brief 补间动画更新
-function AnimatorData:UpdateDelayView(dt)
-	self:UpdatePosDelay(dt)
-end
-
-
-function AnimatorData:UpdatePosDelay(dt)
-	if not self.m_bDelayPosSpeed then
-		return
-	end
-
-	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > self.m_nDelayPosLenght then
-		self.m_tCurPos = self.m_tCurPos + self.m_bDelayPosSpeed
-		self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
-	else
-		self.m_tCurPos = self.m_tTargetPos
-		self.m_bDelayPosSpeed = false
-	end
-	self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
-
-end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

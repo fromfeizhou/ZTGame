@@ -1,55 +1,76 @@
---BuffAttribute.txt
---@breif 属性buff
---@data 2018/03/25
+--BattleAnimatorData.txt
+--@breif 战斗动画数据
+--@data 2018/04/11
 
 --@brief c#引用
 local CSLog = CS.GameTool.Log
+local CSVector3 = CS.UnityEngine.Vector3
 
-BuffAttribute = {
-	m_tAttriTypes = nil,	--属性类型列表
-	m_tAttriList = nil,	--加成值
+BattleAnimatorData = {
+	m_tCurPos = nil,		--当前位置
+	m_tTargetPos = nil,		--目标位置
 }
 --@breif 继承SkillAction
-setmetatable( BuffAttribute, { __index = BuffBase})
+setmetatable( BattleAnimatorData, { __index = AnimatorData})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BuffAttribute:Create(owner,config)
+function BattleAnimatorData:Create(animaType,careerType)
 	local obj = {}
-	setmetatable( obj, { __index = BuffAttribute })
-	obj:Init(owner,config)
+	setmetatable( obj, { __index = BattleAnimatorData })
+	obj:Init(animaType,careerType)
 	return obj
 end
 
 --@brief 初始化
-function BuffAttribute:Init(owner,config)
-	BuffBase.Init(self,owner,config)
-	self.m_tAttriTypes = {AttributeType.Hp}
-	self.m_tAttriList = {}
+function BattleAnimatorData:Init(animaType,careerType)
+	AnimatorData.Init(self,animaType,careerType)
 end
 
---@brief 移除
-function BuffAttribute:Destroy()
-	
+
+--@brief 刷新位置
+--@param vector3 pos
+function BattleAnimatorData:UpdatePos(pos)
+	self:SetPosDelay(pos)
 end
 
---@brief 获得属性列表
-function BuffAttribute:GetArrtibuteTypes()
-	return self.m_tAttriTypes
-end
 
---@brief 获得属性
-function BuffAttribute:GetAttributeByType(attriType,value)
-	if not self.m_tAttriList or not self.m_tAttriList[attriType] then
-		return 0
+function BattleAnimatorData:SetPosDelay(pos)
+	if not self.m_tCurPos then
+		self.m_tCurPos = pos
 	end
-	return self.m_tAttriList[attriType]
+	self.m_tTargetPos = pos
+	--大于10米 直接跑
+	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > 10 then
+		self.m_tCurPos = pos
+		self:DispatchEvent(AnimaEvent.UpdatePos,pos)
+	else
+		self.m_bDelayPosSpeed = (self.m_tTargetPos - self.m_tCurPos)/10
+		self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
+	end
 end
 
---@brief 设置属性
-function BuffAttribute:SetAttributeByType(attriType,value)
-	self.m_tAttriList[attriType] = value
+
+--@brief 补间动画更新
+function BattleAnimatorData:UpdateDelayView(dt)
+	self:UpdatePosDelay(dt)
+end
+
+
+function BattleAnimatorData:UpdatePosDelay(dt)
+	if not self.m_bDelayPosSpeed then
+		return
+	end
+
+	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > self.m_nDelayPosLenght then
+		self.m_tCurPos = self.m_tCurPos + self.m_bDelayPosSpeed
+		self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
+	else
+		self.m_tCurPos = self.m_tTargetPos
+		self.m_bDelayPosSpeed = false
+	end
+	self:DispatchEvent(AnimaEvent.UpdatePos,self.m_tCurPos)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

@@ -23,7 +23,7 @@ end
 
 --@brief 初始化
 function CharaAttribute:Init(owner,config)
-	BuffBase.init(self,owner,config)
+	BuffBase.Init(self,owner,config)
 	self.m_tAttriList = {}
 end
 

@@ -54,8 +54,7 @@ end
 function Character:Init(battleData,container)
 	-- CSLog("Character:Init",battleData.pos)
 	self.m_nBattleId = battleData.battleId or 1
-	self.m_animData = AnimatorData:Create(AnimatorType.Hero,battleData.careerType)
-	self.m_animData:SetDelayAction(true)
+	self.m_animData = BattleAnimatorData:Create(AnimatorType.Hero,battleData.careerType)
 	self.m_animator = Animator:Create(self.m_animData,container)
 	self.m_bInCamera = false
 

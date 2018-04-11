@@ -124,7 +124,7 @@ function BattleCameraMgr:_UpdateCameraActoin()
 	BattleCameraMgr:_UpdateCameraPos(curPos)
 
 	local distance = BattleCameraMgr:_GetDistanceForTarget()
-	if distance <= BattleDefine.PlayerSpeed then
+	if distance <= 0.01 then
 		BattleCameraMgr.m_bMoveAction = nil
 		BattleCameraMgr:_UpdateCameraPos(BattleCameraMgr.m_tTargetPos)
 	end
