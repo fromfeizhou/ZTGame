@@ -31,6 +31,7 @@ Character = {
 	m_nCampId = nil,		--camp
 	
 	m_nState = nil,		--玩家状态
+	m_bMoveLocked = nil,	--锁定移动
 	m_ztCollider = nil,		--碰撞框
 
 	m_attriSystem = nil,	--属性系统
@@ -235,6 +236,11 @@ function Character:GetEffectCon()
 		return self.m_animator:GetEffectCon()
 	end
 	return nil
+end
+
+--@brief 锁定移动
+function Character:SetMoveLocked(value)
+	self.m_bMoveLocked = value
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -455,7 +461,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
-	if self:IsDead() then
+	if self:IsDead() or self.m_bMoveLocked then
 		return
 	end
 

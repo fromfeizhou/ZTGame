@@ -123,15 +123,16 @@ end
 
 --@brief 解析配置
 function SkillActionParse:_ParseConfig()
-	-- local config = {
-	-- [0] = {
-	-- 		{actionType = SkillActionType.Play,param = {"attack1"}},
-	-- 		{actionType = SkillActionType.Face,param = {SkillFaceType.UpSkill}},
-	-- 	},
-	-- [1] = {
-	-- 		{actionType = SkillActionType.Collider,param = {0.5,0,SkillLayerType.Hero,0,1,SkillTargetType.Self,30}},
-	-- 	}
-	-- }
+	local ActionFactory = {
+		[SkillActionType.Face] = self._GetActionFace,
+		[SkillActionType.Play] = self._GetActionPlay,
+		[SkillActionType.Collider] = self._GetActionCollider,
+		[SkillActionType.SpEffect] = self._GetActoinSpEffect,
+		[SkillActionType.PlayerMove] = self._GetActoinMove,
+		[SkillActionType.MoveLocked] = self._GetActionMoveLocked,
+		[SkillActionType.Sound] = nil,
+	}
+
 	local skillCfg = Tab_Skill[self.m_nSkillId]
 	local actionId = skillCfg.actionId
 	local config = SkillActionConfig["id_"..actionId] or SkillActionConfig["id_".."10001"]
@@ -146,23 +147,12 @@ function SkillActionParse:_ParseConfig()
 			local param = actionCFG.param
 			local action = nil
 			local actionType = actionCFG.actionType
-			if actionType == SkillActionType.Face then
-				action = self:_GetRotateAction(frame,param)
-
-			elseif actionType == SkillActionType.Play then
-				action = self:_GetPlayAction(frame,param)
-
-			elseif actionType == SkillActionType.Collider then
-				action = self:_GetColliderAction(frame,param)
-			elseif actionType == SkillActionType.SpEffect then
-				action = self:_GetSpEffectActoin(frame,param)
-			elseif actionType == SkillActionType.PlayerMove then
-				action = self:_GetPlayerMoveActoin(frame,param)
-
-			elseif actionType == SkillActionType.Sound then
-
+			--获得对应的action
+			local actionfunc = ActionFactory[actionType]
+			if actionfunc then
+				action = actionfunc(self,frame,param)
 			end
-
+			
 			if action then
 				if not self.m_tActionList[i] then
 					self.m_tActionList[i] = {}
@@ -174,9 +164,9 @@ function SkillActionParse:_ParseConfig()
 	end
 end
 
---@brief 获得基础Action
-function SkillActionParse:_GetRotateAction(frame,param)
-	-- CSLog("SkillActionParse:_GetRotateAction",frame,SerializeTable(param))
+--@brief 获得朝向Action
+function SkillActionParse:_GetActionFace(frame,param)
+	-- CSLog("SkillActionParse:_GetActionFace",frame,SerializeTable(param))
 	--[1]朝向
 	local data = SkillActionFaceData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionFace:Create(self,data)
@@ -184,32 +174,39 @@ function SkillActionParse:_GetRotateAction(frame,param)
 end
 
 --@brief 获得播放Action
-function SkillActionParse:_GetPlayAction(frame,param)
-	-- CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
+function SkillActionParse:_GetActionPlay(frame,param)
+	-- CSLog("SkillActionParse:_GetActionPlay",frame,SerializeTable(param))
 	local data = SkillActionPlayData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionPlay:Create(self,data)
 	return action
 end
 
 --@brief 获得碰撞Action
-function SkillActionParse:_GetColliderAction(frame,param)
-	--CSLog("SkillActionParse:_GetPlayAction",frame,SerializeTable(param))
+function SkillActionParse:_GetActionCollider(frame,param)
 	local data = SkillActionColliderData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionCollider:Create(self,data)
 	return action
 end
 
 --@brief 获得特效action
-function SkillActionParse:_GetSpEffectActoin(frame,param)
+function SkillActionParse:_GetActoinSpEffect(frame,param)
 	local data = SkillActionSpEffData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActoinSpEffect:Create(self,data)
 	return action
 end
 
 --@brief 获得位移action
-function SkillActionParse:_GetPlayerMoveActoin(frame,param)
+function SkillActionParse:_GetActoinMove(frame,param)
 	local data = SkillActionMoveData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
 	local action = SkillActionMove:Create(self,data)
+	return action
+end
+
+
+--@brief 获得锁定移动action
+function SkillActionParse:_GetActionMoveLocked(frame,param)
+	local data = SkillActionMoveLockedData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionMoveLocked:Create(self,data)
 	return action
 end
 
