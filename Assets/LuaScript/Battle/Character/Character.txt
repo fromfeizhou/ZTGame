@@ -31,6 +31,7 @@ Character = {
 	m_nCampId = nil,		--camp
 	
 	m_nState = nil,		--玩家状态
+	m_bMoveLocked = nil,	--锁定移动
 	m_ztCollider = nil,		--碰撞框
 
 	m_attriSystem = nil,	--属性系统
@@ -134,7 +135,7 @@ function Character:SetDirection(dir)
 		if self.m_nMoveDir == BattleDir.None then
 			self:Play(AnimatorName.Move)
 		elseif dir == BattleDir.None then
-			self:Play(AnimatorName.Idle,self.m_nState)
+			self:Play(AnimatorName.Idle)
 		end
 		
 		--切换角度
@@ -180,12 +181,12 @@ end
 
 --@brief 是否死亡
 function Character:IsDead()
-	return self.m_nState == CharacterState.Die
+	return self:IsInState(CharacterState.Die)
 end
 
 --@brief 设置死亡
 function Character:SetDead(value)
-	-- CSLog("Character:SetDead",isDead)
+	-- CSLog("Character:SetDead",value)
 	if self.m_bIsDead == value then
 		return
 	end
@@ -237,6 +238,12 @@ function Character:GetEffectCon()
 	return nil
 end
 
+--@brief 锁定移动
+function Character:SetMoveLocked(value)
+	self.m_bMoveLocked = value
+	self:CheckStateAnima()
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -249,14 +256,22 @@ end
 --@brief 设置玩家状态
 function Character:OutState(state)
 	self.m_nState = self.m_nState & ~state
-
 	self:CheckStateAnima()
 	--CSLog("Character:OutState",self.m_nState)
 end
 
+--@brief 是否存在状态
+function Character:IsInState(state)
+	local result = self.m_nState & state
+	return result == 1
+end
+
 --@brief 是否是普通状态
 function Character:IsNormalState()
-	return self.m_nState == CharacterState.Normal
+	if self:IsDead() then
+		return false
+	end
+	return true
 end
 
 --@brief 根据类型获取属性
@@ -455,7 +470,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 刷新移动
 function Character:_UpdateMoveCommand()
-	if self:IsDead() then
+	if self:IsDead() or self.m_bMoveLocked then
 		return
 	end
 

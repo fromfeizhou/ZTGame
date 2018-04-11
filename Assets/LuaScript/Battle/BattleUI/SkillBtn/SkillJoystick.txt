@@ -139,7 +139,7 @@ function SkillJoystick:_SendSkillCommand(pos)
 		self.m_nCurIndex = 1
 	end
 	-- local owner = GlobalBattleCtrl:GetOwnerChara()
-	-- if not owner or not owner:IsNormalState() then
+	-- if not owner or owner:IsNormalState() then
 	-- 	return
 	-- end
 
