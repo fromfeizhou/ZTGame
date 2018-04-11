@@ -2,30 +2,34 @@ SkillActionConfig = {
 	id_10001 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack1" }},
-				{ actionType = 5, param = { 1001 }},
 		},
 		[ 20 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 18, 1, "HitBlood1" }},
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 1, 1, "HitBlood1" }},
+		},
+		[ 21 ] = {
+				{ actionType = 5, param = { 1001 }},
 		},
 	},
 
 	id_10002 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack2" }},
-				{ actionType = 5, param = { 1001 }},
 		},
 		[ 20 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 18, 1, "HitBlood2" }},
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 1, 1, "HitBlood2" }},
+		},
+		[ 21 ] = {
+				{ actionType = 5, param = { 1001 }},
 		},
 	},
 
 	id_10003 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack3" }},
-				{ actionType = 5, param = { 1002 }},
 		},
 		[ 25 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 4, 2, 18, 5, "HitBlood3" }},
+				{ actionType = 3, param = { 1, -1, 1, 0, 4, 2, 1, 5, "HitBlood3" }},
+				{ actionType = 5, param = { 1002 }},
 		},
 	},
 
