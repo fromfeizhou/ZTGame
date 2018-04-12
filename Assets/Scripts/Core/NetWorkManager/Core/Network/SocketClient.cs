@@ -93,7 +93,7 @@ public class SocketClient {
         }
     }
 	private int msgLen;
-	private byte[] _receiveBuff = new byte[256 * 1024];
+	private byte[] _receiveBuff = new byte[64 * 1024];
 
 	private byte[] _dataBuff;
 	private int _dataLen;

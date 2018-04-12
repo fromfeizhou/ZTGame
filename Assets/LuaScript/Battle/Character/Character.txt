@@ -16,6 +16,7 @@ CharacterState = {
 	Skill = 8,			--施法中
 	KnockState = 16,		--击倒 击飞 击退
 	Controller = 32,		--受控
+	MoveLocked = 64,		--移动锁定
 }
 
 Character = {
@@ -31,7 +32,11 @@ Character = {
 	m_nCampId = nil,		--camp
 	
 	m_nState = nil,		--玩家状态
+	--频繁访问状态（update等）用bool值记录
+	m_bIsDead = nil,	--玩家死亡
 	m_bMoveLocked = nil,	--锁定移动
+	
+
 	m_ztCollider = nil,		--碰撞框
 
 	m_attriSystem = nil,	--属性系统
@@ -132,19 +137,27 @@ function Character:SetDirection(dir)
 	-- CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
-		if self.m_nMoveDir == BattleDir.None then
-			self:Play(AnimatorName.Move)
-		elseif dir == BattleDir.None then
-			self:Play(AnimatorName.Idle)
-		end
-		
-		--切换角度
-		if dir ~= BattleDir.None then
-			self:UpdateRotate(BattleDirDefine:GetDirPos(dir))
-		end
-
 		self.m_nMoveDir = dir
+		self:UpdateViewByDirection()
+	end
+end
 
+--@brief 调整朝向
+function Character:UpdateViewByDirection()
+	--切换角度(移动锁定 而且 不包含调整角度技能)
+	if not self:IsMoveActionChangeRotate() then
+		return
+	end
+	if self:IsNormalState() then
+		if self.m_nMoveDir == BattleDir.None then
+			self:Play(AnimatorName.Idle)
+		else
+			self:Play(AnimatorName.Move)
+		end
+	end
+
+	if self.m_nMoveDir ~= BattleDir.None then
+		self:UpdateRotate(BattleDirDefine:GetDirPos(self.m_nMoveDir))
 	end
 end
 
@@ -179,9 +192,74 @@ function Character:GetViewPos()
 	return self.m_animData.m_tCurPos
 end
 
+
+--@brief 获取碰撞体
+function Character:GetCollider()
+	return self.m_ztCollider
+end
+
+--@brief 获取碰撞中心
+function Character:GetColliderPos()
+	return self.m_ztCollider.m_tPos
+end
+
+--@brief 是否主机
+function Character:IsHost()
+	return GlobalBattleCtrl:GetOwnerId() == self.m_nBattleId
+end
+
+
+--@brief 获取特效容器
+function Character:GetEffectCon()
+	if self.m_animator then
+		return self.m_animator:GetEffectCon()
+	end
+	return nil
+end
+
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 状态机begin
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 设置玩家状态
+function Character:InState(state)
+	self.m_nState = self.m_nState | state
+	---CSLog("Character:InState",self.m_nState)
+end
+
+--@brief 设置玩家状态
+function Character:OutState(state)
+	self.m_nState = self.m_nState & ~state
+	self:CheckStateAnima()
+	--CSLog("Character:OutState",self.m_nState)
+end
+
+--@brief 状态回切动作判断
+function Character:CheckStateAnima()
+	self:UpdateViewByDirection()
+end
+
+--@brief 是否存在状态
+function Character:IsInState(state)
+	local result = self.m_nState & state
+	return result == 1
+end
+
+--@brief 是否是普通状态
+function Character:IsNormalState()
+	if self:IsDead() then
+		return false
+	end
+	if self:IsInState(CharacterState.Skill) then
+		return false
+	end
+	return true
+end
+
 --@brief 是否死亡
 function Character:IsDead()
-	return self:IsInState(CharacterState.Die)
+	return self.m_bIsDead
 end
 
 --@brief 设置死亡
@@ -204,75 +282,35 @@ function Character:SetDead(value)
 	end
 end
 
---@brief 获取碰撞体
-function Character:GetCollider()
-	return self.m_ztCollider
-end
-
---@brief 获取碰撞中心
-function Character:GetColliderPos()
-	return self.m_ztCollider.m_tPos
-end
-
---@brief 是否主机
-function Character:IsHost()
-	return GlobalBattleCtrl:GetOwnerId() == self.m_nBattleId
-end
-
---@brief 状态回切动作判断
-function Character:CheckStateAnima()
-	if self:IsNormalState() then
-		if self.m_nMoveDir ~= BattleDir.None then
-			self:Play(AnimatorName.Move)
-		else
-			self:Play(AnimatorName.Idle)
-		end
-	end
-end
-
---@brief 获取特效容器
-function Character:GetEffectCon()
-	if self.m_animator then
-		return self.m_animator:GetEffectCon()
-	end
-	return nil
-end
-
 --@brief 锁定移动
 function Character:SetMoveLocked(value)
 	self.m_bMoveLocked = value
-	--self:CheckStateAnima()
+	if self.m_bMoveLocked then
+		self:InState(CharacterState.MoveLocked)
+	else
+		self:OutState(CharacterState.MoveLocked)
+	end
 end
+
+--@brief 移动操作 调整朝向判断
+function Character:IsMoveActionChangeRotate(value)
+	if self.m_bMoveLocked and not self:IsInState(CharacterState.Skill)  then
+		return false
+	end
+
+	return true
+end
+
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 状态机end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 属性计算相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 设置玩家状态
-function Character:InState(state)
-	self.m_nState = self.m_nState | state
-	---CSLog("Character:InState",self.m_nState)
-end
 
---@brief 设置玩家状态
-function Character:OutState(state)
-	self.m_nState = self.m_nState & ~state
-	self:CheckStateAnima()
-	--CSLog("Character:OutState",self.m_nState)
-end
-
---@brief 是否存在状态
-function Character:IsInState(state)
-	local result = self.m_nState & state
-	return result == 1
-end
-
---@brief 是否是普通状态
-function Character:IsNormalState()
-	if self:IsDead() then
-		return false
-	end
-	return true
-end
 
 --@brief 根据类型获取属性
 function Character:GetAttributeByType(type,isBase)
