@@ -22,5 +22,5 @@ SkillActionMoveConfig = {
 
 	[1001] = {actionType = 1,param = {0.1,10}},
 	[1002] = {actionType = 1,param = {0.1,20}},
-	[1003] = {actionType = 2,param = {0.1,50}},
+	[1003] = {actionType = 2,param = {0.1,200000}},
 }
