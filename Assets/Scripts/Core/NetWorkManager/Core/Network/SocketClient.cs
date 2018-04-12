@@ -86,8 +86,6 @@ public class SocketClient {
             else {
                 client = new TcpClient(AddressFamily.InterNetwork);
             }
-            client.SendTimeout = 1000;
-            client.ReceiveTimeout = 1000;
             client.NoDelay = true;
             client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
         } catch (Exception e) {
@@ -95,7 +93,7 @@ public class SocketClient {
         }
     }
 	private int msgLen;
-	private byte[] _receiveBuff = new byte[8 * 1024];
+	private byte[] _receiveBuff = new byte[64 * 1024];
 
 	private byte[] _dataBuff;
 	private int _dataLen;
@@ -106,6 +104,7 @@ public class SocketClient {
 			try {
 				int receiveLen = ns.Read (_receiveBuff, 0, _receiveBuff.Length);
 				if (receiveLen > 0) {
+					//Debug.Log("receiveLen:" + receiveLen );
 
 					EnsureCapacity (receiveLen);
 					Array.Copy (_receiveBuff, 0, _dataBuff, _dataLen, receiveLen);
@@ -156,7 +155,7 @@ public class SocketClient {
 		byte[] msgLen = new byte[2];
 		Array.Copy (_dataBuff, readLen, msgLen, 0, msgLen.Length);
 		Array.Reverse (msgLen);
-		return BitConverter.ToInt16 (msgLen,0) + MsgLen.PACKERLEN;
+		return BitConverter.ToUInt16 (msgLen,0) + MsgLen.PACKERLEN;
 	}
 
 
