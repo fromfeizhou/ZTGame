@@ -80,7 +80,7 @@ SkillActionConfig = {
 	id_11003 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "skill03" }},
-				{ actionType = 0, param = { -1 }},
+				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
 				{ actionType = 3, param = { 8, -1, 1, 0, 0, 2, 50, 10, "Magic_Pulse1" }},
