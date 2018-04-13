@@ -118,7 +118,7 @@ public class MapManager : Singleton<MapManager>
     private bool _isInit = false;
     private List<MapBlockData> _mapBlockData = new List<MapBlockData>();
     private string currentBigMapIndex = "00";
-    private Vector2 currElementGrid = Vector2.zero;
+    private Vector2 currElementGrid = new Vector2(-100f, -100f);
 
     private Action<string, float, float> _mapUpdateProces;
     private List<string> assetPaths;
@@ -347,15 +347,6 @@ public class MapManager : Singleton<MapManager>
     private float maptileInterval = MapDefine.TilesGridInterval;//MapDefine.MapWidth / 4f;
     public void SetMapCenterPos(Vector3 pos)
     {
-        int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
-        int tempY = Mathf.FloorToInt(pos.z / MapDefine.MapElementSize);
-        if (_mapTilePosCenter == null || Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
-        {
-            currElementGrid.x = tempX;
-            currElementGrid.y = tempY;
-            mapView.UpdateElementView(pos, tempX, tempY);
-        }
-
         if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.z / maptileInterval)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.x / maptileInterval)) >= 1)
         {
             if (_mapTilePosCenter == null)
@@ -363,8 +354,19 @@ public class MapManager : Singleton<MapManager>
             _mapTilePosCenter.Row = Mathf.FloorToInt(pos.x / maptileInterval);
             _mapTilePosCenter.Column = Mathf.FloorToInt(pos.z / maptileInterval);
 
-            mapTilesViewMgr.UpdateTilesView(pos,_mapTilePosCenter.Row, _mapTilePosCenter.Column);
+            mapTilesViewMgr.UpdateTilesView(pos, _mapTilePosCenter.Row, _mapTilePosCenter.Column);
         }
+
+        int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
+        int tempY = Mathf.FloorToInt(pos.z / MapDefine.MapElementSize);
+        if ( Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
+        {
+            currElementGrid.x = tempX;
+            currElementGrid.y = tempY;
+            mapView.UpdateElementView(pos, tempX, tempY);
+        }
+
+       
         mapView.UpdateRoleRay(pos);
     }
 
