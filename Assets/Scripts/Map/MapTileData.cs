@@ -9,4 +9,5 @@ public class MapTileData{
 
     public int Row;    //行
     public int Column;//列
+    public Vector3 pos;
 }

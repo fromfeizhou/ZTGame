@@ -2,6 +2,13 @@
 
 public class CameraFollow : MonoBehaviour
 {
+    [SerializeField]
+    float tx = 5f;     // 最低俯视角度
+    [SerializeField]
+    float ty = 5f;     // 最低俯视角度
+    [SerializeField]
+    float tz = 5f;     // 最低俯视角度
+
     public Transform target = null;     // 目标玩家
     [SerializeField]
     [Range(0, 360)]
@@ -92,15 +99,15 @@ public class CameraFollow : MonoBehaviour
         float upRidus = Mathf.Deg2Rad * initialAngle;
         float flatRidus = Mathf.Deg2Rad * horizontalAngle;
 
-        float x = initialDistance * Mathf.Cos(upRidus) * Mathf.Cos(flatRidus);
-        float z = initialDistance * Mathf.Cos(upRidus) * Mathf.Sin(flatRidus);
-        float y = initialDistance * Mathf.Sin(upRidus);
+        float x = tx;//initialDistance * Mathf.Cos(upRidus) * Mathf.Cos(flatRidus);
+        float z = ty;//initialDistance * Mathf.Cos(upRidus) * Mathf.Sin(flatRidus);
+        float y = tz;//initialDistance * Mathf.Sin(upRidus);
 
         transform.position = Vector3.zero;
         tempVector.Set(x, y, z);
         tempVector = tempVector + target.position;
         transform.position = tempVector;
-        tempVector.Set(target.position.x, target.position.y + initialHeight, target.position.z);
+        tempVector.Set(target.position.x, target.position.y, target.position.z);
 
         transform.LookAt(tempVector);
 

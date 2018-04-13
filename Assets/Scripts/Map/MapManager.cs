@@ -114,18 +114,18 @@ public class RoleTilePos
 
 public class MapManager : Singleton<MapManager>
 {
-    private List<MapTileView> _mapViewList = null;
     private MapTilePos _mapTilePosCenter;  //地图中心
     private bool _isInit = false;
     private List<MapBlockData> _mapBlockData = new List<MapBlockData>();
     private string currentBigMapIndex = "00";
-    private Vector2 currElementGrid = Vector2.zero;
+    private Vector2 currElementGrid = new Vector2(-100f, -100f);
 
     private Action<string, float, float> _mapUpdateProces;
     private List<string> assetPaths;
     private List<UnityAction<Object, string>> assetCallbackList;
 
     private MapElementView mapView;
+    private MapTileViewMgr mapTilesViewMgr;
     private byte[] ColliderDatas;
     private byte[] hideDatas;
     private byte[] heightDatas;
@@ -158,6 +158,8 @@ public class MapManager : Singleton<MapManager>
         Debug.Log("MapManager:Init");
         mapView = new MapElementView();
         mapView.SetBigMapKey(pos);
+        mapTilesViewMgr =new MapTileViewMgr();
+        mapTilesViewMgr.SetBigMapKey(pos);
         _mapUpdateProces = mapUpdateProcess;
         loadIndex = 0;
         assetPaths = new List<string>();
@@ -165,12 +167,14 @@ public class MapManager : Singleton<MapManager>
         assetPaths.Add(MapDefine.MapDataSavePath);
         assetPaths.Add(MapDefine.MapHideBlockDataSavePath);
         assetPaths.Add(MapDefine.MapHeightBlockDataSavePath);
+        assetPaths.Add(String.Format(MapDefine.MapTilesAssetFilePath, currentBigMapIndex, currentBigMapIndex));
         assetPaths.Add(String.Format(MapDefine.MapAssetFilePath, currentBigMapIndex, currentBigMapIndex));
 
         assetCallbackList = new List<UnityAction<Object, string>>();
         assetCallbackList.Add(LoadColliderBlockData);
         assetCallbackList.Add(LoadHideBlockData);
         assetCallbackList.Add(LoadHeightBlockData);
+        assetCallbackList.Add(LoadMapTilesAsset);
         assetCallbackList.Add(LoadMapAsset);
         assetCallbackList.Add((x, y) => { SetMapCenterPos(pos); });
         LoadNextAsset();
@@ -207,6 +211,12 @@ public class MapManager : Singleton<MapManager>
     private void LoadMapAsset(Object target, string path)
     {
         mapView.InitMapElementView(target as MapAsset);
+    }
+
+    //加载地图瓦片预设数据资源列表
+    private void LoadMapTilesAsset(Object target, string path)
+    {
+        mapTilesViewMgr.InitMapTilesView(target as MapAsset);
     }
     private void LoadColliderBlockData(Object target, string path)
     {
@@ -322,17 +332,7 @@ public class MapManager : Singleton<MapManager>
     public override void Destroy()
     {
         base.Destroy();
-        if (null != _mapViewList)
-        {
-            for (int i = 0; i < _mapViewList.Count; i++)
-            {
-                if (_mapViewList[i] == null) continue;
-                GameObject.Destroy(_mapViewList[i].gameObject);
-            }
-            _mapViewList.Clear();
-
-            _mapViewList = null;
-        }
+       
     }
 
     public void Update(Vector3 pos)
@@ -344,27 +344,29 @@ public class MapManager : Singleton<MapManager>
         SetMapCenterPos(pos);
     }
 
-    private float maptileInterval = MapDefine.MapWidth / 4f;
+    private float maptileInterval = MapDefine.TilesGridInterval;//MapDefine.MapWidth / 4f;
     public void SetMapCenterPos(Vector3 pos)
     {
+        if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.z / maptileInterval)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.x / maptileInterval)) >= 1)
+        {
+            if (_mapTilePosCenter == null)
+                _mapTilePosCenter = new MapTilePos();
+            _mapTilePosCenter.Row = Mathf.FloorToInt(pos.x / maptileInterval);
+            _mapTilePosCenter.Column = Mathf.FloorToInt(pos.z / maptileInterval);
+
+            mapTilesViewMgr.UpdateTilesView(pos, _mapTilePosCenter.Row, _mapTilePosCenter.Column);
+        }
+
         int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
         int tempY = Mathf.FloorToInt(pos.z / MapDefine.MapElementSize);
-        if (_mapTilePosCenter == null || Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
+        if ( Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
         {
             currElementGrid.x = tempX;
             currElementGrid.y = tempY;
             mapView.UpdateElementView(pos, tempX, tempY);
         }
 
-        if (_mapTilePosCenter == null || Mathf.Abs(_mapTilePosCenter.Column - Mathf.FloorToInt(pos.x / maptileInterval)) >= 1 || Mathf.Abs(_mapTilePosCenter.Row - Mathf.FloorToInt(pos.z / maptileInterval)) >= 1)
-        {
-            if (_mapTilePosCenter == null)
-                _mapTilePosCenter = new MapTilePos();
-            _mapTilePosCenter.Row = Mathf.FloorToInt(pos.z / maptileInterval);
-            _mapTilePosCenter.Column = Mathf.FloorToInt(pos.x / maptileInterval);
-
-            mapView.UpdateTerrainView(pos,_mapTilePosCenter.Row, _mapTilePosCenter.Column);
-        }
+       
         mapView.UpdateRoleRay(pos);
     }
 
@@ -394,7 +396,7 @@ public class MapManager : Singleton<MapManager>
     //  //  UpdateMapView();
     //}
 
-    //private void UpdateElementView(Vector3 pos)
+    //private void UpdateTilesView(Vector3 pos)
     //{
     //    if (_isInit == false)
     //        return;

@@ -6,10 +6,15 @@ public class MapDefine
 {
     public const string MapAssetFileName = "/MapAsset{0}.asset";
     public const string MapAssetFolderPath = "Assets/Map/Prefabs/MapData/MapAsset{0}";
+    public const string MapTilesAssetFileName = "/MapTilesAsset{0}.asset";
+    public const string MapTilesAssetFolderPath = "Assets/Map/Prefabs/MapData/MapTilesAsset{0}";
     public const string MapAssetFilePath = "Assets/Map/Prefabs/MapData/MapAsset{0}/MapAsset{1}.asset";
+    public const string MapTilesAssetFilePath = "Assets/Map/Prefabs/MapData/MapTilesAsset{0}/MapTilesAsset{1}.asset";
     public const string TERRAIN_ASSET_PATH = "Assets/Map/Model/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Map/Prefabs/MapItem/";
     public const string MapDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapData.bytes";
+    public const string MapTilesDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapData.bytes";
+
     public const string MapHideBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HideBolckData.bytes";
     public const string MapHeightBlockDataSavePath = "Assets/Map/Prefabs/MapBlockData/HeightBolckData.bytes";
     public const string MapPropPostionDataSavePath = "Assets/Map/Prefabs/MapBlockData/MapPropPostionData.txt";
@@ -24,6 +29,8 @@ public class MapDefine
     public const string MapRoleCreatePointSavePath = "Assets/RoleCreatePosData.txt";
     public const string MapElementPath = "Assets/Map/Prefabs/MapElementPrefabs/{0}.prefab";
     public const string MapElementFilePath = "/Map/Prefabs/MapElementPrefabs/";//地图元素生成文件路劲
+    public const string MapTilesPath = "Assets/Map/Prefabs/MapItem/TilesItem/{0}.prefab";
+    public const string TilesMapFilePath = "/Map/Prefabs/MapItem/TilesItem/";//地图元素生成文件路劲
 
     public const string MAPKEYNAME = "{0}_{1}";
     public const string EXTENSION = ".asset";
@@ -44,6 +51,8 @@ public class MapDefine
     public static int MapWidth = MAPITEMSIZE;
     public static int MapHeight = MAPITEMSIZE;
 
+    public const int FileGridInterval = 256;
+    public const int TilesGridInterval = 16;
 
     public static int MaxViewRowNum = 3; //创建最大行数
     public static int MaxViewColumnNum = 3; //创建最大列数
