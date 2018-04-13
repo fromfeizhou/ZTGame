@@ -73,7 +73,7 @@ public class MapElementView
     //刷新地图块
     public void UpdateTerrainView(Vector3 pos, int row, int col)
     {
-        mapTileViewMgr.UpdateViewByPos(pos, row, col);
+       // mapTileViewMgr.UpdateViewByPos(pos, row, col);
     }
    
     //射线检测（建筑屋顶逻辑）
