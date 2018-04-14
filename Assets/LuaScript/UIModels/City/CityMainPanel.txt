@@ -7,7 +7,7 @@
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
-
+local CSRenderTexture = CS.UnityEngine.RenderTexture
 CityMainPanel = {
 	m_panelName = "CityMainPanel",
 	m_txtNickName,
@@ -15,6 +15,9 @@ CityMainPanel = {
 
 	m_roleId,
 	
+	m_roleImg,
+	m_roleCamera,
+
 	m_noticeHero,
 	m_noticeHeroName,
 	m_noticeHeroType,
@@ -73,6 +76,13 @@ function CityMainPanel:onCreatePanel()
 	self.m_txtNickName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtNickName")
 	self.m_txtName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtName")
 
+
+
+	self.m_roleCamera = PanelWidget:GetChild(self.m_transform,"3DHeroShow/HeroCamera"):GetComponent("Camera")
+	self.m_roleCamera.targetTexture = CSRenderTexture(1024,1024,16)
+	self.m_roleImg = PanelWidget:GetChild(self.m_transform,"ViewPort/HeroImg"):GetComponent("RawImage")
+	self.m_roleImg.texture = self.m_roleCamera.targetTexture
+	self.m_roleImg.enabled = true
 end
 
 --@brief 面板初始化
@@ -86,6 +96,10 @@ end
 
 --@brief 销毁登录面板
 function CityMainPanel:onDestroy()
+	self.m_roleCamera.targetTexture:Release()
+	self.m_roleCamera.targetTexture = nil
+	self.m_roleImg.texture = nil
+	self.m_roleImg.enabled = false
 end
 
 --@brief 添加事件监听
