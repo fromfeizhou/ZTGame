@@ -1,0 +1,4 @@
+Tab_SkillType = {
+[1] = { id = 1, name = '主动',  },
+[2] = { id = 2, name = '被动',  },
+}
