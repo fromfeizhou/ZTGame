@@ -7,6 +7,7 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+local CSIsDestroyed = CS.GameTool.IsDestroyed
 
 BaseModel = {
 	m_tPanelList = nil,
@@ -66,15 +67,15 @@ end
 
 --@brief 获取面板节点
 function BaseModel:_GetCanvasRoot()
-	if not self.m_canvasRoot then
-		self.m_canvasRoot = CSGameObject.Find(self.m_canvasName).transform
+	if not self.m_canvasRoot or CSIsDestroyed(self.m_canvasRoot) then
+		self.m_canvasRoot = CSGameObject.Find(self.m_canvasName)
 	end
-	return self.m_canvasRoot
+	return self.m_canvasRoot.transform
 end
 
 --@brief 设置面板节点
 function BaseModel:SetCanvasRoot(parent)
-	self.m_canvasRoot = parent
+	self.m_canvasRoot = parent.gameObject
 end
 
 --@breif 显示面板
@@ -112,6 +113,10 @@ end
 
 --@brief 子类重写 - 模块初始化
 function BaseModel:onInitModel()
+end
+
+--@brief 子类重写 - 模块被销毁
+function BaseModel:onDestroy()
 end
 
 --@brief 子类重写 - 添加事件监听

@@ -52,3 +52,8 @@ end
 --@brief 子类重写 - 注销网络门户
 function SystemModel:_UnRegNetFacade( )
 end
+
+--@brief 子类重写 - 模块被销毁
+function SystemModel:onDestroy()
+	GCSLog("SystemModel:onDestroy")
+end
