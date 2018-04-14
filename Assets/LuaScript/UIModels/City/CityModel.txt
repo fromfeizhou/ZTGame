@@ -1,15 +1,16 @@
 --CityModel.txt
 --@breif lua入口
 --@data 2018/3/5
-CityModel = {
-	m_tPanelList = nil,
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = GCSLog
+
+CityModel = {
+	m_tPanelList = nil,
+}
 
 setmetatable( CityModel, { __index = BaseModel})
 function  CityModel:GetName()

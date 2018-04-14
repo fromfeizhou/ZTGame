@@ -50,6 +50,8 @@ local LuaFileLoad = {
 		"ALuaConfig.SkillActionMoveConfig",
 		"ALuaConfig.Tab_Equipment",
 		"ALuaConfig.Tab_Skill",
+		"ALuaConfig.Tab_Hero",
+		"ALuaConfig.Tab_SkillTeam",
 	},
 
 	--游戏lua文件

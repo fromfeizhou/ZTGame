@@ -55,7 +55,7 @@ function SystemNoticePanel:_UnRegNetFacade()
 end
 
 --@brief 显示面板
-function SystemNoticePanel:onShow()
+function SystemNoticePanel:onUpdate()
 	self.m_Notice.text = self.m_tPanelData.noticeStr
 end
 

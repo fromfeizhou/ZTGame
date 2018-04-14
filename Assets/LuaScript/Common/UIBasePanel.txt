@@ -43,7 +43,6 @@ function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 	end
 
 	local panelName = model:GetName() .."/"..self:GetRelativePath() .. self:GetName()
-	GCSLog("UIBasePanel:_LoadAssetPanel>>>>>>>>>>>>>>>>>>>>>>>>>>>",panelName)
 	CSAssetManager.LoadAsset(PathManager:GetUIPanel(panelName),callback_loadfinish)
 	self.m_model = model
 	return self

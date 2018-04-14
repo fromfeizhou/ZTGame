@@ -1,0 +1,152 @@
+SkillActionConfig = {
+	id_10001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 6, param = { 26 }},
+		},
+		[ 2 ] = {
+				{ actionType = 5, param = { 1001 }},
+		},
+		[ 20 ] = {
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 1, 1, "HitBlood1" }},
+		},
+	},
+
+	id_10002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack2" }},
+				{ actionType = 6, param = { 26 }},
+		},
+		[ 2 ] = {
+				{ actionType = 5, param = { 1001 }},
+		},
+		[ 20 ] = {
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 18, 1, "HitBlood2" }},
+		},
+	},
+
+	id_10003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack3" }},
+				{ actionType = 6, param = { 30 }},
+		},
+		[ 2 ] = {
+				{ actionType = 5, param = { 1002 }},
+		},
+		[ 25 ] = {
+				{ actionType = 3, param = { 1, -1, 1, 0, 4, 2, 18, 5, "HitBlood3" }},
+		},
+	},
+
+	id_11001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill01" }},
+				{ actionType = 0, param = { 0 }},
+				{ actionType = 6, param = { 60 }},
+		},
+		[ 2 ] = {
+				{ actionType = 5, param = { 1001 }},
+		},
+		[ 6 ] = {
+				{ actionType = 3, param = { 2, -1, 1, 0, 2, 2, 10, 1, "HitBlood1" }},
+		},
+		[ 7 ] = {
+				{ actionType = 5, param = { 1001 }},
+		},
+		[ 14 ] = {
+				{ actionType = 3, param = { 2, -1, 1, 0, 2, 2, 10, 1, "HitBlood1" }},
+		},
+		[ 15 ] = {
+				{ actionType = 5, param = { 1002 }},
+		},
+		[ 55 ] = {
+				{ actionType = 3, param = { 2, -1, 1, 0, 4, 2, 25, 2, "Bomb1" }},
+		},
+	},
+
+	id_11002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill04" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 10 ] = {
+				{ actionType = 5, param = { 1003 }},
+		},
+		[ 50 ] = {
+				{ actionType = 3, param = { 3, -1, 1, 0, 5, 2, 20, 10, "Bomb1" }},
+		},
+	},
+
+	id_11003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill03" }},
+				{ actionType = 0, param = { -1 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 8, -1, 1, 0, 0, 2, 50, 10, "Magic_Pulse1" }},
+		},
+	},
+
+	id_20001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_20002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack2" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_20003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "attack3" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 3, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+		},
+	},
+
+	id_21001 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill02" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_IceArea1" }},
+		},
+	},
+
+	id_21002 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill03" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Pulse1" }},
+		},
+	},
+
+	id_21003 = {
+		[ 1 ] = {
+				{ actionType = 1, param = { "skill04" }},
+				{ actionType = 0, param = { 0 }},
+		},
+		[ 30 ] = {
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Rock1" }},
+		},
+	},
+
+}
+
+SkillActionConfig.TestSkillId = "id_11002"
