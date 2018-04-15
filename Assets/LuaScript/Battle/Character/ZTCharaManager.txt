@@ -248,6 +248,7 @@ function ZTCharaManager:_OnAddCharacter(battleData)
 
 	--设置可见 
 	chara:SetInCamera(true)
+	chara:ShowBornSpEffect()
 	--加入队列
 	self.m_tCharaList[battleData.battleId] = chara
 	table.insert(self.m_tSortCharaList,chara)

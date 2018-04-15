@@ -498,7 +498,15 @@ function Character:ChangeTranslucence(transLv)
 	self.m_animData:ChangeTranslucence(transLv)
 end
 
-
+--@brief 显示出生特效
+function Character:ShowBornSpEffect()
+	CS.AssetManager.LoadAsset(PathManager:GetSkillParticle("Born"),function (target,path)
+		--CSLog("Character:ShowBornSpEffect:",target,path)
+		if target then
+			local go = CSGameObject.Instantiate(target,self:GetEffectCon())
+		end
+	end)
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 动作相关end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
