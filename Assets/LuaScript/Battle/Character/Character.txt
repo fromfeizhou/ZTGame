@@ -138,28 +138,39 @@ function Character:SetDirection(dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
 		self.m_nMoveDir = dir
-		self:UpdateViewByDirection()
-	end
-end
-
---@brief 调整朝向
-function Character:UpdateViewByDirection()
-	--切换角度(移动锁定 而且 不包含调整角度技能)
-	if not self:IsMoveActionChangeRotate() then
-		return
-	end
-	if self:IsNormalState() then
-		if self.m_nMoveDir == BattleDir.None then
-			self:Play(AnimatorName.Idle)
-		else
+		
+		if self.m_nMoveDir ~= BattleDir.None then
+			self:UpdateRotate(BattleDirDefine:GetDirPos(self.m_nMoveDir))
 			self:Play(AnimatorName.Move)
+		else
+			self:AnimaMoveToPos()
 		end
 	end
 
-	if self.m_nMoveDir ~= BattleDir.None then
-		self:UpdateRotate(BattleDirDefine:GetDirPos(self.m_nMoveDir))
-	end
 end
+--@brief 动画补间移动
+function Character:AnimaMoveToPos()
+	self.m_animData:MoveToPos(self.m_nMoveDir,self.m_charaPos)
+end
+
+--@brief 调整朝向
+-- function Character:UpdateViewByDirection()
+-- 	--切换角度(移动锁定 而且 不包含调整角度技能)
+-- 	if not self:IsMoveActionChangeRotate() then
+-- 		return
+-- 	end
+-- 	if self:IsNormalState() then
+-- 		if self.m_nMoveDir == BattleDir.None then
+-- 			self:Play(AnimatorName.Idle)
+-- 		else
+-- 			self:Play(AnimatorName.Move)
+-- 		end
+-- 	end
+
+-- 	if self.m_nMoveDir ~= BattleDir.None then
+-- 		self:UpdateRotate(BattleDirDefine:GetDirPos(self.m_nMoveDir))
+-- 	end
+-- end
 
 --@brief 获取朝向
 function Character:GetFaceDir()
@@ -235,9 +246,16 @@ function Character:OutState(state)
 	--CSLog("Character:OutState",self.m_nState)
 end
 
---@brief 状态回切动作判断
+-- --@brief 状态回切动作判断
 function Character:CheckStateAnima()
-	self:UpdateViewByDirection()
+	if self:IsNormalState() then
+		if self.m_nMoveDir == BattleDir.None then
+			self:Play(AnimatorName.Idle)
+		else
+			self:Play(AnimatorName.Move)
+			self:UpdateRotate(BattleDirDefine:GetDirPos(self.m_nMoveDir))
+		end
+	end
 end
 
 --@brief 是否存在状态
@@ -446,7 +464,7 @@ end
 
 --@brief 刷新位置
 --@param vector3 pos
-function Character:UpdatePos(pos)
+function Character:UpdatePos(pos,isMove)
 	-- CS.GameTool.LogError("Character:UpdatePos",self.m_charaPos,pos,self.m_charaPos.Equals(pos))
 	if not self.m_charaPos.Equals(pos) then
 		--设置高度
@@ -455,9 +473,11 @@ function Character:UpdatePos(pos)
 
 		self.m_charaPos = pos
 		self.m_ztCollider:SetPos(pos.x,pos.y + BattleDefine.PlayerHeight,pos.z)
-
-		--动画刷新通知
-		self.m_animData:UpdatePos(pos)
+		--调用动画刷新补间
+		if not isMove then
+			--动画刷新通知
+			self.m_animData:UpdatePos(pos)
+		end
 		--CS.GameTool.LogError("Character:UpdatePos")
 		-- if self.m_nBattleId == GlobalBattleCtrl:GetOwnerId() then
 		-- 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,pos)
@@ -529,6 +549,7 @@ function Character:_UpdateMoveCommand()
 		if canMove then
 			-- CSLog("Character:_UpdateMoveCommand",self.m_nMoveDir,hitPos)
 			self:UpdatePos(hitPos)
+			self:AnimaMoveToPos()
 		end
 	end
 end
