@@ -34,7 +34,7 @@ end
 
 --@brief 设置镜头跟随
 function BattleAnimatorData:SetCameraFollow(value)
-	self.m_bCameraFollow = true
+	self.m_bCameraFollow = value
 end
 
 --@brief 刷新位置

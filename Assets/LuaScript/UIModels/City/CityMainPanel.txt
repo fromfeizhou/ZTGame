@@ -7,7 +7,7 @@
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
-
+local CSRenderTexture = CS.UnityEngine.RenderTexture
 CityMainPanel = {
 	m_panelName = "CityMainPanel",
 	m_txtNickName,
@@ -15,14 +15,18 @@ CityMainPanel = {
 
 	m_roleId,
 	
+	m_roleImg,
+	m_roleCamera,
+
+	m_noticeHero,
+	m_noticeHeroName,
+	m_noticeHeroType,
+	m_noticeHeroDesc,
+
 	m_noticeSkill,
 	m_noticeSkillName,
 	m_noticeSkillType,
 	m_noticeSkillDesc,
-
-	m_noticeHero,
-	m_noticeHeroName,
-	m_noticeHeroDesc,
 }
 
 setmetatable( CityMainPanel, { __index = UIBasePanel})
@@ -56,19 +60,29 @@ function CityMainPanel:onCreatePanel()
 	PanelWidget:GetButton(self.m_transform,"ViewPort/MenuList/LeftUpRoot/ShopItem/ZTButton",function() self:_OnClick_Shop() end)
 	PanelWidget:GetButton(self.m_transform,"ViewPort/MenuList/LeftBottomRoot/TalkItem/ZTButton",function() self:_OnClick_Talk() end)
 
+	self.m_noticeHero = PanelWidget:GetChild(self.m_transform,"NoticeInfo/Hero")
+	self.m_noticeHeroName = PanelWidget:GetZTText(self.m_noticeHero,"Txt_HeroName")
+	self.m_noticeHeroType = PanelWidget:GetZTText(self.m_noticeHero,"Txt_HeroName/ZTImage/Txt_HeroType")
+
+	self.m_noticeHeroDesc = PanelWidget:GetZTText(self.m_noticeHero,"Txt_HeroInfo")
+
 	self.m_noticeSkill = PanelWidget:GetChild(self.m_transform,"NoticeInfo/Skill")
 	self.m_noticeSkillName = PanelWidget:GetZTText(self.m_noticeSkill,"Txt_SkillName")
 	self.m_noticeSkillType = PanelWidget:GetZTText(self.m_noticeSkill,"Txt_SkillName/ZTImage/Txt_SkillType")
 	self.m_noticeSkillDesc = PanelWidget:GetZTText(self.m_noticeSkill,"Txt_SkillInfo")
 
-	self.m_noticeHero = PanelWidget:GetChild(self.m_transform,"NoticeInfo/Hero")
-	self.m_noticeHeroName = PanelWidget:GetZTText(self.m_noticeHero,"Txt_HeroName")
-	self.m_noticeHeroDesc = PanelWidget:GetZTText(self.m_noticeHero,"Txt_HeroInfo")
 
 	-- 按钮 - 菜单
 	self.m_txtNickName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtNickName")
 	self.m_txtName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtName")
 
+
+
+	self.m_roleCamera = PanelWidget:GetChild(self.m_transform,"3DHeroShow/HeroCamera"):GetComponent("Camera")
+	self.m_roleCamera.targetTexture = CSRenderTexture(1024,1024,16)
+	self.m_roleImg = PanelWidget:GetChild(self.m_transform,"ViewPort/HeroImg"):GetComponent("RawImage")
+	self.m_roleImg.texture = self.m_roleCamera.targetTexture
+	self.m_roleImg.enabled = true
 end
 
 --@brief 面板初始化
@@ -82,6 +96,10 @@ end
 
 --@brief 销毁登录面板
 function CityMainPanel:onDestroy()
+	self.m_roleCamera.targetTexture:Release()
+	self.m_roleCamera.targetTexture = nil
+	self.m_roleImg.texture = nil
+	self.m_roleImg.enabled = false
 end
 
 --@brief 添加事件监听
@@ -108,6 +126,7 @@ function CityMainPanel:_SelectHero(roleId)
 	self.m_roleId = roleId
 	self.m_txtNickName.text = Tab_Hero[self.m_roleId].name
 	self.m_noticeHeroName.text = Tab_Hero[self.m_roleId].name
+	self.m_noticeHeroType.text = Tab_HeroPro[Tab_Hero[self.m_roleId].type].name
 	self.m_noticeHeroDesc.text = Tab_Hero[self.m_roleId].desc
 
 end
@@ -124,11 +143,7 @@ end
 function CityMainPanel:_OnClick_Skill_OnDown(skillIndex)
 	local skillId = Tab_Hero[self.m_roleId].skill[skillIndex]
 	self.m_noticeSkillName.text = Tab_SkillTeam[skillId].name
-	if Tab_SkillTeam[skillId].type == 1 then
-		self.m_noticeSkillType.text = "主动"
-	else
-		self.m_noticeSkillType.text = "被动"
-	end
+	self.m_noticeSkillType.text = Tab_SkillType[Tab_SkillTeam[skillId].type].name
 	self.m_noticeSkillDesc.text = Tab_SkillTeam[skillId].desc
 	self.m_noticeSkill.gameObject:SetActive(true) 
 end

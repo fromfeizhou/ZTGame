@@ -173,7 +173,7 @@ function GlobalBattleCtrl:InitData()
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 
 	GlobalBattleCtrl.m_bGameOver = false
-
+	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
 end
 
 --@rife 初始化数据(进入游戏)
@@ -196,6 +196,7 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 
 	GlobalBattleCtrl.m_bGameOver = false
+	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
 end
 
 
@@ -213,33 +214,41 @@ end
 
 --@brief 界面刷新
 function GlobalBattleCtrl:Update(dt)
-	--GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime + dt
 	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
 	--逻辑刷新
 	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
 		GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime - BattleDefine.CommandTime
-		if GlobalBattleCtrl.m_battleCommandMgr then
-			GlobalBattleCtrl.m_battleCommandMgr:Update()
+
+		if GlobalBattleCtrl:CheckCommandStart() then
+			if GlobalBattleCtrl.m_battleCommandMgr then
+				GlobalBattleCtrl.m_battleCommandMgr:Update()
+			end
 		end
 	end
 	--界面刷新
-	--while GlobalBattleCtrl.m_nRendererTime >= BattleDefine.RendererTime do
-		GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime - BattleDefine.RendererTime
-		if GlobalBattleCtrl.m_battleUIMgr then
-			GlobalBattleCtrl.m_battleUIMgr:Update()
-		end
+	if GlobalBattleCtrl.m_battleUIMgr then
+		GlobalBattleCtrl.m_battleUIMgr:Update()
+	end
 
-		if GlobalBattleCtrl.m_ztCharaManager then
-			GlobalBattleCtrl.m_ztCharaManager:Update()
-		end
-		
-		BattleCameraMgr:Update()
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:Update()
+	end
+	
+	BattleCameraMgr:Update()
 
-		--头像管理
-		if GlobalBattleCtrl.m_HeadItemManager then
-			GlobalBattleCtrl.m_HeadItemManager:Update()
-		end
-	--end
+	--头像管理
+	if GlobalBattleCtrl.m_HeadItemManager then
+		GlobalBattleCtrl.m_HeadItemManager:Update()
+	end
+end
+
+--@brief 是否启动逻辑帧
+function GlobalBattleCtrl:CheckCommandStart()
+	if GlobalBattleCtrl.m_nCommandStart < 0 then
+		return true
+	end
+	GlobalBattleCtrl.m_nCommandStart = GlobalBattleCtrl.m_nCommandStart - 1
+	return false
 end
 
 

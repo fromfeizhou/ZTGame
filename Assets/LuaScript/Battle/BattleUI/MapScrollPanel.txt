@@ -16,6 +16,8 @@ MapScrollPanel = {
 	m_scaleValue = 1,
 	m_showCircle = false,
 	
+	m_mapScrollImg = nil,
+
 	m_ScrollView = nil,
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
@@ -23,6 +25,7 @@ MapScrollPanel = {
 	m_playerList = nil,
 	m_playerItemParent = nil,
 	m_prePlayerItem = nil,
+
 }
 
 setmetatable( MapScrollPanel, { __index = UIBasePanel})
@@ -44,7 +47,9 @@ function MapScrollPanel:onCreatePanel()
 
 	PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 	self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
-
+	self.m_mapScrollImg = self.m_ScrollView.content:GetComponent("ZTImage")
+	self.m_mapScrollImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
+	
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
 	self.m_ztCircleCur:Init(80,false,4.0)
@@ -59,6 +64,10 @@ function MapScrollPanel:onCreatePanel()
 
 end
 
+function MapScrollPanel:onClickMapScroll(clickPoint)
+
+end
+
 --@brief 面板初始化
 function MapScrollPanel:onInitPanel()
 	self:_UpdatePlayer()
@@ -66,8 +75,9 @@ end
 
 --@brief 面板每帧更新
 function MapScrollPanel:onTick(deltaTime)
-		self:_UpdateCircle(false)
+	self:_UpdateCircle(false)
 	self:_UpdatePlayer()
+
 end
 
 --@brief 销毁登录面板

@@ -49,8 +49,12 @@ local LuaFileLoad = {
 		"ALuaConfig.SkillActionConfig",
 		"ALuaConfig.SkillActionMoveConfig",
 		"ALuaConfig.Tab_Equipment",
-		"ALuaConfig.Tab_Skill",
+
 		"ALuaConfig.Tab_Hero",
+		"ALuaConfig.Tab_HeroPro",
+		
+		"ALuaConfig.Tab_Skill",
+		"ALuaConfig.Tab_SkillType",
 		"ALuaConfig.Tab_SkillTeam",
 	},
 

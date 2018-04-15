@@ -53,6 +53,8 @@ function BattleCommandMgr:Update()
 	-- 	CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame,math.floor((g_curTime - g_time)*1000))
 	-- 	g_time = g_curTime
 	-- end
+
+	--CSLog("BattleCommandMgr:Update",self.m_nClientFrame , self.m_nServerFrame)
 	if not self.m_tServerCommand then
 		return
 	end
@@ -60,16 +62,19 @@ function BattleCommandMgr:Update()
 	if self.m_nClientFrame < self.m_nServerFrame then
 		self:_RunCommand()
 		--比驱动帧慢 加速
-		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStep then
+		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStart then
 			-- CSLog("BattleCommandMgr:Update>>>>>>>>>>>>>>>>>>>>")
 			self:_RunCommand()
 		end
-	
+	else
+		self:CommandDebugRun()
 	end
-	--技能测试
+end
+
+--@技能测试
+function BattleCommandMgr:CommandDebugRun()
 	if GameConfig.IsSingleScene then
-		if self.m_nClientFrame == self.m_nServerFrame - 1 or self.m_nServerFrame == 0 then
-		
+		if self.m_nClientFrame == self.m_nServerFrame or self.m_nServerFrame <= BattleDefine.CommandStart then
 			BattleCommandProtocol:__TsClientSendDriveCommand()
 		end 
 	end
@@ -77,7 +82,7 @@ end
 
 --@brife 设置下一驱动帧
 function BattleCommandMgr:SetNextFrame(endId)
--- CSLog("BattleCommandMgr:SetNextFrame",endId)
+	--CSLog("BattleCommandMgr:SetNextFrame",self.m_nServerFrame,endId)
 	if endId then
 		self.m_nServerFrame = endId
 	else
@@ -126,6 +131,9 @@ function BattleCommandMgr:_RunCommand()
 
 	--刷新全局逻辑帧命令
 	GlobalBattleCtrl:CommandUpdate()
+
+	--单机启动驱动帧
+	self:CommandDebugRun()
 end
 
 --@brief 解析帧命令

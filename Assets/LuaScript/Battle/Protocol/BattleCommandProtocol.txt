@@ -96,20 +96,20 @@ function BattleCommandProtocol:SendColliderCommand(skillId,colliderPos,targetLis
 	BattleCommandProtocol:SendCommand(command)
 end
 
---@brief发送血量修改（临时）
-function BattleCommandProtocol:SendHpChange(value)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame()
+-- --@brief发送血量修改（临时）
+-- function BattleCommandProtocol:SendHpChange(value)
+-- 	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 
-	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
-	package.data = {}
-	package.data.frame_id = frame
-	package.data.type = 6
-	--发送服务器坐标转换
-	package.data.int_data = {value}
-	package.data.str_data = ""
+-- 	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+-- 	package.data = {}
+-- 	package.data.frame_id = frame
+-- 	package.data.type = 6
+-- 	--发送服务器坐标转换
+-- 	package.data.int_data = {value}
+-- 	package.data.str_data = ""
 
-	NetWorkManager:SendNetMsg(package)
-end
+-- 	NetWorkManager:SendNetMsg(package)
+-- end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -152,7 +152,7 @@ end
 
 --@brief 发送移动驱动帧消息
 function BattleCommandProtocol:SendMoveFrameMsg(command)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	
 	local data = {}
 	data.frame_id = frame
@@ -167,7 +167,7 @@ end
 
 --@brief 发送技能驱动帧消息
 function BattleCommandProtocol:SendSkillFrameMsg(command)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	
 	local data = {}
 	data.frame_id = frame
@@ -183,7 +183,7 @@ end
 
 --@brief 发送碰撞驱动帧消息
 function BattleCommandProtocol:SendColliderFrameMsg(command)
-	local frame =GlobalBattleCtrl:GetCurCommandFrame()
+	local frame =GlobalBattleCtrl:GetCurServerCommandFrame()
 
 	local data = {}
 	data.frame_id = frame
@@ -368,7 +368,7 @@ end
 --@brife 客户端模拟塞入驱动帧
 function BattleCommandProtocol:__TsClientInputCommand(command)
 	--CSLog("BattleCommandProtocol:__TsClientInputCommand",SerializeTable(command))
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	if not BattleCommandProtocol.m_tstClientCommandList then
 		BattleCommandProtocol.m_tstClientCommandList = {}
 	end
