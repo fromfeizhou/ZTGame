@@ -100,10 +100,4 @@ function ZTBattleScene:_OnUpdateScenePos(pos)
 	end
 end
 
---@brief 刷新镜头位置
-function ZTBattleScene:_OnUpdateScenePos(pos)
-	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
-	if self.m_comZtBattleScene then
-		self.m_comZtBattleScene:MapUpdate(pos)
-	end
-end
+
