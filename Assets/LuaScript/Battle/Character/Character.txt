@@ -440,6 +440,7 @@ function Character:IsInCamera()
 end
 --@brief 设置镜头跟随
 function Character:SetCameraFollow(value)
+	--CSLog("Character:SetCameraFollow",value)
 	self.m_animData:SetCameraFollow(value)
 end
 
