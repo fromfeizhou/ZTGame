@@ -347,11 +347,6 @@ function Character:ChangeHp(value)
 	local hp = self:GetHp()
 	hp  = hp + value
 	self:SetHp(hp)
-
-	--@brief 测试代码
-	-- if self:IsHost() and not GameConfig.IsSingleScene then
-	-- 	BattleCommandProtocol:SendHpChange(value)
-	-- end
 end
 --@brief 血量
 function Character:GetHp(isBase)
