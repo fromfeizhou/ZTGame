@@ -28,10 +28,13 @@ public class ZTTcpClient
         //连接
         IPAddress ipAddress = IPAddress.Parse(ip); 
         IPEndPoint ipEnd = new IPEndPoint(ipAddress, port);
+        serverSocket.ReceiveBufferSize = 8192;
+        serverSocket.NoDelay = true;
         serverSocket.Connect(ipEnd);
 
         //开启一个线程连接，必须的，否则主线程卡死
         connectThread = new Thread(new ThreadStart(SocketReceive));
+        connectThread.Priority = System.Threading.ThreadPriority.Highest;
         connectThread.Start();
 
         //ZTSceneManager.GetInstance().StartCoroutine(OnReceiveCoroutine());
