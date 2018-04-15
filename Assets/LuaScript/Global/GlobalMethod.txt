@@ -78,3 +78,15 @@ function GetPosTab(...)
         return { x = args[1].x, y = args[1].y, z = args[1].z }
     end
 end
+
+--brief 判断GameObject是否为空
+function GameObjectIsNotNull( gameObject )
+    return gameObject and not CS.GameTool.IsDestroyed(gameObject)
+end
+
+
+
+
+
+
+
