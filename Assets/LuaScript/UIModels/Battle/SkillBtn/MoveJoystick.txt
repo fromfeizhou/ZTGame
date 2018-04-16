@@ -9,7 +9,8 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 local CSJoystick = CS.JoystickBase
-
+local CSVector2 = CS.UnityEngine.Vector2
+local CSCANVAS = CS.UnityEngine.Canvas
 
 MoveJoystick = {
 	m_ctrlContainer = nil,	--父容器
@@ -70,6 +71,11 @@ end
 
 --@brief 添加控制事件 
 function MoveJoystick:_InitJoyEvent()
+
+	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
+	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+	self.m_joystick:SetCanvas(canvas)
+
 	self.m_joystick.onJoystickDownEvent = function(pos)
 		self:_OnJoystickDown(pos)
 	end

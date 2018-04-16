@@ -99,8 +99,9 @@ function PanelManager:_CreatePanel(model, panelType, panelData)
 end
 
 
-
-
+function PanelManager:GetLayerRoot(layerType)
+	return self.m_layerList[layerType].layerRoot
+end
 
 
 

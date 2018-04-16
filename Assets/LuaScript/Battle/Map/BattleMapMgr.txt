@@ -135,7 +135,7 @@ end
 --@brief 刷新地图预设跟ui提示
 function BattleMapMgr:_UpdateView()
 	BattleMapMgr.m_battleMapView:UpdateMapView(BattleMapMgr.m_curMapBlockItem)
-	GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapMgr.m_curMapBlockItem)
+	--GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapMgr.m_curMapBlockItem)
 end
 
 --@brief 判断范围
@@ -180,12 +180,20 @@ end
 
 --@brief 是否存在近距离物品
 function BattleMapMgr:_IsDisEvent(newItem)
+	local modelData = {}
+	modelData.modelType = MODEL_TYPE.BATTLE
+	modelData.panelType = BATTLE_TYPE.MAP_RADAR
+
 	if ZTableLen(newItem) > 0 then
-		local panelData = {
+		modelData.panelData = {
 			items = newItem,
 		}
-		GlobalBattleCtrl:GetUIModel():ShowPanel(BATTLE_TYPE.QUICKBAG,panelData)
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 	else
-		GlobalBattleCtrl:GetUIModel():HidePanel(BATTLE_TYPE.QUICKBAG)
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
 	end
+
+
+	
+
 end

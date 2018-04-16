@@ -27,7 +27,7 @@ CITY_TYPE = {
 	MAIN = 3001,	--模块主面板
 }
 
-
+--@战斗面板类型
 BATTLE_TYPE = {
 	MAIN  		= 4001,	--全局控制面板
 	MAP_SCROLL 	= 4002,	--大地图

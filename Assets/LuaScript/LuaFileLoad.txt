@@ -113,8 +113,6 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.SkillActionParse",
 		"Battle.Skill.SkillAction.SkillActionManager",
 		
-		
-		"UIModels.Battle.BattleUIMgr",
 		"UIModels.Battle.BattleHead.BattleHeadItem",
 		"UIModels.Battle.BattleHead.HeadItemManager",
 		
@@ -126,7 +124,7 @@ local LuaFileLoad = {
 
 		"UIModels.Battle.MapScrollPanel",
 		"UIModels.Battle.MapRadarPanel",
-		"UIModels.Battle.BattleMapPropUIMgr",
+		--"UIModels.Battle.BattleMapPropUIMgr",
 		
 		"UIModels.Battle.Panel.BattleMainPanel",
 

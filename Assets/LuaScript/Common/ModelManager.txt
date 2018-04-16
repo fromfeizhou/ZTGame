@@ -126,6 +126,8 @@ function ModelManager:_CreateModel( modelType)
 		modelTemplate = LoginModel
 	elseif modelType == MODEL_TYPE.CITY then 
 		modelTemplate = CityModel
+	elseif modelType == MODEL_TYPE.BATTLE then 
+		modelTemplate = BattleModel
 	end
 
 	if modelTemplate then

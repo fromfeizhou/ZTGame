@@ -23,7 +23,6 @@ function LuaGameStart:Init()
 	else
 		self:_EnterLoginModel()
 	end
-
 end
 
 --@brief 更新

@@ -42,6 +42,7 @@ end
 
 --@brief 更新
 function BaseModel:Tick()
+	self:onTick()
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
 			if panel.Update then
@@ -66,18 +67,6 @@ function BaseModel:_CleanPanel( )
 		end
 		self.m_tPanelList = nil
 	end
-end
---@brief 获取面板节点
-function BaseModel:_GetCanvasRoot()
-	if not self.m_canvasRoot or CSIsDestroyed(self.m_canvasRoot) then
-		self.m_canvasRoot = CSGameObject.Find(self.m_canvasName)
-	end
-	return self.m_canvasRoot.transform
-end
-
---@brief 设置面板节点
-function BaseModel:SetCanvasRoot(parent)
-	self.m_canvasRoot = parent.gameObject
 end
 
 --@breif 显示面板
@@ -127,4 +116,7 @@ end
 
 --@brief 子类重写 - 注销网络门户
 function BaseModel:_UnRegNetFacade( )
+end
+
+function BaseModel:onTick()
 end
