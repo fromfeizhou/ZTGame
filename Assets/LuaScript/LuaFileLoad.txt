@@ -30,6 +30,7 @@ local LuaFileLoad = {
 		"Global.GlobalData",
 		"Global.ZTProtoData",
 		"Global.GlobalMethod",
+		"Global.Log",
 
 
 		--[[UI面板相关]]
