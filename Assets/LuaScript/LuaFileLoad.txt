@@ -13,6 +13,7 @@ local LuaFileLoad = {
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
 		"Common.ModelManager",
+		"Common.PanelManager",
 		"Common.TimerManager.Timer",
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
@@ -94,7 +95,6 @@ local LuaFileLoad = {
 		"Battle.Map.BattleMapMgr",
 		"Battle.Map.BattleMapView",
 
-
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.SkillMoveDefine",
@@ -113,27 +113,27 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.SkillActionManager",
 		
 		
-		"Battle.BattleUI.BattleUIMgr",
-		"Battle.BattleUI.BattleHead.BattleHeadItem",
-		"Battle.BattleUI.BattleHead.HeadItemManager",
+		"UIModels.Battle.BattleUIMgr",
+		"UIModels.Battle.BattleHead.BattleHeadItem",
+		"UIModels.Battle.BattleHead.HeadItemManager",
 		
-		"Battle.BattleUI.SkillBtn.CommonSkillBtn",
-		"Battle.BattleUI.SkillBtn.MoveJoystick",
-		"Battle.BattleUI.SkillBtn.SkillJoystick",
+		"UIModels.Battle.SkillBtn.CommonSkillBtn",
+		"UIModels.Battle.SkillBtn.MoveJoystick",
+		"UIModels.Battle.SkillBtn.SkillJoystick",
 
-		"Battle.BattleUI.BattleModel",
+		"UIModels.Battle.BattleModel",
 
-		"Battle.BattleUI.MapScrollPanel",
-		"Battle.BattleUI.MapRadarPanel",
-		"Battle.BattleUI.BattleMapPropUIMgr",
+		"UIModels.Battle.MapScrollPanel",
+		"UIModels.Battle.MapRadarPanel",
+		"UIModels.Battle.BattleMapPropUIMgr",
 		
-		"Battle.BattleUI.Panel.BattleHUD",
+		"UIModels.Battle.Panel.BattleMainPanel",
 
-		"Battle.BattleUI.BagUI.BattleBagPanel",
-		"Battle.BattleUI.BagUI.BattleBagCell",
+		"UIModels.Battle.BagUI.BattleBagPanel",
+		"UIModels.Battle.BagUI.BattleBagCell",
 
-		"Battle.BattleUI.BagUI.QuickBag.QuickBagPanel",
-		"Battle.BattleUI.BagUI.QuickBag.BaseBagCell",
+		"UIModels.Battle.BagUI.QuickBag.QuickBagPanel",
+		"UIModels.Battle.BagUI.QuickBag.BaseBagCell",
 
 
 		"UIModels.City.CityModel",

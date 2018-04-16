@@ -2,21 +2,21 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
-BattleHUD = {
-	m_panelName = "BattleHUD",
+BattleMainPanel = {
+	m_panelName = "BattleMainPanel",
 	m_bagBtn=nil,
 
 }
 
-setmetatable( BattleHUD, { __index = UIBasePanel})
+setmetatable( BattleMainPanel, { __index = UIBasePanel})
 
 
-function BattleHUD:GetName()
-	return "BattleHUD"
+function BattleMainPanel:GetName()
+	return "BattleMainPanel"
 end
 
 --@brief 面板资源相对模块路径
-function BattleHUD:GetRelativePath()
+function BattleMainPanel:GetRelativePath()
 	return "Panel/"
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -24,67 +24,67 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 --@brief 子类重写 - 面板被创建
-function BattleHUD:onCreatePanel()
+function BattleMainPanel:onCreatePanel()
 	self:_InitSkillBtn()
 	self:_InitComponent()
 end
 
 --@brief 子类重写 - 面板初始化
-function BattleHUD:onInitPanel()
+function BattleMainPanel:onInitPanel()
 end
 
 --@brief 子类重写 - 面板更新
-function BattleHUD:onUpdate()
+function BattleMainPanel:onUpdate()
 end
 
 --@brief 子类重写 - 面板每帧更新
-function BattleHUD:onTick(deltaTime)
+function BattleMainPanel:onTick(deltaTime)
 end
 
 --@brief 子类重写 - 面板被销毁
-function BattleHUD:onDestroy()
+function BattleMainPanel:onDestroy()
 end
 
 --@brief 子类重写 - 显示面板
-function BattleHUD:onShow()
+function BattleMainPanel:onShow()
 end
 
 --@brief 子类重写 - 隐藏面板
-function BattleHUD:onHide()
+function BattleMainPanel:onHide()
 end
 
 --@brief 子类重写 - 添加事件监听
-function BattleHUD:_AddEvents( )
+function BattleMainPanel:_AddEvents( )
 end
 
 --@brief 子类重写 - 移除事件监听
-function BattleHUD:_RemoveEvents( )
+function BattleMainPanel:_RemoveEvents( )
 end
 
 --@brief 子类重写 - 注册网络门户
-function BattleHUD:_RegNetFacade( )
+function BattleMainPanel:_RegNetFacade( )
 end
 
 --@brief 子类重写 - 注销网络门户
-function BattleHUD:_UnRegNetFacade( )
+function BattleMainPanel:_UnRegNetFacade( )
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-function BattleHUD:_InitComponent()
+function BattleMainPanel:_InitComponent()
 	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
 end
 
 
-function BattleHUD:_InitSkillBtn()
+function BattleMainPanel:_InitSkillBtn()
 	local testSkillId = {1001,1101,1102,1103}
 
 	for i = 1, #testSkillId do
 		local skillId = testSkillId[i]
 		local template = Tab_Skill[skillId] or Tab_Skill[1001]
-		GCSLog("BattleHUD:_InitSkillBtn",skillId,template.operaDistance)
+		GCSLog("BattleMainPanel:_InitSkillBtn",skillId,template.operaDistance)
 		if template.operaDistance > 0 then
 			SkillJoystick:Create(skillId,self:_GetSkillBtnNode(i))
 		else
@@ -95,17 +95,17 @@ end
 
 
 --@brief 
-function BattleHUD:_GetSkillBtnNode( index )
+function BattleMainPanel:_GetSkillBtnNode( index )
 	local transform =  self.m_transform:Find(string.format("SkillBtnNode/SkillBtn%02d",index))
 	return transform
 end
 
 
-function BattleHUD:_OnClickBagBtn( )
-	local panelType = BATTLE_UI_TYPE.BATTLEBAG
+function BattleMainPanel:_OnClickBagBtn( )
+	local panelType = BATTLE_TYPE.BATTLEBAG
 	local panel = GlobalBattleCtrl:GetUIModel().m_tPanelList[panelType]
 	if panel then
-		GCSLog("BattleHUD:_OnClickBagBtn",panel.m_isShow)
+		GCSLog("BattleMainPanel:_OnClickBagBtn",panel.m_isShow)
 		if panel.m_isShow == true then
 			panel:Hide()
 		else

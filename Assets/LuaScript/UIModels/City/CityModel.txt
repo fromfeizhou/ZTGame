@@ -34,7 +34,6 @@ end
 
 --@brief 子类重写 - 模块初始化
 function CityModel:onInitModel()
-	self.m_panelDefine[CITY_TYPE.MAIN] = CityMainPanel
 end
 
 --@brief 子类重写 - 添加事件监听

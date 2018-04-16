@@ -4,24 +4,34 @@
 
 --@brief 模块类型(添加类型 在ModelManager:GetModel下增加对应处理)
 MODEL_TYPE = {
-	SYSTEM = 0,		--系统
-	LOGIN = 1, 		--登录
-	CITY = 2,		--主城
+	SYSTEM = 1,		--系统
+	LOGIN = 2, 		--登录
+	CITY = 3,		--主城
+	BATTLE = 4,		--战斗
 }
 
 --@系统面板类型
 SYSTEM_TYPE = {
-	NOTICE = 1, --用户提示
-	LOCK = 2,	--锁屏等待
+	NOTICE = 1001, --用户提示
+	LOCK = 1002,	--锁屏等待
 }
 
 --@登录面板类型
 LOGIN_TYPE = {
-	MAIN = 1, --主面板
-	CREATEROLE = 2,	--创角
+	MAIN = 2001, --主面板
+	CREATEROLE = 2002,	--创角
 }
 
 --@主城面板类型
 CITY_TYPE = {
-	MAIN = 1,	--模块主面板
+	MAIN = 3001,	--模块主面板
+}
+
+
+BATTLE_TYPE = {
+	MAIN  		= 4001,	--全局控制面板
+	MAP_SCROLL 	= 4002,	--大地图
+	MAP_RADAR 	= 4003,	--地图卷轴
+	QUICKBAG 	= 4004,	--快速背包
+	BATTLEBAG	= 4005, --用户背包
 }

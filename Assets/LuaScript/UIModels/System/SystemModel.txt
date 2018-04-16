@@ -33,8 +33,6 @@ end
 
 --@brief 子类重写 - 模块初始化
 function SystemModel:onInitModel()
-	self.m_panelDefine[SYSTEM_TYPE.NOTICE] = SystemNoticePanel
-	self.m_panelDefine[SYSTEM_TYPE.LOCK] = SystemLockPanel
 end
 
 --@brief 子类重写 - 添加事件监听

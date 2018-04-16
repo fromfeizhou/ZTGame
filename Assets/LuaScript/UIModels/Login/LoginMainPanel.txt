@@ -133,9 +133,11 @@ end
 function LoginMainPanel:_OnBtnClick_Login()
 	GameConfig.IsSingleScene = false
 
-	self.m_model.m_pAccname 	= self.m_inputAccount.text
+	self.m_model.m_pAccname = self.m_inputAccount.text
 	self.m_model.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
+
+	GCSLog("LoginMainPanel:_OnBtnClick_Login:", self.m_model.m_pAccname)
 end
 
 --@brief 按钮 - 无网络登录

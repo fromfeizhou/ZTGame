@@ -21,6 +21,10 @@ end
 function UIBasePanel:GetName()
 	return "UIBasePanel"
 end
+
+function UIBasePanel:GetLayerType()
+	return LAYER_TYPE.NORMAL
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -94,6 +98,7 @@ end
 
 --@brief 销毁面板
 function UIBasePanel:Destroy()
+	CSGameObject.Destroy(self.m_gameObject)
 	self:_RemoveEvents()
 	self:_UnRegNetFacade()
 	self:onDestroy()

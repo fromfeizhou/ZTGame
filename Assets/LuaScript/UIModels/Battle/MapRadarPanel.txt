@@ -114,7 +114,7 @@ end
 
 --@brief 打开地图卷轴
 function MapRadarPanel:_OpenMap( )
-	self.m_model:ShowPanel(BATTLE_UI_TYPE.MAP_SCROLL)
+	self.m_model:ShowPanel(BATTLE_TYPE.MAP_SCROLL)
 end
 
 --@brief 在地图上创建一个玩家标识

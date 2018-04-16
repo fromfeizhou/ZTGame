@@ -11,9 +11,7 @@ local CSIsDestroyed = CS.GameTool.IsDestroyed
 
 BaseModel = {
 	m_tPanelList = nil,
-	m_panelDefine = nil,
 	m_canvasRoot = nil,
-	m_canvasName = "Canvas",
 }
 
 function  BaseModel:GetName()
@@ -44,27 +42,31 @@ end
 
 --@brief 更新
 function BaseModel:Tick()
-	for i,panel in pairs(self.m_tPanelList) do
-		if panel.Update then
-			panel:Tick(deltaTime)
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			if panel.Update then
+				panel:Tick(deltaTime)
+			end
 		end
 	end
 end
 
 --@brief 移除
 function BaseModel:Destroy()
+	self:_CleanPanel()
+	self:_RemoveEvents()
+	self:_UnRegNetFacade()
+end
+
+
+function BaseModel:_CleanPanel( )
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
 			panel:Destroy()
 		end
 		self.m_tPanelList = nil
 	end
-
-	self:_RemoveEvents()
-	self:_UnRegNetFacade()
 end
-
-
 --@brief 获取面板节点
 function BaseModel:_GetCanvasRoot()
 	if not self.m_canvasRoot or CSIsDestroyed(self.m_canvasRoot) then
@@ -85,7 +87,7 @@ function BaseModel:ShowPanel( panelType, panelData )
 			self.m_tPanelList[panelType]:Show(panelData)
 		end
 	else
-		self.m_tPanelList[panelType] = self:CreatePanel(panelType, panelData)
+		self.m_tPanelList[panelType] = PanelManager:GetPanel(self, panelType, panelData)
 	end
 end
 
@@ -97,14 +99,6 @@ function BaseModel:HidePanel(panelType)
 	--else
 		--GCSLog("BaseModel:HidePanel","found out",panelType)
 	end
-end
-
-
-function BaseModel:CreatePanel(panelType, panelData)
-	local panel = {}
-	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
-	panel:_LoadAssetPanel(self:_GetCanvasRoot(), self, panelData)
-	return panel
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

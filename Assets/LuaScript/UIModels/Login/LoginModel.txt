@@ -37,8 +37,6 @@ end
 
 --@brief 子类重写 - 模块初始化
 function LoginModel:onInitModel()
-	self.m_panelDefine[LOGIN_TYPE.MAIN] = LoginMainPanel
-	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] = LoginCreateRolePanel
 end
 
 
@@ -63,7 +61,11 @@ end
 
 function LoginModel:LoginFinish()
 	GCSLog("登录完成，进入游戏")
+
+	self:_CleanPanel()
+
 	LuaGameStart:EnterGameCity()
+
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
