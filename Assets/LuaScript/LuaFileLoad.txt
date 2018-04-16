@@ -134,6 +134,7 @@ local LuaFileLoad = {
 		"UIModels.Battle.BagUI.QuickBag.QuickBagPanel",
 		"UIModels.Battle.BagUI.QuickBag.BaseBagCell",
 
+		"UIModels.Battle.Panel.MatchPanel",
 
 		"UIModels.City.CityModel",
 		"UIModels.City.CityMainPanel",

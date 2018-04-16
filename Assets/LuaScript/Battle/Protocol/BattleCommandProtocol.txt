@@ -209,6 +209,12 @@ end
 --@brief 匹配返回
 function BattleCommandProtocol:_OnSurvieMatch(data)
 	CSLog("BattleCommandProtocol:_OnSurvieMatch",data.code)
+	CSLog("SHOW  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+	local modelData = {}
+	modelData.modelType = MODEL_TYPE.BATTLE
+	modelData.panelType = BATTLE_TYPE.MATCH
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
+	
 end
 
 --@brief 游戏开始
@@ -218,6 +224,16 @@ end
 
 --@brief 玩家信息
 function BattleCommandProtocol:_OnMapSight(data)
+	--开始战斗
+
+	local modelData = {
+		modelType = MODEL_TYPE.BATTLE,
+		panelType = BATTLE_TYPE.MATCH,
+	}
+	CSLog("Hide  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
+
 	CSLog("BattleCommandProtocol:_OnMapSight",data.role_id,data.frame_id,SerializeTable(data.roles_enter))
 	if data.roles_enter then
 		local list = {}

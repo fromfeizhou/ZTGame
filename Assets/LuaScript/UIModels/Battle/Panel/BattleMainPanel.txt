@@ -45,7 +45,8 @@ function BattleMainPanel:onCreatePanel()
 
 	--临时匹配按钮
 	if not GameConfig.IsSingleScene then
-		self:_CreateMatchUI()
+		--self:_CreateMatchUI()
+		BattleCommandProtocol:SendMath()
 	end
 --[[
 	self:_CreateSkillBtn()
