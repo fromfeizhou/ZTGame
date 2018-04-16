@@ -32,13 +32,15 @@ public class GameTool
 		}
 		return str;
 	}
+	public static void LogC(params object[] args)
+	{
+		string str = string.Format("<color={0}>{1}</Color>",ColorHex,_Parse (args));
+		Debug.Log(str);
+	}
+
 	public static void Log(params object[] args)
 	{
-		string str = _Parse (args);
-
-		if(!string.IsNullOrEmpty(ColorHex))
-			str = string.Format("<color={0}>{1}</Color>",ColorHex,str);
-		Debug.Log(str);
+		Debug.Log(_Parse (args));
 	}
 
 	public static void LogWarning(params object[] args)
