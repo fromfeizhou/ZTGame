@@ -12,6 +12,9 @@ BattleMainPanel = {
 	m_rootLeftDown = nil,
 	m_rootRightUp = nil,
 	m_rootRightDown = nil,
+
+	m_bagCtrl = nil, --背包控制器
+
 }
 
 setmetatable( BattleMainPanel, { __index = UIBasePanel})
@@ -47,10 +50,6 @@ function BattleMainPanel:onCreatePanel()
 	if not GameConfig.IsSingleScene then
 		self:_CreateMatchUI()
 	end
---[[
-	self:_CreateSkillBtn()
-	self:_CreateMapRaderPanel()
-]]
 
 end
 
@@ -116,18 +115,17 @@ function BattleMainPanel:_CreateSkillBtn()
 end
 
 function BattleMainPanel:_OnClickBagBtn( )
-	local panelType = BATTLE_TYPE.BATTLEBAG
-	local panel = GlobalBattleCtrl:GetUIModel().m_tPanelList[panelType]
-	if panel then
-		GCSLog("BattleMainPanel:_OnClickBagBtn",panel.m_isShow)
-		if panel.m_isShow == true then
-			panel:Hide()
+	if self.m_bagCtrl then
+		GCSLog("BattleMainPanel:_OnClickBagBtn",self.m_bagCtrl.m_isShow)
+		if self.m_bagCtrl.m_isShow == true then
+			self.m_bagCtrl:Hide()
 		else
-			panel:Show()
+			self.m_bagCtrl:Show()
 		end
 	else
-		GlobalBattleCtrl:GetUIModel():ShowPanel(panelType)
+		self:_CreateBagPanel()
 	end
+
 end
 
 --@brief 创建移动摇杆
@@ -138,6 +136,14 @@ end
 --@brief 创建技能按钮
 function BattleMainPanel:_CreateSkillJoystick()
 	MoveJoystick:Create(self.m_rootLeftDown)
+end
+
+--@brief 創建背包
+function BattleMainPanel:_CreateBagPanel()
+	local panel = {}
+	setmetatable( panel, { __index = BattleBagPanel })
+	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, panelData)
+	self.m_bagCtrl = panel
 end
 
 --@brief 显示雷达地图

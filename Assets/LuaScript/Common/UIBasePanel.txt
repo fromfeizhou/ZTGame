@@ -29,6 +29,7 @@ end
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
+	self.m_model = model
 	local callback_loadfinish = function(target,path)
  		if target then
  			self.m_gameObject = CSGameObject.Instantiate(target,parent)
@@ -42,13 +43,12 @@ function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 			self:Show(panelData)
 
 		else
-			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
+			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName,path)
 		end
 	end
 
 	local panelName = model:GetName() .."/"..self:GetRelativePath() .. self:GetName()
 	CSAssetManager.LoadAsset(PathManager:GetUIPanel(panelName),callback_loadfinish)
-	self.m_model = model
 	return self
 end
 
