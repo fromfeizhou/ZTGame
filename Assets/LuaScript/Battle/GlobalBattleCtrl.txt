@@ -225,6 +225,7 @@ function GlobalBattleCtrl:Update(dt)
 			end
 		end
 	end
+	BattleDefine.RendererDelay = math.ceil(BattleDefine.CommandTime / dt) + 2
 	--界面刷新
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Update()
