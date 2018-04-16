@@ -74,6 +74,16 @@ end
 --@技能测试
 function BattleCommandMgr:CommandDebugRun()
 	if GameConfig.IsSingleScene then
+		-- 卡帧测试
+		-- if not BattleCommandMgr.count then
+		-- 	BattleCommandMgr.count = 0
+		-- end
+		-- if BattleCommandMgr.count > 0 then
+		-- 	BattleCommandMgr.count = BattleCommandMgr.count - 1
+		-- 	return
+		-- end
+
+		-- BattleCommandMgr.count = 10
 		if self.m_nClientFrame == self.m_nServerFrame or self.m_nServerFrame <= BattleDefine.CommandStart then
 			BattleCommandProtocol:__TsClientSendDriveCommand()
 		end 

@@ -109,7 +109,8 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 	local isEndPos = false
 
 	if self.m_tTargetPos then
-		if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) <= self.m_nDelayPosLenght then
+		local distance = CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos)
+		if distance <= self.m_nDelayPosLenght or distance < 0.1 then
 			isEndPos = true
 		end
 	end
