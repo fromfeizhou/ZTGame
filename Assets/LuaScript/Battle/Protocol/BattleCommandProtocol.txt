@@ -209,7 +209,7 @@ end
 --@brief 匹配返回
 function BattleCommandProtocol:_OnSurvieMatch(data)
 	CSLog("BattleCommandProtocol:_OnSurvieMatch",data.code)
-	CSLog("SHOW  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+	--CSLog("SHOW  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 	local modelData = {}
 	modelData.modelType = MODEL_TYPE.BATTLE
 	modelData.panelType = BATTLE_TYPE.MATCH
@@ -230,11 +230,11 @@ function BattleCommandProtocol:_OnMapSight(data)
 		modelType = MODEL_TYPE.BATTLE,
 		panelType = BATTLE_TYPE.MATCH,
 	}
-	CSLog("Hide  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+	--CSLog("Hide  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
 
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
 
-	CSLog("BattleCommandProtocol:_OnMapSight",data.role_id,data.frame_id,SerializeTable(data.roles_enter))
+--	CSLog("BattleCommandProtocol:_OnMapSight",data.role_id,data.frame_id,SerializeTable(data.roles_enter))
 	if data.roles_enter then
 		local list = {}
 		for i,v in pairs(data.roles_enter) do

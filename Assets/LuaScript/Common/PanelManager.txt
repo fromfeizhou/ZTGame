@@ -73,6 +73,8 @@ function PanelManager:_RegGamePanel()
 	self.m_panelDefine[BATTLE_TYPE.MAP_RADAR] 	= MapRadarPanel
 	self.m_panelDefine[BATTLE_TYPE.QUICKBAG] 	= QuickBagPanel
 	self.m_panelDefine[BATTLE_TYPE.MAIN] 		= BattleMainPanel
+	self.m_panelDefine[BATTLE_TYPE.MATCH]       = MatchPanel
+
 
 end
 
