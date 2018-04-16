@@ -39,7 +39,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 面板被创建
 function MapRadarPanel:onCreatePanel()	
-	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OpenMap() end)
 	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_transform,"ViewPort/ztTxt_WaitTime")
 	local mapConentTrans = PanelWidget:GetChild(self.m_transform,"ViewPort/Mask/Content")
 	self.m_mapContent = mapConentTrans:GetComponent("RectTransform")
@@ -110,11 +109,6 @@ function MapRadarPanel:_ClearPlayer()
 	for k,v in pairs(self.m_playerList) do
 		CSGameObject.Destroy(v.gameObject)
 	end
-end
-
---@brief 打开地图卷轴
-function MapRadarPanel:_OpenMap( )
-	self.m_model:ShowPanel(BATTLE_TYPE.MAP_SCROLL)
 end
 
 --@brief 在地图上创建一个玩家标识
