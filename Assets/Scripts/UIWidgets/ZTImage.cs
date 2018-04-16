@@ -62,13 +62,6 @@ public class ZTImageBase : Image , IWidget, IPointerClickHandler
 		if (onClickImg != null)
 			onClickImg (eventData);
 	}
-
-	public override void Rebuild (CanvasUpdate update)
-	{
-		base.Rebuild (update);
-		Debug.Log ("Rebuild:" + name);
-	}
-
 }
 
 public class ZTImage : ZTImageBase
