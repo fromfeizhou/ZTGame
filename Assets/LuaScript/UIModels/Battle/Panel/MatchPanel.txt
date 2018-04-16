@@ -1,0 +1,83 @@
+--MatchPanel.txt
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+MatchPanel = {
+	m_panelName = "MatchPanel",
+	m_bagBtn=nil,
+
+}
+
+setmetatable( MatchPanel, { __index = UIBasePanel})
+
+
+function MatchPanel:GetName()
+	return "MatchPanel"
+end
+
+--@brief 面板资源相对模块路径
+function MatchPanel:GetRelativePath()
+	return "Panel/"
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 子类重写 - 面板被创建
+function MatchPanel:onCreatePanel()
+	self:_InitComponent()
+end
+
+--@brief 子类重写 - 面板初始化
+function MatchPanel:onInitPanel()
+end
+
+--@brief 子类重写 - 面板更新
+function MatchPanel:onUpdate()
+end
+
+--@brief 子类重写 - 面板每帧更新
+function MatchPanel:onTick(deltaTime)
+end
+
+--@brief 子类重写 - 面板被销毁
+function MatchPanel:onDestroy()
+end
+
+--@brief 子类重写 - 显示面板
+function MatchPanel:onShow()
+end
+
+--@brief 子类重写 - 隐藏面板
+function MatchPanel:onHide()
+end
+
+--@brief 子类重写 - 添加事件监听
+function MatchPanel:_AddEvents( )
+end
+
+--@brief 子类重写 - 移除事件监听
+function MatchPanel:_RemoveEvents( )
+end
+
+--@brief 子类重写 - 注册网络门户
+function MatchPanel:_RegNetFacade( )
+end
+
+--@brief 子类重写 - 注销网络门户
+function MatchPanel:_UnRegNetFacade( )
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function MatchPanel:_InitComponent()
+	--self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
+end
+
+
+
+
+
