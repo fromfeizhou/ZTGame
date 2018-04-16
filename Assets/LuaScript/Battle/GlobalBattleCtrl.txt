@@ -344,6 +344,15 @@ function GlobalBattleCtrl:GetCurServerCommandFrame()
 	return 0
 end
 
+--@brief 是否等待逻辑帧
+function GlobalBattleCtrl:IsWaitCommandFrame()
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		return GlobalBattleCtrl.m_battleCommandMgr.m_nClientFrame >= GlobalBattleCtrl.m_battleCommandMgr.m_nServerFrame
+	end
+	return false
+end
+
+
 --@brief 塞入队列
 function GlobalBattleCtrl:AddCommandList(frame,commandList)
 	if GlobalBattleCtrl.m_battleCommandMgr then

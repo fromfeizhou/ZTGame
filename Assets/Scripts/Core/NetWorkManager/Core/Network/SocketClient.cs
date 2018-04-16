@@ -90,6 +90,7 @@ public class SocketClient {
             client.ReceiveTimeout = 1000;
             client.NoDelay = true;
             client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
+            FPSShow.SendPing(host);
         } catch (Exception e) {
             Close(); Debug.LogError(e.Message);
         }

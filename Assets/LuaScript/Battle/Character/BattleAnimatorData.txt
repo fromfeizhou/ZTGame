@@ -51,7 +51,7 @@ function BattleAnimatorData:MoveToPos(moveDir,pos)
 	else
 		self.m_bMoveStop = false
 	end
-	self:_SetPosDelay(pos,stop)
+	self:_SetPosDelay(pos)
 end
 
 --@brief 补间动画更新(界面刷新调用)
@@ -79,7 +79,6 @@ end
 
 --@brief 刷新当前位置
 function BattleAnimatorData:_UpdateCurPos(pos)
-	--CSLog("BattleAnimatorData:_UpdateCurPos",pos)
 	AnimatorData.UpdatePos(self,pos)
 	self.m_tCurPos = pos
 	self:_UpdateCameraPos()
@@ -107,14 +106,36 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 		return
 	end
 	local pos = self.m_tCurPos + self.m_bDelayPosSpeed
-	if self.m_bMoveStop then	
+	local isEndPos = false
+
+	if self.m_tTargetPos then
 		if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) <= self.m_nDelayPosLenght then
+			isEndPos = true
+		end
+	end
+	--是否移动逻辑 区分插入位移补间
+	if self.m_bMoveStop then	
+		if isEndPos then
 			pos = self.m_tTargetPos
 			self.m_bDelayPosSpeed = nil
+			
+			--移动停止			
 			if self.m_sAnimaName == AnimatorName.Move then
 				self:Play(AnimatorName.Idle)
 			end
 		end
+	else
+		if isEndPos then
+			--等待逻辑帧 移动继续
+			if GlobalBattleCtrl:IsWaitCommandFrame() then
+				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed.normalized
+				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed * (1/self.m_bDelayPosSpeed.magnitude) * BattleDefine.PlayerSpeed / BattleDefine.RendererDelay
+				self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
+
+				self.m_tTargetPos = nil
+			end
+		end
+		
 	end
 	
 	self:_UpdateCurPos(pos)

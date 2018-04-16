@@ -24,7 +24,6 @@ public class FPSShow : MonoBehaviour
     {
         transform.SetSiblingIndex(10000);
         m_LastUpdateShowTime = Time.realtimeSinceStartup;
-        SendPing();
         DontDestroyOnLoad(this);
 
     }
@@ -43,8 +42,7 @@ public class FPSShow : MonoBehaviour
         }
     }
 
-    public string IP = "192.168.0.168";
-    Ping ping;
+    static Ping ping;
     float delayTime;
     void OnGUI()
     {
@@ -57,9 +55,14 @@ public class FPSShow : MonoBehaviour
         }
     }
 
-    void SendPing()
+    public static void SendPing(string ip)
     {
-        ping = new Ping(IP);
+        if (ping != null)
+        {
+            ping.DestroyPing();
+            ping = null;
+        }
+        ping = new Ping(ip);
 
     }
 }
