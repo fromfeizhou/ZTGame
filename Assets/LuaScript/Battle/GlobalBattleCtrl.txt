@@ -152,7 +152,7 @@ function GlobalBattleCtrl:ExitBattle()
 	ZTCityScene:InitScene()
 end
 
---@rife 初始化数据
+--@rife 初始化数据（单机测试使用）
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
 	GlobalBattleCtrl.m_nOwnerId = 1
@@ -165,12 +165,8 @@ function GlobalBattleCtrl:InitData()
 	
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
-
-	--数据初始化完成
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
-
-	GlobalBattleCtrl.m_bGameOver = false
-	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
+	
+	GlobalBattleCtrl:ResetGameState()
 end
 
 --@rife 初始化数据(进入游戏)
@@ -185,20 +181,22 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
-		
-	--数据初始化完成
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+	
+	GlobalBattleCtrl:ResetGameState()
 
 	BattleMapMgr:Reset( )
 
 
-	GlobalBattleCtrl.m_bGameOver = false
-	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
 end
 
 --@brief 重置计数相关
 function GlobalBattleCtrl:ResetGameState()
-	
+	GlobalBattleCtrl.m_bGameOver = false
+	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
+	--数据初始化完成
+	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
+	GlobalBattleCtrl.m_nRendererCount = 0
+	GlobalBattleCtrl.m_nCommandCount = 0
 end
 
 
@@ -219,6 +217,9 @@ function GlobalBattleCtrl:Update(dt)
 	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
 	--逻辑刷新
 	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
+		--逻辑帧执行计数
+		GlobalBattleCtrl.m_nCommandCount = GlobalBattleCtrl.m_nCommandCount + 1
+
 		GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime - BattleDefine.CommandTime
 
 		if GlobalBattleCtrl:CheckCommandStart() then
@@ -227,7 +228,6 @@ function GlobalBattleCtrl:Update(dt)
 			end
 		end
 	end
-	BattleDefine.RendererDelay = math.ceil(BattleDefine.CommandTime / dt) + 2
 	--界面刷新
 	--if GlobalBattleCtrl.m_battleUIMgr then
 	--	GlobalBattleCtrl.m_battleUIMgr:Update()
@@ -242,6 +242,14 @@ function GlobalBattleCtrl:Update(dt)
 	--头像管理
 	if GlobalBattleCtrl.m_HeadItemManager then
 		GlobalBattleCtrl.m_HeadItemManager:Update()
+	end
+
+	--动态设置补间动画参数
+	GlobalBattleCtrl.m_nRendererCount = GlobalBattleCtrl.m_nRendererCount + 1
+	if GlobalBattleCtrl.m_nCommandCount > 15 then
+		BattleDefine.RendererDelay =  math.ceil(GlobalBattleCtrl.m_nRendererCount / GlobalBattleCtrl.m_nCommandCount) + 1
+		GlobalBattleCtrl.m_nCommandCount = 0
+		GlobalBattleCtrl.m_nRendererCount = 0
 	end
 end
 

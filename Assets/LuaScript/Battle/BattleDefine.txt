@@ -22,10 +22,10 @@ TransLevelDefine = {
 
 --@breif 战斗预定义
 BattleDefine = {
-	CommandTime = 0.025,	--逻辑帧刷新时间
+	CommandTime = 0.024,	--驱动帧刷新时间
 	RendererDelay = 3,		--动画补间
 	CommandStart = 6,		--逻辑帧本地缓存
-	CommandStep = 1,		--驱动帧步伐
+	CommandStep = 3,		--驱动帧步伐
 
 	SecondToFrameRate = 45,	--秒转帧率帧率
 

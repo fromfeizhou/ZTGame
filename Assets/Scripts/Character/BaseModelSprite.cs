@@ -327,13 +327,13 @@ public class RoleModelSprite : BaseModelSprite
         if (null == animator) return;
         if (transLv == 1)
         {
-            model.SetActive(false);
-
-
+            if (model.activeSelf)
+                model.SetActive(false);
         }
         else
         {
-            model.SetActive(true);
+            if (!model.activeSelf)
+                model.SetActive(true);
             Renderer[] renders = model.transform.GetComponentsInChildren<Renderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
             for (int index = 0; index < renders.Length; index++)
             {
