@@ -8,15 +8,16 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSRenderTexture = CS.UnityEngine.RenderTexture
+local CSSetGameObjectLayer = CS.GameTool.SetGameObjectLayer
+
 CityMainPanel = {
 	m_panelName = "CityMainPanel",
 	m_txtNickName,
 	m_txtName,
 
 	m_roleId,
-	
-	m_roleImg,
-	m_roleCamera,
+	m_roldModelId,
+	m_heroModelRoot,
 
 	m_noticeHero,
 	m_noticeHeroName,
@@ -27,6 +28,8 @@ CityMainPanel = {
 	m_noticeSkillName,
 	m_noticeSkillType,
 	m_noticeSkillDesc,
+
+	m_heroModelList = {}
 }
 
 setmetatable( CityMainPanel, { __index = UIBasePanel})
@@ -71,19 +74,13 @@ function CityMainPanel:onCreatePanel()
 	self.m_noticeSkillType = PanelWidget:GetZTText(self.m_noticeSkill,"Txt_SkillName/ZTImage/Txt_SkillType")
 	self.m_noticeSkillDesc = PanelWidget:GetZTText(self.m_noticeSkill,"Txt_SkillInfo")
 
+	self.m_heroModelRoot = PanelWidget:GetChild(self.m_transform,"3DHeroShow/HeroRoot")
 
 	-- 按钮 - 菜单
 	self.m_txtNickName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtNickName")
 	self.m_txtName = PanelWidget:GetZTText(self.m_transform,"ViewPort/PlayerName/ZTImage/txtName")
-
-
-
-	self.m_roleCamera = PanelWidget:GetChild(self.m_transform,"3DHeroShow/HeroCamera"):GetComponent("Camera")
-	self.m_roleCamera.targetTexture = CSRenderTexture(1024,1024,16)
-	self.m_roleImg = PanelWidget:GetChild(self.m_transform,"ViewPort/HeroImg"):GetComponent("RawImage")
-	self.m_roleImg.texture = self.m_roleCamera.targetTexture
-	self.m_roleImg.enabled = true
 end
+
 
 --@brief 面板初始化
 function CityMainPanel:onInitPanel()
@@ -96,10 +93,7 @@ end
 
 --@brief 销毁登录面板
 function CityMainPanel:onDestroy()
-	self.m_roleCamera.targetTexture:Release()
-	self.m_roleCamera.targetTexture = nil
-	self.m_roleImg.texture = nil
-	self.m_roleImg.enabled = false
+	self:DestroyHeroModel()
 end
 
 --@brief 添加事件监听
@@ -119,17 +113,49 @@ function CityMainPanel:_UnRegNetFacade()
 end
 	
 
-
-
 --@brief 选择角色
 function CityMainPanel:_SelectHero(roleId)
 	self.m_roleId = roleId
-	self.m_txtNickName.text = Tab_Hero[self.m_roleId].name
-	self.m_noticeHeroName.text = Tab_Hero[self.m_roleId].name
-	self.m_noticeHeroType.text = Tab_HeroPro[Tab_Hero[self.m_roleId].type].name
-	self.m_noticeHeroDesc.text = Tab_Hero[self.m_roleId].desc
+	self.m_roleModelId = Tab_Hero[self.m_roleId].modelid
+	self.m_txtNickName.text 	= Tab_Hero[self.m_roleId].name
+	self.m_noticeHeroName.text 	= Tab_Hero[self.m_roleId].name
+	self.m_noticeHeroType.text 	= Tab_HeroPro[Tab_Hero[self.m_roleId].type].name
+	self.m_noticeHeroDesc.text 	= Tab_Hero[self.m_roleId].desc
+	self:_UpdateHeroModel()
+end
+
+function CityMainPanel:_UpdateHeroModel(  )
+
+	self.m_roldModelId = Tab_Hero[self.m_roleId].name
+
+	if self.m_heroModelList and self.m_heroModelList[self.m_roleModelId] then
+		for k,v in pairs(self.m_heroModelList) do
+			self.m_heroModelList[k]:SetActive(k == self.m_roleModelId)
+		end
+	else
+		self:_LoadHeroModel(self.m_roleModelId)
+	end
 
 end
+
+function CityMainPanel:_LoadHeroModel( modelId )
+	local heroModelPath = PathManager:GetHeroModelPath(modelId)
+	LogC("CityMainPanel:_LoadHeroModel",modelId,heroModelPath)
+	CS.AssetManager.LoadAsset(heroModelPath,function(target,path)
+ 		if target then
+ 			local heroModelGo = CSGameObject.Instantiate(target)
+ 			heroModelGo.transform:SetParent(self.m_heroModelRoot)
+ 			heroModelGo.transform.localPosition 	= CSVector3.zero
+ 			heroModelGo.transform.localEulerAngles 	= CSVector3.zero
+ 			heroModelGo.transform.localScale 		= CSVector3.one
+ 			CSSetGameObjectLayer(heroModelGo,"UILayer_Normal")
+ 			self.m_heroModelList[modelId] = heroModelGo
+ 			self:_UpdateHeroModel(modelId)
+			LogC("CityMainPanel:_LoadHeroModel - Finish",self.m_heroModelList[modelId])
+		end
+	end)
+end
+
 
 function CityMainPanel:_OnClick_Hero_OnDown()
 	self.m_noticeHero.gameObject:SetActive(true) 
@@ -177,3 +203,8 @@ function CityMainPanel:_ShowNotice(noticeStr)
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
+function CityMainPanel:DestroyHeroModel()
+	for k,v in pairs(self.m_heroModelList) do
+		CSGameObject.Destroy(self.m_heroModelList[k])
+	end
+end

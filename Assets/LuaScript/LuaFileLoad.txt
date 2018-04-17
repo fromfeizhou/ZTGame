@@ -71,16 +71,16 @@ local LuaFileLoad = {
 		"Battle.Protocol.BattleProtocol",
 		"Battle.BattleDefine",
 		"Battle.BattleMapHeight",
-		"Battle.BattleCameraMgr",
 		"Battle.GlobalBattleCtrl",
 		"Battle.ZTBattleScene",
-		"Battle.BattleItemManager",
 		
+		"Battle.Manager.BattleItemManager",
+		"Battle.Manager.BattleCameraMgr",
+		"Battle.Manager.MapCircleManager",
 
 		"Battle.BattleCommand.BattleCommand",
 		"Battle.BattleCommand.BattleCommandMgr",
 
-		"Battle.MapCircle.MapCircleManager",
 
 		"Battle.Character.CharaSystem.AttributeSystem",
 		"Battle.Character.CharaSystem.BuffSystem",
