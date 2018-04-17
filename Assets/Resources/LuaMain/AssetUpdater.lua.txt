@@ -40,7 +40,7 @@ end
 
 --@brief 开始检查加载
 function AssetUpdater:StartAssetUpdater()
-	self.m_updater:StartAssetUpdater("http://192.168.0.188:80")
+	self.m_updater:StartAssetUpdater("http://192.168.0.188")
 end
 
 --@brief 清除加载对象
