@@ -9,6 +9,7 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 local CSJoystick = CS.SkillJoystick
+local CSCANVAS = CS.UnityEngine.Canvas
 
 
 SkillJoystick = {
@@ -35,7 +36,9 @@ end
 
 --@brief 初始化
 function SkillJoystick:Init(skillId,parent)
-	CSLog("SkillJoystick:Init",skillId)
+
+
+	LogC("SkillJoystick:Init",skillId,parent)
 	self:_ParseSkillConfig(skillId)
 
 	self.m_ctrlContainer = parent
@@ -102,6 +105,13 @@ end
 
 --@brief 添加控制事件 
 function SkillJoystick:_InitJoyEvent()
+
+
+	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
+	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+	self.m_joystick:SetCanvas(canvas)
+	LogC("SkillJoystick:_InitJoyEvent", canvas)
+
 	self.m_joystick.onJoystickDownEvent = function(pos)
 		self:_OnJoystickDown(pos)
 	end

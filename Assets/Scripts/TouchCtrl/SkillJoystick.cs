@@ -19,7 +19,6 @@ public class SkillJoystick : JoystickBase
         innerCircleTrans = transform.Find("InnerCircle") as RectTransform;
         _imgTouch = innerCircleTrans.gameObject.GetComponent<Image>();
 
-        _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         _isDownTouch = false;
         SetVisibleOpacity(false);
     }

@@ -30,6 +30,7 @@ local LuaFileLoad = {
 		"Global.GlobalData",
 		"Global.ZTProtoData",
 		"Global.GlobalMethod",
+		"Global.Log",
 
 
 		--[[UI面板相关]]
@@ -112,8 +113,6 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.SkillActionParse",
 		"Battle.Skill.SkillAction.SkillActionManager",
 		
-		
-		"UIModels.Battle.BattleUIMgr",
 		"UIModels.Battle.BattleHead.BattleHeadItem",
 		"UIModels.Battle.BattleHead.HeadItemManager",
 		
@@ -125,7 +124,7 @@ local LuaFileLoad = {
 
 		"UIModels.Battle.MapScrollPanel",
 		"UIModels.Battle.MapRadarPanel",
-		"UIModels.Battle.BattleMapPropUIMgr",
+		--"UIModels.Battle.BattleMapPropUIMgr",
 		
 		"UIModels.Battle.Panel.BattleMainPanel",
 
@@ -135,6 +134,7 @@ local LuaFileLoad = {
 		"UIModels.Battle.BagUI.QuickBag.QuickBagPanel",
 		"UIModels.Battle.BagUI.QuickBag.BaseBagCell",
 
+		"UIModels.Battle.Panel.MatchPanel",
 
 		"UIModels.City.CityModel",
 		"UIModels.City.CityMainPanel",

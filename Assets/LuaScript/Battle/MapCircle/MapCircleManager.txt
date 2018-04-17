@@ -14,7 +14,6 @@ local CSLog = CS.GameTool.Log
 
 
 MapCircleManager = {
-	m_model,
 	m_fbxDuCircle = nil,
 
 	m_circle = nil,--网络基础数据
@@ -34,7 +33,6 @@ MapCircleManager = {
 function MapCircleManager:Create()
 	local obj = {}
 	setmetatable( obj, { __index = MapCircleManager })
-	obj.m_model = GlobalBattleCtrl.m_battleUIMgr.m_UIModel
 	obj:Init()
 	return obj
 end
@@ -52,13 +50,6 @@ function MapCircleManager:Destroy()
 	CSLog("MapCircleManager:Destroy")
 	self:_RemoveEvent()
 end
-
-
---@brief 更新
--- function MapCircleManager:Update()
--- 	--self.m_model:Update()
--- end
-
 
 --@brief 逻辑帧刷新
 function MapCircleManager:UpdateCommand()
