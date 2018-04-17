@@ -1,0 +1,131 @@
+fileFormatVersion: 2
+guid: 287cbb10d64253e4aadb1f86b756806c
+timeCreated: 1523607671
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: ManChengJianZhu02_dimian
+    100004: ManChengJianZhu02_men
+    100006: ManChengJianZhu02_posun
+    100008: ManChengJianZhu02_wall
+    100010: ManChengJianZhu02_wall01
+    100012: ManChengJianZhu02_wall02
+    100014: ManChengJianZhu02_wuding
+    100016: ManChengJianZhu02_wuding01
+    100018: ManChengJianZhu02_wujian
+    100020: ManChengJianZhu02_wujian01
+    400000: //RootNode
+    400002: ManChengJianZhu02_dimian
+    400004: ManChengJianZhu02_men
+    400006: ManChengJianZhu02_posun
+    400008: ManChengJianZhu02_wall
+    400010: ManChengJianZhu02_wall01
+    400012: ManChengJianZhu02_wall02
+    400014: ManChengJianZhu02_wuding
+    400016: ManChengJianZhu02_wuding01
+    400018: ManChengJianZhu02_wujian
+    400020: ManChengJianZhu02_wujian01
+    2300000: ManChengJianZhu02_dimian
+    2300002: ManChengJianZhu02_men
+    2300004: ManChengJianZhu02_posun
+    2300006: ManChengJianZhu02_wall
+    2300008: ManChengJianZhu02_wall01
+    2300010: ManChengJianZhu02_wall02
+    2300012: ManChengJianZhu02_wuding
+    2300014: ManChengJianZhu02_wuding01
+    2300016: ManChengJianZhu02_wujian
+    2300018: ManChengJianZhu02_wujian01
+    3300000: ManChengJianZhu02_dimian
+    3300002: ManChengJianZhu02_men
+    3300004: ManChengJianZhu02_posun
+    3300006: ManChengJianZhu02_wall
+    3300008: ManChengJianZhu02_wall01
+    3300010: ManChengJianZhu02_wall02
+    3300012: ManChengJianZhu02_wuding
+    3300014: ManChengJianZhu02_wuding01
+    3300016: ManChengJianZhu02_wujian
+    3300018: ManChengJianZhu02_wujian01
+    4300000: ManChengJianZhu02_wall02
+    4300002: ManChengJianZhu02_wujian
+    4300004: ManChengJianZhu02_dimian
+    4300006: ManChengJianZhu02_wall
+    4300008: ManChengJianZhu02_wall01
+    4300010: ManChengJianZhu02_wuding
+    4300012: ManChengJianZhu02_wujian01
+    4300014: ManChengJianZhu02_men
+    4300016: ManChengJianZhu02_posun
+    4300018: ManChengJianZhu02_wuding01
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
