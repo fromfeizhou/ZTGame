@@ -48,13 +48,8 @@ function GlobalBattleCtrl:Init()
 	--技能解析器
 	GlobalBattleCtrl.m_skillActionManager = SkillActionManager:Create()
 
-
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
-
-
-	--地图物品ui容器
-	--GlobalBattleCtrl.m_mapPropUIMgr=BattleMapPropUIMgr:Create()
 
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()

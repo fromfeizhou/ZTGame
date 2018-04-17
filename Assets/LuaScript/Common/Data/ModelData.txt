@@ -30,8 +30,5 @@ CITY_TYPE = {
 --@战斗面板类型
 BATTLE_TYPE = {
 	MAIN  		= 4001,	--全局控制面板
-	MAP_SCROLL 	= 4002,	--大地图
-	MAP_RADAR 	= 4003,	--地图卷轴
-	QUICKBAG 	= 4004,	--快速背包
 	MATCH		= 4005, --匹配界面
 }
