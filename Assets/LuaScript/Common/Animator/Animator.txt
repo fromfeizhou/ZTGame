@@ -88,7 +88,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/r1001/prefab/r1001.prefab","Assets/Models/CharacterRoot/r1001/prefab/r1001Equip.prefab"	)--self.m_animData:GetAnimatorPath())
+	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"	)--self.m_animData:GetAnimatorPath())
 end
 
 --@brief 移除形象

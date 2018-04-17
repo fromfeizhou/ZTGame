@@ -76,7 +76,7 @@ class DisableMaterialImport : AssetPostprocessor
 
                 foreach (Renderer smr in go.GetComponentsInChildren<Renderer>())
                 {
-                    Material mater = new Material(Shader.Find("Legacy Shaders/Transparent/Diffuse"));
+                    Material mater = new Material(Shader.Find("Mobile/Diffuse"));//Legacy Shaders/Transparent/Diffuse"));
                     AssetDatabase.CreateAsset(mater, string.Format(CreatePrefabs.ModelMaterialPath, go.name, smr.name));
 
                     //AssetDatabase.CreateAsset();
