@@ -46,7 +46,7 @@ public class CompressHelper
 	/// <param name="zipFilePath">生成压缩文件的路径，为空则默认与被压缩文件夹同一级目录，名称为：文件夹名+.zip</param>
 	/// <param name="err">出错信息</param>
 	/// <returns>是否压缩成功</returns>
-	public static bool ZipFile(string dirPath, string zipFilePath, out string err, out float progress)
+	public static bool ZipFile(string dirPath, string zipFilePath, out string err, out float progress,string match = "*.*")
 	{
 		progress = 0.0f;
 		err = "";
@@ -79,7 +79,7 @@ public class CompressHelper
 
 				DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
 
-				FileInfo[] fileInfos = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+				FileInfo[] fileInfos = dirInfo.GetFiles(match, SearchOption.AllDirectories);
 				long totalSize = 0;
 				for (int i = 0; i < fileInfos.Length; i++)
 				{
@@ -89,7 +89,6 @@ public class CompressHelper
 				for (int i = 0; i < fileInfos.Length; i++)
 				{
 					FileInfo file = fileInfos[i];
-
 					ZipEntry entry = new ZipEntry(file.FullName.Replace(dirInfo.FullName, string.Empty));
 					entry.DateTime = DateTime.Now;
 					s.PutNextEntry(entry);

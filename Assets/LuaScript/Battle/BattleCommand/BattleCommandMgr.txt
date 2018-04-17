@@ -62,10 +62,10 @@ function BattleCommandMgr:Update()
 	if self.m_nClientFrame < self.m_nServerFrame then
 		self:_RunCommand()
 		--比驱动帧慢 加速
-		if self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStart then
-			-- CSLog("BattleCommandMgr:Update>>>>>>>>>>>>>>>>>>>>")
+		while self.m_nClientFrame < self.m_nServerFrame - BattleDefine.CommandStart do
 			self:_RunCommand()
 		end
+		
 	else
 		self:CommandDebugRun()
 	end
@@ -82,8 +82,8 @@ function BattleCommandMgr:CommandDebugRun()
 		-- 	BattleCommandMgr.count = BattleCommandMgr.count - 1
 		-- 	return
 		-- end
-
 		-- BattleCommandMgr.count = 10
+
 		if self.m_nClientFrame == self.m_nServerFrame or self.m_nServerFrame <= BattleDefine.CommandStart then
 			BattleCommandProtocol:__TsClientSendDriveCommand()
 		end 
