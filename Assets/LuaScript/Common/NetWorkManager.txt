@@ -38,7 +38,6 @@ local _systemModel
 
 --@brief 初始化
 function NetWorkManager:Init()
-	GCSLog("NetWorkManager:Init")
 	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
 	NetWorkManager.m_instance:Init()
 	--[[设置网络消息回调]]
@@ -181,6 +180,7 @@ function NetWorkManager:OnReceive(pId,pbData)
 		_heartInterval = login_login_s2c.heart_interval
 		self:_OpenHeart()
 	end
+	--GCSLog("NetWorkManager:OnReceive = ", pId)
 	ZTProtocol:Invoking(pId,pbData)
 end
 
