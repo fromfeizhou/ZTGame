@@ -21,6 +21,8 @@ GlobalBattleCtrl = {
 
 	m_nRendererTime = nil,		--渲染刷新
 	m_nCommandTime = nil,	--逻辑刷新
+	m_nRendererCount = 0,	--渲染帧计数
+	m_nCommandCount = 0,	--逻辑帧计数
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -197,6 +199,11 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 	GlobalBattleCtrl.m_bGameOver = false
 	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
+end
+
+--@brief 重置计数相关
+function GlobalBattleCtrl:ResetGameState()
+	
 end
 
 
