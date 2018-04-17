@@ -569,6 +569,8 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
 
         string initial_full_name = DownLoadCommon.GetFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         AssetBundleManifest initial = DownLoadCommon.LoadMainManifestByPath(initial_full_name);
+        if (initial == null)
+            yield break;
         //拷贝AssetBundle文件
         string[] all_assetbundle = initial.GetAllAssetBundles();
         for (int i = 0; i < all_assetbundle.Length; ++i)

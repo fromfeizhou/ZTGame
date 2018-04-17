@@ -40,7 +40,7 @@ end
 
 --@brief 开始检查加载
 function AssetUpdater:StartAssetUpdater()
-	self.m_updater:StartAssetUpdater("http://192.168.0.188")
+	self.m_updater:StartAssetUpdater("http://192.168.0.158")
 end
 
 --@brief 清除加载对象
@@ -74,7 +74,7 @@ function AssetUpdater:_UpdateAssetDone()
 		self.m_callBack()
 	end
 	--文本显示(临时) 
-	self.m_text.text = "AssetUpdater:_UpdateAssetDone"
+	self.m_text.text = ""
 end
 
 return AssetUpdater
