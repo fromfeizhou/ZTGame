@@ -7,6 +7,23 @@ using UnityEditor.Animations;
 
 class CreatePrefabs
 {
+
+    public static string CharacterRoot = "Assets/Models/CharacterRoot/";
+    private const string defaultAnimationName = "@stand.FBX";
+    public static string CharacterMaterialRoot = "Assets/Models/CharacterRoot/{0}/material/";
+    public static string CharacterModelRoot = "Assets/Models/CharacterRoot/{0}/model/";
+    public static string CharacterAnimationRoot = "Assets/Models/CharacterRoot/{0}/animation/";
+    public static string CharacterPrefabRoot = "Assets/Models/CharacterRoot/{0}/prefab/";
+    public static string CharacterTextureRoot = "Assets/Models/CharacterRoot/{0}/texture/";
+
+    public static string CharacterAnimatorPath = "Assets/Models/Animator/";
+    public static string ModelTexturePath = "Assets/Models/CharacterRoot/{0}/{1}";
+    public static string ModelMaterialPath = "Assets/Models/CharacterRoot/{0}/{1}.mat";
+    public static string ModelFBXPath = "Assets/Models/CharacterRoot/{0}/{1}.FBX";
+    public static string ModelPrefabPath = "Assets/Models/CharacterRoot/{0}/{1}.prefab";
+
+    public static string ModelAnimationAssetPath = "Assets/Models/Animator/{0}/model/";
+
     public static string m_ModeName = "Male";
     public static Dictionary<string, string> m_materialList;
     //创建Prefab  
@@ -78,14 +95,8 @@ class CreatePrefabs
         PrefabUtility.CreatePrefab(prefabPath, go);
         // GameObject.DestroyImmediate(go);
     }
-    public static string CharacterRoot = "Assets/Models/CharacterRoot/";
-    private const string defaultAnimationName = "@stand.FBX";
-    public static string CharacterMaterialRoot = "Assets/Models/CharacterRoot/{0}/material/";
-    public static string CharacterModelRoot = "Assets/Models/CharacterRoot/{0}/model/";
-    public static string CharacterAnimationRoot = "Assets/Models/CharacterRoot/{0}/animation/";
-    public static string CharacterPrefabRoot = "Assets/Models/CharacterRoot/{0}/prefab/";
-    public static string CharacterTextureRoot = "Assets/Models/CharacterRoot/{0}/texture/";
-
+   
+    //public  static string CharacterAssetRootPath="Asset/Models/CharacterRoot/"
 
     [MenuItem("ZTTool/Character/CreateAllPrefabs")]
     private static void CreateAllCharacterPrefab()
@@ -98,18 +109,10 @@ class CreatePrefabs
             int lastLineIndex = dir.LastIndexOf("/");
             if (lastLineIndex == -1)
                 continue;
-
             string foldName = dir.Substring(lastLineIndex + 1);
 
-            try
-            {
-                CreateRolePrefab(foldName);
-                Debug.LogError("foldName: Create Finish+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("----create charactor prefab fail----name=" + foldName + ",msg=" + e.Message);
-            }
+            CreateRolePrefab_1(foldName);
+            Debug.LogError("foldName: Create Finish+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -126,7 +129,8 @@ class CreatePrefabs
             DirectoryInfo info = new DirectoryInfo(path);
             if (info.Parent.Name.Equals("CharacterRoot"))//检测
             {
-                CreateRolePrefab(file[0].name);
+                //CreateRolePrefab(file[0].name);
+                CreateRolePrefab_1(file[0].name);
             }
         }
     }
@@ -150,7 +154,6 @@ class CreatePrefabs
                 SetMaterial(go.transform, materialRoot);
                 string prefabPath = prefabRoot + go.name + ".prefab";
                 PrefabUtility.CreatePrefab(prefabPath, go);
-
             }
             else
             {
@@ -176,7 +179,7 @@ class CreatePrefabs
                 else
                 {
                     //动画文件设置loop  模型资源有问题 想注释
-                   // SetClipLoop(models[index]);
+                    // SetClipLoop(models[index]);
                 }
             }
         }
@@ -256,21 +259,180 @@ class CreatePrefabs
     #endregion
 
 
+    #region 新版创建逻辑
+
+    private static void CreateRolePrefab_1(string roleName)
+    {
+
+
+        AnimatorController ac = CreateModelController(roleName);
+        string prefabPath = string.Format(ModelFBXPath, roleName, roleName);
+        GameObject go = AssetDatabase.LoadAssetAtPath(prefabPath, typeof(GameObject)) as GameObject;
+        foreach (Renderer smr in go.GetComponentsInChildren<Renderer>())
+        {
+            SetModelMaterial(smr.transform, go.name);
+        }
+        if (ac != null)
+        {
+            go.GetComponent<Animator>().runtimeAnimatorController = ac;
+        }
+        PrefabUtility.CreatePrefab(string.Format(ModelPrefabPath, roleName, roleName), go);
+    }
+
+    private static string SetModelTexturePath(string name)
+    {
+        string tempPath = name + ".png";
+        if (File.Exists(tempPath))
+            return tempPath;
+        tempPath = name + ".tga";
+        if (File.Exists(tempPath))
+            return tempPath;
+        tempPath = name + "jpg";
+        if (File.Exists(tempPath))
+            return tempPath;
+        return "";
+    }
+
+    private static void SetModelMaterial(Transform go, string modelName)
+    {
+        string materialPath = string.Format(ModelMaterialPath, modelName, go.name);
+        Renderer sr = go.GetComponent<Renderer>();
+
+        string textruePath = SetModelTexturePath(string.Format(ModelTexturePath, modelName, go.name));
+        Texture modelTexture = AssetDatabase.LoadAssetAtPath(textruePath, typeof(Texture)) as Texture;
+
+        if (sr != null)
+        {
+            Material tempMaterial = AssetDatabase.LoadAssetAtPath(materialPath, typeof(UnityEngine.Material)) as
+                UnityEngine.Material;
+            if (tempMaterial != null)
+            {
+                tempMaterial.mainTexture = modelTexture;
+                EditorUtility.SetDirty(tempMaterial);
+                AssetDatabase.SaveAssets();
+                sr.material = tempMaterial;
+            }
+        }
+
+
+    }
+
+    //10100
+    private static AnimatorController CreateModelController(string roleName)
+    {
+        string animationFBXRoot = string.Format(ModelAnimationAssetPath, roleName);
+        if (Directory.Exists(animationFBXRoot))
+        {
+            string[] animationFBXs = Directory.GetFiles(animationFBXRoot, "*.FBX", SearchOption.AllDirectories);
+            for (int index = 0; index < animationFBXs.Length; index++)
+            {
+                SetClipLoop(animationFBXs[index]);
+            }
+        }
+        string controllerDirName = GetModelControllerDirName(roleName);
+        if (string.IsNullOrEmpty(controllerDirName)) return null;
+        string animatorRootPath = CharacterAnimatorPath + controllerDirName;
+        string ControllerPath = animatorRootPath + "/" + controllerDirName + ".Controller";
+
+        bool animatorIsExists = File.Exists(ControllerPath);
+        if (roleName == controllerDirName || animatorIsExists) //创建
+        {
+
+            string animationAssetRootPath = string.Format(ModelAnimationAssetPath, controllerDirName);
+
+            AnimatorController controller = AnimatorController.CreateAnimatorControllerAtPath(ControllerPath);
+            AnimatorControllerLayer layer = controller.layers[0];
+            AnimatorStateMachine machine = layer.stateMachine;
+            string defaultFbxPath = animationAssetRootPath + controllerDirName + defaultAnimationName;
+            AnimatorState defaultState = null;
+            AnimatorState tempState = null;
+            if (File.Exists(defaultFbxPath)) //规定stand动画为默认
+            {
+                AnimationClip clip =
+                    AssetDatabase.LoadAssetAtPath(defaultFbxPath, typeof(AnimationClip)) as AnimationClip;
+                if (clip != null)
+                {
+                    defaultState = machine.AddState(clip.name, new Vector3(300f, -300f, 0));
+                    defaultState.motion = clip;
+                    machine.defaultState = defaultState;
+                }
+            }
+            if (defaultState == null)
+            {
+                Debug.LogError("模型资源没有待机动画 不规范 ！！！");
+                return controller;
+            }
+            int tempIndex = 0;
+            string fbxRoot = string.Format(ModelAnimationAssetPath, controllerDirName);
+            string[] models = Directory.GetFiles(fbxRoot, "*.FBX", SearchOption.AllDirectories);
+            for (int index = 0; index < models.Length; index++)
+            {
+                if (models[index].Contains(defaultAnimationName)) continue;
+                if (models[index].Contains("@")) //动作文件
+                {
+                    Object[] objects = AssetDatabase.LoadAllAssetsAtPath(models[index]);
+                    for (int m = 0; m < objects.Length; m++)
+                    {
+
+                        if (objects[m] is AnimationClip)
+                        {
+                            AnimationClip clip = (AnimationClip)objects[m];
+                            if (clip.name.StartsWith("__")) continue; //资源不规范会带出这类前缀的无效clip，过滤
+                            tempState = machine.AddState(clip.name,
+                                new Vector3(300f + 30 * tempIndex, -250f + tempIndex * 50f, 0));
+                            tempState.motion = clip;
+                            var temp = defaultState.AddTransition(tempState);
+                            temp.hasExitTime = false;
+                            tempIndex++;
+                        }
+                    }
+
+                }
+            }
+            return controller;
+        }
+        else
+        {
+            return AnimatorController.CreateAnimatorControllerAtPath(ControllerPath);
+        }
+    }
+
+    public const int ModelInterval = 10000;//模型类型id区间
+    public const int PartInterval = 100;//部件区间
+    public static string GetModelControllerDirName(string name)
+    {
+        int id = -1;
+        if (!int.TryParse(name, out id))
+        {
+            Debug.LogError("ModelName is Error");
+            return "";
+        }
+
+        int modelType = id / ModelInterval * ModelInterval;
+        int partType = id % ModelInterval / PartInterval * PartInterval;
+
+        if (Directory.Exists(CharacterAnimatorPath + (modelType + partType)))
+            return (modelType + partType + "");
+        return "";
+    }
+
+    #endregion
+
+
 
     #region Clip设置
 
-
+    public static readonly List<string> LoopClipName = new List<string>() { "stand", "move", "stealth", "crawl" };
     private static void SetClipLoop(string fxbPath)
     {
-
         ModelImporter modelImporter = AssetImporter.GetAtPath(fxbPath) as ModelImporter; //as 类型转换
         if (modelImporter == null)
             return;
 
         List<ModelImporterClipAnimation> actions = new List<ModelImporterClipAnimation>();
-        foreach (ModelImporterClipAnimation a in modelImporter.clipAnimations)
+        foreach (ModelImporterClipAnimation a in modelImporter.defaultClipAnimations)//
         {
-            if (a.name.Contains("stand")|| a.name.Contains("move"))
+            if (LoopClipName.Contains(a.name))//|| a.name.Contains("stand") || a.name.Contains("move"))
             {
                 a.loopTime = true;
             }
@@ -280,9 +442,28 @@ class CreatePrefabs
         modelImporter.clipAnimations = actions.ToArray();
         modelImporter.SaveAndReimport();
     }
+    #endregion
 
 
-    #endregion 
 
 
+
+
+
+    [MenuItem("ZTTool/Character/Test")]
+    public static void TestClip()
+    {
+        string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+        Debug.LogError(path + ">>>>>>>>");
+        Object[] objects = AssetDatabase.LoadAllAssetsAtPath(path);
+
+        for (int m = 0; m < objects.Length; m++)
+        {
+
+            if (objects[m] is AnimationClip)
+            {
+                Debug.LogError(objects[m].name + "_________________");
+            }
+        }
+    }
 }
