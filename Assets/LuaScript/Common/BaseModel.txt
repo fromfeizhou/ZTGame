@@ -63,6 +63,7 @@ end
 function BaseModel:_CleanPanel( )
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
+			Log("BaseModel:_CleanPanel",panel.m_panelName)
 			panel:Destroy()
 		end
 		self.m_tPanelList = nil

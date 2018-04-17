@@ -12,6 +12,8 @@ ModelImporter:
     100008: //RootNode
     100010: wuding
     100012: wujian
+    100014: ding
+    100016: wujian02
     400000: dimian
     400002: jianzhu01
     400004: jianzhu02
@@ -19,24 +21,32 @@ ModelImporter:
     400008: //RootNode
     400010: wuding
     400012: wujian
+    400014: ding
+    400016: wujian02
     2300000: dimian
     2300002: jianzhu01
     2300004: jianzhu02
     2300006: jianzhu03
     2300008: wuding
     2300010: wujian
+    2300012: ding
+    2300014: wujian02
     3300000: dimian
     3300002: jianzhu01
     3300004: jianzhu02
     3300006: jianzhu03
     3300008: wuding
     3300010: wujian
+    3300012: ding
+    3300014: wujian02
     4300000: dimian
     4300002: wuding
     4300004: jianzhu02
     4300006: jianzhu03
     4300008: jianzhu01
     4300010: wujian
+    4300012: ding
+    4300014: wujian02
     11100000: //RootNode
   materials:
     importMaterials: 0

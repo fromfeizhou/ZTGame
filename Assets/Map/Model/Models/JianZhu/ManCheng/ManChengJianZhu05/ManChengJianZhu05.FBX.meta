@@ -1,0 +1,161 @@
+fileFormatVersion: 2
+guid: 78460b578351dff41be9e556249e9a7c
+timeCreated: 1523609522
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Ele_Box014
+    100002: Ele_ManChengJianZhu05_bu
+    100004: Ele_ManChengJianZhu05_dimian
+    100006: Ele_ManChengJianZhu05_dimian01
+    100008: Ele_ManChengJianZhu05_men
+    100010: Ele_ManChengJianZhu05_qiang01
+    100012: Ele_ManChengJianZhu05_qiang02
+    100014: Ele_ManChengJianZhu05_qiang03
+    100016: Ele_ManChengJianZhu05_wall
+    100018: Ele_ManChengJianZhu05_wall02
+    100020: Ele_ManChengJianZhu05_wuding
+    100022: Ele_ManChengJianZhu05_wuding01
+    100024: Ele_ManChengJianZhu05_wujian
+    100026: Ele_ManChengJianZhu05_wujian01
+    100028: Ele_ManChengJianZhu05_wujian02
+    100030: Ele_ManChengJianZhu05_wujian03
+    100032: //RootNode
+    400000: Ele_Box014
+    400002: Ele_ManChengJianZhu05_bu
+    400004: Ele_ManChengJianZhu05_dimian
+    400006: Ele_ManChengJianZhu05_dimian01
+    400008: Ele_ManChengJianZhu05_men
+    400010: Ele_ManChengJianZhu05_qiang01
+    400012: Ele_ManChengJianZhu05_qiang02
+    400014: Ele_ManChengJianZhu05_qiang03
+    400016: Ele_ManChengJianZhu05_wall
+    400018: Ele_ManChengJianZhu05_wall02
+    400020: Ele_ManChengJianZhu05_wuding
+    400022: Ele_ManChengJianZhu05_wuding01
+    400024: Ele_ManChengJianZhu05_wujian
+    400026: Ele_ManChengJianZhu05_wujian01
+    400028: Ele_ManChengJianZhu05_wujian02
+    400030: Ele_ManChengJianZhu05_wujian03
+    400032: //RootNode
+    2300000: Ele_Box014
+    2300002: Ele_ManChengJianZhu05_bu
+    2300004: Ele_ManChengJianZhu05_dimian
+    2300006: Ele_ManChengJianZhu05_dimian01
+    2300008: Ele_ManChengJianZhu05_men
+    2300010: Ele_ManChengJianZhu05_qiang01
+    2300012: Ele_ManChengJianZhu05_qiang02
+    2300014: Ele_ManChengJianZhu05_qiang03
+    2300016: Ele_ManChengJianZhu05_wall
+    2300018: Ele_ManChengJianZhu05_wall02
+    2300020: Ele_ManChengJianZhu05_wuding
+    2300022: Ele_ManChengJianZhu05_wuding01
+    2300024: Ele_ManChengJianZhu05_wujian
+    2300026: Ele_ManChengJianZhu05_wujian01
+    2300028: Ele_ManChengJianZhu05_wujian02
+    2300030: Ele_ManChengJianZhu05_wujian03
+    3300000: Ele_Box014
+    3300002: Ele_ManChengJianZhu05_bu
+    3300004: Ele_ManChengJianZhu05_dimian
+    3300006: Ele_ManChengJianZhu05_dimian01
+    3300008: Ele_ManChengJianZhu05_men
+    3300010: Ele_ManChengJianZhu05_qiang01
+    3300012: Ele_ManChengJianZhu05_qiang02
+    3300014: Ele_ManChengJianZhu05_qiang03
+    3300016: Ele_ManChengJianZhu05_wall
+    3300018: Ele_ManChengJianZhu05_wall02
+    3300020: Ele_ManChengJianZhu05_wuding
+    3300022: Ele_ManChengJianZhu05_wuding01
+    3300024: Ele_ManChengJianZhu05_wujian
+    3300026: Ele_ManChengJianZhu05_wujian01
+    3300028: Ele_ManChengJianZhu05_wujian02
+    3300030: Ele_ManChengJianZhu05_wujian03
+    4300000: Ele_ManChengJianZhu05_wujian03
+    4300002: Ele_ManChengJianZhu05_wall02
+    4300004: Ele_ManChengJianZhu05_wujian01
+    4300006: Ele_ManChengJianZhu05_wuding01
+    4300008: Ele_ManChengJianZhu05_dimian01
+    4300010: Ele_ManChengJianZhu05_wall
+    4300012: Ele_ManChengJianZhu05_qiang01
+    4300014: Ele_ManChengJianZhu05_men
+    4300016: Ele_Box014
+    4300018: Ele_ManChengJianZhu05_dimian
+    4300020: Ele_ManChengJianZhu05_bu
+    4300022: Ele_ManChengJianZhu05_qiang02
+    4300024: Ele_ManChengJianZhu05_qiang03
+    4300026: Ele_ManChengJianZhu05_wujian02
+    4300028: Ele_ManChengJianZhu05_wujian
+    4300030: Ele_ManChengJianZhu05_wuding
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

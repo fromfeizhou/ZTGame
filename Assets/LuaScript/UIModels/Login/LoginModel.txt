@@ -60,9 +60,9 @@ end
 
 
 function LoginModel:LoginFinish()
-	GCSLog("登录完成，进入游戏")
-
+	GCSLog("LoginModel:LoginFinish登录完成，进入游戏")
 	self:_CleanPanel()
+	GCSLog("LoginModel:LoginFinish登录完成，进入游戏")
 
 	LuaGameStart:EnterGameCity()
 

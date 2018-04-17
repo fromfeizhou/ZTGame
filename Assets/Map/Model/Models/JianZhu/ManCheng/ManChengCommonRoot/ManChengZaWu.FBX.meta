@@ -1,0 +1,131 @@
+fileFormatVersion: 2
+guid: dbfb630fd8b404747b5ab625e101c1e2
+timeCreated: 1520933993
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: build_mupengzi
+    100002: build_mutong
+    100004: build_mutong 1
+    100006: build_yewai_bujian_tanzi02
+    100008: build_yewai_yuanluo_zhalan02
+    100010: build_yewai_yuanluo_zhalan02 1
+    100012: build_zuozi
+    100014: Object020
+    100016: Object021
+    100018: yewai_tuiche02
+    100020: //RootNode
+    400000: build_mupengzi
+    400002: build_mutong
+    400004: build_mutong 1
+    400006: build_yewai_bujian_tanzi02
+    400008: build_yewai_yuanluo_zhalan02
+    400010: build_yewai_yuanluo_zhalan02 1
+    400012: build_zuozi
+    400014: Object020
+    400016: Object021
+    400018: yewai_tuiche02
+    400020: //RootNode
+    2300000: build_mupengzi
+    2300002: build_mutong
+    2300004: build_mutong 1
+    2300006: build_yewai_bujian_tanzi02
+    2300008: build_yewai_yuanluo_zhalan02
+    2300010: build_yewai_yuanluo_zhalan02 1
+    2300012: build_zuozi
+    2300014: Object020
+    2300016: Object021
+    2300018: yewai_tuiche02
+    3300000: build_mupengzi
+    3300002: build_mutong
+    3300004: build_mutong 1
+    3300006: build_yewai_bujian_tanzi02
+    3300008: build_yewai_yuanluo_zhalan02
+    3300010: build_yewai_yuanluo_zhalan02 1
+    3300012: build_zuozi
+    3300014: Object020
+    3300016: Object021
+    3300018: yewai_tuiche02
+    4300000: build_yewai_bujian_tanzi02
+    4300002: build_yewai_yuanluo_zhalan02
+    4300004: build_yewai_yuanluo_zhalan02
+    4300006: build_mutong
+    4300008: build_mutong
+    4300010: build_mupengzi
+    4300012: yewai_tuiche02
+    4300014: build_zuozi
+    4300016: Object021
+    4300018: Object020
+    7400000: Take 001
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

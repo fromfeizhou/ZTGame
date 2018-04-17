@@ -56,28 +56,18 @@ function PanelManager:Init()
 	self:_RegLoginPanel()
 end
 
-
 function PanelManager:_RegLoginPanel()
 	self.m_panelDefine[SYSTEM_TYPE.NOTICE] 		= SystemNoticePanel
 	self.m_panelDefine[SYSTEM_TYPE.LOCK] 		= SystemLockPanel
-
 	self.m_panelDefine[LOGIN_TYPE.MAIN] 		= LoginMainPanel
 	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] 	= LoginCreateRolePanel
 end
 
-
 function PanelManager:_RegGamePanel()
-
 	self.m_panelDefine[CITY_TYPE.MAIN] 			= CityMainPanel
-	self.m_panelDefine[BATTLE_TYPE.MAP_SCROLL] 	= MapScrollPanel
-	self.m_panelDefine[BATTLE_TYPE.MAP_RADAR] 	= MapRadarPanel
-	self.m_panelDefine[BATTLE_TYPE.QUICKBAG] 	= QuickBagPanel
 	self.m_panelDefine[BATTLE_TYPE.MAIN] 		= BattleMainPanel
 	self.m_panelDefine[BATTLE_TYPE.MATCH]       = MatchPanel
-
-
 end
-
 
 function PanelManager:_InitLayer(layerType)
 	local layerTab = {

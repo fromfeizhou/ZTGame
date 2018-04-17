@@ -124,17 +124,16 @@ local LuaFileLoad = {
 
 		"UIModels.Battle.MapScrollPanel",
 		"UIModels.Battle.MapRadarPanel",
-		--"UIModels.Battle.BattleMapPropUIMgr",
 		
-		"UIModels.Battle.Panel.BattleMainPanel",
+		"UIModels.Battle.BattleMainPanel",
 
-		"UIModels.Battle.BagUI.BattleBagPanel",
-		"UIModels.Battle.BagUI.BattleBagCell",
+		"UIModels.Battle.Bag.BattleBagPanel",
+		"UIModels.Battle.Bag.BattleBagCell",
 
-		"UIModels.Battle.BagUI.QuickBag.QuickBagPanel",
-		"UIModels.Battle.BagUI.QuickBag.BaseBagCell",
+		"UIModels.Battle.QuickBag.QuickBagPanel",
+		"UIModels.Battle.QuickBag.BaseBagCell",
 
-		"UIModels.Battle.Panel.MatchPanel",
+		"UIModels.Battle.MatchPanel",
 
 		"UIModels.City.CityModel",
 		"UIModels.City.CityMainPanel",

@@ -16,7 +16,8 @@ BattleMapMgr = {
 	m_curMapBlockItem=nil,
 	m_battleMapView=nil,
 	m_CanPickItem=nil,
-	m_nTimeCount=nil
+	m_nTimeCount=nil,
+	m_tPockItems = nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -170,30 +171,12 @@ function BattleMapMgr:_UpdateRoleDistance(pos)
 					tempPockItems[temKey] = value
 				end
 			end
-			BattleMapMgr:_IsDisEvent(tempPockItems)
+
+			BattleMapMgr.m_tPockItems = tempPockItems
+
 			BattleMapMgr.m_nTimeCount = BattleMapMgr.m_nTimeCount % 5
 		else
 			BattleMapMgr.m_nTimeCount = BattleMapMgr.m_nTimeCount + 1
 		end
 	end
-end
-
---@brief 是否存在近距离物品
-function BattleMapMgr:_IsDisEvent(newItem)
-	local modelData = {}
-	modelData.modelType = MODEL_TYPE.BATTLE
-	modelData.panelType = BATTLE_TYPE.MAP_RADAR
-
-	if ZTableLen(newItem) > 0 then
-		modelData.panelData = {
-			items = newItem,
-		}
-		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
-	else
-		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
-	end
-
-
-	
-
 end

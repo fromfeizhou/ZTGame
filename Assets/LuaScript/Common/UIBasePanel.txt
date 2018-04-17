@@ -99,8 +99,11 @@ end
 --@brief 销毁面板
 function UIBasePanel:Destroy()
 	CSGameObject.Destroy(self.m_gameObject)
+	GCSLog("UIBasePanel:Destroy-0")
 	self:_RemoveEvents()
+	GCSLog("UIBasePanel:Destroy-1")
 	self:_UnRegNetFacade()
+	GCSLog("UIBasePanel:Destroy-2")
 	self:onDestroy()
 end
 
