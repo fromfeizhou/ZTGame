@@ -43,9 +43,12 @@ public class FPSShow : MonoBehaviour
     }
 
     static Ping ping;
+    public static string pingIp = string.Empty;
     float delayTime;
     void OnGUI()
     {
+        if (pingIp == string.Empty)
+            return;
         if (null != ping && ping.isDone)
         {
             delayTime = ping.time;
@@ -55,14 +58,17 @@ public class FPSShow : MonoBehaviour
         }
     }
 
-    public static void SendPing(string ip)
+    public static void SendPing()
     {
+        if (pingIp == string.Empty)
+            return;
+
         if (ping != null)
         {
             ping.DestroyPing();
             ping = null;
         }
-        ping = new Ping(ip);
+        ping = new Ping(pingIp);
 
     }
 }
