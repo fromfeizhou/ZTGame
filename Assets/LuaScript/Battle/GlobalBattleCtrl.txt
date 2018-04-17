@@ -54,15 +54,10 @@ function GlobalBattleCtrl:Init()
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
 
-	--头像管理
-	--GlobalBattleCtrl.m_HeadItemManager = HeadItemManager:Create()
-	
 	--****************管理者初始化end************************************************
 
 	--全局数据引用初始化
 	GlobalBattleCtrl:InitData()
-
-	
 
 	--启动协议监听
 	BattleCommandProtocol:Init()
@@ -120,11 +115,6 @@ function GlobalBattleCtrl:Destroy()
 		GlobalBattleCtrl.m_mapCircleManager = nil
 	end
 
-	--头像管理
-	if GlobalBattleCtrl.m_HeadItemManager then
-		GlobalBattleCtrl.m_HeadItemManager:Destroy()
-		GlobalBattleCtrl.m_HeadItemManager = nil
-	end
 
 	--物资管理器
 	if GlobalBattleCtrl.m_BattleItemManager then
@@ -238,11 +228,6 @@ function GlobalBattleCtrl:Update(dt)
 	end
 	
 	BattleCameraMgr:Update()
-
-	--头像管理
-	if GlobalBattleCtrl.m_HeadItemManager then
-		GlobalBattleCtrl.m_HeadItemManager:Update()
-	end
 
 	--动态设置补间动画参数
 	GlobalBattleCtrl.m_nRendererCount = GlobalBattleCtrl.m_nRendererCount + 1
