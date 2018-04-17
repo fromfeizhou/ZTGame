@@ -59,6 +59,7 @@ end
 
 --@brief 收到服务器毒圈信息
 function MapCircleManager:SetMapCircleCommand(p_map_circle)
+	LogC("MapCircleManager:SetMapCircleCommand")
 	local circleData = {}
 	for i=1,#p_map_circle do
 		local netCircleData = p_map_circle[i]
@@ -136,6 +137,7 @@ function MapCircleManager:_UpdateCircleInfoCur()
 
 	--总帧数
 	local frameCnt = self.m_curCircle.endFrame - self.m_curCircle.startFrame
+
 	--当前缩圈帧索引
 	local progressFrame = GlobalBattleCtrl:GetCurCommandFrame() - self.m_curCircle.startFrame
 	local progress = progressFrame/frameCnt

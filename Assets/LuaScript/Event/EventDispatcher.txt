@@ -52,7 +52,6 @@ function EventDispatcher:RemoveEvent(name,listener)
 	local existIndex = self:_GetEventIndex(name,listener)
 	if existIndex == -1 then return end
 	table.remove(self.m_listeners[name],existIndex)
-	GCSLog("",#self.m_listeners[name])
 end
 
 --@brief 弹射事件
