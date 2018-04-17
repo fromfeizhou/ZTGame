@@ -93,7 +93,7 @@ public class CharaDefine
 
     public static Dictionary<EquipType, string> CharaPartParent = new Dictionary<EquipType, string>()
     {
-        {EquipType.Equip, "Bip001/Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Neck/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/weapon"}
+        {EquipType.Equip, "Bip001/Bip001 Prop1"}////"Bip001 Pelvis/Bip001 Spine/Bip001 Spine1/Bip001 Neck/Bip001 R Clavicle/Bip001 R UpperArm/Bip001 R Forearm/Bip001 R Hand/weapon"}
     };
 
 
