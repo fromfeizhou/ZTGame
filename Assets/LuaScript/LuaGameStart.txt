@@ -17,6 +17,7 @@ end
 --@brief 初始化
 function LuaGameStart:Init()
 	print("LuaGameStart:Init")
+
 	if GameConfig.IsSingleScene then
 		self:_EnterSkillDebug()
 	else
@@ -47,10 +48,11 @@ function LuaGameStart:_EnterLoginModel()
 		ZTProtoData:Init()
 	end
 	 
-	 ModelManager:Create() --创建模块管理器
-	 TimerManager:Create() --创建定时管理器
-	 
-	 self:_ShowPanel_Login()
+	ModelManager:Create() --创建模块管理器
+	TimerManager:Create() --创建定时管理器
+	PanelManager:Create() --创建面板管理器
+
+	self:_ShowPanel_Login()
 end
 
 --@brief 显示登录界面
@@ -67,6 +69,7 @@ function LuaGameStart:EnterGameCity()
 	---初始化 加载登录lua
 	luaFieLoad:LoadGameLua(function()
 		print("LuaGame:LoadGameLua")
+		PanelManager:_RegGamePanel()
 			ZTCityScene:InitScene()
 	end)
 end

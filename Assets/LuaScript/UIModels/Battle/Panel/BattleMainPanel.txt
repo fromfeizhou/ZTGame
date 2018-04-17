@@ -1,0 +1,208 @@
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+
+BattleMainPanel = {
+	m_panelName = "BattleMainPanel",
+	m_bagBtn=nil,
+
+	m_rootLeftUp = nil,
+	m_rootLeftDown = nil,
+	m_rootRightUp = nil,
+	m_rootRightDown = nil,
+
+	m_tBagPanel = nil, --背包控制器
+	m_tRadarPanel = nil, --雷达面板
+	m_tScrollPanel = nil, --地图卷轴
+}
+
+setmetatable( BattleMainPanel, { __index = UIBasePanel})
+
+
+function BattleMainPanel:GetName()
+	return "BattleMainPanel"
+end
+
+--@brief 面板资源相对模块路径
+function BattleMainPanel:GetRelativePath()
+	return "Panel/"
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 子类重写 - 面板被创建
+function BattleMainPanel:onCreatePanel()
+
+	self.m_rootLeftUp = self.m_transform:Find("LeftUpContent")
+	self.m_rootLeftDown = self.m_transform:Find("LeftDownContent")
+	self.m_rootRightUp = self.m_transform:Find("RightUpContent")
+	self.m_rootRightDown = self.m_transform:Find("RightDownContent")
+
+
+	self:_CreateMoveJoystick()
+	self:_CreateSkillBtn()
+	self:_CreateSkillJoystick()
+	self:_CreateMapRaderPanel()
+
+
+	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
+
+
+
+
+	--临时匹配按钮
+	if not GameConfig.IsSingleScene then
+		--self:_CreateMatchUI()
+		BattleCommandProtocol:SendMath()
+	end
+
+end
+
+--@brief 子类重写 - 面板初始化
+function BattleMainPanel:onInitPanel()
+end
+
+--@brief 子类重写 - 面板更新
+function BattleMainPanel:onUpdate()
+end
+
+--@brief 子类重写 - 面板每帧更新
+function BattleMainPanel:onTick(deltaTime)
+end
+
+--@brief 子类重写 - 面板被销毁
+function BattleMainPanel:onDestroy()
+end
+
+--@brief 子类重写 - 显示面板
+function BattleMainPanel:onShow()
+end
+
+--@brief 子类重写 - 隐藏面板
+function BattleMainPanel:onHide()
+end
+
+--@brief 子类重写 - 添加事件监听
+function BattleMainPanel:_AddEvents( )
+end
+
+--@brief 子类重写 - 移除事件监听
+function BattleMainPanel:_RemoveEvents( )
+end
+
+--@brief 子类重写 - 注册网络门户
+function BattleMainPanel:_RegNetFacade( )
+end
+
+--@brief 子类重写 - 注销网络门户
+function BattleMainPanel:_UnRegNetFacade( )
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function BattleMainPanel:_CreateSkillBtn()
+	local testSkillId = {1001,1101,1102,1103}
+
+	for i = 1, #testSkillId do
+		local skillId = testSkillId[i]
+		local template = Tab_Skill[skillId] or Tab_Skill[1001]
+		GCSLog("BattleMainPanel:_InitSkillBtn",skillId,template.operaDistance)
+
+		local skillBtnRoot = self.m_rootRightDown:Find(string.format("SkillBtnNode/SkillBtn%02d",i))
+		if template.operaDistance > 0 then
+			SkillJoystick:Create(skillId,skillBtnRoot)
+		else
+			CommonSkillBtn:Create(skillId,skillBtnRoot)
+		end 
+	end
+end
+
+function BattleMainPanel:_OnClickBagBtn( )
+	if self.m_tBagPanel then
+		GCSLog("BattleMainPanel:_OnClickBagBtn",self.m_tBagPanel.m_isShow)
+		if self.m_tBagPanel.m_isShow == true then
+			self.m_tBagPanel:Hide()
+		else
+			self.m_tBagPanel:Show()
+		end
+	else
+		self:_CreateBagPanel()
+	end
+
+end
+
+--@brief 创建移动摇杆
+function BattleMainPanel:_CreateMoveJoystick()
+	MoveJoystick:Create(self.m_rootLeftDown)
+end
+
+--@brief 创建技能按钮
+function BattleMainPanel:_CreateSkillJoystick()
+	MoveJoystick:Create(self.m_rootLeftDown)
+end
+
+--@brief 創建背包
+function BattleMainPanel:_CreateBagPanel()
+	local panel = {}
+	setmetatable( panel, { __index = BattleBagPanel })
+	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, panelData)
+	self.m_tBagPanel = panel
+end
+
+function BattleMainPanel:_CreateMapRaderPanel()
+	local panel = {}
+	setmetatable( panel, { __index = MapRadarPanel })
+	panel:_LoadAssetPanel(self.m_rootLeftUp, self.m_model, panelData)
+	self.m_tRadarPanel = panel
+
+	PanelWidget:GetZTButton(self.m_tRadarPanel.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OnClickMapScrollBtn() end)
+
+end
+
+function BattleMainPanel:_OnClickMapScrollBtn( )
+	if self.m_tScrollPanel then
+		self.m_tScrollPanel:Show()
+	else
+		self:_CreateMapScrollPanel()
+	end
+end
+
+function BattleMainPanel:_CreateMapScrollPanel()
+	local panel = {}
+	setmetatable( panel, { __index = MapScrollPanel })
+	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, panelData)
+	self.m_tScrollPanel = panel
+end
+
+--@brief 创建匹配ui
+function BattleMainPanel:_CreateMatchUI()
+	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButtonTxt"),function(target,path)
+
+		local gameObject = CSGameObject.Instantiate(target)
+		local text = gameObject:GetComponentInChildren(typeof(CS.ZTText))
+		local rectTrans = gameObject:GetComponent(typeof(CSRectTransform))
+		rectTrans:SetParent(self.m_transform,false)
+		rectTrans.pivot = CSVector2(0.5,0.5)
+		rectTrans.anchorMin = CSVector2(0,1)
+		rectTrans.anchorMax = CSVector2(0,1)
+		rectTrans.anchoredPosition = CSVector2(500,-100)
+		text.text = "匹配"
+		self.m_bMatch = true
+		gameObject:GetComponent(typeof(CS.ZTButton)).onClick:AddListener(function()
+			if self.m_bMatch then
+				self.m_bMatch = false
+				BattleCommandProtocol:SendMath()
+				text.text = "退出"
+			else
+				text.text = "匹配"
+				GlobalBattleCtrl:ExitBattle()
+				self.m_bMatch = true
+			end
+		end)
+	end)
+end

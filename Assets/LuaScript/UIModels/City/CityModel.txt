@@ -1,9 +1,6 @@
 --CityModel.txt
 --@breif lua入口
 --@data 2018/3/5
-CityModel = {
-	m_tPanelList = nil,
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
@@ -11,8 +8,14 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = GCSLog
 
-setmetatable( CityModel, { __index = BaseModel})
+CityModel = {
+	m_tPanelList = nil,
+}
 
+setmetatable( CityModel, { __index = BaseModel})
+function  CityModel:GetName()
+	return "City"
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -31,7 +34,6 @@ end
 
 --@brief 子类重写 - 模块初始化
 function CityModel:onInitModel()
-	self.m_panelDefine[CITY_TYPE.MAIN] = CityMainPanel
 end
 
 --@brief 子类重写 - 添加事件监听

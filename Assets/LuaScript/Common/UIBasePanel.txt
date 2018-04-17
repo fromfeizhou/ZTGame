@@ -3,29 +3,33 @@ local CSTransform = CS.UnityEngine.Transform
 local CSAssetManager = CS.AssetManager
 
 UIBasePanel = {
-
-	m_model,
+	m_model = nil,
 	m_isShow = false,
-
 	m_tPanelData = nil,
-	m_gameObject,
-	m_transform,
-	m_rectTransform,
-
-	m_panelName,
-
+	m_gameObject = nil,
+	m_transform = nil,
+	m_rectTransform = nil,
+	m_panelName = nil,
 	m_LoadFinish = false,
 }
 
---@brief 拷贝原表
-function UIBasePanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = UIBasePanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+--@brief 面板资源相对模块路径
+function UIBasePanel:GetRelativePath()
+	return ""
 end
 
+function UIBasePanel:GetName()
+	return "UIBasePanel"
+end
+
+function UIBasePanel:GetLayerType()
+	return LAYER_TYPE.NORMAL
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
+	self.m_model = model
 	local callback_loadfinish = function(target,path)
  		if target then
  			self.m_gameObject = CSGameObject.Instantiate(target,parent)
@@ -39,11 +43,12 @@ function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 			self:Show(panelData)
 
 		else
-			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName)
+			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName,path)
 		end
 	end
-	CSAssetManager.LoadAsset(PathManager:GetUIPanel(self.m_panelName),callback_loadfinish)
-	self.m_model = model
+
+	local panelName = model:GetName() .."/"..self:GetRelativePath() .. self:GetName()
+	CSAssetManager.LoadAsset(PathManager:GetUIPanel(panelName),callback_loadfinish)
 	return self
 end
 
@@ -93,6 +98,7 @@ end
 
 --@brief 销毁面板
 function UIBasePanel:Destroy()
+	CSGameObject.Destroy(self.m_gameObject)
 	self:_RemoveEvents()
 	self:_UnRegNetFacade()
 	self:onDestroy()

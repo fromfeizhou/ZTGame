@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
 public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-
     public float outerCircleRadius = 100;
     public float activeMoveDistance = 20;
     public RectTransform innerCircleTrans;
@@ -21,15 +19,16 @@ public class JoystickBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     public virtual void Start()
     {
 		innerCircleTrans = transform.Find("InnerCircle") as RectTransform;
-        _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         _isDownTouch = false;
     }
 
     public virtual void OnDestroy()
     {
-        
     }
 
+	public void SetCanvas(Canvas canvas){
+		this._canvas = canvas;
+	}
 
     /// <summary>
     /// 按下

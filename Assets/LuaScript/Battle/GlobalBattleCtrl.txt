@@ -15,7 +15,7 @@ GlobalBattleCtrl = {
 	
 	m_nOwnerId = nil,		--操作者id
 	m_character = nil,		--操作者数据	
-	m_mapPropUIMgr=nil,
+	--m_mapPropUIMgr=nil,
 
 	m_bGameOver = nil,		--游戏结束标记
 
@@ -50,17 +50,15 @@ function GlobalBattleCtrl:Init()
 	--战斗物资管理
 	GlobalBattleCtrl.m_BattleItemManager=BattleItemManager:Create()
 
-	--主UI管理器
-	GlobalBattleCtrl.m_battleUIMgr = BattleUIMgr:Create()
 
 	--地图物品ui容器
-	GlobalBattleCtrl.m_mapPropUIMgr=BattleMapPropUIMgr:Create()
+	--GlobalBattleCtrl.m_mapPropUIMgr=BattleMapPropUIMgr:Create()
 
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
 
 	--头像管理
-	GlobalBattleCtrl.m_HeadItemManager = HeadItemManager:Create()
+	--GlobalBattleCtrl.m_HeadItemManager = HeadItemManager:Create()
 	
 	--****************管理者初始化end************************************************
 
@@ -75,6 +73,7 @@ function GlobalBattleCtrl:Init()
 
 	GlobalBattleCtrl.m_nRendererTime = 0
 	GlobalBattleCtrl.m_nCommandTime = 0
+
 end
 
 
@@ -113,10 +112,10 @@ function GlobalBattleCtrl:Destroy()
 	end
 
 	--地图item(UI)解析器
-	if GlobalBattleCtrl.m_mapPropUIMgr then
-		GlobalBattleCtrl.m_mapPropUIMgr:Destroy()
-		GlobalBattleCtrl.m_mapPropUIMgr = nil
-	end
+	--if GlobalBattleCtrl.m_mapPropUIMgr then
+	--	GlobalBattleCtrl.m_mapPropUIMgr:Destroy()
+	--	GlobalBattleCtrl.m_mapPropUIMgr = nil
+	--end
 
 	--地图毒圈管理器销毁
 	if GlobalBattleCtrl.m_mapCircleManager then
@@ -137,10 +136,11 @@ function GlobalBattleCtrl:Destroy()
 	end
 
 	--主UI管理器(备注：最后移除)
+	--[[
 	if GlobalBattleCtrl.m_battleUIMgr then
 		GlobalBattleCtrl.m_battleUIMgr:Destroy()
 		GlobalBattleCtrl.m_battleUIMgr = nil
-	end
+	end]]
 
 	--清理全局事件管理器
 	GBattleEvent:RemoveDispatcher()
@@ -173,7 +173,7 @@ function GlobalBattleCtrl:InitData()
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 
 	GlobalBattleCtrl.m_bGameOver = false
-
+	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
 end
 
 --@rife 初始化数据(进入游戏)
@@ -196,6 +196,7 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 
 	GlobalBattleCtrl.m_bGameOver = false
+	GlobalBattleCtrl.m_nCommandStart = BattleDefine.CommandStart
 end
 
 
@@ -213,33 +214,42 @@ end
 
 --@brief 界面刷新
 function GlobalBattleCtrl:Update(dt)
-	--GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime + dt
 	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
 	--逻辑刷新
 	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
 		GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime - BattleDefine.CommandTime
-		if GlobalBattleCtrl.m_battleCommandMgr then
-			GlobalBattleCtrl.m_battleCommandMgr:Update()
+
+		if GlobalBattleCtrl:CheckCommandStart() then
+			if GlobalBattleCtrl.m_battleCommandMgr then
+				GlobalBattleCtrl.m_battleCommandMgr:Update()
+			end
 		end
 	end
+	BattleDefine.RendererDelay = math.ceil(BattleDefine.CommandTime / dt) + 2
 	--界面刷新
-	--while GlobalBattleCtrl.m_nRendererTime >= BattleDefine.RendererTime do
-		GlobalBattleCtrl.m_nRendererTime = GlobalBattleCtrl.m_nRendererTime - BattleDefine.RendererTime
-		if GlobalBattleCtrl.m_battleUIMgr then
-			GlobalBattleCtrl.m_battleUIMgr:Update()
-		end
-
-		if GlobalBattleCtrl.m_ztCharaManager then
-			GlobalBattleCtrl.m_ztCharaManager:Update()
-		end
-		
-		BattleCameraMgr:Update()
-
-		--头像管理
-		if GlobalBattleCtrl.m_HeadItemManager then
-			GlobalBattleCtrl.m_HeadItemManager:Update()
-		end
+	--if GlobalBattleCtrl.m_battleUIMgr then
+	--	GlobalBattleCtrl.m_battleUIMgr:Update()
 	--end
+
+	if GlobalBattleCtrl.m_ztCharaManager then
+		GlobalBattleCtrl.m_ztCharaManager:Update()
+	end
+	
+	BattleCameraMgr:Update()
+
+	--头像管理
+	if GlobalBattleCtrl.m_HeadItemManager then
+		GlobalBattleCtrl.m_HeadItemManager:Update()
+	end
+end
+
+--@brief 是否启动逻辑帧
+function GlobalBattleCtrl:CheckCommandStart()
+	if GlobalBattleCtrl.m_nCommandStart < 0 then
+		return true
+	end
+	GlobalBattleCtrl.m_nCommandStart = GlobalBattleCtrl.m_nCommandStart - 1
+	return false
 end
 
 
@@ -335,6 +345,15 @@ function GlobalBattleCtrl:GetCurServerCommandFrame()
 	return 0
 end
 
+--@brief 是否等待逻辑帧
+function GlobalBattleCtrl:IsWaitCommandFrame()
+	if GlobalBattleCtrl.m_battleCommandMgr then
+		return GlobalBattleCtrl.m_battleCommandMgr.m_nClientFrame >= GlobalBattleCtrl.m_battleCommandMgr.m_nServerFrame
+	end
+	return false
+end
+
+
 --@brief 塞入队列
 function GlobalBattleCtrl:AddCommandList(frame,commandList)
 	if GlobalBattleCtrl.m_battleCommandMgr then
@@ -405,7 +424,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 容器相关接口begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
+--[[
 --@brief
 function GlobalBattleCtrl:GetUIModel()
 	if GlobalBattleCtrl.m_battleUIMgr then
@@ -437,7 +456,7 @@ end
 --@brief 容器相关接口end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-
+]]
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 地图物资相关 begin
@@ -486,11 +505,11 @@ function GlobalBattleCtrl:UpdateBattleMapItems(map_update_goods)
 end
 
 --@brief 更新地图Item(UI)在地图上显示名字
-function GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapItemDatas)
-	if GlobalBattleCtrl.m_mapPropUIMgr then
-		GlobalBattleCtrl.m_mapPropUIMgr:UpdateMapItemList(BattleMapItemDatas)
-	end
-end
+--function GlobalBattleCtrl:UpdateBattleMapUIItems(BattleMapItemDatas)
+--	if GlobalBattleCtrl.m_mapPropUIMgr then
+--		GlobalBattleCtrl.m_mapPropUIMgr:UpdateMapItemList(BattleMapItemDatas)
+--	end
+--end
 
 
 

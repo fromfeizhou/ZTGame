@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /*ImageType
  * Simple,
@@ -31,7 +32,7 @@ using UnityEngine.UI;
 /*DefaultAmount*/
 /*Colckwish*/
 
-public class ZTImageBase : Image , IWidget
+public class ZTImageBase : Image , IWidget, IPointerClickHandler
 {
 	#if UNITY_EDITOR 
 	public void InitEditor (string paramStr)
@@ -54,6 +55,12 @@ public class ZTImageBase : Image , IWidget
 	public void Init (string paramStr)
 	{
 		
+	}
+
+	public UnityEngine.Events.UnityAction<PointerEventData> onClickImg;
+	public virtual void OnPointerClick (PointerEventData eventData){
+		if (onClickImg != null)
+			onClickImg (eventData);
 	}
 }
 

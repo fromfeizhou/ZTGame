@@ -90,20 +90,22 @@ public class SocketClient {
             client.ReceiveTimeout = 1000;
             client.NoDelay = true;
             client.BeginConnect(host, port, new AsyncCallback(OnConnect), null);
+            FPSShow.SendPing(host);
         } catch (Exception e) {
             Close(); Debug.LogError(e.Message);
         }
     }
-
+	
     /// <summary>
     /// 连接上服务器
     /// </summary>
     void OnConnect(IAsyncResult asr) {
         outStream = client.GetStream();
+		isConnect = true;
         client.GetStream().BeginRead(byteBuffer, 0, MAX_READ, new AsyncCallback(OnRead), null);
         NetWorkManager.AddEvent(Protocal.Connect, new ByteBuffer());
     }
-
+	public bool isConnect = false;
     /// <summary>
     /// 写数据
     /// </summary>

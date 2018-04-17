@@ -60,6 +60,7 @@ function ZTBattleScene:_Init()
 	GlobalBattleCtrl:SetBattleScene(self.m_comZtBattleScene)
 
 	
+	self:_ShowBattleUI()
 		
 	self:_AddEvent()
 end
@@ -76,9 +77,16 @@ function ZTBattleScene:_UnInt()
 		self.m_goZtBattleScene = nil
 		self.m_comZtBattleScene = nil
 	end
-
-
 end
+
+function ZTBattleScene:_ShowBattleUI()
+		local modelData = {
+		modelType = MODEL_TYPE.BATTLE,
+		panelType = BATTLE_TYPE.MAIN
+	}
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
+end
+
 
 --@brief 监听事件
 function ZTBattleScene:_AddEvent()
@@ -100,10 +108,4 @@ function ZTBattleScene:_OnUpdateScenePos(pos)
 	end
 end
 
---@brief 刷新镜头位置
-function ZTBattleScene:_OnUpdateScenePos(pos)
-	-- CSLog("BattleCameraMgr:_UpdateCameraPos",pos)
-	if self.m_comZtBattleScene then
-		self.m_comZtBattleScene:MapUpdate(pos)
-	end
-end
+

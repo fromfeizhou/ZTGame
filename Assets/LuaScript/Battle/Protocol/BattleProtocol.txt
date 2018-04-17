@@ -117,6 +117,8 @@ end
 function BattleProtocol:_OnSurvieEnd(survive_end_s2c)
 	local data = survive_end_s2c
 	CSLog("BattleProtocol:_OnSurvieEnd",data.win)
+
+	--结算面板
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

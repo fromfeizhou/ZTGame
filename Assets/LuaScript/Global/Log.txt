@@ -1,0 +1,46 @@
+
+local _userColor = {
+	ClaineLe = "#7B287CFF",
+	CaiBinBin = "#00CABAFF",
+	FromFeiZhou = "#00CABAFF",
+}
+
+CS.GameTool.ColorHex = _userColor.ClaineLe
+
+--@brief Debug输出
+function Log(...)
+    if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.Log(...)
+end
+
+--@brief Debug输出
+function LogC(...)
+    if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.LogC(...)
+end
+
+--@brief Debug输出
+function Log(...)
+    if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.Log(...)
+end
+
+function LogWarning( ... )
+	 if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.LogWarning(...)
+end
+
+function LogError( ... )
+	 if not GameConfig.IsDebug then
+        return
+    end
+    CS.GameTool.LogError(...)
+end

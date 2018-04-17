@@ -1,0 +1,122 @@
+--PanelManager.txt
+--@breif 面板管理器
+--@data 2018/3/5
+--@brief c#引用
+
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSCamera = CS.UnityEngine.Camera
+local CSCanvas = CS.UnityEngine.Canvas
+local CSAssetManager = CS.AssetManager
+
+PanelManager = {
+	m_uiRoot = nil,
+	m_layerList = {},
+	m_panelList = {},
+	m_panelDefine = {},
+}
+
+LAYER_TYPE = { 
+	BOTTOM = "Bottom",
+	NORMAL = "Normal",
+	TOP = "Top",
+	MASK = "Mask",
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function PanelManager:Create()
+	GCSLog("PanelManager:Create")
+	local obj = {}
+	setmetatable( obj, { __index = PanelManager })
+	obj:_LoadUIRoot()
+	return obj
+end
+
+
+function PanelManager:_LoadUIRoot()
+	local callback_loadfinish = function(target,path)
+ 		if target then
+ 			self.m_uiRoot = CSGameObject.Instantiate(target)
+ 			self:Init()
+		end
+	end
+	CSAssetManager.LoadAsset(PathManager:GetUIPanel("UIRoot"),callback_loadfinish)
+end
+
+--@brief 初始化
+function PanelManager:Init()
+	CSGameObject.DontDestroyOnLoad(self.m_uiRoot)
+	self:_InitLayer(LAYER_TYPE.BOTTOM)
+	self:_InitLayer(LAYER_TYPE.NORMAL)
+	self:_InitLayer(LAYER_TYPE.TOP)
+	self:_InitLayer(LAYER_TYPE.MASK)
+	self:_RegLoginPanel()
+end
+
+
+function PanelManager:_RegLoginPanel()
+	self.m_panelDefine[SYSTEM_TYPE.NOTICE] 		= SystemNoticePanel
+	self.m_panelDefine[SYSTEM_TYPE.LOCK] 		= SystemLockPanel
+
+	self.m_panelDefine[LOGIN_TYPE.MAIN] 		= LoginMainPanel
+	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] 	= LoginCreateRolePanel
+end
+
+
+function PanelManager:_RegGamePanel()
+
+	self.m_panelDefine[CITY_TYPE.MAIN] 			= CityMainPanel
+	self.m_panelDefine[BATTLE_TYPE.MAP_SCROLL] 	= MapScrollPanel
+	self.m_panelDefine[BATTLE_TYPE.MAP_RADAR] 	= MapRadarPanel
+	self.m_panelDefine[BATTLE_TYPE.QUICKBAG] 	= QuickBagPanel
+	self.m_panelDefine[BATTLE_TYPE.MAIN] 		= BattleMainPanel
+	self.m_panelDefine[BATTLE_TYPE.MATCH]       = MatchPanel
+
+
+end
+
+
+function PanelManager:_InitLayer(layerType)
+	local layerTab = {
+		layerRoot = self.m_uiRoot.transform:Find(layerType .. "/Canvas")
+	}
+	self.m_layerList[layerType] = layerTab
+end
+
+function PanelManager:GetPanel(model, panelType, panelData)
+	return self.m_panelList[panelType] or self:_CreatePanel(model, panelType, panelData)
+end
+
+function PanelManager:_CreatePanel(model, panelType, panelData)
+	local panel = {}
+	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
+	local layerType = panel:GetLayerType()
+	local layer = self.m_layerList[layerType].layerRoot
+	panel:_LoadAssetPanel(layer, model, panelData)
+	return panel
+end
+
+
+function PanelManager:GetLayerRoot(layerType)
+	return self.m_layerList[layerType].layerRoot
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

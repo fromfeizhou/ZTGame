@@ -16,17 +16,13 @@ setmetatable( SystemNoticePanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function SystemNoticePanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = SystemNoticePanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+function SystemNoticePanel:GetName()
+	return "SystemNoticePanel"
 end
-
-
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	
+
+	GCSLog("SystemNoticePanel:onCreatePanel",self.m_canvasRoot)
 	-- 按钮 - 用户确认
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:Hide() end)
 	-- 文本 - 用户提示
@@ -61,7 +57,7 @@ function SystemNoticePanel:_UnRegNetFacade()
 end
 
 --@brief 显示面板
-function SystemNoticePanel:onShow()
+function SystemNoticePanel:onUpdate()
 	self.m_Notice.text = self.m_tPanelData.noticeStr
 end
 

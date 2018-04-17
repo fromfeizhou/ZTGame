@@ -38,6 +38,7 @@ local _systemModel
 
 --@brief 初始化
 function NetWorkManager:Init()
+	GCSLog("NetWorkManager:Init")
 	NetWorkManager.m_instance = CSNetWorkManager.GetInstance()
 	NetWorkManager.m_instance:Init()
 	--[[设置网络消息回调]]

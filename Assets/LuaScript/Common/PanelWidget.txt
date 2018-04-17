@@ -19,6 +19,16 @@ function PanelWidget:GetZTButton(panel,path,onClick)
 	return button
 end
 
+--@brief 获取ztButtonLongPress
+function PanelWidget:GetZTButtonL(panel,path,onClickDown,onClickUp)
+	local transform = panel:Find(path)
+	local button = transform:GetComponent("ZTButtonLongPress")
+	button.onDown = onClickDown
+	button.onUp = onClickUp
+	return button
+end
+
+
 --@brief 获取Ztimage
 function PanelWidget:GetZTImage(panel,path)
 	local transform = panel:Find(path)

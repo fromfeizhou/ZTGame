@@ -13,6 +13,7 @@ local LuaFileLoad = {
 		"Common.NetWorkManager",
 		"Common.PanelWidget",
 		"Common.ModelManager",
+		"Common.PanelManager",
 		"Common.TimerManager.Timer",
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
@@ -29,6 +30,7 @@ local LuaFileLoad = {
 		"Global.GlobalData",
 		"Global.ZTProtoData",
 		"Global.GlobalMethod",
+		"Global.Log",
 
 
 		--[[UI面板相关]]
@@ -49,7 +51,13 @@ local LuaFileLoad = {
 		"ALuaConfig.SkillActionConfig",
 		"ALuaConfig.SkillActionMoveConfig",
 		"ALuaConfig.Tab_Equipment",
+
+		"ALuaConfig.Tab_Hero",
+		"ALuaConfig.Tab_HeroPro",
+		
 		"ALuaConfig.Tab_Skill",
+		"ALuaConfig.Tab_SkillType",
+		"ALuaConfig.Tab_SkillTeam",
 	},
 
 	--游戏lua文件
@@ -88,7 +96,6 @@ local LuaFileLoad = {
 		"Battle.Map.BattleMapMgr",
 		"Battle.Map.BattleMapView",
 
-
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.SkillMoveDefine",
@@ -99,35 +106,35 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionMoveLocked",
 
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",
 		"Battle.Skill.SkillAction.SkillActionParse",
 		"Battle.Skill.SkillAction.SkillActionManager",
 		
+		"UIModels.Battle.BattleHead.BattleHeadItem",
+		"UIModels.Battle.BattleHead.HeadItemManager",
 		
-		"Battle.BattleUI.BattleUIMgr",
-		"Battle.BattleUI.BattleHead.BattleHeadItem",
-		"Battle.BattleUI.BattleHead.HeadItemManager",
+		"UIModels.Battle.SkillBtn.CommonSkillBtn",
+		"UIModels.Battle.SkillBtn.MoveJoystick",
+		"UIModels.Battle.SkillBtn.SkillJoystick",
+
+		"UIModels.Battle.BattleModel",
+
+		"UIModels.Battle.MapScrollPanel",
+		"UIModels.Battle.MapRadarPanel",
+		--"UIModels.Battle.BattleMapPropUIMgr",
 		
-		"Battle.BattleUI.SkillBtn.CommonSkillBtn",
-		"Battle.BattleUI.SkillBtn.MoveJoystick",
-		"Battle.BattleUI.SkillBtn.SkillJoystick",
+		"UIModels.Battle.Panel.BattleMainPanel",
 
-		"Battle.BattleUI.BattleModel",
+		"UIModels.Battle.BagUI.BattleBagPanel",
+		"UIModels.Battle.BagUI.BattleBagCell",
 
-		"Battle.BattleUI.MapScrollPanel",
-		"Battle.BattleUI.MapRadarPanel",
-		"Battle.BattleUI.BattleMapPropUIMgr",
-		
-		"Battle.BattleUI.Panel.BattleHUD",
+		"UIModels.Battle.BagUI.QuickBag.QuickBagPanel",
+		"UIModels.Battle.BagUI.QuickBag.BaseBagCell",
 
-		"Battle.BattleUI.BagUI.BattleBagPanel",
-		"Battle.BattleUI.BagUI.BattleBagCell",
-
-		"Battle.BattleUI.BagUI.QuickBag.QuickBagPanel",
-		"Battle.BattleUI.BagUI.QuickBag.BaseBagCell",
-
+		"UIModels.Battle.Panel.MatchPanel",
 
 		"UIModels.City.CityModel",
 		"UIModels.City.CityMainPanel",

@@ -2,16 +2,22 @@ SkillActionConfig = {
 	id_10001 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack1" }},
+				{ actionType = 6, param = { 26 }},
+		},
+		[ 2 ] = {
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 20 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 18, 1, "HitBlood1" }},
+				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 1, 1, "HitBlood1" }},
 		},
 	},
 
 	id_10002 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack2" }},
+				{ actionType = 6, param = { 26 }},
+		},
+		[ 2 ] = {
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 20 ] = {
@@ -22,6 +28,9 @@ SkillActionConfig = {
 	id_10003 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "attack3" }},
+				{ actionType = 6, param = { 30 }},
+		},
+		[ 2 ] = {
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 25 ] = {
@@ -33,16 +42,21 @@ SkillActionConfig = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "skill01" }},
 				{ actionType = 0, param = { 0 }},
+				{ actionType = 6, param = { 60 }},
 		},
 		[ 2 ] = {
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 6 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 2, 2, 10, 1, "HitBlood1" }},
+				{ actionType = 3, param = { 2, -1, 1, 0, 2, 2, 10, 1, "HitBlood1" }},
+		},
+		[ 7 ] = {
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 14 ] = {
-				{ actionType = 3, param = { 1, -1, 1, 0, 3, 2, 10, 1, "HitBlood1" }},
+				{ actionType = 3, param = { 2, -1, 1, 0, 2, 2, 10, 1, "HitBlood1" }},
+		},
+		[ 15 ] = {
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 55 ] = {
@@ -55,11 +69,11 @@ SkillActionConfig = {
 				{ actionType = 1, param = { "skill04" }},
 				{ actionType = 0, param = { 0 }},
 		},
-		[ 2 ] = {
+		[ 10 ] = {
 				{ actionType = 5, param = { 1003 }},
 		},
 		[ 50 ] = {
-				{ actionType = 3, param = { 5, -1, 1, 0, 5, 2, 20, 10, "Bomb1" }},
+				{ actionType = 3, param = { 3, -1, 1, 0, 5, 2, 20, 10, "Bomb1" }},
 		},
 	},
 
@@ -135,4 +149,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10001"
+SkillActionConfig.TestSkillId = "id_11002"

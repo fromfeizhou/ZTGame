@@ -23,14 +23,9 @@ setmetatable( LoginMainPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Base Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function LoginMainPanel:Create(parent, model, panelData)
-	local obj = {}
-	setmetatable( obj, { __index = LoginMainPanel })
-	obj:_LoadAssetPanel(parent, model, panelData)
-	return obj
+function LoginMainPanel:GetName()
+	return "LoginMainPanel"
 end
-
 --@brief 面板被创建
 function LoginMainPanel:onCreatePanel()	
 	-- 按钮 - 服务器列表
@@ -138,9 +133,11 @@ end
 function LoginMainPanel:_OnBtnClick_Login()
 	GameConfig.IsSingleScene = false
 
-	self.m_model.m_pAccname 	= self.m_inputAccount.text
+	self.m_model.m_pAccname = self.m_inputAccount.text
 	self.m_model.m_pKey		= self.m_inputKey.text
 	NetWorkManager:RequestConnect(self.m_curSelectAddress)
+
+	GCSLog("LoginMainPanel:_OnBtnClick_Login:", self.m_model.m_pAccname)
 end
 
 --@brief 按钮 - 无网络登录

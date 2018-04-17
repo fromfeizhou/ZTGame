@@ -1,0 +1,83 @@
+--QuickBagPanel.txt
+--@breif 快速拾取背包
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.JoystickBase
+local  CSRectTransform = CS.UnityEngine.RectTransform
+
+QuickBagPanel = {
+	m_quickPanelRoot=nil,--拾取界面
+	m_PagePanelRoot=nil,--包裹界面
+	m_ScrollView=nil,
+	m_Grid=nil,
+	m_ItemList=nil,
+}
+
+setmetatable( QuickBagPanel, { __index = UIBasePanel})
+
+function QuickBagPanel:GetName()
+	return "QuickBagPanel"
+end
+
+--@brief 面板资源相对模块路径
+function QuickBagPanel:GetRelativePath()
+	return "Panel/"
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板被创建
+function QuickBagPanel:onCreatePanel()	
+	self.m_quickPanelRoot = self.m_transform:Find("ItemPanel")
+	self.m_quickPanelRoot.gameObject:SetActive(false)
+	self.m_ItemList={}
+	--@brief 初始化登录界面UI控件
+	self.m_ScrollView=PanelWidget:GetScrollView(self.m_transform,"ItemPanel/ScrollView")
+	self.m_Grid=self.m_ScrollView.content
+
+	for i=1,20 do
+		local temRoot=self.m_Grid:GetChild(i-1)
+		if temRoot then
+			self.m_ItemList[i]=BaseBagCell:Create(temRoot,function(itemId,itemNum) self:OnClickCell(itemId,itemNum) end)
+		end
+	end
+end
+
+--@brief 显示登录面板
+function QuickBagPanel:onUpdate()
+	if self.m_tPanelData and self.m_tPanelData.items then
+		for key,value in pairs(self.m_ItemList) do
+			self.m_ItemList[key]:UpdateCell(nil)
+		end
+
+		self.m_quickPanelRoot.gameObject:SetActive(true)
+		local  tempIndex = 1;--先只刷新前20个后续加入循环scrollView后修改
+		for key,value in pairs(self.m_tPanelData.items) do
+			if tempIndex <= #self.m_ItemList then
+			--	CSLog("QuickBagPanel: UpdateCell")
+				self.m_ItemList[tempIndex]:UpdateCell(value)
+				tempIndex = tempIndex + 1
+			else
+				break
+			end
+		end
+		self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 90 * tempIndex}
+
+	end
+end
+
+--点击cell
+function QuickBagPanel:OnClickCell( netId )
+	BattleProtocol:SendMapPickItem(netId)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

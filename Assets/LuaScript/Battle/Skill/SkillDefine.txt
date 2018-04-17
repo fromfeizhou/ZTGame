@@ -10,13 +10,14 @@ SkillActionType = {
 	Collider = 3,	--碰撞
 	SpEffect = 4,	--特效
 	PlayerMove = 5,	--玩家位移
+	MoveLocked = 6,	--锁定移动
 }
 
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
 SkillLayerType = {
-	Hero = 0,	--玩家
-	Scene = 1,	--场景
-	SkillPos = 2,	--技能位置（场景）
+	Hero = 1,	--玩家
+	Scene = 2,	--场景
+	SkillPos = 3,	--技能位置（场景）
 }
 --@brief 技能朝向(操作点)
 SkillFaceType = {

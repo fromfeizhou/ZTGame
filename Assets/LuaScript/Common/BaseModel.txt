@@ -7,17 +7,22 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+local CSIsDestroyed = CS.GameTool.IsDestroyed
 
 BaseModel = {
 	m_tPanelList = nil,
-	m_panelDefine = nil,
 	m_canvasRoot = nil,
-	m_canvasName = "Canvas",
 }
+
+function  BaseModel:GetName()
+	return "BaseModel"
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
 --@brief 拷贝原表
 function BaseModel:Create()
 	local obj = {}
@@ -37,38 +42,31 @@ end
 
 --@brief 更新
 function BaseModel:Tick()
-	for i,panel in pairs(self.m_tPanelList) do
-		if panel.Update then
-			panel:Tick(deltaTime)
+	self:onTick()
+	if self.m_tPanelList then
+		for i,panel in pairs(self.m_tPanelList) do
+			if panel.Update then
+				panel:Tick(deltaTime)
+			end
 		end
 	end
 end
 
 --@brief 移除
 function BaseModel:Destroy()
+	self:_CleanPanel()
+	self:_RemoveEvents()
+	self:_UnRegNetFacade()
+end
+
+
+function BaseModel:_CleanPanel( )
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
 			panel:Destroy()
 		end
 		self.m_tPanelList = nil
 	end
-
-	self:_RemoveEvents()
-	self:_UnRegNetFacade()
-end
-
-
---@brief 获取面板节点
-function BaseModel:_GetCanvasRoot()
-	if not self.m_canvasRoot then
-		self.m_canvasRoot = CSGameObject.Find(self.m_canvasName).transform
-	end
-	return self.m_canvasRoot
-end
-
---@brief 设置面板节点
-function BaseModel:SetCanvasRoot(parent)
-	self.m_canvasRoot = parent
 end
 
 --@breif 显示面板
@@ -78,24 +76,19 @@ function BaseModel:ShowPanel( panelType, panelData )
 			self.m_tPanelList[panelType]:Show(panelData)
 		end
 	else
-		local parent = self:_GetCanvasRoot()
-		panel = self.m_panelDefine[panelType]:Create(parent, self, panelData)
-		self.m_tPanelList[panelType] = panel
+		self.m_tPanelList[panelType] = PanelManager:GetPanel(self, panelType, panelData)
 	end
 end
-
 
 function BaseModel:HidePanel(panelType)
 	if self.m_tPanelList[panelType] then
 		if self.m_tPanelList[panelType].Hide then
 			self.m_tPanelList[panelType]:Hide()
 		end
-	else
-		GCSLog("BaseModel:HidePanel","found out",panelType)
+	--else
+		--GCSLog("BaseModel:HidePanel","found out",panelType)
 	end
 end
-
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
@@ -103,6 +96,10 @@ end
 
 --@brief 子类重写 - 模块初始化
 function BaseModel:onInitModel()
+end
+
+--@brief 子类重写 - 模块被销毁
+function BaseModel:onDestroy()
 end
 
 --@brief 子类重写 - 添加事件监听
@@ -119,4 +116,7 @@ end
 
 --@brief 子类重写 - 注销网络门户
 function BaseModel:_UnRegNetFacade( )
+end
+
+function BaseModel:onTick()
 end

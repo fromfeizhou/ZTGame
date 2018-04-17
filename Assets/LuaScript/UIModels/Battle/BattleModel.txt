@@ -1,0 +1,115 @@
+--BattleModel.txt
+--@breif 战斗模块
+--@data 2018/3/5
+
+
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = GCSLog
+
+BattleModel = {
+}
+
+
+
+setmetatable( BattleModel, { __index = BaseModel})
+function  BattleModel:GetName()
+	return "Battle"
+end
+
+----------------------------------------------------------------------------------------------------------------------------------
+--*******************************************************Public Begin***************************************************************
+----------------------------------------------------------------------------------------------------------------------------------
+--@brief 拷贝原表
+function BattleModel:Create()
+	local obj = {}
+	setmetatable( obj, { __index = BattleModel })
+	obj:Init()
+	return obj
+end
+
+--@brief 模块初始化
+function BattleModel:onInitModel()
+
+	
+end
+
+--@brief 添加事件监听
+function BattleModel:_AddEvents( )
+end
+
+--@brief 移除事件监听
+function BattleModel:_RemoveEvents( )
+end
+
+--@brief 注册网络门户
+function BattleModel:_RegNetFacade( )
+end
+
+--@brief 注销网络门户
+function BattleModel:_UnRegNetFacade( )
+end
+
+--@brief 指令帧更新
+function BattleModel:UpdateCommand()
+	--self:_UpdateCommandPanel()
+end
+
+function BattleModel:onTick( )
+	--if GameConfig.IsSingleScene then
+	--	self:_UpdateKeyBoardControl()
+	--end
+end
+----------------------------------------------------------------------------------------------------------------------------------
+--*******************************************************Public End***************************************************************
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------test----------------------------------
+local CSInput = CS.UnityEngine.Input
+local CSKeyCode = CS.UnityEngine.KeyCode
+BattleModel.m_sendDir = false
+BattleModel.m_bSendDir = nil
+--@brief 键盘移动
+function BattleModel:_UpdateKeyBoardControl()
+	 if CSInput.GetKey(CSKeyCode.W) and CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.UpRight)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.W) and CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.UpLeft)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) and CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.DownLeft)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) and CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.DownRight)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.W) then
+        self:_SendMoveCommand(BattleDir.Up)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.S) then
+        self:_SendMoveCommand(BattleDir.Down)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.A) then
+        self:_SendMoveCommand(BattleDir.Left)
+        BattleModel.m_bSend = true
+    elseif CSInput.GetKey(CSKeyCode.D) then
+        self:_SendMoveCommand(BattleDir.Right)
+        BattleModel.m_bSend = true
+    elseif BattleModel.m_bSend then
+        self:_SendMoveCommand(BattleDir.None)
+        BattleModel.m_bSend = false
+    end
+end
+
+--@brife 发送移动操作
+function BattleModel:_SendMoveCommand(dir)
+	if BattleModel.m_sendDir == dir then
+		return
+	end
+	-- CSLog("MoveJoystick:_SendMoveCommand")
+	BattleModel.m_sendDir = dir
+	BattleCommandProtocol:SendMoveCommand(dir)
+end

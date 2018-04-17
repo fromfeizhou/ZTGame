@@ -10,6 +10,7 @@ BattleAnimatorData = {
 	m_bCameraFollow = nil,	--镜头跟随
 	m_tCurPos = nil,		--当前位置
 	m_tTargetPos = nil,		--目标位置
+	m_bMoveStop = nil,		--移动结束
 
 	m_nPlayCount = nil,		--动作计数
 }
@@ -28,38 +29,43 @@ end
 
 -- --@brief 初始化
 -- function BattleAnimatorData:Init(animaType,careerType)
-
 -- 	AnimatorData.Init(self,animaType,careerType)
 -- end
 
 --@brief 设置镜头跟随
 function BattleAnimatorData:SetCameraFollow(value)
-	self.m_bCameraFollow = true
+	self.m_bCameraFollow = value
 end
 
 --@brief 刷新位置
 --@param vector3 pos
 function BattleAnimatorData:UpdatePos(pos)
+	self.m_bMoveStop = true
+	self:_SetPosDelay(pos)
+end
+
+--@brief 移动
+function BattleAnimatorData:MoveToPos(moveDir,pos)
+	if moveDir == BattleDir.None then
+		self.m_bMoveStop = true
+	else
+		self.m_bMoveStop = false
+	end
 	self:_SetPosDelay(pos)
 end
 
 --@brief 补间动画更新(界面刷新调用)
 function BattleAnimatorData:UpdateDelayView(dt)
 	self:_UpdatePosDelay(dt)
-	self:_UpdatePlayDelay(dt)
 end
-
 
 --@brief 播放动作
 --@param 动作名
 function BattleAnimatorData:Play(name)
-	if name == AnimatorName.Idle then
-		self:_SetPlayDelay(name)
-	else
-		self.m_nPlayCount = nil
-		AnimatorData.Play(self,name)
-	end
+	self.m_sAnimaName = name
+	AnimatorData.Play(self,name)
 end
+
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
@@ -73,7 +79,7 @@ end
 
 --@brief 刷新当前位置
 function BattleAnimatorData:_UpdateCurPos(pos)
-	--CSLog("BattleAnimatorData:_UpdateCurPos",pos)
+	-- CSLog("BattleAnimatorData:_UpdateCurPos",pos)
 	AnimatorData.UpdatePos(self,pos)
 	self.m_tCurPos = pos
 	self:_UpdateCameraPos()
@@ -100,30 +106,39 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 	if not self.m_bDelayPosSpeed then
 		return
 	end
-	local pos = nil
-	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > self.m_nDelayPosLenght then
-		pos = self.m_tCurPos + self.m_bDelayPosSpeed
+	local pos = self.m_tCurPos + self.m_bDelayPosSpeed
+	local isEndPos = false
+
+	if self.m_tTargetPos then
+		local distance = CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos)
+		if distance <= self.m_nDelayPosLenght or distance < 0.01 then
+			isEndPos = true
+		end
+	end
+	--是否移动逻辑 区分插入位移补间
+	if self.m_bMoveStop then	
+		if isEndPos then
+			pos = self.m_tTargetPos
+			self.m_bDelayPosSpeed = nil
+			
+			--移动停止			
+			if self.m_sAnimaName == AnimatorName.Move then
+				self:Play(AnimatorName.Idle)
+			end
+		end
 	else
-		pos = self.m_tTargetPos
-		self.m_bDelayPosSpeed = nil
+		if isEndPos then
+			--等待逻辑帧 移动继续
+			if GlobalBattleCtrl:IsWaitCommandFrame() then
+				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed.normalized
+				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed * (1/self.m_bDelayPosSpeed.magnitude) * BattleDefine.PlayerSpeed / BattleDefine.RendererDelay
+				self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
+
+				self.m_tTargetPos = nil
+			end
+		end
+		
 	end
+	
 	self:_UpdateCurPos(pos)
-end
-
---@brief 初始化董动作播放补间动画
-function BattleAnimatorData:_SetPlayDelay(name)
-	self.m_nPlayCount = BattleDefine.RendererDelay
-	self.m_sAnimName = name
-end
-
---@brief 更新位置补间动画
-function BattleAnimatorData:_UpdatePlayDelay(dt)
-	if not self.m_nPlayCount then
-		return
-	end
-	self.m_nPlayCount = self.m_nPlayCount -1
-	if self.m_nPlayCount <= 0 then
-		self.m_nPlayCount = nil
-		AnimatorData.Play(self,self.m_sAnimName)
-	end
 end

@@ -1,0 +1,175 @@
+--SkillJoystick.txt
+--@breif 移动控制UI
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSJoystick = CS.SkillJoystick
+local CSCANVAS = CS.UnityEngine.Canvas
+
+
+SkillJoystick = {
+	m_ctrlContainer = nil,	--父容器
+	m_transform = nil,		--当前对象transfrom
+	m_gameObject = nil,		--当前对象挂钩gameObject
+	m_joystick = nil,		--摇杆组件
+
+	m_nCurIndex = nil,		--技能id
+	m_tSkillList = nil,		--下一个技能
+	m_tDistances = nil,		--技能距离
+}
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillJoystick:Create(skillId,parent)
+	local obj = {}
+	setmetatable( obj, { __index = SkillJoystick })
+	obj:Init(skillId,parent)
+	return obj
+end
+
+--@brief 初始化
+function SkillJoystick:Init(skillId,parent)
+
+
+	LogC("SkillJoystick:Init",skillId,parent)
+	self:_ParseSkillConfig(skillId)
+
+	self.m_ctrlContainer = parent
+	--加载预设件
+	local callback_loadfinish = function(target,path)
+		self:_LoadAsseFinish(target,path)
+	end
+		
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillJoyBtn"),callback_loadfinish)
+end
+
+--@brief 移除
+function SkillJoystick:Destroy()
+	CSLog("SkillJoystick:Destroy")
+	self.m_imgSkillIcon = nil
+
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 解析技能
+function SkillJoystick:_ParseSkillConfig(skillId)
+	self.m_nCurIndex = 1
+	local config = Tab_Skill[skillId] or Tab_Skill[1001]
+	local baseSkillId = config.id
+
+	self.m_tSkillList = {skillId}
+	self.m_tDistances = {config.operaDistance}
+
+	while config and config.nextSkillId ~= -1 and config.nextSkillId ~= baseSkillId do
+		--CSLog("SkillJoystick:ParseSkillConfig",config.nextSkillId,baseSkillId)
+		table.insert( self.m_tSkillList, config.nextSkillId )
+		table.insert( self.m_tDistances, config.operaDistance )
+
+		config = Tab_Skill[config.nextSkillId]
+	end
+end
+--@brief 预设加载成功
+function SkillJoystick:_LoadAsseFinish(target,path)
+	local prefab = target
+ 		if prefab then
+ 			self.m_transform = CSTransform.Instantiate(target.transform,self.m_ctrlContainer)
+ 			self.m_gameObject = self.m_transform.gameObject
+ 			self.m_joystick = self.m_gameObject:GetComponentInChildren(typeof(CSJoystick))
+
+ 			self.m_imgSkillIcon = self.m_gameObject:GetComponentInChildren(typeof(CS.ZTImage))
+ 			self:_InitJoyEvent()
+ 			self:_LoadSkillIcon()
+		end
+end
+
+--@brief 加载技能图标
+function SkillJoystick:_LoadSkillIcon()
+	local callback = function(target,path)
+		if self.m_imgSkillIcon then
+			self.m_imgSkillIcon.sprite = target
+			self.m_imgSkillIcon:SetNativeSize()
+		end
+	end
+	CS.AssetManager.LoadAsset(PathManager:GetSkillIcon(self:_GetCurSkillId()),callback,typeof(CS.UnityEngine.Sprite))
+end
+
+
+--@brief 添加控制事件 
+function SkillJoystick:_InitJoyEvent()
+
+
+	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
+	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+	self.m_joystick:SetCanvas(canvas)
+	LogC("SkillJoystick:_InitJoyEvent", canvas)
+
+	self.m_joystick.onJoystickDownEvent = function(pos)
+		self:_OnJoystickDown(pos)
+	end
+
+	self.m_joystick.onJoystickMoveEvent = function(pos)
+		self:_OnJoystickMove(pos)
+	end
+
+	self.m_joystick.onJoystickUpEvent = function(pos)
+		self:_OnJoystickUp(pos)
+	end
+end
+
+--@brief 触摸点按下
+function SkillJoystick:_OnJoystickDown(pos)
+end
+
+--@brief 触摸点移动
+function SkillJoystick:_OnJoystickMove(pos)
+end
+
+--@brief 触摸点松开
+function SkillJoystick:_OnJoystickUp(pos)
+	 self:_SendSkillCommand(pos)
+end
+
+--@brife 发送移动操作
+--@param 目标标点
+function SkillJoystick:_SendSkillCommand(pos)
+	local skillId = self:_GetCurSkillId()
+	
+	--普通连招
+	self.m_nCurIndex = self.m_nCurIndex + 1
+	if self.m_nCurIndex > #self.m_tSkillList then
+		self.m_nCurIndex = 1
+	end
+	-- local owner = GlobalBattleCtrl:GetOwnerChara()
+	-- if not owner or owner:IsNormalState() then
+	-- 	return
+	-- end
+
+	-- CSLog("SkillJoystick:_SendSkillCommand")
+	--local deltaVec = CSVector3(pos.x, 0, pos.y).normalized
+	local distance = self:_GetCurSkillDic()
+	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetPos()
+	local targetPos = CSVector3(charaPos.x + distance * pos.x, charaPos.y, distance * pos.y + charaPos.z)
+	local targetId = GlobalBattleCtrl:GetOwnerId()
+	BattleCommandProtocol:SendSkillCommand(skillId,targetPos,targetId)
+end
+
+--@brief 获取技能id
+function SkillJoystick:_GetCurSkillId()
+	local skillId = self.m_tSkillList[self.m_nCurIndex]
+	return skillId
+end
+
+--@brief 获取技能id
+function SkillJoystick:_GetCurSkillDic()
+	local distance = self.m_tDistances[self.m_nCurIndex] > 0 and self.m_tDistances[self.m_nCurIndex] or 0
+	return distance
+end

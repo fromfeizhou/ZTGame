@@ -96,20 +96,20 @@ function BattleCommandProtocol:SendColliderCommand(skillId,colliderPos,targetLis
 	BattleCommandProtocol:SendCommand(command)
 end
 
---@brief发送血量修改（临时）
-function BattleCommandProtocol:SendHpChange(value)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame()
+-- --@brief发送血量修改（临时）
+-- function BattleCommandProtocol:SendHpChange(value)
+-- 	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 
-	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
-	package.data = {}
-	package.data.frame_id = frame
-	package.data.type = 6
-	--发送服务器坐标转换
-	package.data.int_data = {value}
-	package.data.str_data = ""
+-- 	local package = Package:Create(PROTOCOL.MAP_ROLE_FRAME)
+-- 	package.data = {}
+-- 	package.data.frame_id = frame
+-- 	package.data.type = 6
+-- 	--发送服务器坐标转换
+-- 	package.data.int_data = {value}
+-- 	package.data.str_data = ""
 
-	NetWorkManager:SendNetMsg(package)
-end
+-- 	NetWorkManager:SendNetMsg(package)
+-- end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -152,7 +152,7 @@ end
 
 --@brief 发送移动驱动帧消息
 function BattleCommandProtocol:SendMoveFrameMsg(command)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	
 	local data = {}
 	data.frame_id = frame
@@ -167,7 +167,7 @@ end
 
 --@brief 发送技能驱动帧消息
 function BattleCommandProtocol:SendSkillFrameMsg(command)
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	
 	local data = {}
 	data.frame_id = frame
@@ -183,7 +183,7 @@ end
 
 --@brief 发送碰撞驱动帧消息
 function BattleCommandProtocol:SendColliderFrameMsg(command)
-	local frame =GlobalBattleCtrl:GetCurCommandFrame()
+	local frame =GlobalBattleCtrl:GetCurServerCommandFrame()
 
 	local data = {}
 	data.frame_id = frame
@@ -209,6 +209,12 @@ end
 --@brief 匹配返回
 function BattleCommandProtocol:_OnSurvieMatch(data)
 	CSLog("BattleCommandProtocol:_OnSurvieMatch",data.code)
+	--CSLog("SHOW  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+	local modelData = {}
+	modelData.modelType = MODEL_TYPE.BATTLE
+	modelData.panelType = BATTLE_TYPE.MATCH
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
+	
 end
 
 --@brief 游戏开始
@@ -218,7 +224,17 @@ end
 
 --@brief 玩家信息
 function BattleCommandProtocol:_OnMapSight(data)
-	CSLog("BattleCommandProtocol:_OnMapSight",data.role_id,data.frame_id,SerializeTable(data.roles_enter))
+	--开始战斗
+
+	local modelData = {
+		modelType = MODEL_TYPE.BATTLE,
+		panelType = BATTLE_TYPE.MATCH,
+	}
+	--CSLog("Hide  Macth>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
+
+--	CSLog("BattleCommandProtocol:_OnMapSight",data.role_id,data.frame_id,SerializeTable(data.roles_enter))
 	if data.roles_enter then
 		local list = {}
 		for i,v in pairs(data.roles_enter) do
@@ -368,7 +384,7 @@ end
 --@brife 客户端模拟塞入驱动帧
 function BattleCommandProtocol:__TsClientInputCommand(command)
 	--CSLog("BattleCommandProtocol:__TsClientInputCommand",SerializeTable(command))
-	local frame = GlobalBattleCtrl:GetCurCommandFrame() + BattleDefine.CommandStep + 1
+	local frame = GlobalBattleCtrl:GetCurServerCommandFrame() + BattleDefine.CommandStep
 	if not BattleCommandProtocol.m_tstClientCommandList then
 		BattleCommandProtocol.m_tstClientCommandList = {}
 	end

@@ -1,5 +1,5 @@
 
-ïz
+Ñ{
 protobuf.protoztGame.proto",
 p_setting_info
 key (
@@ -418,7 +418,12 @@ quick_code (
 sina_appid
  (	
 sina_appkey (	
-sina_redirecturl (	"
+sina_redirecturl (	"(
+login_choice_hero_c2s
+hero_id ("6
+login_choice_hero_s2c
+code (
+hero_id ("
 role_info_c2s"8
 role_info_s2c'
 role (2.ztGame.proto.p_role_attr"&
