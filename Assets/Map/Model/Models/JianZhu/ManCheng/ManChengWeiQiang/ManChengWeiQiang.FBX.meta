@@ -1,0 +1,195 @@
+fileFormatVersion: 2
+guid: 87e39e62288ee344e891ded7e6d49770
+timeCreated: 1523698773
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Ele_ManChengWeiQiang_wall
+    100002: Ele_ManChengWeiQiang_wall 1
+    100004: Ele_ManChengWeiQiang_wall 2
+    100006: Ele_ManChengWeiQiang_wall 3
+    100008: Ele_ManChengWeiQiang_wujian01
+    100010: Ele_ManChengWeiQiang_wujian01 1
+    100012: Ele_ManChengWeiQiang_wujian01 2
+    100014: Ele_ManChengWeiQiang_wujian02
+    100016: Ele_ManChengWeiQiang_wujian02 1
+    100018: Ele_ManChengWeiQiang_wujian03
+    100020: Ele_ManChengWeiQiang_wujian03 1
+    100022: //RootNode
+    100024: Ele_ManChengWeiQiang
+    100026: Ele_ManChengWeiQiang_wall 4
+    100028: Ele_ManChengWeiQiang_wall 5
+    100030: Ele_ManChengWeiQiang_wall 6
+    100032: Ele_ManChengWeiQiang_wall004
+    100034: Ele_ManChengWeiQiang_wujian01 3
+    100036: Ele_ManChengWeiQiang_wujian01 4
+    100038: Ele_ManChengWeiQiang_wujian01 5
+    100040: Ele_ManChengWeiQiang_wujian02 2
+    100042: Ele_ManChengWeiQiang_wujian02 3
+    100044: Ele_ManChengWeiQiang_wujian04
+    100046: Ele_ManChengWeiQiang_wujian05
+    400000: Ele_ManChengWeiQiang_wall
+    400002: Ele_ManChengWeiQiang_wall 1
+    400004: Ele_ManChengWeiQiang_wall 2
+    400006: Ele_ManChengWeiQiang_wall 3
+    400008: Ele_ManChengWeiQiang_wujian01
+    400010: Ele_ManChengWeiQiang_wujian01 1
+    400012: Ele_ManChengWeiQiang_wujian01 2
+    400014: Ele_ManChengWeiQiang_wujian02
+    400016: Ele_ManChengWeiQiang_wujian02 1
+    400018: Ele_ManChengWeiQiang_wujian03
+    400020: Ele_ManChengWeiQiang_wujian03 1
+    400022: //RootNode
+    400024: Ele_ManChengWeiQiang
+    400026: Ele_ManChengWeiQiang_wall 4
+    400028: Ele_ManChengWeiQiang_wall 5
+    400030: Ele_ManChengWeiQiang_wall 6
+    400032: Ele_ManChengWeiQiang_wall004
+    400034: Ele_ManChengWeiQiang_wujian01 3
+    400036: Ele_ManChengWeiQiang_wujian01 4
+    400038: Ele_ManChengWeiQiang_wujian01 5
+    400040: Ele_ManChengWeiQiang_wujian02 2
+    400042: Ele_ManChengWeiQiang_wujian02 3
+    400044: Ele_ManChengWeiQiang_wujian04
+    400046: Ele_ManChengWeiQiang_wujian05
+    2300000: Ele_ManChengWeiQiang_wall
+    2300002: Ele_ManChengWeiQiang_wall 1
+    2300004: Ele_ManChengWeiQiang_wall 2
+    2300006: Ele_ManChengWeiQiang_wall 3
+    2300008: Ele_ManChengWeiQiang_wujian01
+    2300010: Ele_ManChengWeiQiang_wujian01 1
+    2300012: Ele_ManChengWeiQiang_wujian01 2
+    2300014: Ele_ManChengWeiQiang_wujian02
+    2300016: Ele_ManChengWeiQiang_wujian02 1
+    2300018: Ele_ManChengWeiQiang_wujian03
+    2300020: Ele_ManChengWeiQiang_wujian03 1
+    2300022: Ele_ManChengWeiQiang
+    2300024: Ele_ManChengWeiQiang_wall 4
+    2300026: Ele_ManChengWeiQiang_wall 5
+    2300028: Ele_ManChengWeiQiang_wall 6
+    2300030: Ele_ManChengWeiQiang_wall004
+    2300032: Ele_ManChengWeiQiang_wujian01 3
+    2300034: Ele_ManChengWeiQiang_wujian01 4
+    2300036: Ele_ManChengWeiQiang_wujian01 5
+    2300038: Ele_ManChengWeiQiang_wujian02 2
+    2300040: Ele_ManChengWeiQiang_wujian02 3
+    2300042: Ele_ManChengWeiQiang_wujian04
+    2300044: Ele_ManChengWeiQiang_wujian05
+    3300000: Ele_ManChengWeiQiang_wall
+    3300002: Ele_ManChengWeiQiang_wall 1
+    3300004: Ele_ManChengWeiQiang_wall 2
+    3300006: Ele_ManChengWeiQiang_wall 3
+    3300008: Ele_ManChengWeiQiang_wujian01
+    3300010: Ele_ManChengWeiQiang_wujian01 1
+    3300012: Ele_ManChengWeiQiang_wujian01 2
+    3300014: Ele_ManChengWeiQiang_wujian02
+    3300016: Ele_ManChengWeiQiang_wujian02 1
+    3300018: Ele_ManChengWeiQiang_wujian03
+    3300020: Ele_ManChengWeiQiang_wujian03 1
+    3300022: Ele_ManChengWeiQiang
+    3300024: Ele_ManChengWeiQiang_wall 4
+    3300026: Ele_ManChengWeiQiang_wall 5
+    3300028: Ele_ManChengWeiQiang_wall 6
+    3300030: Ele_ManChengWeiQiang_wall004
+    3300032: Ele_ManChengWeiQiang_wujian01 3
+    3300034: Ele_ManChengWeiQiang_wujian01 4
+    3300036: Ele_ManChengWeiQiang_wujian01 5
+    3300038: Ele_ManChengWeiQiang_wujian02 2
+    3300040: Ele_ManChengWeiQiang_wujian02 3
+    3300042: Ele_ManChengWeiQiang_wujian04
+    3300044: Ele_ManChengWeiQiang_wujian05
+    4300000: Ele_ManChengWeiQiang_wujian03
+    4300002: Ele_ManChengWeiQiang_wujian03
+    4300004: Ele_ManChengWeiQiang_wujian01
+    4300006: Ele_ManChengWeiQiang_wujian01
+    4300008: Ele_ManChengWeiQiang_wujian01
+    4300010: Ele_ManChengWeiQiang_wall
+    4300012: Ele_ManChengWeiQiang_wall
+    4300014: Ele_ManChengWeiQiang_wall
+    4300016: Ele_ManChengWeiQiang_wall
+    4300018: Ele_ManChengWeiQiang_wujian02
+    4300020: Ele_ManChengWeiQiang_wujian02
+    4300022: Ele_ManChengWeiQiang_wujian04
+    4300024: Ele_ManChengWeiQiang_wall
+    4300026: Ele_ManChengWeiQiang_wujian01
+    4300028: Ele_ManChengWeiQiang_wujian01
+    4300030: Ele_ManChengWeiQiang_wujian01
+    4300032: Ele_ManChengWeiQiang_wall
+    4300034: Ele_ManChengWeiQiang_wall
+    4300036: Ele_ManChengWeiQiang_wujian05
+    4300038: Ele_ManChengWeiQiang_wujian02
+    4300040: Ele_ManChengWeiQiang_wall004
+    4300042: Ele_ManChengWeiQiang_wujian02
+    4300044: Ele_ManChengWeiQiang
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

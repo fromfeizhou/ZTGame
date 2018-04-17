@@ -1,0 +1,135 @@
+fileFormatVersion: 2
+guid: 95b30bbb20eb45e42b8c5a5c8f724193
+timeCreated: 1523608837
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: ManChengJianZhu04_dimian
+    100004: ManChengJianZhu04_men
+    100006: ManChengJianZhu04_qiang
+    100008: ManChengJianZhu04_qiang01
+    100010: ManChengJianZhu04_qiang02
+    100012: ManChengJianZhu04_wall
+    100014: ManChengJianZhu04_wuding
+    100016: ManChengJianZhu04_wujian
+    100018: ManChengJianZhu04_wujian01
+    100020: ManChengJianZhu04_wujian02
+    100022: ManChengJianZhu04_wujian03
+    100024: ManChengJianZhu04_Object020
+    400000: //RootNode
+    400002: ManChengJianZhu04_dimian
+    400004: ManChengJianZhu04_men
+    400006: ManChengJianZhu04_qiang
+    400008: ManChengJianZhu04_qiang01
+    400010: ManChengJianZhu04_qiang02
+    400012: ManChengJianZhu04_wall
+    400014: ManChengJianZhu04_wuding
+    400016: ManChengJianZhu04_wujian
+    400018: ManChengJianZhu04_wujian01
+    400020: ManChengJianZhu04_wujian02
+    400022: ManChengJianZhu04_wujian03
+    400024: ManChengJianZhu04_Object020
+    2300000: ManChengJianZhu04_dimian
+    2300002: ManChengJianZhu04_men
+    2300004: ManChengJianZhu04_qiang
+    2300006: ManChengJianZhu04_qiang01
+    2300008: ManChengJianZhu04_qiang02
+    2300010: ManChengJianZhu04_wall
+    2300012: ManChengJianZhu04_wuding
+    2300014: ManChengJianZhu04_wujian
+    2300016: ManChengJianZhu04_wujian02
+    2300018: ManChengJianZhu04_wujian03
+    3300000: ManChengJianZhu04_dimian
+    3300002: ManChengJianZhu04_men
+    3300004: ManChengJianZhu04_qiang
+    3300006: ManChengJianZhu04_qiang01
+    3300008: ManChengJianZhu04_qiang02
+    3300010: ManChengJianZhu04_wall
+    3300012: ManChengJianZhu04_wuding
+    3300014: ManChengJianZhu04_wujian
+    3300016: ManChengJianZhu04_wujian02
+    3300018: ManChengJianZhu04_wujian03
+    4300000: ManChengJianZhu04_wujian02
+    4300002: ManChengJianZhu04_wuding
+    4300004: ManChengJianZhu04_qiang01
+    4300006: ManChengJianZhu04_men
+    4300008: ManChengJianZhu04_dimian
+    4300010: ManChengJianZhu04_qiang02
+    4300012: ManChengJianZhu04_qiang
+    4300014: ManChengJianZhu04_wall
+    4300016: ManChengJianZhu04_wujian
+    4300018: ManChengJianZhu04_wujian03
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
