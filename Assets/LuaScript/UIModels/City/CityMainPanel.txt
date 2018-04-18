@@ -9,11 +9,13 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSRenderTexture = CS.UnityEngine.RenderTexture
 local CSSetGameObjectLayer = CS.GameTool.SetGameObjectLayer
-
+local CSColor = CS.UnityEngine.Color
 CityMainPanel = {
 	m_panelName = "CityMainPanel",
 	m_txtNickName,
 	m_txtName,
+
+	m_selectBtnList = {},
 
 	m_roleId,
 	m_roldModelId,
@@ -54,10 +56,14 @@ function CityMainPanel:onCreatePanel()
 	PanelWidget:GetZTButtonL(self.m_transform,"ViewPort/BtnL_UserInfo",function() self:_OnClick_Hero_OnDown() end, function() self:_OnClick_Hero_OnUp() end)
 
 	-- 按钮 - 英雄选择
-	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_0/ZTButtonImg",function() self:_SelectHero(100001) end)
-	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_1/ZTButtonImg",function() self:_SelectHero(100002) end)
-	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_2/ZTButtonImg",function() self:_SelectHero(100003) end)
-	PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_3/ZTButtonImg",function() self:_SelectHero(100004) end)
+	self.m_selectBtnList[100001] = PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_0/ZTButtonImg",function() self:_SelectHero(100001) end)
+	self.m_selectBtnList[100002] = PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_1/ZTButtonImg",function() self:_SelectHero(100002) end)
+	self.m_selectBtnList[100003] = PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_2/ZTButtonImg",function() self:_SelectHero(100003) end)
+	self.m_selectBtnList[100004] = PanelWidget:GetButton(self.m_transform,"ViewPort/HeroList/Hero_3/ZTButtonImg",function() self:_SelectHero(100004) end)
+
+	PanelWidget:GetZTButtonImg(self.m_transform,"ViewPort/TeamList/FriendItem_0/ZTButtonImg",function() self:_OnClick_SelectFriend(1) end)
+	PanelWidget:GetZTButtonImg(self.m_transform,"ViewPort/TeamList/FriendItem_1/ZTButtonImg",function() self:_OnClick_SelectFriend(2) end)
+	PanelWidget:GetZTButtonImg(self.m_transform,"ViewPort/TeamList/FriendItem_2/ZTButtonImg",function() self:_OnClick_SelectFriend(3) end)
 
 	-- 按钮 - 菜单
 	PanelWidget:GetButton(self.m_transform,"ViewPort/MenuList/LeftUpRoot/ShopItem/ZTButton",function() self:_OnClick_Shop() end)
@@ -115,13 +121,20 @@ end
 
 --@brief 选择角色
 function CityMainPanel:_SelectHero(roleId)
+
+	if self.m_roleId and self.m_roleId ~= 0 then
+		self.m_selectBtnList[self.m_roleId].targetGraphic.color = CSColor.clear
+	end
+
 	self.m_roleId = roleId
-	self.m_roleModelId = Tab_Hero[self.m_roleId].modelid
+	self.m_roleModelId 			= Tab_Hero[self.m_roleId].modelid
 	self.m_txtNickName.text 	= Tab_Hero[self.m_roleId].name
 	self.m_noticeHeroName.text 	= Tab_Hero[self.m_roleId].name
 	self.m_noticeHeroType.text 	= Tab_HeroPro[Tab_Hero[self.m_roleId].type].name
 	self.m_noticeHeroDesc.text 	= Tab_Hero[self.m_roleId].desc
 	self:_UpdateHeroModel()
+	self.m_selectBtnList[self.m_roleId].targetGraphic.color = CSColor.white
+
 end
 
 function CityMainPanel:_UpdateHeroModel(  )
@@ -188,6 +201,10 @@ end
 --@brief 按钮点击 - 聊天
 function CityMainPanel:_OnClick_Talk()
 	self:_ShowNotice("敬请期待 - 聊天 ")
+end
+
+function CityMainPanel:_OnClick_SelectFriend( friendItemIdx )
+	self:_ShowNotice("敬请期待 - 好友选择 - " .. friendItemIdx)
 end
 
 --@brief 显示提示
