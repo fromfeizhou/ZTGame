@@ -57,6 +57,11 @@ public static class DownLoadCommon
     public static readonly string CACHE_PATH = PATH + "/Cache";
 
     /// <summary>
+    ///   lua热更路径
+    /// </summary>
+    public static readonly string HOT_LUA_PATH = PATH + "/LuaScrpit";
+
+    /// <summary>
     ///   DownloadCache文件路径
     /// </summary>
     public static readonly string DOWNLOADCACHE_FILE_PATH = CACHE_PATH + "/DownloadCache.cfg";
@@ -72,6 +77,11 @@ public static class DownLoadCommon
     public static string GetFileFullName(string file)
     {
         return PATH + "/" + file;
+    }
+
+    public static string GetLuaHotFullName(string file)
+    {
+        return HOT_LUA_PATH + "/" + file;
     }
 
     /// <summary>

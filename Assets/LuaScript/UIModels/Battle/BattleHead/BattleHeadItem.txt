@@ -5,6 +5,7 @@
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
@@ -13,6 +14,7 @@ local CSGetWorldToScreenPoint = CS.GameTool.GetWorldToScreenPoint
 BattleHeadItem = {
 	m_parentRoot=nil,
 	m_transform=nil,
+	m_rectTransform=nil,
 	m_gameObject=nil,
 }
 
@@ -20,17 +22,17 @@ BattleHeadItem = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function BattleHeadItem:Create(parent)
+function BattleHeadItem:Create(canvas, parent)
 	local obj = {}
 	setmetatable( obj, { __index = BattleHeadItem })
-	obj:Init(parent)
+	obj:Init(canvas, parent)
 	return obj
 end
 
 --@brief 初始化
-function BattleHeadItem:Init(parent)
+function BattleHeadItem:Init(canvas, parent)
 	self.m_parentRoot = parent
-	self.m_canvas = GlobalBattleCtrl:GetCanvasComp()
+	self.m_canvas = canvas
 
 	--加载预设件
 	local callback_loadfinish = function(target,path)
@@ -63,6 +65,8 @@ function BattleHeadItem:_LoadAsseFinish(target,path)
 	if prefab and self.m_parentRoot then
 		self.m_gameObject = CSGameObject.Instantiate(target)
 		self.m_gameObject.transform:SetParent(self.m_parentRoot,false)
+		self.m_gameObject.transform.localPosition = CSVector3.zero
+		self.m_rectTransform = self.m_gameObject:GetComponent(typeof(CSRectTransform))
 
 		self.m_slider = self.m_gameObject:GetComponentInChildren(typeof(CS.UnityEngine.UI.Slider))
         self.m_hpText = self.m_gameObject:GetComponentInChildren(typeof(CS.ZTText))
@@ -71,7 +75,6 @@ function BattleHeadItem:_LoadAsseFinish(target,path)
         self:_OnUpdateCamera()
 	end
 end
-
 
 --@brief 监听事件
 function BattleHeadItem:_InitEvent()
@@ -106,8 +109,8 @@ function BattleHeadItem:_OnUpdateCamera()
 	if not self.m_gameObject then
 		return
 	end
+
 	local pos = GlobalBattleCtrl:GetOwnerChara():GetViewPos()
 	local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
-	-- CSLog("BattleHeadItem:_OnUpdateScenePos",pos,uiPos)
-	self.m_gameObject.transform.position = {x = uiPos.x, y = uiPos.y + 1.2, z = 0}
+	self.m_rectTransform.anchoredPosition =  CSVector2(uiPos.x,uiPos.y + 20)
 end

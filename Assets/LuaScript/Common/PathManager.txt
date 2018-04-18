@@ -8,10 +8,11 @@ PathManager = {
 	m_sUIWidgets 	= "Assets/Prefabs/UIWidgets/",		--ui组件地址
 
 	m_sUIPanel 		= "Assets/Prefabs/Model/",	--面板预设地址
-	m_sPbFile 		= "Assets/LuaScript/ProtoBuff/",
+	m_sPbFile 		= "ProtoBuff/",
 
 	m_sAnimator 	= "Assets/Models/CharacterRoot/%s/prefab/",		--模型预设地址
 	m_sModel 		= "Assets/Models/",
+	m_sHeroModel	= "Assets/Models/CharacterRoot/%s/%s",
 
 	m_sBattleUIPrefab 	= "Assets/Prefabs/Model/Battle/",		--战斗ui预设地址
 	m_sBattleUINum 		= "Assets/Prefabs/Model/Battle/",		--战斗ui数字
@@ -56,6 +57,10 @@ end
 
 function PathManager:GetModelPath( name )
 	return PathManager.m_sModel .. name .. ".prefab"
+end
+
+function PathManager:GetHeroModelPath( modelId )
+	return string.format(PathManager.m_sHeroModel,modelId,modelId) .. ".prefab"
 end
 
 --@brief 获取战斗ui pb文件路径

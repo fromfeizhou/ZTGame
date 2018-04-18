@@ -273,6 +273,51 @@ function ZTCharaManager:_OnRemoveCharacter(battleId)
 	end
 end
 
+--开始战斗推送角色数据
+-- function ZTCharaManager:OnBeginBattle(p_map_role)
+
+-- 	if not p_map_role then return end
+
+--  	for i = 1,#p_map_role do
+--  		local role = p_map_role[i]
+--  		local battleId = role.id
+--  		local CareerType = role.job
+--  		local pos = BattleDefine:GetClientPos(role.x,role.y,role.z)
+--  		local camp = role.team
+--  		local attributeList = self:_GetAttributeList(role.base_attr,role.hp,role.mp)
+
+--  		local player = GBattleEvent:GetBattleData(battleId,CareerType,pos,camp,attributeList)
+-- 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player)
+
+--  	end
+
+
+-- end
+
+-- --@brief 获得属性列表
+-- function ZTCharaManager:_GetAttributeList(p_base_attr,hp,mp)
+-- 	local list = {}
+-- 	table.insert(list, {AttributeType.HpMax, p_base_attr.hp_max })
+-- 	table.insert(list, {AttributeType.AttackMin, p_base_attr.attack_min })
+-- 	table.insert(list, {AttributeType.AttackMax, p_base_attr.attack_max })
+-- 	table.insert(list, {AttributeType.Defense, p_base_attr.defense })
+-- 	table.insert(list, {AttributeType.AttackSpeed, p_base_attr.attack_speed })
+
+-- 	table.insert(list, {AttributeType.HpRec, p_base_attr.hp_rec })
+-- 	table.insert(list, {AttributeType.MpMax, p_base_attr.mp_max })
+-- 	table.insert(list, {AttributeType.Luck, p_base_attr.lucky })----------
+-- 	table.insert(list, {AttributeType.Curse, p_base_attr.curse })
+-- 	table.insert(list, {AttributeType.MoveSpeed, p_base_attr.move_speed })
+
+-- 	table.insert(list, {AttributeType.AttackAcc, p_base_attr.attack_acc })
+-- 	table.insert(list, {AttributeType.HurtDec, p_base_attr.hurt_dec })
+-- 	table.insert(list, {AttributeType.CDAcc, p_base_attr.cd_acc })
+-- 	table.insert(list, {AttributeType.Hp, hp })
+-- 	table.insert(list, {AttributeType.Mp, mp })
+
+-- 	table.insert(list, {AttributeType.MpRec, p_base_attr.mp_rec })
+-- 	return list
+-- end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()

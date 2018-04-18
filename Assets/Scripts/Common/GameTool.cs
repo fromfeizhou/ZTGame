@@ -80,10 +80,22 @@ public class GameTool
         return (signed_angle < 0) ? 360 + signed_angle : signed_angle;
     }
 
-    public static Vector3 GetWorldToScreenPoint(Vector3 scenePos,Canvas canvas)
-    {
-        Vector3 worldToScreenPoint = Camera.main.WorldToScreenPoint(scenePos);
-        Vector3 screenToWorldPoint = canvas.worldCamera.ScreenToWorldPoint(worldToScreenPoint);
-        return screenToWorldPoint;
-    }
+	public static Vector2 GetWorldToScreenPoint(Vector3 scenePos,Canvas canvas)
+	{
+		RectTransform rectCanvas = canvas.transform as RectTransform;
+		Vector3 ScreenPos = Camera.main.WorldToScreenPoint (scenePos);
+		Vector2 pos;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle (rectCanvas, ScreenPos, canvas.worldCamera, out pos);
+		return pos;
+	}
+
+
+	public static void SetGameObjectLayer(GameObject gameObject, string layerName){
+		Debug.Log (gameObject);
+		Debug.Log (layerName);
+		int layerNum = LayerMask.NameToLayer (layerName);
+		Transform[] transGo = gameObject.GetComponentsInChildren<Transform> ();
+		for (int i = 0; i < transGo.Length; i++)
+			transGo [i].gameObject.layer = layerNum;
+	}
 }

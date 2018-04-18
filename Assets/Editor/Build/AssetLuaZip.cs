@@ -15,7 +15,10 @@ class AssetLuaZip
         string outPath = "D:/IISRoot/LuaScript.zip";
         string error;
         float process;
-        FileHelper.DeleteFile(outPath,"");
+        if (File.Exists(outPath))
+        {
+            File.Delete(outPath);
+        }
         CompressHelper.ZipFile(path, outPath, out error,out process,"*.txt");
     }
 

@@ -41,6 +41,7 @@ function Main_InitAssetUpdater()
 	updater:Init(function ()
 		--资源更新流程结束 游戏主逻辑入口
 		Main_EnterLuaGame()
+		updater:Destroy()
 	end)
 end
 

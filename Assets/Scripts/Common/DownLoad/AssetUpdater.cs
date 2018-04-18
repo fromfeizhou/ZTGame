@@ -21,6 +21,8 @@ public class AssetUpdater : MonoBehaviour
         None,               // 无
         Initialize,         // 初始化更新器
         VerifyURL,          // 验证有效的URL
+        DownLuaZip,         // 下载lua文件
+        UnZipLua,           //解压lua包
         DownloadMainConfig, // 下载主要的配置文件
         UpdateAssetBundle,  // 更新AssetBundle
         CopyCacheFile,      // 复制缓存下的文件
@@ -38,7 +40,7 @@ public class AssetUpdater : MonoBehaviour
     public delegate void DoneDelegate();
     private DoneDelegate _onDone;
 
-    public void SetAssetLuaFunc(UpdateDelegate update,DoneDelegate done)
+    public void SetAssetLuaFunc(UpdateDelegate update, DoneDelegate done)
     {
         _onUpdate = update;
         _onDone = done;
@@ -145,8 +147,8 @@ public class AssetUpdater : MonoBehaviour
         }
         if (_ab_download != null)
         {
-           _ab_download.Cancel();
-           _ab_download = null;
+            _ab_download.Cancel();
+            _ab_download = null;
         }
         SaveDownloadCacheData();
         UpdateState(EmState.Cancel);
@@ -190,6 +192,10 @@ public class AssetUpdater : MonoBehaviour
         yield return StartInitialize();
         UpdateState(EmState.VerifyURL);
         yield return StartVerifyURL();
+        UpdateState(EmState.DownLuaZip);
+        yield return StartDownLuaZip();
+        UpdateState(EmState.UnZipLua);
+        yield return StartUnZipLua();
         UpdateState(EmState.DownloadMainConfig);
         yield return StartDownloadMainConfig();
         UpdateState(EmState.UpdateAssetBundle);
@@ -244,11 +250,13 @@ public class AssetUpdater : MonoBehaviour
 
         //下载地址重定向为根文件夹
         for (int i = 0; i < _url_group.Count; ++i)
-#if UNITY_EDITOR
-            _url_group[i] = _url_group[i] + "/win/AssetBundle/";
-#elif UNITY_ANDROID
-        _url_group[i] = _url_group[i] + "/android/AssetBundle/";
-#endif
+        {
+            //#if UNITY_EDITOR
+            //            _url_group[i] = _url_group[i] + "/win/AssetBundle/";
+            //#elif UNITY_ANDROID
+            //        _url_group[i] = _url_group[i] + "/android/AssetBundle/";
+            //#endif
+        }
         //找到合适的资源服务器
         _verifier = new URLVerifier(_url_group);
         _verifier.Start();
@@ -269,6 +277,57 @@ public class AssetUpdater : MonoBehaviour
     }
     #endregion
 
+    #region DownLuaZip
+    IEnumerator StartDownLuaZip()
+    {
+        Debug.Log("AssetUpdater:StartDownLuaZip");
+        if (ErrorCode != EmErrorCode.None)
+            yield break;
+
+        //下载主配置文件
+        _file_download = new FileDownload(_current_url
+                                , DownLoadCommon.CACHE_PATH
+                                , "/LuaScript.zip");
+        _file_download.Start();
+        while (!_file_download.IsDone)
+        {
+            UpdateCompleteValue(_file_download.CompletedSize, _file_download.TotalSize);
+            yield return null;
+        }
+        if (_file_download.IsFailed)
+        {
+            Error(EmErrorCode.DownloadFailed
+                , " download luazip failed!");
+            yield break;
+        }
+        _file_download = null;
+        UpdateCompleteValue(1f, 1f);
+    }
+    #endregion
+
+    #region StartUnZipLua
+    IEnumerator StartUnZipLua()
+    {
+        Debug.Log("AssetUpdater:StartUnZipLua");
+        if (ErrorCode != EmErrorCode.None)
+            yield break;
+      
+        string path = DownLoadCommon.GetCacheFileFullName("LuaScript.zip");
+        string outPath = DownLoadCommon.HOT_LUA_PATH;
+
+        CompressHelper.CompressTask task = CompressHelper.UnCompressAsync(path, outPath);
+        while (!task.IsDone)
+        {
+            Debug.Log(task.Progress);
+            UpdateCompleteValue(Mathf.Floor(task.Progress * 100), 100f);
+            yield return null;
+        }
+        File.Delete(path);
+      
+        UpdateCompleteValue(1f, 1f);
+    }
+    #endregion
+
     #region DownloadMainFile
     /// <summary>
     ///   开始进行主要文件下载,下载至缓存目录
@@ -280,22 +339,22 @@ public class AssetUpdater : MonoBehaviour
             yield break;
 
         //下载主配置文件
-            _file_download = new FileDownload(_current_url
-                                    , DownLoadCommon.CACHE_PATH
-                                    , DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
-            _file_download.Start();
-            while (!_file_download.IsDone)
-            {
-                yield return null;
-            }
-            if (_file_download.IsFailed)
-            {
-                Error(EmErrorCode.DownloadMainConfigFileFailed
-                    , DownLoadCommon.MAIN_MANIFEST_FILE_NAME + " download failed!");
-                yield break;
-            }
-            _file_download = null;
-            UpdateCompleteValue(1f,1f);
+        _file_download = new FileDownload(_current_url
+                                , DownLoadCommon.CACHE_PATH
+                                , DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
+        _file_download.Start();
+        while (!_file_download.IsDone)
+        {
+            yield return null;
+        }
+        if (_file_download.IsFailed)
+        {
+            Error(EmErrorCode.DownloadMainConfigFileFailed
+                , DownLoadCommon.MAIN_MANIFEST_FILE_NAME + " download failed!");
+            yield break;
+        }
+        _file_download = null;
+        UpdateCompleteValue(1f, 1f);
 
         yield return null;
     }
@@ -312,7 +371,7 @@ public class AssetUpdater : MonoBehaviour
             yield break;
 
         UpdateCompleteValue(0f, 0f);
-        
+
         ////载入MainManifest
         AssetBundleManifest manifest = AssetBundleManager.GetInstance().MainManifest;
         //载入新的ResourcesManifest
@@ -359,12 +418,12 @@ public class AssetUpdater : MonoBehaviour
             yield break;
         }
 
-       
+
     }
 
-     //<summary>
-     //  比较AssetBundle差异，获得下载列表与删除列表
-     //</summary>
+    //<summary>
+    //  比较AssetBundle差异，获得下载列表与删除列表
+    //</summary>
     static void CompareAssetBundleDifference(ref List<string> download_files
                                             , ref List<string> delete_files
                                             , AssetBundleManifest old_manifest
@@ -385,7 +444,7 @@ public class AssetUpdater : MonoBehaviour
         //位标记： 0： 存在旧资源中 1： 存在新资源中 2：本地资源标记
         int old_version_bit = 0x1;                      // 存在旧资源中
         int new_version_bit = 0x2;                      // 存在新资源中
-       
+
         Dictionary<string, int> temp_dic = new Dictionary<string, int>();
         //标记旧资源
         string[] all_assetbundle = old_manifest.GetAllAssetBundles();
@@ -502,7 +561,7 @@ public class AssetUpdater : MonoBehaviour
         Debug.Log("AssetUpdater:StartCopyCacheFile");
         if (ErrorCode != EmErrorCode.None)
             yield break;
-      
+
         string str = DownLoadCommon.GetCacheFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         string dest = DownLoadCommon.GetFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         UpdateCompleteValue(1, 1);
@@ -630,47 +689,47 @@ public class AssetUpdater : MonoBehaviour
     ///   写入下载缓存信息，用于断点续传
     /// </summary>
     void SaveDownloadCacheData()
+    {
+        if (CurrentState < EmState.UpdateAssetBundle)
+            return;
+
+        if (!Directory.Exists(DownLoadCommon.CACHE_PATH))
+            return;
+
+        //载入新的Manifest
+        string new_manifest_name = DownLoadCommon.GetCacheFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
+        AssetBundleManifest new_manifest = DownLoadCommon.LoadMainManifestByPath(new_manifest_name);
+        if (new_manifest == null)
+            return;
+
+        //先尝试读取旧的缓存信息，再保存现在已经下载的数据
+        //PS:由于只有版本完整更新完才会移动Cache目录，且玩家可能多次尝试下载更新，所以必须保留旧的缓存信息
+        DownloadCache cache = new DownloadCache();
+        cache.Load(DownLoadCommon.DOWNLOADCACHE_FILE_PATH);
+        if (_ab_download != null
+            && _ab_download.CompleteDownloads != null
+            && _ab_download.CompleteDownloads.Count > 0)
         {
-            if (CurrentState < EmState.UpdateAssetBundle)
-                return;
-
-            if (!Directory.Exists(DownLoadCommon.CACHE_PATH))
-                return;
-
-            //载入新的Manifest
-            string new_manifest_name = DownLoadCommon.GetCacheFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
-            AssetBundleManifest new_manifest = DownLoadCommon.LoadMainManifestByPath(new_manifest_name);
-            if (new_manifest == null)
-                return;
-
-            //先尝试读取旧的缓存信息，再保存现在已经下载的数据
-            //PS:由于只有版本完整更新完才会移动Cache目录，且玩家可能多次尝试下载更新，所以必须保留旧的缓存信息
-            DownloadCache cache = new DownloadCache();
-            cache.Load(DownLoadCommon.DOWNLOADCACHE_FILE_PATH);
-            if (_ab_download != null
-                && _ab_download.CompleteDownloads != null
-                && _ab_download.CompleteDownloads.Count > 0)
+            for (int i = 0; i < _ab_download.CompleteDownloads.Count; ++i)
             {
-                for (int i = 0; i < _ab_download.CompleteDownloads.Count; ++i)
+                string assetbundle_name = _ab_download.CompleteDownloads[i];
+                Hash128 hash_code = new_manifest.GetAssetBundleHash(assetbundle_name);
+                if (hash_code.isValid && !cache.Data.AssetBundles.ContainsKey(assetbundle_name))
                 {
-                    string assetbundle_name = _ab_download.CompleteDownloads[i];
-                    Hash128 hash_code = new_manifest.GetAssetBundleHash(assetbundle_name);
-                    if (hash_code.isValid && !cache.Data.AssetBundles.ContainsKey(assetbundle_name))
+                    DownloadCacheData.AssetBundle elem = new DownloadCacheData.AssetBundle()
                     {
-                        DownloadCacheData.AssetBundle elem = new DownloadCacheData.AssetBundle()
-                        {
-                            AssetBundleName = assetbundle_name,
-                            Hash = hash_code.ToString(),
-                        };
-                        Debug.Log(cache.Data.AssetBundles.Count + " - Cache Add:" + assetbundle_name);
-                        cache.Data.AssetBundles.Add(assetbundle_name, elem);
-                    }
-
+                        AssetBundleName = assetbundle_name,
+                        Hash = hash_code.ToString(),
+                    };
+                    Debug.Log(cache.Data.AssetBundles.Count + " - Cache Add:" + assetbundle_name);
+                    cache.Data.AssetBundles.Add(assetbundle_name, elem);
                 }
+
             }
-            if (cache.HasData())
-                cache.Save(DownLoadCommon.DOWNLOADCACHE_FILE_PATH);
         }
+        if (cache.HasData())
+            cache.Save(DownLoadCommon.DOWNLOADCACHE_FILE_PATH);
+    }
     #endregion
 
     #region MonoBehaviour
