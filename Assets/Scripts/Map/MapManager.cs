@@ -176,7 +176,7 @@ public class MapManager : Singleton<MapManager>
         assetCallbackList.Add(LoadHeightBlockData);
         assetCallbackList.Add(LoadMapTilesAsset);
         assetCallbackList.Add(LoadMapAsset);
-        assetCallbackList.Add((x, y) => { SetMapCenterPos(pos); });
+        assetCallbackList.Add((x, y) => {/* SetMapCenterPos(pos); */});
         LoadNextAsset();
 
     }
@@ -341,7 +341,11 @@ public class MapManager : Singleton<MapManager>
         {
             return;
         }
-        SetMapCenterPos(pos);
+
+        mapView.UpdateRoleRay(pos);
+
+        //4月底测试，初始化完毕创建所有先屏蔽
+        // SetMapCenterPos(pos);
     }
 
     private float maptileInterval = MapDefine.TilesGridInterval;//MapDefine.MapWidth / 4f;
