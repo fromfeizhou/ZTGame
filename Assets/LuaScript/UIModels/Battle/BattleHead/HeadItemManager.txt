@@ -5,7 +5,9 @@
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 local CSGetWorldToScreenPoint = CS.GameTool.GetWorldToScreenPoint
 local CSText = CS.UnityEngine.UI.Text
@@ -26,26 +28,29 @@ HeadItemManager = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function HeadItemManager:Create()
+function HeadItemManager:Create(canvas, container)
 	local obj = {}
 	setmetatable( obj, { __index = HeadItemManager })
-	obj:Init()
+	obj:Init(canvas, container)
 	return obj
 end
 
 --@brief 初始化
-function HeadItemManager:Init()
+function HeadItemManager:Init(canvas, container)
 	CSLog("HeadItemManager:Init")
-	self.m_canvas = GlobalBattleCtrl:GetCanvasComp()
-	self.m_container = GlobalBattleCtrl:GetHeadContainer()
+	self.m_canvas = canvas
+	self.m_container = container
 	self.m_tHurtNumList = {}
 	self.m_nTiSpeed = 1.2
 	self.m_nTiHorSpeedReduce = 0.007
 	self.m_nTiTime = 0.9
 
 	self:_InitEvent()
+	self:_InitDataComplete()
+
 	CS.AssetManager.LoadAsset(PathManager:GetBatteUINum("HurtText"),function(target,path)
 		self.m_hurtGo = target
+
 	end)
 end
 
@@ -73,33 +78,35 @@ end
 --@brief 监听事件
 function HeadItemManager:_InitEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum,self)
-	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnInitDataComplete,self)
 end
 
 --@brief 移除事件
 function HeadItemManager:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,self._OnUpdateCharacterHurtNum)
-	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnInitDataComplete)
 end
 
 --@brief 添加伤害数字
 function HeadItemManager:_OnUpdateCharacterHurtNum(hurtInfo)
 	local hurtType,pos,value = hurtInfo.hurtType, hurtInfo.pos, hurtInfo.value
 	if self.m_hurtGo then
-		local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
 		local hurtGo = CSGameObject.Instantiate(self.m_hurtGo)
 		hurtGo.transform:SetParent(self.m_container,false)
-		hurtGo.transform.position = {x = uiPos.x, y = uiPos.y + 0.3, z = 0}
+		hurtGo.transform.localPosition = CSVector3.zero
 		hurtGo.transform.localScale = {x = 1,y= 1,z = 1}
-		
+
+		local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
+		local rectTransform = hurtGo:GetComponent(typeof(CSRectTransform))
+		rectTransform.anchoredPosition = CSVector2(uiPos.x,uiPos.y + 20)
+
 		local text = hurtGo:GetComponent(typeof(CSText))
         text.text = value
 
         local hurtNum = {
         	text = text,
+        	rectTransform = rectTransform,
         	oriPos = pos,
         	time = self.m_nTiTime,		--消失时间
-        	horSpeed = math.random(8, 13)/10,	--水平速度随机值
+        	horSpeed = math.random(80, 130),	--水平速度随机值
         	extent = 4,		--抛物线系数
     	}
     	table.insert(self.m_tHurtNumList,hurtNum)
@@ -128,16 +135,16 @@ function HeadItemManager:_UpdateHurtNum()
 		
 
 		local pos = CSGetWorldToScreenPoint(hurtNum.oriPos,self.m_canvas)
-		hurtNum.text.transform.position = {x = pos.x, y = pos.y + 0.3 + self.m_nTiTime - hurtNum.time, z = 0}
+		hurtNum.rectTransform.anchoredPosition = CSVector2(pos.x,pos.y + 20 + (self.m_nTiTime - hurtNum.time)*100)
 	end
 end
 
 --@brief 数据初始化完成
-function HeadItemManager:_OnInitDataComplete()
+function HeadItemManager:_InitDataComplete()
 	if self.m_headItem then
 		self.m_headItem:Destroy()
 		self.m_headItem = nil
 	end
 	--CSLog("HeadItemManager:_OnInitDataComplete",self.m_container.name)
-	self.m_headItem =  BattleHeadItem:Create(self.m_container)
+	self.m_headItem =  BattleHeadItem:Create(self.m_canvas, self.m_container)
 end

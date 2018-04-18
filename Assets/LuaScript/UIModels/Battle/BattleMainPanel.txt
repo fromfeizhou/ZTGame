@@ -3,6 +3,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSRectTransform = CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
+local CSCANVAS = CS.UnityEngine.Canvas
 
 BattleMainPanel = {
 	m_panelName = "BattleMainPanel",
@@ -18,6 +19,8 @@ BattleMainPanel = {
 	m_tQuickBagPanel = nil, --快速背包
 	m_tRadarPanel = nil, --雷达面板
 	m_tScrollPanel = nil, --地图卷轴
+
+	m_tHeadItemMgr = nil,	--血槽，扣血特效
 }
 
 setmetatable( BattleMainPanel, { __index = UIBasePanel})
@@ -48,6 +51,10 @@ function BattleMainPanel:onCreatePanel()
 	self:_CreateSkillBtn()
 	self:_CreateMapRaderPanel()
 
+	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
+	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+
+	self.m_tHeadItemMgr = HeadItemManager:Create(canvas, self.m_rootTop)
 
 	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
 
@@ -75,12 +82,20 @@ function BattleMainPanel:onTick(deltaTime)
 		self.m_tScrollPanel:onTick(deltaTime)
 	end
 
-	self:_CheckQuickBagPanel()
+	if self.m_tHeadItemMgr then
+		self.m_tHeadItemMgr:Update()
+	end
 
+	self:_CheckQuickBagPanel()
+	
 end
 
 --@brief 子类重写 - 面板被销毁
 function BattleMainPanel:onDestroy()
+	if self.m_tHeadItemMgr then
+		self.m_tHeadItemMgr:Destroy()
+		self.m_tHeadItemMgr = nil
+	end
 end
 
 --@brief 子类重写 - 显示面板

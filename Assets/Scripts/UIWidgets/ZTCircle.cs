@@ -16,13 +16,13 @@ public class ZTCircle : MonoBehaviour {
 	/** 初始化 */
 	public void Init(int lineCnt,  bool awakeShow = false, float lineWidth = 6.0f, Vector2 pos = default(Vector2), float radius = 20)
 	{
-		Debug.Log ("lineWidth>>>>>>>>>>>>" + lineWidth);
 		gameObject.SetActive (awakeShow);
 		line = new VectorLine ("Circle", new List<Vector2> (lineCnt + 1), tex,lineWidth,LineType.Continuous);
 		line.texture = tex;
 		line.rectTransform.SetParent (transform);
 		line.rectTransform.anchorMin = Vector2.one * 0.5f;
 		line.rectTransform.anchorMax = Vector2.one * 0.5f;
+		line.rectTransform.localPosition = Vector2.zero;
 		line.rectTransform.anchoredPosition = Vector2.zero;
 		line.rectTransform.localScale = Vector3.one;
 		SetCircle (pos, radius);
