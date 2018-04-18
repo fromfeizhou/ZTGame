@@ -21,6 +21,7 @@ public class PathManager
     public static string ConfigPath = "Assets/ResourcesLib/Config";
     public static string ResoucePath = "Assets/ResourcesLib";
     public static string LuaPath = "Assets/LuaScript";
+    public static string HotLuaPath = "Assets/PersistentAssets/AssetBundle/LuaScript";
 	public const string NetWorkErrCodeFilePath = "ecode_zh";
 
     private static string GetRootPath(string key = "ImgShopItem", bool isResoucePath = true)

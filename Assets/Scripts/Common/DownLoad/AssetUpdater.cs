@@ -313,7 +313,7 @@ public class AssetUpdater : MonoBehaviour
             yield break;
       
         string path = DownLoadCommon.GetCacheFileFullName("LuaScript.zip");
-        string outPath = DownLoadCommon.GetFileFullName("LuaScript");
+        string outPath = DownLoadCommon.HOT_LUA_PATH;
 
         CompressHelper.CompressTask task = CompressHelper.UnCompressAsync(path, outPath);
         while (!task.IsDone)
