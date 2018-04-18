@@ -74,7 +74,7 @@ public class LuaMainScene : MonoBehaviour
 
     private byte[] CustomLoaderMethod(ref string fileName)
     {
-        fileName = PathManager.LuaPath +"/" + fileName.Replace('.', '/') + ".txt";
+        fileName = fileName.Replace('.', '/') + ".txt";
         TextAsset txtAsset = AssetManager.LoadLuaAsset(fileName) as TextAsset;
         if (null != txtAsset)
         {

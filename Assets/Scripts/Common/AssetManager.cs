@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using UnityEngine.Events;
 using XLua;
 
@@ -76,6 +77,15 @@ public class AssetManager
         }
 
 #if UNITY_EDITOR
+        string filename = PathManager.HotLuaPath + "/" + path;
+        if (File.Exists(filename))
+        {
+            Object objtmp = null;
+            objtmp = UnityEditor.AssetDatabase.LoadMainAssetAtPath(filename);
+            return objtmp;
+        }
+        //lua ab包地址
+        path = PathManager.LuaPath + "/" + path;
         //编辑器模式下 资源获取
         Object obj = null;
         obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
