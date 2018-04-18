@@ -75,13 +75,13 @@ public class LuaMainScene : MonoBehaviour
     private byte[] CustomLoaderMethod(ref string fileName)
     {
         fileName = fileName.Replace('.', '/') + ".txt";
-        TextAsset txtAsset = AssetManager.LoadLuaAsset(fileName) as TextAsset;
-        if (null != txtAsset)
-        {
-            return txtAsset.bytes;
-        }
+        //TextAsset txtAsset = AssetManager.LoadLuaAsset(fileName) as TextAsset;
+        //if (null != txtAsset)
+        //{
+        //    return txtAsset.bytes;
+        //}
         //找到指定文件  
-        return null;
+        return AssetManager.LoadLuaAsset(fileName);
     }
                                    
     // Use this for initialization

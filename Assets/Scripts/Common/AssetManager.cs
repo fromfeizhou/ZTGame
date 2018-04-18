@@ -68,7 +68,7 @@ public class AssetManager
      * @param path 资源路径
      * @param callback 回调函数
      */
-    public static Object LoadLuaAsset(string path)
+    public static byte[] LoadLuaAsset(string path)
     {
         // Windows 平台分隔符为 '/', OS 平台 路径分隔符为 '\'， 此处是一个大坑
         if (Application.platform == RuntimePlatform.WindowsEditor)
@@ -77,21 +77,35 @@ public class AssetManager
         }
 
 #if UNITY_EDITOR
+        Object obj = null;
         string filename = PathManager.HotLuaPath + "/" + path;
         if (File.Exists(filename))
         {
-            Object objtmp = null;
-            objtmp = UnityEditor.AssetDatabase.LoadMainAssetAtPath(filename);
-            return objtmp;
+            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(filename);
         }
-        //lua ab包地址
-        path = PathManager.LuaPath + "/" + path;
-        //编辑器模式下 资源获取
-        Object obj = null;
-        obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
-        return obj;
+        if(null == obj)
+        {
+            //lua ab包地址
+            path = PathManager.LuaPath + "/" + path;
+            //编辑器模式下 资源获取
+            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
+        }
+        TextAsset text = (TextAsset)obj;
+        if (null != text)
+            return text.bytes;
+
+        return null;
 #else
         Object obj2 = null;
+        string filename = DownLoadCommon.GetLuaHotFullName(path);
+        if (File.Exists(filename))
+        {
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            byte[] buffur = new byte[fs.Length];
+            fs.Read(buffur, 0, buffur.Length);
+            fs.Close();
+            return buffur;
+        }
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript");
         //加载assetBundleManifest文件    
@@ -99,16 +113,17 @@ public class AssetManager
         {   
             obj2 = bundle.LoadAsset(fileNameEx);
         }
-        return obj2;
+        TextAsset text2 = (TextAsset)obj2;
+        if (null != text2)
+            return text2.bytes;
+
+        return null;
 #endif
     }
 
-	public static byte[] LoadPbAsset(string path)
+    public static byte[] LoadPbAsset(string path)
 	{
-		TextAsset pbAsset = LoadLuaAsset (path) as TextAsset;
-		if (pbAsset != null)
-			return pbAsset.bytes;
-		return null;
+		return LoadLuaAsset(path);
 	}
 
     //加载所有资源
