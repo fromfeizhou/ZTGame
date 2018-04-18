@@ -275,7 +275,7 @@ public class TerrainSlicing : Editor
                 Vector3 postion = element.position;
                 Vector3 scale = element.localScale;
                 element.position = Vector3.zero;
-                element.localScale = Vector3.one;
+              //  element.localScale = Vector3.one;
                 Vector3 center = Vector3.zero;
                 Renderer[] renders = element.GetComponentsInChildren<Renderer>();
                 foreach (Renderer child in renders)
@@ -286,7 +286,7 @@ public class TerrainSlicing : Editor
                     bounds.Encapsulate(child.bounds);
                 Vector3 centralPoint = bounds.center;
                 element.position = postion;
-                element.localScale = scale;
+               // element.localScale = scale;
 
                 centralPoint += element.position;
                 int starX = (int) (centralPoint.x - bounds.size.x * 0.5f + offsetX) / MapDefine.MapElementSize;
@@ -302,7 +302,7 @@ public class TerrainSlicing : Editor
                         {
                             Pos = element.position,
                             Angle = element.eulerAngles,
-                            Scale = element.localScale
+                            Scale = element.lossyScale,
                         };
                         MapElement mapElement = new MapElement();
                         mapElement.elementKey = elementKey;
