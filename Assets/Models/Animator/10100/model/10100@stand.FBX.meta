@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9fc927988b2a58e49a98d0e773dd0ba6
-timeCreated: 1523937275
+guid: 0884579ce3109d54f86f3542afe0d7d3
+timeCreated: 1524052743
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -240,5 +240,5 @@ ModelImporter:
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
-  assetBundleName: assets_models_animator_10100_model
+  assetBundleName: 
   assetBundleVariant: 
