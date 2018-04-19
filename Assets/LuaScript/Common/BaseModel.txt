@@ -45,7 +45,7 @@ function BaseModel:Tick()
 	self:onTick()
 	if self.m_tPanelList then
 		for i,panel in pairs(self.m_tPanelList) do
-			if panel.Update then
+			if panel.Update and panel.m_isShow == true then
 				panel:Tick(deltaTime)
 			end
 		end
