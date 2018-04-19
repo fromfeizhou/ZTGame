@@ -57,9 +57,9 @@ function BattleModel:UpdateCommand()
 end
 
 function BattleModel:onTick( )
-	--if GameConfig.IsSingleScene then
-	--	self:_UpdateKeyBoardControl()
-	--end
+	if GameConfig.IsSingleScene then
+		self:_UpdateKeyBoardControl()
+	end
 end
 ----------------------------------------------------------------------------------------------------------------------------------
 --*******************************************************Public End***************************************************************

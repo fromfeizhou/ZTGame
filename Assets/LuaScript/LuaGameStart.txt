@@ -68,9 +68,13 @@ function LuaGameStart:EnterGameCity()
 	---初始化 加载登录lua
 	luaFieLoad:LoadGameLua(function()
 		print("LuaGame:LoadGameLua")
+		PanelManager:SetLoadingProgress(0.1)
 		ModelManager:_RegGameModel()
+		PanelManager:SetLoadingProgress(0.3)
 		PanelManager:_RegGamePanel()
+		PanelManager:SetLoadingProgress(0.6)
 		ZTCityScene:InitScene()
+		PanelManager:SetLoadingProgress(0.9)
 	end)
 end
 
