@@ -348,15 +348,19 @@ end
 
 --@brief 根据类型设置属性
 function Character:SetAttributeByType(attriType,value)
-	self.m_attriSystem:SetAttributeByType(attriType,value)
-
 	--发送血量变化事件
 	if attriType ==  AttributeType.Hp and self:IsInCamera() then
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
-
-		local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
+		local curHp = self:GetHp()
+		self.m_attriSystem:SetAttributeByType(attriType,value)
+		--弹出伤害数字
+		local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = curHp - self:GetHp()}
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
+		--同步血槽
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+		
+		return
 	end
+	self.m_attriSystem:SetAttributeByType(attriType,value)
 end
 
 --@brief 设置属性
