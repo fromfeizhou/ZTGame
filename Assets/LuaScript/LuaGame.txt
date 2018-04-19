@@ -42,7 +42,6 @@ function LuaGame:_InitLuaFileLoad( )
 	---初始化 加载登录lua
 	luaFieLoad:LoadLoginLua(function()
 		self.m_LuaGameStart = LuaGameStart:Create()
-		self.m_LuaGameStart:Init()
 	end)
 end
 

@@ -13,7 +13,7 @@ LuaGameStart = {
 function LuaGameStart:Create()
 	local obj = {}
 	setmetatable( obj, { __index = LuaGameStart })
-	obj:_RegManager()
+	obj:Init()
 	return obj
 end
 
@@ -21,12 +21,10 @@ end
 --@brief 初始化
 function LuaGameStart:Init()
 	print("LuaGameStart:Init")
-
-	if GameConfig.IsSingleScene then
-		self:_EnterSkillDebug()
-	else
-		self:_EnterLoginModel()
-	end
+	NetWorkManager:Init()
+	ZTProtocol:Init()
+	ZTProtoData:Init()
+	self:_RegManager()
 end
 
 --@brief 更新
@@ -37,7 +35,6 @@ end
 
 --@brief 移除
 function LuaGameStart:Destroy()
-
 	print("LuaGameStart:Destroy")
 end
 
@@ -46,19 +43,26 @@ function LuaGameStart:_RegManager( )
 	table.insert(self.m_mgrList, PanelManager) --创建面板管理器
 	table.insert(self.m_mgrList, TimerManager) --创建定时管理器
 	table.insert(self.m_mgrList, ModelManager) --创建模块管理器
+	self:StartLoadMgr()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
+function LuaGameStart:StartLoadMgr()
+	if #self.m_mgrList > 0 then
+		local mgr = self.m_mgrList[1]
+		table.remove(self.m_mgrList,1)
+		mgr:Create(function ()
+			self:StartLoadMgr()
+		end )
+	else
+		self:_ShowPanel_Login()
+	end 
+end
+
 --@brief 进入登录模块
 function LuaGameStart:_EnterLoginModel()
-	if GameConfig.IsOpenNetWork then 
-		NetWorkManager:Init()
-		ZTProtocol:Init()
-		ZTProtoData:Init()
-	end
-	
 	local loadMgrFinish = function ( )
 		self.m_loadMgrFinishNum = self.m_loadMgrFinishNum + 1
 		if self.m_loadMgrFinishNum == #self.m_mgrList then 
@@ -78,9 +82,10 @@ end
 
 --@brief 显示登录界面
 function LuaGameStart:_ShowPanel_Login()
-	local modelData = {}
-	modelData.modelType = MODEL_TYPE.LOGIN
-	modelData.panelType = LOGIN_TYPE.MAIN
+	local modelData = {
+		modelType = MODEL_TYPE.LOGIN,
+		panelType = LOGIN_TYPE.MAIN,
+	}
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
