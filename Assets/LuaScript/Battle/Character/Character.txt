@@ -353,6 +353,9 @@ function Character:SetAttributeByType(attriType,value)
 	--发送血量变化事件
 	if attriType ==  AttributeType.Hp and self:IsInCamera() then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+
+		local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 	end
 end
 
@@ -433,10 +436,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	if GameConfig.IsSingleScene then
-		self:ChangeHp(value)
+	if not GameConfig.IsSingleScene then
+		return
 	end
-
+	self:ChangeHp(value)
 	local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
