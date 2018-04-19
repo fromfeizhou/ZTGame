@@ -60,12 +60,11 @@ end
 
 
 function LoginModel:LoginFinish()
+	PanelManager:ShowLoadingPanel()
 	GCSLog("LoginModel:LoginFinish登录完成，进入游戏")
 	self:_CleanPanel()
 	GCSLog("LoginModel:LoginFinish登录完成，进入游戏")
-
 	LuaGameStart:EnterGameCity()
-
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

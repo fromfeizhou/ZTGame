@@ -119,6 +119,10 @@ function CityMainPanel:_UnRegNetFacade()
 end
 	
 
+function CityMainPanel:onShow()
+	PanelManager:HideLoadingPanel()
+end
+
 --@brief 选择角色
 function CityMainPanel:_SelectHero(roleId)
 
