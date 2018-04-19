@@ -41,6 +41,7 @@ end
 --@brief 场景加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
 	self:_Init()
+	PanelManager:HideLoadingPanel()
 end
 
 
