@@ -134,7 +134,9 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed * (1/self.m_bDelayPosSpeed.magnitude) * BattleDefine.PlayerSpeed / BattleDefine.RendererDelay
 				self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
 
-				self.m_tTargetPos = nil
+				self.m_tTargetPos = pos + self.m_bDelayPosSpeed * 2--加两帧补间
+			else
+				self.m_bDelayPosSpeed = nil
 			end
 		end
 		
