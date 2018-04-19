@@ -48,7 +48,7 @@ function SkillActionStateLocked:Start()
 		self.m_tOwner:InState(CharacterState.FaceLocked)
 	end
 
-	if self.m_nFaceLocked > 0 then
+	if self.m_nAnimaLocked > 0 then
 		self.m_tOwner:InState(CharacterState.AnimaLocked)
 	end
 end
@@ -90,7 +90,7 @@ function SkillActionStateLocked:Destroy()
 		self.m_tOwner:OutState(CharacterState.FaceLocked)
 	end
 
-	if self.m_nFaceLocked > 0 then
+	if self.m_nAnimaLocked > 0 then
 		self.m_tOwner:OutState(CharacterState.AnimaLocked)
 	end
 	
