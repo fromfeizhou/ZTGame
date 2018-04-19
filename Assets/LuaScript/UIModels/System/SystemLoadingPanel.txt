@@ -6,10 +6,13 @@
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
+local CSMathf = CS.UnityEngine.Mathf
 
 SystemLoadingPanel = {
 	m_panelName = "SystemLoadingPanel",
 	m_ztSlider = nil,
+	m_sensitivity = 0.6,
+	m_progress = 0,
 }
 
 setmetatable( SystemLoadingPanel, { __index = UIBasePanel})
@@ -38,10 +41,13 @@ end
 
 --@brief 面板每帧更新
 function SystemLoadingPanel:onTick(deltaTime)
+	if self.m_ztSlider.value ~= self.m_progress then
+		self.m_ztSlider.value = CSMathf.Lerp(self.m_ztSlider.value, self.m_progress, self.m_sensitivity)
+	end
 end
 
-function SystemLoadingPanel:onUpdate()
-	self.m_ztSlider.value = self.m_tPanelData.progress
+function SystemLoadingPanel:onHide( )
+	self:SetProgress(0,true)
 end
 
 --@brief 销毁登录面板
@@ -66,3 +72,29 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function SystemLoadingPanel:SetSensitivity( sensitivity )
+	if sensitivity then
+		if sensitivity > 1 then 
+			self.m_sensitivity = 0.9
+		elseif sensitivity <= 0 then
+			 self.m_sensitivity = 0.1 
+		else
+			self.m_sensitivity = sensitivity
+		end
+	else
+		self.m_sensitivity = 0.6
+	end
+end
+
+function SystemLoadingPanel:SetProgress( progress, force )
+
+	local tmpPressage = progress
+	if tmpPressage > 1 then tmpPressage = 1 end
+	if tmpPressage < 0 then tmpPressage = 0 end
+
+	self.m_progress = tmpPressage
+	if force then 
+		self.m_ztSlider.value = tmpPressage
+	end
+end
