@@ -65,6 +65,12 @@ AttributeType = {
 	Mp = 15,		--当前能量
 	
 	MpRec = 16,		--能量回复
+
+	EquipCover = 2001, 		--服饰
+	EquipWeapon = 2002,		-- 武器
+	EquipNecklace = 2003, 	--项链
+ 	EquipRing = 2004,		--戒指
+ 	EquipSpirit = 2005,		--精灵
 }
 
 --@brief buff类型

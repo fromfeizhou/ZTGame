@@ -349,13 +349,28 @@ function Character:SetAttributeByType(attriType,value)
 	if attriType ==  AttributeType.Hp and self:IsInCamera() then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 	end
+
+
 end
 
 --@brief 设置属性
 function Character:SetAttributeByList(list)
+	local isEquipUpdate = false
 	for i = 1,#list do
 		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
 		self:SetAttributeByType(list[i][1],list[i][2])
+		local attriType = list[i][1]
+		if attriType == AttributeType.EquipCover or
+			attriType == AttributeType.EquipNecklace or
+			attriType == AttributeType.EquipRing or
+			attriType == AttributeType.EquipSpirit then
+			isEquipUpdate = true
+		end
+
+	end
+
+	if isEquipUpdate then
+		self.m_animData:UpdateEquipData(self.m_attriSystem:GetEquipIds())
 	end
 
 end

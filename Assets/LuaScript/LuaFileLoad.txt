@@ -127,6 +127,7 @@ local LuaFileLoad = {
 		"UIModels.Battle.MapRadarPanel",
 		
 		"UIModels.Battle.BattleMainPanel",
+		"UIModels.Battle.BattleEnd.BattleEndPanel",
 
 		"UIModels.Battle.Bag.BattleBagPanel",
 		"UIModels.Battle.Bag.BattleBagCell",
