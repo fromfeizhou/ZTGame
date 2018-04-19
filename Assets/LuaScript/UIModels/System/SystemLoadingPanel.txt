@@ -1,87 +1,68 @@
---LuaGameStart.txt
+--SystemLoadingPanel.txt
 --@breif lua入口
 --@data 2018/3/5
-LuaGameStart = {
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+SystemLoadingPanel = {
+	m_panelName = "SystemLoadingPanel",
+	m_ztSlider = nil,
 }
 
+setmetatable( SystemLoadingPanel, { __index = UIBasePanel})
+
+function SystemLoadingPanel:GetLayerType()
+	return LAYER_TYPE.TOP
+end
+
+function SystemLoadingPanel:AwakeShow()
+	return false
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 拷贝原表
-function LuaGameStart:Create()
-	local obj = {}
-	setmetatable( obj, { __index = LuaGameStart })
-	return obj
+function SystemLoadingPanel:GetName()
+	return "SystemLoadingPanel"
+end
+--@brief 面板被创建
+function SystemLoadingPanel:onCreatePanel()
+	self.m_ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider")
 end
 
---@brief 初始化
-function LuaGameStart:Init()
-	print("LuaGameStart:Init")
-
-	if GameConfig.IsSingleScene then
-		self:_EnterSkillDebug()
-	else
-		self:_EnterLoginModel()
-	end
+--@brief 面板初始化
+function SystemLoadingPanel:onInitPanel()
 end
 
---@brief 更新
-function LuaGameStart:Update()
-	ModelManager:Update()
-	TimerManager:Update()
+--@brief 面板每帧更新
+function SystemLoadingPanel:onTick(deltaTime)
 end
 
---@brief 移除
-function LuaGameStart:Destroy()
-	print("LuaGameStart:Destroy")
+function SystemLoadingPanel:onUpdate()
+	self.m_ztSlider.value = self.m_tPanelData.progress
 end
 
+--@brief 销毁登录面板
+function SystemLoadingPanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function SystemLoadingPanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function SystemLoadingPanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function SystemLoadingPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function SystemLoadingPanel:_UnRegNetFacade()
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
---@brief 进入登录模块
-function LuaGameStart:_EnterLoginModel()
-	if GameConfig.IsOpenNetWork then 
-		NetWorkManager:Init()
-		ZTProtocol:Init()
-		ZTProtoData:Init()
-	end
-	PanelManager:Create() --创建面板管理器
-	TimerManager:Create() --创建定时管理器
-	ModelManager:Create() --创建模块管理器
-
-	self:_ShowPanel_Login()
-end
-
---@brief 显示登录界面
-function LuaGameStart:_ShowPanel_Login()
-	local modelData = {}
-	modelData.modelType = MODEL_TYPE.LOGIN
-	modelData.panelType = LOGIN_TYPE.MAIN
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
-end
-
---@brief 进入主城场景
-function LuaGameStart:EnterGameCity()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	luaFieLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLua")
-		ModelManager:_RegGameModel()
-		PanelManager:_RegGamePanel()
-		ZTCityScene:InitScene()
-	end)
-end
-
-
---@brief 进入技能调试
-function LuaGameStart:_EnterSkillDebug()
-	local luaFieLoad = require 'LuaFileLoad' --加载文件
-	---初始化 加载登录lua
-	luaFieLoad:LoadGameLua(function()
-		print("LuaGame:LoadGameLua")
-			ZTBattleScene:InitScene()
-			TimerManager:Create()
-	end)
-end
