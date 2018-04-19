@@ -88,10 +88,40 @@ function PanelManager:_CreatePanel(model, panelType, panelData)
 	local layerType = panel:GetLayerType()
 	local layer = self.m_layerList[layerType].layerRoot
 	panel:_LoadAssetPanel(layer, model, panelData)
+	self.m_panelList[panelType] = panel
 	return panel
 end
 
 
 function PanelManager:GetLayerRoot(layerType)
 	return self.m_layerList[layerType].layerRoot
+end
+
+
+--@brief 显示Loading界面
+--@brief 参数：sensitivity 灵敏度
+function PanelManager:ShowLoadingPanel(sensitivity)
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		if sensitivity then
+			panel:SetSensitivity(sensitivity)
+		end
+		panel:Show()
+	end
+end
+
+--@brief 隐藏Loading界面
+function PanelManager:HideLoadingPanel()
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		panel:Hide()
+	end
+end
+
+--@brief 设置Loading界面进度
+function PanelManager:SetLoadingProgress( progress, force )
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		panel:SetProgress(progress, force)
+	end
 end
