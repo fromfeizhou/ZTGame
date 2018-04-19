@@ -10,7 +10,7 @@ SkillActionType = {
 	Collider = 3,	--碰撞
 	SpEffect = 4,	--特效
 	PlayerMove = 5,	--玩家位移
-	MoveLocked = 6,	--锁定移动
+	StateLocked = 6,	--锁定状态
 }
 
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
