@@ -8,6 +8,10 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
+		"Common.BaseManager",
+		"Common.UIBasePanel",
+		"Common.BaseModel",
+
 		"Common.Data.ModelData",
 		"Common.PathManager",
 		"Common.NetWorkManager",
@@ -18,8 +22,6 @@ local LuaFileLoad = {
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
-		"Common.UIBasePanel",
-		"Common.BaseModel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",

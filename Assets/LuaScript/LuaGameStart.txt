@@ -2,6 +2,8 @@
 --@breif lua入口
 --@data 2018/3/5
 LuaGameStart = {
+	m_mgrList,
+	m_loadMgrFinishNum = 0,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -11,8 +13,10 @@ LuaGameStart = {
 function LuaGameStart:Create()
 	local obj = {}
 	setmetatable( obj, { __index = LuaGameStart })
+	obj:_RegManager()
 	return obj
 end
+
 
 --@brief 初始化
 function LuaGameStart:Init()
@@ -33,9 +37,16 @@ end
 
 --@brief 移除
 function LuaGameStart:Destroy()
+
 	print("LuaGameStart:Destroy")
 end
 
+function LuaGameStart:_RegManager( )
+	self.m_mgrList = {}
+	table.insert(self.m_mgrList, PanelManager) --创建面板管理器
+	table.insert(self.m_mgrList, TimerManager) --创建定时管理器
+	table.insert(self.m_mgrList, ModelManager) --创建模块管理器
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -47,12 +58,23 @@ function LuaGameStart:_EnterLoginModel()
 		ZTProtocol:Init()
 		ZTProtoData:Init()
 	end
-	PanelManager:Create() --创建面板管理器
-	TimerManager:Create() --创建定时管理器
-	ModelManager:Create() --创建模块管理器
+	
+	local loadMgrFinish = function ( )
+		self.m_loadMgrFinishNum = self.m_loadMgrFinishNum + 1
+		if self.m_loadMgrFinishNum == #self.m_mgrList then 
+			self:_OnGameInitFinish()
+		end
+	end
 
+	for i=1,#self.m_mgrList do
+		self.m_mgrList[i]:Create(loadMgrFinish)
+	end
+end
+
+function LuaGameStart:_OnGameInitFinish( )
 	self:_ShowPanel_Login()
 end
+
 
 --@brief 显示登录界面
 function LuaGameStart:_ShowPanel_Login()
