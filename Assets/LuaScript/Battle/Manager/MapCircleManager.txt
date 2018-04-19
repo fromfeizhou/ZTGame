@@ -16,6 +16,8 @@ local CSLog = CS.GameTool.Log
 MapCircleManager = {
 	m_fbxDuCircle = nil,
 
+	m_isStart = false,
+
 	m_circle = nil,--网络基础数据
 	m_curCircle = nil,--当前毒圈数据
 
@@ -59,7 +61,6 @@ end
 
 --@brief 收到服务器毒圈信息
 function MapCircleManager:SetMapCircleCommand(p_map_circle)
-	LogC("MapCircleManager:SetMapCircleCommand")
 	local circleData = {}
 	for i=1,#p_map_circle do
 		local netCircleData = p_map_circle[i]
@@ -79,7 +80,6 @@ function MapCircleManager:SetMapCircleCommand(p_map_circle)
 	MapCircleManager.m_destCircle = {}
 end
 
-
 --@brief 计算毒圈数据
 function MapCircleManager:CalculationCircle()
 
@@ -95,7 +95,17 @@ function MapCircleManager:CalculationCircle()
 	 	return 
 	end
 
+
+
 	MapCircleManager.m_isWait = curFrameNum < self.m_curCircle.startFrame
+
+	--开始缩圈流程
+	if not MapCircleManager.m_isStart then 
+		if not MapCircleManager.m_isWait then
+			MapCircleManager.m_isStart = true
+		end
+	end
+
 
 	if MapCircleManager.m_isWait then 
 		--毒圈等待
