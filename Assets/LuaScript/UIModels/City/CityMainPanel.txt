@@ -46,7 +46,7 @@ end
 function CityMainPanel:onCreatePanel()	
 	
 	-- 按钮 - 服务器列表
-	PanelWidget:GetButton(self.m_transform,"ViewPort/TeamList/Btn_Confirm",function() ZTBattleScene:InitScene() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/TeamList/Btn_Confirm",function() self:_OnClick_GameStart() end)
 
 	-- 按钮 - 技能提示
 	PanelWidget:GetZTButtonL(self.m_transform,"ViewPort/SkillList/Skill_0",function() self:_OnClick_Skill_OnDown(1) end, function() self:_OnClick_Skill_OnUp() end)
@@ -205,6 +205,12 @@ end
 
 function CityMainPanel:_OnClick_SelectFriend( friendItemIdx )
 	self:_ShowNotice("敬请期待 - 好友选择 - " .. friendItemIdx)
+end
+
+
+function CityMainPanel:_OnClick_GameStart()
+	PanelManager:ShowLoadingPanel()
+	ZTBattleScene:InitScene() 
 end
 
 --@brief 显示提示
