@@ -91,6 +91,11 @@ public class AssetUpdater : MonoBehaviour
     private string _current_url;
 
     /// <summary>
+    ///   当前可用的ab下载地址
+    /// </summary>
+    private string _current_ab_url;
+
+    /// <summary>
     ///   
     /// </summary>
     private URLVerifier _verifier;
@@ -123,6 +128,7 @@ public class AssetUpdater : MonoBehaviour
 
         _url_group = url_group;
         _current_url = null;
+        _current_ab_url = null;
         StartCoroutine(Updating());
 
         return true;
@@ -248,15 +254,6 @@ public class AssetUpdater : MonoBehaviour
 
         UpdateCompleteValue(0f, 1f);
 
-        //下载地址重定向为根文件夹
-        for (int i = 0; i < _url_group.Count; ++i)
-        {
-            //#if UNITY_EDITOR
-            //            _url_group[i] = _url_group[i] + "/win/AssetBundle/";
-            //#elif UNITY_ANDROID
-            //        _url_group[i] = _url_group[i] + "/android/AssetBundle/";
-            //#endif
-        }
         //找到合适的资源服务器
         _verifier = new URLVerifier(_url_group);
         _verifier.Start();
@@ -265,6 +262,11 @@ public class AssetUpdater : MonoBehaviour
             yield return null;
         }
         _current_url = _verifier.URL;
+#if UNITY_EDITOR
+        _current_ab_url = _current_url + "/Wins/AssetBundle/";
+#elif UNITY_ANDROID
+        _current_ab_url = _current_url + "/Android/AssetBundle/";
+#endif
         if (string.IsNullOrEmpty(_current_url))
         {
             Debug.LogWarning("Can't find valid Resources URL");
@@ -283,7 +285,6 @@ public class AssetUpdater : MonoBehaviour
         Debug.Log("AssetUpdater:StartDownLuaZip");
         if (ErrorCode != EmErrorCode.None)
             yield break;
-
         //下载主配置文件
         _file_download = new FileDownload(_current_url
                                 , DownLoadCommon.CACHE_PATH
@@ -322,6 +323,7 @@ public class AssetUpdater : MonoBehaviour
             UpdateCompleteValue(Mathf.Floor(task.Progress * 100), 100f);
             yield return null;
         }
+        Debug.Log("AssetUpdater:StartUnZipLua Delete: " + path);
         File.Delete(path);
       
         UpdateCompleteValue(1f, 1f);
@@ -337,9 +339,8 @@ public class AssetUpdater : MonoBehaviour
         Debug.Log("AssetUpdater:StartDownloadMainConfig");
         if (ErrorCode != EmErrorCode.None)
             yield break;
-
         //下载主配置文件
-        _file_download = new FileDownload(_current_url
+        _file_download = new FileDownload(_current_ab_url
                                 , DownLoadCommon.CACHE_PATH
                                 , DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         _file_download.Start();
@@ -405,7 +406,7 @@ public class AssetUpdater : MonoBehaviour
         }
 
         //更新所有需下载的资源
-        _ab_download = new AssetBundleDownloader(_current_url);
+        _ab_download = new AssetBundleDownloader(_current_ab_url);
         _ab_download.Start(DownLoadCommon.PATH, download_files);
         while (!_ab_download.IsDone)
         {
