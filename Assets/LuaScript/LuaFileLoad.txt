@@ -38,6 +38,7 @@ local LuaFileLoad = {
 		"UIModels.System.SystemModel",
 		"UIModels.System.SystemNoticePanel",
 		"UIModels.System.SystemLockPanel",
+		"UIModels.System.SystemLoadingPanel",
 
 		--登录模块
 		"UIModels.Login.LoginModel",

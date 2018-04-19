@@ -1,0 +1,68 @@
+--SystemLoadingPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+
+SystemLoadingPanel = {
+	m_panelName = "SystemLoadingPanel",
+	m_ztSlider = nil,
+}
+
+setmetatable( SystemLoadingPanel, { __index = UIBasePanel})
+
+function SystemLoadingPanel:GetLayerType()
+	return LAYER_TYPE.TOP
+end
+
+function SystemLoadingPanel:AwakeShow()
+	return false
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function SystemLoadingPanel:GetName()
+	return "SystemLoadingPanel"
+end
+--@brief 面板被创建
+function SystemLoadingPanel:onCreatePanel()
+	self.m_ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider")
+end
+
+--@brief 面板初始化
+function SystemLoadingPanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function SystemLoadingPanel:onTick(deltaTime)
+end
+
+function SystemLoadingPanel:onUpdate()
+	self.m_ztSlider.value = self.m_tPanelData.progress
+end
+
+--@brief 销毁登录面板
+function SystemLoadingPanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function SystemLoadingPanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function SystemLoadingPanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function SystemLoadingPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function SystemLoadingPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

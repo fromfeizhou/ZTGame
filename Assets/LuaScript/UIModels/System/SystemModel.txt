@@ -9,6 +9,7 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 
 SystemModel = {
+	m_awakeShow = false,
 }
 
 setmetatable( SystemModel, { __index = BaseModel})
@@ -33,6 +34,9 @@ end
 
 --@brief 子类重写 - 模块初始化
 function SystemModel:onInitModel()
+	self.m_tPanelList[SYSTEM_TYPE.NOTICE] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.NOTICE)
+	self.m_tPanelList[SYSTEM_TYPE.LOCK] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.LOCK)
+	self.m_tPanelList[SYSTEM_TYPE.LOADING] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.LOADING)
 end
 
 --@brief 子类重写 - 添加事件监听
@@ -54,4 +58,9 @@ end
 --@brief 子类重写 - 模块被销毁
 function SystemModel:onDestroy()
 	GCSLog("SystemModel:onDestroy")
+end
+
+
+function SystemModel:LoadingPanel_Set(progress)
+	-- body
 end

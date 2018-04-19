@@ -59,6 +59,8 @@ end
 function PanelManager:_RegLoginPanel()
 	self.m_panelDefine[SYSTEM_TYPE.NOTICE] 		= SystemNoticePanel
 	self.m_panelDefine[SYSTEM_TYPE.LOCK] 		= SystemLockPanel
+	self.m_panelDefine[SYSTEM_TYPE.LOADING]		= SystemLoadingPanel
+	
 	self.m_panelDefine[LOGIN_TYPE.MAIN] 		= LoginMainPanel
 	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] 	= LoginCreateRolePanel
 end
@@ -93,20 +95,3 @@ end
 function PanelManager:GetLayerRoot(layerType)
 	return self.m_layerList[layerType].layerRoot
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

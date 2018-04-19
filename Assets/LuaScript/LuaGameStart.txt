@@ -47,10 +47,9 @@ function LuaGameStart:_EnterLoginModel()
 		ZTProtocol:Init()
 		ZTProtoData:Init()
 	end
-	 
-	ModelManager:Create() --创建模块管理器
-	TimerManager:Create() --创建定时管理器
 	PanelManager:Create() --创建面板管理器
+	TimerManager:Create() --创建定时管理器
+	ModelManager:Create() --创建模块管理器
 
 	self:_ShowPanel_Login()
 end
@@ -69,8 +68,9 @@ function LuaGameStart:EnterGameCity()
 	---初始化 加载登录lua
 	luaFieLoad:LoadGameLua(function()
 		print("LuaGame:LoadGameLua")
+		ModelManager:_RegGameModel()
 		PanelManager:_RegGamePanel()
-			ZTCityScene:InitScene()
+		ZTCityScene:InitScene()
 	end)
 end
 

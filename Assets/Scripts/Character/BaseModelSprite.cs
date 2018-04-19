@@ -202,6 +202,8 @@ public class RoleModelSprite : BaseModelSprite
             return;
         if (string.IsNullOrEmpty(assetPaths[loadIndex]) || assetPaths[loadIndex].Equals(GetPathByType(modelPartPath, type)))
         {
+            if (string.IsNullOrEmpty(assetPaths[loadIndex]))
+                DestroyOldPart(type);
             loadIndex++;
             LoadNextAsset();
         }
@@ -219,6 +221,8 @@ public class RoleModelSprite : BaseModelSprite
         loadIndex++;
         LoadNextAsset();
     }
+
+    //private bool test = true;
     //模型组装完毕
     private void OnCreateModelFinish()
     {
