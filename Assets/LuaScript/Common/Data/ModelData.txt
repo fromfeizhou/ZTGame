@@ -32,4 +32,5 @@ CITY_TYPE = {
 BATTLE_TYPE = {
 	MAIN  		= 4001,	--全局控制面板
 	MATCH		= 4005, --匹配界面
+	BATTLEEND	= 4006,
 }

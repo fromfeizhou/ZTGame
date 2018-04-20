@@ -154,6 +154,7 @@ function AnimatorData:UpdateEquipData(cover,weapon,necklace,ring,spirit)
 	end
 
 	if isrush then
+		CSLog("EquiptId Change---------------------------")
 		self:DispatchEvent(AnimaEvent.UpdateModel)
 	end
 end
@@ -168,18 +169,23 @@ function AnimatorData:GetModelViewData()
 	local ringPath = self:GetEquipPath(self.m_nRing)
 	local spiritPath = self:GetEquipPath(self.m_nSpirit)
 
+	if coverPath == "" then
+		coverPath="Assets/Models/CharacterRoot/10100/10100.prefab"
+	end
 
+	if weaponPath == "" then
+		weaponPath="Assets/Models/CharacterRoot/10200/10200.prefab"
+	end
 
 	return 1,1,coverPath,weaponPath,necklacePath,ringPath,spiritPath--"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"
 end
 
 function AnimatorData:GetEquipPath(itemId)
-	
-	if Tab_Equipment[tempItem.id] then
-  		local itemData = Tab_Equipment[tempItem.id]
-  		local equipType =self.m_nCareerType * 10000+ itemData.type * 100
-  		CSLog("Get EquiptId :>>>>>>>>>",equipType)
-  		CSLog("Get EquipIdPath>>>>>",PathManager:GetAnimatorPath(equipType))
+	if Tab_Equipment[itemId] then
+  		local itemData = Tab_Equipment[itemId]
+  		local equipType =self.m_nCareerType * 10000+ itemData.type * 100+itemData.Lv
+  		--CSLog("Get EquiptId :>>>>>>>>>",equipType)
+  		--CSLog("Get EquipIdPath>>>>>",PathManager:GetAnimatorPath(equipType))
   		return PathManager:GetAnimatorPath(equipType)
   	end
   	return ""

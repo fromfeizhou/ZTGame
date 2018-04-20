@@ -24,6 +24,7 @@ BattleMapView = {
 	m_tAllViewObj=nil,
 }
 
+local tempIndex = 1
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -46,6 +47,7 @@ function BattleMapView:Init()
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
+	tempIndex = 1
  	math.randomseed(os.time())
  	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("TestProp_1"),callback_loadfinish)
  	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("TestProp_2"),callback_loadfinish)
@@ -54,13 +56,14 @@ end
 
 function BattleMapView:_LoadAsseFinish(target,path)
 	local prefab = target
- 		if prefab then
- 			--self.m_testCubeObj = CSGameObject.Instantiate(target,self.m_transform)
- 			local x = string.sub(target.name,string.len(target.name),string.len(target.name))
- 			self.m_dTestCubeObjDic[x]=CSGameObject.Instantiate(target,self.m_transform)
- 		else
-			CSLog("BattleMapView:GetEquipCell: prefab load Error!") 
-		end
+ 	if prefab then
+ 		--self.m_testCubeObj = CSGameObject.Instantiate(target,self.m_transform)
+ 		--local x = string.sub(target.name,string.len(target.name),string.len(target.name))
+ 		self.m_dTestCubeObjDic[tempIndex]=CSGameObject.Instantiate(target,self.m_transform)
+ 	else
+		CSLog("BattleMapView:GetEquipCell: prefab load Error!") 
+	end
+	tempIndex=tempIndex+1
 end
 
 --@brief 移除

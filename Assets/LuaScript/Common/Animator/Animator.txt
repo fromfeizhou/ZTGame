@@ -112,7 +112,7 @@ end
 
 function Animator:_RushModelView()
 	if self.m_bIsInCamera then
-		self:_CreateAnimatorView(self.m_animData:GetModelViewData())
+		self:_CreateAnimatorView()
 	else
 		self:_RemoveAnimatorView()
 	end

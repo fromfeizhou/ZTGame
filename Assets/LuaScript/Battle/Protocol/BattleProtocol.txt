@@ -123,6 +123,7 @@ function BattleProtocol:_OnSurvieEnd(survive_end_s2c)
 		panelType = BATTLE_TYPE.BATTLEEND,
 		panelData = data
 	}
+	CSLog("DispatchEvent BattleEnd-------------------------------------")
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
