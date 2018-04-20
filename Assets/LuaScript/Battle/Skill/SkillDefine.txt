@@ -13,6 +13,16 @@ SkillActionType = {
 	MoveLocked = 6,	--锁定移动
 }
 
+
+--@brief 技能指示类型
+SkillAreaType = {
+	OuterCircle = 1,    -- 外圆
+    InnerCircle = 2,    -- 内圆
+    Cube = 3,           -- 矩形 
+    Sector60 = 4,        -- 扇形
+    Sector120 = 5,        -- 扇形
+}
+
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
 SkillLayerType = {
 	Hero = 1,	--玩家

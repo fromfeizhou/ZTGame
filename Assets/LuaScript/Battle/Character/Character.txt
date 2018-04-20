@@ -231,6 +231,14 @@ function Character:GetEffectCon()
 	return nil
 end
 
+--@brief 获取技能容器
+function Character:GetSkillCon()
+	if self.m_animator then
+		return self.m_animator:GetSkillCon()
+	end
+	return nil
+end
+
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -239,8 +247,6 @@ end
 --@brief 设置玩家状态
 function Character:InState(state)
 	self.m_nState = self.m_nState | state
-	---CSLog("Character:InState",self.m_nState)
-
 	if state == CharacterState.MoveLocked then
 		self.m_bMoveLocked = true
 	elseif state == CharacterState.AnimaLocked then
@@ -275,7 +281,7 @@ end
 --@brief 是否存在状态
 function Character:IsInState(state)
 	local result = self.m_nState & state
-	return result == 1
+	return result == state
 end
 
 --@brief 是否是普通状态

@@ -17,6 +17,7 @@ PathManager = {
 	m_sHeroModel	= "Assets/Models/CharacterRoot/%s/%s",
 
 	m_sBattleUIPrefab 	= "Assets/Prefabs/Model/Battle/",		--战斗ui预设地址
+	m_sBattleUISkillPrefab 	= "Assets/Prefabs/Model/Battle/Skill/",		--战斗技能ui
 	m_sBattleUINum 		= "Assets/Prefabs/Model/Battle/",		--战斗ui数字
 	m_sSkillParticles 	= "Assets/Particles/Skill/",				--技能粒子地址
 	m_sSkillIcon 		= "Assets/ResourcesLib/Images/PanelPng/Fight/SkillIcon/", --技能图标地址
@@ -70,6 +71,13 @@ end
 --@return string 地址
 function PathManager:GetBatteUIPanel(name)
 	return PathManager.m_sBattleUIPrefab .. name ..".prefab"
+end
+
+--@brief 获取战斗ui pb文件路径
+--@param name pb文件名字
+--@return string 地址
+function PathManager:GetBatteUISkill(name)
+	return PathManager.m_sBattleUISkillPrefab .. name ..".prefab"
 end
 
 --@brief 获取战斗数字 pb文件路径

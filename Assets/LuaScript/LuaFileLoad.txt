@@ -101,6 +101,7 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillDefine",
 		"Battle.Skill.SkillEffectDefine",
 		"Battle.Skill.SkillMoveDefine",
+		"Battle.Skill.SkillAreaManager",
 		"Battle.Skill.Collider.ZTCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillAction",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionFace",
