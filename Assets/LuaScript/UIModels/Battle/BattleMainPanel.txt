@@ -58,10 +58,6 @@ function BattleMainPanel:onCreatePanel()
 
 	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
 
-	--临时匹配按钮
-	if not GameConfig.IsSingleScene then
-		BattleCommandProtocol:SendMath()
-	end
 end
 
 --@brief 子类重写 - 面板初始化
@@ -184,6 +180,7 @@ end
 
 --@brief 按钮点击-开启背包
 function BattleMainPanel:_OnClickBagBtn( )
+	--[[
 	if self.m_tBagPanel then
 		GCSLog("BattleMainPanel:_OnClickBagBtn",self.m_tBagPanel.m_isShow)
 		if self.m_tBagPanel.m_isShow == true then
@@ -194,6 +191,8 @@ function BattleMainPanel:_OnClickBagBtn( )
 	else
 		self:_CreateBagPanel()
 	end
+	]]
+	GlobalBattleCtrl:ExitBattle()
 end
 
 --@brief 按钮点击-开启地图卷轴

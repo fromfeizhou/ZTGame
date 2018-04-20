@@ -143,18 +143,20 @@ end
 function MapRadarPanel:_UpdatePlayer()
 	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
+	if team then 
 	for k,v in pairs(team) do
-		local playerId = v:GetBattleId()
+			local playerId = v:GetBattleId()
 
-		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
+			self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 
-		local pos = v:GetPos()
-		--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
-		self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
-		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+			local pos = v:GetPos()
+			--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
+			self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
+			self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 
-		if playerId == GlobalBattleCtrl:GetOwnerId() then
-			self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
+			if playerId == GlobalBattleCtrl:GetOwnerId() then
+				self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
+			end
 		end
 	end
 end
