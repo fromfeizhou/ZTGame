@@ -96,7 +96,7 @@ function HeadItemManager:_OnUpdateCharacterHurtNum(hurtInfo)
 
 		local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
 		local rectTransform = hurtGo:GetComponent(typeof(CSRectTransform))
-		rectTransform.anchoredPosition = CSVector2(uiPos.x,uiPos.y + 20)
+		rectTransform.anchoredPosition = CSVector2(uiPos.x,uiPos.y + 50)
 
 		local text = hurtGo:GetComponent(typeof(CSText))
         text.text = value
@@ -135,7 +135,7 @@ function HeadItemManager:_UpdateHurtNum()
 		
 
 		local pos = CSGetWorldToScreenPoint(hurtNum.oriPos,self.m_canvas)
-		hurtNum.rectTransform.anchoredPosition = CSVector2(pos.x,pos.y + 20 + (self.m_nTiTime - hurtNum.time)*100)
+		hurtNum.rectTransform.anchoredPosition = CSVector2(pos.x,pos.y + 150 + (self.m_nTiTime - hurtNum.time)*100)
 	end
 end
 
