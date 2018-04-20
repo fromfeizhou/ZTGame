@@ -28,10 +28,11 @@ setmetatable( PanelManager, { __index = BaseManager})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function PanelManager:Create()
+function PanelManager:Create(callbackInitFinish)
 	GCSLog("PanelManager:Create")
 	local obj = {}
 	setmetatable( obj, { __index = PanelManager })
+	obj.m_callbackInitFinish = callbackInitFinish
 	obj:_LoadUIRoot()
 	return obj
 end
@@ -55,6 +56,7 @@ function PanelManager:Init()
 	self:_InitLayer(LAYER_TYPE.TOP)
 	self:_InitLayer(LAYER_TYPE.MASK)
 	self:_RegLoginPanel()
+	self:_onFinish()
 end
 
 function PanelManager:_RegLoginPanel()
