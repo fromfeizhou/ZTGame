@@ -63,20 +63,6 @@ function LuaGameStart:StartLoadMgr()
 	end 
 end
 
---@brief 进入登录模块
-function LuaGameStart:_EnterLoginModel()
-	local loadMgrFinish = function ( )
-		self.m_loadMgrFinishNum = self.m_loadMgrFinishNum + 1
-		if self.m_loadMgrFinishNum == #self.m_mgrList then 
-			self:_OnGameInitFinish()
-		end
-	end
-
-	for i=1,#self.m_mgrList do
-		self.m_mgrList[i]:Create(loadMgrFinish)
-	end
-end
-
 function LuaGameStart:_OnGameInitFinish( )
 	LogC("LuaGameStart:_OnGameInitFinish")
 	self:_ShowPanel_Login()
