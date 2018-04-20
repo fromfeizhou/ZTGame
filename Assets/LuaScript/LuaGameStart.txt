@@ -39,6 +39,7 @@ function LuaGameStart:Destroy()
 end
 
 function LuaGameStart:_RegManager( )
+	LogC("LuaGameStart:_RegManager")
 	self.m_mgrList = {}
 	table.insert(self.m_mgrList, PanelManager) --创建面板管理器
 	table.insert(self.m_mgrList, TimerManager) --创建定时管理器
@@ -50,6 +51,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 function LuaGameStart:StartLoadMgr()
+	LogC("LuaGameStart:StartLoadMgr")
 	if #self.m_mgrList > 0 then
 		local mgr = self.m_mgrList[1]
 		table.remove(self.m_mgrList,1)
@@ -76,6 +78,7 @@ function LuaGameStart:_EnterLoginModel()
 end
 
 function LuaGameStart:_OnGameInitFinish( )
+	LogC("LuaGameStart:_OnGameInitFinish")
 	self:_ShowPanel_Login()
 end
 

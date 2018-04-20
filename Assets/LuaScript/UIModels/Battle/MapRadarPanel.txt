@@ -15,6 +15,10 @@ MapRadarPanel = {
 	m_panelName = "MapRadarPanel",
 	m_ztTxt_waitTime = nil,
 
+	m_OnClickOpenMapScroll = nil,
+
+	m_OnClickOpenMapScroll = nil,
+
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
 
@@ -54,7 +58,13 @@ function MapRadarPanel:onCreatePanel()
 	--玩家，队友
 	self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
 	self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self.m_onClickOpenMapScroll() end)
 	
+end
+
+
+function MapRadarPanel:SetClickOpenMapScroll( onClickOpenMapScroll )
+	self.m_onClickOpenMapScroll = onClickOpenMapScroll
 end
 
 --@brief 面板初始化
@@ -133,18 +143,20 @@ end
 function MapRadarPanel:_UpdatePlayer()
 	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
+	if team then 
 	for k,v in pairs(team) do
-		local playerId = v:GetBattleId()
+			local playerId = v:GetBattleId()
 
-		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
+			self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 
-		local pos = v:GetPos()
-		--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
-		self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
-		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+			local pos = v:GetPos()
+			--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
+			self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
+			self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 
-		if playerId == GlobalBattleCtrl:GetOwnerId() then
-			self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
+			if playerId == GlobalBattleCtrl:GetOwnerId() then
+				self.m_mapContent.anchoredPosition = -self.m_playerList[playerId].anchoredPosition
+			end
 		end
 	end
 end

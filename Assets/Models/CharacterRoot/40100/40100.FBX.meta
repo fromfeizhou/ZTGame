@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: 4557a5b136b97f44492b7225c69abe94
-timeCreated: 1523936472
+guid: d0ff05f565e2c494cbb7866979f3a345
+timeCreated: 1524194551
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: 10100
+    100000: 10100
+    100002: //RootNode
     100004: Bip001
     100006: Bip001 Head
     100008: Bip001 L Calf
@@ -74,8 +74,8 @@ ModelImporter:
     100132: Bone019(mirrored)
     100134: Bone020
     100136: Bone020(mirrored)
-    400000: //RootNode
-    400002: 10100
+    400000: 10100
+    400002: //RootNode
     400004: Bip001
     400006: Bip001 Head
     400008: Bip001 L Calf
@@ -144,6 +144,7 @@ ModelImporter:
     400134: Bone020
     400136: Bone020(mirrored)
     4300000: 10100
+    7400000: Take 001
     9500000: //RootNode
     13700000: 10100
   materials:

@@ -7,6 +7,7 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
+local CSCamera = CS.UnityEngine.Camera
 
 SkillAreaManager = {
 }
@@ -59,8 +60,19 @@ end
 
 --@brief 刷新技能位置
 function SkillAreaManager:UpdateSkillAreaPos(pos)
-	if not SkillAreaManager.m_bIsInit then
+	if not SkillAreaManager.m_bIsInit or not SkillAreaManager.m_nAreaType then
 		return
+	end
+	local areaType = SkillAreaManager.m_nAreaType
+	if areaType == SkillAreaType.OuterCircle then
+		return
+	end
+
+	if areaType == SkillAreaType.InnerCircle then
+		SkillAreaManager.m_tElmentList[areaType].transform.position = pos
+
+	elseif areaType == SkillAreaType.Cube then
+		SkillAreaManager.m_tElmentList[areaType].transform:LookAt(pos);
 	end
 end
 
@@ -154,7 +166,23 @@ function SkillAreaManager:_LoadAsset(list)
 	end
 end
 
---@brief 获取预设件地址
+-- --@brief 获取预设件地址
 function SkillAreaManager:_GetElementPath(areaType)
 	return PathManager:GetBatteUISkill(SkillAreaManager.m_tElmentPathList[areaType])
 end
+
+-- --@brief 获取InnerCircle元素位置
+-- function SkillAreaManager:_GetCirclePos(pos)
+-- 	local y = CSCamera.main.transform.rotation.eulerAngles.y
+-- 	local targetDir = CSVector3(pos.x, 0, pos.y) * SkillAreaManager.m_ndistance
+--     local targetPos = Quaternion.Euler(0, y, 0) * targetDir
+--     return targetPos
+-- end
+   
+-- --@brief 获取Cube、Sector元素朝向
+-- function SkillAreaManager:_GetCubeSectorLookAt(pos)
+-- 	local y = CSCamera.main.transform.rotation.eulerAngles.y
+-- 	local targetDir = CSVector3(pos.x, 0, pos.y) * SkillAreaManager.m_ndistance
+--     local targetPos = Quaternion.Euler(0, y, 0) * targetDir
+--     return targetPos
+-- end

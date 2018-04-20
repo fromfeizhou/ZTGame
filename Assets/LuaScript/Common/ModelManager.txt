@@ -13,15 +13,20 @@ ModelManager = {
 
 	m_mdlEvent = nil,
 }
+setmetatable( ModelManager, { __index = BaseManager})
 
+function ModelManager:Name()
+	return "ModelManager"
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function ModelManager:Create()
+function ModelManager:Create(callbackInitFinish)
 	GCSLog("ModelManager:Create")
 	local obj = {}
 	setmetatable( obj, { __index = ModelManager })
+	obj.m_callbackInitFinish = callbackInitFinish
 	obj:Init()
 	return obj
 end
@@ -35,6 +40,7 @@ function ModelManager:Init()
 
 	self:_RegLoginModel()
 	self:_CreateModel(MODEL_TYPE.SYSTEM)
+	self:_onFinish()
 end
 
 --@brief 更新模块列表中的模块逻辑

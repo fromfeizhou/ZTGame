@@ -561,6 +561,18 @@ message login_share_config_s2c {
     required string sina_redirecturl = 12; // 新浪分享跳转链接
 }
 
+message login_choice_hero_c2s{
+    required uint32 hero_id = 1; //英雄id
+}
+
+message login_choice_hero_s2c {
+    required uint32 code = 1; // 错误码
+    required uint32 hero_id = 2; // 英雄id
+}
+
+
+
+
 
 
 // ##model_begin##role##2##角色##model_end##

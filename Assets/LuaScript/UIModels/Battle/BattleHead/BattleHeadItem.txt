@@ -98,11 +98,13 @@ function BattleHeadItem:_onUpdateCharacterHp(battleId)
 
 
 	local chara = GlobalBattleCtrl:GetOwnerChara()
-	local curHp = chara:GetHp()
-	local maxHp = chara:GetHpMax()
-	self.m_slider.maxValue = maxHp
-    self.m_slider.value = curHp
-    self.m_hpText.text = curHp .. " / " .. maxHp
+	if chara then 
+		local curHp = chara:GetHp()
+		local maxHp = chara:GetHpMax()
+		self.m_slider.maxValue = maxHp
+	    self.m_slider.value = curHp
+	    self.m_hpText.text = curHp .. " / " .. maxHp
+	end
 end
 
 function BattleHeadItem:_OnUpdateCamera()
@@ -110,7 +112,9 @@ function BattleHeadItem:_OnUpdateCamera()
 		return
 	end
 
-	local pos = GlobalBattleCtrl:GetOwnerChara():GetViewPos()
-	local uiPos = CSGetWorldToScreenPoint(pos,self.m_canvas)
-	self.m_rectTransform.anchoredPosition =  CSVector2(uiPos.x,uiPos.y + 20)
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		local uiPos = CSGetWorldToScreenPoint(chara:GetViewPos(),self.m_canvas)
+		self.m_rectTransform.anchoredPosition =  CSVector2(uiPos.x,uiPos.y + 20)
+	end
 end

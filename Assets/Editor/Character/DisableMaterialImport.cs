@@ -11,8 +11,9 @@ class DisableMaterialImport : AssetPostprocessor
 {
     private static bool IsEnable = false;
 
-    void OnPreprocessModel()
+   void OnPreprocessModel()
     {
+
         ModelImporter modelImporter = assetImporter as ModelImporter;
 
         if (modelImporter != null)
