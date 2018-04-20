@@ -167,9 +167,9 @@ function SkillAreaManager:_LoadAsset(list)
 end
 
 -- --@brief 获取预设件地址
--- function SkillAreaManager:_GetElementPath(areaType)
--- 	return PathManager:GetBatteUISkill(SkillAreaManager.m_tElmentPathList[areaType])
--- end
+function SkillAreaManager:_GetElementPath(areaType)
+	return PathManager:GetBatteUISkill(SkillAreaManager.m_tElmentPathList[areaType])
+end
 
 -- --@brief 获取InnerCircle元素位置
 -- function SkillAreaManager:_GetCirclePos(pos)
