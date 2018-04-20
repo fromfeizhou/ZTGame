@@ -36,6 +36,9 @@ end
 --@brief 移除
 function SkillAreaManager:Destroy()
 	CSLog("SkillAreaManager:Destroy")
+	if SkillAreaManager.m_tElmentList then
+		CSGameObject.Destroy(SkillAreaManager.m_tElmentList[i])
+	end
 	SkillAreaManager.m_tElmentList = nil
 	SkillAreaManager.m_bIsInit = false
 end
@@ -155,6 +158,7 @@ function SkillAreaManager:_LoadAsset(list)
 			end
 
 			local go = CSGameObject.Instantiate(target)
+			CSGameObject.DontDestroyOnLoad(go)
 			table.insert(SkillAreaManager.m_tElmentList,go)
 			--继续加载预设件
 			SkillAreaManager:_LoadAsset(list)
