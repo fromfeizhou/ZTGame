@@ -203,7 +203,10 @@ end
 
 --@brief 获取动画位置
 function Character:GetViewPos()
-	return self.m_animData.m_tCurPos
+	if self.m_animData then
+		return self.m_animData.m_tCurPos
+	end
+	return nil
 end
 
 
