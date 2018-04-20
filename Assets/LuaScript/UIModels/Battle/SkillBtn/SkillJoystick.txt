@@ -104,8 +104,7 @@ end
 
 --@brief 添加控制事件 
 function SkillJoystick:_InitJoyEvent()
-	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
-	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+	local canvas = PanelManager:GetLayerCanvas(LAYER_TYPE.NORMAL)
 	self.m_joystick:SetCanvas(canvas)
 
 	self.m_joystick.onJoystickDownEvent = function(pos)
