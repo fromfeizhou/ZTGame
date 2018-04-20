@@ -52,7 +52,7 @@ SkillActionConfig = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "tiaopi" }},
 				{ actionType = 0, param = { 0 }},
-				{ actionType = 6, param = { 120, 120, 120 }},
+				{ actionType = 6, param = { 80, 80, 80 }},
 		},
 		[ 11 ] = {
 				{ actionType = 5, param = { 1002 }},
@@ -134,4 +134,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10001"
+SkillActionConfig.TestSkillId = "id_11002"

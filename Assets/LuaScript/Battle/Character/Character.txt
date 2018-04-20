@@ -284,12 +284,24 @@ end
 --@brief 是否存在状态
 function Character:IsInState(state)
 	local result = self.m_nState & state
+	-- CSLog("Character:IsInState",self.m_nState,state,result)
 	return result == state
 end
 
 --@brief 是否是普通状态
 function Character:IsNormalState()
 	if self:IsDead() then
+		return false
+	end
+	-- if self:IsInState(CharacterState.Skill) then
+	-- 	return false
+	-- end
+	return true
+end
+
+--@brief 是否是普通状态
+function Character:CanUseSkillState()
+	if self:IsDead() or self:IsInState(CharacterState.Skill) then
 		return false
 	end
 	-- if self:IsInState(CharacterState.Skill) then
