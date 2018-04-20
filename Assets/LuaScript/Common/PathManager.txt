@@ -63,7 +63,7 @@ function PathManager:GetModelPath( name )
 end
 
 function PathManager:GetHeroModelPath( modelId )
-	return string.format(PathManager.m_sHeroModel,modelId,modelId) .. ".prefab"
+	return string.format(PathManager.m_sHeroModel,modelId,modelId) .. "F.prefab"
 end
 
 --@brief 获取战斗ui pb文件路径
