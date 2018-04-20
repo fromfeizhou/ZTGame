@@ -213,6 +213,9 @@ end
 
 --@brief 界面刷新
 function GlobalBattleCtrl:Update(dt)
+	if not GlobalBattleCtrl.m_nCommandTime then
+		return
+	end
 	GlobalBattleCtrl.m_nCommandTime = GlobalBattleCtrl.m_nCommandTime + dt
 	--逻辑刷新
 	while GlobalBattleCtrl.m_nCommandTime >= BattleDefine.CommandTime do
