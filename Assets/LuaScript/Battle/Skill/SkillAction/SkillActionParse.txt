@@ -129,7 +129,7 @@ function SkillActionParse:_ParseConfig()
 		[SkillActionType.Collider] = self._GetActionCollider,
 		[SkillActionType.SpEffect] = self._GetActoinSpEffect,
 		[SkillActionType.PlayerMove] = self._GetActoinMove,
-		[SkillActionType.StateLocked] = self._GetActionStateLocked,
+		[SkillActionType.MoveLocked] = self._GetActionMoveLocked,
 		[SkillActionType.Sound] = nil,
 	}
 
@@ -204,9 +204,9 @@ end
 
 
 --@brief 获得锁定移动action
-function SkillActionParse:_GetActionStateLocked(frame,param)
-	local data = SkillActionStateLockedData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
-	local action = SkillActionStateLocked:Create(self,data)
+function SkillActionParse:_GetActionMoveLocked(frame,param)
+	local data = SkillActionMoveLockedData:Create(self.m_tOwner,frame,self.m_tSkillPos,self.m_nTargetId,param)
+	local action = SkillActionMoveLocked:Create(self,data)
 	return action
 end
 

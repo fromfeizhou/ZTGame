@@ -8,10 +8,6 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
-		"Common.BaseManager",
-		"Common.UIBasePanel",
-		"Common.BaseModel",
-
 		"Common.Data.ModelData",
 		"Common.PathManager",
 		"Common.NetWorkManager",
@@ -22,6 +18,8 @@ local LuaFileLoad = {
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
+		"Common.UIBasePanel",
+		"Common.BaseModel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
@@ -110,7 +108,7 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
-		"Battle.Skill.SkillAction.CommonAction.SkillActionStateLocked",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionMoveLocked",
 
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",
@@ -130,6 +128,7 @@ local LuaFileLoad = {
 		"UIModels.Battle.MapRadarPanel",
 		
 		"UIModels.Battle.BattleMainPanel",
+		"UIModels.Battle.BattleEnd.BattleEndPanel",
 
 		"UIModels.Battle.Bag.BattleBagPanel",
 		"UIModels.Battle.Bag.BattleBagCell",

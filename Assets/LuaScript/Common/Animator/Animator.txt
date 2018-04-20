@@ -78,6 +78,7 @@ end
 --@brief 监听事件
 function Animator:_AddEvent()
 	if self.m_animData then
+		self.m_animData:AddEvent(AnimaEvent.UpdateModel, self._OnUpdateModel, self)
 		self.m_animData:AddEvent(AnimaEvent.Play, self._OnPlay, self)
 		self.m_animData:AddEvent(AnimaEvent.InCamera, self._OnSetInCamera, self)
 		self.m_animData:AddEvent(AnimaEvent.UpdatePos, self._OnUpdatePos, self)
@@ -98,7 +99,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"	)--self.m_animData:GetAnimatorPath())
+	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetModelViewData())--self.m_animData:GetAnimatorPath())
 end
 
 --@brief 移除形象
@@ -112,13 +113,20 @@ function Animator:_OnSetInCamera(inCamera)
 		return
 	end
 	self.m_bIsInCamera = inCamera
+	self:_RushModelView()
+end
+
+function Animator:_OnUpdateModel()
+	self:_RushModelView()
+end
+
+function Animator:_RushModelView()
 	if self.m_bIsInCamera then
-		self:_CreateAnimatorView()
+		self:_CreateAnimatorView(self.m_animData:GetModelViewData())
 	else
 		self:_RemoveAnimatorView()
 	end
 end
-
 
 --@brief 播放动作
 --@param 动作名

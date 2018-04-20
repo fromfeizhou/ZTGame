@@ -43,27 +43,21 @@ TimerManager = {
 	m_cTime_fixedUnscaledTime,
 }
 
-setmetatable( TimerManager, { __index = BaseManager})
 
-function TimerManager:Name()
-	return "TimerManager"
-end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function TimerManager:Create(callbackInitFinish)
+function TimerManager:Create()
 	local obj = {}
 	setmetatable( obj, { __index = TimerManager })
-	obj.m_callbackInitFinish = callbackInitFinish
-	obj:Init()
+	obj.Init()
 	return obj
 end
 
 --@brief 初始化
 function TimerManager:Init()
 	TimerManager.m_tTimerList = {}
-	self:_onFinish()
 end
 
 

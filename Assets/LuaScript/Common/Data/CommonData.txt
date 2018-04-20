@@ -13,7 +13,7 @@ AnimatorType = {
 
 --@brief 职业类别
 CareerType = {
-	FashShi = 1,	--法师
+	FashShi = 1,	--女战士
 	ZhanShi = 2,	--战士
 	DouShi = 3,		--道士
 	LieShou = 4,	--猎手

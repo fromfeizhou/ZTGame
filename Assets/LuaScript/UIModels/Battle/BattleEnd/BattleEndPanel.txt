@@ -1,0 +1,111 @@
+--BattleEndPanel.txt
+--@breif 移动控制UI
+--@data 2018/03/11
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local  CSUnityScrollView = CS.UnityEngine.ScrollRect
+
+
+BattleEndPanel = {
+
+	m_ranKIcon=nil,
+	m_outNum=nil,
+	m_costNum=nil,
+	m_btn=nil,
+}
+
+
+
+setmetatable( BattleEndPanel, { __index = UIBasePanel})
+function BattleEndPanel:GetName()
+	return "BattleEndPanel"
+end
+
+--@brief 面板资源相对模块路径
+function BattleEndPanel:GetRelativePath()
+	return "Panel/"
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 面板被创建
+function BattleEndPanel:onCreatePanel()	
+	CSLog("BattleEndPanel:Init")
+
+	self.m_ranKIcon=PanelWidget:GetZTImage(self.m_transform,"Content/Up/Rank")
+	self.m_outNum=PanelWidget:GetZTText(self.m_transform,"Content/Right/OutNum/Num")
+	self.m_costNum=PanelWidget:GetZTText(self.m_transform,"Content/Right/Cost/Num")
+	self.m_btn=PanelWidget:GetZTButton(self.m_transform,"Content/Right/Btn",function ()
+		self:_OnClickResBattle()
+	end)
+
+end
+
+--@brief 显示面板
+function BattleEndPanel:onShow()
+	
+	if self.panelData then
+		local callback = function(target,path)
+			if self.m_ranKIcon then
+				self.m_ranKIcon.sprite = target
+			end
+		end
+		local  iconPath ="Assets/ResourcesLib/Images/settlement/@Img_number_6.png"--临时资源
+		if(self.panelData.win == 1) then
+			iconPath ="Assets/ResourcesLib/Images/settlement/@Img_number_1.png"
+		end
+		CS.AssetManager.LoadAsset(iconPath,callback,typeof(CS.UnityEngine.Sprite))
+		self.m_costNum.text="1000"
+		self.m_outNum="2"
+	end
+
+end
+
+
+--@brief 添加事件监听
+function BattleEndPanel:_AddEvents()
+	--GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip,self)
+end
+
+--@brief 移除事件监听
+function BattleEndPanel:_RemoveEvents()
+	--GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self._UpdateEquip)
+end
+
+--@brief 注册网络门户
+function BattleEndPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function BattleEndPanel:_UnRegNetFacade()
+end
+
+--@brief 销毁面板
+function BattleEndPanel:onDestroy()
+	--CSLog("BattleEndPanel:Destroy")
+	self:_RemoveEvent()
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+
+--------------ui事件
+--点击武器
+function BattleEndPanel:_OnClickResBattle(netId)
+	
+	GlobalBattleCtrl:ExitBattle()
+
+end
+
+--------------ui事件end
+
+
+

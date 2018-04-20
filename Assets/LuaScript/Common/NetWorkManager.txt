@@ -143,6 +143,15 @@ end
 
 --@brief 网络状态事件 - 连接完成
 function NetWorkManager:_OnConnect()
+	--隐藏锁屏面板
+	local dispatcher = GlobalData:GetMdlEventDispatcher()
+	local modelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.LOCK,
+	}
+	GCSLog("+++++++++++++++++NetWorkManager:_OnConnect,",SYSTEM_TYPE.LOCK)
+	dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData)
+	
 	self:_Request_Login_Auth_Key()
 end
 
