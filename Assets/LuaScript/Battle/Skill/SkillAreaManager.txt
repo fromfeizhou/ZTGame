@@ -53,6 +53,7 @@ end
 --@param 距离
 --@param 类型
 function SkillAreaManager:ShowSkillArea(distance,areaType)
+	-- CSLog("SkillAreaManager:ShowSkillArea",distance,areaType)
 	SkillAreaManager.m_ndistance = distance
 	SkillAreaManager.m_nAreaType = areaType
 	if not SkillAreaManager.m_bIsInit then
@@ -70,9 +71,8 @@ function SkillAreaManager:UpdateSkillAreaPos(pos)
 	if areaType == SkillAreaType.OuterCircle then
 		return
 	end
-
 	if areaType == SkillAreaType.InnerCircle then
-		SkillAreaManager.m_tElmentList[areaType].transform.position = pos
+		SkillAreaManager.m_tElmentList[areaType].transform.localPosition = pos
 
 	elseif areaType == SkillAreaType.Cube then
 		SkillAreaManager.m_tElmentList[areaType].transform:LookAt(pos);
