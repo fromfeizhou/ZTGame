@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-[RequireComponent(typeof(Text))]
+
 public class FPSShow : MonoBehaviour
 {
    
@@ -14,6 +13,9 @@ public class FPSShow : MonoBehaviour
 
     private float m_FPS = 0;
 
+	private Ping ping;
+
+	private GUIStyle fontStyle = new GUIStyle();
     void Awake()
     {
         //Application.targetFrameRate = 30;
@@ -22,11 +24,15 @@ public class FPSShow : MonoBehaviour
     // Use this for initialization  
     void Start()
     {
-        transform.SetSiblingIndex(10000);
-        m_LastUpdateShowTime = Time.realtimeSinceStartup;
-        DontDestroyOnLoad(this);
+		fontStyle.normal.background = null;    //这是设置背景填充的
+		fontStyle.normal.textColor = Color.white;
+		fontStyle.fontSize = 40;       //当然，这是字体颜色
 
+		transform.SetSiblingIndex(10000);
+        m_LastUpdateShowTime = Time.realtimeSinceStartup;
+        SendPing();
     }
+
 
     // Update is called once per frame  
     void Update()
@@ -37,28 +43,29 @@ public class FPSShow : MonoBehaviour
             m_FPS = m_FrameUpdate / (Time.realtimeSinceStartup - m_LastUpdateShowTime);
             m_FrameUpdate = 0;
             m_LastUpdateShowTime = Time.realtimeSinceStartup;
-            string ping = "ping: " + delayTime.ToString() + "ms\n";
-            GetComponent<Text>().text = ping + "FPS: " + Mathf.Floor(m_FPS);
         }
+
+		if (pingIp == string.Empty || ping == null)
+			return;
+
+		if (null != ping && ping.isDone)
+		{
+			delayTime = ping.time;
+			ping.DestroyPing();
+			ping = null;
+			Invoke("SendPing", 1.0F);//每秒Ping一次
+		}
     }
 
-    static Ping ping;
     public static string pingIp = string.Empty;
     float delayTime;
     void OnGUI()
     {
-        if (pingIp == string.Empty)
-            return;
-        if (null != ping && ping.isDone)
-        {
-            delayTime = ping.time;
-            ping.DestroyPing();
-            ping = null;
-            Invoke("SendPing", 1.0F);//每秒Ping一次
-        }
+		GUILayout.Label ("ping: " + delayTime + "ms",fontStyle);
+		GUILayout.Label ("fps:" + Mathf.Floor (m_FPS),fontStyle);
     }
 
-    public static void SendPing()
+    public void SendPing()
     {
         if (pingIp == string.Empty)
             return;
@@ -69,6 +76,5 @@ public class FPSShow : MonoBehaviour
             ping = null;
         }
         ping = new Ping(pingIp);
-
     }
 }
