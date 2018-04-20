@@ -326,7 +326,10 @@ end
 
 --@brief 队友
 function GlobalBattleCtrl:GetOwnerTeamChara()
-	return GlobalBattleCtrl.m_ztCharaManager:GetOwnerTeamChara()
+	if GlobalBattleCtrl.m_ztCharaManager then
+		return GlobalBattleCtrl.m_ztCharaManager:GetOwnerTeamChara()
+	end
+	return nil
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 对象管理相关接口end

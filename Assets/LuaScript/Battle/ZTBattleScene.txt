@@ -22,6 +22,7 @@ ZTBattleScene = {
 function ZTBattleScene:InitScene()
 	CSLog("ZTBattleScene:InitScene")
 	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
+	self:_ShowBattleUI()
 	
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
@@ -41,7 +42,6 @@ end
 --@brief 场景加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
 	self:_Init()
-	PanelManager:HideLoadingPanel()
 end
 
 
@@ -59,11 +59,14 @@ function ZTBattleScene:_Init()
 	GlobalBattleCtrl:Init()
 	--设置全局场景接口
 	GlobalBattleCtrl:SetBattleScene(self.m_comZtBattleScene)
-
-	
-	self:_ShowBattleUI()
 		
 	self:_AddEvent()
+
+		--临时匹配按钮
+	if not GameConfig.IsSingleScene then
+		PanelManager:HideLoadingPanel()
+		BattleCommandProtocol:SendMath()
+	end
 end
 
 --@brief 战斗场景初始化
