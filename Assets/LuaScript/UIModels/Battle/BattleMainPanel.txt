@@ -180,7 +180,7 @@ end
 
 --@brief 按钮点击-开启背包
 function BattleMainPanel:_OnClickBagBtn( )
-	--[[
+	
 	if self.m_tBagPanel then
 		GCSLog("BattleMainPanel:_OnClickBagBtn",self.m_tBagPanel.m_isShow)
 		if self.m_tBagPanel.m_isShow == true then
@@ -191,8 +191,8 @@ function BattleMainPanel:_OnClickBagBtn( )
 	else
 		self:_CreateBagPanel()
 	end
-	]]
-	GlobalBattleCtrl:ExitBattle()
+	
+	--GlobalBattleCtrl:ExitBattle()
 end
 
 --@brief 按钮点击-开启地图卷轴
