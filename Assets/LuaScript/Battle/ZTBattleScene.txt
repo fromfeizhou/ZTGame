@@ -23,7 +23,7 @@ function ZTBattleScene:InitScene()
 	CSLog("ZTBattleScene:InitScene")
 	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
 	self:_ShowBattleUI()
-	
+
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 
@@ -62,9 +62,9 @@ function ZTBattleScene:_Init()
 		
 	self:_AddEvent()
 
+	PanelManager:HideLoadingPanel()
 		--临时匹配按钮
 	if not GameConfig.IsSingleScene then
-		PanelManager:HideLoadingPanel()
 		BattleCommandProtocol:SendMath()
 	end
 end
