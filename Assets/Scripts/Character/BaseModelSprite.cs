@@ -202,6 +202,7 @@ public class RoleModelSprite : BaseModelSprite
             return;
         if (string.IsNullOrEmpty(assetPaths[loadIndex]) || assetPaths[loadIndex].Equals(GetPathByType(modelPartPath, type)))
         {
+            //Debug.LogError("Model Not Create" + assetPaths[loadIndex]);
             if (string.IsNullOrEmpty(assetPaths[loadIndex]))
                 DestroyOldPart(type);
             loadIndex++;
@@ -210,6 +211,7 @@ public class RoleModelSprite : BaseModelSprite
         else
         {
             modelPartPath[type] = assetPaths[loadIndex];
+          //  Debug.LogError("Model Create" + assetPaths[loadIndex]);
             AssetManager.LoadAsset(assetPaths[loadIndex], OnLoadFinish);
 
         }
@@ -237,7 +239,11 @@ public class RoleModelSprite : BaseModelSprite
 
         if (!modelPartPath[type].Equals(path)) return;
         GameObject prefab = target as GameObject;
-        if (null == prefab) return;
+        if (null == prefab)
+        {
+            Debug.LogError("Model Asset is null!!!:" + path);
+            return;
+        }
         GameObject go = GameObject.Instantiate(prefab, modelParent);
         if (type == EquipType.Main)
         {
@@ -256,19 +262,32 @@ public class RoleModelSprite : BaseModelSprite
                 go.transform.localScale = Vector3.one;
             }
         }
-        modelObjDic[type] = go;
+       
+        SetParObj(type, go);
     }
     //改变衣服时候，挂件要挂到新衣服上面
     private void OnModelChange(GameObject go)
     {
         foreach (var item in modelObjDic )
         {
-            if (item.Value == null||item.Key== EquipType.Main) return;
+            if (item.Value == null||item.Key== EquipType.Main) continue;
             Transform temp = go.transform.Find(CharaDefine.CharaPartParent[item.Key]);
             item.Value.transform.SetParent(temp);
+            item.Value.transform.localScale=Vector3.one;
+            item.Value.transform.localPosition=Vector3.zero;
+            item.Value.transform.localEulerAngles=Vector3.zero;
         }
        
     }
+
+    private void SetParObj(EquipType type,GameObject go)
+    {
+        if (modelObjDic.ContainsKey(type))
+            GameObject.Destroy(modelObjDic[type]);
+
+        modelObjDic[type] = go;
+    }
+
     //删除旧部件
     private void DestroyOldPart(EquipType type)
     {

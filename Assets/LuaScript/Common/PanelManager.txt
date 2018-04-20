@@ -15,7 +15,6 @@ PanelManager = {
 	m_panelList = {},
 	m_panelDefine = {},
 }
-setmetatable( PanelManager, { __index = BaseManager})
 
 LAYER_TYPE = { 
 	BOTTOM = "Bottom",
@@ -28,18 +27,14 @@ LAYER_TYPE = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function PanelManager:Create(callbackInitFinish)
+function PanelManager:Create()
+	GCSLog("PanelManager:Create")
 	local obj = {}
 	setmetatable( obj, { __index = PanelManager })
-	obj.m_callbackInitFinish = callbackInitFinish
 	obj:_LoadUIRoot()
 	return obj
 end
 
-
-function PanelManager:Name()
-	return "PanelManager"
-end
 
 function PanelManager:_LoadUIRoot()
 	local callback_loadfinish = function(target,path)
@@ -59,7 +54,6 @@ function PanelManager:Init()
 	self:_InitLayer(LAYER_TYPE.TOP)
 	self:_InitLayer(LAYER_TYPE.MASK)
 	self:_RegLoginPanel()
-	self:_onFinish()
 end
 
 function PanelManager:_RegLoginPanel()
@@ -75,6 +69,7 @@ function PanelManager:_RegGamePanel()
 	self.m_panelDefine[CITY_TYPE.MAIN] 			= CityMainPanel
 	self.m_panelDefine[BATTLE_TYPE.MAIN] 		= BattleMainPanel
 	self.m_panelDefine[BATTLE_TYPE.MATCH]       = MatchPanel
+	self.m_panelDefine[BATTLE_TYPE.BATTLEEND]	= BattleEndPanel
 end
 
 function PanelManager:_InitLayer(layerType)

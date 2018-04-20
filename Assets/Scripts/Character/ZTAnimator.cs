@@ -29,7 +29,7 @@ public class ZTAnimator : MonoBehaviour {
     }
 
     //创建形象
-    public void CreateAnimatorView(int modelType,int animationType, string rolePath,string equipPath )
+    public void CreateAnimatorView(int modelType,int animationType, string rolePath,string equipPath ,string necklace,string ring,string spirit)
     {
         if (modelSprite == null)
             modelSprite = new RoleModelSprite();
@@ -39,10 +39,7 @@ public class ZTAnimator : MonoBehaviour {
             {EquipType.Main, rolePath},
             {EquipType.Equip, equipPath}
         };
-
         modelSprite.CreateModel(this.transform, animationType,tempPathDic);
-        
-
     }
 
 

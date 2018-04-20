@@ -10,7 +10,17 @@ SkillActionType = {
 	Collider = 3,	--碰撞
 	SpEffect = 4,	--特效
 	PlayerMove = 5,	--玩家位移
-	StateLocked = 6,	--锁定状态
+	MoveLocked = 6,	--锁定移动
+}
+
+
+--@brief 技能指示类型
+SkillAreaType = {
+	OuterCircle = 1,    -- 外圆
+    InnerCircle = 2,    -- 内圆
+    Cube = 3,           -- 矩形 
+    Sector60 = 4,        -- 扇形
+    Sector120 = 5,        -- 扇形
 }
 
 --@brief 技能位置类型(计算 碰撞特效等放置位置选项)
@@ -65,6 +75,12 @@ AttributeType = {
 	Mp = 15,		--当前能量
 	
 	MpRec = 16,		--能量回复
+
+	EquipCover = 2001, 		--服饰
+	EquipWeapon = 2002,		-- 武器
+	EquipNecklace = 2003, 	--项链
+ 	EquipRing = 2004,		--戒指
+ 	EquipSpirit = 2005,		--精灵
 }
 
 --@brief buff类型

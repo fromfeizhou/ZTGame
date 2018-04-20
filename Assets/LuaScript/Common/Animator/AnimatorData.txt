@@ -16,6 +16,18 @@ AnimaEvent = {
 	UpdatePos = "UpdatePos",		--更新位置
 	UpdateRotate = "UpdateRotate",		--角度旋转
 	ChangeTranslucence = "ChangeTranslucence",		--改变半透明
+	UpdateModel = "UpdateModel",
+}
+
+EquiptType = {
+	
+	Cover = 1,
+	Weapon = 2,
+	Necklace  = 3,
+	Ring = 4,
+	Spirit = 5,
+
+
 }
 
 --@brief 动画名字
@@ -28,6 +40,11 @@ AnimatorName = {
 AnimatorData = {
 	m_nType = nil,	--动画类型
 	m_nCareerType = nil,	--职业类型
+	m_nCover = 0,		--衣服
+	m_nWeapon = 0,		--武器
+	m_nNecklace = 0,	--項鏈
+	m_nRing = 0,		--戒指
+	m_nSpirit = 0,		--精靈
 }
 
 --@breif 继承EventDispatcher
@@ -37,22 +54,26 @@ setmetatable( AnimatorData, { __index = EventDispatcher})
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表(继承事件)
-function AnimatorData:Create(animaType,careerType)
+function AnimatorData:Create(animaType,careerType,cover,weapon,necklace,ring,spirit)
 	local obj = {}
 	setmetatable( obj, { __index = AnimatorData })
-	obj:Init(animaType,careerType)
+	obj:Init(animaType,careerType,cover,weapon,necklace,ring,spirit)
 	return obj
 end
 
 --@brief 初始化
-function AnimatorData:Init(animaType,careerType)
+function AnimatorData:Init(animaType,careerType,cover,weapon,necklace,ring,spirit)
 	CSLog("AnimatorData:Init")
 	--基类初始化
 	EventDispatcher.Init(self)
 
 	self.m_nType = animaType or AnimatorType.Hero
 	self.m_nCareerType = careerType or CareerType.FashShi
-
+	self.m_nCover = cover or 0
+	self.m_nWeapon = weapon or 0
+	self.m_nNecklace = necklace or 0
+	self.m_nRing = ring or 0
+	self.m_nSpirit = spirit or 0
 	self.m_tTransLv = TransLevelDefine.Normal
 end
 
@@ -102,6 +123,72 @@ function AnimatorData:ChangeTranslucence(transLv)
 	end
 	self.m_tTransLv = transLv
 	self:DispatchEvent(AnimaEvent.ChangeTranslucence,self.m_tTransLv)
+end
+
+--@brife 刷新裝備
+function AnimatorData:UpdateEquipData(cover,weapon,necklace,ring,spirit)
+	local isrush = false
+	if self.m_nCover ~= cover then
+		self.m_nCover = cover
+		isrush = true
+	end
+
+	if self.m_nWeapon ~= weapon then
+		self.m_nWeapon = weapon
+		isrush = true
+	end
+
+	if self.m_nNecklace ~= necklace then
+		self.m_nNecklace = necklace
+		isrush = true
+	end
+
+	if self.m_nRing ~= ring then
+		self.m_nRing = ring
+		isrush = true
+	end
+
+	if self.m_nSpirit ~= spirit then
+		self.m_nSpirit = spirit
+		isrush = true
+	end
+
+	if isrush then
+		CSLog("EquiptId Change---------------------------")
+		self:DispatchEvent(AnimaEvent.UpdateModel)
+	end
+end
+
+function AnimatorData:GetModelViewData()
+
+	local coverPath = self:GetEquipPath(self.m_nCover)
+	local weaponPath = self:GetEquipPath(self.m_nWeapon)
+
+	local necklacePath = self:GetEquipPath(self.m_nNecklace)
+
+	local ringPath = self:GetEquipPath(self.m_nRing)
+	local spiritPath = self:GetEquipPath(self.m_nSpirit)
+
+	if coverPath == "" then
+		coverPath="Assets/Models/CharacterRoot/10100/10100.prefab"
+	end
+
+	if weaponPath == "" then
+		weaponPath="Assets/Models/CharacterRoot/10200/10200.prefab"
+	end
+
+	return 1,1,coverPath,weaponPath,necklacePath,ringPath,spiritPath--"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"
+end
+
+function AnimatorData:GetEquipPath(itemId)
+	if Tab_Equipment[itemId] then
+  		local itemData = Tab_Equipment[itemId]
+  		local equipType =self.m_nCareerType * 10000+ itemData.type * 100+itemData.Lv
+  		--CSLog("Get EquiptId :>>>>>>>>>",equipType)
+  		--CSLog("Get EquipIdPath>>>>>",PathManager:GetAnimatorPath(equipType))
+  		return PathManager:GetAnimatorPath(equipType)
+  	end
+  	return ""
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

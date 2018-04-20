@@ -231,6 +231,14 @@ function Character:GetEffectCon()
 	return nil
 end
 
+--@brief 获取技能容器
+function Character:GetSkillCon()
+	if self.m_animator then
+		return self.m_animator:GetSkillCon()
+	end
+	return nil
+end
+
 
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -239,8 +247,6 @@ end
 --@brief 设置玩家状态
 function Character:InState(state)
 	self.m_nState = self.m_nState | state
-	---CSLog("Character:InState",self.m_nState)
-
 	if state == CharacterState.MoveLocked then
 		self.m_bMoveLocked = true
 	elseif state == CharacterState.AnimaLocked then
@@ -275,7 +281,7 @@ end
 --@brief 是否存在状态
 function Character:IsInState(state)
 	local result = self.m_nState & state
-	return result == 1
+	return result == state
 end
 
 --@brief 是否是普通状态
@@ -357,7 +363,6 @@ function Character:SetAttributeByType(attriType,value)
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 		--同步血槽
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
-		
 		return
 	end
 	self.m_attriSystem:SetAttributeByType(attriType,value)
@@ -365,9 +370,24 @@ end
 
 --@brief 设置属性
 function Character:SetAttributeByList(list)
+	local isEquipUpdate = false
 	for i = 1,#list do
-		--CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
+		CSLog("AttributeSystem:SetAttributeByList",list[i][1],list[i][2])
 		self:SetAttributeByType(list[i][1],list[i][2])
+		local attriType = list[i][1]
+		if attriType == AttributeType.EquipCover or
+			attriType == AttributeType.EquipWeapon or
+			attriType == AttributeType.EquipNecklace or
+			attriType == AttributeType.EquipRing or
+			attriType == AttributeType.EquipSpirit then
+			isEquipUpdate = true
+			CSLog("装备变更：",attriType," id ",list[i][2],"--------------------------------------")
+		end
+
+	end
+
+	if isEquipUpdate then
+		self.m_animData:UpdateEquipData(self.m_attriSystem:GetEquipIds())
 	end
 
 end

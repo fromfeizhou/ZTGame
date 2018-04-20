@@ -227,6 +227,14 @@ function BattleItemManager:_CreateMapDataItem( p_map_goods )
 	return item
 end
 
+-- function BattleItemManager:GetMapItemById(id)
+-- 	for key,item in pairs(self.m_MapItemList) do
+-- 		if id==item.id
+-- 			return item
+-- 	end
+-- 	return nil
+-- 	-- body
+-- end
 
 
 

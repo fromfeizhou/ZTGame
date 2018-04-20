@@ -33,3 +33,12 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/Scripts/Test/Height (1).prefab.meta
+Assets/Scripts/Test/Height (1).prefab
+Assets/PsdFile/Panel.meta
+Assets/PsdFile/Panel/matching.jpg.meta
+Assets/PsdFile/Panel/settlement.jpg.meta
+Assets/PsdFile.meta
+Assets/StreamingAssets.meta
+Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionStateLocked.txt
+Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionStateLocked.txt.meta
