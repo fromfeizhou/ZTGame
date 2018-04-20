@@ -30,6 +30,10 @@ end
 function UIBasePanel:GetLayerType()
 	return LAYER_TYPE.NORMAL
 end
+
+function UIBasePanel:GetCanvas()
+	return PanelManager:GetLayerCanvas(self:GetLayerType())
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -108,6 +112,7 @@ end
 
 --@brief 销毁面板
 function UIBasePanel:Destroy()
+	self.m_LoadFinish = false
 	CSGameObject.Destroy(self.m_gameObject)
 	self:_RemoveEvents()
 	self:_UnRegNetFacade()

@@ -76,8 +76,11 @@ function PanelManager:_RegGamePanel()
 end
 
 function PanelManager:_InitLayer(layerType)
+	local canvaTrans = self.m_uiRoot.transform:Find(layerType .. "/Canvas")
 	local layerTab = {
-		layerRoot = self.m_uiRoot.transform:Find(layerType .. "/Canvas")
+		layerRoot = canvaTrans,
+		layerCanvas = canvaTrans:GetComponent("Canvas"),
+		layerCanvasScaler = canvaTrans:GetComponent("CanvasScaler"),
 	}
 	self.m_layerList[layerType] = layerTab
 end
@@ -108,6 +111,14 @@ end
 
 function PanelManager:GetLayerRoot(layerType)
 	return self.m_layerList[layerType].layerRoot
+end
+
+function PanelManager:GetLayerCanvas(layerType)
+	return self.m_layerList[layerType].layerCanvas
+end
+
+function PanelManager:GetLayerCanvasScaler(layerType)
+	return self.m_layerList[layerType].layerCanvasScaler
 end
 
 
