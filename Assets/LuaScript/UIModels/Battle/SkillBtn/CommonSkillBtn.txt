@@ -124,6 +124,10 @@ end
 
 --@brief 技能按钮
 function CommonSkillBtn:_OnSkillBtnHandler()
+	if not GlobalBattleCtrl:GetOwnerChara():CanUseSkillState() then
+		return
+	end
+
 	local skillId = self:_GetCurSkillId()
 	CSLog("CommonSkillBtn:_OnSkillBtnHandler",skillId)
 	--普通连招
@@ -145,6 +149,9 @@ function CommonSkillBtn:_OnSkillBtnHandler()
 	
 	local targetId = GlobalBattleCtrl:GetOwnerId()
 	BattleCommandProtocol:SendSkillCommand(skillId,targetPos,targetId)
+
+	--临时锁
+	GlobalBattleCtrl:GetOwnerChara():InState(CharacterState.Skill)
 end
 
 --@brief 获取技能id

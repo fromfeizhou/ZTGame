@@ -200,7 +200,6 @@ function SkillAreaManager:_GetCirclePos(pos)
 	local y = CSCamera.main.transform.rotation.eulerAngles.y
 	local targetDir = SkillAreaManager.m_deltaVec * SkillAreaManager.m_ndistance
     local targetPos = CSQuaternion.Euler(0, y, 0) * targetDir
-	CSLog("SkillAreaManager:_GetCirclePos",targetDir,SkillAreaManager.m_ndistance)
     return pos + targetPos
 end
    
