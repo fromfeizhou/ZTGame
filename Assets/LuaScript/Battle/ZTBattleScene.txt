@@ -62,7 +62,6 @@ function ZTBattleScene:_Init()
 		
 	self:_AddEvent()
 
-	PanelManager:HideLoadingPanel()
 		--临时匹配按钮
 	if not GameConfig.IsSingleScene then
 		BattleCommandProtocol:SendMath()

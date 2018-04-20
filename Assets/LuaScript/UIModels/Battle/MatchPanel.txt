@@ -47,6 +47,7 @@ end
 
 --@brief 子类重写 - 显示面板
 function MatchPanel:onShow()
+	PanelManager:HideLoadingPanel()
 end
 
 --@brief 子类重写 - 隐藏面板
