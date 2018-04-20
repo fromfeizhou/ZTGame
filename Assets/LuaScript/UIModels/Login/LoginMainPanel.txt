@@ -210,6 +210,8 @@ function LoginMainPanel:_Receive_Login_Login(login_login_s2c)
 	if login_login_s2c.code == 0 then--成功
 		self:_Request_Select_Role(login_login_s2c.login_info[1].id)
 	elseif login_login_s2c.code == 12 then--没有角色
+
+--[[
 		--显示创角界面
 		local dispatcher = GlobalData:GetMdlEventDispatcher()
 		
@@ -218,13 +220,14 @@ function LoginMainPanel:_Receive_Login_Login(login_login_s2c)
 			panelType = LOGIN_TYPE.CREATEROLE
 		}
 		dispatcher:DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData_CreateRole)
-
+]]
 			
+		self:_Request_Create_Role(0)
 		local modelData_LoginRole = {
 			modelType = MODEL_TYPE.LOGIN,
 			panelType = LOGIN_TYPE.MAIN,
 		}
-		dispatcher:DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData_LoginRole)
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.HIDE_PANEL,modelData_LoginRole)
 
 		
 	elseif login_login_s2c.code == 20 then
@@ -250,3 +253,15 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --********************NetWork Receive End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 请求 - 创建角色
+function LoginMainPanel:_Request_Create_Role(jobId)
+	GCSLog("LoginCreateRolePanel:_Request_Create_Role")
+	local package 	= Package:Create(PROTOCOL.LOGIN_CREATE_ROLE)
+	package.data = {
+		name = self.m_model.m_pAccname, 	-- 人物名字
+		job = jobId,	-- 角色职业
+		sex = 1,		-- 性别
+		serv_id = 0,	-- 服务器ID
+	}
+	NetWorkManager:SendNetMsg(package)
+end
