@@ -89,7 +89,6 @@ end
 --@brief 销毁面板
 function BattleEndPanel:onDestroy()
 	--CSLog("BattleEndPanel:Destroy")
-	self:_RemoveEvent()
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
