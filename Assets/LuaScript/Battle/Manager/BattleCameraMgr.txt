@@ -27,10 +27,10 @@ BattleCameraMgr = {
 function BattleCameraMgr:Init()
 	CSLog("BattleCameraMgr:Init")
 	
-	BattleCameraMgr.m_nInitialAngle = 55	--初始俯视角度
+	BattleCameraMgr.m_nInitialAngle = 65	--初始俯视角度
 	BattleCameraMgr.m_nHorizontalAngle = 270 --水平角度
-	BattleCameraMgr.m_nInitialHeight = 2	--人物在视野内屏幕中的位置设置
-	BattleCameraMgr.m_nInitialDistance = 9 --镜头距离(近镜头9 远镜头13)
+	BattleCameraMgr.m_nInitialHeight = -1	--人物在视野内屏幕中的位置设置
+	BattleCameraMgr.m_nInitialDistance = 10 --镜头距离(近镜头9 远镜头13)
 
 	local upRidus = math.rad(BattleCameraMgr.m_nInitialAngle)
 	local flatRidus = math.rad(BattleCameraMgr.m_nHorizontalAngle)
