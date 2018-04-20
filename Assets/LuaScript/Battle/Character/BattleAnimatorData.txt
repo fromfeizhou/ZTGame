@@ -79,7 +79,7 @@ end
 
 --@brief 刷新当前位置
 function BattleAnimatorData:_UpdateCurPos(pos)
-	-- CSLog("BattleAnimatorData:_UpdateCurPos",pos)
+	CSLog("BattleAnimatorData:_UpdateCurPos",pos)
 	AnimatorData.UpdatePos(self,pos)
 	self.m_tCurPos = pos
 	self:_UpdateCameraPos()
@@ -91,6 +91,7 @@ function BattleAnimatorData:_SetPosDelay(pos)
 		self:_UpdateCurPos(pos)
 		return
 	end
+
 	self.m_tTargetPos = pos
 	--大于10米 直接跑
 	if CSVector3.Distance(self.m_tCurPos,self.m_tTargetPos) > 10 then
@@ -131,16 +132,19 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 			--等待逻辑帧 移动继续
 			if GlobalBattleCtrl:IsWaitCommandFrame() then
 				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed.normalized
-				self.m_bDelayPosSpeed = self.m_bDelayPosSpeed * (1/self.m_bDelayPosSpeed.magnitude) * BattleDefine.PlayerSpeed / BattleDefine.RendererDelay
-				self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
+				if self.m_bDelayPosSpeed.magnitude > 0 then
+					self.m_bDelayPosSpeed = self.m_bDelayPosSpeed * (1/self.m_bDelayPosSpeed.magnitude) * BattleDefine.PlayerSpeed / BattleDefine.RendererDelay
+					self.m_nDelayPosLenght = self.m_bDelayPosSpeed.magnitude
 
-				self.m_tTargetPos = pos + self.m_bDelayPosSpeed * 2--加两帧补间
+					self.m_tTargetPos = pos + self.m_bDelayPosSpeed * 2--加两帧补间
+				else
+					self.m_bDelayPosSpeed = nil
+				end
 			else
 				self.m_bDelayPosSpeed = nil
 			end
 		end
 		
 	end
-	
 	self:_UpdateCurPos(pos)
 end
