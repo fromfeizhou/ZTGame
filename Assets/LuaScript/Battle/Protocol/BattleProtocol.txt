@@ -115,10 +115,16 @@ end
 
 --@brief 游戏结束
 function BattleProtocol:_OnSurvieEnd(survive_end_s2c)
-	local data = survive_end_s2c
+	local data  = survive_end_s2c
 	CSLog("BattleProtocol:_OnSurvieEnd",data.win)
 
-	--结算面板
+	local modelData = {
+		modelType = MODEL_TYPE.BATTLE,
+		panelType = BATTLE_TYPE.BATTLEEND,
+		panelData = data
+	}
+	CSLog("DispatchEvent BattleEnd-------------------------------------")
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

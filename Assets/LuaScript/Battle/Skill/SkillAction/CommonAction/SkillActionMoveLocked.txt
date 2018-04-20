@@ -1,0 +1,103 @@
+--SkillActionStateLocked.txt
+--@breif 移动锁定
+--@data 2018/04/11
+
+--@brief c#引用
+local CSLog = CS.GameTool.Log
+
+
+SkillActionStateLocked = {
+	m_nMoveLocked = 0,		--移动锁定
+	m_nFaceLocked = 0,		--方向锁定
+	m_nAnimaLocked = 0,		--动画锁定
+}
+
+--@breif 继承SkillAction
+setmetatable( SkillActionStateLocked, { __index = SkillAction})
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 拷贝原表
+function SkillActionStateLocked:Create(actionParse,actionData)
+	CSLog("SkillActionStateLocked:Create")
+	local obj = {}
+	setmetatable( obj, { __index = SkillActionStateLocked })
+	obj:Init(actionParse,actionData)
+	return obj
+end
+
+-- --@brief 初始化
+function SkillActionStateLocked:Init(actionParse,actionData)
+	--继承实现
+	SkillAction.Init(self,actionParse,actionData)
+	self.m_nMoveLocked = self.m_tActionData.m_nMoveLocked
+	self.m_nFaceLocked = self.m_tActionData.m_nFaceLocked
+	self.m_nAnimaLocked = self.m_tActionData.m_nAnimaLocked
+end
+
+--@brief 开始
+function SkillActionStateLocked:Start()
+	--继承实现
+	SkillAction.Start(self)
+	if self.m_nMoveLocked > 0 then
+		self.m_tOwner:InState(CharacterState.MoveLocked)
+	end
+
+	if self.m_nFaceLocked > 0 then
+		self.m_tOwner:InState(CharacterState.FaceLocked)
+	end
+
+	if self.m_nAnimaLocked > 0 then
+		self.m_tOwner:InState(CharacterState.AnimaLocked)
+	end
+end
+
+
+--@brief 更新
+function SkillActionStateLocked:Update()
+	--继承实现
+	SkillAction.Update(self)
+	if self.m_nMoveLocked > 0 and self.m_nFrameCount >= self.m_nMoveLocked then
+		self.m_tOwner:OutState(CharacterState.MoveLocked)
+		self.m_nMoveLocked = -1
+	end
+
+	if self.m_nFaceLocked > 0 and self.m_nFrameCount >= self.m_nFaceLocked then
+		self.m_tOwner:OutState(CharacterState.FaceLocked)
+		self.m_nFaceLocked = -1
+	end
+
+	if self.m_nAnimaLocked > 0 and self.m_nFrameCount >= self.m_nAnimaLocked then
+		self.m_tOwner:OutState(CharacterState.AnimaLocked)
+		self.m_nAnimaLocked = -1
+	end
+end
+
+-- --@brief 结束
+-- function SkillActionStateLocked:Done()
+-- 	--继承实现
+-- 	SkillAction.Done(self)
+-- end
+
+--@brief 移除
+function SkillActionStateLocked:Destroy()
+	if self.m_nMoveLocked > 0 then
+		self.m_tOwner:OutState(CharacterState.MoveLocked)
+	end
+
+	if self.m_nFaceLocked > 0 then
+		self.m_tOwner:OutState(CharacterState.FaceLocked)
+	end
+
+	if self.m_nAnimaLocked > 0 then
+		self.m_tOwner:OutState(CharacterState.AnimaLocked)
+	end
+	
+	--继承实现
+	SkillAction.Destroy(self)
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

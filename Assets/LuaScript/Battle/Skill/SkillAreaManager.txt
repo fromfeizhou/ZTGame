@@ -1,0 +1,160 @@
+--SkillAreaManager.txt
+--@breif 技能范围
+--@data 2018/04/20
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+
+SkillAreaManager = {
+}
+
+SkillAreaManager.m_tElmentPathList = {
+	"quan_hero",	--圆形
+	"quan_hero",	--圆形
+    "chang_hero",		--矩形
+    "shan_hero_60",		--扇形60度
+    "shan_hero_120",		--扇形120度
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 初始化
+function SkillAreaManager:Init()
+	CSLog("SkillAreaManager:Init")
+	SkillAreaManager.m_bIsInit = false
+	SkillAreaManager:_CreateElementList()
+	SkillAreaManager.m_ndistance = nil
+	SkillAreaManager.m_nAreaType = nil
+end
+
+
+--@brief 移除
+function SkillAreaManager:Destroy()
+	CSLog("SkillAreaManager:Destroy")
+	SkillAreaManager.m_tElmentList = nil
+	SkillAreaManager.m_bIsInit = false
+end
+
+--@brief 设置父节点
+function SkillAreaManager:SetParentContainer(container)
+	SkillAreaManager.m_container = container
+	SkillAreaManager:_UpdateContainer()
+end
+
+--@brief 显示技能范围
+--@param 距离
+--@param 类型
+function SkillAreaManager:ShowSkillArea(distance,areaType)
+	SkillAreaManager.m_ndistance = distance
+	SkillAreaManager.m_nAreaType = areaType
+	if not SkillAreaManager.m_bIsInit then
+		return
+	end
+	SkillAreaManager:_UpdateView()
+end
+
+--@brief 刷新技能位置
+function SkillAreaManager:UpdateSkillAreaPos(pos)
+	if not SkillAreaManager.m_bIsInit then
+		return
+	end
+end
+
+--@brief 隐藏
+function SkillAreaManager:HideSkillArea()
+	SkillAreaManager.m_ndistance = nil
+	SkillAreaManager.m_nAreaType = nil
+
+	if not SkillAreaManager.m_bIsInit then
+		return
+	end
+	for i = 1,#SkillAreaManager.m_tElmentList do
+		SkillAreaManager.m_tElmentList[i]:SetActive(false)
+    end
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 刷新显示
+function SkillAreaManager:_UpdateView()
+	local areaType = SkillAreaManager.m_nAreaType
+	local distance = SkillAreaManager.m_ndistance
+	if not areaType or not distance then
+		return
+	end
+
+	if areaType == SkillAreaType.OuterCircle then
+		SkillAreaManager.m_tElmentList[areaType]:SetActive(true)
+		SkillAreaManager.m_tElmentList[areaType].transform.localScale = CSVector3(distance * 2, 1, distance * 2)
+
+	elseif areaType == SkillAreaType.Cube then
+		SkillAreaManager.m_tElmentList[areaType]:SetActive(true)
+		SkillAreaManager.m_tElmentList[areaType].transform.localScale = CSVector3(1, 1, distance * 2)
+	else
+		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle]:SetActive(true)
+		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle].transform.localScale = CSVector3(distance, 1,distance)
+
+		SkillAreaManager.m_tElmentList[areaType]:SetActive(true)
+	end
+end
+--@brief 更新父容器
+function SkillAreaManager:_UpdateContainer()
+	if not SkillAreaManager.m_bIsInit or not SkillAreaManager.m_container then
+		return
+	end
+
+	for i = 1,#SkillAreaManager.m_tElmentList do
+		local go = SkillAreaManager.m_tElmentList[i]
+		go.transform:SetParent(SkillAreaManager.m_container,false)
+        go:SetActive(false)
+        go.transform.localEulerAngles = CSVector3.zero
+        go.transform.localPosition = CSVector3.zero
+        go.transform.localScale = CSVector3.one
+	end
+	SkillAreaManager:_UpdateView()
+end
+
+--@brief 创建显示预设
+function SkillAreaManager:_CreateElementList()
+	local list = {}
+	table.insert(list, SkillAreaManager:_GetElementPath(SkillAreaType.OuterCircle))
+	table.insert(list, SkillAreaManager:_GetElementPath(SkillAreaType.InnerCircle))
+	table.insert(list, SkillAreaManager:_GetElementPath(SkillAreaType.Cube))
+	table.insert(list, SkillAreaManager:_GetElementPath(SkillAreaType.Sector60))
+	table.insert(list, SkillAreaManager:_GetElementPath(SkillAreaType.Sector120))
+	--@brief 指示框实例列表
+	SkillAreaManager.m_tElmentList = {}
+	SkillAreaManager:_LoadAsset(list)
+end
+
+--@brief 加载资源
+function SkillAreaManager:_LoadAsset(list)
+	if #list > 0 then
+		local elmentpath = list[1]
+		table.remove(list,1)
+		CS.AssetManager.LoadAsset(elmentpath,function(target,path)
+			if not SkillAreaManager.m_tElmentList or not target then
+				return
+			end
+
+			local go = CSGameObject.Instantiate(target)
+			table.insert(SkillAreaManager.m_tElmentList,go)
+			--继续加载预设件
+			SkillAreaManager:_LoadAsset(list)
+		end)
+	else
+		--创建完成
+		self.m_bIsInit = true
+		self:_UpdateContainer()
+	end
+end
+
+--@brief 获取预设件地址
+function SkillAreaManager:_GetElementPath(areaType)
+	return PathManager:GetBatteUISkill(SkillAreaManager.m_tElmentPathList[areaType])
+end

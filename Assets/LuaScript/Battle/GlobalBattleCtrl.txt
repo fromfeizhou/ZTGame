@@ -54,6 +54,9 @@ function GlobalBattleCtrl:Init()
 	--地图毒圈管理器
 	GlobalBattleCtrl.m_mapCircleManager = MapCircleManager:Create()
 
+	--技能圈
+	SkillAreaManager:Init()
+
 	--****************管理者初始化end************************************************
 
 	--全局数据引用初始化
@@ -80,6 +83,9 @@ function GlobalBattleCtrl:Destroy()
 	
 	--镜头管理
 	BattleCameraMgr:Destroy()
+
+	--技能圈
+	SkillAreaManager:Destroy()
 
 	--物资预设管理
 	BattleMapMgr:Destroy()
@@ -178,7 +184,6 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 
 	BattleMapMgr:Reset( )
 
-
 end
 
 --@brief 重置计数相关
@@ -189,6 +194,8 @@ function GlobalBattleCtrl:ResetGameState()
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.INIT_DATA_COMPLETE)
 	GlobalBattleCtrl.m_nRendererCount = 0
 	GlobalBattleCtrl.m_nCommandCount = 0
+
+	SkillAreaManager:SetParentContainer(GlobalBattleCtrl.m_character:GetSkillCon())
 end
 
 

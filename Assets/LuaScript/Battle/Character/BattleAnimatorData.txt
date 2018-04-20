@@ -79,7 +79,7 @@ end
 
 --@brief 刷新当前位置
 function BattleAnimatorData:_UpdateCurPos(pos)
-	CSLog("BattleAnimatorData:_UpdateCurPos",pos)
+	-- CSLog("BattleAnimatorData:_UpdateCurPos",pos)
 	AnimatorData.UpdatePos(self,pos)
 	self.m_tCurPos = pos
 	self:_UpdateCameraPos()
