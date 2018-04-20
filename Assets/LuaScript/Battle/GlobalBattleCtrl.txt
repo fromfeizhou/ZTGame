@@ -138,6 +138,8 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@rife 初始化数据
 function GlobalBattleCtrl:ExitBattle()
+	local battleModel = ModelManager:_GetModel( MODEL_TYPE.BATTLE )
+	if battleModel then battleModel:_CleanPanel() end
 	GlobalBattleCtrl:Destroy()
 	ZTCityScene:InitScene()
 end

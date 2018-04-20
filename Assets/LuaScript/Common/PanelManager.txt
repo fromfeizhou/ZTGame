@@ -85,7 +85,10 @@ function PanelManager:_InitLayer(layerType)
 end
 
 function PanelManager:GetPanel(model, panelType, panelData)
-	return self.m_panelList[panelType] or self:_CreatePanel(model, panelType, panelData)
+	if not self.m_panelList[panelType] then
+		return self:_CreatePanel(model, panelType, panelData)
+	end
+	return self.m_panelList[panelType]
 end
 
 function PanelManager:_CreatePanel(model, panelType, panelData)
@@ -98,6 +101,12 @@ function PanelManager:_CreatePanel(model, panelType, panelData)
 	return panel
 end
 
+function PanelManager:DestroyPanel( panelType )
+	if self.m_panelList[panelType] then
+		self.m_panelList[panelType]:Destroy()
+		self.m_panelList[panelType] = nil
+	end
+end
 
 function PanelManager:GetLayerRoot(layerType)
 	return self.m_layerList[layerType].layerRoot

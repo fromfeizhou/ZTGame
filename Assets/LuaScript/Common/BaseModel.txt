@@ -62,11 +62,11 @@ end
 
 function BaseModel:_CleanPanel( )
 	if self.m_tPanelList then
-		for i,panel in pairs(self.m_tPanelList) do
-			Log("BaseModel:_CleanPanel",panel.m_panelName)
-			panel:Destroy()
+		for k,v in pairs(self.m_tPanelList) do
+			Log("BaseModel:_CleanPanel",k,self.m_tPanelList[k]:GetName())
+			PanelManager:DestroyPanel(k)
 		end
-		self.m_tPanelList = nil
+		self.m_tPanelList = {}
 	end
 end
 
