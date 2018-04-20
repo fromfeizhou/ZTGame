@@ -206,6 +206,12 @@ function SkillActionStateLockedData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
 	self.m_nFrameMax = param[1]
+	self.m_nFrameMax = self.m_nFrameMax > param[2] and self.m_nFrameMax or param[2]
+	self.m_nFrameMax = self.m_nFrameMax > param[3] and self.m_nFrameMax or param[3]
+	
+	self.m_nMoveLocked = param[1]
+	self.m_nFaceLocked = param[2]
+	self.m_nAnimaLocked = param[3]
 end
 
 

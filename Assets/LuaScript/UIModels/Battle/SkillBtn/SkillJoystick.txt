@@ -123,7 +123,7 @@ end
 function SkillJoystick:_OnJoystickDown(pos)
 	local distance = self.m_tDistances[self.m_nCurIndex]
 	if distance > 0 then
-		SkillAreaManager:ShowSkillArea(distance,SkillActionType.InnerCircle)
+		SkillAreaManager:ShowSkillArea(distance,SkillAreaType.InnerCircle)
 	end
 end
 
