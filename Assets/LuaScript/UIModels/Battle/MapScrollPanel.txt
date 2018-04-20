@@ -194,11 +194,9 @@ end
 --@brief 设置毒圈参数
 function MapScrollPanel:_SetCircle(circle, circleInfo)
 	local _mapProportion = 512/2048 * self.m_scaleValue
-	if circleInfo.pos and circleInfo.radius then
-		local xPos = circleInfo.pos  * _mapProportion
-		local xRadius = circleInfo.radius * _mapProportion
-		circle:SetCircle(xPos,xRadius)
-	end
+	local pos = circleInfo.pos  * _mapProportion
+	local radius = circleInfo.radius * _mapProportion
+	circle:SetCircle(pos,radius)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -16,6 +16,7 @@ Animator = {
 	m_animData,		--动画data
 	m_bIsInCamera,	--是否进入场景范围
 	m_conSpEffect, --特效容器
+	m_conSkill,		-- 技能范围
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -41,6 +42,9 @@ function Animator:Init(animaData,container)
 	self.m_conSpEffect = CSGameObject("EffectCon").transform
 	self.m_conSpEffect:SetParent(self.m_goAnima.transform,false)
 
+	self.m_conSkill = CSGameObject("SkillCon").transform
+	self.m_conSkill:SetParent(self.m_goAnima.transform,false)
+
 	self:_AddEvent()
 end
 
@@ -54,6 +58,7 @@ function Animator:Destroy()
 
 	self:_RemoveEvent()
 	self.m_conSpEffect = nil
+	self.m_conSkill = nil
 	self.m_animData = nil
 end
 
@@ -62,12 +67,18 @@ end
 function Animator:GetEffectCon()
 	return self.m_conSpEffect
 end
+
+--@brief 获取特效容器
+function Animator:GetSkillCon()
+	return self.m_conSkill
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 监听事件
 function Animator:_AddEvent()
 	if self.m_animData then
+		self.m_animData:AddEvent(AnimaEvent.UpdateModel, self._OnUpdateModel, self)
 		self.m_animData:AddEvent(AnimaEvent.Play, self._OnPlay, self)
 		self.m_animData:AddEvent(AnimaEvent.InCamera, self._OnSetInCamera, self)
 		self.m_animData:AddEvent(AnimaEvent.UpdatePos, self._OnUpdatePos, self)
@@ -88,7 +99,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
-	self.m_ztAnima:CreateAnimatorView(1,1,"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"	)--self.m_animData:GetAnimatorPath())
+	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetModelViewData())--self.m_animData:GetAnimatorPath())
 end
 
 --@brief 移除形象
@@ -102,13 +113,20 @@ function Animator:_OnSetInCamera(inCamera)
 		return
 	end
 	self.m_bIsInCamera = inCamera
+	self:_RushModelView()
+end
+
+function Animator:_OnUpdateModel()
+	self:_RushModelView()
+end
+
+function Animator:_RushModelView()
 	if self.m_bIsInCamera then
-		self:_CreateAnimatorView()
+		self:_CreateAnimatorView(self.m_animData:GetModelViewData())
 	else
 		self:_RemoveAnimatorView()
 	end
 end
-
 
 --@brief 播放动作
 --@param 动作名

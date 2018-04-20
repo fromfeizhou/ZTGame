@@ -57,6 +57,11 @@ function AttributeSystem:SetAttributeByType(attriType,value)
 	self.m_tAttriList[attriType] = value
 end
 
+--@brief 獲得裝備屬性值
+function AttributeSystem:GetEquipIds()
+	return self:GetAttributeByType(AttributeType.EquipCover),self:GetAttributeByType(AttributeType.EquipWeapon),self:GetAttributeByType(AttributeType.EquipNecklace),self:GetAttributeByType(AttributeType.EquipRing),self:GetAttributeByType(AttributeType.EquipSpirit)
+end
+
 -- --@brife 设置属性
 -- function AttributeSystem:SetAttributeByList(list)
 -- 	for i = 1,#list do
