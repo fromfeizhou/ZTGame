@@ -55,7 +55,7 @@ end
 
 --@brief 获取模型地址
 function PathManager:GetAnimatorPath(name)
-	return string.format(PathManager.m_sAnimator,name,name)  ..".prefab"
+	return string.format(PathManager.m_sAnimator,name,name)  .."F.prefab"-- F前綴
 end
 
 function PathManager:GetModelPath( name )
