@@ -8,6 +8,10 @@ local LuaFileLoad = {
 
 		"Event.EventDispatcher",
 
+		"Common.BaseManager",
+		"Common.UIBasePanel",
+		"Common.BaseModel",
+
 		"Common.Data.ModelData",
 		"Common.PathManager",
 		"Common.NetWorkManager",
@@ -18,8 +22,6 @@ local LuaFileLoad = {
 		"Common.TimerManager.FixTimer",
 		"Common.TimerManager.LoopTimer",
 		"Common.TimerManager.TimerManager",
-		"Common.UIBasePanel",
-		"Common.BaseModel",
 
 		"ProtoBuff.NetProtocol",
 		"ProtoBuff.ProtocolDefine",
@@ -38,6 +40,7 @@ local LuaFileLoad = {
 		"UIModels.System.SystemModel",
 		"UIModels.System.SystemNoticePanel",
 		"UIModels.System.SystemLockPanel",
+		"UIModels.System.SystemLoadingPanel",
 
 		--登录模块
 		"UIModels.Login.LoginModel",
@@ -106,7 +109,7 @@ local LuaFileLoad = {
 		"Battle.Skill.SkillAction.CommonAction.SkillActionMove",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionCollider",
 		"Battle.Skill.SkillAction.CommonAction.SkillActionSpEffect",
-		"Battle.Skill.SkillAction.CommonAction.SkillActionMoveLocked",
+		"Battle.Skill.SkillAction.CommonAction.SkillActionStateLocked",
 
 		"Battle.Skill.SkillAction.SpecAction.SpecAction1",
 		"Battle.Skill.SkillAction.SkillActionData",

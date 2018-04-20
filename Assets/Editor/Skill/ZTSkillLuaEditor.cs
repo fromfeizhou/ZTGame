@@ -54,7 +54,7 @@ public class ZTSkillLuaEditor
 
     private byte[] CustomLoaderMethod(ref string fileName)
     {
-        fileName = PathManager.LuaPath + "/" + fileName.Replace('.', '/') + ".txt";
+        fileName = fileName.Replace('.', '/') + ".txt";
       
         //找到指定文件  
         return AssetManager.LoadLuaAsset(fileName);

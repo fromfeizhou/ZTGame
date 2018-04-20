@@ -14,7 +14,8 @@ local CSQuaternion = CS.UnityEngine.Quaternion
 MapScrollPanel = {
 	m_panelName = "MapScrollPanel",
 	m_scaleValue,
-	m_showCircle = false,
+
+	m_isShowCircle = false,
 	
 	m_mapScrollImg = nil,
 
@@ -76,6 +77,7 @@ end
 
 --@brief 面板每帧更新
 function MapScrollPanel:onTick(deltaTime)
+	self:_ShowCircle()
 	self:_UpdateCircle(false)
 	self:_UpdatePlayer()
 end
@@ -102,6 +104,24 @@ end
 
 --@brief 注销网络门户
 function MapScrollPanel:_UnRegNetFacade()
+end
+
+function MapScrollPanel:onShow()
+	self:_ShowCircle()
+end
+
+function MapScrollPanel:onHide()
+	self.m_ztCircleCur:Hide()	
+	self.m_ztCircleDest:Hide()
+end
+
+
+function MapScrollPanel:_ShowCircle()
+	if MapCircleManager.m_isStart and not self.m_isShowCircle then 
+		self:_UpdateCircle( true )
+		self.m_ztCircleCur:Show()	
+		self.m_ztCircleDest:Show()
+	end
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
@@ -159,9 +179,7 @@ end
 function MapScrollPanel:_onValueChanged(value)
 	self.m_scaleValue = value
 	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
-	if self.m_showCircle then 
-		self:_UpdateCircle( true )
-	end
+	self:_UpdateCircle( true )
 end
 
 --@brief 刷新毒圈
@@ -169,30 +187,18 @@ function MapScrollPanel:_UpdateCircle(force)
 	if not MapCircleManager.m_isWait or force then
 		self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
 		self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
-		self:Show_Circle()
 	end
 end
 
---@brief 显示毒圈
-function MapScrollPanel:Show_Circle()
-	self.m_showCircle = true
-	self.m_ztCircleCur:Show()	
-	self.m_ztCircleDest:Show()
-end
-
---@brief 隐藏毒圈
-function MapScrollPanel:Hide_Circle()
-	self.m_showCircle = false
-	self.m_ztCircleCur:Hide()	
-	self.m_ztCircleDest:Hide()
-end
 
 --@brief 设置毒圈参数
 function MapScrollPanel:_SetCircle(circle, circleInfo)
 	local _mapProportion = 512/2048 * self.m_scaleValue
-	local pos = circleInfo.pos  * _mapProportion
-	local radius = circleInfo.radius * _mapProportion
-	circle:SetCircle(pos,radius)
+	if circleInfo.pos and circleInfo.radius then
+		local xPos = circleInfo.pos  * _mapProportion
+		local xRadius = circleInfo.radius * _mapProportion
+		circle:SetCircle(xPos,xRadius)
+	end
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

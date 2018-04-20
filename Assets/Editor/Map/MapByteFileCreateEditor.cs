@@ -109,7 +109,8 @@ public class MapByteFileCreateEditor
                         Renderer tempRenderer = colliderRenderers[colliderIndex];
                         CollRectange tempColl = new CollRectange(tempRenderer.transform.position.x,
                             tempRenderer.transform.position.z, tempRenderer.transform.eulerAngles.y,
-                            tempRenderer.transform.lossyScale.x, tempRenderer.transform.lossyScale.z);
+                            Mathf.Abs(tempRenderer.transform.lossyScale.x),
+                            Mathf.Abs(tempRenderer.transform.lossyScale.z));
                         colliderRectList.Add(tempColl);
                     }
                     for (int blockIndex = goInCludeRects.Count - 1; blockIndex >= 0; blockIndex--)
@@ -119,7 +120,7 @@ public class MapByteFileCreateEditor
                             if (ZTCollider.CheckCollision(goInCludeRects[blockIndex].Value, colliderRectList[colliderIndex]))
                             {
                                 if (blockType == eMapBlockType.Height)
-                                    blockParam = colliderRenderers[colliderIndex].bounds.size.y + "";
+                                    blockParam = Mathf.Abs(colliderRenderers[colliderIndex].bounds.size.y) + "";
                                 AddColliderToDic(goInCludeRects[blockIndex].Key, blockType, blockParam);
                                 //goInCludeRects.RemoveAt(blockIndex);
                                 break;

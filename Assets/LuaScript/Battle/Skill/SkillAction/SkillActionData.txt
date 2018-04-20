@@ -188,24 +188,36 @@ end
 --*******************************************************分割线***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --移动锁定
-SkillActionMoveLockedData = {
+SkillActionStateLockedData = {
+	m_nMoveLocked = -1,		--移动锁定
+	m_nFaceLocked = -1,		--方向锁定
+	m_nAnimaLocked = -1,		--动画锁定
 }
 --@breif SkillActionData
-setmetatable(SkillActionMoveLockedData, { __index = SkillActionData})
+setmetatable(SkillActionStateLockedData, { __index = SkillActionData})
 
 --@brief 拷贝原表
-function SkillActionMoveLockedData:Create(owner,frame,skillPos,targetId,param)
+function SkillActionStateLockedData:Create(owner,frame,skillPos,targetId,param)
 	local obj = {}
-	setmetatable( obj, { __index = SkillActionMoveLockedData })
+	setmetatable( obj, { __index = SkillActionStateLockedData })
 	obj:Init(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
 --@brief 初始化 
-function SkillActionMoveLockedData:Init(owner,frame,skillPos,targetId,param)
+function SkillActionStateLockedData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
-	self.m_nFrameMax = param[1]
+	local frameMax = param[1]
+	for i,v in pairs(param) do
+		if frameMax < v then
+			frameMax = v
+		end
+	end
+	self.m_nFrameMax = frameMax
+	self.m_nMoveLocked = param[1] or -1
+	self.m_nFaceLocked = param[2] or -1
+	self.m_nAnimaLocked = param[3] or -1
 end
 
 

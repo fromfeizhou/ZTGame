@@ -1,0 +1,100 @@
+--SystemLoadingPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSMathf = CS.UnityEngine.Mathf
+
+SystemLoadingPanel = {
+	m_panelName = "SystemLoadingPanel",
+	m_ztSlider = nil,
+	m_sensitivity = 0.6,
+	m_progress = 0,
+}
+
+setmetatable( SystemLoadingPanel, { __index = UIBasePanel})
+
+function SystemLoadingPanel:GetLayerType()
+	return LAYER_TYPE.TOP
+end
+
+function SystemLoadingPanel:AwakeShow()
+	return false
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function SystemLoadingPanel:GetName()
+	return "SystemLoadingPanel"
+end
+--@brief 面板被创建
+function SystemLoadingPanel:onCreatePanel()
+	self.m_ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider")
+end
+
+--@brief 面板初始化
+function SystemLoadingPanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function SystemLoadingPanel:onTick(deltaTime)
+	if self.m_ztSlider.value ~= self.m_progress then
+		self.m_ztSlider.value = CSMathf.Lerp(self.m_ztSlider.value, self.m_progress, self.m_sensitivity)
+	end
+end
+
+function SystemLoadingPanel:onHide( )
+	self:SetProgress(0,true)
+end
+
+--@brief 销毁登录面板
+function SystemLoadingPanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function SystemLoadingPanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function SystemLoadingPanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function SystemLoadingPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function SystemLoadingPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function SystemLoadingPanel:SetSensitivity( sensitivity )
+	if sensitivity then
+		if sensitivity > 1 then 
+			self.m_sensitivity = 0.9
+		elseif sensitivity <= 0 then
+			 self.m_sensitivity = 0.1 
+		else
+			self.m_sensitivity = sensitivity
+		end
+	else
+		self.m_sensitivity = 0.6
+	end
+end
+
+function SystemLoadingPanel:SetProgress( progress, force )
+
+	local tmpPressage = progress
+	if tmpPressage > 1 then tmpPressage = 1 end
+	if tmpPressage < 0 then tmpPressage = 0 end
+
+	self.m_progress = tmpPressage
+	if force then 
+		self.m_ztSlider.value = tmpPressage
+	end
+end

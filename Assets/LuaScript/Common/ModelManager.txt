@@ -13,15 +13,20 @@ ModelManager = {
 
 	m_mdlEvent = nil,
 }
+setmetatable( ModelManager, { __index = BaseManager})
 
+function ModelManager:Name()
+	return "ModelManager"
+end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function ModelManager:Create()
+function ModelManager:Create(callbackInitFinish)
 	GCSLog("ModelManager:Create")
 	local obj = {}
 	setmetatable( obj, { __index = ModelManager })
+	obj.m_callbackInitFinish = callbackInitFinish
 	obj:Init()
 	return obj
 end
@@ -30,54 +35,68 @@ end
 --@brief 初始化
 function ModelManager:Init()
 	ModelManager.m_modelList = {}
-	ModelManager.m_modelDef = {}
-	ModelManager.m_mdlEvent = GlobalData:GetMdlEventDispatcher()
-	ModelManager:_AddEvents()
+	self.m_mdlEvent = GlobalData:GetMdlEventDispatcher()
+	self:_AddEvents()
+
+	self:_RegLoginModel()
+	self:_CreateModel(MODEL_TYPE.SYSTEM)
+	self:_onFinish()
 end
 
 --@brief 更新模块列表中的模块逻辑
 function ModelManager:Update()
-	ModelManager:_TickPanel(CSTime.deltaTime)
+	self:_TickPanel(CSTime.deltaTime)
 end
 
 --@breif 移除
 function ModelManager:Destroy()
-	ModelManager:_RemoveEvents()
+	self:_RemoveEvents()
 end
-
-
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function ModelManager:_RegLoginModel(  )
+	ModelManager.m_modelDef = {}
+	ModelManager.m_modelDef[ MODEL_TYPE.SYSTEM 	] 	= SystemModel
+	ModelManager.m_modelDef[ MODEL_TYPE.LOGIN 	] 	= LoginModel
+end
+
+function ModelManager:_RegGameModel(  )
+	ModelManager.m_modelDef = {}
+	ModelManager.m_modelDef[ MODEL_TYPE.CITY 	] 	= CityModel
+	ModelManager.m_modelDef[ MODEL_TYPE.BATTLE 	] 	= BattleModel
+end
+
 --@breif 添加监听模块事件
 function ModelManager:_AddEvents()
-	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show,ModelManager)
-	ModelManager.m_mdlEvent:AddEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide,ModelManager)
+	self.m_mdlEvent:AddEvent(MDL_EVENT.SHOW_PANEL,self._OnHandle_Show,self)
+	self.m_mdlEvent:AddEvent(MDL_EVENT.HIDE_PANEL,self._OnHandle_Hide,self)
 end
 
 --@breif 移除模块事件
 function ModelManager:_RemoveEvents()
-	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,ModelManager._OnHandle_Show)
-	ModelManager.m_mdlEvent:RemoveEvent(MDL_EVENT.HIDE_PANEL,ModelManager._OnHandle_Hide)
+	self.m_mdlEvent:RemoveEvent(MDL_EVENT.SHOW_PANEL,self._OnHandle_Show)
+	self.m_mdlEvent:RemoveEvent(MDL_EVENT.HIDE_PANEL,self._OnHandle_Hide)
 end
 
 --@breif 事件句柄 显示面板
 function ModelManager:_OnHandle_Show(modelData)
-	local model = ModelManager:_GetModel(modelData.modelType)
+	local model = self:_GetModel(modelData.modelType)
 	if model then
 		model:ShowPanel(modelData.panelType,modelData.panelData)
 	else
-		GCSLog("ModelManager:_OnHandle_Show found out ",modelData.panelType)
+		GCSLog("ModelManager:_OnHandle_Show found out model ",modelData.modelType)
 	end
 end
 
 --@breif 事件句柄 隐藏面板
 function ModelManager:_OnHandle_Hide(modelData)
-	local model = ModelManager:_GetModel(modelData.modelType)
+	local model = self:_GetModel(modelData.modelType)
 	if model then
 		model:HidePanel(modelData.panelType)
-		ModelManager:_TryCleanModel()
+		self:_TryCleanModel()
 	else
 		GCSLog("ModelManager:_OnHandle_Hide found out ",modelData.panelType)
 	end
@@ -98,53 +117,31 @@ end
 function ModelManager:_TryCleanModel(model)
 	if not model then return end
 	if model.m_tPanelList == nil or #model.m_tPanelList == 0 then
-		ModelManager:_RemoveModel(model);
+		self:_RemoveModel(model);
 	end
 end
 
 --@breif 获取模块
 function ModelManager:_GetModel( modelType )
 	if not ModelManager.m_modelList[modelType] then
-		local model = ModelManager:_CreateModel(modelType)
-		if model then
-			ModelManager:_AddModel(modelType,model)
-		else
-			GCSLog("ModelManager:_GetModel",modelType)
-		end
+		self:_CreateModel(modelType)
 	end
 	return ModelManager.m_modelList[modelType]
 end
 
 --@breif 创建模块
 function ModelManager:_CreateModel( modelType)
-	GCSLog("[ModelManager:_CreateModel]",modelType)
-	local modelTemplate = nil
-	local model = nil
-	if modelType == MODEL_TYPE.SYSTEM then 
-		modelTemplate = SystemModel
-	elseif modelType == MODEL_TYPE.LOGIN then 
-		modelTemplate = LoginModel
-	elseif modelType == MODEL_TYPE.CITY then 
-		modelTemplate = CityModel
-	elseif modelType == MODEL_TYPE.BATTLE then 
-		modelTemplate = BattleModel
+	if ModelManager.m_modelDef[modelType] then
+		ModelManager.m_modelList[modelType] = ModelManager.m_modelDef[modelType]:Create()
+	else
+		LogError("ModelManager:_CreateModel found out modelDef. ",SerializeTable(self.m_modelDef))
 	end
-
-	if modelTemplate then
-		model = modelTemplate:Create()
-	end
-	return model
-end
-
---@breif 添加模块到缓存列表
-function ModelManager:_AddModel(modelType, model )
-	if ModelManager.m_modelList[model] then return end
-	ModelManager.m_modelList[modelType] = model
 end
 
 --@breif 从缓存列表中移除模块
-function ModelManager:_RemoveModel(model)
-	if not ModelManager.m_modelList[model] then return end
-	ModelManager.m_modelList[model]:Destroy()
-	ModelManager.m_modelList[model] = nil
+function ModelManager:_RemoveModel(modelType)
+	if ModelManager.m_modelList[modelType] then
+		ModelManager.m_modelList[modelType]:Destroy()
+		ModelManager.m_modelList[modelType] = nil
+	end
 end

@@ -74,11 +74,11 @@ end
 
 --@brief 子类重写 - 面板每帧更新
 function BattleMainPanel:onTick(deltaTime)
-	if self.m_tRadarPanel and self.m_tRadarPanel.onTick then
+	if self.m_tRadarPanel and self.m_tRadarPanel.m_LoadFinish and self.m_tRadarPanel.m_isShow and self.m_tRadarPanel.onTick then
 		self.m_tRadarPanel:onTick(deltaTime)
 	end
 
-	if self.m_tScrollPanel and self.m_tScrollPanel.onTick then
+	if self.m_tScrollPanel and self.m_tScrollPanel.m_LoadFinish and self.m_tScrollPanel.m_isShow and self.m_tScrollPanel.onTick then
 		self.m_tScrollPanel:onTick(deltaTime)
 	end
 
@@ -170,8 +170,8 @@ function BattleMainPanel:_CreateMapRaderPanel()
 	local panel = {}
 	setmetatable( panel, { __index = MapRadarPanel })
 	panel:_LoadAssetPanel(self.m_rootLeftUp, self.m_model)
+	panel:SetClickOpenMapScroll(function ( ) self:_OnClickMapScrollBtn() end )
 	self.m_tRadarPanel = panel
-	PanelWidget:GetZTButton(self.m_tRadarPanel.m_transform,"ViewPort/Mask/btnOpenMap",function () self:_OnClickMapScrollBtn() end)
 end
 
 --@brief 创建 地图卷轴

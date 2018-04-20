@@ -25,6 +25,11 @@ end
 function SystemNoticePanel:GetName()
 	return "SystemNoticePanel"
 end
+
+function SystemNoticePanel:AwakeShow()
+	return false
+end
+
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	
 

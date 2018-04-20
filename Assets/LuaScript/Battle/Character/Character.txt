@@ -17,6 +17,8 @@ CharacterState = {
 	KnockState = 16,		--击倒 击飞 击退
 	Controller = 32,		--受控
 	MoveLocked = 64,		--移动锁定
+	FaceLocked = 128,		--方向锁定
+	AnimaLocked = 256,		--动作锁定
 }
 
 Character = {
@@ -35,6 +37,7 @@ Character = {
 	--频繁访问状态（update等）用bool值记录
 	m_bIsDead = nil,	--玩家死亡
 	m_bMoveLocked = nil,	--锁定移动
+	m_bAnimLocked = nil,	--动作播放锁定
 	
 
 	m_ztCollider = nil,		--碰撞框
@@ -237,11 +240,22 @@ end
 function Character:InState(state)
 	self.m_nState = self.m_nState | state
 	---CSLog("Character:InState",self.m_nState)
+
+	if state == CharacterState.MoveLocked then
+		self.m_bMoveLocked = true
+	elseif state == CharacterState.AnimaLocked then
+		self.m_bAnimLocked = true
+	end
 end
 
 --@brief 设置玩家状态
 function Character:OutState(state)
 	self.m_nState = self.m_nState & ~state
+	if state == CharacterState.MoveLocked then
+		self.m_bMoveLocked = false
+	elseif state == CharacterState.AnimaLocked then
+		self.m_bAnimLocked = false
+	end
 	self:CheckStateAnima()
 	--CSLog("Character:OutState",self.m_nState)
 end
@@ -269,9 +283,9 @@ function Character:IsNormalState()
 	if self:IsDead() then
 		return false
 	end
-	if self:IsInState(CharacterState.Skill) then
-		return false
-	end
+	-- if self:IsInState(CharacterState.Skill) then
+	-- 	return false
+	-- end
 	return true
 end
 
@@ -300,15 +314,6 @@ function Character:SetDead(value)
 	end
 end
 
---@brief 锁定移动
-function Character:SetMoveLocked(value)
-	self.m_bMoveLocked = value
-	if self.m_bMoveLocked then
-		self:InState(CharacterState.MoveLocked)
-	else
-		self:OutState(CharacterState.MoveLocked)
-	end
-end
 
 --@brief 移动操作 调整朝向判断
 function Character:IsMoveActionChangeRotate(value)
@@ -343,12 +348,19 @@ end
 
 --@brief 根据类型设置属性
 function Character:SetAttributeByType(attriType,value)
-	self.m_attriSystem:SetAttributeByType(attriType,value)
-
 	--发送血量变化事件
 	if attriType ==  AttributeType.Hp and self:IsInCamera() then
+		local curHp = self:GetHp()
+		self.m_attriSystem:SetAttributeByType(attriType,value)
+		--弹出伤害数字
+		local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = curHp - self:GetHp()}
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
+		--同步血槽
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
+		
+		return
 	end
+	self.m_attriSystem:SetAttributeByType(attriType,value)
 end
 
 --@brief 设置属性
@@ -428,10 +440,10 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
-	if GameConfig.IsSingleScene then
-		self:ChangeHp(value)
+	if not GameConfig.IsSingleScene then
+		return
 	end
-
+	self:ChangeHp(value)
 	local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = value}
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 end
@@ -440,6 +452,9 @@ end
 --@brief 播放动作
 --@param 动作名
 function Character:Play(name)
+	if self.m_bAnimLocked then
+		return
+	end
 	self.m_animData:Play(name)
 end
 
@@ -491,6 +506,10 @@ end
 --@brief 更新角度
 --@param vector3 dir
 function Character:UpdateRotate(dir)
+	if self:IsInState(CharacterState.FaceLocked) then
+		return
+	end
+
 	if not self.m_rotatePos.Equals(dir) then
 		self.m_rotatePos = dir
 		self.m_animData:UpdateRotate(dir)

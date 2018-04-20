@@ -4,7 +4,7 @@ local CSAssetManager = CS.AssetManager
 
 UIBasePanel = {
 	m_model = nil,
-	m_isShow = false,
+	m_isShow = true,
 	m_tPanelData = nil,
 	m_gameObject = nil,
 	m_transform = nil,
@@ -16,6 +16,11 @@ UIBasePanel = {
 --@brief 面板资源相对模块路径
 function UIBasePanel:GetRelativePath()
 	return ""
+end
+
+function UIBasePanel:AwakeShow()
+	LogC("UIBasePanel:AwakeShow",true)
+	return true
 end
 
 function UIBasePanel:GetName()
@@ -40,8 +45,13 @@ function UIBasePanel:_LoadAssetPanel(parent, model, panelData)
 			self:_InitPanel()
 			self.m_LoadFinish = true
 
-			self:Show(panelData)
-
+			if self:AwakeShow() then
+				self.m_isShow = false
+				self:Show(panelData)
+			else 
+				self.m_isShow = true
+				self:Hide()
+			end
 		else
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName,path)
 		end
@@ -99,14 +109,10 @@ end
 --@brief 销毁面板
 function UIBasePanel:Destroy()
 	CSGameObject.Destroy(self.m_gameObject)
-	GCSLog("UIBasePanel:Destroy-0")
 	self:_RemoveEvents()
-	GCSLog("UIBasePanel:Destroy-1")
 	self:_UnRegNetFacade()
-	GCSLog("UIBasePanel:Destroy-2")
 	self:onDestroy()
 end
-
 
 --@brief 子类重写 - 面板被创建
 function UIBasePanel:onCreatePanel()

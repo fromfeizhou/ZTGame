@@ -20,7 +20,9 @@ public class AssetManager
         }
 
 #if UNITY_EDITOR
+		ZTSceneManager.GetInstance().StartCoroutine(AnsyLoadAsset(path,callback,type));
         //编辑器模式下 资源获取
+			/*
         Object obj = null;
         if (null != type)
         {
@@ -35,6 +37,7 @@ public class AssetManager
             callback(obj, path);
         }
         return;
+        */
 #else
         string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
@@ -63,6 +66,27 @@ public class AssetManager
 #endif
     }
 
+	private static System.Collections.IEnumerator AnsyLoadAsset(string path, UnityAction<Object, string> callback = null, System.Type type = null)
+	{
+		yield return null;
+        //编辑器模式下 资源获取
+#if UNITY_EDITOR
+        Object obj = null;
+		if (null != type)
+		{
+			obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
+		}
+		else
+		{
+			obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
+		}
+		if (null != callback) {
+			callback (obj, path);
+		} else
+			callback (null, path);
+#endif
+    }
+
     /* 
      * @brief 加载资源
      * @param path 资源路径
@@ -78,34 +102,30 @@ public class AssetManager
 
 #if UNITY_EDITOR
         Object obj = null;
-        string filename = PathManager.HotLuaPath + "/" + path;
-        if (File.Exists(filename))
-        {
-            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(filename);
-        }
-        if(null == obj)
-        {
-            //lua ab包地址
-            path = PathManager.LuaPath + "/" + path;
-            //编辑器模式下 资源获取
-            obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
-        }
+        //lua ab包地址
+        path = PathManager.LuaPath + "/" + path;
+        //编辑器模式下 资源获取
+        obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
         TextAsset text = (TextAsset)obj;
         if (null != text)
             return text.bytes;
-
         return null;
+
 #else
-        Object obj2 = null;
         string filename = DownLoadCommon.GetLuaHotFullName(path);
         if (File.Exists(filename))
         {
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            byte[] buffur = new byte[fs.Length];
-            fs.Read(buffur, 0, buffur.Length);
-            fs.Close();
-            return buffur;
+            try
+            {
+                string res = File.ReadAllText(filename);
+                return System.Text.Encoding.UTF8.GetBytes(res);
+            }catch(System.Exception e)
+            {
+                Debug.Log("LoadLuaAsset=====3>>" + e.ToString());
+            }
         }
+
+        Object obj2 = null;
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript");
         //加载assetBundleManifest文件    

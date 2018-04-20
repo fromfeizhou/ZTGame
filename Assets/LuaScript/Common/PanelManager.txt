@@ -15,6 +15,7 @@ PanelManager = {
 	m_panelList = {},
 	m_panelDefine = {},
 }
+setmetatable( PanelManager, { __index = BaseManager})
 
 LAYER_TYPE = { 
 	BOTTOM = "Bottom",
@@ -27,14 +28,18 @@ LAYER_TYPE = {
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 拷贝原表
-function PanelManager:Create()
-	GCSLog("PanelManager:Create")
+function PanelManager:Create(callbackInitFinish)
 	local obj = {}
 	setmetatable( obj, { __index = PanelManager })
+	obj.m_callbackInitFinish = callbackInitFinish
 	obj:_LoadUIRoot()
 	return obj
 end
 
+
+function PanelManager:Name()
+	return "PanelManager"
+end
 
 function PanelManager:_LoadUIRoot()
 	local callback_loadfinish = function(target,path)
@@ -54,11 +59,14 @@ function PanelManager:Init()
 	self:_InitLayer(LAYER_TYPE.TOP)
 	self:_InitLayer(LAYER_TYPE.MASK)
 	self:_RegLoginPanel()
+	self:_onFinish()
 end
 
 function PanelManager:_RegLoginPanel()
 	self.m_panelDefine[SYSTEM_TYPE.NOTICE] 		= SystemNoticePanel
 	self.m_panelDefine[SYSTEM_TYPE.LOCK] 		= SystemLockPanel
+	self.m_panelDefine[SYSTEM_TYPE.LOADING]		= SystemLoadingPanel
+	
 	self.m_panelDefine[LOGIN_TYPE.MAIN] 		= LoginMainPanel
 	self.m_panelDefine[LOGIN_TYPE.CREATEROLE] 	= LoginCreateRolePanel
 end
@@ -86,6 +94,7 @@ function PanelManager:_CreatePanel(model, panelType, panelData)
 	local layerType = panel:GetLayerType()
 	local layer = self.m_layerList[layerType].layerRoot
 	panel:_LoadAssetPanel(layer, model, panelData)
+	self.m_panelList[panelType] = panel
 	return panel
 end
 
@@ -95,18 +104,30 @@ function PanelManager:GetLayerRoot(layerType)
 end
 
 
+--@brief 显示Loading界面
+--@brief 参数：sensitivity 灵敏度
+function PanelManager:ShowLoadingPanel(sensitivity)
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		if sensitivity then
+			panel:SetSensitivity(sensitivity)
+		end
+		panel:Show()
+	end
+end
 
+--@brief 隐藏Loading界面
+function PanelManager:HideLoadingPanel()
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		panel:Hide()
+	end
+end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+--@brief 设置Loading界面进度
+function PanelManager:SetLoadingProgress( progress, force )
+	local panel = self.m_panelList[SYSTEM_TYPE.LOADING]
+	if panel then
+		panel:SetProgress(progress, force)
+	end
+end
