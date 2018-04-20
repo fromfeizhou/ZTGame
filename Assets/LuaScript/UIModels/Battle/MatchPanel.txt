@@ -52,6 +52,7 @@ end
 
 --@brief 子类重写 - 隐藏面板
 function MatchPanel:onHide()
+	PanelManager:HideLoadingPanel()
 end
 
 --@brief 子类重写 - 添加事件监听

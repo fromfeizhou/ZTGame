@@ -34,9 +34,9 @@ end
 
 --@brief 子类重写 - 模块初始化
 function SystemModel:onInitModel()
-	self.m_tPanelList[SYSTEM_TYPE.NOTICE] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.NOTICE)
-	self.m_tPanelList[SYSTEM_TYPE.LOCK] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.LOCK)
-	self.m_tPanelList[SYSTEM_TYPE.LOADING] 	= PanelManager:GetPanel(self, SYSTEM_TYPE.LOADING)
+	self:ShowPanel( SYSTEM_TYPE.NOTICE,	{defHide = true} )
+	self:ShowPanel( SYSTEM_TYPE.LOCK,  	{defHide = true} )
+	self:ShowPanel( SYSTEM_TYPE.LOADING,{defHide = true} )
 end
 
 --@brief 子类重写 - 添加事件监听

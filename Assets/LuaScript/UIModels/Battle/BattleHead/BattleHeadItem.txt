@@ -80,23 +80,28 @@ end
 function BattleHeadItem:_InitEvent()
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self._onUpdateCharacterHp,self)
 	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera,self)
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnRushView,self)
 end
 
 --@brief 移除事件
 function BattleHeadItem:_RemoveEvent()
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self._onUpdateCharacterHp,self)
 	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.UPDATE_CAMERA,self._OnUpdateCamera)
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.INIT_DATA_COMPLETE,self._OnRushView)
 end
 
 function BattleHeadItem:_onUpdateCharacterHp(battleId)
-	if not self.m_gameObject then
-		return
-	end
 	if not battleId == GlobalBattleCtrl:GetOwnerId() then
 		return
 	end
 
+	self:_OnRushView()
+end
 
+function BattleHeadItem:_OnRushView()
+	if not self.m_gameObject then
+		return
+	end
 	local chara = GlobalBattleCtrl:GetOwnerChara()
 	if chara then 
 		local curHp = chara:GetHp()

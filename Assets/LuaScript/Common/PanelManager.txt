@@ -85,19 +85,19 @@ function PanelManager:_InitLayer(layerType)
 	self.m_layerList[layerType] = layerTab
 end
 
-function PanelManager:GetPanel(model, panelType, panelData)
+function PanelManager:GetPanel(model, panelType)
 	if not self.m_panelList[panelType] then
-		return self:_CreatePanel(model, panelType, panelData)
+		return self:_CreatePanel(model, panelType)
 	end
 	return self.m_panelList[panelType]
 end
 
-function PanelManager:_CreatePanel(model, panelType, panelData)
+function PanelManager:_CreatePanel(model, panelType)
 	local panel = {}
 	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
 	local layerType = panel:GetLayerType()
 	local layer = self.m_layerList[layerType].layerRoot
-	panel:_LoadAssetPanel(layer, model, panelData)
+	panel:_LoadAssetPanel(layer, model)
 	self.m_panelList[panelType] = panel
 	return panel
 end

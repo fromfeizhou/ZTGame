@@ -77,7 +77,8 @@ function BaseModel:ShowPanel( panelType, panelData )
 			self.m_tPanelList[panelType]:Show(panelData)
 		end
 	else
-		self.m_tPanelList[panelType] = PanelManager:GetPanel(self, panelType, panelData)
+		self.m_tPanelList[panelType] = PanelManager:GetPanel(self, panelType)
+		self.m_tPanelList[panelType]:Show(panelData)
 	end
 end
 
