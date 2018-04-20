@@ -69,8 +69,9 @@ public class AssetManager
 	private static System.Collections.IEnumerator AnsyLoadAsset(string path, UnityAction<Object, string> callback = null, System.Type type = null)
 	{
 		yield return null;
-		//编辑器模式下 资源获取
-		Object obj = null;
+        //编辑器模式下 资源获取
+#if UNITY_EDITOR
+        Object obj = null;
 		if (null != type)
 		{
 			obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);
@@ -81,10 +82,10 @@ public class AssetManager
 		}
 		if (null != callback) {
 			callback (obj, path);
-			Debug.Log ("[AnsyLoadAsset]filePath:" + path);
 		} else
 			callback (null, path);
-	}
+#endif
+    }
 
     /* 
      * @brief 加载资源
