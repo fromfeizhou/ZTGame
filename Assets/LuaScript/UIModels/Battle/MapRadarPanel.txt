@@ -15,6 +15,10 @@ MapRadarPanel = {
 	m_panelName = "MapRadarPanel",
 	m_ztTxt_waitTime = nil,
 
+	m_OnClickOpenMapScroll = nil,
+
+	m_OnClickOpenMapScroll = nil,
+
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
 
@@ -54,7 +58,13 @@ function MapRadarPanel:onCreatePanel()
 	--玩家，队友
 	self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
 	self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self.m_onClickOpenMapScroll() end)
 	
+end
+
+
+function MapRadarPanel:SetClickOpenMapScroll( onClickOpenMapScroll )
+	self.m_onClickOpenMapScroll = onClickOpenMapScroll
 end
 
 --@brief 面板初始化
