@@ -4,7 +4,7 @@ SkillActionConfig = {
 				{ actionType = 1, param = { "sanlianpi1" }},
 		},
 		[ 2 ] = {
-				{ actionType = 6, param = { 50, -1, 50 }},
+				{ actionType = 6, param = { 50, 50, 50 }},
 		},
 		[ 25 ] = {
 				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, "HitBlood1" }},
@@ -14,7 +14,7 @@ SkillActionConfig = {
 	id_10002 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "sanlianpi2" }},
-				{ actionType = 6, param = { 60, -1, 60 }},
+				{ actionType = 6, param = { 60, 60, 60 }},
 		},
 		[ 30 ] = {
 				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 18, 1, "HitBlood2" }},
@@ -24,7 +24,7 @@ SkillActionConfig = {
 	id_10003 = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "sanlianpi3" }},
-				{ actionType = 6, param = { 100, -1, 100 }},
+				{ actionType = 6, param = { 100, 100, 100 }},
 		},
 		[ 45 ] = {
 				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 5, "HitBlood3" }},
@@ -38,13 +38,13 @@ SkillActionConfig = {
 		},
 		[ 41 ] = {
 				{ actionType = 1, param = { "xuanfongzhan_mid" }},
-				{ actionType = 3, param = { 3.5, 1004, 1, 0, 0, 2, 100, -1, -1 }},
-				{ actionType = 6, param = { -1, -1, 100 }},
-				{ actionType = 4, param = { "Magic_Pulse1", 1, 100, 0, 0 }},
+				{ actionType = 3, param = { 3.5, 1004, 1, 0, 0, 2, 70, -1, -1 }},
+				{ actionType = 6, param = { -1, -1, 70 }},
+				{ actionType = 4, param = { "Magic_Pulse1", 1, 30, 0, 0 }},
 		},
-		[ 142 ] = {
+		[ 112 ] = {
 				{ actionType = 1, param = { "xuanfongzhan_end" }},
-				{ actionType = 6, param = { 50, -1, 50 }},
+				{ actionType = 6, param = { 50, 50, 50 }},
 		},
 	},
 
@@ -52,7 +52,7 @@ SkillActionConfig = {
 		[ 1 ] = {
 				{ actionType = 1, param = { "tiaopi" }},
 				{ actionType = 0, param = { 0 }},
-				{ actionType = 6, param = { 120, -1, 120 }},
+				{ actionType = 6, param = { 120, 120, 120 }},
 		},
 		[ 11 ] = {
 				{ actionType = 5, param = { 1002 }},
@@ -64,7 +64,7 @@ SkillActionConfig = {
 
 	id_11003 = {
 		[ 1 ] = {
-				{ actionType = 1, param = { "baozao" }},
+				{ actionType = 1, param = { "baozou" }},
 				{ actionType = 6, param = { 80, 80, 80 }},
 		},
 		[ 50 ] = {
