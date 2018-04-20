@@ -1,0 +1,13 @@
+BaseManager = {
+	m_callbackInitFinish,
+}
+
+function BaseManager:Name()
+	-- body
+end
+
+function BaseManager:_onFinish( )
+	if self.m_callbackInitFinish then
+		self.m_callbackInitFinish()
+	end
+end
