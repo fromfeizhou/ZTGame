@@ -64,11 +64,11 @@ SkillActionConfig = {
 
 	id_11003 = {
 		[ 1 ] = {
-				{ actionType = 1, param = { "skill03" }},
-				{ actionType = 0, param = { -1 }},
+				{ actionType = 1, param = { "baozao" }},
+				{ actionType = 6, param = { 80, 80, 80 }},
 		},
-		[ 30 ] = {
-				{ actionType = 3, param = { 8, -1, 1, 0, 0, 2, 50, 10, "Magic_Pulse1" }},
+		[ 50 ] = {
+				{ actionType = 4, param = { "Magic_Pulse1", 1, 50, 0, 0 }},
 		},
 	},
 
@@ -134,4 +134,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_11002"
+SkillActionConfig.TestSkillId = "id_10001"
