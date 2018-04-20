@@ -15,8 +15,10 @@ MapScrollPanel = {
 	m_panelName = "MapScrollPanel",
 	m_scaleValue,
 
+	m_viewPort = nil,
 	m_isShowCircle = false,
 	
+	m_canvasResolution = nil,
 	m_mapScrollImg = nil,
 
 	m_ScrollView = nil,
@@ -29,6 +31,8 @@ MapScrollPanel = {
 
 }
 
+local minMapView = 512
+local maxMapView = 2048
 setmetatable( MapScrollPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -43,15 +47,24 @@ function MapScrollPanel:GetRelativePath()
 end
 --@brief 面板被创建
 function MapScrollPanel:onCreatePanel()	
+
+	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent("RectTransform")
+
 	--@brief 初始化登录界面UI控件
 	PanelWidget:GetZTButton(self.m_transform,"ViewPort/btnClose",function() self:Hide() end)
 
-	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
-	self.m_scaleValue = ztSlider.value
+
 	self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
+
+	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
+	self.m_scaleValue = self.m_ScrollView.content.sizeDelta.x / minMapView
+	ztSlider.minValue = self.m_scaleValue
+	ztSlider.maxValue = maxMapView / minMapView
+
 	self.m_mapScrollImg = self.m_ScrollView.content:GetComponent("ZTImage")
 	self.m_mapScrollImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
 	
+
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleCur")
 	self.m_ztCircleCur:Init(80,false,4.0)
@@ -67,11 +80,20 @@ function MapScrollPanel:onCreatePanel()
 end
 
 function MapScrollPanel:onClickMapScroll(clickPoint)
+	local clickImgPos = self.m_canvasResolution - clickPoint
+	clickImgPos = self.m_viewPort.sizeDelta - clickImgPos
 
+	local clickPosRatio_X = clickImgPos.x/self.m_viewPort.sizeDelta.x
+	local clickPosRatio_Y = clickImgPos.y/self.m_viewPort.sizeDelta.y
+	--LogC("MapScrollPanel:onClickMapScroll","X:" .. clickPosRatio_X * self.m_ScrollView.content.sizeDelta.x, "Y:" .. clickPosRatio_Y * self.m_ScrollView.content.sizeDelta.y)
+	LogC("MapScrollPanel:onClickMapScroll","X:" .. clickPosRatio_X * self.m_ScrollView.content.sizeDelta.x)
+	LogC("MapScrollPanel:onClickMapScroll","Y:" .. clickPosRatio_Y * self.m_ScrollView.content.sizeDelta.y)
 end
 
 --@brief 面板初始化
 function MapScrollPanel:onInitPanel()
+	local canvasScaler = PanelManager:GetLayerCanvasScaler(self:GetLayerType())
+	self.m_canvasResolution = canvasScaler.referenceResolution
 	self:_UpdatePlayer()
 end
 
@@ -157,7 +179,7 @@ function MapScrollPanel:_UpdatePlayer()
 		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 		local pos = v:GetPos()
 		local tmpPos = CSVector2(pos.x,pos.z)
-		self.m_playerList[playerId].anchoredPosition = tmpPos * 512/2048 * self.m_scaleValue
+		self.m_playerList[playerId].anchoredPosition = tmpPos * minMapView/maxMapView * self.m_scaleValue
 		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 	end
 end
@@ -178,7 +200,7 @@ end
 --@brief 地图缩放时触发
 function MapScrollPanel:_onValueChanged(value)
 	self.m_scaleValue = value
-	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * 512
+	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * minMapView
 	self:_UpdateCircle( true )
 end
 
@@ -193,8 +215,8 @@ end
 
 --@brief 设置毒圈参数
 function MapScrollPanel:_SetCircle(circle, circleInfo)
-	local _mapProportion = 512/2048 * self.m_scaleValue
-	if circleInfo.pos and circleInfo.radius then 
+	local _mapProportion = minMapView/maxMapView * self.m_scaleValue
+	if circleInfo and circleInfo.pos and circleInfo.radius then 
 		local pos = circleInfo.pos  * _mapProportion
 		local radius = circleInfo.radius * _mapProportion
 		circle:SetCircle(pos,radius)
