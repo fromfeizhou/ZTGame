@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 88407fb1f241b2a49a632ef0812e829c
-timeCreated: 1524194691
+guid: ae884412dcc1baa4fbc52bf7c4ad91f5
+timeCreated: 1524232802
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -169,7 +169,8 @@ ModelImporter:
     400160: "\u6218\u58EB\u5973\u6B66\u5668"
     4300000: "\u6218\u58EB\u5973\u6B66\u5668"
     4300002: "\u6218\u58EB\u5973"
-    7400000: xuanfongzhan_mid
+    7400000: Take 001
+    7400002: xuanfongzhan_mid
     9500000: //RootNode
     13700000: "\u6218\u58EB\u5973"
     13700002: "\u6218\u58EB\u5973\u6B66\u5668"

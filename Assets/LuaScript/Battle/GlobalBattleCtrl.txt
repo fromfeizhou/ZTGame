@@ -240,6 +240,7 @@ function GlobalBattleCtrl:Update(dt)
 	end
 	
 	BattleCameraMgr:Update()
+	SkillAreaManager:Update()
 
 	--动态设置补间动画参数
 	GlobalBattleCtrl.m_nRendererCount = GlobalBattleCtrl.m_nRendererCount + 1

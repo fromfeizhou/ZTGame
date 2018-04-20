@@ -38,6 +38,7 @@ function SkillActionParse:Init(skillCommand)
 		self:Done()
 		return
 	end
+	
 	self.m_nStartFrame = GlobalBattleCtrl:GetCurCommandFrame()
 	self.m_nSkillId = skillCommand.m_nSkillId
 	self.m_tSkillPos = skillCommand.m_tSkillPos
@@ -54,6 +55,7 @@ end
 --@brief 移除
 function SkillActionParse:Destroy()
 	CSLog("SkillActionParse:Destroy")
+	self.m_tOwner:OutState(CharacterState.Skill)
 	if self.m_tActionList then
 
 		for frame,actionList in pairs(self.m_tActionList) do

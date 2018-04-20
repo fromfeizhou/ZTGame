@@ -51,9 +51,7 @@ function BattleMainPanel:onCreatePanel()
 	self:_CreateSkillBtn()
 	self:_CreateMapRaderPanel()
 
-	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
-	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
-
+	local canvas = PanelManager:GetLayerCanvas(LAYER_TYPE.NORMAL)
 	self.m_tHeadItemMgr = HeadItemManager:Create(canvas, self.m_rootTop)
 
 	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
@@ -180,7 +178,7 @@ end
 
 --@brief 按钮点击-开启背包
 function BattleMainPanel:_OnClickBagBtn( )
-	--[[
+	
 	if self.m_tBagPanel then
 		GCSLog("BattleMainPanel:_OnClickBagBtn",self.m_tBagPanel.m_isShow)
 		if self.m_tBagPanel.m_isShow == true then
@@ -191,8 +189,8 @@ function BattleMainPanel:_OnClickBagBtn( )
 	else
 		self:_CreateBagPanel()
 	end
-	]]
-	GlobalBattleCtrl:ExitBattle()
+	
+	--GlobalBattleCtrl:ExitBattle()
 end
 
 --@brief 按钮点击-开启地图卷轴

@@ -55,7 +55,7 @@ end
 
 --@brief 获取模型地址
 function PathManager:GetAnimatorPath(name)
-	return string.format(PathManager.m_sAnimator,name,name)  ..".prefab"
+	return string.format(PathManager.m_sAnimator,name,name)  .."F.prefab"-- F前綴
 end
 
 function PathManager:GetModelPath( name )
@@ -63,7 +63,7 @@ function PathManager:GetModelPath( name )
 end
 
 function PathManager:GetHeroModelPath( modelId )
-	return string.format(PathManager.m_sHeroModel,modelId,modelId) .. ".prefab"
+	return string.format(PathManager.m_sHeroModel,modelId,modelId) .. "F.prefab"
 end
 
 --@brief 获取战斗ui pb文件路径

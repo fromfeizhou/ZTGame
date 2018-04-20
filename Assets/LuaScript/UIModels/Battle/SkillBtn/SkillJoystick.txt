@@ -21,6 +21,8 @@ SkillJoystick = {
 	m_nCurIndex = nil,		--技能id
 	m_tSkillList = nil,		--下一个技能
 	m_tDistances = nil,		--技能距离
+
+	m_bIsDown = nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -102,8 +104,7 @@ end
 
 --@brief 添加控制事件 
 function SkillJoystick:_InitJoyEvent()
-	local layerRoot = PanelManager:GetLayerRoot(LAYER_TYPE.NORMAL)
-	local canvas = layerRoot:GetComponent(typeof(CSCANVAS))
+	local canvas = PanelManager:GetLayerCanvas(LAYER_TYPE.NORMAL)
 	self.m_joystick:SetCanvas(canvas)
 
 	self.m_joystick.onJoystickDownEvent = function(pos)
@@ -121,14 +122,22 @@ end
 
 --@brief 触摸点按下
 function SkillJoystick:_OnJoystickDown(pos)
+	if not GlobalBattleCtrl:GetOwnerChara():CanUseSkillState() then
+		return
+	end
+	self.m_bIsDown = true
 	local distance = self.m_tDistances[self.m_nCurIndex]
 	if distance > 0 then
-		SkillAreaManager:ShowSkillArea(distance,SkillActionType.InnerCircle)
+		SkillAreaManager:ShowSkillArea(distance,SkillAreaType.InnerCircle)
 	end
 end
 
 --@brief 触摸点移动
 function SkillJoystick:_OnJoystickMove(pos)
+	if not self.m_bIsDown then
+		return
+	end
+
 	local distance = self.m_tDistances[self.m_nCurIndex]
 	if distance > 0 then
 		SkillAreaManager:UpdateSkillAreaPos(CSVector3(pos.x,0,pos.y))
@@ -137,8 +146,12 @@ end
 
 --@brief 触摸点松开
 function SkillJoystick:_OnJoystickUp(pos)
-	 self:_SendSkillCommand(pos)
-	 SkillAreaManager:HideSkillArea()
+	if not self.m_bIsDown then
+		return
+	end
+	self.m_bIsDown = nil
+	self:_SendSkillCommand(pos)
+	SkillAreaManager:HideSkillArea()
 end
 
 --@brife 发送移动操作
@@ -163,6 +176,10 @@ function SkillJoystick:_SendSkillCommand(pos)
 	local targetPos = CSVector3(charaPos.x + distance * pos.x, charaPos.y, distance * pos.y + charaPos.z)
 	local targetId = GlobalBattleCtrl:GetOwnerId()
 	BattleCommandProtocol:SendSkillCommand(skillId,targetPos,targetId)
+
+	--临时锁
+	GlobalBattleCtrl:GetOwnerChara():InState(CharacterState.Skill)
+
 end
 
 --@brief 获取技能id

@@ -203,7 +203,10 @@ end
 
 --@brief 获取动画位置
 function Character:GetViewPos()
-	return self.m_animData.m_tCurPos
+	if self.m_animData then
+		return self.m_animData.m_tCurPos
+	end
+	return nil
 end
 
 
@@ -281,12 +284,24 @@ end
 --@brief 是否存在状态
 function Character:IsInState(state)
 	local result = self.m_nState & state
+	-- CSLog("Character:IsInState",self.m_nState,state,result)
 	return result == state
 end
 
 --@brief 是否是普通状态
 function Character:IsNormalState()
 	if self:IsDead() then
+		return false
+	end
+	-- if self:IsInState(CharacterState.Skill) then
+	-- 	return false
+	-- end
+	return true
+end
+
+--@brief 是否是普通状态
+function Character:CanUseSkillState()
+	if self:IsDead() or self:IsInState(CharacterState.Skill) then
 		return false
 	end
 	-- if self:IsInState(CharacterState.Skill) then
@@ -358,9 +373,12 @@ function Character:SetAttributeByType(attriType,value)
 	if attriType ==  AttributeType.Hp and self:IsInCamera() then
 		local curHp = self:GetHp()
 		self.m_attriSystem:SetAttributeByType(attriType,value)
-		--弹出伤害数字
-		local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = curHp - self:GetHp()}
-		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
+		
+		if not GameConfig.IsSingleScene then
+			--弹出伤害数字
+			local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = curHp - self:GetHp()}
+			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
+		end
 		--同步血槽
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 		return
@@ -381,7 +399,7 @@ function Character:SetAttributeByList(list)
 			attriType == AttributeType.EquipRing or
 			attriType == AttributeType.EquipSpirit then
 			isEquipUpdate = true
-			CSLog("装备变更：",attriType," id ",list[i][2],"--------------------------------------")
+			--CSLog("装备变更：",attriType," id ",list[i][2],"--------------------------------------")
 		end
 
 	end
