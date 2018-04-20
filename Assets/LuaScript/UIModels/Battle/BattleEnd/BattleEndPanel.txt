@@ -50,19 +50,19 @@ end
 --@brief 显示面板
 function BattleEndPanel:onShow()
 	
-	if self.panelData then
+	if self.m_tPanelData then
 		local callback = function(target,path)
 			if self.m_ranKIcon then
 				self.m_ranKIcon.sprite = target
 			end
 		end
 		local  iconPath ="Assets/ResourcesLib/Images/settlement/@Img_number_6.png"--临时资源
-		if(self.panelData.win == 1) then
+		if(self.m_tPanelData.protoData.win == 1) then
 			iconPath ="Assets/ResourcesLib/Images/settlement/@Img_number_1.png"
 		end
 		CS.AssetManager.LoadAsset(iconPath,callback,typeof(CS.UnityEngine.Sprite))
 		self.m_costNum.text="1000"
-		self.m_outNum="2"
+		self.m_outNum.text="2"
 	end
 
 end

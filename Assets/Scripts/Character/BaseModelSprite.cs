@@ -237,7 +237,7 @@ public class RoleModelSprite : BaseModelSprite
         if (!GetCurTypeByLoadingIndex(out type))
             return;
 
-        if (!modelPartPath[type].Equals(path)) return;
+        if (!modelPartPath.ContainsKey(type)||!modelPartPath[type].Equals(path)) return;
         GameObject prefab = target as GameObject;
         if (null == prefab)
         {
@@ -309,6 +309,7 @@ public class RoleModelSprite : BaseModelSprite
             GameObject.Destroy(model);
             model = null;
             animator = null;
+            modelPartPath.Clear();
             //暂时销毁处理
             // this.StartCoroutine(timeOut());
         }
