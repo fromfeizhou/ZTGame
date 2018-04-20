@@ -131,7 +131,7 @@ end
 function SkillJoystick:_OnJoystickMove(pos)
 	local distance = self.m_tDistances[self.m_nCurIndex]
 	if distance > 0 then
-		SkillAreaManager:UpdateSkillAreaPos(CSVector3(pos.x * distance,0,pos.y * distance))
+		SkillAreaManager:UpdateSkillAreaPos(CSVector3(pos.x,0,pos.y))
 	end
 end
 

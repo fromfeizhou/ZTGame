@@ -8,6 +8,7 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
 local CSCamera = CS.UnityEngine.Camera
+local CSQuaternion = CS.UnityEngine.Quaternion
 
 SkillAreaManager = {
 }
@@ -30,6 +31,7 @@ function SkillAreaManager:Init()
 	SkillAreaManager:_CreateElementList()
 	SkillAreaManager.m_ndistance = nil
 	SkillAreaManager.m_nAreaType = nil
+	SkillAreaManager.m_deltaVec = CSVector3.zero
 end
 
 
@@ -41,6 +43,14 @@ function SkillAreaManager:Destroy()
 	end
 	SkillAreaManager.m_tElmentList = nil
 	SkillAreaManager.m_bIsInit = false
+end
+
+--@brief 刷新
+function SkillAreaManager:Update()
+	if not SkillAreaManager.m_bIsInit and not SkillAreaManager.m_nAreaType then
+		return
+	end
+	SkillAreaManager:_UpdateViewPos()
 end
 
 --@brief 设置父节点
@@ -64,19 +74,11 @@ end
 
 --@brief 刷新技能位置
 function SkillAreaManager:UpdateSkillAreaPos(pos)
+	SkillAreaManager.m_deltaVec = pos
 	if not SkillAreaManager.m_bIsInit or not SkillAreaManager.m_nAreaType then
 		return
 	end
-	local areaType = SkillAreaManager.m_nAreaType
-	if areaType == SkillAreaType.OuterCircle then
-		return
-	end
-	if areaType == SkillAreaType.InnerCircle then
-		SkillAreaManager.m_tElmentList[areaType].transform.localPosition = pos
-
-	elseif areaType == SkillAreaType.Cube then
-		SkillAreaManager.m_tElmentList[areaType].transform:LookAt(pos);
-	end
+	
 end
 
 --@brief 隐藏
@@ -112,7 +114,7 @@ function SkillAreaManager:_UpdateView()
 		SkillAreaManager.m_tElmentList[areaType].transform.localScale = CSVector3(1, 1, distance * 2)
 	else
 		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle]:SetActive(true)
-		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle].transform.localScale = CSVector3(distance, 1,distance)
+		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle].transform.localScale = CSVector3(distance * 2, 1,distance * 2)
 
 		SkillAreaManager.m_tElmentList[areaType]:SetActive(true)
 	end
@@ -175,18 +177,37 @@ function SkillAreaManager:_GetElementPath(areaType)
 	return PathManager:GetBatteUISkill(SkillAreaManager.m_tElmentPathList[areaType])
 end
 
+function SkillAreaManager:_UpdateViewPos()
+	if not GlobalBattleCtrl:GetOwnerChara() then
+		return
+	end
+	local charaPos = GlobalBattleCtrl:GetOwnerChara():GetViewPos()
+
+	local areaType = SkillAreaManager.m_nAreaType
+	if areaType == SkillAreaType.OuterCircle then
+		return
+	end
+	if areaType == SkillAreaType.InnerCircle then
+		SkillAreaManager.m_tElmentList[areaType].transform.position = SkillAreaManager:_GetCirclePos(charaPos)
+
+	elseif areaType == SkillAreaType.Cube then
+		SkillAreaManager.m_tElmentList[areaType].transform:LookAt(SkillAreaManager:_GetCirclePos(charaPos));
+	end
+end
+
 -- --@brief 获取InnerCircle元素位置
--- function SkillAreaManager:_GetCirclePos(pos)
--- 	local y = CSCamera.main.transform.rotation.eulerAngles.y
--- 	local targetDir = CSVector3(pos.x, 0, pos.y) * SkillAreaManager.m_ndistance
---     local targetPos = Quaternion.Euler(0, y, 0) * targetDir
---     return targetPos
--- end
+function SkillAreaManager:_GetCirclePos(pos)
+	local y = CSCamera.main.transform.rotation.eulerAngles.y
+	local targetDir = SkillAreaManager.m_deltaVec * SkillAreaManager.m_ndistance
+    local targetPos = CSQuaternion.Euler(0, y, 0) * targetDir
+	CSLog("SkillAreaManager:_GetCirclePos",targetDir,SkillAreaManager.m_ndistance)
+    return pos + targetPos
+end
    
 -- --@brief 获取Cube、Sector元素朝向
--- function SkillAreaManager:_GetCubeSectorLookAt(pos)
--- 	local y = CSCamera.main.transform.rotation.eulerAngles.y
--- 	local targetDir = CSVector3(pos.x, 0, pos.y) * SkillAreaManager.m_ndistance
---     local targetPos = Quaternion.Euler(0, y, 0) * targetDir
---     return targetPos
--- end
+function SkillAreaManager:_GetCubeSectorLookAt(pos)
+	local y = CSCamera.main.transform.rotation.eulerAngles.y
+	local targetDir =  SkillAreaManager.m_deltaVec
+    local targetPos = CSQuaternion.Euler(0, y, 0) * targetDir
+    return pos + targetPos
+end
