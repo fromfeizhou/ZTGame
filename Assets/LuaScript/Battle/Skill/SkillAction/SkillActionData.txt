@@ -188,21 +188,21 @@ end
 --*******************************************************分割线***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --移动锁定
-SkillActionMoveLockedData = {
+SkillActionStateLockedData = {
 }
 --@breif SkillActionData
-setmetatable(SkillActionMoveLockedData, { __index = SkillActionData})
+setmetatable(SkillActionStateLockedData, { __index = SkillActionData})
 
 --@brief 拷贝原表
-function SkillActionMoveLockedData:Create(owner,frame,skillPos,targetId,param)
+function SkillActionStateLockedData:Create(owner,frame,skillPos,targetId,param)
 	local obj = {}
-	setmetatable( obj, { __index = SkillActionMoveLockedData })
+	setmetatable( obj, { __index = SkillActionStateLockedData })
 	obj:Init(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
 --@brief 初始化 
-function SkillActionMoveLockedData:Init(owner,frame,skillPos,targetId,param)
+function SkillActionStateLockedData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
 	self.m_nFrameMax = param[1]
