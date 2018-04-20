@@ -24,8 +24,7 @@ public class FPSShow : MonoBehaviour
     {
         transform.SetSiblingIndex(10000);
         m_LastUpdateShowTime = Time.realtimeSinceStartup;
-        DontDestroyOnLoad(this);
-
+        SendPing();
     }
 
     // Update is called once per frame  
@@ -47,8 +46,9 @@ public class FPSShow : MonoBehaviour
     float delayTime;
     void OnGUI()
     {
-        if (pingIp == string.Empty)
+        if (pingIp == string.Empty || ping == null)
             return;
+        
         if (null != ping && ping.isDone)
         {
             delayTime = ping.time;
@@ -58,7 +58,7 @@ public class FPSShow : MonoBehaviour
         }
     }
 
-    public static void SendPing()
+    public void SendPing()
     {
         if (pingIp == string.Empty)
             return;

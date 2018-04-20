@@ -170,11 +170,11 @@ function AnimatorData:GetModelViewData()
 	local spiritPath = self:GetEquipPath(self.m_nSpirit)
 
 	if coverPath == "" then
-		coverPath="Assets/Models/CharacterRoot/10100/10100.prefab"
+		coverPath="Assets/Models/CharacterRoot/10100/10100F.prefab"
 	end
 
 	if weaponPath == "" then
-		weaponPath="Assets/Models/CharacterRoot/10200/10200.prefab"
+		weaponPath="Assets/Models/CharacterRoot/10200/10200F.prefab"
 	end
 
 	return 1,1,coverPath,weaponPath,necklacePath,ringPath,spiritPath--"Assets/Models/CharacterRoot/10100/10100.prefab","Assets/Models/CharacterRoot/10200/10200.prefab"

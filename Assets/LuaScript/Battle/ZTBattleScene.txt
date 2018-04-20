@@ -50,7 +50,7 @@ function ZTBattleScene:_Init()
 	--初始化场景管理器
 	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
 	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
-	self.m_comZtBattleScene:MapInit(CSVector3(270,0,270))
+	self.m_comZtBattleScene:MapInit(CSVector3(350,0,200))
 	self.m_comZtBattleScene:SetUpdate(function(dt) self:Update(dt)
 	end)
 	

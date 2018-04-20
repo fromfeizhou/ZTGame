@@ -17,10 +17,10 @@ class CreatePrefabs
     public static string CharacterTextureRoot = "Assets/Models/CharacterRoot/{0}/texture/";
 
     public static string CharacterAnimatorPath = "Assets/Models/Animator/";
-    public static string ModelTexturePath = "Assets/Models/CharacterRoot/{0}/{1}";
-    public static string ModelMaterialPath = "Assets/Models/CharacterRoot/{0}/{1}.mat";
+    public static string ModelTexturePath = "Assets/Models/CharacterRoot/{0}/{1}T";
+    public static string ModelMaterialPath = "Assets/Models/CharacterRoot/{0}/{1}M.mat";
     public static string ModelFBXPath = "Assets/Models/CharacterRoot/{0}/{1}.FBX";
-    public static string ModelPrefabPath = "Assets/Models/CharacterRoot/{0}/{1}.prefab";
+    public static string ModelPrefabPath = "Assets/Models/CharacterRoot/{0}/{1}F.prefab";
 
     public static string ModelAnimationAssetPath = "Assets/Models/Animator/{0}/model/";
 
