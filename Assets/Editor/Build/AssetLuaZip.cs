@@ -12,7 +12,7 @@ class AssetLuaZip
     static void CreateLuaZip()
     {
         string path = Application.dataPath + "/LuaScript";
-        string outPath = "http://192.168.0.158/LuaScript.zip";
+        string outPath = "D:/IISRoot/LuaScript.zip";
         string error;
         float process;
         if (File.Exists(outPath))
