@@ -115,6 +115,6 @@ function BattleHeadItem:_OnUpdateCamera()
 	local chara = GlobalBattleCtrl:GetOwnerChara()
 	if chara then
 		local uiPos = CSGetWorldToScreenPoint(chara:GetViewPos(),self.m_canvas)
-		self.m_rectTransform.anchoredPosition =  CSVector2(uiPos.x,uiPos.y + 20)
+		self.m_rectTransform.anchoredPosition =  CSVector2(uiPos.x,uiPos.y + 200)
 	end
 end
