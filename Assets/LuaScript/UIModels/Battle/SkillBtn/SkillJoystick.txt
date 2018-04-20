@@ -121,15 +121,24 @@ end
 
 --@brief 触摸点按下
 function SkillJoystick:_OnJoystickDown(pos)
+	local distance = self.m_tDistances[self.m_nCurIndex]
+	if distance > 0 then
+		SkillAreaManager:ShowSkillArea(distance,SkillActionType.InnerCircle)
+	end
 end
 
 --@brief 触摸点移动
 function SkillJoystick:_OnJoystickMove(pos)
+	local distance = self.m_tDistances[self.m_nCurIndex]
+	if distance > 0 then
+		SkillAreaManager:UpdateSkillAreaPos(CSVector3(pos.x,0,pos.y))
+	end
 end
 
 --@brief 触摸点松开
 function SkillJoystick:_OnJoystickUp(pos)
 	 self:_SendSkillCommand(pos)
+	 SkillAreaManager:HideSkillArea()
 end
 
 --@brife 发送移动操作

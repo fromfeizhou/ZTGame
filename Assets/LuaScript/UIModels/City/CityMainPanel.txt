@@ -233,5 +233,7 @@ end
 function CityMainPanel:DestroyHeroModel()
 	for k,v in pairs(self.m_heroModelList) do
 		CSGameObject.Destroy(self.m_heroModelList[k])
+		self.m_heroModelList[k] = nil
 	end
+	self.m_heroModelList = nil
 end
