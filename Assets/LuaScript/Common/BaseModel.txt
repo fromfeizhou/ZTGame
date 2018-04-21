@@ -87,8 +87,6 @@ function BaseModel:HidePanel(panelType)
 		if self.m_tPanelList[panelType].Hide then
 			self.m_tPanelList[panelType]:Hide()
 		end
-	--else
-		--GCSLog("BaseModel:HidePanel","found out",panelType)
 	end
 end
 
