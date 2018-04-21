@@ -120,7 +120,7 @@ end
 
 --@brief 移除定时器
 function TimerManager:_RemoveTimer(timer)
-	if self.m_tTimerList[timer.m_onHandle] then
+	if timer and self.m_tTimerList[timer.m_onHandle] then
 		self.m_tTimerList[timer.m_onHandle] = nil
 		self.m_nTimerCnt = self.m_nTimerCnt - 1
 	end

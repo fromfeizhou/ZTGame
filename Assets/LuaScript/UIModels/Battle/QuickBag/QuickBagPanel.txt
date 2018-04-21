@@ -51,7 +51,7 @@ function QuickBagPanel:onCreatePanel()
 end
 
 --@brief 显示登录面板
-function QuickBagPanel:onUpdate()
+function QuickBagPanel:onRush()
 	if self.m_tPanelData and self.m_tPanelData.items and self.m_ItemList then
 		for key,value in pairs(self.m_ItemList) do
 			self.m_ItemList[key]:UpdateCell(nil)

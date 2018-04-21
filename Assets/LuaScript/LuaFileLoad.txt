@@ -41,6 +41,7 @@ local LuaFileLoad = {
 		"UIModels.System.SystemNoticePanel",
 		"UIModels.System.SystemLockPanel",
 		"UIModels.System.SystemLoadingPanel",
+		"UIModels.System.SystemTipPanel",
 
 		--登录模块
 		"UIModels.Login.LoginModel",
@@ -60,6 +61,7 @@ local LuaFileLoad = {
 		"ALuaConfig.Tab_Skill",
 		"ALuaConfig.Tab_SkillType",
 		"ALuaConfig.Tab_SkillTeam",
+		"ALuaConfig.Tab_TipSafeCircle",
 	},
 
 	--游戏lua文件

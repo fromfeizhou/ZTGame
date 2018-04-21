@@ -1,0 +1,3 @@
+Tab_TipSafeCircle = {
+[1] = { id = 1, activeTime = 20000, tipContent  = '测试内容哈哈哈', showTime = 5000,  },
+}

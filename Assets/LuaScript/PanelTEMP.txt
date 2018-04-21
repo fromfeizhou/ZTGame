@@ -37,16 +37,16 @@ end
 function XXXXPanel:onInitPanel()
 end
 
---@brief 子类重写 - 面板更新
-function XXXXPanel:onUpdate()
-end
-
 --@brief 子类重写 - 面板每帧更新
 function XXXXPanel:onTick(deltaTime)
 end
 
 --@brief 子类重写 - 面板被销毁
 function XXXXPanel:onDestroy()
+end
+
+--@brief 子类重写 - 面板更新
+function XXXXPanel:onRush()
 end
 
 --@brief 子类重写 - 显示面板
