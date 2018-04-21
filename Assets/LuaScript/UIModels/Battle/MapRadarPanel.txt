@@ -23,9 +23,13 @@ MapRadarPanel = {
 	m_ztCircleDest = nil,
 
 	m_playerList = nil,
-
 	m_playerItemParent = nil,
 	m_prePlayerItem = nil,
+
+
+	m_mapFlagList = nil,
+	m_mapFlagItemParent = nil,
+	m_preMapFlagItem = nil,
 
 	m_mapContent = nil,
 }
@@ -38,6 +42,7 @@ end
 function MapRadarPanel:GetRelativePath()
 	return "Panel/"
 end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -58,6 +63,11 @@ function MapRadarPanel:onCreatePanel()
 	--玩家，队友
 	self.m_playerItemParent = PanelWidget:GetChild(mapConentTrans,"PlayerList")
 	self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+	
+	--坐标标记
+	self.m_mapFlagItemParent = PanelWidget:GetChild(mapConentTrans,"MapFlagList")
+	self.m_preMapFlagItem = PanelWidget:GetChild(self.m_mapFlagItemParent,"PreMapFlagItem")
+
 	PanelWidget:GetZTButton(self.m_transform,"ViewPort/Mask/btnOpenMap",function () self.m_onClickOpenMapScroll() end)
 	
 end
@@ -76,11 +86,40 @@ end
 function MapRadarPanel:onTick(deltaTime)
 	self:_UpdateCircle()
 	self:_UpdatePlayer()
+	self:_UpdateMapFlag()
 end
 
 --@brief 销毁登录面板
 function MapRadarPanel:onDestroy()
 	
+end
+--@brief 刷新地图上，坐标标识
+function MapRadarPanel:_UpdateMapFlag()
+	if MapCircleManager.m_mapFlagData then
+		if not self.m_mapFlagList then self.m_mapFlagList = {} end
+		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
+			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
+			self.m_mapFlagList[playerId].anchoredPosition = flagPos
+		end
+	end
+end
+--@brief 在地图上创建一个坐标标识
+function MapRadarPanel:_CreateMapFlag( playerId )
+	LogC(self.m_preMapFlagItem)
+	LogC(self.m_mapFlagItemParent)
+	local flagTransform = CSTransform.Instantiate(self.m_preMapFlagItem,self.m_mapFlagItemParent)
+	local flagRectTransform = flagTransform:GetComponent("RectTransform")
+	flagTransform.name = playerId
+	local ztImg = flagTransform:GetComponent("ZTImage")
+	if ztImg then
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
+			ztImg.color = CSColor.green;
+		else
+			ztImg.color = CSColor.yellow;
+		end
+	end
+	flagTransform.gameObject:SetActive(true)
+	return flagRectTransform
 end
 
 --@brief 添加事件监听
@@ -144,7 +183,7 @@ function MapRadarPanel:_UpdatePlayer()
 	if not self.m_playerList then self.m_playerList = {} end
 	local team = GlobalBattleCtrl:GetOwnerTeamChara()
 	if team then 
-	for k,v in pairs(team) do
+		for k,v in pairs(team) do
 			local playerId = v:GetBattleId()
 
 			self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)

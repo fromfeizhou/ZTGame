@@ -1,4 +1,4 @@
---SystemNoticePanel.txt
+--SystemTipPanel.txt
 --@breif lua入口
 --@data 2018/3/5
 
@@ -7,66 +7,89 @@ local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 
-SystemNoticePanel = {
-	m_panelName = "SystemNoticePanel",
+SystemTipPanel = {
+	m_panelName = "SystemTipPanel",
 	m_Notice = nil,
 }
 
-setmetatable( SystemNoticePanel, { __index = UIBasePanel})
+setmetatable( SystemTipPanel, { __index = UIBasePanel})
 
 
-function SystemNoticePanel:GetLayerType()
+function SystemTipPanel:GetLayerType()
 	return LAYER_TYPE.TOP
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-function SystemNoticePanel:GetName()
-	return "SystemNoticePanel"
+function SystemTipPanel:GetName()
+	return "SystemTipPanel"
 end
 
-function SystemNoticePanel:AwakeShow()
+function SystemTipPanel:AwakeShow()
 	return false
 end
 
 --@brief 面板被创建
-function SystemNoticePanel:onCreatePanel()	
-	-- 按钮 - 用户确认
-	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:Hide() end)
+function SystemTipPanel:onCreatePanel()	
 	-- 文本 - 用户提示
 	self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
 end
 --@brief 面板初始化
-function SystemNoticePanel:onInitPanel()
+function SystemTipPanel:onInitPanel()
 end
 
 --@brief 面板每帧更新
-function SystemNoticePanel:onTick(deltaTime)
+function SystemTipPanel:onTick(deltaTime)
 end
 
 --@brief 销毁登录面板
-function SystemNoticePanel:onDestroy()
+function SystemTipPanel:onDestroy()
 end
 
 --@brief 添加事件监听
-function SystemNoticePanel:_AddEvents()
+function SystemTipPanel:_AddEvents()
 end
 
 --@brief 移除事件监听
-function SystemNoticePanel:_RemoveEvents()
+function SystemTipPanel:_RemoveEvents()
 end
 
 --@brief 注册网络门户
-function SystemNoticePanel:_RegNetFacade()
+function SystemTipPanel:_RegNetFacade()
 end
 
 --@brief 注销网络门户
-function SystemNoticePanel:_UnRegNetFacade()
+function SystemTipPanel:_UnRegNetFacade()
 end
 
+local _heartTimer
+
+
 --@brief 显示面板
-function SystemNoticePanel:onRush()
-	self.m_Notice.text = self.m_tPanelData.noticeStr
+function SystemTipPanel:onRush()
+
+	
+end
+
+function SystemTipPanel:AddTip(tipData)
+	if _heartTimer then
+		self:Hide()
+		_heartTimer.m_isFinish = true
+		TimerManager._RemoveTimer(_heartTimer)
+		_heartTimer = nil
+	end
+	self.m_Notice.text = tipData.tip
+	_heartTimer = LoopTimer:Create(self.Hide,self)
+	
+	self:Show()
+	local shotTime = 5
+	if tipData.showTime then
+		shotTime = tipData.showTime
+	end
+
+	_heartTimer:SetParam(shotTime,1)
+
+	TimerManager:AddTimer(_heartTimer)
 end
 

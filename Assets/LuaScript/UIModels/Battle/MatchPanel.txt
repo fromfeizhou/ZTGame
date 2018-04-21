@@ -34,7 +34,7 @@ function MatchPanel:onInitPanel()
 end
 
 --@brief 子类重写 - 面板更新
-function MatchPanel:onUpdate()
+function MatchPanel:onRush()
 end
 
 --@brief 子类重写 - 面板每帧更新
