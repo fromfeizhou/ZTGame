@@ -1,6 +1,6 @@
 
 local _userColor = {
-	ClaineLe = "#A90F0FFF",
+	ClaineLe = "#543EF8FF",
 	CaiBinBin = "#00CABAFF",
 	FromFeiZhou = "#00CABAFF",
 }
