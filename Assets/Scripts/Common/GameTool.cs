@@ -89,6 +89,12 @@ public class GameTool
 		return pos;
 	}
 
+	public static Vector2 GetScreenPosToParentPos(RectTransform parentRect, Vector2 screenPos,Canvas canvas)
+	{
+		Vector2 pos;
+		RectTransformUtility.ScreenPointToLocalPointInRectangle (parentRect, screenPos, canvas.worldCamera, out pos);
+		return pos;
+	}
 
 	public static void SetGameObjectLayer(GameObject gameObject, string layerName){
 		Debug.Log (gameObject);
