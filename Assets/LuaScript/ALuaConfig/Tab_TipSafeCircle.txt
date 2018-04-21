@@ -1,3 +1,12 @@
 Tab_TipSafeCircle = {
-[1] = { id = 1, activeTime = 20000, tipContent  = '测试内容哈哈哈', showTime = 5000,  },
+[1] = { id = 1, activeTime = 2000, tipContent  = '比赛开始', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[2] = { id = 2, activeTime = 10000, tipContent  = '赶快收集物资', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[3] = { id = 3, activeTime = 60000, tipContent  = '还有4分钟毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[4] = { id = 4, activeTime = 500000, tipContent  = '还有3分钟毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[5] = { id = 5, activeTime = 650000, tipContent  = '还有2分30秒毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[6] = { id = 6, activeTime = 770000, tipContent  = '还有2分钟毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[7] = { id = 7, activeTime = 890000, tipContent  = '还有2分钟毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[8] = { id = 8, activeTime = 980000, tipContent  = '还有1分30秒毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[9] = { id = 9, activeTime = 1070000, tipContent  = '还有1分30秒毒圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
+[10] = { id = 10, activeTime = 1130000, tipContent  = '还有1分钟决胜圈开始缩小', showTime = 5000, offSetX = 0, offSetY = 10,  },
 }

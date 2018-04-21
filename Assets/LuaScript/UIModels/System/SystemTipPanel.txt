@@ -6,6 +6,7 @@
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2= CS.UnityEngine.Vector2
 
 SystemTipPanel = {
 	m_panelName = "SystemTipPanel",
@@ -80,6 +81,9 @@ function SystemTipPanel:AddTip(tipData)
 		_heartTimer = nil
 	end
 	self.m_Notice.text = tipData.tip
+	if tipData.offSet then 
+		self.m_Notice.rectTransform.anchoredPosition = tipData.offSet
+	end
 	_heartTimer = LoopTimer:Create(self.Hide,self)
 	
 	self:Show()
