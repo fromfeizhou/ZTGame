@@ -25,6 +25,8 @@ SkillActionCollider = {
 	m_spriteEffGo = nil,	--特效实例
 
 	m_nMoveActionId = nil,	--运动id
+	m_nRushTime = nil,		--刷新时间
+	m_nRushTimeNum = nil,	--刷新计数
 }
 
 --@breif 继承SkillAction
@@ -56,6 +58,7 @@ function SkillActionCollider:Init(actionParse,actionData)
 	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
 
 	self.m_nMoveActionId = self.m_tActionData.m_nMoveActionId
+	self.m_nRushTime = self.m_tActionData.m_nRushTime
 
 	self:_GetTargetList()
 end
@@ -74,6 +77,7 @@ function SkillActionCollider:Start()
 		local targetPos,targetId = self.m_tSkillPos, self.m_nTargetId
 		self.m_tMoveAction = SkillMoveDefine:GetMoveAction(self.m_ztCollider,self.m_nMoveActionId,dir,targetPos,targetId)
 	end
+	self.m_nRushTimeNum = 0
 end
 
 
@@ -81,6 +85,7 @@ end
 function SkillActionCollider:Update()
 	--继承实现
 	SkillAction.Update(self)
+	self.m_nRushTimeNum = self.m_nRushTimeNum + 1
 	self:_CheckCollider()
 	self:_UpdateColliderView()
 	self:_UpdateEffect()
@@ -152,6 +157,11 @@ function SkillActionCollider:_CheckCollider()
 	if self.m_nColliderMax ~= -1 and #self.m_tInColliders >= self.m_nColliderMax then
 		return
 	end
+
+	if self.m_nRushTime > 0 and self.m_nRushTimeNum >= self.m_nRushTime then
+		self.m_nRushTimeNum = 0
+		self:_ClearInColliderList()
+	end
 	
 	local list = {}
 	for i,chara in pairs(self.m_tColliderTargets) do
@@ -180,6 +190,11 @@ function SkillActionCollider:_CheckInColliderList(battleId)
 		end
 	end
 	return false
+end
+
+--@brief 判断是否存在碰撞队列里
+function SkillActionCollider:_ClearInColliderList()
+	self.m_tInColliders = {}
 end
 
 --@brief 创建特效

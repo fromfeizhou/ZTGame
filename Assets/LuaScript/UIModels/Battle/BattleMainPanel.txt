@@ -56,6 +56,9 @@ function BattleMainPanel:onCreatePanel()
 
 	self.m_bagBtn=PanelWidget:GetZTButton(self.m_transform,"RightUpContent/BagButton",function() self:_OnClickBagBtn() end)
 
+	--fps
+	self.m_gameObject:AddComponent(typeof(CS.FPSShow))
+
 end
 
 --@brief 子类重写 - 面板初始化
