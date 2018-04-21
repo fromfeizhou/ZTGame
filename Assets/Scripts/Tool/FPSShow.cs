@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using XLua;
+[LuaCallCSharp]
 public class FPSShow : MonoBehaviour
 {
    
@@ -26,7 +27,7 @@ public class FPSShow : MonoBehaviour
     {
 		fontStyle.normal.background = null;    //这是设置背景填充的
 		fontStyle.normal.textColor = Color.white;
-		fontStyle.fontSize = 40;       //当然，这是字体颜色
+		fontStyle.fontSize = 25;       //当然，这是字体颜色
 
 		transform.SetSiblingIndex(10000);
         m_LastUpdateShowTime = Time.realtimeSinceStartup;
