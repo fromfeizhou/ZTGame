@@ -199,7 +199,7 @@ end
 
 --@brief 创建特效
 function SkillActionCollider:_CreateEffect()
-	if not self.m_spriteEffName then
+	if not self.m_spriteEffName and self.m_tOwner:IsInCamera() then
 		return
 	end
 

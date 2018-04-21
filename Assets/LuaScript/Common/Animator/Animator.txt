@@ -46,6 +46,8 @@ function Animator:Init(animaData,container)
 	self.m_conSkill:SetParent(self.m_goAnima.transform,false)
 
 	self:_AddEvent()
+
+	self.m_bInit = nil
 end
 
 --@brief 移除
@@ -60,6 +62,7 @@ function Animator:Destroy()
 	self.m_conSpEffect = nil
 	self.m_conSkill = nil
 	self.m_animData = nil
+	self.m_bInit = nil
 end
 
 
@@ -99,6 +102,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建形象
 function Animator:_CreateAnimatorView()
+	self.m_bInit = true
 	self.m_ztAnima:CreateAnimatorView(self.m_animData:GetModelViewData())--self.m_animData:GetAnimatorPath())
 end
 
@@ -117,14 +121,18 @@ function Animator:_OnSetInCamera(inCamera)
 end
 
 function Animator:_OnUpdateModel()
-	self:_RushModelView()
+	self:_RushModelView(true)
 end
 
-function Animator:_RushModelView()
+function Animator:_RushModelView(isChange)
 	if self.m_bIsInCamera then
-		self:_CreateAnimatorView()
+		if isChange or not self.m_bInit then
+			self:_CreateAnimatorView()
+		end
+		self.m_goAnima:SetActive(true)
 	else
-		self:_RemoveAnimatorView()
+		self.m_goAnima:SetActive(false)
+		--self:_RemoveAnimatorView()
 	end
 end
 
