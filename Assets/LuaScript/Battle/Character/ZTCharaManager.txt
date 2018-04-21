@@ -97,6 +97,24 @@ function ZTCharaManager:UpdateCommand()
 	for i = 1,#self.m_tSortCharaList do
 		self.m_tSortCharaList[i]:UpdateCommand()
 	end
+	self:RushInCamerView()
+end
+
+--@brief 刷新人物显示
+function ZTCharaManager:RushInCamerView()
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		local pos  = chara:GetPos()
+		for i = 1,#self.m_tSortCharaList do
+			local tmpChara = self.m_tSortCharaList[i]
+			local tmpPos = tmpChara:GetPos()
+			if  CSVector3.Distance(pos,tmpPos) < 15 then
+				tmpChara:SetInCamera(true)
+			else
+				tmpChara:SetInCamera(false)
+			end
+		end
+	end
 end
 
 --@brief 逻辑帧刷新
@@ -247,8 +265,7 @@ function ZTCharaManager:_OnAddCharacter(battleData)
 	local chara = Character:Create(battleData,self.m_ztCharaContainer)
 
 	--设置可见 
-	chara:SetInCamera(true)
-	chara:ShowBornSpEffect()
+	--chara:SetInCamera(true)
 	--加入队列
 	self.m_tCharaList[battleData.battleId] = chara
 	table.insert(self.m_tSortCharaList,chara)

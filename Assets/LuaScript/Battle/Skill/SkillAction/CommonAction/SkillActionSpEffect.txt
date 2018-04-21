@@ -68,7 +68,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 创建特效
 function SkillActoinSpEffect:_CreateEffect()
-	if not self.m_spriteEffName then
+	if not self.m_spriteEffName and self.m_tOwner:IsInCamera() then
 		return
 	end
 	self.m_spriteEffGo = CSGameObject("ColliderEffect")

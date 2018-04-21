@@ -62,6 +62,9 @@ end
 --@brief 播放动作
 --@param 动作名
 function BattleAnimatorData:Play(name)
+	if self.m_sAnimaName == name then
+		return
+	end
 	self.m_sAnimaName = name
 	AnimatorData.Play(self,name)
 end
