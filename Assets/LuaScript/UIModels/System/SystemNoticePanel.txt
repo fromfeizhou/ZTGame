@@ -32,8 +32,6 @@ end
 
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	
-
-	GCSLog("SystemNoticePanel:onCreatePanel",self.m_canvasRoot)
 	-- 按钮 - 用户确认
 	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:Hide() end)
 	-- 文本 - 用户提示

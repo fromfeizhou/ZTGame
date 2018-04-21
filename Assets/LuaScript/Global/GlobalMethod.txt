@@ -34,7 +34,7 @@ end
 
 --@brief 序列化table表
 function SerializeTable(tTable,index)
-    if not GameConfig.IsDebug then
+    if not GameConfig.IsDebug or not tTable then
         return ""
     end
     local str = ""
