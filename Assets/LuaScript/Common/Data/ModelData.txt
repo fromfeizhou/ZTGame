@@ -12,9 +12,10 @@ MODEL_TYPE = {
 
 --@系统面板类型
 SYSTEM_TYPE = {
-	NOTICE = 1001, --用户提示
-	LOCK = 1002,	--锁屏等待
+	NOTICE 	= 1001, --用户提示
+	LOCK 	= 1002,	--锁屏等待
 	LOADING = 1003, --Loading界面
+	TIP		= 1004, --Tip飘字提示
 }
 
 --@登录面板类型

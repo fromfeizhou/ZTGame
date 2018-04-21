@@ -28,6 +28,8 @@ MapCircleManager = {
 	m_waitTime = nil,--等待时间
 
 	m_mapFlagData = nil,
+
+	m_noticeed = false,--是否已经缩圈提示过
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -57,8 +59,24 @@ end
 
 --@brief 逻辑帧刷新
 function MapCircleManager:UpdateCommand()
-	self:CalculationCircle()
+	--游戏当前帧数
+	local curFrameNum = GlobalBattleCtrl:GetCurCommandFrame()
+	self:CalculationCircle(curFrameNum)
+	self:CheckSafeCircleTip(curFrameNum)
 	self:UpdateCircleFBX()
+end
+
+local curTipIndex = 1
+function MapCircleManager:CheckSafeCircleTip(curFrameNum)
+	if Tab_TipSafeCircle and curTipIndex <= #Tab_TipSafeCircle then 
+		local nowGameTime = math.ceil(curFrameNum/GameConfig.CommandFrameNum) * 1000
+		if nowGameTime > Tab_TipSafeCircle[curTipIndex].activeTime then
+			local tipContent =  Tab_TipSafeCircle[curTipIndex].tipContent
+			local showTime =  Tab_TipSafeCircle[curTipIndex].showTime
+			PanelManager:ShowTip(tipContent,showTime * 0.001)
+			curTipIndex = curTipIndex + 1
+		end
+	end
 end
 
 --@brief 收到服务器毒圈信息
@@ -93,8 +111,6 @@ function MapCircleManager:SetMapFlagList(p_mapflags)
 	MapCircleManager.m_mapFlagData = mapFlagData
 end
 
-
-
 function MapCircleManager:Request_SendPlayerPosFlag(mapFlagPos)
 	local tmpMapFlagList = {}
 	local tmpCircleData = {
@@ -107,12 +123,10 @@ end
 
 
 --@brief 计算毒圈数据
-function MapCircleManager:CalculationCircle()
+function MapCircleManager:CalculationCircle(curFrameNum)
 
 	if not self.m_circle then return end
 
-	--游戏当前帧数
-	local curFrameNum = GlobalBattleCtrl:GetCurCommandFrame()
 
 	--获取当前帧对应的毒圈数据，所有毒圈数据用完之后，将清空
 	self.m_curCircle = self:_GetCurCircleData(curFrameNum)

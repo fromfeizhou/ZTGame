@@ -37,6 +37,7 @@ function SystemModel:onInitModel()
 	self:ShowPanel( SYSTEM_TYPE.NOTICE,	{defHide = true} )
 	self:ShowPanel( SYSTEM_TYPE.LOCK,  	{defHide = true} )
 	self:ShowPanel( SYSTEM_TYPE.LOADING,{defHide = true} )
+	self:ShowPanel( SYSTEM_TYPE.TIP,	{defHide = true} )
 end
 
 --@brief 子类重写 - 添加事件监听
