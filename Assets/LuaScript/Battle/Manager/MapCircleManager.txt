@@ -26,6 +26,8 @@ MapCircleManager = {
 
 	m_isWait = true,--状态，true等待，false移动
 	m_waitTime = nil,--等待时间
+
+	m_mapFlagData = nil,
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -79,6 +81,30 @@ function MapCircleManager:SetMapCircleCommand(p_map_circle)
 	MapCircleManager.m_scrCircle = {}
 	MapCircleManager.m_destCircle = {}
 end
+
+function MapCircleManager:SetMapFlagList(p_mapflags)
+	local mapFlagData = {}
+	MapCircleManager.m_mapFlagData = {}
+	for i=1, #p_mapflags do
+		local playerId = p_mapflags[i].playerId
+		local flagPos = p_mapflags[i].flagPos
+		mapFlagData[playerId] = flagPos
+	end
+	MapCircleManager.m_mapFlagData = mapFlagData
+end
+
+
+
+function MapCircleManager:Request_SendPlayerPosFlag(mapFlagPos)
+	local tmpMapFlagList = {}
+	local tmpCircleData = {
+		playerId = GlobalBattleCtrl:GetOwnerId(),
+		flagPos = mapFlagPos
+	}
+	table.insert(tmpMapFlagList,tmpCircleData)
+	self:SetMapFlagList(tmpMapFlagList)
+end
+
 
 --@brief 计算毒圈数据
 function MapCircleManager:CalculationCircle()
