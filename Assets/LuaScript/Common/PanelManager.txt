@@ -85,6 +85,7 @@ function PanelManager:_InitLayer(layerType)
 	self.m_layerList[layerType] = layerTab
 end
 
+--@brief 获取面板
 function PanelManager:GetPanel(model, panelType)
 	if not self.m_panelList[panelType] then
 		return self:_CreatePanel(model, panelType)
@@ -92,6 +93,7 @@ function PanelManager:GetPanel(model, panelType)
 	return self.m_panelList[panelType]
 end
 
+--@brief 创建面板
 function PanelManager:_CreatePanel(model, panelType)
 	local panel = {}
 	setmetatable( panel, { __index = self.m_panelDefine[panelType] })
@@ -102,6 +104,7 @@ function PanelManager:_CreatePanel(model, panelType)
 	return panel
 end
 
+--@brief 销毁面板
 function PanelManager:DestroyPanel( panelType )
 	if self.m_panelList[panelType] then
 		self.m_panelList[panelType]:Destroy()
@@ -109,14 +112,17 @@ function PanelManager:DestroyPanel( panelType )
 	end
 end
 
+--@brief 获取Canvas节点
 function PanelManager:GetLayerRoot(layerType)
 	return self.m_layerList[layerType].layerRoot
 end
 
+--@brief 获取Canvas对象
 function PanelManager:GetLayerCanvas(layerType)
 	return self.m_layerList[layerType].layerCanvas
 end
 
+--@brief 获取CanvasScaler对象
 function PanelManager:GetLayerCanvasScaler(layerType)
 	return self.m_layerList[layerType].layerCanvasScaler
 end
