@@ -98,6 +98,7 @@ SkillActionColliderData = {
 	m_spriteEffName = nil,	--特效名字
 	m_nMoveActionId = nil,	--动作id
 	m_nColliderMax = nil,	--碰撞总数
+	m_nRushTime =nil,	--刷新时间
 }
 --@breif SkillActionData
 setmetatable( SkillActionColliderData, { __index = SkillActionData})
@@ -111,7 +112,7 @@ function SkillActionColliderData:Create(owner,frame,skillPos,targetId,param)
 	return obj
 end
 
---@brief 初始化{ "半径", "运动id", "层次", "偏移x", "偏移y","目标类型", "存在时间","碰撞总数","特效名字" };
+--@brief 初始化{ "半径", "运动id", "层次", "偏移x", "偏移y","目标类型", "存在时间","碰撞总数","特效名字","刷新时间" };
 function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	--基类实现
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
@@ -126,6 +127,7 @@ function SkillActionColliderData:Init(owner,frame,skillPos,targetId,param)
 	self.m_nFrameMax = param[7] or -1
 	self.m_nColliderMax = param[8]
 	self.m_spriteEffName = param[9] == -1 and nil or param[9]
+	self.m_nRushTime = param[10] and param[10] or -1
 
 end
 
