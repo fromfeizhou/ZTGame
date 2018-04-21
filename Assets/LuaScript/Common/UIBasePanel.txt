@@ -48,15 +48,7 @@ function UIBasePanel:_LoadAssetPanel(parent, model)
 			self:_OnCreatePanel()
 			self:_InitPanel()
 			self.m_LoadFinish = true
-			--self.m_isShow = self:AwakeShow()
-			-- if self:AwakeShow() then
-			-- 	self.m_isShow = false
-				--self:Show(panelData)
-				self:_Rush()
-			-- else 
-			-- 	self.m_isShow = true
-			-- 	self:Hide()
-			-- end
+			self:_Rush()
 		else
 			GCSLog("UIBasePanel:Create","found out panel.",self.m_panelName,path)
 		end
@@ -69,18 +61,19 @@ end
 
 --@brief 显示面板
 function UIBasePanel:Show(panelData)
-	--LogC("UIBasePanel:Show",self:GetName(),SerializeTable(panelData))
 	self.m_tPanelData = panelData
 	self.m_isShow = true
 	if panelData and panelData.defHide then
 		self.m_isShow = false
 	end
 	self:_Rush()
-	-- if self.m_gameObject and self.m_isShow == false then 
-	-- 	self.m_isShow = true
-	-- 	self:_Rush()
-	-- 	self:onShow()
-	-- end
+end
+
+--@brief 隐藏面板
+function UIBasePanel:Hide()
+--	LogC("UIBasePanel:Hide",self:GetName())
+	self.m_isShow = false
+	self:_Rush()
 end
 
 function UIBasePanel:_Rush()
@@ -93,18 +86,6 @@ function UIBasePanel:_Rush()
 			self:onHide()
 		end
 	end
-end
-
---@brief 隐藏面板
-function UIBasePanel:Hide()
---	LogC("UIBasePanel:Hide",self:GetName())
-	self.m_isShow = false
-	self:_Rush()
-	-- if self.m_gameObject and self.m_isShow == true then 
-	-- 	self.m_isShow = false
-	-- 	self:_Rush()
-	-- 	self:onHide()
-	-- end
 end
 
 --@brief 面板创建后
@@ -122,7 +103,6 @@ end
 --@brief 更新面板
 function UIBasePanel:Update(panelData)
 	self.m_tPanelData = panelData
-	
 end
 
 --@brief 面板每帧刷新
