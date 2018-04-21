@@ -7,7 +7,7 @@ SkillActionConfig = {
 				{ actionType = 6, param = { 35, 35, 35 }},
 		},
 		[ 25 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, "HitBlood1" }},
+				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, "HitBlood1", -1 }},
 				{ actionType = 5, param = { 1001 }},
 		},
 	},
@@ -21,7 +21,7 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 18, 1, "HitBlood2" }},
+				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 18, 1, "HitBlood2", -1 }},
 		},
 	},
 
@@ -34,24 +34,22 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 45 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 5, "HitBlood3" }},
+				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 5, "HitBlood3", -1 }},
 		},
 	},
 
 	id_11001 = {
 		[ 1 ] = {
-				{ actionType = 1, param = { "xuanfongzhan_star" }},
-				{ actionType = 6, param = { 35, -1, 35 }},
-		},
-		[ 41 ] = {
 				{ actionType = 1, param = { "xuanfongzhan_mid" }},
-				{ actionType = 3, param = { 3.5, 1004, 1, 0, 0, 2, 70, -1, -1 }},
-				{ actionType = 6, param = { -1, -1, 70 }},
+				{ actionType = 3, param = { 3.5, 1004, 1, 0, 0, 2, 70, -1, -1, 10 }},
 				{ actionType = 4, param = { "Magic_Pulse1", 1, 30, 0, 0 }},
 		},
-		[ 112 ] = {
+		[ 2 ] = {
+				{ actionType = 6, param = { -1, -1, 70 }},
+		},
+		[ 72 ] = {
 				{ actionType = 1, param = { "xuanfongzhan_end" }},
-				{ actionType = 6, param = { 30, 30, 30 }},
+				{ actionType = 6, param = { 25, 30, 25 }},
 		},
 	},
 
@@ -65,7 +63,7 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1003 }},
 		},
 		[ 40 ] = {
-				{ actionType = 3, param = { 3, -1, 1, 0, 2.5, 2, 20, -1, "Bomb1" }},
+				{ actionType = 3, param = { 3, -1, 1, 0, 2.5, 2, 20, -1, "Bomb1", -1 }},
 		},
 	},
 
@@ -85,7 +83,7 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1", -1 }},
 		},
 	},
 
@@ -95,7 +93,7 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+				{ actionType = 3, param = { 2, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1", -1 }},
 		},
 	},
 
@@ -105,7 +103,7 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 3, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1" }},
+				{ actionType = 3, param = { 3, -1, 0, 0, 5, 2, 100, 1, "Fire_Campfire1", -1 }},
 		},
 	},
 
@@ -115,7 +113,7 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_IceArea1" }},
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_IceArea1", -1 }},
 		},
 	},
 
@@ -125,7 +123,7 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Pulse1" }},
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Pulse1", -1 }},
 		},
 	},
 
@@ -135,10 +133,10 @@ SkillActionConfig = {
 				{ actionType = 0, param = { 0 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Rock1" }},
+				{ actionType = 3, param = { 5, -1, 0, 0, 5, 2, 300, -1, "Magic_Rock1", -1 }},
 		},
 	},
 
 }
 
-SkillActionConfig.TestSkillId = "id_10001"
+SkillActionConfig.TestSkillId = "id_10003"
