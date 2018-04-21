@@ -211,7 +211,7 @@ public class RoleModelSprite : BaseModelSprite
         else
         {
             modelPartPath[type] = assetPaths[loadIndex];
-          //  Debug.LogError("Model Create" + assetPaths[loadIndex]);
+            Debug.Log("type"+type +"Model Create" + assetPaths[loadIndex]);
             AssetManager.LoadAsset(assetPaths[loadIndex], OnLoadFinish);
 
         }
@@ -228,7 +228,7 @@ public class RoleModelSprite : BaseModelSprite
     //模型组装完毕
     private void OnCreateModelFinish()
     {
-        ChangeTranslucence(0);
+        UpdateTranslucence();
     }
 
     public void OnLoadObjCallback(Object target, string path)
@@ -349,6 +349,7 @@ public class RoleModelSprite : BaseModelSprite
     private void UpdateTranslucence()
     {
         if (null == animator) return;
+        transLv = transLv == -1 ? 0 : transLv;
         if (transLv == 1)
         {
             if (model.activeSelf)
