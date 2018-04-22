@@ -157,13 +157,14 @@ function PanelManager:SetLoadingProgress( progress, force )
 	end
 end
 
-function PanelManager:ShowTip(tipStr, iShowTime)
+function PanelManager:ShowTip(tipStr, iShowTime, iOffSet)
 	LogC("PanelManager:ShowTip", tipStr)
 	local panel = self.m_panelList[SYSTEM_TYPE.TIP]
 	if panel then
 		local tipData = {
 			tip = tipStr,
 			showTime = iShowTime,
+			offSet = iOffSet,
 		}
 		panel:AddTip(tipData)
 	end

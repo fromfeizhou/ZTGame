@@ -376,7 +376,9 @@ function Character:SetAttributeByType(attriType,value)
 		
 		if not GameConfig.IsSingleScene then
 			--弹出伤害数字
-			local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = curHp - self:GetHp()}
+			local result = curHp - self:GetHp()
+
+			local hurtInfo = {hurtType = 1,pos = self:GetViewPos(),value = -result}
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER_HURT_NUM,hurtInfo)
 		end
 		--同步血槽
