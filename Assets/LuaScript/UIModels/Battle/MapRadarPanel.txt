@@ -218,7 +218,8 @@ end
 
 --@brief 设置毒圈参数
 function MapRadarPanel:_SetCircle(circle, circleInfo)
-	circle:SetCircle(circleInfo.pos,circleInfo.radius)
+	circle.rectTransform.anchoredPosition = circleInfo.pos
+	circle:SetRadius(circleInfo.radius * 2)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************

@@ -59,10 +59,7 @@ function MapScrollPanel:onCreatePanel()
 
 	self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
 
-	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
-	self.m_scaleValue = self.m_ScrollView.content.sizeDelta.x / minMapView
-	ztSlider.minValue = self.m_scaleValue
-	ztSlider.maxValue = 4
+	
 
 	self.m_mapScrollImg = self.m_ScrollView.content:GetComponent("ZTImage")
 	self.m_mapScrollImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
@@ -75,6 +72,11 @@ function MapScrollPanel:onCreatePanel()
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_ScrollView.content,"Circles/ZTCircleDest")
 	self.m_ztCircleDest:Init(80,false,4.0)
 	self.m_ztCircleDest:SetColor(CSColor.red)
+
+	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
+	self.m_scaleValue = self.m_ScrollView.content.sizeDelta.x / minMapView
+	ztSlider.minValue = self.m_scaleValue
+	ztSlider.maxValue = 4
 
 	--玩家，队友
 	self.m_playerItemParent = PanelWidget:GetChild(self.m_ScrollView.content,"PlayerList")
@@ -100,7 +102,6 @@ end
 --@brief 面板每帧更新
 function MapScrollPanel:onTick(deltaTime)
 	self:_ShowCircle()
-	self:_UpdateCircle(false)
 	self:_UpdatePlayer()
 	self:_UpdateMapFlag()
 end
@@ -139,7 +140,7 @@ end
 
 function MapScrollPanel:_ShowCircle()
 	if MapCircleManager.m_isStart and not self.m_isShowCircle then 
-		self:_UpdateCircle( true )
+		self:_UpdateCircle( false )
 		self.m_ztCircleCur:Show()	
 		self.m_ztCircleDest:Show()
 	end
@@ -242,9 +243,8 @@ end
 function MapScrollPanel:_SetCircle(circle, circleInfo)
 	local _mapProportion = minMapView/maxMapView * self.m_scaleValue
 	if circleInfo and circleInfo.pos and circleInfo.radius then 
-		local pos = circleInfo.pos  * _mapProportion
-		local radius = circleInfo.radius * _mapProportion
-		circle:SetCircle(pos,radius)
+		circle.rectTransform.anchoredPosition = circleInfo.pos  * _mapProportion
+		circle:SetRadius(circleInfo.radius * _mapProportion)
 	end
 end
 
