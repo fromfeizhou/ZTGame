@@ -4,10 +4,10 @@ SkillActionConfig = {
 				{ actionType = 1, param = { "sanlianpi1" }},
 		},
 		[ 2 ] = {
-				{ actionType = 6, param = { 35, 35, 35 }},
+				{ actionType = 6, param = { 50, 50, 50 }},
 		},
 		[ 25 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, -1, -1 }},
+				{ actionType = 3, param = { 0.1, -1, 1, 0, 2.2, 2, 10, 1, -1, -1 }},
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 26 ] = {
@@ -151,4 +151,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10003"
+SkillActionConfig.TestSkillId = "id_10001"
