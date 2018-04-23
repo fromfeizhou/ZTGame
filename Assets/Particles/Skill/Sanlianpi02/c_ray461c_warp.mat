@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: c_ray461c_warp
+  m_Shader: {fileID: 4800000, guid: aca03b8604bc90049bd2c1e8a92a9d65, type: 3}
+  m_ShaderKeywords: _HEATDISTORTION_ON _SOFTTOGGLE_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Main:
+        m_Texture: {fileID: 2800000, guid: 5abdb00379de7974dabf91fa69ceddd1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 5abdb00379de7974dabf91fa69ceddd1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: 0d24a96615f284241bbf76b5a2ee80c7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _noise:
+        m_Texture: {fileID: 2800000, guid: e0eaccd4a9e037544a85584bd3071ae9, type: 3}
+        m_Scale: {x: 2, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _noise2:
+        m_Texture: {fileID: 2800000, guid: 774752bc9be94cd42a928608ef1c74af, type: 3}
+        m_Scale: {x: 1, y: 2}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _1U: -0.3
+    - _1V: 0
+    - _2U: -0.5
+    - _2V: 0
+    - _Alpha: 0
+    - _ColorIntensity: 2
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _Cutout: 0
+    - _DistortionIntensity: 0.01
+    - _DstBlend: 10
+    - _InvFade: 1
+    - _LightToggle: 0
+    - _MainUVAnimation: 0
+    - _MainUVSpeedX: 1
+    - _MainUVSpeedY: 1
+    - _MaskToggle: 0
+    - _Mode: 4
+    - _Soft: 1.36
+    - _SoftToggle: 1
+    - _SrcBlend: 5
+    - _Twist: 0.1
+    - _ZWrite: 0
+    - _amount: 0.01
+    - _tex: 0
+    m_Colors:
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 1, g: 0.33229107, b: 0, a: 1}

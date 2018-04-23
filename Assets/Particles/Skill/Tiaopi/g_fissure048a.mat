@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: g_fissure048a
+  m_Shader: {fileID: 4800000, guid: 13b846252c9512442ac66af6422342e5, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DiffuseTexture:
+        m_Texture: {fileID: 2800000, guid: 791ac4222986ef94e8b5021848c2cf03, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: bfceb016283e6294cb1a6e9a5b183046, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _T_mask:
+        m_Texture: {fileID: 2800000, guid: b2654384da581e444b67fceff8a983e7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _1Uspeed: 0
+    - _1Vspeed: 0
+    - _2Uspeed: 0
+    - _2Vspeed: 0
+    - _Cutoff: 0.5
+    - _N_BY_KD: 2
+    - _N_BY_QD: 2.88
+    - _N_mask: 1
+    - _Twist: 0
+    m_Colors:
+    - _C_BYcolor: {r: 1, g: 0.52251524, b: 0.21323532, a: 1}
+    - _ColorAlpha: {r: 1, g: 0.81338745, b: 0.32352942, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

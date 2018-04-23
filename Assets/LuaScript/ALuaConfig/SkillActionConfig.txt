@@ -7,8 +7,11 @@ SkillActionConfig = {
 				{ actionType = 6, param = { 35, 35, 35 }},
 		},
 		[ 25 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, "HitBlood1", -1 }},
+				{ actionType = 3, param = { 0.1, -1, 1, 0, 2.2, 2, 10, 1, -1, -1 }},
 				{ actionType = 5, param = { 1001 }},
+		},
+		[ 26 ] = {
+				{ actionType = 4, param = { "HitBlood1", 1, 20, 0, 80 }},
 		},
 	},
 
