@@ -71,6 +71,7 @@ function MapCircleManager:CheckSafeCircleTip(curFrameNum)
 	if Tab_TipSafeCircle and curTipIndex <= #Tab_TipSafeCircle then 
 		local nowGameTime = math.ceil(curFrameNum/GameConfig.CommandFrameNum) * 1000
 		if nowGameTime > Tab_TipSafeCircle[curTipIndex].activeTime then
+			LogC("MapCircleManager:CheckSafeCircleTip()",curTipIndex,Tab_TipSafeCircle[curTipIndex].offSetX,Tab_TipSafeCircle[curTipIndex].offSetY)
 			local safeCircleTip = Tab_TipSafeCircle[curTipIndex]
 			local tipContent =  safeCircleTip.tipContent
 			local showTime =  safeCircleTip.showTime
