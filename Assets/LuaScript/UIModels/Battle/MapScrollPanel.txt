@@ -13,6 +13,7 @@ local CSQuaternion = CS.UnityEngine.Quaternion
 local CSGetScreenPosToParentPos = CS.GameTool.GetScreenPosToParentPos
 MapScrollPanel = {
 	m_panelName = "MapScrollPanel",
+	m_scaleValue,
 
 	m_viewPort = nil,
 	m_isShowCircle = false,
@@ -20,7 +21,6 @@ MapScrollPanel = {
 	m_canvas = nil,
 	m_mapScrollImg = nil,
 
-	m_ztSlider = nil,
 	m_ScrollView = nil,
 	m_ztCircleCur = nil,
 	m_ztCircleDest = nil,
@@ -34,6 +34,8 @@ MapScrollPanel = {
 	m_preMapFlagItem = nil,
 }
 
+local minMapView = 512
+local maxMapView = 1024
 setmetatable( MapScrollPanel, { __index = UIBasePanel})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
@@ -57,10 +59,10 @@ function MapScrollPanel:onCreatePanel()
 
 	self.m_ScrollView = PanelWidget:GetScrollView(self.m_transform,"ViewPort/Scroll View")
 
-	self.m_ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) 
-		self.m_ScrollView.content.sizeDelta = CSVector2.one * value
-		self:_UpdateCircle( true )
-	end)
+	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
+	self.m_scaleValue = self.m_ScrollView.content.sizeDelta.x / minMapView
+	ztSlider.minValue = self.m_scaleValue
+	ztSlider.maxValue = 4
 
 	self.m_mapScrollImg = self.m_ScrollView.content:GetComponent("ZTImage")
 	self.m_mapScrollImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
@@ -85,7 +87,7 @@ end
 
 function MapScrollPanel:onClickMapScroll(clickPoint)
 	local clickImgPos = CSGetScreenPosToParentPos(self.m_mapScrollImg.rectTransform,clickPoint,self.m_canvas)
-	local mapPos = clickImgPos / self.m_ztSlider.value
+	local mapPos = clickImgPos / self.m_scaleValue * maxMapView / minMapView
 	MapCircleManager:Request_SendPlayerPosFlag(mapPos)
 end
 
@@ -155,14 +157,6 @@ function MapScrollPanel:_CreatePlayer( playerId )
 	local playRectTransform = playTransform:GetComponent("RectTransform")
 	playTransform.name = playerId
 	local ztImg = playTransform:GetComponent("ZTImage")
-	if ztImg then
-		if playerId == GlobalBattleCtrl:GetOwnerId() then
-			ztImg.color = CSColor.green;
-		else
-			ztImg.color = CSColor.yellow;
-		end
-	end
-
 	playTransform.gameObject:SetActive(true)
 	return playRectTransform
 end
@@ -198,7 +192,7 @@ function MapScrollPanel:_UpdatePlayer()
 		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
 		local pos = v:GetPos()
 		local tmpPos = CSVector2(pos.x,pos.z)
-		self.m_playerList[playerId].anchoredPosition = tmpPos
+		self.m_playerList[playerId].anchoredPosition = tmpPos * minMapView/maxMapView * self.m_scaleValue
 		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 	end
 end
@@ -210,7 +204,7 @@ function MapScrollPanel:_UpdateMapFlag()
 		if not self.m_mapFlagList then self.m_mapFlagList = {} end
 		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
 			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
-			self.m_mapFlagList[playerId].anchoredPosition = flagPos /self.m_ztSlider.value
+			self.m_mapFlagList[playerId].anchoredPosition = flagPos * minMapView/maxMapView * self.m_scaleValue
 		end
 	end
 end
@@ -230,7 +224,9 @@ end
 
 --@brief 地图缩放时触发
 function MapScrollPanel:_onValueChanged(value)
-	
+	self.m_scaleValue = value
+	self.m_ScrollView.content.sizeDelta = CSVector2.one * self.m_scaleValue * minMapView
+	self:_UpdateCircle( true )
 end
 
 --@brief 刷新毒圈
@@ -244,7 +240,7 @@ end
 
 --@brief 设置毒圈参数
 function MapScrollPanel:_SetCircle(circle, circleInfo)
-	local _mapProportion = self.m_ztSlider.value
+	local _mapProportion = minMapView/maxMapView * self.m_scaleValue
 	if circleInfo and circleInfo.pos and circleInfo.radius then 
 		local pos = circleInfo.pos  * _mapProportion
 		local radius = circleInfo.radius * _mapProportion
