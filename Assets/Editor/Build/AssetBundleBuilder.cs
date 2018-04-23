@@ -87,8 +87,27 @@ public class AssetBundleBuilder : MonoBehaviour
             File.Delete(path);
         }
         BuildAssetResource(path);
+
+        string pathout = "E:/ZTGameAndroid.apk";
+        if (Directory.Exists(pathout))
+        {
+            File.Delete(pathout);
+        }
+        BuildPipeline.BuildPlayer(GetBuildScenes(), pathout, BuildTarget.Android, BuildOptions.None);
     }
 
+    static string[] GetBuildScenes()
+    {
+        List<string> names = new List<string>();
+        foreach (EditorBuildSettingsScene e in EditorBuildSettings.scenes)
+        {
+            if (e == null)
+                continue;
+            if (e.enabled)
+                names.Add(e.path);
+        }
+        return names.ToArray();
+    }
 
 
     static void BuildAssetResource(string assetPath)
