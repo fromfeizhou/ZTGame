@@ -23,7 +23,7 @@ function ZTBattleScene:InitScene()
 	CSLog("ZTBattleScene:InitScene")
 	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
 	self:_ShowBattleUI()
-
+	PanelManager:SetLoadingProgress(0.7)
 	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
 end
 
@@ -41,6 +41,7 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 场景加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
+	PanelManager:SetLoadingProgress(0.8)
 	self:_Init()
 end
 
@@ -54,6 +55,7 @@ function ZTBattleScene:_Init()
 	self.m_comZtBattleScene:SetUpdate(function(dt) self:Update(dt)
 	end)
 	
+	PanelManager:SetLoadingProgress(0.9)
 
 	--全局控制器初始化
 	GlobalBattleCtrl:Init()
@@ -61,6 +63,7 @@ function ZTBattleScene:_Init()
 	GlobalBattleCtrl:SetBattleScene(self.m_comZtBattleScene)
 		
 	self:_AddEvent()
+	PanelManager:SetLoadingProgress(1,true)
 
 	--PanelManager:HideLoadingPanel()
 		--临时匹配按钮
