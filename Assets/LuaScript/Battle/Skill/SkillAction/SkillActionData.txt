@@ -138,7 +138,7 @@ end
 SkillActionSpEffData = {
 	m_spriteEffName = "",	--动作名
 	m_skillLayer = "",		--放置层次
-	m_nOffset = nil,		--偏移
+	m_tOffset = nil,		--偏移
 }
 --@breif SkillActionData
 setmetatable(SkillActionSpEffData, { __index = SkillActionData})
@@ -157,8 +157,8 @@ function SkillActionSpEffData:Init(owner,frame,skillPos,targetId,param)
 	SkillActionData.Init(self,owner,frame,skillPos,targetId)
 	self.m_spriteEffName = param[1]
 	self.m_skillLayer = param[2] or SkillLayerType.Hero
-	self.m_nFrameMax = param[3] == -1 and 300 or param[3]
-	self.m_nOffset = CSVector3(param[4],0,param[5])
+	self.m_nFrameMax = param[3] == -1 and 900 or param[3]
+	self.m_tOffset = CSVector3(param[4],0,param[5])
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
