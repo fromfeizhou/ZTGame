@@ -1,0 +1,73 @@
+--SpEffectManager.txt
+--@breif 特效管理
+--@data 2018/04/23
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSLog = CS.GameTool.Log
+
+
+SpEffectManager = {
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 初始化
+function SpEffectManager:Init()
+	CSLog("SpEffectManager:Init")
+	SpEffectManager.m_tEffectList = {}
+	SpEffectManager:_InitNormalEffect()
+end
+
+
+--@brief 移除
+function SpEffectManager:Destroy()
+	CSLog("SpEffectManager:Destroy")
+
+	-- if SpEffectManager.m_tEffectList then
+	-- 	for i,v in pairs(SpEffectManager.m_tEffectList) do
+	-- 		if v then
+	-- 			CSGameObject.Destroy(v)
+	-- 		end
+	-- 	end
+	-- end
+	SpEffectManager.m_tEffectList = nil
+end
+
+--@brief 移除
+function SpEffectManager:LoadSpAsset(name)
+	if SpEffectManager.m_tEffectList then
+		return SpEffectManager.m_tEffectList[name]
+	end
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+--@brief 获得特效
+function SpEffectManager:_InitNormalEffect()
+	local list = {"sanlianpi1","HitBlood1","sanlianpi2","HitBlood2","HitBlood3",
+	"sanlianpi3","xuanfongzhan_mid","Magic_Pulse1","xuanfongzhan_end","tiaopi",
+	"Bomb1","baozou"
+	}
+	--@brief 指示框实例列表
+	SpEffectManager.m_tEffectList = {}
+	SpEffectManager:_LoadAsset(list)
+end
+
+--@brief 加载资源
+function SpEffectManager:_LoadAsset(list)
+	if #list > 0 then
+		local elmentpath = list[1]
+		table.remove(list,1)
+		CS.AssetManager.LoadAsset(elmentpath,function(target,path)
+			if not SpEffectManager.m_tEffectList or not target then
+				return
+			end
+			SpEffectManager.m_tEffectLis[path] = target
+			--继续加载预设件
+			SpEffectManager:_LoadAsset(list)
+		end)
+	end
+end

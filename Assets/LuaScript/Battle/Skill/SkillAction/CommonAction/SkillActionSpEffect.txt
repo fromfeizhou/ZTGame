@@ -83,11 +83,17 @@ function SkillActoinSpEffect:_CreateEffect()
 		local pos = SkillDefine:GetStartPosByLayer(self.m_tOwner,self.m_tOffset,self.m_skillLayer,self.m_tSkillPos)
 		self.m_spriteEffGo.transform.localPosition = pos
 	end
-	
+	--创建特效
+	local spGo = SpEffectManager:LoadSpAsset(self.m_spriteEffName)
+	if spGo then
+		CSGameObject.Instantiate(spGo,self.m_spriteEffGo.transform)
+	else
+		CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
+			if target and self.m_spriteEffGo then
+				local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
+			end
+		end)
+	end
 
-	CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
-		if target and self.m_spriteEffGo then
-			local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
-		end
-	end)
+	
 end
