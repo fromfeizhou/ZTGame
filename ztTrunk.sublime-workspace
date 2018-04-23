@@ -1,0 +1,1895 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"de",
+				"Destroy"
+			],
+			[
+				"m_nco",
+				"m_nCommandCount"
+			],
+			[
+				"batt",
+				"BattleAnimatorData"
+			],
+			[
+				"m_t",
+				"m_tTargetPos"
+			],
+			[
+				"mb",
+				"m_bDelayPosSpeed"
+			],
+			[
+				"moveto",
+				"AnimaMoveToPos"
+			],
+			[
+				"m_ani",
+				"m_animData"
+			],
+			[
+				"com",
+				"CommandStart"
+			],
+			[
+				"cha",
+				"CharacterState"
+			],
+			[
+				"m_b",
+				"m_bMoveLocked"
+			],
+			[
+				"Loc",
+				"MoveLocked"
+			],
+			[
+				"mo",
+				"MoveLocked"
+			],
+			[
+				"_getmo",
+				"_GetSkillActionMoveLocked"
+			],
+			[
+				"mmove",
+				"m_bMoveLocked"
+			],
+			[
+				"m_tar",
+				"m_tTargetPosNext"
+			],
+			[
+				"cs",
+				"CSLog"
+			],
+			[
+				"m_ta",
+				"m_animData"
+			],
+			[
+				"m_an",
+				"m_animData"
+			],
+			[
+				"up",
+				"UpdatePos"
+			],
+			[
+				"m_n",
+				"m_nFrameTime"
+			],
+			[
+				"bat",
+				"BattleDefine"
+			],
+			[
+				"Co",
+				"CommandStep"
+			],
+			[
+				"Update",
+				"CommandUpdate"
+			],
+			[
+				"co",
+				"commandCount"
+			],
+			[
+				"Cs",
+				"CSLog"
+			],
+			[
+				"gs",
+				"GGCSLog"
+			],
+			[
+				"zt",
+				"ZTProtocol"
+			],
+			[
+				"p",
+				"pId"
+			],
+			[
+				"mode",
+				"modelId"
+			],
+			[
+				"modeli",
+				"ModelIdDefine"
+			],
+			[
+				"Net",
+				"NetWorkManager"
+			],
+			[
+				"pb",
+				"pbData"
+			],
+			[
+				"nem",
+				"NetWorkManager"
+			],
+			[
+				"m_col",
+				"m_nColliderMax"
+			],
+			[
+				"skill",
+				"skillId"
+			],
+			[
+				"end",
+				"endId"
+			],
+			[
+				"_on",
+				"_OnSurvieEnd"
+			],
+			[
+				"target",
+				"target"
+			],
+			[
+				"ini",
+				"InitData"
+			],
+			[
+				"ga",
+				"gameObject"
+			],
+			[
+				"hp",
+				"Hp"
+			],
+			[
+				"Battlehe",
+				"BattleHeadItem"
+			],
+			[
+				"m_",
+				"m_slider"
+			],
+			[
+				"batth",
+				"BattleHeadItem"
+			],
+			[
+				"bathe",
+				"BattleHeadItem"
+			],
+			[
+				"m_h",
+				"m_headIcon"
+			],
+			[
+				"movea",
+				"moveAction"
+			],
+			[
+				"id",
+				"index"
+			],
+			[
+				"tar",
+				"target"
+			],
+			[
+				"ta",
+				"target"
+			],
+			[
+				"m_sUI",
+				"m_sUIWidgets"
+			],
+			[
+				"po",
+				"posEnd"
+			],
+			[
+				"pos",
+				"posBegin"
+			],
+			[
+				"csv",
+				"CSVector2"
+			],
+			[
+				"spee",
+				"speedPos"
+			],
+			[
+				"Movea",
+				"MoveActoinDefine"
+			],
+			[
+				"m_co",
+				"m_ztCollider"
+			],
+			[
+				"_li",
+				"_Line"
+			],
+			[
+				"skillaction",
+				"SkillActionType"
+			],
+			[
+				"actio",
+				"actionType"
+			],
+			[
+				"Skilla",
+				"SkillActionParse"
+			],
+			[
+				"m_nc",
+				"m_nMoveActionId"
+			],
+			[
+				"par",
+				"param"
+			],
+			[
+				"sp",
+				"speedPosDis"
+			],
+			[
+				"targ",
+				"target"
+			],
+			[
+				"mov",
+				"moveData"
+			],
+			[
+				"m_ts",
+				"m_tOffset"
+			],
+			[
+				"skia",
+				"SkillActionCollider"
+			],
+			[
+				"LineTo",
+				"LineToTarget"
+			],
+			[
+				"move",
+				"moveData"
+			],
+			[
+				"movead",
+				"MoveActoinDefine"
+			],
+			[
+				"lito",
+				"LineToPos"
+			],
+			[
+				"Moveact",
+				"MoveActoinType"
+			],
+			[
+				"action",
+				"actionData"
+			],
+			[
+				"tran",
+				"transform"
+			],
+			[
+				"_get",
+				"_GetSpEffectActoin"
+			],
+			[
+				"act",
+				"actionType"
+			],
+			[
+				"m_nof",
+				"m_nOffsetZ"
+			],
+			[
+				"gam",
+				"m_gameObject"
+			],
+			[
+				"G",
+				"GCSLog"
+			],
+			[
+				"ski",
+				"skillId"
+			],
+			[
+				"lo",
+				"local\tlocal x = 1"
+			],
+			[
+				"CS",
+				"CSLog"
+			],
+			[
+				"getB",
+				"GetBattleId"
+			],
+			[
+				"Seta",
+				"SetAttributeByList"
+			],
+			[
+				"attr",
+				"AttributeSystem"
+			],
+			[
+				"effec",
+				"EffectSyncType"
+			],
+			[
+				"game",
+				"GameConfig"
+			],
+			[
+				"fram",
+				"frame_id"
+			],
+			[
+				"m_sp",
+				"m_spriteEffName"
+			],
+			[
+				"m_spri",
+				"m_spriteEffGo"
+			],
+			[
+				"m_sr",
+				"m_spriteEffGo"
+			],
+			[
+				"skillac",
+				"SkillActionCollider"
+			],
+			[
+				"upd",
+				"_UpdateView"
+			],
+			[
+				"Upd",
+				"_UpdateView"
+			],
+			[
+				"buffty",
+				"buffTypeList"
+			],
+			[
+				"is",
+				"IsFinish"
+			],
+			[
+				"att",
+				"AttributeList"
+			],
+			[
+				"a",
+				"AttributeList"
+			],
+			[
+				"bufft",
+				"buffTypeList"
+			],
+			[
+				"rebu",
+				"RemoveBuffById"
+			],
+			[
+				"pan",
+				"panelType"
+			],
+			[
+				"m_ar",
+				"m_attriSystem"
+			],
+			[
+				"m_buf",
+				"m_buffAttriSystem"
+			],
+			[
+				"init",
+				"InitArrtibuteSystem"
+			],
+			[
+				"battlct",
+				"GlobalBattleCtrl"
+			],
+			[
+				"battcom",
+				"BattleCommandProtocol"
+			],
+			[
+				"Gam",
+				"GameObject"
+			],
+			[
+				"cst",
+				"CSText"
+			],
+			[
+				"ti",
+				"time"
+			],
+			[
+				"m_nti",
+				"m_nTiTime"
+			],
+			[
+				"hurt",
+				"hurtNum"
+			],
+			[
+				"hur",
+				"hurtNum"
+			],
+			[
+				"m",
+				"m_hurtGo"
+			],
+			[
+				"Cl",
+				"CalculateHurt"
+			],
+			[
+				"Cha",
+				"charaB"
+			],
+			[
+				"chara",
+				"charaA"
+			],
+			[
+				"user",
+				"userId"
+			],
+			[
+				"Skilleffc",
+				"SkillEffectDefine"
+			],
+			[
+				"Par",
+				"ParseEffect"
+			],
+			[
+				"gc",
+				"GlobalBattleCtrl"
+			],
+			[
+				"Batl",
+				"BATTLE_EVENT"
+			],
+			[
+				"Anim",
+				"AnimatorType"
+			],
+			[
+				"state",
+				"InState"
+			],
+			[
+				"battle",
+				"battleId"
+			],
+			[
+				"skilla",
+				"SkillActionCollider"
+			],
+			[
+				"battlocom",
+				"BattleColliderCommand"
+			],
+			[
+				"ch",
+				"_CheckCollider"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Assets/LuaScript/Battle/BattleDefine.txt",
+			"settings":
+			{
+				"buffer_size": 8589,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/Battle/ZTBattleScene.txt",
+			"settings":
+			{
+				"buffer_size": 3216,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/Resources/LuaMain/AssetUpdater.lua.txt",
+			"settings":
+			{
+				"buffer_size": 2429,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/Resources/LuaMain/Main.lua.txt",
+			"settings":
+			{
+				"buffer_size": 1593,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/LuaGameStart.txt",
+			"settings":
+			{
+				"buffer_size": 2378,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/Global/ZTProtoData.txt",
+			"settings":
+			{
+				"buffer_size": 1497,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/Common/PathManager.txt",
+			"settings":
+			{
+				"buffer_size": 3178,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/Common/NetWorkManager.txt",
+			"settings":
+			{
+				"buffer_size": 5907,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "Assets/LuaScript/Battle/GlobalBattleCtrl.txt",
+			"settings":
+			{
+				"buffer_size": 16580,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/E/Client/Assets/LuaScript",
+		"/E/Client/Assets/LuaScript/ALuaConfig",
+		"/E/Client/Assets/LuaScript/Battle",
+		"/E/Client/Assets/LuaScript/Battle/BattleCommand",
+		"/E/Client/Assets/LuaScript/Battle/Character",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff",
+		"/E/Client/Assets/LuaScript/Common",
+		"/E/Client/Assets/LuaScript/Common/Animator",
+		"/E/Client/Assets/LuaScript/ProtoBuff",
+		"/E/Client/Assets/Resources/LuaMain"
+	],
+	"file_history":
+	[
+		"/E/Client/Assets/LuaScript/Battle/Protocol/BattleCommandProtocol.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleCommand/BattleCommandMgr.txt",
+		"/E/Client/Assets/LuaScript/Battle/GlobalBattleCtrl.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/BattleAnimatorData.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleCameraMgr.txt",
+		"/E/Client/Assets/LuaScript/LuaGameStart.txt",
+		"/E/Client/Assets/LuaScript/Common/Protobuf.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Character.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleDefine.txt",
+		"/E/Client/Assets/LuaScript/LuaFileLoad.txt",
+		"/E/Client/Assets/LuaScript/GameConfig.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SkillActionData.txt",
+		"/E/Client/Assets/LuaScript/Common/NetWorkManager.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/ZTCharaManager.txt",
+		"/E/Client/Assets/LuaScript/ProtoBuff/ProtocolDefine.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillMoveDefine.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/SkillBtn/SkillJoystick.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillDefine.txt",
+		"/E/Client/Assets/Resources/LuaMain/Main.lua.txt",
+		"/E/Client/Assets/LuaScript/Common/UIBasePanel.txt",
+		"/E/Client/Assets/LuaScript/Common/BaseModel.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionMoveLocked.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SkillActionParse.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/SkillBtn/MoveJoystick.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/SkillBtn/CommonSkillBtn.txt",
+		"/E/Client/Assets/LuaScript/ALuaConfig/SkillActionMoveConfig.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleHead/HeadItemManager.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleHead/BattleHeadItem.txt",
+		"/E/Client/Assets/LuaScript/ALuaConfig/SkillActionConfig.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleCommand/BattleCommand.txt",
+		"/E/Client/Assets/LuaScript/Common/Animator/AnimatorData.txt",
+		"/E/Client/Assets/LuaScript/Common/Animator/Animator.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillEffectDefine.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/MapRadarPanel.txt",
+		"/E/Client/Assets/LuaScript/Battle/ZTBattleScene.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff/BuffAttribute.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff/BuffDynamicAttribute.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff/BuffCharaAttribute.txt",
+		"/E/Client/Assets/LuaScript/Battle/Map/BattleMapView.txt",
+		"/E/Client/Assets/LuaScript/Battle/Map/BattleMapMgr.txt",
+		"/E/Client/Assets/LuaScript/UIModels/Login/LoginModel.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BagUI/BattleBagPanel.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleModel.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleUIMgr.txt",
+		"/E/Client/Assets/LuaScript/Global/GlobalMethod.txt",
+		"/C/Users/pc/AppData/Local/Unity/Editor/Editor.log",
+		"/E/Client/Assets/LuaScript/UIModels/Login/LoginMainPanel.txt",
+		"/C/Users/pc/AppData/Local/Temp/crash_452cf02142a8fb409d57585ca32af7d7/error.log",
+		"/E/Client/Assets/LuaScript/ProtoBuff/ZTProtocol.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleMapHeight.txt",
+		"/E/Client/Assets/LuaScript/ProtoBuff/NetProtocol.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionCollider.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionMove.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/Panel/BattleHUD.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveActionDefine.txt",
+		"/E/Client/Assets/LuaScript/UIModels/City/ZTCityScene.txt",
+		"/E/Client/Assets/LuaScript/Global/ZTProtoData.txt",
+		"/E/Client/Assets/LuaScript/Event/EventDispatcher.txt",
+		"/E/Client/Assets/LuaScript/Battle/Protocol/BattleProtocol.txt",
+		"/E/Client/Assets/LuaScript/ALuaConfig/SkillActionConfigTmp.txt",
+		"/E/Client/Assets/LuaScript/Common/Data/ModelData.txt",
+		"/E/Client/Assets/LuaScript/Common/ModelManager.txt",
+		"/E/Client/Assets/LuaScript/Common/PathManager.txt",
+		"/E/Client/Assets/LuaScript/LuaGame.txt",
+		"/E/Client/Assets/LuaScript/Battle/MapCircle/MapCircleManager.txt",
+		"/E/Client/Assets/LuaScript/UIModels/City/CityMainPanel.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionPlay.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleMapPropUIMgr.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillAction.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/CharaSystem/AttributeSystem.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SkillActionManager.txt",
+		"/E/Client/Assets/LuaScript/Common/PanelWidget.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleHead/BattleHeadItem.txt",
+		"/E/Client/Assets/LuaScript/ALuaConfig/Tab_Skill.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveAction/MoveActionDefine.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveAction/MoveActionConfig.txt",
+		"/E/SkillActionConfig.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BattleHUD.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BagUI/QuickBag/BaseBagCell.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/JoystickBtn/CommonSkillBtn.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionFace.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/JoystickBtn/SkillJoystick.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActionSpEffect.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/SkillJoystick.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveActoin/MoveActionConfig.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveActoin/MoveActoinDefine.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/Collider/ZTCollider.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/MoveActoin/MoveActionData.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillActoinSpEffect.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/MapScrollPanel.txt",
+		"/E/Client/Assets/LuaScript/UIModels/System/SystemLockPanel.txt",
+		"/E/Client/Assets/LuaScript/UIModels/Login/LoginCreateRolePanel.txt",
+		"/E/Client/LocalData/导表工具.py",
+		"/E/Client/Assets/LuaScript/Battle/BattleItemManager.txt",
+		"/E/Client/BuildProto/protobuf.proto",
+		"/E/Client/Assets/LuaScript/Common/Data/CommonData.txt",
+		"/E/Client/Assets/LuaScript/ALuaConfig/Tab_Equipment.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/BagUI/BattleBagCell.txt",
+		"/E/Client/Assets/LuaScript/ProtoBuff/protobuf.pb.bytes",
+		"/E/Client/Assets/LuaScript/ALuaConfig/SkillActoinConfigTmp.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/CharaSystem/BuffSystem.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/MoveJoystick.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff/BuffBase.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/Buff/BuffChangeAttribute.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/BuffSystem.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/FightProSystem.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleUI/HeadItemManager.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/HeadItemManager.txt",
+		"/E/Client/Assets/ResourcesLib/Config/LuaConfig/Equipment.txt",
+		"/E/Client/Assets/LuaScript/Battle/Character/CharaHeadManager.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonAction/SkillPlayAction.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonActoin/SkillAction.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/Effect/SkillEffect.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SpecAction/SpecAction1.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/CommonActoin/SkillPlayAction.txt",
+		"/E/Client/Assets/Resources/LuaMain/LuaTemplate.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SkillAction.txt",
+		"/E/Client/Assets/LuaScript/Battle/Skill/SkillAction/SkillPlayAction.txt",
+		"/E/Client/Assets/LuaScript/Common/TimerManager/TimerManager.txt",
+		"/E/Client/Assets/LuaScript/Global/GlobalData.txt",
+		"/E/Client/Assets/LuaScript/Battle/BattleContainerMgr.txt",
+		"/E/Client/Assets/LuaScript/UIModels/System/SystemModel.txt",
+		"/E/Client/Assets/LuaScript/UIModels/System/SystemNoticePanel.txt",
+		"/E/Client/Assets/Resources/LuaMain/AssetUpdater.lua.txt",
+		"/E/ZTGame/Assets/LuaScript/AssetUpdater.txt",
+		"/E/ZTGame/Assets/LuaScript/AssetUpdater.lua.txt",
+		"/E/ZTGame/Assets/Resources/LuaMain/AssetUpdater.lua.txt",
+		"/E/ZTGame/Assets/LuaScript/LuaList.lua"
+	],
+	"find":
+	{
+		"height": 40.0
+	},
+	"find_in_files":
+	{
+		"height": 104.0,
+		"where_history":
+		[
+			"",
+			"E:\\Client\\Assets\\LuaScript\\Battle\\BattleUI",
+			"",
+			"Zt",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"_UpdateCurPos",
+			"_SetPosDelay",
+			"m_bMoveStop",
+			"nor",
+			"noram",
+			"stop",
+			"m_bMoveStop",
+			"self.m_animData",
+			"MoveToPos",
+			"IsMoveActionChangeRotate",
+			"UpdateViewByDirection",
+			"_SetPlayDelay",
+			"_UpdatePlayDelay",
+			"_SetPlayDelay",
+			"_UpdatePlayDelay",
+			"_SetPosDelay",
+			"UpdatePos",
+			"UpdateViewByDirection",
+			"RushCameraFollow",
+			"SetCameraFollow",
+			"SetCameraFollow\nSetCameraFollow",
+			"SetCameraFollow",
+			"UpdatePos",
+			"UPDATE_CHARACTRE_POS",
+			"UpdatePos",
+			"ParseCommand",
+			"__TsClientInputCommand",
+			"__TsClientSendDriveCommand",
+			"CommandDebugRun",
+			"_RunCommand",
+			"SendHpChange",
+			"GetCurCommandFrame",
+			"__TsClientInputCommand",
+			"CommandStep",
+			"m_nCommandStart",
+			"heart",
+			"MAP_FRAME",
+			"MAP_SIGHT",
+			"SURVIVE_MATCH",
+			"PROTOCOL.SURVIVE_MATCH",
+			"SetNextFrame",
+			" BattleCommandMgr:SetNextFrame",
+			"LineToPos",
+			"UpdateRotate",
+			"IsMoveActionChangeRotate",
+			"UpdateRotate",
+			"Skill",
+			"MoveLocked",
+			"UpdateRotate",
+			"Play",
+			"CheckStateAnima",
+			"self.m_nState &",
+			"IsDead",
+			"IsNormalState",
+			"isDead",
+			"IsDead",
+			"m_nState",
+			"IsNormalState",
+			"InState",
+			"CharacterState",
+			"OutState",
+			"InState",
+			"setstate",
+			"Play",
+			"m_nState",
+			"_GetActionMoveLocked",
+			"SkillActionType.Face",
+			"SkillActionPlay",
+			"_GetSpEffectActoin",
+			"_GetActionRotate",
+			"_ParseConfig",
+			"_GetActionRotate",
+			"_GetRotateAction",
+			"_GetPlayAction",
+			"_GetColliderAction",
+			"PlayerMove",
+			"_GetPlayerMoveActoin",
+			"_GetSkillActionMoveLocked",
+			"SkillActionMoveData",
+			"m_bMoveLocked",
+			"_SetPlayDelay",
+			"Event",
+			"_SetPlayDelay",
+			"_UpdateCameraPos",
+			"DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS",
+			"UPDATE_SCENE_POS",
+			"UPDATE_CAMERA",
+			"Log(",
+			"Log",
+			"m_nRendererTime",
+			"m_nViewTime",
+			"UPDATE_CAMERA",
+			"ADD_CHARACTER_HURT_NUM",
+			"GlobalBattleCtrl",
+			"BuffAttribute",
+			"m_bDelayPosAction",
+			"IsDead",
+			"isDead",
+			"Update(",
+			"m_animData",
+			"m_charaPos",
+			"UpdatePos",
+			"update(",
+			"CommandUpdate",
+			"login_login_s2c",
+			"======",
+			"_Rush",
+			"_CreateQuickBag",
+			"QUICKBAG",
+			"panelData",
+			"onInitPanelData",
+			"CS.UnityEngine.Text",
+			"getcom",
+			"SetNextFrame",
+			"_RegNetFacade",
+			"_curMsgSeq",
+			"_loginAuthKey",
+			"m_loginAuthKey",
+			"\nNetWork_RequestLogin  accname:  asdasd  key  ",
+			"NetWork_RequestLogin  accname:  asdasd  key  ",
+			"m_tNetMsg",
+			"NetWorkManager",
+			"NetWorkManager\\NetWorkManager.cs:66]",
+			"chara",
+			"local netMsg = NetWorkManager.m_tNetMsg[_msgIndex]\n\tZTProto",
+			"ModelIdToBattle",
+			"_insertNetWorkMsg",
+			"_insertNetWorkMsg\n_insertNetWorkMsg"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"SkillActionMoveLocked",
+			"_GetActoinSpEffect",
+			"_GetActionFace",
+			"_GetActionRotate",
+			"_GetActionPlay",
+			"_GetActionCollider",
+			"_GetActoinMove",
+			"m_nRendererTime",
+			"BattleAnimatorData",
+			"SkillMoveDefine",
+			"BattleHeadItem",
+			"BattleHUD",
+			"CommonSkillBtn",
+			"moveAction",
+			"",
+			"SkillActionMove",
+			"MoveActionData",
+			"SkillActoinSpEffect",
+			"nextSkillId",
+			"})",
+			"])",
+			"table.insert(list, {",
+			" })",
+			"table.insert(list, AttributeType",
+			"HpMax",
+			"InitAttributeSystem",
+			"SetAttributeByType",
+			"CreateAttribute",
+			"BattleEffectSyncCommand",
+			"BattleAttributeCommand",
+			"AddEffectCommand",
+			"BattleCommandType.Effect",
+			"BattleEffectCommand",
+			"m_bInShow",
+			"m_bInit",
+			"SetAttributeByType",
+			"BuffDynamicAttribute",
+			"CharaAttribute",
+			"BuffChangeAttribute",
+			"BuffAttribute",
+			"BuffBase",
+			"m_attriSystem",
+			"AttributeSystem",
+			"BuffSystem",
+			"data",
+			"",
+			"BattleCommandProtocol",
+			"HeadItemManager",
+			"CharaHeadManager",
+			"m_nKey",
+			"self.m_tActionData",
+			"skillPos",
+			"offsetZ",
+			"targetType",
+			"SkillActionCollider",
+			"BattleDir",
+			"elseif ",
+			"elseif",
+			"",
+			"elseif",
+			"CSKeyCode",
+			"CSInput",
+			"SkillActionFace",
+			"SkillActionPlay",
+			"m_tSkillPos",
+			"Collider",
+			"SkillJoystick",
+			"SkillActionManager",
+			"m_nOwnerId",
+			"SkillActionParse",
+			"SkillActionData",
+			"SkillPlayAction",
+			"SkillAction",
+			"ZTBattleScene"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Assets/LuaScript/Battle/BattleDefine.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8589,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								446,
+								446
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Assets/LuaScript/Battle/ZTBattleScene.txt",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1959,
+								1959
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 126.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Assets/Resources/LuaMain/AssetUpdater.lua.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2429,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1399,
+								1406
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Assets/Resources/LuaMain/Main.lua.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1593,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								882,
+								882
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Assets/LuaScript/LuaGameStart.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2378,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1469,
+								1480
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Assets/LuaScript/Global/ZTProtoData.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1497,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1260,
+								1260
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Assets/LuaScript/Common/PathManager.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3178,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								276,
+								276
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Assets/LuaScript/Common/NetWorkManager.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5907,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4384,
+								4384
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2058.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 8,
+					"file": "Assets/LuaScript/Battle/GlobalBattleCtrl.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6089,
+								6089
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2814.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.699185461787,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 119.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/MyLua.sublime-build",
+	"project": "ztTrunk.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"path",
+				"LuaScript\\Common\\PathManager.txt"
+			],
+			[
+				"ztprotodata",
+				"LuaScript\\Global\\ZTProtoData.txt"
+			],
+			[
+				"luagamestart",
+				"LuaScript\\LuaGameStart.txt"
+			],
+			[
+				"luagams",
+				"LuaScript\\LuaGameStart.txt"
+			],
+			[
+				"protobuf",
+				"LuaScript\\Common\\Protobuf.txt"
+			],
+			[
+				"main",
+				"LuaMain\\Main.lua.txt"
+			],
+			[
+				"",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"comman",
+				"LuaScript\\Battle\\BattleCommand\\BattleCommandMgr.txt"
+			],
+			[
+				"commp",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"battlede",
+				"LuaScript\\Battle\\BattleDefine.txt"
+			],
+			[
+				"commma",
+				"LuaScript\\Battle\\BattleCommand\\BattleCommandMgr.txt"
+			],
+			[
+				"update",
+				"LuaMain\\AssetUpdater.lua.txt"
+			],
+			[
+				"net",
+				"LuaScript\\Common\\NetWorkManager.txt"
+			],
+			[
+				"battlec",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"camera",
+				"LuaScript\\Battle\\BattleCameraMgr.txt"
+			],
+			[
+				"battle",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"chara",
+				"LuaScript\\Battle\\Character\\Character.txt"
+			],
+			[
+				"protocolcomm",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"cmman",
+				"LuaScript\\Battle\\BattleCommand\\BattleCommandMgr.txt"
+			],
+			[
+				"skill",
+				"LuaScript\\Battle\\BattleUI\\SkillBtn\\SkillJoystick.txt"
+			],
+			[
+				"modef",
+				"LuaScript\\Battle\\Skill\\SkillMoveDefine.txt"
+			],
+			[
+				"ski",
+				"LuaScript\\Battle\\Skill\\SkillDefine.txt"
+			],
+			[
+				"game",
+				"LuaScript\\GameConfig.txt"
+			],
+			[
+				"gam",
+				"LuaScript\\GameConfig.txt"
+			],
+			[
+				"procom",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"gamo",
+				"LuaScript\\GameConfig.txt"
+			],
+			[
+				"basem",
+				"LuaScript\\Common\\BaseModel.txt"
+			],
+			[
+				"basepan",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"lualoa",
+				"LuaScript\\LuaFileLoad.txt"
+			],
+			[
+				"skillactiond",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionData.txt"
+			],
+			[
+				"skillmo",
+				"LuaScript\\ALuaConfig\\SkillActionMoveConfig.txt"
+			],
+			[
+				"skillde",
+				"LuaScript\\Battle\\Skill\\SkillDefine.txt"
+			],
+			[
+				"comm",
+				"LuaScript\\Battle\\BattleCommand\\BattleCommand.txt"
+			],
+			[
+				"head",
+				"LuaScript\\Battle\\BattleUI\\BattleHead\\HeadItemManager.txt"
+			],
+			[
+				"anima",
+				"LuaScript\\Common\\Animator\\AnimatorData.txt"
+			],
+			[
+				"effe",
+				"LuaScript\\Battle\\Skill\\SkillEffectDefine.txt"
+			],
+			[
+				"skillpa",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionParse.txt"
+			],
+			[
+				"battani",
+				"LuaScript\\Battle\\Character\\BattleAnimatorData.txt"
+			],
+			[
+				"networkmanager",
+				"LuaScript\\Common\\NetWorkManager.txt"
+			],
+			[
+				"ztba",
+				"LuaScript\\Battle\\ZTBattleScene.txt"
+			],
+			[
+				"charaman",
+				"LuaScript\\Battle\\Character\\ZTCharaManager.txt"
+			],
+			[
+				"lualua",
+				"LuaScript\\LuaFileLoad.txt"
+			],
+			[
+				"move",
+				"LuaScript\\Battle\\Skill\\SkillMoveDefine.txt"
+			],
+			[
+				"batteff",
+				"LuaScript\\Battle\\Skill\\SkillEffectDefine.txt"
+			],
+			[
+				"anim",
+				"LuaScript\\Common\\Animator\\Animator.txt"
+			],
+			[
+				"ztcha",
+				"LuaScript\\Battle\\Character\\ZTCharaManager.txt"
+			],
+			[
+				"battlechara",
+				"LuaScript\\Battle\\Character\\Character.txt"
+			],
+			[
+				"battledefine",
+				"LuaScript\\Battle\\BattleDefine.txt"
+			],
+			[
+				"battlescne",
+				"LuaScript\\Battle\\ZTBattleScene.txt"
+			],
+			[
+				"basep",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"battlemo",
+				"LuaScript\\Battle\\BattleUI\\BattleModel.txt"
+			],
+			[
+				"ui",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"bagpan",
+				"LuaScript\\Battle\\BattleUI\\BagUI\\BattleBagPanel.txt"
+			],
+			[
+				"luam",
+				"LuaMain\\Main.lua.txt"
+			],
+			[
+				"gameto",
+				"LuaScript\\Global\\GlobalMethod.txt"
+			],
+			[
+				"battlemapv",
+				"LuaScript\\Battle\\Map\\BattleMapView.txt"
+			],
+			[
+				"ptococom",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"luamain",
+				"LuaMain\\Main.lua.txt"
+			],
+			[
+				"protocol",
+				"LuaScript\\ProtoBuff\\NetProtocol.txt"
+			],
+			[
+				"lo",
+				"LuaScript\\UIModels\\Login\\LoginModel.txt"
+			],
+			[
+				"login",
+				"LuaScript\\UIModels\\Login\\LoginMainPanel.txt"
+			],
+			[
+				"gamestar",
+				"LuaScript\\LuaGameStart.txt"
+			],
+			[
+				"ztprotocol",
+				"LuaScript\\ProtoBuff\\ZTProtocol.txt"
+			],
+			[
+				"loginp",
+				"LuaScript\\UIModels\\Login\\LoginMainPanel.txt"
+			],
+			[
+				"lual",
+				"LuaScript\\LuaFileLoad.txt"
+			],
+			[
+				"camer",
+				"LuaScript\\Battle\\BattleCameraMgr.txt"
+			],
+			[
+				"cameram",
+				"LuaScript\\Battle\\BattleCameraMgr.txt"
+			],
+			[
+				"hie",
+				"LuaScript\\Battle\\BattleMapHeight.txt"
+			],
+			[
+				"globa",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"battlesc",
+				"LuaScript\\Battle\\ZTBattleScene.txt"
+			],
+			[
+				"loa",
+				"LuaScript\\LuaFileLoad.txt"
+			],
+			[
+				"skillpar",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionParse.txt"
+			],
+			[
+				"new",
+				"LuaScript\\Common\\NetWorkManager.txt"
+			],
+			[
+				"proto",
+				"LuaScript\\Common\\Protobuf.txt"
+			],
+			[
+				"even",
+				"LuaScript\\Event\\EventDispatcher.txt"
+			],
+			[
+				"prot",
+				"LuaScript\\ProtoBuff\\ProtocolDefine.txt"
+			],
+			[
+				"protoco",
+				"LuaScript\\Battle\\Protocol\\BattleProtocol.txt"
+			],
+			[
+				"glob",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"protocolcom",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"pathman",
+				"LuaScript\\Common\\PathManager.txt"
+			],
+			[
+				"battlehud",
+				"LuaScript\\Battle\\BattleUI\\Panel\\BattleHUD.txt"
+			],
+			[
+				"mapradarpanel",
+				"LuaScript\\Battle\\BattleUI\\MapRadarPanel.txt"
+			],
+			[
+				"battlemod",
+				"LuaScript\\Battle\\BattleUI\\BattleModel.txt"
+			],
+			[
+				"commna",
+				"LuaScript\\Battle\\BattleCommand\\BattleCommandMgr.txt"
+			],
+			[
+				"comp",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"protooco",
+				"LuaScript\\Battle\\Protocol\\BattleCommandProtocol.txt"
+			],
+			[
+				"pan",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"glo",
+				"LuaScript\\Global\\GlobalMethod.txt"
+			],
+			[
+				"uim",
+				"LuaScript\\Battle\\BattleUI\\BattleUIMgr.txt"
+			],
+			[
+				"battl",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"uiba",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"mo",
+				"LuaScript\\Common\\ModelManager.txt"
+			],
+			[
+				"mode",
+				"LuaScript\\Common\\ModelManager.txt"
+			],
+			[
+				"ztbattlescene",
+				"LuaScript\\Battle\\ZTBattleScene.txt"
+			],
+			[
+				"uibasepanel",
+				"LuaScript\\Common\\UIBasePanel.txt"
+			],
+			[
+				"heam",
+				"LuaScript\\Battle\\BattleUI\\BattleHead\\HeadItemManager.txt"
+			],
+			[
+				"lom",
+				"LuaScript\\UIModels\\Login\\LoginModel.txt"
+			],
+			[
+				"battleprotocol",
+				"LuaScript\\Battle\\Protocol\\BattleProtocol.txt"
+			],
+			[
+				"charama",
+				"LuaScript\\Battle\\Character\\ZTCharaManager.txt"
+			],
+			[
+				"battlemapmgr",
+				"LuaScript\\Battle\\Map\\BattleMapMgr.txt"
+			],
+			[
+				"battlect",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"attri",
+				"LuaScript\\Battle\\Character\\CharaSystem\\AttributeSystem.txt"
+			],
+			[
+				"battlemappropuimgr",
+				"LuaScript\\Battle\\BattleUI\\BattleMapPropUIMgr.txt"
+			],
+			[
+				"actionman",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionManager.txt"
+			],
+			[
+				"skillacoinman",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionManager.txt"
+			],
+			[
+				"skillman",
+				"LuaScript\\Battle\\Skill\\SkillAction\\SkillActionManager.txt"
+			],
+			[
+				"gl",
+				"LuaScript\\Global\\GlobalMethod.txt"
+			],
+			[
+				"glome",
+				"LuaScript\\Global\\GlobalMethod.txt"
+			],
+			[
+				"anelw",
+				"LuaScript\\Common\\PanelWidget.txt"
+			],
+			[
+				"panelw",
+				"LuaScript\\Common\\PanelWidget.txt"
+			],
+			[
+				"w",
+				"LuaScript\\Common\\PanelWidget.txt"
+			],
+			[
+				"battlectr",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"ch",
+				"LuaScript\\Battle\\Character\\Character.txt"
+			],
+			[
+				"clol",
+				"LuaScript\\Battle\\Skill\\Collider\\ZTCollider.txt"
+			],
+			[
+				"ga",
+				"LuaScript\\Global\\GlobalMethod.txt"
+			],
+			[
+				"skillactoinspeffect",
+				"LuaScript\\Battle\\Skill\\SkillAction\\CommonAction\\SkillActoinSpEffect.txt"
+			],
+			[
+				"maps",
+				"LuaScript\\Battle\\BattleUI\\MapScrollPanel.txt"
+			],
+			[
+				"r",
+				"LuaScript\\Battle\\BattleUI\\MapRadarPanel.txt"
+			],
+			[
+				"city",
+				"LuaScript\\UIModels\\City\\CityMainPanel.txt"
+			],
+			[
+				"cityma",
+				"LuaScript\\UIModels\\City\\CityMainPanel.txt"
+			],
+			[
+				"create",
+				"LuaScript\\UIModels\\Login\\LoginCreateRolePanel.txt"
+			],
+			[
+				"systemlo",
+				"LuaScript\\UIModels\\System\\SystemLockPanel.txt"
+			],
+			[
+				"loginmai",
+				"LuaScript\\UIModels\\Login\\LoginMainPanel.txt"
+			],
+			[
+				"skillatcoinco",
+				"LuaScript\\Battle\\Skill\\SkillAction\\CommonAction\\SkillActionCollider.txt"
+			],
+			[
+				"globalbattlectrl",
+				"LuaScript\\Battle\\GlobalBattleCtrl.txt"
+			],
+			[
+				"skillactioncollider",
+				"LuaScript\\Battle\\Skill\\SkillAction\\CommonAction\\SkillActionCollider.txt"
+			],
+			[
+				"skilleff",
+				"LuaScript\\Battle\\Skill\\SkillEffectDefine.txt"
+			],
+			[
+				"charamana",
+				"LuaScript\\Battle\\Character\\ZTCharaManager.txt"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 375.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

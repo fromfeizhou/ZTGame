@@ -9,14 +9,13 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
 local CSJoystick = CS.JoystickBase
-local CSVector2 = CS.UnityEngine.Vector2
 
 MoveJoystick = {
 	m_ctrlContainer = nil,	--父容器
 	m_transform = nil,		--当前对象transfrom
 	m_gameObject = nil,		--当前对象挂钩gameObject
 	m_joystick = nil,		--摇杆组件
-
+	m_moveDir = nil,		--移动方向
 	m_bIsSend = nil,		--是否发送操作
 	m_sendDir = nil,		--已发送移动类型
 }
@@ -74,6 +73,7 @@ function MoveJoystick:_InitJoyEvent()
 	local canvas = PanelManager:GetLayerCanvas(LAYER_TYPE.NORMAL)
 	self.m_joystick:SetCanvas(canvas)
 
+	self.m_moveDir = self.m_transform:Find("Dir"):GetComponent("RectTransform")
 	self.m_joystick.onJoystickDownEvent = function(pos)
 		self:_OnJoystickDown(pos)
 	end
@@ -100,6 +100,7 @@ end
 
 --@brief 触发移动
 function MoveJoystick:_OnMoveAction(pos)
+	self.m_moveDir.gameObject:SetActive(true)
 	local angle = math.deg(math.atan(pos.y,pos.x))
 	if angle >= -22.5 and angle < 22.5 then
         self:_SendMoveCommand(BattleDir.Right)
@@ -118,6 +119,9 @@ function MoveJoystick:_OnMoveAction(pos)
     else
         self:_SendMoveCommand(BattleDir.Left)
     end
+
+    self.m_moveDir.localEulerAngles = CSVector3.forward * (angle - 90)
+    
     self.m_bIsSend = true
 end
 
@@ -128,6 +132,7 @@ function MoveJoystick:_OnJoystickUp(pos)
 	if self.m_bIsSend then
 	 	self:_SendMoveCommand(BattleDir.None);
 	 	self.m_bIsSend = false
+		self.m_moveDir.gameObject:SetActive(false)
 	end
 end
 

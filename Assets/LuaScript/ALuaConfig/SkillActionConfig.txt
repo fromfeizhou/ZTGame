@@ -7,11 +7,11 @@ SkillActionConfig = {
 				{ actionType = 6, param = { 35, 35, 35 }},
 		},
 		[ 25 ] = {
-				{ actionType = 3, param = { 0.1, -1, 1, 0, 2.2, 2, 10, 1, -1, -1 }},
+				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 1, -1, -1 }},
 				{ actionType = 5, param = { 1001 }},
 		},
 		[ 26 ] = {
-				{ actionType = 4, param = { "HitBlood1", 1, 20, 0, 80 }},
+				{ actionType = 4, param = { "HitBlood1", 1, 20, 0, 2.2 }},
 		},
 	},
 
@@ -24,7 +24,10 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1002 }},
 		},
 		[ 30 ] = {
-				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 18, 1, "HitBlood2", -1 }},
+				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 18, 1, -1, -1 }},
+		},
+		[ 31 ] = {
+				{ actionType = 4, param = { "HitBlood2", 1, 20, 0, 2.2 }},
 		},
 	},
 
@@ -38,6 +41,9 @@ SkillActionConfig = {
 		},
 		[ 45 ] = {
 				{ actionType = 3, param = { 2.5, -1, 1, 0, 2.2, 2, 10, 5, "HitBlood3", -1 }},
+		},
+		[ 46 ] = {
+				{ actionType = 4, param = { "HitBlood3", 1, 20, 0, 2.2 }},
 		},
 	},
 
@@ -67,6 +73,9 @@ SkillActionConfig = {
 		},
 		[ 40 ] = {
 				{ actionType = 3, param = { 3, -1, 1, 0, 2.5, 2, 20, -1, "Bomb1", -1 }},
+		},
+		[ 41 ] = {
+				{ actionType = 4, param = { "Bomb1", 2, 50, 0, 2.5 }},
 		},
 	},
 
@@ -142,4 +151,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10001"
+SkillActionConfig.TestSkillId = "id_10003"
