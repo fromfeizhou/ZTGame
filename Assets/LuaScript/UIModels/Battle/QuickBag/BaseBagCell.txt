@@ -17,7 +17,8 @@ BaseBagCell = {
  	itemId=nil,
  	id=nil,
 
-	m_textNum=nil,
+	m_textDec = nil,		--描述
+	m_textNum = nil,
  	m_textName = nil,		--item名字
  	m_imageIcon = nil,		--图标
  	m_btn=nil,
@@ -63,6 +64,7 @@ function BaseBagCell:_InitCell(callBack)
 	self.m_tContent=self.m_transform:Find("Content")
 	self.m_textName=PanelWidget:GetText(self.m_transform,"Content/Name")
 	self.m_textNum=PanelWidget:GetText(self.m_transform,"Content/Num")
+	self.m_textDec = PanelWidget:GetText(self.m_transform,"Content/Dec")
 	self.m_btn=PanelWidget:GetZTButton(self.m_transform,"Content/Icon", function()
 		self:OnCellClick(callBack)
 	end )
@@ -104,6 +106,7 @@ function BaseBagCell:UpdateData(item)
 
 		self.m_textNum.text=item.itemNum
 		self.m_textName.text = temp.name
+		self.m_textDec.text = temp.description
 		self.m_transform.gameObject:SetActive(true)
 	else
 		self.m_transform.gameObject:SetActive(false)

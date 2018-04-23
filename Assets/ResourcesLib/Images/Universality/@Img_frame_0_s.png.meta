@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 57bc3ca9541320f4492bd792b424d01c
-timeCreated: 1522743594
+timeCreated: 1524468090
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -39,7 +39,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 73, y: 98, z: 89, w: 43}
+  spriteBorder: {x: 160, y: 125, z: 192, w: 43}
   spritePixelsToUnits: 100
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -80,5 +80,5 @@ TextureImporter:
     outline: []
   spritePackingTag: 
   userData: 
-  assetBundleName: 
+  assetBundleName: assets_resourceslib_images_universality
   assetBundleVariant: 
