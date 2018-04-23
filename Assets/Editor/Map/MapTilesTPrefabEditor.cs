@@ -96,6 +96,7 @@ public class MapTilesTPrefabEditor
         EditorSceneManager.OpenScene("Assets/Scences/SceneEditor.unity");
     }
 
+   
     private static void CreateTilesPrefab()
     {
         foreach (KeyValuePair<string, MapTilesData> item in mapTilesDataDic)
@@ -161,9 +162,9 @@ public class MapTilesTPrefabEditor
         tilesIndex = 0;
         EditorUtility.DisplayProgressBar("遍历瓦片数据", "地图瓦片遍历ing...", 0);
         CreateTilesMap(bigMapKey, offsetX, offsetY, mapAsset);
-        EditorUtility.DisplayProgressBar("遍历瓦片数据", "地图纹理瓦片遍历ing...", 0);
-        GameObject root = GameObject.Find("MapTilesRoot/MapTextureTiles");
-        CreateTileTexture(root.transform,bigMapKey, offsetX, offsetY, mapAsset);
+       // EditorUtility.DisplayProgressBar("遍历瓦片数据", "地图纹理瓦片遍历ing...", 0);
+       // GameObject root = GameObject.Find("MapTilesRoot/MapTextureTiles");
+       // CreateTileTexture(root.transform,bigMapKey, offsetX, offsetY, mapAsset);
         CreateTileDataFile(mapAsset, bigMapKey);
         EditorUtility.ClearProgressBar();
     }
@@ -177,12 +178,14 @@ public class MapTilesTPrefabEditor
         //美术还没弄完先，目前只有一种类型，先特殊处理
         Renderer[] gos = root.transform.GetComponentsInChildren<Renderer>();
 
+
         for (int index = 0; index < gos.Length; index++)
         {
             Transform element = gos[index].transform;
-            if (element.name.Contains(TilesMapKey))
+            element.gameObject.name = gos[index].sharedMaterial.name;
+            if (true)//element.gameObject.name.Contains(TilesMapKey))
             {
-                string prefabPath = MapDefine.TilesMapFilePath + element.name + ".prefab";
+                string prefabPath = MapDefine.TilesMapFilePath + element.gameObject.name + ".prefab";
                 if (!System.IO.File.Exists(Application.dataPath + prefabPath))
                 {
                     PrefabUtility.CreatePrefab("Assets" + prefabPath, element.gameObject);
