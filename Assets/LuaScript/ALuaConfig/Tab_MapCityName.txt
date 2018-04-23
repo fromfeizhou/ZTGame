@@ -1,0 +1,15 @@
+Tab_MapCityName = {
+[1] = { id = 1, posX = 100, posY = 100, nameCn = '测试1', nameEn = 'one',  },
+[2] = { id = 2, posX = 200, posY = 200, nameCn = '测试2', nameEn = 'two',  },
+[3] = { id = 3, posX = 300, posY = 300, nameCn = '测试3', nameEn = 'three',  },
+[4] = { id = 4, posX = 400, posY = 400, nameCn = '测试4', nameEn = 'four',  },
+[5] = { id = 5, posX = 500, posY = 500, nameCn = '测试5', nameEn = 'five',  },
+[6] = { id = 6, posX = 600, posY = 600, nameCn = '测试6', nameEn = 'six',  },
+[7] = { id = 7, posX = 700, posY = 700, nameCn = '测试7', nameEn = 'seven',  },
+[8] = { id = 8, posX = 800, posY = 800, nameCn = '测试8', nameEn = 'eight',  },
+[9] = { id = 9, posX = 900, posY = 900, nameCn = '测试9', nameEn = 'nine',  },
+[10] = { id = 10, posX = 1000, posY = 1000, nameCn = '测试10', nameEn = 'ten',  },
+[11] = { id = 11, posX = 1100, posY = 1100, nameCn = '测试11', nameEn = 'eleven',  },
+[12] = { id = 12, posX = 1200, posY = 1200, nameCn = '测试12', nameEn = 'twelve',  },
+[13] = { id = 13, posX = 1300, posY = 1300, nameCn = '测试13', nameEn = 'thirteen',  },
+}
