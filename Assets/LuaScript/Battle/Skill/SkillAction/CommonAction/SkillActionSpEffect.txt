@@ -34,7 +34,7 @@ function SkillActoinSpEffect:Init(actionParse,actionData)
 	--继承实现
 	SkillAction.Init(self,actionParse,actionData)
 	self.m_nActionType = SkillActionType.SpEffect
-	self.m_nOffset = self.m_tActionData.m_nOffset
+	self.m_tOffset = self.m_tActionData.m_tOffset
 	self.m_skillLayer = self.m_tActionData.m_skillLayer
 	self.m_spriteEffName = self.m_tActionData.m_spriteEffName
 end
@@ -77,9 +77,10 @@ function SkillActoinSpEffect:_CreateEffect()
 		local effectCon = self.m_tOwner:GetEffectCon()
 		if effectCon then
 			self.m_spriteEffGo.transform:SetParent(effectCon,false)
+			self.m_spriteEffGo.transform.localPosition = self.m_tOffset
 		end
 	else
-		local pos = SkillDefine:GetStartPosByLayer(self.m_tOwner,self.m_nOffset,self.m_skillLayer,self.m_tSkillPos)
+		local pos = SkillDefine:GetStartPosByLayer(self.m_tOwner,self.m_tOffset,self.m_skillLayer,self.m_tSkillPos)
 		self.m_spriteEffGo.transform.localPosition = pos
 	end
 	
