@@ -61,7 +61,7 @@ function SpEffectManager:_LoadAsset(list)
 	if #list > 0 then
 		local elmentpath = list[1]
 		table.remove(list,1)
-		CS.AssetManager.LoadAsset(elmentpath,function(target,path)
+		CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(elmentpath),function(target,path)
 			if not SpEffectManager.m_tEffectList or not target then
 				return
 			end
