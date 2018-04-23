@@ -14,7 +14,7 @@ SkillAreaManager = {
 }
 
 SkillAreaManager.m_tElmentPathList = {
-	"quan_hero",	--圆形
+	"quan_hero_out",	--圆形
 	"quan_hero",	--圆形
     "chang_hero",		--矩形
     "shan_hero_60",		--扇形60度
@@ -117,6 +117,7 @@ function SkillAreaManager:_UpdateView()
 		SkillAreaManager.m_tElmentList[SkillAreaType.OuterCircle].transform.localScale = CSVector3(distance * 2, 1,distance * 2)
 
 		SkillAreaManager.m_tElmentList[areaType]:SetActive(true)
+		SkillAreaManager.m_tElmentList[areaType].transform.localScale = CSVector3.one * 2
 	end
 end
 --@brief 更新父容器

@@ -84,17 +84,8 @@ public class SkillJoystick : JoystickBase
 
     private void SetVisibleOpacity(bool isShow)
     {
-        if (isShow)
-        {
-            _imgBg.color = new Color32(255, 255, 255, 255);
-            _imgTouch.color = new Color32(0, 213, 255, 255);
-        }
-        else
-        {
-            _imgBg.color = new Color32(255, 255, 255, 1);
-            _imgTouch.color = new Color32(0, 213, 255, 1);
-        }
+		_imgBg.color = isShow ? Color.white : Color.clear;
+		_imgTouch.color = isShow ? Color.white : Color.clear;
     }
-
 
 }
