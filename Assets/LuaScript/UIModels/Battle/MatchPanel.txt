@@ -12,6 +12,9 @@ MatchPanel = {
 setmetatable( MatchPanel, { __index = UIBasePanel})
 
 
+function MatchPanel:GetLayerType()
+	return LAYER_TYPE.MASK
+end
 function MatchPanel:GetName()
 	return "MatchPanel"
 end
@@ -47,12 +50,17 @@ end
 
 --@brief 子类重写 - 显示面板
 function MatchPanel:onShow()
-	PanelManager:HideLoadingPanel()
+	--PanelManager:HideLoadingPanel()
 end
 
 --@brief 子类重写 - 隐藏面板
 function MatchPanel:onHide()
-	PanelManager:HideLoadingPanel()
+	local _heartTimer = LoopTimer:Create(function ( )
+		PanelManager:HideLoadingPanel()
+	end,self)
+	_heartTimer:SetParam(2,1)
+	TimerManager:AddTimer(_heartTimer)
+
 end
 
 --@brief 子类重写 - 添加事件监听
