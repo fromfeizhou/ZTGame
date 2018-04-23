@@ -62,7 +62,7 @@ function MapScrollPanel:onCreatePanel()
 	local ztSlider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 	self.m_scaleValue = self.m_ScrollView.content.sizeDelta.x / minMapView
 	ztSlider.minValue = self.m_scaleValue
-	ztSlider.maxValue = maxMapView / minMapView
+	ztSlider.maxValue = 4
 
 	self.m_mapScrollImg = self.m_ScrollView.content:GetComponent("ZTImage")
 	self.m_mapScrollImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
@@ -157,14 +157,6 @@ function MapScrollPanel:_CreatePlayer( playerId )
 	local playRectTransform = playTransform:GetComponent("RectTransform")
 	playTransform.name = playerId
 	local ztImg = playTransform:GetComponent("ZTImage")
-	if ztImg then
-		if playerId == GlobalBattleCtrl:GetOwnerId() then
-			ztImg.color = CSColor.green;
-		else
-			ztImg.color = CSColor.yellow;
-		end
-	end
-
 	playTransform.gameObject:SetActive(true)
 	return playRectTransform
 end
