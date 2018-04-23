@@ -1,7 +1,7 @@
 Tab_Skill = {
-[1001] = { id = 1001, name = '巨斧斩击', description = '巨斧斩击一式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10001, nextSkillId = 1002, operaDistance = -1,  },
-[1002] = { id = 1002, name = '巨斧斩击', description = '巨斧斩击二式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10002, nextSkillId = 1003, operaDistance = -1,  },
-[1003] = { id = 1003, name = '巨斧斩击', description = '巨斧斩击三式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10003, nextSkillId = 1001, operaDistance = -1,  },
+[1001] = { id = 1001, name = '巨斧斩击', description = '巨斧斩击一式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10001, nextSkillId = -1, operaDistance = -1,  },
+[1002] = { id = 1002, name = '巨斧斩击', description = '巨斧斩击二式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10002, nextSkillId = -1, operaDistance = -1,  },
+[1003] = { id = 1003, name = '巨斧斩击', description = '巨斧斩击三式，连续攻击挥砍三次，力量逐渐增强；', actionId = 10003, nextSkillId = -1, operaDistance = -1,  },
 [1101] = { id = 1101, name = '巨斧旋风', description = '挥动手中巨斧，对附近敌人造成伤害，持续5秒；', actionId = 11001, nextSkillId = -1, operaDistance = -1,  },
 [1102] = { id = 1102, name = '凶猛跃击', description = '猛力跳向目标，并大力劈砍，造成巨额伤害并眩晕对手；', actionId = 11002, nextSkillId = -1, operaDistance = 5,  },
 [1103] = { id = 1103, name = '虎灵狂暴', description = '激活蛮荒血液，技能不再冷却并获得50%移动速度和30%伤害加成，持续8秒；', actionId = 11003, nextSkillId = -1, operaDistance = -1,  },
