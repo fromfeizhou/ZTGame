@@ -67,7 +67,7 @@ function QuickBagPanel:onRush()
 				break
 			end
 		end
-		self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 90 * tempIndex}
+		self.m_Grid.sizeDelta={x = self.m_Grid.sizeDelta.x,y = 150 * tempIndex}
 
 	end
 end

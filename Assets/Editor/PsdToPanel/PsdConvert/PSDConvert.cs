@@ -148,8 +148,9 @@ namespace subjectnerdagreement.psdexport
 		private static void ExportSprite(List<PanelNode> layerList, string psdRootPath)
 		{
 			for (int i = 0; i < layerList.Count; i++) {
-				if (layerList [i].isGroup)
+				if (layerList [i].isGroup || !layerList[i].visible || !layerList[i].Parent.visible)
 					continue;
+
 				Texture2D tex = CreateTexture (layerList[i].layer);
 				if (tex != null) {
 					string fileName = layerList[i].Name.Trim() + ".png";
@@ -180,7 +181,6 @@ namespace subjectnerdagreement.psdexport
 		{
 			if ((int)layer.Rect.width == 0 || (int)layer.Rect.height == 0)
 				return null;
-
 			// For possible clip to document functionality
 			//int fileWidth = psd.ColumnCount;
 			//int fileHeight = psd.RowCount;
