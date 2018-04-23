@@ -217,7 +217,7 @@ namespace subjectnerdagreement.psdexport
 			return tex;
 		}
 
-		private static void SaveAsset (Texture2D tex, string savePath)
+		public static void SaveAsset (Texture2D tex, string savePath)
 		{
 			byte[] buf = tex.EncodeToPNG ();
 			File.WriteAllBytes (savePath, buf);

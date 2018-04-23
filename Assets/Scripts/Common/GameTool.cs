@@ -8,7 +8,7 @@ using XLua;
 public class GameTool
 {
 	public static string ColorHex = string.Empty;
-
+	   
 	private static string _Parse(params object[] args)
 	{
 		string str = "";
@@ -88,7 +88,7 @@ public class GameTool
 		RectTransformUtility.ScreenPointToLocalPointInRectangle (rectCanvas, ScreenPos, canvas.worldCamera, out pos);
 		return pos;
 	}
-
+	   
 	public static Vector2 GetScreenPosToParentPos(RectTransform parentRect, Vector2 screenPos,Canvas canvas)
 	{
 		Vector2 pos;
@@ -103,5 +103,35 @@ public class GameTool
 		Transform[] transGo = gameObject.GetComponentsInChildren<Transform> ();
 		for (int i = 0; i < transGo.Length; i++)
 			transGo [i].gameObject.layer = layerNum;
+	}
+
+	public static Texture2D CaptureScreen(Camera camera)
+	{
+		Rect rect = new Rect (0,0,2048,2048);
+		// 创建一个RenderTexture对象  
+
+		// 临时设置相关相机的targetTexture为rt, 并手动渲染相关相机  
+		camera.Render();  
+		//ps: --- 如果这样加上第二个相机，可以实现只截图某几个指定的相机一起看到的图像。  
+		//ps: camera2.targetTexture = rt;  
+		//ps: camera2.Render();  
+		//ps: -------------------------------------------------------------------  
+
+		// 激活这个rt, 并从中中读取像素。  
+		RenderTexture.active = camera.targetTexture;  
+		Texture2D screenShot = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGB24,false);  
+		screenShot.ReadPixels(rect, 0, 0);// 注：这个时候，它是从RenderTexture.active中读取像素  
+		screenShot.Apply();  
+
+		// 重置相关参数，以使用camera继续在屏幕上显示  
+		//ps: camera2.targetTexture = null;  
+		RenderTexture.active = null; // JC: added to avoid errors  
+		// 最后将这些纹理数据，成一个png图片文件  
+		byte[] bytes = screenShot.EncodeToPNG();  
+		string filename = Application.dataPath + "/Screenshot.png";  
+		System.IO.File.WriteAllBytes(filename, bytes);  
+		Debug.Log(string.Format("截屏了一张照片: {0}", filename));  
+
+		return screenShot;
 	}
 }

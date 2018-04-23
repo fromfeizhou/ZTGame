@@ -166,14 +166,6 @@ function MapRadarPanel:_CreatePlayer( playerId )
 	local playRectTransform = playTransform:GetComponent("RectTransform")
 	playTransform.name = playerId
 	local ztImg = playTransform:GetComponent("ZTImage")
-	if ztImg then
-		if playerId == GlobalBattleCtrl:GetOwnerId() then
-			ztImg.color = CSColor.green;
-		else
-			ztImg.color = CSColor.yellow;
-		end
-	end
-
 	playTransform.gameObject:SetActive(true)
 	return playRectTransform
 end
@@ -190,7 +182,7 @@ function MapRadarPanel:_UpdatePlayer()
 
 			local pos = v:GetPos()
 			--GCSLog("===================================MapRadarPanel:_UpdatePlayer",v:GetBattleId(),v:GetPos())
-			self.m_playerList[playerId].anchoredPosition = {x=pos.x, y = pos.z}
+			self.m_playerList[playerId].anchoredPosition = {x = pos.x * 2, y = pos.z * 2} 
 			self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 
 			if playerId == GlobalBattleCtrl:GetOwnerId() then
