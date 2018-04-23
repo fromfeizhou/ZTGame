@@ -56,6 +56,7 @@ function GlobalBattleCtrl:Init()
 
 	--技能圈
 	SkillAreaManager:Init()
+	SpEffectManager:Init()
 
 	--****************管理者初始化end************************************************
 
@@ -86,6 +87,7 @@ function GlobalBattleCtrl:Destroy()
 
 	--技能圈
 	SkillAreaManager:Destroy()
+	SpEffectManager:Destroy()
 
 	--物资预设管理
 	BattleMapMgr:Destroy()

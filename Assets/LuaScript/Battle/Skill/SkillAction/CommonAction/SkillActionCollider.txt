@@ -204,6 +204,19 @@ function SkillActionCollider:_CreateEffect()
 	end
 
 	self.m_spriteEffGo = CSGameObject("ColliderEffect")
+
+	--创建特效
+	local spGo = SpEffectManager:LoadSpAsset(self.m_spriteEffName)
+	if spGo then
+		CSGameObject.Instantiate(spGo,self.m_spriteEffGo.transform)
+	else
+		CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
+			if target and self.m_spriteEffGo then
+				local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)
+			end
+		end)
+	end
+	
 	CS.AssetManager.LoadAsset(PathManager:GetSkillParticle(self.m_spriteEffName),function (target,path)
 		if target and self.m_spriteEffGo then
 			local go = CSGameObject.Instantiate(target,self.m_spriteEffGo.transform)

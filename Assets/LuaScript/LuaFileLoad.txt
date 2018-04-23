@@ -81,6 +81,7 @@ local LuaFileLoad = {
 		"Battle.Manager.BattleItemManager",
 		"Battle.Manager.BattleCameraMgr",
 		"Battle.Manager.MapCircleManager",
+		"Battle.Manager.SpEffectManager",
 
 		"Battle.BattleCommand.BattleCommand",
 		"Battle.BattleCommand.BattleCommandMgr",
