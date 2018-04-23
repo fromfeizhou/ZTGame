@@ -74,7 +74,22 @@ public class AssetBundleBuilder : MonoBehaviour
         BuildAssetResource(assetBundlesPath + "Wins/AssetBundle");
     }
 
-    
+    [MenuItem("CYH_Tools/AB_Packager/Build_ALL_Android")]
+    public static void BuildAllAndroidResource()
+    {
+        CSObjectWrapEditor.Generator.ClearAll();
+        CSObjectWrapEditor.Generator.GenAll();
+        target = BuildTarget.Android;
+        BuildAssetBundleName();
+        string path = Application.dataPath + "/StreamingAssets/AssetBundle";
+        if (Directory.Exists(path))
+        {
+            File.Delete(path);
+        }
+        BuildAssetResource(path);
+    }
+
+
 
     static void BuildAssetResource(string assetPath)
     {
