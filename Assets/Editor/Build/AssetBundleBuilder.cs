@@ -74,25 +74,31 @@ public class AssetBundleBuilder : MonoBehaviour
         BuildAssetResource(assetBundlesPath + "Wins/AssetBundle");
     }
 
-    [MenuItem("CYH_Tools/AB_Packager/Build_ALL_Android")]
+    [MenuItem("CYH_Tools/Build_Packager/Build_ALL_Android")]
     public static void BuildAllAndroidResource()
     {
         CSObjectWrapEditor.Generator.ClearAll();
+        AssetDatabase.Refresh();
         CSObjectWrapEditor.Generator.GenAll();
         target = BuildTarget.Android;
-        BuildAssetBundleName();
+        //BuildAssetBundleName();
         string path = Application.dataPath + "/StreamingAssets/AssetBundle";
+       
         if (Directory.Exists(path))
         {
-            File.Delete(path);
+            Directory.Delete(path,true);
         }
+        AssetDatabase.Refresh();
         BuildAssetResource(path);
 
         string pathout = "E:/ZTGameAndroid.apk";
-        if (Directory.Exists(pathout))
+        FileInfo fileInfoOut = new FileInfo(pathout);
+        if (fileInfoOut.Exists)
         {
-            File.Delete(pathout);
+            fileInfoOut.Delete();
         }
+
+        AssetDatabase.Refresh();
         BuildPipeline.BuildPlayer(GetBuildScenes(), pathout, BuildTarget.Android, BuildOptions.None);
     }
 
