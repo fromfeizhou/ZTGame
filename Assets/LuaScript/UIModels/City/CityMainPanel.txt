@@ -142,7 +142,7 @@ end
 
 function CityMainPanel:_UpdateHeroModel( roleModelId )
 	self.m_roleModelId = roleModelId
-	if self.m_heroModelList and self.m_heroModelList[roleModelId] and GameObjectIsNotNull(self.m_heroModelList[roleModelId]) then
+	if self.m_heroModelList and self.m_heroModelList[roleModelId] then
 		self:_RushHeroModel()
 	else
 		self:_LoadHeroModel(roleModelId)
