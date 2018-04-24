@@ -18,7 +18,7 @@ CityMainPanel = {
 	m_selectBtnList = {},
 
 	m_roleId,
-	m_roldModelId,
+	m_roleModelId,
 	m_heroModelRoot,
 
 	m_noticeHero,
@@ -131,33 +131,32 @@ function CityMainPanel:_SelectHero(roleId)
 	end
 
 	self.m_roleId = roleId
-	self.m_roleModelId 			= Tab_Hero[self.m_roleId].modelid
 	self.m_txtNickName.text 	= Tab_Hero[self.m_roleId].name
 	self.m_noticeHeroName.text 	= Tab_Hero[self.m_roleId].name
 	self.m_noticeHeroType.text 	= Tab_HeroPro[Tab_Hero[self.m_roleId].type].name
 	self.m_noticeHeroDesc.text 	= Tab_Hero[self.m_roleId].desc
-	self:_UpdateHeroModel()
+	self:_UpdateHeroModel(Tab_Hero[self.m_roleId].modelid)
 	self.m_selectBtnList[self.m_roleId].targetGraphic.color = CSColor.white
 
 end
 
-function CityMainPanel:_UpdateHeroModel(  )
-
-	self.m_roldModelId = Tab_Hero[self.m_roleId].name
-
-	if self.m_heroModelList and self.m_heroModelList[self.m_roleModelId] then
-		for k,v in pairs(self.m_heroModelList) do
-			self.m_heroModelList[k]:SetActive(k == self.m_roleModelId)
-		end
+function CityMainPanel:_UpdateHeroModel( roleModelId )
+	self.m_roleModelId = roleModelId
+	if self.m_heroModelList and self.m_heroModelList[roleModelId] and GameObjectIsNotNull(self.m_heroModelList[roleModelId]) then
+		self:_RushHeroModel()
 	else
-		self:_LoadHeroModel(self.m_roleModelId)
+		self:_LoadHeroModel(roleModelId)
 	end
-
 end
 
-function CityMainPanel:_LoadHeroModel( modelId )
-	local heroModelPath = PathManager:GetHeroModelPath(modelId)
-	LogC("CityMainPanel:_LoadHeroModel",modelId,heroModelPath)
+function CityMainPanel:_RushHeroModel()
+	for k,v in pairs(self.m_heroModelList) do
+		self.m_heroModelList[k]:SetActive(k == self.m_roleModelId)
+	end
+end
+
+function CityMainPanel:_LoadHeroModel( roleModelId )
+	local heroModelPath = PathManager:GetHeroModelPath(roleModelId)
 	CS.AssetManager.LoadAsset(heroModelPath,function(target,path)
  		if target then
  			local heroModelGo = CSGameObject.Instantiate(target)
@@ -166,12 +165,13 @@ function CityMainPanel:_LoadHeroModel( modelId )
  			heroModelGo.transform.localEulerAngles 	= CSVector3.zero
  			heroModelGo.transform.localScale 		= CSVector3.one
  			CSSetGameObjectLayer(heroModelGo,"UILayer_Normal")
- 			self.m_heroModelList[modelId] = heroModelGo
- 			self:_UpdateHeroModel(modelId)
-			LogC("CityMainPanel:_LoadHeroModel - Finish",self.m_heroModelList[modelId])
+ 			self.m_heroModelList[roleModelId] = heroModelGo
+			self:_RushHeroModel()
 		end
 	end)
 end
+
+
 
 
 function CityMainPanel:_OnClick_Hero_OnDown()
