@@ -73,10 +73,15 @@ function MapCircleManager:CheckSafeCircleTip(curFrameNum)
 		if nowGameTime > Tab_TipSafeCircle[curTipIndex].activeTime then
 			LogC("MapCircleManager:CheckSafeCircleTip()",curTipIndex,Tab_TipSafeCircle[curTipIndex].offSetX,Tab_TipSafeCircle[curTipIndex].offSetY)
 			local safeCircleTip = Tab_TipSafeCircle[curTipIndex]
-			local tipContent =  safeCircleTip.tipContent
-			local showTime =  safeCircleTip.showTime
-			local offSet = CSVector2(safeCircleTip.offSetX,safeCircleTip.offSetY)
-			PanelManager:ShowTip(tipContent,showTime * 0.001,offSet)
+
+			--tip参数
+			local tipData = {
+				tip = safeCircleTip.tipContent,
+				showTime = safeCircleTip.showTime * 0.001,
+				offSet = CSVector2(safeCircleTip.offSetX,safeCircleTip.offSetY),
+			}
+			PanelManager:ShowTip(tipData)
+
 			curTipIndex = curTipIndex + 1
 		end
 	end

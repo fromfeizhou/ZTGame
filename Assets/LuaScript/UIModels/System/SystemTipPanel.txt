@@ -92,6 +92,10 @@ function SystemTipPanel:AddTip(tipData)
 		shotTime = tipData.showTime
 	end
 
+	if tipData.tipType then
+		--[[ Tip 类型 ]]
+	end
+
 	_heartTimer:SetParam(shotTime,1)
 
 	TimerManager:AddTimer(_heartTimer)
