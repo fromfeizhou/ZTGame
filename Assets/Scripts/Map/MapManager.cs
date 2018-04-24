@@ -149,17 +149,18 @@ public class MapManager : Singleton<MapManager>
     };
 
 
-
+    private Vector3 tempPos;
     public void InitMap(Action<string, float, float> mapUpdateProcess, Vector3 pos = default(Vector3))
     {
         _isInit = false;
+        tempPos = pos;
         mapBlockDataDic = new Dictionary<string, MapBlockData>();
         mapHeightBlockData=new Dictionary<string, MapBlockData>();
         Debug.Log("MapManager:Init");
         mapView = new MapElementView();
-        mapView.SetBigMapKey(pos);
+        mapView.SetBigMapKey(tempPos);
         mapTilesViewMgr =new MapTileViewMgr();
-        mapTilesViewMgr.SetBigMapKey(pos);
+        mapTilesViewMgr.SetBigMapKey(tempPos);
         _mapUpdateProces = mapUpdateProcess;
         loadIndex = 0;
         assetPaths = new List<string>();
@@ -176,7 +177,11 @@ public class MapManager : Singleton<MapManager>
         assetCallbackList.Add(LoadHeightBlockData);
         assetCallbackList.Add(LoadMapTilesAsset);
         assetCallbackList.Add(LoadMapAsset);
-        assetCallbackList.Add((x, y) => {/* SetMapCenterPos(pos); */});
+        assetCallbackList.Add((x, y) =>
+        {
+           // Debug.LogError("C#>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            SetMapCenterPos(tempPos);
+        });
         LoadNextAsset();
 
     }
@@ -339,13 +344,14 @@ public class MapManager : Singleton<MapManager>
     {
         if (_isInit == false)
         {
+            tempPos = pos;
             return;
         }
 
-        mapView.UpdateRoleRay(pos);
+        //mapView.UpdateRoleRay(pos);
 
         //4月底测试，初始化完毕创建所有先屏蔽
-        // SetMapCenterPos(pos);
+         SetMapCenterPos(pos);
     }
 
     private float maptileInterval = MapDefine.TilesGridInterval;//MapDefine.MapWidth / 4f;
