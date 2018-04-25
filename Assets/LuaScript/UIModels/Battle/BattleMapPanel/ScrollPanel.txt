@@ -89,7 +89,6 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function ScrollPanel:_onValueChanged(value)
-	--local curSize = CSVector2.Lerp(m_viewPort.sizeDelta)
-	
 	self.m_battleMapBase:SetScale(value)
+	self.m_battleMapBase:CheckViewPortClamped(self.m_viewPort.sizeDelta)
 end
