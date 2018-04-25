@@ -59,24 +59,15 @@ function LuaGameStart:StartLoadMgr()
 			self:StartLoadMgr()
 		end )
 	else
-		self:_ShowPanel_Login()
+		self:_OnGameInitFinish()
 	end 
 end
 
 function LuaGameStart:_OnGameInitFinish( )
 	LogC("LuaGameStart:_OnGameInitFinish")
-	self:_ShowPanel_Login()
+	ZTLoginScene:InitScene()
 end
 
-
---@brief 显示登录界面
-function LuaGameStart:_ShowPanel_Login()
-	local modelData = {
-		modelType = MODEL_TYPE.LOGIN,
-		panelType = LOGIN_TYPE.MAIN,
-	}
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
-end
 
 --@brief 进入主城场景
 function LuaGameStart:EnterGameCity()

@@ -187,10 +187,10 @@ end
 
 --@brief 创建 地图卷轴
 function BattleMainPanel:_CreateMapScrollPanel(mapBaseGo)
-		local panel = {}
+	local panel = {}
 	setmetatable( panel, { __index = ScrollPanel })
 	local mapBasePanel = BattleMapBase:Create(mapBaseGo)
-	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, mapBasePanel)
+	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, mapBasePanel, UIBasePanel:GetCanvas())
 	self.m_tScrollPanel = panel
 
 end

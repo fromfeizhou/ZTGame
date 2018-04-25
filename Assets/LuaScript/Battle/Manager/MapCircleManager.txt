@@ -55,6 +55,12 @@ function MapCircleManager:Init()
 		self:DebugInitMapCircleCommand()
 	end
 
+--临时处理
+	math.randomseed(os.time())
+	for i = 1,#Tab_KillTips do
+		Tab_KillTips[i].randNum=math.random(Tab_KillTips[i].timeMin,Tab_KillTips[i].timeMax)
+	end
+
 end
 
 --@brief 移除
@@ -69,6 +75,7 @@ function MapCircleManager:UpdateCommand()
 	local curFrameNum = GlobalBattleCtrl:GetCurCommandFrame()
 	self:CalculationCircle(curFrameNum)
 	self:CheckSafeCircleTip(curFrameNum)
+	self:TipsKillHero(curFrameNum)
 	self:UpdateCircleFBX()
 end
 
@@ -76,6 +83,7 @@ local curTipIndex = 1
 function MapCircleManager:CheckSafeCircleTip(curFrameNum)
 	if Tab_TipSafeCircle and curTipIndex <= #Tab_TipSafeCircle then 
 		local nowGameTime = math.ceil(curFrameNum/GameConfig.CommandFrameNum) * 1000
+		
 		if nowGameTime > Tab_TipSafeCircle[curTipIndex].activeTime then
 			LogC("MapCircleManager:CheckSafeCircleTip()",curTipIndex,Tab_TipSafeCircle[curTipIndex].offSetX,Tab_TipSafeCircle[curTipIndex].offSetY)
 			local safeCircleTip = Tab_TipSafeCircle[curTipIndex]
@@ -92,6 +100,28 @@ function MapCircleManager:CheckSafeCircleTip(curFrameNum)
 		end
 	end
 end
+
+local curKillTipIndex = 1
+function MapCircleManager:TipsKillHero(curFrameNum)
+	if Tab_KillTips and curKillTipIndex <= #Tab_KillTips then 
+		local nowGameTime = math.ceil(curFrameNum/GameConfig.CommandFrameNum) * 1000
+		if nowGameTime > Tab_KillTips[curKillTipIndex].randNum then
+			LogC("MapCircleManager:TipsKillHero()",curKillTipIndex,Tab_KillTips[curTipIndex].offSetX,Tab_TipSafeCircle[curTipIndex].offSetY)
+			local safeCircleTip = Tab_KillTips[curKillTipIndex]
+
+			--tip参数
+			local tipData = {
+				tip = safeCircleTip.killTips,
+				showTime = safeCircleTip.showTime * 0.001,
+				offSet = CSVector2(safeCircleTip.offSetX,safeCircleTip.offSetY),
+			}
+			PanelManager:ShowSkillTip(tipData)
+
+			curKillTipIndex = curKillTipIndex + 1
+		end
+	end
+end
+
 
 --@brief 收到服务器毒圈信息
 function MapCircleManager:SetMapCircleCommand(p_map_circle)

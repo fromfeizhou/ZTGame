@@ -12,6 +12,9 @@ BattleMapBase = {
 	m_transform = nil,
 	m_rectTransform = nil,
 
+	m_playerList,
+	m_mapFlagList,
+
 	m_pixel = 0,
 	m_meter = 0,
 	m_ratio = 0,
@@ -41,6 +44,10 @@ end
 
 function BattleMapBase:GetViewPortPos(realPos)
 	return realPos * self.m_ratio * self.m_scale
+end
+
+function BattleMapBase:GetRealPos(viewPortPos)
+	return viewPortPos /(self.m_ratio * self.m_scale)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -117,15 +124,7 @@ end
 --*******************************************************Public End*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-function BattleMapBase:GetOwnerCharaViewPortPos()
-	local chara = GlobalBattleCtrl:GetOwnerChara()
-	if chara then
-		local pos = chara:GetPos()
-		return self:GetViewPortPos(CSVector2(pos.x,pos.z))
-	end
-end
-
-function BattleMapBase:SetMapBasePos( pos)
+function BattleMapBase:SetMapBasePos(pos)
 	self.m_rectTransform.anchoredPosition = pos
 	if checkClamped then 
 		self:CheckViewPortClamped()
@@ -177,8 +176,6 @@ function BattleMapBase:_UpdatePlayer()
 end
 --@brief 在地图上创建一个坐标标识
 function BattleMapBase:_CreateMapFlag( playerId )
-	LogC(self.m_preMapFlagItem)
-	LogC(self.m_mapFlagItemParent)
 	local flagTransform = CSTransform.Instantiate(self.m_preMapFlagItem,self.m_mapFlagItemParent)
 	local flagRectTransform = flagTransform:GetComponent("RectTransform")
 	flagTransform.name = playerId
@@ -200,7 +197,7 @@ function BattleMapBase:_UpdateMapFlag()
 		if not self.m_mapFlagList then self.m_mapFlagList = {} end
 		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
 			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
-			self.m_mapFlagList[playerId].anchoredPosition = flagPos * minMapView/maxMapView * self.m_scaleValue
+			self.m_mapFlagList[playerId].anchoredPosition = self:GetViewPortPos(flagPos)
 		end
 	end
 end

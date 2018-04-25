@@ -45,6 +45,7 @@ local LuaFileLoad = {
 		"UIModels.System.SystemTipPanel",
 
 		--登录模块
+		"UIModels.Login.ZTLoginScene",
 		"UIModels.Login.LoginModel",
 		"UIModels.Login.LoginMainPanel",
 		"UIModels.Login.LoginCreateRolePanel",
@@ -58,7 +59,7 @@ local LuaFileLoad = {
 
 		"ALuaConfig.Tab_Hero",
 		"ALuaConfig.Tab_HeroPro",
-		
+		"ALuaConfig.Tab_KillTips",
 		"ALuaConfig.Tab_Skill",
 		"ALuaConfig.Tab_SkillType",
 		"ALuaConfig.Tab_SkillTeam",
