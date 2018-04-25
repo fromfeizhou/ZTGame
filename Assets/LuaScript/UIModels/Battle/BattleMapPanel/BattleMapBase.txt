@@ -149,7 +149,6 @@ function BattleMapBase:CheckViewPortClamped( viewPortSize )
 	if curValueY < clampMinY then curValueY = clampMinY end
 	if curValueY > clampMaxY then curValueY = clampMaxY end
 
-	LogC(clampMinX,curValueX,clampMaxX, " ==== ", clampMinY,curValueY,clampMaxY)
 	local pos = CSVector2(curValueX-self.m_rectTransform.sizeDelta.x, curValueY-self.m_rectTransform.sizeDelta.y)
 	self.m_rectTransform.anchoredPosition = pos
 end
