@@ -75,7 +75,7 @@ public class ZTSkillLuaEditor
     public List<ZtEdFrameData> LoadSkillLua(string skillId)
     {
         //DoString("Battle.Skill.SkillDefine");
-        DoString("ALuaConfig.SkillActionConfig");
+        DoString("ALuaConfig.Local.SkillActionConfig");
         //DoString("Battle.skill.MoveAction.MoveActionConfig");
         SkillConfigTab = luaenv.Global.Get<LuaTable>("SkillActionConfig");//映射到LuaTable，by ref
 
@@ -145,7 +145,7 @@ public class ZTSkillLuaEditor
         LuaTable table = luaenv.Global.Get<LuaTable>(tablename);//映射到LuaTable，by ref
        
     }
-    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/SkillActionConfig.txt";
+    string SkillTabSavePath = "Assets/LuaScript/ALuaConfig/Local/SkillActionConfig.txt";
     public void SaveSkillTable()
     {
         if (File.Exists(SkillTabSavePath))

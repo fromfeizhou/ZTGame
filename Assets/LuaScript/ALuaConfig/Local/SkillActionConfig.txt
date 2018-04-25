@@ -151,4 +151,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10003"
+SkillActionConfig.TestSkillId = "id_10001"
