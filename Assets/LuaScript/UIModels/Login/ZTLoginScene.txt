@@ -1,0 +1,62 @@
+
+--ZTLoginScene.txt
+--@breif 战斗场景
+--@data 2018/03/07
+ZTLoginScene = {
+	
+}
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSLog = CS.GameTool.Log
+local CSSceneManager = CS.ZTSceneManager
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 切换战斗场景
+function ZTLoginScene:InitScene()
+	CSSceneManager.GetInstance():ReplaceScene("LoginScene", function() self:_SceneReplaceComplete() end)
+end
+
+function ZTLoginScene:Update()
+end
+
+function ZTLoginScene:Destroy()
+	self:_UnInt()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 场景加载完毕
+function ZTLoginScene:_SceneReplaceComplete()
+	self:_Init()
+	local modelData = {
+		modelType = MODEL_TYPE.LOGIN,
+		panelType = LOGIN_TYPE.MAIN,
+	}
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
+
+end
+
+
+--@brief 战斗场景初始化
+function ZTLoginScene:_Init()
+	--初始化场景管理器
+	self:_AddEvent()
+end
+
+--@brief 战斗场景初始化
+function ZTLoginScene:_UnInt()
+	self:_RemoveEvent()
+end
+
+--@brief 监听事件
+function ZTLoginScene:_AddEvent()
+end
+
+--@brifef 移除事件
+function ZTLoginScene:_RemoveEvent()
+end

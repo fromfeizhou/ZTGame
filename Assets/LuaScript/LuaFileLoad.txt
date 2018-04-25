@@ -44,6 +44,7 @@ local LuaFileLoad = {
 		"UIModels.System.SystemTipPanel",
 
 		--登录模块
+		"UIModels.Login.ZTLoginScene",
 		"UIModels.Login.LoginModel",
 		"UIModels.Login.LoginMainPanel",
 		"UIModels.Login.LoginCreateRolePanel",
