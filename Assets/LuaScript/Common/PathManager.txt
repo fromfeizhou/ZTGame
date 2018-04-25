@@ -21,7 +21,8 @@ PathManager = {
 	m_sBattleUINum 		= "Assets/Prefabs/Model/Battle/",		--战斗ui数字
 	m_sSkillParticles 	= "Assets/Particles/Skill/",				--技能粒子地址
 	m_sSkillIcon 		= "Assets/ResourcesLib/Images/PanelPng/Fight/SkillIcon/", --技能图标地址
-	m_sItemIcon			= "Assets/ResourcesLib/Images/ItemIcon/"   					--物品图标地址
+	m_sItemIcon			= "Assets/ResourcesLib/Images/ItemIcon/",   					--物品图标地址
+	m_sTipsPath			= "Assets/Prefabs/Model/System/Tips/",
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -101,6 +102,14 @@ function PathManager:GetItemIcon(name )
 
 	return PathManager.m_sItemIcon .. name .. ".png"
 end
+
+--@brief 获取tips预设
+function PathManager:GetTipePrefabPath(name) 
+
+	return PathManager.m_sTipsPath .. name ..".Prefab"
+
+end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

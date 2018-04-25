@@ -16,7 +16,7 @@ AnimaEvent = {
 	UpdatePos = "UpdatePos",		--更新位置
 	UpdateRotate = "UpdateRotate",		--角度旋转
 	ChangeTranslucence = "ChangeTranslucence",		--改变半透明
-	UpdateModel = "UpdateModel",
+	UpdateModel = "UpdateModel",		--更新模型
 }
 
 EquiptType = {
