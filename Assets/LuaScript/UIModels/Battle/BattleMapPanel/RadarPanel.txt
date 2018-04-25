@@ -100,7 +100,12 @@ end
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function RadarPanel:_UpdateMapBasePos()
-	local playerPos = self.m_battleMapBase:GetOwnerCharaViewPortPos()
-	self.m_ztTxt_PlayerPos.text =string.format("%d,%d", math.ceil(playerPos.x), math.ceil(playerPos.y))
-	self.m_battleMapBase:SetMapBasePos(self.m_mapPosOffSet-playerPos)
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		local worldPos = chara:GetPos()
+		local playerPos = CSVector2(worldPos.x,worldPos.z)
+		self.m_ztTxt_PlayerPos.text =string.format("%d,%d", math.ceil(playerPos.x), math.ceil(playerPos.y))
+		local viewPortPos = self.m_battleMapBase:GetViewPortPos(playerPos)
+		self.m_battleMapBase:SetMapBasePos(self.m_mapPosOffSet-viewPortPos)
+	end
 end
