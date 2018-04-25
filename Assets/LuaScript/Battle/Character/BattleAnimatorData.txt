@@ -49,14 +49,6 @@ function BattleAnimatorData:UpdatePos(pos)
 	self:_SetPosDelay(pos)
 end
 
---@brief 更新角度
---@param vector3 dir
-function BattleAnimatorData:UpdateRotate(pos)
-	self.m_tTargetRotate = pos
-	self:_SetRotateDelay(pos)
-	--AnimatorData.UpdateRotate(self,dir)
-end
-
 --@brief 移动
 function BattleAnimatorData:MoveToPos(moveDir,pos)
 	if moveDir == BattleDir.None then
@@ -67,11 +59,6 @@ function BattleAnimatorData:MoveToPos(moveDir,pos)
 	self:_SetPosDelay(pos)
 end
 
---@brief 补间动画更新(界面刷新调用)
-function BattleAnimatorData:UpdateDelayView(dt)
-	self:_UpdatePosDelay(dt)
-	self:_UpdateRotateDelay(dt)
-end
 
 --@brief 播放动作
 --@param 动作名
@@ -83,6 +70,19 @@ function BattleAnimatorData:Play(name)
 	AnimatorData.Play(self,name)
 end
 
+--@brief 更新角度
+--@param vector3 dir
+function BattleAnimatorData:UpdateRotate(pos)
+	self.m_tTargetRotate = pos
+	self:_SetRotateDelay(pos)
+	--AnimatorData.UpdateRotate(self,dir)
+end
+
+--@brief 补间动画更新(界面刷新调用)
+function BattleAnimatorData:UpdateDelayView(dt)
+	self:_UpdatePosDelay(dt)
+	self:_UpdateRotateDelay(dt)
+end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
