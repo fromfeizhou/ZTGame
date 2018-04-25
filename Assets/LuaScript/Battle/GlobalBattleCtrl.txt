@@ -144,19 +144,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 数据相关管理相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@rife 清理战斗场景
-function GlobalBattleCtrl:DestroyBattle()
-	local battleModel = ModelManager:_GetModel( MODEL_TYPE.BATTLE )
-	if battleModel then battleModel:_CleanPanel() end
-	GlobalBattleCtrl:Destroy()
-end
-
---@rife 退出战斗
-function GlobalBattleCtrl:ExitBattle()
-	GlobalBattleCtrl:DestroyBattle()
-	ZTCityScene:InitScene()
-end
-
 --@rife 初始化数据（单机测试使用）
 function GlobalBattleCtrl:InitData()
 	--test 测试代码
