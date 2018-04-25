@@ -125,7 +125,32 @@ function BattleMapBase:GetOwnerCharaViewPortPos()
 	end
 end
 
-function BattleMapBase:SetMapBasePos( pos )
+function BattleMapBase:SetMapBasePos( pos)
+	self.m_rectTransform.anchoredPosition = pos
+	if checkClamped then 
+		self:CheckViewPortClamped()
+	end
+end
+
+function BattleMapBase:CheckViewPortClamped( viewPortSize )
+
+	local curValueX = self.m_rectTransform.sizeDelta.x + self.m_rectTransform.anchoredPosition.x
+	local curValueY = self.m_rectTransform.sizeDelta.y + self.m_rectTransform.anchoredPosition.y
+
+	local clampMinX = viewPortSize.x
+	local clampMaxX = self.m_rectTransform.sizeDelta.x
+	local clampMinY = viewPortSize.y
+	local clampMaxY = self.m_rectTransform.sizeDelta.y
+
+
+	if curValueX < clampMinX then curValueX = clampMinX end
+	if curValueX > clampMaxX then curValueX = clampMaxX end
+
+	if curValueY < clampMinY then curValueY = clampMinY end
+	if curValueY > clampMaxY then curValueY = clampMaxY end
+
+	LogC(clampMinX,curValueX,clampMaxX, " ==== ", clampMinY,curValueY,clampMaxY)
+	local pos = CSVector2(curValueX-self.m_rectTransform.sizeDelta.x, curValueY-self.m_rectTransform.sizeDelta.y)
 	self.m_rectTransform.anchoredPosition = pos
 end
 
