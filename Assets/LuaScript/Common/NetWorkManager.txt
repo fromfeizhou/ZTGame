@@ -158,7 +158,16 @@ end
 --@brief 网络状态事件 - 网络发生异常
 function NetWorkManager:_OnException(exception)
 	self:_CloseHeart()
-	GGCSLog("[NetWorkManager:_OnException]" , exception:ReadString())
+	GCSLog("CityMainPanel:_ShowNotice",noticeStr)
+	local modelData = {
+		modelType = MODEL_TYPE.SYSTEM,
+		panelType = SYSTEM_TYPE.NOTICE,
+		panelData = {
+			noticeStr = noticeStr,
+			handle = ZTLoginScene:InitScene()
+		}
+	}
+	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
 end
 
 --@brief 网络状态事件 - 网络断线
