@@ -22,7 +22,6 @@ setmetatable( ZTBattleScene, { __index = ZTBaseScene})
 --@brief 切换战斗场景
 function ZTBattleScene:InitScene()
 
-	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
 	self:_ShowBattleUI()
 	PanelManager:SetLoadingProgress(0.3)
 
@@ -30,8 +29,6 @@ function ZTBattleScene:InitScene()
 end
 
 function ZTBattleScene:Update(dt)
-	ZTBaseScene.Update(self,ts)
-
 	GlobalBattleCtrl:Update(dt)
 end
 

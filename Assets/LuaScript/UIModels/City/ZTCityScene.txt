@@ -17,45 +17,25 @@ local CSSceneManager = CS.ZTSceneManager
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 切换战斗场景
 function ZTCityScene:InitScene()
-	CSSceneManager.GetInstance():ReplaceScene("CityScene", function() self:_SceneReplaceComplete() end)
+	ZTBaseScene.InitScene(self,"CityScene")
 end
 
-function ZTCityScene:Update()
+function ZTCityScene:Update(dt)
 end
 
 function ZTCityScene:Destroy()
-	self:_UnInt()
+	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 场景加载完毕
 function ZTCityScene:_SceneReplaceComplete()
-	self:_Init()
+	ZTBaseScene._SceneReplaceComplete(self)
 	GCSLog("------------------------------------ZTCityScene:_SceneReplaceComplete")
 	--显示场景主面板
 	local loginPanelData = {}
 	loginPanelData.modelType = MODEL_TYPE.CITY
 	loginPanelData.panelType = CITY_TYPE.MAIN
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
-end
-
-
---@brief 战斗场景初始化
-function ZTCityScene:_Init()
-	--初始化场景管理器
-	self:_AddEvent()
-end
-
---@brief 战斗场景初始化
-function ZTCityScene:_UnInt()
-	self:_RemoveEvent()
-end
-
---@brief 监听事件
-function ZTCityScene:_AddEvent()
-end
-
---@brifef 移除事件
-function ZTCityScene:_RemoveEvent()
 end
