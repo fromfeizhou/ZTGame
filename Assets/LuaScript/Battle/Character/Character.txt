@@ -528,8 +528,10 @@ function Character:UpdatePos(pos,isMove)
 	-- CS.GameTool.LogError("Character:UpdatePos",self.m_charaPos,pos,self.m_charaPos.Equals(pos))
 	if not self.m_charaPos.Equals(pos) then
 		--设置高度
-		local height = BattleMapHeight:GetHight(pos)
-		pos.y = height
+		if self:IsInCamera() then
+			local height = BattleMapHeight:GetHight(pos)
+			pos.y = height
+		end
 
 		self.m_charaPos = pos
 		self.m_ztCollider:SetPos(pos.x,pos.y + BattleDefine.PlayerHeight,pos.z)
