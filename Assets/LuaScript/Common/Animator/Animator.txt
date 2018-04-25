@@ -11,12 +11,14 @@ local CSZTAnimator = CS.ZTAnimator
 
 
 Animator = {
-	m_goAnima, --挂钩object
-	m_ztAnima, --C#动作接口引用
-	m_animData,		--动画data
-	m_bIsInCamera,	--是否进入场景范围
-	m_conSpEffect, --特效容器
-	m_conSkill,		-- 技能范围
+	m_goAnima = nil, --挂钩object
+	m_ztAnima = nil, --C#动作接口引用
+	m_animData = nil,		--动画data
+	m_bIsInCamera = nil,	--是否进入场景范围
+	m_conSpEffect = nil, --特效容器
+	m_conSkill = nil,		-- 技能范围
+
+	m_sCurActionName = nil,	--当前动作
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -131,6 +133,9 @@ function Animator:_RushModelView(isChange)
 			self:_CreateAnimatorView()
 		end
 		self.m_goAnima:SetActive(true)
+		if self.m_sCurActionName and self.m_sCurActionName ~= "" then
+			self.m_ztAnima:Play(name)
+		end
 	else
 		self.m_goAnima:SetActive(false)
 		--self:_RemoveAnimatorView()
@@ -140,6 +145,7 @@ end
 --@brief 播放动作
 --@param 动作名
 function Animator:_OnPlay(name)
+	self.m_sCurActionName = name
 	self.m_ztAnima:Play(name)
 end
 
