@@ -15,7 +15,7 @@ ZTBaseScene = {
 --@brief 初始化
 function ZTBaseScene:InitScene(sceneName)
 	CSLog("ZTBaseScene:Init",name)
-	PanelManager:HideLoadingPanel()
+	PanelManager:ShowLoadingPanel()
 	CS.ZTSceneManager.GetInstance():ReplaceScene(sceneName, function() self:_SceneReplaceComplete() end)
 end
 
@@ -39,5 +39,8 @@ function ZTBaseScene:_SceneReplaceComplete()
    	local component = gameObject:AddComponent(typeof(CS.ZTBaseScene))
    	component:SetUpdate(function(dt) self:Update(dt) end)
    	component:SetDestroy(function() self:Destroy() end)
+
+
+	--PanelManager:HideLoadingPanel()
 end
 
