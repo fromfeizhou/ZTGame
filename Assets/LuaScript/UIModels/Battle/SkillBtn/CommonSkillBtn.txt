@@ -20,6 +20,9 @@ CommonSkillBtn = {
 	m_nCurIndex = nil,		--技能id
 	m_tSkillList = nil,		--下一个技能
 	m_tDistances = nil,		--技能距离
+
+	m_btnEffectRoot = nil,	--按钮特效节点
+	m_preBtnEffect = nil,	--按钮特效
 }
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -43,8 +46,8 @@ function CommonSkillBtn:Init(skillId,parent)
 	local callback_loadfinish = function(target,path)
 		self:_LoadAsseFinish(target,path)
 	end
-		
-	CS.AssetManager.LoadAsset(PathManager:GetUIWidgets("ZTButton"),callback_loadfinish)
+	LogC(PathManager:GetBatteUIPanel("SkillBaseBtn"))
+	CS.AssetManager.LoadAsset(PathManager:GetBatteUIPanel("SkillBaseBtn"),callback_loadfinish)
 end
 
 --@brief 移除
@@ -98,6 +101,9 @@ function CommonSkillBtn:_LoadAsseFinish(target,path)
 			self:_OnSkillBtnHandler()
 		end)
 
+		self.m_btnEffectRoot = self.m_transform:Find("BtnEffect")	--按钮特效节点
+		self.m_preBtnEffect = self.m_btnEffectRoot:Find("effImg")	--按钮特效
+
  		--刷新icon
  		self:_UpdateView()
 
@@ -124,6 +130,9 @@ end
 
 --@brief 技能按钮
 function CommonSkillBtn:_OnSkillBtnHandler()
+	
+	self:_ActiveEffect()
+
 	if not GlobalBattleCtrl:GetOwnerChara():CanUseSkillState() then
 		return
 	end
@@ -164,4 +173,10 @@ end
 function CommonSkillBtn:_GetCurSkillDic()
 	local distance = self.m_tDistances[self.m_nCurIndex] > 0 and self.m_tDistances[self.m_nCurIndex] or 0
 	return distance
+end
+
+
+function CommonSkillBtn:_ActiveEffect()
+	local effect = CSTransform.Instantiate(self.m_preBtnEffect,self.m_btnEffectRoot)
+	effect.gameObject:SetActive(true)
 end
