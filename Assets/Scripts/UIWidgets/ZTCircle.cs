@@ -21,8 +21,9 @@ public class ZTCircle : MonoBehaviour {
 	private float _radius;
 
 	private bool _show = false;
-
-	public RectTransform rectTransform;
+	public Color color;
+	private RectTransform rectTransform;
+	public Sprite lineSprite;
 
 	/** 初始化 */
 	public void Init(int lineCnt, bool awakeShow = false, float radius = 20)
@@ -31,6 +32,7 @@ public class ZTCircle : MonoBehaviour {
 		_show = awakeShow;
 		SetLineNum (lineCnt);
 		SetRadius (radius);
+		SetColor (color);
 	}
 
 	/** 设置颜色 */
@@ -51,7 +53,7 @@ public class ZTCircle : MonoBehaviour {
 		for (int i = 0; i < rectLineList.Count; i++) {
 			float width = _lineWidth;
 			float hight = rectLineList [i].sizeDelta.y;
-			rectLineList [i].sizeDelta.Set(width,hight);
+			rectLineList [i].sizeDelta = new Vector2 (width,hight);
 		}
 	}
 
@@ -68,6 +70,8 @@ public class ZTCircle : MonoBehaviour {
 				GameObject go = new GameObject ("Line_" + i.ToString());
 				RectTransform lineRect = go.AddComponent<RectTransform> ();
 				Image lineImg = go.AddComponent<Image> ();
+				if (lineSprite != null)
+					lineImg.sprite = lineSprite;
 				lineImg.raycastTarget = false;
 				lineRect.SetParent (transform);
 				lineRect.localPosition = Vector3.zero;
@@ -110,6 +114,15 @@ public class ZTCircle : MonoBehaviour {
 				rectLineList [i].localEulerAngles = Vector3.forward * i * _angle;
 			}
 		}
+	}
+
+	public void SetPos(Vector2 pos){
+		rectTransform.anchoredPosition = pos;
+	}
+
+	public void SetCircle(Vector2 pos, float radius){
+		SetPos (pos);
+		SetRadius (radius);
 	}
 
 	public void Switch(bool isShow)
