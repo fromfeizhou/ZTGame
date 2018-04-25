@@ -11,6 +11,7 @@ local CSVector2 = CS.UnityEngine.Vector2
 local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
 local CSScrollRect = CS.UnityEngine.UI.ScrollRect
+local CSGetScreenPosToParentPos = CS.GameTool.GetScreenPosToParentPos
 
 
 local MAP_VIEWPORT_SCALE = 2
@@ -19,6 +20,7 @@ ScrollPanel = {
 	m_battleMapBase = nil,
 	m_scrollView = nil,
 	m_viewPort = nil,
+	m_mapImg = nil,
 }
 
 setmetatable( ScrollPanel, { __index = UIBasePanel})
@@ -31,7 +33,8 @@ function ScrollPanel:GetRelativePath()
 	return "Panel/BattleMapPanel/"
 end
 
-function ScrollPanel:_LoadAssetPanel(parent, model, battleMapBase)
+function ScrollPanel:_LoadAssetPanel(parent, model, battleMapBase, canvas)
+	self.m_canvas = canvas
 	self.m_battleMapBase = battleMapBase
 	UIBasePanel._LoadAssetPanel(self, parent, model)
 	self.m_isShow = false
@@ -46,6 +49,10 @@ function ScrollPanel:onCreatePanel()
 	PanelWidget:GetButton(self.m_viewPort,"btnClose",function() self:Hide() end)
 	self.m_scrollView = self.m_transform:Find("ViewPort/Scroll View"):GetComponent(typeof(CSScrollRect))
 	self.m_scrollView.content = self.m_battleMapBase.m_transform
+
+	self.m_mapImg = self.m_scrollView.content:GetComponent("ZTImage")
+	self.m_mapImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
+
 	self.m_battleMapBase:InitMapBase(self.m_scrollView.viewport)
 	local slider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 	slider.minValue = self.m_viewPort.sizeDelta.x / self.m_battleMapBase:GetPixel()
@@ -92,3 +99,14 @@ function ScrollPanel:_onValueChanged(value)
 	self.m_battleMapBase:SetScale(value)
 	self.m_battleMapBase:CheckViewPortClamped(self.m_viewPort.sizeDelta)
 end
+
+
+function ScrollPanel:onClickMapScroll(clickPoint)
+	local viewPortPos = CSGetScreenPosToParentPos(self.m_mapImg.rectTransform,clickPoint,self.m_canvas)
+	MapCircleManager:Request_SendPlayerPosFlag(self.m_battleMapBase:GetRealPos(viewPortPos))
+end
+
+
+
+	
+	

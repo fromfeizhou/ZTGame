@@ -12,6 +12,9 @@ BattleMapBase = {
 	m_transform = nil,
 	m_rectTransform = nil,
 
+	m_playerList,
+	m_mapFlagList,
+
 	m_pixel = 0,
 	m_meter = 0,
 	m_ratio = 0,
@@ -41,6 +44,10 @@ end
 
 function BattleMapBase:GetViewPortPos(realPos)
 	return realPos * self.m_ratio * self.m_scale
+end
+
+function BattleMapBase:GetRealPos(viewPortPos)
+	return viewPortPos /(self.m_ratio * self.m_scale)
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -200,7 +207,7 @@ function BattleMapBase:_UpdateMapFlag()
 		if not self.m_mapFlagList then self.m_mapFlagList = {} end
 		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
 			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
-			self.m_mapFlagList[playerId].anchoredPosition = flagPos * minMapView/maxMapView * self.m_scaleValue
+			self.m_mapFlagList[playerId].anchoredPosition =    self:GetViewPortPos(flagPos)
 		end
 	end
 end
