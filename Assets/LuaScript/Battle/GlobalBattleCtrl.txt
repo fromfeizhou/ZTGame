@@ -241,10 +241,10 @@ function GlobalBattleCtrl:Update(dt)
 	--end
 
 	if GlobalBattleCtrl.m_ztCharaManager then
-		GlobalBattleCtrl.m_ztCharaManager:Update()
+		GlobalBattleCtrl.m_ztCharaManager:Update(dt)
 	end
 	
-	BattleCameraMgr:Update()
+	BattleCameraMgr:Update(dt)
 	SkillAreaManager:Update()
 
 	--动态设置补间动画参数
