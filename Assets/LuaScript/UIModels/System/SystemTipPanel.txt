@@ -5,12 +5,28 @@
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
 local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform =CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2= CS.UnityEngine.Vector2
+local CSLog = CS.GameTool.Log
+local CSRegisterAnimatorEvent = CS.ZTRegisterAnimatorEvent
 
 SystemTipPanel = {
 	m_panelName = "SystemTipPanel",
 	m_Notice = nil,
+	m_ViewPort = nil, 
+
+	m_tPools = nil,
+}
+
+SystemTipsType = {
+	TipsUpHide ="TipsUpHide"
+
+}
+
+SYSTEMTIPS_EVENT = {
+
+	TIPS_ROLE_PICK_EQUIPT="SYSTEMTIPS_EVENT_TIPS_ROLE_PICK_EQUIPT," 			--通知拾取装备
 }
 
 setmetatable( SystemTipPanel, { __index = UIBasePanel})
@@ -35,6 +51,8 @@ end
 function SystemTipPanel:onCreatePanel()	
 	-- 文本 - 用户提示
 	self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
+	self.m_ViewPort = self.m_transform:Find("ViewPort")
+	m_tPools = {}
 end
 --@brief 面板初始化
 function SystemTipPanel:onInitPanel()
@@ -50,10 +68,14 @@ end
 
 --@brief 添加事件监听
 function SystemTipPanel:_AddEvents()
+
+	GlobalData:GetMdlEventDispatcher():AddEvent(SYSTEMTIPS_EVENT.TIPS_ROLE_PICK_EQUIPT,self.AddTipsItem,self)
+
 end
 
 --@brief 移除事件监听
 function SystemTipPanel:_RemoveEvents()
+	GlobalData:GetMdlEventDispatcher():RemoveEvent(SYSTEMTIPS_EVENT.TIPS_ROLE_PICK_EQUIPT,self.AddTipsItem)
 end
 
 --@brief 注册网络门户
@@ -84,7 +106,9 @@ function SystemTipPanel:AddTip(tipData)
 	if tipData.offSet then 
 		self.m_Notice.rectTransform.anchoredPosition = tipData.offSet
 	end
-	_heartTimer = LoopTimer:Create(self.Hide,self)
+	_heartTimer = LoopTimer:Create(function()
+		self.m_Notice.text="";
+	end,self)
 	
 	self:Show()
 	local shotTime = 5
@@ -101,3 +125,52 @@ function SystemTipPanel:AddTip(tipData)
 	TimerManager:AddTimer(_heartTimer)
 end
 
+function SystemTipPanel:AddTipsItem(tipData)
+	-- body
+	if tipData then
+		self:CreateUpHideTipsItem(tipData)
+	end
+end
+
+function SystemTipPanel:CreateUpHideTipsItem(tipData)
+
+	local outObj = self:GetUpHideTipsItem();
+
+	if outObj then
+		local TipsItem = PanelWidget:GetZTText(outObj.transform,"Text");--TempObj.transform:GetComponent("ZTText")
+		TipsItem.text = tipData.tip
+		outObj:SetActive(true)
+	else 
+		local callback_loadfinish = function(target,path)
+			local TempObj = CSGameObject.Instantiate(target,self.m_ViewPort)
+			local TipsItem = PanelWidget:GetZTText(TempObj.transform,"Text");--TempObj.transform:GetComponent("ZTText")
+			TempObj:GetComponent(typeof(CSRectTransform)).anchoredPosition = CSVector2(0,100)-- tipData.offSet
+			TipsItem.text = tipData.tip
+			TempObj:SetActive(true)
+			local enentMono = TempObj:AddComponent(typeof(CSRegisterAnimatorEvent))
+			 enentMono:Register( function()
+			 	TempObj:SetActive(false)
+			 end,SystemTipsType.TipsUpHide,1)--动画播放结束后隐藏
+
+			if not m_tPools[SystemTipsType.TipsUpHide] then
+				m_tPools[SystemTipsType.TipsUpHide] = {}
+			end
+			table.insert (m_tPools[SystemTipsType.TipsUpHide], TempObj)
+			self:Show();
+		end
+		CSLog("TipsType>>>:",tipData.tipType)
+ 		CS.AssetManager.LoadAsset(PathManager:GetTipePrefabPath(tipData.tipType),callback_loadfinish)
+	end
+end
+
+function SystemTipPanel:GetUpHideTipsItem()
+	local bojList = m_tPools[SystemTipsType.TipsUpHide]
+	if bojList then
+		for i = 1,#bojList do
+			if not bojList[i].activeSelf then
+				return bojList[i]
+			end
+		end
+	end
+ 	return nil
+end

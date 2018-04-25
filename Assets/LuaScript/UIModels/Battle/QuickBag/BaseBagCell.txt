@@ -6,7 +6,6 @@ local CSTransform = CS.UnityEngine.Transform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSLog = CS.GameTool.Log
-local CSJoystick = CS.JoystickBase
 
 
 

@@ -124,6 +124,14 @@ function BattleItemManager:PickItem(map_pick_goods_s2c)
 		--通知刷新身上装备
 		CSLog("DispatchEvent Role Change")
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_ROLE_EQUIPT,self.m_OwnerEquipList)
+
+		local tipsData = {
+
+			tip = "获得" .. baseItemData.name,
+			tipType = SystemTipsType.TipsUpHide
+
+		}
+		GlobalData:GetMdlEventDispatcher():DispatchEvent(SYSTEMTIPS_EVENT.TIPS_ROLE_PICK_EQUIPT,tipsData)
 	end
 end
 
