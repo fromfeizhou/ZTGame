@@ -124,15 +124,7 @@ end
 --*******************************************************Public End*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
-function BattleMapBase:GetOwnerCharaViewPortPos()
-	local chara = GlobalBattleCtrl:GetOwnerChara()
-	if chara then
-		local pos = chara:GetPos()
-		return self:GetViewPortPos(CSVector2(pos.x,pos.z))
-	end
-end
-
-function BattleMapBase:SetMapBasePos( pos)
+function BattleMapBase:SetMapBasePos(pos)
 	self.m_rectTransform.anchoredPosition = pos
 	if checkClamped then 
 		self:CheckViewPortClamped()
@@ -184,8 +176,6 @@ function BattleMapBase:_UpdatePlayer()
 end
 --@brief 在地图上创建一个坐标标识
 function BattleMapBase:_CreateMapFlag( playerId )
-	LogC(self.m_preMapFlagItem)
-	LogC(self.m_mapFlagItemParent)
 	local flagTransform = CSTransform.Instantiate(self.m_preMapFlagItem,self.m_mapFlagItemParent)
 	local flagRectTransform = flagTransform:GetComponent("RectTransform")
 	flagTransform.name = playerId
@@ -207,7 +197,7 @@ function BattleMapBase:_UpdateMapFlag()
 		if not self.m_mapFlagList then self.m_mapFlagList = {} end
 		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
 			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
-			self.m_mapFlagList[playerId].anchoredPosition =    self:GetViewPortPos(flagPos)
+			self.m_mapFlagList[playerId].anchoredPosition = self:GetViewPortPos(flagPos)
 		end
 	end
 end
