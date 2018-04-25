@@ -31,7 +31,7 @@ BattleDefine = {
 
 	PosRate = 100,		    --位置前后端转换系数
 
-	PlayerSpeed = 0.25,		--移动速度
+	PlayerSpeed = 0.12,		--移动速度
 	PlayerRadius = 0.5,		--碰撞半径
 	PlayerHeight = 1,		--碰撞高度
 }
