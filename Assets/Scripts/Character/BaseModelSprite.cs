@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 public enum EquipType
 {
-    Node=0,
+    Node = 0,
     Main = 1,
     Equip
 }
@@ -77,7 +77,7 @@ public class AnimatorAction : AnimationBase
     public override void Play(string name, int layout, int index)
     {
         if (animator != null)
-            animator.Play(name,layout,index);
+            animator.Play(name, layout, index);
     }
 }
 
@@ -105,6 +105,9 @@ public class BaseModelSprite
     protected GameObject model;
     protected AnimationBase animator;
     protected int transLv = -1;
+    protected bool OpenXray;
+
+    public string curPlayName;
 
     //创建
     public virtual void CreateModel(string path, Transform parent, int type) { }
@@ -114,12 +117,17 @@ public class BaseModelSprite
 
     //销毁
     public virtual void RemoveAnimatorView() { }
+
+
+
     //播放
     public virtual void Play(string animationName) { }
     //透明度
     public virtual void ChangeTranslucence(int level) { }
     //设置装备
     public virtual void SetEquipDatas(List<int> equips) { }
+    //创建
+    public virtual void SetXray(bool isEnable) { }
 }
 
 public class RoleModelSprite : BaseModelSprite
@@ -184,7 +192,7 @@ public class RoleModelSprite : BaseModelSprite
             return false;
         else
         {
-            type = (EquipType) index;
+            type = (EquipType)index;
             return true;
         }
     }
@@ -211,7 +219,7 @@ public class RoleModelSprite : BaseModelSprite
         else
         {
             modelPartPath[type] = assetPaths[loadIndex];
-            Debug.Log("type"+type +"Model Create" + assetPaths[loadIndex]);
+          //  Debug.Log("type" + type + "Model Create" + assetPaths[loadIndex]);
             AssetManager.LoadAsset(assetPaths[loadIndex], OnLoadFinish);
 
         }
@@ -229,6 +237,11 @@ public class RoleModelSprite : BaseModelSprite
     private void OnCreateModelFinish()
     {
         UpdateTranslucence();
+        if (curPlayName != "")
+        {
+            Play(curPlayName);
+            curPlayName = "";
+        }
     }
 
     public void OnLoadObjCallback(Object target, string path)
@@ -237,7 +250,7 @@ public class RoleModelSprite : BaseModelSprite
         if (!GetCurTypeByLoadingIndex(out type))
             return;
 
-        if (!modelPartPath.ContainsKey(type)||!modelPartPath[type].Equals(path)) return;
+        if (!modelPartPath.ContainsKey(type) || !modelPartPath[type].Equals(path)) return;
         GameObject prefab = target as GameObject;
         if (null == prefab)
         {
@@ -262,25 +275,25 @@ public class RoleModelSprite : BaseModelSprite
                 go.transform.localScale = Vector3.one;
             }
         }
-       
+
         SetParObj(type, go);
     }
     //改变衣服时候，挂件要挂到新衣服上面
     private void OnModelChange(GameObject go)
     {
-        foreach (var item in modelObjDic )
+        foreach (var item in modelObjDic)
         {
-            if (item.Value == null||item.Key== EquipType.Main) continue;
+            if (item.Value == null || item.Key == EquipType.Main) continue;
             Transform temp = go.transform.Find(CharaDefine.CharaPartParent[item.Key]);
             item.Value.transform.SetParent(temp);
-            item.Value.transform.localScale=Vector3.one;
-            item.Value.transform.localPosition=Vector3.zero;
-            item.Value.transform.localEulerAngles=Vector3.zero;
+            item.Value.transform.localScale = Vector3.one;
+            item.Value.transform.localPosition = Vector3.zero;
+            item.Value.transform.localEulerAngles = Vector3.zero;
         }
-       
+
     }
 
-    private void SetParObj(EquipType type,GameObject go)
+    private void SetParObj(EquipType type, GameObject go)
     {
         if (modelObjDic.ContainsKey(type))
             GameObject.Destroy(modelObjDic[type]);
@@ -333,7 +346,7 @@ public class RoleModelSprite : BaseModelSprite
     public override void Play(string animationName)
     {
         if (null == animator) return;
-        animator.Play(animationName,0,0);
+        animator.Play(animationName, 0, 0);
     }
 
     public override void ChangeTranslucence(int level)
@@ -350,38 +363,42 @@ public class RoleModelSprite : BaseModelSprite
     {
         if (null == animator) return;
         transLv = transLv == -1 ? 0 : transLv;
-        if (transLv == 1)
+
+        Renderer[] renders = model.transform.GetComponentsInChildren<Renderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
+        for (int index = 0; index < renders.Length; index++)
         {
-            if (model.activeSelf)
-                model.SetActive(false);
-        }
-        else
-        {
-            if (!model.activeSelf)
-                model.SetActive(true);
-            Renderer[] renders = model.transform.GetComponentsInChildren<Renderer>();// model.transform.Find("equitPos").GetComponent<SkinnedMeshRenderer>();
-            for (int index = 0; index < renders.Length; index++)
+            Renderer render = renders[index];
+            if (transLv == 0)
             {
-                Renderer render = renders[index];
-                if (transLv == 0)
-                {
+                if (OpenXray)
                     render.material.shader = Shader.Find("Custom/PengLuOccTransVF");
-                }
                 else
                 {
-					render.material.shader = Shader.Find("Legacy Shaders/Transparent/Diffuse");//")//");Unlit/ZTAlphaBlend
-                    Color color = render.material.color;
-                    render.material.color = new Color(color.r, color.g, color.b, 0.5f);
+                    render.material.shader = Shader.Find("Mobile/Bumped Specular");//")//");Unlit/ZTAlphaBlend
                 }
             }
-
-            
+            else
+            {
+                float alpha = transLv > 1 ? 0.5f : 0.001f;
+                
+                render.material.shader = Shader.Find("Legacy Shaders/Transparent/Diffuse");//")//");Unlit/ZTAlphaBlend
+                Color color = render.material.color;
+                render.material.color = new Color(color.r, color.g, color.b, alpha);
+            }
         }
+
+
+
     }
 
     public override void SetEquipDatas(List<int> equips)
     {
 
+    }
+
+    public override void SetXray(bool isEnable)
+    {
+        OpenXray = isEnable;
     }
 }
 
