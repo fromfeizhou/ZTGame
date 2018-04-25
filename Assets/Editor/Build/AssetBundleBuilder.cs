@@ -22,6 +22,7 @@ public class AssetBundleBuilder : MonoBehaviour
     {
         //清除所有的AssetBundleName
         ClearAllAssetBundleName();
+        AssetDatabase.Refresh();
         Debug.Log("BuildAssetBundleName Finish");
     }
     [MenuItem("CYH_Tools/AB_Packager/BuildAbName")]
@@ -37,7 +38,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(particlesDir);
         SetAssetBundlesName(luaScript,"luaScript");
         EditorUtility.ClearProgressBar();
-
+        AssetDatabase.Refresh();
         Debug.Log("BuildAssetBundleName Finish");
     }
 
@@ -77,11 +78,9 @@ public class AssetBundleBuilder : MonoBehaviour
     [MenuItem("CYH_Tools/Build_Packager/Build_ALL_Android")]
     public static void BuildAllAndroidResource()
     {
-        CSObjectWrapEditor.Generator.ClearAll();
-        AssetDatabase.Refresh();
-        CSObjectWrapEditor.Generator.GenAll();
+      
         target = BuildTarget.Android;
-        //BuildAssetBundleName();
+        BuildAssetBundleName();
         string path = Application.dataPath + "/StreamingAssets/AssetBundle";
        
         if (Directory.Exists(path))
@@ -97,8 +96,10 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             fileInfoOut.Delete();
         }
-
         AssetDatabase.Refresh();
+        CSObjectWrapEditor.Generator.ClearAll();
+        AssetDatabase.Refresh();
+        CSObjectWrapEditor.Generator.GenAll();
         BuildPipeline.BuildPlayer(GetBuildScenes(), pathout, BuildTarget.Android, BuildOptions.None);
     }
 

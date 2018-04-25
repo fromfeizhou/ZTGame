@@ -4,6 +4,7 @@ local CSRectTransform = CS.UnityEngine.RectTransform
 local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSCANVAS = CS.UnityEngine.Canvas
+local CSAssetManager = CS.AssetManager
 
 BattleMainPanel = {
 	m_panelName = "BattleMainPanel",
@@ -25,7 +26,6 @@ BattleMainPanel = {
 
 setmetatable( BattleMainPanel, { __index = UIBasePanel})
 
-
 function BattleMainPanel:GetName()
 	return "BattleMainPanel"
 end
@@ -37,10 +37,8 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
-
 --@brief 子类重写 - 面板被创建
 function BattleMainPanel:onCreatePanel()
-
 	self.m_rootLeftUp 		= self.m_transform:Find("LeftUpContent")
 	self.m_rootLeftDown 	= self.m_transform:Find("LeftDownContent")
 	self.m_rootRightUp 		= self.m_transform:Find("RightUpContent")
@@ -49,7 +47,11 @@ function BattleMainPanel:onCreatePanel()
 
 	self:_CreateMoveJoystick()
 	self:_CreateSkillBtn()
-	self:_CreateMapRaderPanel()
+
+	self:_LoadMapBasePanelAsset(function ( mapBaseGo )
+		self:_CreateMapRaderPanel(mapBaseGo)
+		self:_CreateMapScrollPanel(mapBaseGo)
+	end)
 
 	local canvas = PanelManager:GetLayerCanvas(LAYER_TYPE.NORMAL)
 	self.m_tHeadItemMgr = HeadItemManager:Create(canvas, self.m_rootTop)
@@ -162,21 +164,42 @@ function BattleMainPanel:_CreateQuicBagPanel(panelData)
 	self.m_tQuickBagPanel = panel
 end
 
+function BattleMainPanel:_LoadMapBasePanelAsset( callback )
+	local panelName = self.m_model:GetName() .. "/" .. self:GetRelativePath() .. "BattleMapPanel/BattleMapBase"
+	CSAssetManager.LoadAsset(PathManager:GetUIPanel(panelName),function(target,path)
+ 		if callback then callback(target) end
+	end)
+end
+
 --@brief 创建 雷达地图
-function BattleMainPanel:_CreateMapRaderPanel()
+function BattleMainPanel:_CreateMapRaderPanel(mapBaseGo)
 	local panel = {}
-	setmetatable( panel, { __index = MapRadarPanel })
-	panel:_LoadAssetPanel(self.m_rootLeftUp, self.m_model)
-	panel:SetClickOpenMapScroll(function ( ) self:_OnClickMapScrollBtn() end )
+	setmetatable( panel, { __index = RadarPanel })
+	local mapBasePanel = BattleMapBase:Create(mapBaseGo)
+	panel:_LoadAssetPanel(self.m_rootLeftUp, self.m_model, mapBasePanel)
 	self.m_tRadarPanel = panel
+	self.m_tRadarPanel.m_delegeteShowMapScroll = function ( )
+		if self.m_tScrollPanel then
+			self.m_tScrollPanel:Show()
+		end
+	end
 end
 
 --@brief 创建 地图卷轴
-function BattleMainPanel:_CreateMapScrollPanel()
-	local panel = {}
-	setmetatable( panel, { __index = MapScrollPanel })
-	panel:_LoadAssetPanel(self.m_rootTop, self.m_model)
+function BattleMainPanel:_CreateMapScrollPanel(mapBaseGo)
+		local panel = {}
+	setmetatable( panel, { __index = ScrollPanel })
+	local mapBasePanel = BattleMapBase:Create(mapBaseGo)
+	panel:_LoadAssetPanel(self.m_rootRightUp, self.m_model, mapBasePanel)
 	self.m_tScrollPanel = panel
+
+end
+
+function BattleMainPanel:_CreateBattleMapBase()
+	local panel = {}
+	setmetatable( panel, { __index = BattleMapBase })
+	panel:_LoadAssetPanel(parent, self.m_model)
+	return panel
 end
 
 --@brief 按钮点击-开启背包
@@ -196,14 +219,6 @@ function BattleMainPanel:_OnClickBagBtn( )
 	--GlobalBattleCtrl:ExitBattle()
 end
 
---@brief 按钮点击-开启地图卷轴
-function BattleMainPanel:_OnClickMapScrollBtn( )
-	if self.m_tScrollPanel then
-		self.m_tScrollPanel:Show()
-	else
-		self:_CreateMapScrollPanel()
-	end
-end
 
 --@brief 检测快速拾取物品面板
 function BattleMainPanel:_CheckQuickBagPanel()

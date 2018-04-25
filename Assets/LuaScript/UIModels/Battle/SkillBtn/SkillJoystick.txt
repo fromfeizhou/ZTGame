@@ -122,9 +122,7 @@ end
 
 --@brief 触摸点按下
 function SkillJoystick:_OnJoystickDown(pos)
-	if not GlobalBattleCtrl:GetOwnerChara():CanUseSkillState() then
-		return
-	end
+	
 	self.m_bIsDown = true
 	local distance = self.m_tDistances[self.m_nCurIndex]
 	if distance > 0 then
@@ -157,6 +155,10 @@ end
 --@brife 发送移动操作
 --@param 目标标点
 function SkillJoystick:_SendSkillCommand(pos)
+	if not GlobalBattleCtrl:GetOwnerChara():CanUseSkillState() then
+		return
+	end
+
 	local skillId = self:_GetCurSkillId()
 	
 	--普通连招

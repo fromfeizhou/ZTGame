@@ -1,0 +1,213 @@
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2= CS.UnityEngine.Vector2
+local CSColor = CS.UnityEngine.Color
+local MAP_PIXEL = 2048
+local MAP_METER = 1024
+
+BattleMapBase = {
+	m_gameObject = nil,
+	m_transform = nil,
+	m_rectTransform = nil,
+
+	m_pixel = 0,
+	m_meter = 0,
+	m_ratio = 0,
+
+	m_scale = 1,
+}
+
+
+function BattleMapBase:GetPixel( )
+	return self.m_pixel
+end
+
+function BattleMapBase:GetRatio( )
+	return self.m_ratio * self.m_scale
+end
+
+function BattleMapBase:GetScale()
+	return self.m_scale
+end
+ 
+function BattleMapBase:SetScale( scale )
+	if scale and scale ~= self.m_scale and scale > 0 then
+		self.m_scale = scale
+		self.m_rectTransform.sizeDelta = CSVector2.one * self.m_pixel * self.m_scale
+	end
+end
+
+function BattleMapBase:GetViewPortPos(realPos)
+	return realPos * self.m_ratio * self.m_scale
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板资源相对模块路径
+function BattleMapBase:Create(target)
+	local panel = {}
+	setmetatable( panel, { __index = BattleMapBase })
+	panel.m_gameObject = CSGameObject.Instantiate(target)
+	panel.m_transform = panel.m_gameObject.transform
+	panel.m_rectTransform = panel.m_transform:GetComponent("RectTransform")
+	panel:onCreatePanel()
+	panel:_AddEvents()
+	return panel
+end
+function BattleMapBase:InitMapBase(parent, pixel, meter)
+	self.m_pixel = MAP_PIXEL
+	self.m_meter = MAP_METER
+
+	self.m_ratio = self.m_pixel / self.m_meter
+
+	self.m_transform:SetParent(parent)
+	self.m_transform.localPosition = CSVector3.zero
+	self.m_transform.localScale = CSVector3.one
+	self.m_rectTransform.anchoredPosition = CSVector2.zero
+end
+
+--@brief 面板被创建
+function BattleMapBase:onCreatePanel()	
+
+	--毒圈相关
+	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleCur")
+	self.m_ztCircleCur:Init(80,true,0)
+	self.m_ztCircleCur:SetLineWidth(4)
+	self.m_ztCircleCur:SetColor(CSColor.green)
+
+	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleDest")
+	self.m_ztCircleDest:Init(80,true,0)
+	self.m_ztCircleDest:SetLineWidth(4)
+	self.m_ztCircleDest:SetColor(CSColor.red)
+
+	--玩家，队友
+	self.m_playerItemParent = PanelWidget:GetChild(self.m_transform,"PlayerList")
+	self.m_prePlayerItem = PanelWidget:GetChild(self.m_playerItemParent,"PrePlayerItem")
+
+	--坐标标记
+	self.m_mapFlagItemParent = PanelWidget:GetChild(self.m_transform,"MapFlagList")
+	self.m_preMapFlagItem = PanelWidget:GetChild(self.m_mapFlagItemParent,"PreMapFlagItem")
+end
+
+--@brief 添加事件监听
+function BattleMapBase:_AddEvents()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function BattleMapBase:_RemoveEvents()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--@brief 销毁登录面板
+function BattleMapBase:onDestroy()
+	self:_RemoveEvents()
+end
+
+function BattleMapBase:Tick( )
+	self:_UpdatePlayer()
+	self:_UpdateMapFlag()
+	self:_UpdateCircleCur()
+	self:_UpdateCircleDest()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function BattleMapBase:GetOwnerCharaViewPortPos()
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		local pos = chara:GetPos()
+		return self:GetViewPortPos(CSVector2(pos.x,pos.z))
+	end
+end
+
+function BattleMapBase:SetMapBasePos( pos )
+	self.m_rectTransform.anchoredPosition = pos
+end
+
+--@brief 在地图上创建一个玩家标识
+function BattleMapBase:_CreatePlayer( playerId )
+	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
+	local playRectTransform = playTransform:GetComponent("RectTransform")
+	playTransform.name = playerId
+	local ztImg = playTransform:GetComponent("ZTImage")
+	playTransform.gameObject:SetActive(true)
+	return playRectTransform
+end
+
+--@brief 刷新地图上，玩家信息（角度，坐标）
+function BattleMapBase:_UpdatePlayer()
+	if not self.m_playerList then self.m_playerList = {} end
+	local team = GlobalBattleCtrl:GetOwnerTeamChara()
+	for k,v in pairs(team) do
+		local playerId = v:GetBattleId()
+		self.m_playerList[playerId] = self.m_playerList[playerId] or self:_CreatePlayer(playerId)
+		local pos = v:GetPos()
+		self.m_playerList[playerId].anchoredPosition = self:GetViewPortPos(CSVector2(pos.x,pos.z))
+		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
+	end
+end
+--@brief 在地图上创建一个坐标标识
+function BattleMapBase:_CreateMapFlag( playerId )
+	LogC(self.m_preMapFlagItem)
+	LogC(self.m_mapFlagItemParent)
+	local flagTransform = CSTransform.Instantiate(self.m_preMapFlagItem,self.m_mapFlagItemParent)
+	local flagRectTransform = flagTransform:GetComponent("RectTransform")
+	flagTransform.name = playerId
+	local ztImg = flagTransform:GetComponent("ZTImage")
+	if ztImg then
+		if playerId == GlobalBattleCtrl:GetOwnerId() then
+			ztImg.color = CSColor.green;
+		else
+			ztImg.color = CSColor.yellow;
+		end
+	end
+	flagTransform.gameObject:SetActive(true)
+	return flagRectTransform
+end
+
+--@brief 刷新地图上，坐标标识
+function BattleMapBase:_UpdateMapFlag()
+	if MapCircleManager.m_mapFlagData then
+		if not self.m_mapFlagList then self.m_mapFlagList = {} end
+		for playerId,flagPos in pairs(MapCircleManager.m_mapFlagData) do
+			self.m_mapFlagList[playerId] = self.m_mapFlagList[playerId] or self:_CreateMapFlag(playerId)
+			self.m_mapFlagList[playerId].anchoredPosition = flagPos * minMapView/maxMapView * self.m_scaleValue
+		end
+	end
+end
+
+--@brief 游戏开始时
+function BattleMapBase:_OnStartGame(  )
+	self:_ClearPlayer()
+end
+
+--@brief 清除地图上的玩家
+function BattleMapBase:_ClearPlayer()
+	if not self.m_playerList then return end
+	for k,v in pairs(self.m_playerList) do
+		CSGameObject.Destroy(v.gameObject)
+	end
+end
+
+function BattleMapBase:_UpdateCircleCur()
+	self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
+end
+
+function BattleMapBase:_UpdateCircleDest()
+	self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
+end
+
+
+--@brief 设置毒圈参数
+function BattleMapBase:_SetCircle(circle, circleInfo)
+	if circleInfo and circleInfo.pos and circleInfo.radius then 
+		local viewPortPos = self:GetViewPortPos(circleInfo.pos)
+		local viewPortRadius = self:GetViewPortPos(circleInfo.radius)
+		circle:SetCircle(viewPortPos,viewPortRadius)
+	end
+end

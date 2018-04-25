@@ -12,6 +12,11 @@ BattleAnimatorData = {
 	m_tTargetPos = nil,		--目标位置
 	m_bMoveStop = nil,		--移动结束
 
+	m_tCurRotate = nil,		--当前旋转
+	m_tTargetRotate = nil,	--目标旋转
+	m_tRotateSpeed = nil,	--旋转速度
+	m_tRotateNum = nil,		--旋转计数
+
 	m_nPlayCount = nil,		--动作计数
 }
 --@breif 继承AnimatorData
@@ -44,6 +49,14 @@ function BattleAnimatorData:UpdatePos(pos)
 	self:_SetPosDelay(pos)
 end
 
+--@brief 更新角度
+--@param vector3 dir
+function BattleAnimatorData:UpdateRotate(pos)
+	self.m_tTargetRotate = pos
+	self:_SetRotateDelay(pos)
+	--AnimatorData.UpdateRotate(self,dir)
+end
+
 --@brief 移动
 function BattleAnimatorData:MoveToPos(moveDir,pos)
 	if moveDir == BattleDir.None then
@@ -57,6 +70,7 @@ end
 --@brief 补间动画更新(界面刷新调用)
 function BattleAnimatorData:UpdateDelayView(dt)
 	self:_UpdatePosDelay(dt)
+	self:_UpdateRotateDelay(dt)
 end
 
 --@brief 播放动作
@@ -150,4 +164,37 @@ function BattleAnimatorData:_UpdatePosDelay(dt)
 		
 	end
 	self:_UpdateCurPos(pos)
+end
+
+
+--@brief 刷新当前位置
+function BattleAnimatorData:_UpdateCurRotate(pos)
+	-- CSLog("BattleAnimatorData:_UpdateCurRotate",pos)
+	AnimatorData.UpdateRotate(self,pos)
+	self.m_tCurRotate = pos
+end
+
+--@brief 设置旋转缓动
+function BattleAnimatorData:_SetRotateDelay(pos)
+	if not self.m_tCurRotate then
+		self:_UpdateCurRotate(pos)
+		return
+	end
+	local rotateNum = BattleDefine.RendererDelay * 4
+	self.m_tRotateSpeed = (self.m_tTargetRotate - self.m_tCurRotate) / rotateNum
+	self.m_tRotateNum = rotateNum
+end
+
+--@brief 刷新旋转
+function BattleAnimatorData:_UpdateRotateDelay(dt)
+	if not self.m_tRotateSpeed then
+		return
+	end
+	if self.m_tRotateNum and self.m_tRotateNum > 0 then
+		self.m_tRotateNum = self.m_tRotateNum - 1
+		local pos = self.m_tCurRotate + self.m_tRotateSpeed 
+		self:_UpdateCurRotate(pos)
+	else
+		self.m_tRotateSpeed = nil
+	end
 end

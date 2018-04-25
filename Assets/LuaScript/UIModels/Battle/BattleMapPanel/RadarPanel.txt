@@ -1,0 +1,101 @@
+--RadarPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSColor = CS.UnityEngine.Color
+local CSQuaternion = CS.UnityEngine.Quaternion
+
+RadarPanel = {
+	m_battleMapBase = nil,
+	m_viewPort = nil,
+	m_mapPosOffSet = nil,
+	m_delegeteShowMapScroll = nil,
+}
+setmetatable( RadarPanel, { __index = UIBasePanel})
+function RadarPanel:GetName()
+	return "RadarPanel"
+end
+
+--@brief 面板资源相对模块路径
+function RadarPanel:GetRelativePath()
+	return "Panel/BattleMapPanel/"
+end
+
+function RadarPanel:_LoadAssetPanel(parent, model, battleMapBase)
+	self.m_battleMapBase = battleMapBase
+	UIBasePanel._LoadAssetPanel(self, parent, model)
+	return self
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板被创建
+function RadarPanel:onCreatePanel()	
+	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent(typeof(CSRectTransform))
+	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_viewPort,"ztTxt_WaitTime")
+	self.m_battleMapBase:InitMapBase(self.m_viewPort:Find("Mask"))
+
+	PanelWidget:GetZTButton(self.m_viewPort,"ZTButton",function () 
+		if self.m_delegeteShowMapScroll then
+			self.m_delegeteShowMapScroll()
+		end
+	end)
+end
+
+
+--@brief 面板初始化
+function RadarPanel:onInitPanel()
+	self.m_mapPosOffSet = self.m_viewPort.sizeDelta * 0.5
+end
+
+--@brief 面板每帧更新
+function RadarPanel:onTick(deltaTime)
+	if self.m_battleMapBase and self.m_battleMapBase.Tick then
+		self.m_battleMapBase:Tick()
+	end
+	self:_UpdateInfo()
+	self:_UpdateMapBasePos()
+end
+local curWaitTime = 0
+function RadarPanel:_UpdateInfo()
+	if MapCircleManager.m_isWait and curWaitTime ~= MapCircleManager.m_waitTime then
+		curWaitTime = MapCircleManager.m_waitTime
+		self.m_ztTxt_waitTime.text = curWaitTime
+	end
+end
+
+--@brief 销毁登录面板
+function RadarPanel:onDestroy()
+	
+end
+
+--@brief 添加事件监听
+function RadarPanel:_AddEvents()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function RadarPanel:_RemoveEvents()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--@brief 注册网络门户
+function RadarPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function RadarPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function RadarPanel:_UpdateMapBasePos()
+	local playerPos = self.m_battleMapBase:GetOwnerCharaViewPortPos()
+	self.m_battleMapBase:SetMapBasePos(self.m_mapPosOffSet-playerPos)
+end
