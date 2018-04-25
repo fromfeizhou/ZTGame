@@ -93,9 +93,17 @@ public class ZTCircle : MonoBehaviour {
 	/** 设置半径 */
 	public void SetRadius(float radius)
 	{
+		if (radius <= 0) {
+			Hide ();
+			return;
+		}
+		
 		if (_radius == radius)
 			return;
-		
+
+		if (!_show)
+			Show ();
+
 		_radius = radius;
 
 		float len = _lineLenBase * _radius;
