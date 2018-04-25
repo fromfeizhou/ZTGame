@@ -1,0 +1,43 @@
+--ZTBaseScene.txt
+--@breif 基础场景
+--@data 2018/03/07
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSLog = CS.GameTool.Log
+
+
+ZTBaseScene = {
+}
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 初始化
+function ZTBaseScene:InitScene(sceneName)
+	CSLog("ZTBaseScene:Init",name)
+	PanelManager:HideLoadingPanel()
+	CS.ZTSceneManager.GetInstance():ReplaceScene(sceneName, function() self:_SceneReplaceComplete() end)
+end
+
+--@brief 更新
+function ZTBaseScene:Update(dt)
+end
+
+--@brief 移除
+function ZTBaseScene:Destroy()
+	CSLog("ZTBaseScene:Destroy")
+end
+
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 场景加载完毕
+function ZTBaseScene:_SceneReplaceComplete()
+	CSLog("ZTBaseScene:_SceneReplaceComplete")
+	
+	local gameObject = CSGameObject("ZTBaseScene")
+   	local component = gameObject:AddComponent(typeof(CS.ZTBaseScene))
+   	component:SetUpdate(function(dt) self:Update(dt) end)
+   	component:SetDestroy(function() self:Destroy() end)
+end
+

@@ -15,29 +15,31 @@ ZTBattleScene = {
 	m_comZtBattleScene = nil,	--战斗场景组件
 }
 
+setmetatable( ZTBattleScene, { __index = ZTBaseScene})
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 切换战斗场景
 function ZTBattleScene:InitScene()
-	
-	PanelManager:HideLoadingPanel()
 
-	CSLog("ZTBattleScene:InitScene")
 	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
 	self:_ShowBattleUI()
 	PanelManager:SetLoadingProgress(0.3)
-	CSSceneManager.GetInstance():ReplaceScene("BattleScene", function() self:_SceneReplaceComplete() end)
+
+	ZTBaseScene.InitScene(self,"BattleScene")
 end
 
 function ZTBattleScene:Update(dt)
-	--CSLog("ZTBattleScene:Update")
+	ZTBaseScene.Update(self,ts)
+
 	GlobalBattleCtrl:Update(dt)
 end
 
 
 function ZTBattleScene:Destroy()
-	CSLog("ZTBattleScene:InitScene")
+	ZTBaseScene.Destroy(self)
+
+	self:_RemoveEvent()
 	self:_UnInt()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -45,6 +47,8 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 场景加载完毕
 function ZTBattleScene:_SceneReplaceComplete()
+	ZTBaseScene._SceneReplaceComplete(self)
+
 	PanelManager:SetLoadingProgress(0.5)
 	self:_Init()
 end
@@ -56,8 +60,7 @@ function ZTBattleScene:_Init()
 	self.m_goZtBattleScene = CSGameObject("ZTBattleScene")
 	self.m_comZtBattleScene = self.m_goZtBattleScene:AddComponent(typeof(CS.ZTBattleScene))
 	self.m_comZtBattleScene:MapInit(CSVector3(350,0,200))
-	self.m_comZtBattleScene:SetUpdate(function(dt) self:Update(dt)
-	end)
+	
 	
 	PanelManager:SetLoadingProgress(0.7)
 
@@ -67,6 +70,7 @@ function ZTBattleScene:_Init()
 	GlobalBattleCtrl:SetBattleScene(self.m_comZtBattleScene)
 		
 	self:_AddEvent()
+
 	PanelManager:SetLoadingProgress(0.8,true)
 
 	--PanelManager:HideLoadingPanel()
@@ -80,7 +84,6 @@ end
 
 --@brief 战斗场景初始化
 function ZTBattleScene:_UnInt()
-	self:_RemoveEvent()
 	--清理全局控制器
 	GlobalBattleCtrl:Destroy()
 
@@ -91,9 +94,7 @@ function ZTBattleScene:_UnInt()
 		self.m_comZtBattleScene = nil
 	end
 
-	local battleModel = ModelManager:_GetModel( MODEL_TYPE.BATTLE )
-	if battleModel then battleModel:_CleanPanel() end
-	GlobalBattleCtrl:Destroy()
+	ModelManager:_RemoveModel(MODEL_TYPE.BATTLE)
 end
 
 function ZTBattleScene:_ShowBattleUI()
