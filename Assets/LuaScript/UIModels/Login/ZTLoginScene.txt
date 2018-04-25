@@ -39,6 +39,6 @@ function ZTLoginScene:_SceneReplaceComplete()
 		panelType = LOGIN_TYPE.MAIN,
 	}
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
-
+	PanelManager:HideLoadingPanel()
 end
 

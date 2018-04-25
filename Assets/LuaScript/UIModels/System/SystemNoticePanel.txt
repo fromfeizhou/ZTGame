@@ -16,7 +16,7 @@ setmetatable( SystemNoticePanel, { __index = UIBasePanel})
 
 
 function SystemNoticePanel:GetLayerType()
-	return LAYER_TYPE.TOP
+	return LAYER_TYPE.MASK
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
