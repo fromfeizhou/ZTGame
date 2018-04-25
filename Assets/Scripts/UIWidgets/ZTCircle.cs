@@ -90,6 +90,11 @@ public class ZTCircle : MonoBehaviour {
 		_lineLenBase = BasePerimeter / rectLineList.Count;
 	}
 
+
+	public float GetRadius(){
+		return _radius;
+	}
+
 	/** 设置半径 */
 	public void SetRadius(float radius)
 	{
@@ -122,6 +127,10 @@ public class ZTCircle : MonoBehaviour {
 				rectLineList [i].localEulerAngles = Vector3.forward * i * _angle;
 			}
 		}
+	}
+
+	public Vector2 GetPos(){
+		return rectTransform.anchoredPosition;
 	}
 
 	public void SetPos(Vector2 pos){
