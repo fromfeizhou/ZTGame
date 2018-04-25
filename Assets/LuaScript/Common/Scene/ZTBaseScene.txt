@@ -1,41 +1,43 @@
---ZTCityScene.txt
---@breif 战斗场景
+--ZTBaseScene.txt
+--@breif 基础场景
 --@data 2018/03/07
-ZTCityScene = {
-	
-}
 
 --@brief c#引用
 local CSGameObject = CS.UnityEngine.GameObject
-local CSTransform = CS.UnityEngine.Transform
-local CSVector3 = CS.UnityEngine.Vector3
 local CSLog = CS.GameTool.Log
-local CSSceneManager = CS.ZTSceneManager
 
+
+ZTBaseScene = {
+}
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public Begin*************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
---@brief 切换战斗场景
-function ZTCityScene:InitScene()
-	ZTBaseScene.InitScene(self,"CityScene")
+--@brief 初始化
+function ZTBaseScene:InitScene(sceneName)
+	CSLog("ZTBaseScene:Init",name)
+	PanelManager:HideLoadingPanel()
+	CS.ZTSceneManager.GetInstance():ReplaceScene(sceneName, function() self:_SceneReplaceComplete() end)
 end
 
-function ZTCityScene:Update(dt)
+--@brief 更新
+function ZTBaseScene:Update(dt)
 end
 
-function ZTCityScene:Destroy()
-	ModelManager:_RemoveModel(MODEL_TYPE.CITY)
+--@brief 移除
+function ZTBaseScene:Destroy()
+	CSLog("ZTBaseScene:Destroy")
 end
+
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End***************************************************************
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 场景加载完毕
-function ZTCityScene:_SceneReplaceComplete()
-	ZTBaseScene._SceneReplaceComplete(self)
-	GCSLog("------------------------------------ZTCityScene:_SceneReplaceComplete")
-	--显示场景主面板
-	local loginPanelData = {}
-	loginPanelData.modelType = MODEL_TYPE.CITY
-	loginPanelData.panelType = CITY_TYPE.MAIN
-	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,loginPanelData)
+function ZTBaseScene:_SceneReplaceComplete()
+	CSLog("ZTBaseScene:_SceneReplaceComplete")
+	
+	local gameObject = CSGameObject("ZTBaseScene")
+   	local component = gameObject:AddComponent(typeof(CS.ZTBaseScene))
+   	component:SetUpdate(function(dt) self:Update(dt) end)
+   	component:SetDestroy(function() self:Destroy() end)
 end
+
