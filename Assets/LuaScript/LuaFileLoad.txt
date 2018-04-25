@@ -58,7 +58,7 @@ local LuaFileLoad = {
 
 		"ALuaConfig.Tab_Hero",
 		"ALuaConfig.Tab_HeroPro",
-		
+		"ALuaConfig.Tab_KillTips",
 		"ALuaConfig.Tab_Skill",
 		"ALuaConfig.Tab_SkillType",
 		"ALuaConfig.Tab_SkillTeam",
