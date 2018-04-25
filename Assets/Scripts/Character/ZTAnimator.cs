@@ -20,6 +20,13 @@ public class ZTAnimator : MonoBehaviour {
         modelSprite.RemoveAnimatorView();
     }
 
+    public void SetModelXRay(bool isEnable)
+    {
+        if (modelSprite == null)
+            modelSprite = new RoleModelSprite();
+        modelSprite.SetXray(isEnable);
+    }
+
     //创建形象
     public void CreateAnimatorView(string path,int type=1)
     {
@@ -61,7 +68,12 @@ public class ZTAnimator : MonoBehaviour {
     //播放动作
     public void Play(string actoinName)
     {
-        if (modelSprite == null) return;
+        if (modelSprite == null)
+        {
+            modelSprite = new RoleModelSprite();
+            modelSprite.curPlayName = actoinName;
+            return;
+        }
         modelSprite.Play(actoinName);
     }
 
