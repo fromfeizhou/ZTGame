@@ -70,7 +70,9 @@ end
 function BattleMapView:Destroy()
 	CSLog("BattleMapView:Destroy")
 	if self.m_transform then
-		CSGameObject.Destroy(self.m_transform.gameObject)
+		if GameObjectIsNotNull(self.m_transform.gameObject) then
+			CSGameObject.Destroy(self.m_transform.gameObject)
+		end
 		self.m_transform = nil
 		self.m_dTestCubeObjDic =nil
 		self.m_tAllViewObj = nil
