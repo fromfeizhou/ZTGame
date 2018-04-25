@@ -179,7 +179,7 @@ end
 
 --@brief 刷新当前服务器地址数据
 function LoginMainPanel:_Update_CurServerName( )
-	self.m_txtCurServerName.text =  self.m_curSelectAddress.name .. "(" .. self.m_curSelectAddress.host .. ":" .. self.m_curSelectAddress.port .. ")"
+	self.m_txtCurServerName.text =  self.m_curSelectAddress.name
 end
 
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
