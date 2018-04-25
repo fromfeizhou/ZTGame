@@ -62,6 +62,7 @@ local LuaFileLoad = {
 		"ALuaConfig.Tab_SkillType",
 		"ALuaConfig.Tab_SkillTeam",
 		"ALuaConfig.Tab_TipSafeCircle",
+		"ALuaConfig.Tab_Circle",
 	},
 
 	--游戏lua文件
@@ -128,8 +129,9 @@ local LuaFileLoad = {
 
 		"UIModels.Battle.BattleModel",
 
-		"UIModels.Battle.MapScrollPanel",
-		"UIModels.Battle.MapRadarPanel",
+		"UIModels.Battle.BattleMapPanel.BattleMapBase",
+		"UIModels.Battle.BattleMapPanel.ScrollPanel",
+		"UIModels.Battle.BattleMapPanel.RadarPanel",
 		
 		"UIModels.Battle.BattleMainPanel",
 		"UIModels.Battle.BattleEnd.BattleEndPanel",

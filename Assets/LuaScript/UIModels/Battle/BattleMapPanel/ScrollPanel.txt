@@ -1,0 +1,95 @@
+--ScrollPanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSRectTransform = CS.UnityEngine.RectTransform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSVector2 = CS.UnityEngine.Vector2
+local CSColor = CS.UnityEngine.Color
+local CSQuaternion = CS.UnityEngine.Quaternion
+local CSScrollRect = CS.UnityEngine.UI.ScrollRect
+
+
+local MAP_VIEWPORT_SCALE = 2
+
+ScrollPanel = {
+	m_battleMapBase = nil,
+	m_scrollView = nil,
+	m_viewPort = nil,
+}
+
+setmetatable( ScrollPanel, { __index = UIBasePanel})
+function ScrollPanel:GetName()
+	return "ScrollPanel"
+end
+
+--@brief 面板资源相对模块路径
+function ScrollPanel:GetRelativePath()
+	return "Panel/BattleMapPanel/"
+end
+
+function ScrollPanel:_LoadAssetPanel(parent, model, battleMapBase)
+	self.m_battleMapBase = battleMapBase
+	UIBasePanel._LoadAssetPanel(self, parent, model)
+	self.m_isShow = false
+	return self
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 面板被创建
+function ScrollPanel:onCreatePanel()
+	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent(typeof(CSRectTransform))
+	PanelWidget:GetButton(self.m_viewPort,"btnClose",function() self:Hide() end)
+	self.m_scrollView = self.m_transform:Find("ViewPort/Scroll View"):GetComponent(typeof(CSScrollRect))
+	self.m_scrollView.content = self.m_battleMapBase.m_transform
+	self.m_battleMapBase:InitMapBase(self.m_scrollView.viewport)
+	local slider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
+	slider.minValue = self.m_viewPort.sizeDelta.x / self.m_battleMapBase:GetPixel()
+	slider.maxValue = MAP_VIEWPORT_SCALE
+end
+
+--@brief 面板初始化
+function ScrollPanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function ScrollPanel:onTick(deltaTime)
+	if self.m_battleMapBase and self.m_battleMapBase.Tick then
+		self.m_battleMapBase:Tick()
+	end
+end
+
+--@brief 销毁登录面板
+function ScrollPanel:onDestroy()
+	
+end
+
+--@brief 添加事件监听
+function ScrollPanel:_AddEvents()
+	GBattleEvent:GetDispatcher():AddEvent(BATTLE_EVENT.START_GAME,self._OnStartGame,self)
+end
+
+--@brief 移除事件监听
+function ScrollPanel:_RemoveEvents()
+	GBattleEvent:GetDispatcher():RemoveEvent(BATTLE_EVENT.START_GAME,self._OnStartGame)
+end
+
+--@brief 注册网络门户
+function ScrollPanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function ScrollPanel:_UnRegNetFacade()
+end
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public End***************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+function ScrollPanel:_onValueChanged(value)
+	--local curSize = CSVector2.Lerp(m_viewPort.sizeDelta)
+	
+	self.m_battleMapBase:SetScale(value)
+end
