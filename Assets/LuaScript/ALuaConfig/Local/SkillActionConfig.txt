@@ -72,10 +72,10 @@ SkillActionConfig = {
 				{ actionType = 5, param = { 1003 }},
 		},
 		[ 40 ] = {
-				{ actionType = 3, param = { 3, -1, 1, 0, 0, 2, 20, -1, "Bomb1", -1 }},
+				{ actionType = 3, param = { 3, -1, 1, 0, 0, 2, 20, -1, -1, -1 }},
 		},
 		[ 41 ] = {
-				{ actionType = 4, param = { "Bomb1", 2, 50, 0, 2.5 }},
+				{ actionType = 4, param = { "Bomb1", 2, 50, 0, 0 }},
 		},
 	},
 
@@ -151,4 +151,4 @@ SkillActionConfig = {
 
 }
 
-SkillActionConfig.TestSkillId = "id_10001"
+SkillActionConfig.TestSkillId = "id_11002"
