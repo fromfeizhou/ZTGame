@@ -35,6 +35,8 @@ end
 --@brief 初始化
 function ModelManager:Init()
 	ModelManager.m_modelList = {}
+	ModelManager.m_modelDef = {}
+	
 	self.m_mdlEvent = GlobalData:GetMdlEventDispatcher()
 	self:_AddEvents()
 
@@ -58,13 +60,12 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
 function ModelManager:_RegLoginModel(  )
-	ModelManager.m_modelDef = {}
+	
 	ModelManager.m_modelDef[ MODEL_TYPE.SYSTEM 	] 	= SystemModel
 	ModelManager.m_modelDef[ MODEL_TYPE.LOGIN 	] 	= LoginModel
 end
 
 function ModelManager:_RegGameModel(  )
-	ModelManager.m_modelDef = {}
 	ModelManager.m_modelDef[ MODEL_TYPE.CITY 	] 	= CityModel
 	ModelManager.m_modelDef[ MODEL_TYPE.BATTLE 	] 	= BattleModel
 end
