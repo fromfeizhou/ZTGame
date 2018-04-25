@@ -33,7 +33,7 @@ end
 --@brief 面板被创建
 function SystemNoticePanel:onCreatePanel()	
 	-- 按钮 - 用户确认
-	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:Hide() end)
+	PanelWidget:GetButton(self.m_transform,"ViewPort/Btn_Confirm",function() self:onClick_Confirm() end)
 	-- 文本 - 用户提示
 	self.m_Notice = PanelWidget:GetText(self.m_transform,"ViewPort/Txt_Notice");
 end
@@ -67,6 +67,15 @@ end
 
 --@brief 显示面板
 function SystemNoticePanel:onRush()
-	self.m_Notice.text = self.m_tPanelData.noticeStr
+	if self.m_tPanelData then
+		self.m_Notice.text = self.m_tPanelData.noticeStr
+	end
 end
 
+
+function SystemNoticePanel:onClick_Confirm( )
+	self:Hide()
+	if self.m_tPanelData.handle then
+		self.m_tPanelData.handle()
+	end
+end
