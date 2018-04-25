@@ -99,9 +99,7 @@ end
 --------------ui事件
 --点击武器
 function BattleEndPanel:_OnClickResBattle(netId)
-	
-	GlobalBattleCtrl:ExitBattle()
-
+	ZTCityScene:InitScene()
 end
 
 --------------ui事件end

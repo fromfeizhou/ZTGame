@@ -215,8 +215,6 @@ function BattleMainPanel:_OnClickBagBtn( )
 	else
 		self:_CreateBagPanel()
 	end
-	
-	--GlobalBattleCtrl:ExitBattle()
 end
 
 
