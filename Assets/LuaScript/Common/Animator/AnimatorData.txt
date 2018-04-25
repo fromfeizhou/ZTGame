@@ -17,6 +17,7 @@ AnimaEvent = {
 	UpdateRotate = "UpdateRotate",		--角度旋转
 	ChangeTranslucence = "ChangeTranslucence",		--改变半透明
 	UpdateModel = "UpdateModel",		--更新模型
+	SetModelXray = "SetModelXray",		--设置X光
 }
 
 EquiptType = {
@@ -100,6 +101,11 @@ end
 --@brief 创建显示(进入镜头范围)
 function AnimatorData:SetInCamera(inCamera)
 	self:DispatchEvent(AnimaEvent.InCamera,inCamera)
+end
+
+--@brief 创建显示(进入镜头范围)
+function AnimatorData:SetModelXray(value)
+	self:DispatchEvent(AnimaEvent.SetModelXray,value)
 end
 
 --@brief 刷新位置

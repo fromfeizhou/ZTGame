@@ -16,6 +16,9 @@ RadarPanel = {
 	m_viewPort = nil,
 	m_mapPosOffSet = nil,
 	m_delegeteShowMapScroll = nil,
+
+	m_ztTxt_waitTime = nil,
+	m_ztTxt_PlayerPos = nil,
 }
 setmetatable( RadarPanel, { __index = UIBasePanel})
 function RadarPanel:GetName()
@@ -39,6 +42,7 @@ end
 function RadarPanel:onCreatePanel()	
 	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent(typeof(CSRectTransform))
 	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_viewPort,"ztTxt_WaitTime")
+	self.m_ztTxt_PlayerPos = PanelWidget:GetZTText(self.m_viewPort,"PlayerPos/ztTxtPlayerPos")
 	self.m_battleMapBase:InitMapBase(self.m_viewPort:Find("Mask"))
 
 	PanelWidget:GetZTButton(self.m_viewPort,"ZTButton",function () 
@@ -97,5 +101,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function RadarPanel:_UpdateMapBasePos()
 	local playerPos = self.m_battleMapBase:GetOwnerCharaViewPortPos()
+	self.m_ztTxt_PlayerPos.text =string.format("%d,%d", math.ceil(playerPos.x), math.ceil(playerPos.y))
 	self.m_battleMapBase:SetMapBasePos(self.m_mapPosOffSet-playerPos)
 end
