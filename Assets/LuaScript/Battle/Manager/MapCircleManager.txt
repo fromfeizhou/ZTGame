@@ -59,7 +59,6 @@ function MapCircleManager:Init()
 	math.randomseed(os.time())
 	for i = 1,#Tab_KillTips do
 		Tab_KillTips[i].randNum=math.random(Tab_KillTips[i].timeMin,Tab_KillTips[i].timeMax)
-		CSLog(Tab_KillTips[i].randNum,"=======================================================")
 	end
 
 end
@@ -106,7 +105,6 @@ local curKillTipIndex = 1
 function MapCircleManager:TipsKillHero(curFrameNum)
 	if Tab_KillTips and curKillTipIndex <= #Tab_KillTips then 
 		local nowGameTime = math.ceil(curFrameNum/GameConfig.CommandFrameNum) * 1000
-		CSLog(Tab_KillTips[curKillTipIndex].randNum,"================",nowGameTime)
 		if nowGameTime > Tab_KillTips[curKillTipIndex].randNum then
 			LogC("MapCircleManager:TipsKillHero()",curKillTipIndex,Tab_KillTips[curTipIndex].offSetX,Tab_TipSafeCircle[curTipIndex].offSetY)
 			local safeCircleTip = Tab_KillTips[curKillTipIndex]
