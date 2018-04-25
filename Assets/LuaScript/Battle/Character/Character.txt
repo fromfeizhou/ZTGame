@@ -478,6 +478,11 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 动作相关begin
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--@brief 设置x光模型
+function Character:SetModelXray(value)
+	self.m_animData:SetModelXray(value)
+end
+
 --@brief 添加伤害数字
 function Character:AddHurtNum(value)
 	if not GameConfig.IsSingleScene then

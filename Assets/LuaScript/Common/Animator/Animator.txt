@@ -87,6 +87,7 @@ function Animator:_AddEvent()
 		self.m_animData:AddEvent(AnimaEvent.UpdatePos, self._OnUpdatePos, self)
 		self.m_animData:AddEvent(AnimaEvent.UpdateRotate, self._OnUpdateRotate, self)
 		self.m_animData:AddEvent(AnimaEvent.ChangeTranslucence, self._OnChangeTranslucence, self)
+		self.m_animData:AddEvent(AnimaEvent.SetModelXray, self._OnSetModelXray, self)
 	end
 end
 
@@ -157,6 +158,11 @@ end
 --@brief 改变半透明（草丛状态显示）
 function Animator:_OnChangeTranslucence(transLv)
 	self.m_ztAnima:ChangeTranslucence(transLv)
+end
+
+--@brief 改变半透明（草丛状态显示）
+function Animator:_OnSetModelXray(value)
+	self.m_ztAnima:SetModelXRay(value)
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --************************************************所有动画操作通过操作animData实现************************************************

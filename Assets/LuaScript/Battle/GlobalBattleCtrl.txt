@@ -161,8 +161,6 @@ function GlobalBattleCtrl:InitData()
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
-	GlobalBattleCtrl.m_character:ShowBornSpEffect()
-
 	
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
@@ -178,7 +176,6 @@ function GlobalBattleCtrl:SetMainCharacter(battleId)
 	GlobalBattleCtrl.m_tCharacterList = GlobalBattleCtrl.m_ztCharaManager:GetCharacterList()
 	--控制对象
 	GlobalBattleCtrl.m_character = GlobalBattleCtrl.m_tCharacterDic[GlobalBattleCtrl.m_nOwnerId]
-	GlobalBattleCtrl.m_character:ShowBornSpEffect()
 	--第一次初始化通知镜头刷新
 	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_SCENE_POS,GlobalBattleCtrl:GetOwnerChara():GetPos())
 	
@@ -197,7 +194,9 @@ function GlobalBattleCtrl:ResetGameState()
 	GlobalBattleCtrl.m_nRendererCount = 0
 	GlobalBattleCtrl.m_nCommandCount = 0
 
-	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
+	GlobalBattleCtrl.m_character:ShowBornSpEffect()
+	GlobalBattleCtrl.m_character:SetModelXray(true)
+
 	GlobalBattleCtrl.m_ztCharaManager:RushCameraFollow()
 
 	SkillAreaManager:SetParentContainer(GlobalBattleCtrl.m_character:GetSkillCon())
