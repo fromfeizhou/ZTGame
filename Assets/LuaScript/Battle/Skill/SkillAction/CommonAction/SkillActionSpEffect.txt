@@ -57,7 +57,7 @@ function SkillActoinSpEffect:Destroy()
 	--继承实现
 	SkillAction.Destroy(self)
 
-	if self.m_spriteEffGo then
+	if GameObjectIsNotNull(self.m_spriteEffGo) then
 		CS.UnityEngine.GameObject.Destroy(self.m_spriteEffGo)
 		self.m_spriteEffGo = nil
 	end

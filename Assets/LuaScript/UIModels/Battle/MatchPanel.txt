@@ -13,7 +13,7 @@ setmetatable( MatchPanel, { __index = UIBasePanel})
 
 
 function MatchPanel:GetLayerType()
-	return LAYER_TYPE.MASK
+	return LAYER_TYPE.TOP
 end
 function MatchPanel:GetName()
 	return "MatchPanel"

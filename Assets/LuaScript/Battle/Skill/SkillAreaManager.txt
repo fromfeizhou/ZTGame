@@ -40,7 +40,9 @@ function SkillAreaManager:Destroy()
 	CSLog("SkillAreaManager:Destroy")
 	if SkillAreaManager.m_tElmentList then
 		for i,v in pairs(SkillAreaManager.m_tElmentList) do
-			CSGameObject.Destroy(v)
+			if GameObjectIsNotNull(v) then
+				CSGameObject.Destroy(v)
+			end
 		end
 	end
 	SkillAreaManager.m_tElmentList = nil

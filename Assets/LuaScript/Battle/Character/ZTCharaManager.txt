@@ -61,7 +61,7 @@ function ZTCharaManager:ClearChara( )
 
 	--清理战斗对象容器
 	if self.m_ztCharaContainer then
-		CSGameObject.Destroy(self.m_ztCharaContainer.gameObject)
+		--CSGameObject.Destroy(self.m_ztCharaContainer.gameObject)
 		self.m_ztCharaContainer = nil
 	end
 

@@ -42,8 +42,8 @@ end
 --@brief 移除
 function BattleMapPropUIMgr:Destroy()
 	CSLog("BattleMapPropUIMgr:Destroy")
-	if self.m_Panel then
-		CSGameObject.Destroy(m_Panel)
+	if GameObjectIsNotNull(self.m_Panel) then
+		CSGameObject.Destroy(self.m_Panel)
 		self.m_Panel = nil
 	end
 	self.m_itemRoot = nil
@@ -129,8 +129,10 @@ function BattleMapPropUIMgr:UpdateMapItemList(battleMapItemDatas)
 			UseCount = UseCount + 1
 		else
 			if UseCount > 20 then
-				CSGameObject.Destroy(self.m_itemList[tempKeyList[i]].gameObject)
-				self.m_itemList[tempKeyList[i]]=nil
+				if GameObjectIsNotNull(self.m_itemList[tempKeyList[i]].gameObject) then
+					CSGameObject.Destroy(self.m_itemList[tempKeyList[i]].gameObject)
+					self.m_itemList[tempKeyList[i]]=nil
+				end
 			end
 		end
 	end

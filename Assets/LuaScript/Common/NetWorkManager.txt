@@ -164,7 +164,7 @@ function NetWorkManager:_OnException(exception)
 		panelType = SYSTEM_TYPE.NOTICE,
 		panelData = {
 			noticeStr = noticeStr,
-			handle = ZTLoginScene:InitScene()
+			handle = function()ZTLoginScene:InitScene() end
 		}
 	}
 	GlobalData:GetMdlEventDispatcher():DispatchEvent(MDL_EVENT.SHOW_PANEL,modelData)
