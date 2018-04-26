@@ -15,6 +15,10 @@ BattleMapBase = {
 	m_playerList,
 	m_mapFlagList,
 
+	m_ztLine,
+	m_ztCircleCur,
+	m_ztCircleDest,
+
 	m_pixel = 0,
 	m_meter = 0,
 	m_ratio = 0,
@@ -79,16 +83,18 @@ end
 --@brief 面板被创建
 function BattleMapBase:onCreatePanel()	
 
+	self.m_ztLine = PanelWidget:GetZTLine(self.m_transform,"Circles/ZTLine")
+	self.m_ztLine:SetLineWidth(8)
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleCur")
 	self.m_ztCircleCur:Init(80,true,0)
 	self.m_ztCircleCur:SetLineWidth(4)
-	self.m_ztCircleCur:SetColor(CSColor.green)
+	self.m_ztCircleCur:SetColor(CSColor.red)
 
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleDest")
 	self.m_ztCircleDest:Init(80,true,0)
 	self.m_ztCircleDest:SetLineWidth(4)
-	self.m_ztCircleDest:SetColor(CSColor.red)
+	self.m_ztCircleDest:SetColor(CSColor.green)
 
 	--玩家，队友
 	self.m_playerItemParent = PanelWidget:GetChild(self.m_transform,"PlayerList")
@@ -119,6 +125,7 @@ function BattleMapBase:Tick( )
 	self:_UpdateMapFlag()
 	self:_UpdateCircleCur()
 	self:_UpdateCircleDest()
+	self:_UpdatePlayerLine()
 end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --*******************************************************Public End*************************************************************
@@ -218,6 +225,32 @@ end
 function BattleMapBase:_UpdateCircleCur()
 	self:_SetCircle(self.m_ztCircleCur,MapCircleManager.m_scrCircle)
 end
+
+function BattleMapBase:_UpdatePlayerLine()
+	if MapCircleManager.m_destCircle and MapCircleManager.m_destCircle.pos then
+		local chara = GlobalBattleCtrl:GetOwnerChara()
+		if chara then
+			local worldPos = chara:GetPos()
+			local playerPos = CSVector2(worldPos.x,worldPos.z)
+			local playerViewPortPos = self:GetViewPortPos(playerPos)
+			local circleViewPortPos = self.m_ztCircleDest:GetPos()
+			local circleRadius = self.m_ztCircleDest:GetRadius()
+			if MapCircleManager.m_isWait then
+				circleViewPortPos = self.m_ztCircleCur:GetPos()
+				circleRadius = self.m_ztCircleCur:GetRadius()
+			end
+
+			local distance = CSVector2.Distance(playerViewPortPos,circleViewPortPos)
+			if distance > circleRadius then
+				self.m_ztLine.gameObject:SetActive(true)
+				self.m_ztLine:SetLine(playerViewPortPos,circleViewPortPos,distance)
+			else
+				self.m_ztLine.gameObject:SetActive(false)
+			end
+		end
+	end
+end
+
 
 function BattleMapBase:_UpdateCircleDest()
 	self:_SetCircle(self.m_ztCircleDest,MapCircleManager.m_destCircle)
