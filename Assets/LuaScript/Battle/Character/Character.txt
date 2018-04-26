@@ -397,6 +397,7 @@ function Character:SetAttributeByType(attriType,value)
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 		elseif attriType == AttributeType.HpMax then
 			--同步血槽
+			self.m_attriSystem:SetAttributeByType(attriType,value)
 			GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.UPDATE_CHARACTER_HP,self.m_nBattleId)
 		end
 		
