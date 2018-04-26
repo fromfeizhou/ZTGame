@@ -94,7 +94,7 @@ ModelImporter:
     4300032: Box13834
     11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

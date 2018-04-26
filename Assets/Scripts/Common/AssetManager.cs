@@ -127,7 +127,7 @@ public class AssetManager
 
         Object obj2 = null;
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
-        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luaScript");
+        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luascript");
         //加载assetBundleManifest文件    
         if (null != bundle)
         {   

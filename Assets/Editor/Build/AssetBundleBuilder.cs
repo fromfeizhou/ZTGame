@@ -36,7 +36,7 @@ public class AssetBundleBuilder : MonoBehaviour
         SetAssetBundlesName(prefabsDir);
         SetAssetBundlesName(mapDir);
         SetAssetBundlesName(particlesDir);
-        SetAssetBundlesName(luaScript,"luaScript");
+        SetAssetBundlesName(luaScript,"luascript");
         EditorUtility.ClearProgressBar();
         AssetDatabase.Refresh();
         Debug.Log("BuildAssetBundleName Finish");

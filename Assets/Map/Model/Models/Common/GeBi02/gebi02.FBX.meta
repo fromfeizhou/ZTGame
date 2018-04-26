@@ -76,7 +76,7 @@ ModelImporter:
     4300024: eBox092
     11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

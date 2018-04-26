@@ -107,11 +107,13 @@ function ZTCharaManager:RushInCamerView()
 		local pos  = chara:GetPos()
 		for i = 1,#self.m_tSortCharaList do
 			local tmpChara = self.m_tSortCharaList[i]
-			local tmpPos = tmpChara:GetPos()
-			if  CSVector3.Distance(pos,tmpPos) < 15 then
-				tmpChara:SetInCamera(true)
-			else
-				tmpChara:SetInCamera(false)
+			if not tmpChara:IsDead() then
+				local tmpPos = tmpChara:GetPos()
+				if  CSVector3.Distance(pos,tmpPos) < 15 then
+					tmpChara:SetInCamera(true)
+				else
+					tmpChara:SetInCamera(false)
+				end
 			end
 		end
 	end
@@ -247,7 +249,7 @@ end
 function ZTCharaManager:_OnUpdateCharacterGlass(battleId)
 	local chara = self.m_tCharaList[battleId]
 	local owner = GlobalBattleCtrl:GetOwnerChara()
-	if chara.m_nGlassId > 0 then
+	if not chara:IsDead() and  chara.m_nGlassId > 0 then
 		if chara.m_nCampId == owner.m_nCampId or chara.m_nGlassId ==  owner.m_nGlassId then
 			chara:ChangeTranslucence(TransLevelDefine.Trans)
 		else

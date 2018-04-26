@@ -25,7 +25,7 @@ ModelImporter:
     7400000: Take 001
     11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:

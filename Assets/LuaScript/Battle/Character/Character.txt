@@ -137,6 +137,9 @@ end
 
 --@brief 设置方向
 function Character:SetDirection(dir)
+	if self:IsDead() then
+		return
+	end
 	-- CS.GameTool.LogError("Character:SetDirection",self.m_nMoveDir,dir)
 	if self.m_nMoveDir ~= dir then
 		--切换待机 和其他状态 播放对应动作
@@ -332,6 +335,14 @@ function Character:SetDead(value)
 
 	if self.m_bIsDead then
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.CHARACTER_DEAD,self:GetBattleId())
+		--移除形象
+		if not GameConfig.IsSingleScene then
+			local loopTimer = LoopTimer:Create(function()
+				self:SetInCamera(false)
+			end)
+			loopTimer:SetParam(5,1)
+			TimerManager:AddTimer(loopTimer)
+		end
 	end
 end
 
