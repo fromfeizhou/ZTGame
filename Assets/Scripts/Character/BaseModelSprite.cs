@@ -237,7 +237,7 @@ public class RoleModelSprite : BaseModelSprite
     private void OnCreateModelFinish()
     {
         UpdateTranslucence();
-        if (curPlayName != "")
+        if (!string.IsNullOrEmpty(curPlayName))
         {
             Play(curPlayName);
             curPlayName = "";
