@@ -134,7 +134,7 @@ function Animator:_RushModelView(isChange)
 		end
 		self.m_goAnima:SetActive(true)
 		if self.m_sCurActionName and self.m_sCurActionName ~= "" then
-			self.m_ztAnima:Play(name)
+			self.m_ztAnima:Play(self.m_sCurActionName)
 		end
 	else
 		self.m_goAnima:SetActive(false)
