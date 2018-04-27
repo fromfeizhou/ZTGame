@@ -8,15 +8,18 @@ using XLua;
 [LuaCallCSharp]
 public class MapElementView
 {
+    //Time.realtimeSinceStartup
+
+    private PiecewiseLoader elementLoader = new PiecewiseLoader(1f, 500f);
+
+
     //地图块加载逻辑
     private MapTileViewMgr mapTileViewMgr;
 
     private MapAsset mapAsset;
-    private Dictionary<string, Dictionary<string, MapElement>> AllMapElementDic =
-        new Dictionary<string, Dictionary<string, MapElement>>();
+    private Dictionary<string, Dictionary<string, MapElement>> AllMapElementDic =new Dictionary<string, Dictionary<string, MapElement>>();
     //预设网格资源列表
-    private Dictionary<string, Dictionary<string, MapElementGrid>> AllMapElementGridDic =
-        new Dictionary<string, Dictionary<string, MapElementGrid>>();
+    private Dictionary<string, Dictionary<string, MapElementGrid>> AllMapElementGridDic = new Dictionary<string, Dictionary<string, MapElementGrid>>();
     //视野内预设列表
     private Dictionary<string, MapElement> visionElementDic = new Dictionary<string, MapElement>();
     private List<string> createElementList = new List<string>();    //创建列表
@@ -163,9 +166,11 @@ public class MapElementView
             disableElementList.Add(key);
 
         visionElementDic = elementDic;
-       // if (disableElementList.Count > 0)
-        //    ClearElementInList();
-        if (createElementList.Count > 0|| disableElementList.Count > 0)
+
+        pushCreateCallback();
+
+
+        if ( disableElementList.Count > 0)
         {
             if (null == _OnUpdateElementHandler)
             {
@@ -183,7 +188,7 @@ public class MapElementView
     //分帧加载或者清理地图元素
     IEnumerator OnUpdateElement()
     {
-        while (createElementList.Count > 0 || disableElementList.Count > 0)
+        while ( disableElementList.Count > 0)
         {
             Update();
             yield return null;
@@ -194,7 +199,7 @@ public class MapElementView
     public void Update()
     {
         ClearElementInList();//active转disable
-        CreateElementInList();
+       // CreateElementInList();
     }
 
     //清理地图元素（放入未激活列表）
@@ -217,6 +222,9 @@ public class MapElementView
             activeObj.Remove(key);
         }
     }
+
+
+
     //创建地图元素
     public void CreateElementInList()
     {
@@ -244,7 +252,7 @@ public class MapElementView
             string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
             AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
             {
-                if (obj != null)//&& visionElementDic.ContainsKey(key))
+                if (obj != null)
                 {
                     if (activeObj.ContainsKey(elementData.elementKey))
                     {
@@ -260,6 +268,63 @@ public class MapElementView
             });
         }
     }
+
+    private void pushCreateCallback()
+    {
+        if (createElementList == null)
+            return;
+
+        for (int index = createElementList.Count-1; index >= 0; index--)
+        {
+            string key = createElementList[index];
+            createElementList.RemoveAt(index);
+            MapElement elementData = visionElementDic[key];
+            MapElementInfo elementInfo = elementData.elementInfo;
+            activeObj[elementData.elementKey] = null;
+
+            GameObject tempObj = GetObjByDisable(elementData.elementType);
+            if (tempObj != null)
+            {
+                elementLoader.PushCallBack(() =>
+                {
+                    if (activeObj.ContainsKey(elementData.elementKey))
+                    {
+                        tempObj.transform.position = elementInfo.Pos;
+                        tempObj.transform.eulerAngles = elementInfo.Angle;
+                        tempObj.transform.localScale = elementInfo.Scale;
+                        tempObj.SetActive(true);
+                        activeObj[elementData.elementKey] = tempObj;
+                    }
+                });
+            }
+            else
+            {
+                string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
+                AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
+                {
+                    elementLoader.PushCallBack(() =>
+                    {
+                        if (obj != null)
+                        {
+                            if (activeObj.ContainsKey(elementData.elementKey))
+                            {
+                                GameObject assetTree = obj as GameObject;
+                                Transform element = GameObject.Instantiate(assetTree).transform;
+                                element.SetParent(elementRoot.transform);
+                                element.position = elementInfo.Pos;
+                                element.eulerAngles = elementInfo.Angle;
+                                element.localScale = elementInfo.Scale;
+                                activeObj[elementData.elementKey] = element.gameObject;
+                            }
+                        }
+                    });
+                });
+            }
+        }
+    }
+
+    
+
     //从缓存获取
     private GameObject GetObjByDisable(string elementType)
     {
@@ -289,5 +354,12 @@ public class MapElementView
         }
         destroyList.Clear();
     }
+
+    
+
+
+        
+
+
 
 }

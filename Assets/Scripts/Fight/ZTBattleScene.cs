@@ -33,6 +33,7 @@ public class ZTBattleScene : MonoBehaviour {
         {
             _update(Time.deltaTime);
         }
+	    PiecewiseLoaderMgr.GetInstance().UpdateLoaders();
 	}
 
 
