@@ -340,20 +340,16 @@ end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
-	local list = {CSVector3(350,0,200),CSVector3(350,0,190)}
-	local index = math.random(1,#list)
-	local pos = list[index]
-	table.remove(list,index)
-	
-
-
-	local player1 = GBattleEvent:GetBattleData(1,CareerType.Hero,pos,1,self:_GetAttributeList())
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
-	
-	index = math.random(1,#list)
-	pos = list[index]
-	local player2 = GBattleEvent:GetBattleData(2,CareerType.Hero,pos,2,self:_GetAttributeList())
-	GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player2)
+	local centerPos = {x = 350, y = 0, z = 200}
+	local len = 1
+	if GameConfig.IsSingleScene then
+		len = 20
+	end
+	for i = 1, len do
+		local vecpos = CSVector3(centerPos.x - (i % 10), centerPos.y, centerPos.z - (i % 10))
+		local player1 = GBattleEvent:GetBattleData(i,CareerType.Hero,vecpos,i,self:_GetAttributeList())
+		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
+	end
 end
 
 --@brief 获得属性列表
