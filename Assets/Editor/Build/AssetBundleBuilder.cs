@@ -14,7 +14,8 @@ public class AssetBundleBuilder : MonoBehaviour
     static string luaScript = Application.dataPath + "/LuaScript";
     static string particlesDir = Application.dataPath + "/Particles";
     //打包后存放路径
-    const string assetBundlesPath = "../../";
+    const string assetBundlesOutPath = "../../";
+    static string assetBundlesOutPathII = Application.dataPath + "/StreamingAssets/AssetBundle";
 
     static BuildTarget target = BuildTarget.Android;
     [MenuItem("CYH_Tools/AB_Packager/ClearAbName")]
@@ -50,7 +51,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, target);
         }
-        BuildAssetResource(assetBundlesPath + "IPhone/AssetBundle");
+        BuildAssetResource(assetBundlesOutPath + "IPhone/AssetBundle");
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_Android")]
@@ -61,7 +62,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, target);
         }
-        BuildAssetResource(assetBundlesPath + "Android/AssetBundle");
+        BuildAssetResource(assetBundlesOutPath + "Android/AssetBundle");
     }
 
     [MenuItem("CYH_Tools/AB_Packager/Build_2_Windows")]
@@ -72,7 +73,7 @@ public class AssetBundleBuilder : MonoBehaviour
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, target);
         }
-        BuildAssetResource(assetBundlesPath + "Wins/AssetBundle");
+        BuildAssetResource(assetBundlesOutPath + "Wins/AssetBundle");
     }
 
     [MenuItem("CYH_Tools/Build_Packager/Build_ALL_Android")]
@@ -81,14 +82,13 @@ public class AssetBundleBuilder : MonoBehaviour
       
         target = BuildTarget.Android;
         BuildAssetBundleName();
-        string path = Application.dataPath + "/StreamingAssets/AssetBundle";
        
-        if (Directory.Exists(path))
+        if (Directory.Exists(assetBundlesOutPathII))
         {
-            Directory.Delete(path,true);
+            Directory.Delete(assetBundlesOutPathII, true);
         }
         AssetDatabase.Refresh();
-        BuildAssetResource(path);
+        BuildAssetResource(assetBundlesOutPathII);
 
         string pathout = "E:/ZTGameAndroid.apk";
         FileInfo fileInfoOut = new FileInfo(pathout);
@@ -126,9 +126,18 @@ public class AssetBundleBuilder : MonoBehaviour
         }
 
         BuildPipeline.BuildAssetBundles(assetPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+        CreateEndResource(assetPath);
         Debug.Log(assetPath + "  BuildAssetResource Finish!");
     }
 
+    static void CreateEndResource(string assetPath)
+    {
+        string fileFullName = assetPath + "/" + DownLoadCommon.END_RESOUCES_FILE_NAME;
+        if (!File.Exists(fileFullName))
+        {
+            File.Create(fileFullName);
+        }
+    }
 
 
     /// <summary>

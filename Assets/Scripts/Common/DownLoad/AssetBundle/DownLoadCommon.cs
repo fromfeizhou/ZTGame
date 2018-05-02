@@ -70,6 +70,10 @@ public static class DownLoadCommon
     ///   主Manifest文件名称（必须存在）
     /// </summary>
     public const string MAIN_MANIFEST_FILE_NAME = "AssetBundle";
+    /// <summary>
+    /// 资源结束位置
+    /// </summary>
+    public const string END_RESOUCES_FILE_NAME = "EndResouceFile.cfg";
 
     /// <summary>
     ///   获得资源全局路径
