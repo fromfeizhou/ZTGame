@@ -43,7 +43,11 @@ function RadarPanel:onCreatePanel()
 	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent(typeof(CSRectTransform))
 	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_viewPort,"ztTxt_WaitTime")
 	self.m_ztTxt_PlayerPos = PanelWidget:GetZTText(self.m_viewPort,"PlayerPos/ztTxtPlayerPos")
-	self.m_battleMapBase:InitMapBase(self.m_viewPort:Find("Mask"))
+
+
+	pixel = 2048
+	meter = 1024
+	self.m_battleMapBase:InitMapBase(self.m_viewPort:Find("Mask"), pixel, meter)
 
 	PanelWidget:GetZTButton(self.m_viewPort,"ZTButton",function () 
 		if self.m_delegeteShowMapScroll then
@@ -72,6 +76,10 @@ function RadarPanel:_UpdateInfo()
 		curWaitTime = MapCircleManager.m_waitTime
 		self.m_ztTxt_waitTime.text = curWaitTime
 	end
+end
+
+function RadarPanel:onShow()
+	self.m_battleMapBase:_UpdateCity()
 end
 
 --@brief 销毁登录面板

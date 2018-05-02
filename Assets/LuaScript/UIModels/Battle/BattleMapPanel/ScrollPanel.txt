@@ -53,7 +53,10 @@ function ScrollPanel:onCreatePanel()
 	self.m_mapImg = self.m_scrollView.content:GetComponent("ZTImage")
 	self.m_mapImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
 
-	self.m_battleMapBase:InitMapBase(self.m_scrollView.viewport)
+
+	pixel = 2048
+	meter = 1024
+	self.m_battleMapBase:InitMapBase(self.m_scrollView.viewport, pixel, meter)
 	local slider = PanelWidget:GetZTSlider(self.m_transform,"ViewPort/ZTSlider",function(value) self:_onValueChanged(value) end)
 	slider.minValue = self.m_viewPort.sizeDelta.x / self.m_battleMapBase:GetPixel()
 	slider.maxValue = MAP_VIEWPORT_SCALE
@@ -68,6 +71,10 @@ function ScrollPanel:onTick(deltaTime)
 	if self.m_battleMapBase and self.m_battleMapBase.Tick then
 		self.m_battleMapBase:Tick()
 	end
+end
+
+function ScrollPanel:onShow()
+	self.m_battleMapBase:_UpdateCity()
 end
 
 --@brief 销毁登录面板
@@ -98,12 +105,15 @@ end
 function ScrollPanel:_onValueChanged(value)
 	self.m_battleMapBase:SetScale(value)
 	self.m_battleMapBase:CheckViewPortClamped(self.m_viewPort.sizeDelta)
+	self.m_battleMapBase:_UpdateCity()
 end
 
 
 function ScrollPanel:onClickMapScroll(clickPoint)
 	local viewPortPos = CSGetScreenPosToParentPos(self.m_mapImg.rectTransform,clickPoint,self.m_canvas)
-	MapCircleManager:Request_SendPlayerPosFlag(self.m_battleMapBase:GetRealPos(viewPortPos))
+	local realPos = self.m_battleMapBase:GetRealPos(viewPortPos)
+	MapCircleManager:Request_SendPlayerPosFlag(realPos)
+	LogC("ScrollPanel:onClickMapScroll",string.format("标记点坐标：(%d,%d)", math.ceil(realPos.x), math.ceil(realPos.y)))
 end
 
 

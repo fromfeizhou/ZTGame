@@ -65,6 +65,7 @@ local LuaFileLoad = {
 		"ALuaConfig.Tab_SkillTeam",
 		"ALuaConfig.Tab_TipSafeCircle",
 		"ALuaConfig.Tab_Circle",
+		"ALuaConfig.Tab_MapCityName",
 	},
 
 	--游戏lua文件
