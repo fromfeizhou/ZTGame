@@ -10,7 +10,8 @@ public class MapElementView
 {
     //Time.realtimeSinceStartup
 
-    private PiecewiseLoader elementLoader = new PiecewiseLoader(1f, 500f);
+    private PiecewiseLoader elementLoader = new PiecewiseLoader(1f);
+    private PiecewiseLoader elementUnLoader = new PiecewiseLoader(1f);
 
 
     //地图块加载逻辑
@@ -167,109 +168,14 @@ public class MapElementView
 
         visionElementDic = elementDic;
 
-        pushCreateCallback();
+        PushCreateCallback();
+        PushClearCallback();
 
-
-        if ( disableElementList.Count > 0)
-        {
-            if (null == _OnUpdateElementHandler)
-            {
-                _OnUpdateElementHandler = OnUpdateElement();
-                ZTSceneManager.GetInstance().StartCoroutine(_OnUpdateElementHandler);
-            }
-        }
-        if (disabelObj.Count > 500)
-        {
-            List<GameObject> tempDisableList = disabelObj.GetRange(0, disabelObj.Count / 2);
-            disabelObj.RemoveRange(0, disabelObj.Count / 2);
-            ZTSceneManager.GetInstance().StartCoroutine(DestroyElementList(tempDisableList));
-        }
-    }
-    //分帧加载或者清理地图元素
-    IEnumerator OnUpdateElement()
-    {
-        while ( disableElementList.Count > 0)
-        {
-            Update();
-            yield return null;
-        }
-        _OnUpdateElementHandler = null;
+       
     }
 
-    public void Update()
-    {
-        ClearElementInList();//active转disable
-       // CreateElementInList();
-    }
-
-    //清理地图元素（放入未激活列表）
-    public void ClearElementInList()
-    {
-        if (disableElementList == null || disableElementList.Count == 0)
-        {
-            return;
-        }
-        string key = disableElementList[0];
-        disableElementList.RemoveAt(0);
-        if (activeObj.ContainsKey(key))
-        {
-            GameObject tempObj = activeObj[key];
-            if (tempObj != null)
-            {
-                tempObj.SetActive(false);
-                disabelObj.Add(tempObj);
-            }
-            activeObj.Remove(key);
-        }
-    }
-
-
-
-    //创建地图元素
-    public void CreateElementInList()
-    {
-        if (createElementList == null || createElementList.Count == 0)
-        {
-            return;
-        }
-        string key = createElementList[0];
-        createElementList.RemoveAt(0);
-        MapElement elementData = visionElementDic[key];
-        MapElementInfo elementInfo = elementData.elementInfo;
-        activeObj[elementData.elementKey] = null;
-
-        GameObject tempObj = GetObjByDisable(elementData.elementType);
-        if (tempObj != null)
-        {
-            tempObj.transform.position = elementInfo.Pos;
-            tempObj.transform.eulerAngles = elementInfo.Angle;
-            tempObj.transform.localScale = elementInfo.Scale;
-            tempObj.SetActive(true);
-            activeObj[elementData.elementKey] = tempObj;
-        }
-        else
-        {
-            string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
-            AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
-            {
-                if (obj != null)
-                {
-                    if (activeObj.ContainsKey(elementData.elementKey))
-                    {
-                        GameObject assetTree = obj as GameObject;
-                        Transform element = GameObject.Instantiate(assetTree).transform;
-                        element.SetParent(elementRoot.transform);
-                        element.position = elementInfo.Pos;
-                        element.eulerAngles = elementInfo.Angle;
-                        element.localScale = elementInfo.Scale;
-                        activeObj[elementData.elementKey] = element.gameObject;
-                    }
-                }
-            });
-        }
-    }
-
-    private void pushCreateCallback()
+   
+    private void PushCreateCallback()
     {
         if (createElementList == null)
             return;
@@ -323,7 +229,49 @@ public class MapElementView
         }
     }
 
-    
+    private void PushClearCallback()
+    {
+
+        if (disabelObj.Count > 100)
+        {
+            List<GameObject> tempDisableList = disabelObj.GetRange(0, disabelObj.Count / 2);
+            disabelObj.RemoveRange(0, disabelObj.Count / 2);
+            for (int index = 0; index < tempDisableList.Count; index++)
+            {
+                GameObject destroyObj = tempDisableList[index];
+                elementUnLoader.PushCallBack(() =>
+                {
+                    if (destroyObj != null)
+                    {
+                        GameObject.Destroy(destroyObj);
+                    }
+                });
+            }
+        }
+
+
+        if (disableElementList == null ) return;
+        for (int index = 0; index < disableElementList.Count; index++)
+        {
+            string key = disableElementList[0];
+            disableElementList.RemoveAt(0);
+            if (activeObj.ContainsKey(key))
+            {
+                GameObject tempObj = activeObj[key];
+                elementUnLoader.PushCallBack(() =>
+                {
+                    if (tempObj != null)
+                    {
+                        tempObj.SetActive(false);
+                        disabelObj.Add(tempObj);
+
+                    }
+                });
+                activeObj.Remove(key);
+            }
+        }
+        
+    }
 
     //从缓存获取
     private GameObject GetObjByDisable(string elementType)

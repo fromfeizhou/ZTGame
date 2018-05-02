@@ -29,19 +29,6 @@ public class MapItemInfoBase
     public Vector3 Scale;
 }
 
-[System.Serializable]
-public class MapItemInfo
-{
-    public eMapItemType MapItemType;
-    public List<MapItemInfoBase> MapItemInfoList = new List<MapItemInfoBase>();
-}
-
-[System.Serializable]
-public class MapInfo
-{
-    public string MapKey;
-    public List<MapItemInfo> MapItemList = new List<MapItemInfo>();
-}
 
 [System.Serializable]
 public class MapElementGrid
@@ -71,8 +58,6 @@ public class MapElementInfo
 [System.Serializable]
 public class MapAsset : ScriptableObject
 {
-    public List<MapInfo> MapList = new List<MapInfo>();
-
     public List<MapElement> elementList = new List<MapElement>();
 
     public List<MapElementGrid> ElementGrids = new List<MapElementGrid>();

@@ -30,11 +30,11 @@ public class PiecewiseLoaderMgr : Singleton<PiecewiseLoaderMgr>
         }
     }
 
-    public void UpdateLoaders()
+    public void UpdateLoaders(float time)
     {
         for (int index = 0; index < loaders.Count; index++)
         {
-            loaders[index].UpdateLoader();
+            loaders[index].UpdateLoader(time);
         }
     }
 
