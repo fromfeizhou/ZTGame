@@ -1,0 +1,8 @@
+Tab_FlyLine = {
+[1] = { id = 1, startPos = {25,0,945,}, endPos = {964,0,367,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+[2] = { id = 2, startPos = {25,0,945,}, endPos = {1027,0,63,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+[3] = { id = 3, startPos = {25,0,945,}, endPos = {1004,0,696,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+[4] = { id = 4, startPos = {1014,0,902,}, endPos = {20,0,781,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+[5] = { id = 5, startPos = {1014,0,902,}, endPos = {32,0,414,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+[6] = { id = 6, startPos = {1014,0,902,}, endPos = {44,0,58,}, flyTime = 30000, activeTime = 5000, allActiveTime = 25000,  },
+}
