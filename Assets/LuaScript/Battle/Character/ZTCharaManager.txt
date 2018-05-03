@@ -340,13 +340,13 @@ end
 
 --@brief 测试技能
 function ZTCharaManager:_InitSkillTest()
-	local centerPos = {x = 350, y = 0, z = 200}
+	local centerPos = {x = 360, y = 0, z = 210}
 	local len = 1
 	if GameConfig.IsSingleScene then
 		len = 20
 	end
 	for i = 1, len do
-		local vecpos = CSVector3(centerPos.x - (i % 10), centerPos.y, centerPos.z - (i % 10))
+		local vecpos = CSVector3(centerPos.x - (i % 5)*1.5, centerPos.y, centerPos.z - math.floor((i - 1) / 5)*1.5)
 		local player1 = GBattleEvent:GetBattleData(i,CareerType.Hero,vecpos,i,self:_GetAttributeList())
 		GBattleEvent:GetDispatcher():DispatchEvent(BATTLE_EVENT.ADD_CHARACTER, player1)
 	end

@@ -234,7 +234,7 @@ end
 
 --@brief 显示碰撞
 function SkillActionCollider:_UpdateColliderView()
-	if not GameConfig.IsSingleScene then
+	if not GameConfig.IsSkillDebugScene then
 		return
 	end
 	if not self.m_colliderView then
