@@ -230,10 +230,10 @@ public class AssetUpdater : MonoBehaviour
         //创建缓存目录
         if (!Directory.Exists(DownLoadCommon.CACHE_PATH))
             Directory.CreateDirectory(DownLoadCommon.CACHE_PATH);
-        AssetBundleManager.GetInstance().Relaunch();
+        ZTAssetBundleManager.GetInstance().Relaunch();
 
         //ab包启动
-        while (!AssetBundleManager.GetInstance().WaitForLaunch())
+        while (!ZTAssetBundleManager.GetInstance().WaitForLaunch())
         {
             yield return null;
         }
@@ -374,7 +374,7 @@ public class AssetUpdater : MonoBehaviour
         UpdateCompleteValue(0f, 0f);
 
         ////载入MainManifest
-        AssetBundleManifest manifest = AssetBundleManager.GetInstance().MainManifest;
+        AssetBundleManifest manifest = ZTAssetBundleManager.GetInstance().MainManifest;
         //载入新的ResourcesManifest
         string file = DownLoadCommon.GetCacheFileFullName(DownLoadCommon.MAIN_MANIFEST_FILE_NAME);
         AssetBundleManifest new_manifest = DownLoadCommon.LoadMainManifestByPath(file);
@@ -590,11 +590,11 @@ public class AssetUpdater : MonoBehaviour
                 Directory.Delete(DownLoadCommon.CACHE_PATH, true);
 
             //重启AssetBundleManager
-            AssetBundleManager.GetInstance().Relaunch();
+            ZTAssetBundleManager.GetInstance().Relaunch();
         }
 
         //ab包重新启动
-        while (!AssetBundleManager.GetInstance().WaitForLaunch())
+        while (!ZTAssetBundleManager.GetInstance().WaitForLaunch())
         {
             yield return null;
         }

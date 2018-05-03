@@ -17,10 +17,11 @@ public class ZTAssetBundle
     /// 初始化
     /// </summary>
     /// <param name="abName"></param>
-    public void Init(string abName)
+    public ZTAssetBundle(string abName)
     {
         this.AbPath = DownLoadCommon.GetFileFullName(abName); ;
         this._assetDic = new Dictionary<string, Object>();
+         this.Load();
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ public class ZTAssetBundle
     /// <summary>
     /// 同步加载资源
     /// </summary>
-    public Object GetAsset(string assetName)
+    public Object GetAsset(string assetName, System.Type type = null)
     {
         if (this._assetDic.ContainsKey(assetName))
         {
@@ -49,7 +50,14 @@ public class ZTAssetBundle
 
         if (null != this._assetBundle)
         {
-            this._assetDic.Add(assetName, this._assetBundle.LoadAsset(assetName));
+            if(null != type)
+            {
+                this._assetDic.Add(assetName, this._assetBundle.LoadAsset(assetName,type));
+            }
+            else
+            {
+                this._assetDic.Add(assetName, this._assetBundle.LoadAsset(assetName));
+            }
             return this._assetDic[assetName];
         }
         return null;
@@ -66,25 +74,25 @@ public class ZTAssetBundle
         }
     }
 
-    /// <summary>
-    /// 异步加载ab包
-    /// </summary>
-    IEnumerator LoadSync()
-    {
-        AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(this.AbPath);
-        while (!abcr.isDone)
-        {
-            yield return null;
-        }
+    ///// <summary>
+    ///// 异步加载ab包
+    ///// </summary>
+    //IEnumerator LoadSync()
+    //{
+    //    AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(this.AbPath);
+    //    while (!abcr.isDone)
+    //    {
+    //        yield return null;
+    //    }
 
-        this._assetBundle = abcr.assetBundle;
-        this.IsLoadAbDone = true;
-    }
+    //    this._assetBundle = abcr.assetBundle;
+    //    this.IsLoadAbDone = true;
+    //}
 
     /// <summary>
     /// 异步加载资源
     /// </summary>
-    private IEnumerator GetAssetSync(string assetName, System.Action<Object> callback, System.Type type = null)
+    public IEnumerator GetAssetSync(string assetName, System.Action<Object> callback, System.Type type = null)
     {
         if (this._assetBundle == null)
         {
