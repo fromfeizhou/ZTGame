@@ -21,23 +21,6 @@ public class AssetManager
 
 #if UNITY_EDITOR
 		ZTSceneManager.GetInstance().StartCoroutine(AnsyLoadAsset(path,callback,type));
-        //编辑器模式下 资源获取
-        /*
-    Object obj = null;
-    if (null != type)
-    { 
-        obj = UnityEditor.AssetDatabase.LoadAssetAtPath(path, type);chang_hero
-    }
-    else
-    {
-        obj = UnityEditor.AssetDatabase.LoadMainAssetAtPath(path);
-    }
-    if (null != callback)
-    {
-        callback(obj, path);
-    }
-    return;
-    */
 #else
         string fileName = System.IO.Path.GetFileName(path);
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
@@ -53,7 +36,7 @@ public class AssetManager
         //}
         //callback(null, path);
 
-        AssetBundleManager.GetInstance().LoadSyncAssetBundleAndDependencies(abName, fileNameEx, (Object gameObject) =>
+        ZTAssetBundleManager.GetInstance().LoadSyncAssetBundleAndDependencies(abName, fileNameEx, (Object gameObject) =>
         {
             //加载assetBundleManifest文件    
             if (null != gameObject)
@@ -127,7 +110,7 @@ public class AssetManager
 
         Object obj2 = null;
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
-        AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luascript");
+        AssetBundle bundle = ZTAssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luascript");
         //加载assetBundleManifest文件    
         if (null != bundle)
         {   

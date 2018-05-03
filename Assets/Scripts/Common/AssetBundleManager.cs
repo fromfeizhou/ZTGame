@@ -21,6 +21,7 @@ using System;
 [LuaCallCSharp]
 public class AssetBundleManager : MonoSingleton<AssetBundleManager>
 {
+
     /// <summary>
     ///   最新的资源版本
     /// </summary>
@@ -461,6 +462,7 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
     /// </summary>
     void Launch()
     {
+       
         if (_assetbundle_permanent == null)
             _assetbundle_permanent = new Dictionary<string, AssetBundle>();
         if (_assetbundle_cache == null)
@@ -542,6 +544,7 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
     /// </summary>
     bool PreprocessFinished()
     {
+        
         MainManifest = DownLoadCommon.LoadMainManifest();
         if (MainManifest == null)
         {
@@ -578,7 +581,6 @@ public class AssetBundleManager : MonoSingleton<AssetBundleManager>
             string name = all_assetbundle[i];
             yield return DownLoadCommon.StartCopyInitialFile(name);
         }
-
         //ResourcesManifest resources_manifest = DownLoadCommon.LoadResourcesManifest();
         //if (resources_manifest == null)
         //{

@@ -4,8 +4,11 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
+public class ZTAssetBundleManager : MonoSingleton<ZTAssetBundleManager>
 {
+    public int InitTotal = 1;
+    public int InitCurrent = 1;
+
     /// <summary>
     ///   主AssetBundleMainfest
     /// </summary>
@@ -22,6 +25,8 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
     {
         get { return ErrorCode != EmErrorCode.None; }
     }
+
+
 
     public EmErrorCode ErrorCode { get; private set; }
 
@@ -46,9 +51,19 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
     private Dictionary<string, ZTAssetBundle> _assetbundleTemporary;
 
 
+    /// <summary>
+    /// 等待启动完毕，启动完毕返回True,
+    /// </summary>
+    public bool WaitForLaunch()
+    {
+        if (IsReady || IsFailed)
+            return true;
+
+        return false;
+    }
+
     public void Relaunch()
     {
-      
         ShutDown();
         Launch();
     }
@@ -64,6 +79,13 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
         if (this._assetbundleTemporary == null)
             _assetbundleTemporary = new Dictionary<string, ZTAssetBundle>();
 
+        this.InitTotal = 1;
+        this.InitCurrent = 0;
+
+        IsReady = false;
+        ErrorCode = EmErrorCode.None;
+        StopAllCoroutines();
+        StartCoroutine(Preprocess());
     }
 
     /// <summary>
@@ -88,6 +110,7 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
     /// </summary>
     void UnloadAssetBundleByDic(Dictionary<string, ZTAssetBundle> assetbundleDic)
     {
+        if (null == assetbundleDic) return;
         var itr = assetbundleDic.Values.GetEnumerator();
         while (itr.MoveNext())
         {
@@ -207,7 +230,7 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
     /// <summary>
     ///   初始化(检测资源完整性)
     /// </summary>
-    IEnumerator CheckInitAsset()
+    IEnumerator Preprocess()
     {
         //创建资源根目录
         if (!Directory.Exists(DownLoadCommon.PATH))
@@ -225,10 +248,12 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
     }
 
     /// <summary>
-    /// 初始化
+    /// 初始化结束
     /// </summary>
     bool PreprocessFinished()
     {
+        this.InitCurrent = this.InitTotal;
+
         this.MainManifest = DownLoadCommon.LoadMainManifest();
 
         if (this.MainManifest == null)
@@ -258,8 +283,10 @@ public class ZTAssetBundleManager : MonoSingleton<AssetBundleManager>
             yield break;
         //拷贝AssetBundle文件
         string[] all_assetbundle = initial.GetAllAssetBundles();
+        this.InitTotal = all_assetbundle.Length;
         for (int i = 0; i < all_assetbundle.Length; ++i)
         {
+            this.InitCurrent = i;
             string name = all_assetbundle[i];
             yield return DownLoadCommon.StartCopyInitialFile(name);
         }

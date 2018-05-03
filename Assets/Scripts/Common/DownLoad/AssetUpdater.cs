@@ -235,6 +235,7 @@ public class AssetUpdater : MonoBehaviour
         //ab包启动
         while (!ZTAssetBundleManager.GetInstance().WaitForLaunch())
         {
+            UpdateCompleteValue(ZTAssetBundleManager.GetInstance().InitCurrent, ZTAssetBundleManager.GetInstance().InitTotal);
             yield return null;
         }
         UpdateCompleteValue(1f, 1f);
