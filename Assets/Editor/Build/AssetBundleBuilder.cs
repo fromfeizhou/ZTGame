@@ -135,7 +135,8 @@ public class AssetBundleBuilder : MonoBehaviour
         string fileFullName = assetPath + "/" + DownLoadCommon.END_RESOUCES_FILE_NAME;
         if (!File.Exists(fileFullName))
         {
-            File.Create(fileFullName);
+            FileStream file = File.Create(fileFullName);
+            file.Close();
         }
     }
 
