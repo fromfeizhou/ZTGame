@@ -26,17 +26,8 @@ public class AssetManager
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
         string abName = path.Replace(fileName, "").Replace('/', '_');
         abName = abName.Substring(0, abName.Length - 1).ToLower();
-        //AssetBundle bundle = AssetBundleManager.GetInstance().LoadAssetBundleAndDependencies(abName);
-        ////加载assetBundleManifest文件    
-        //if (null != bundle)
-        //{
-        //    Object obj2 = bundle.LoadAsset(fileNameEx);
-        //    callback(obj2, path);
-        //    return;
-        //}
-        //callback(null, path);
 
-        ZTAssetBundleManager.GetInstance().LoadSyncAssetBundleAndDependencies(abName, fileNameEx, (Object gameObject) =>
+        ZTAssetBundleManager.GetInstance().LoadAssetInBundleSync(abName, fileNameEx, (Object gameObject) =>
         {
             //加载assetBundleManifest文件    
             if (null != gameObject)
@@ -110,11 +101,11 @@ public class AssetManager
 
         Object obj2 = null;
         string fileNameEx = System.IO.Path.GetFileNameWithoutExtension(path);
-        AssetBundle bundle = ZTAssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luascript");
+        ZTAssetBundle bundle = ZTAssetBundleManager.GetInstance().LoadAssetBundleAndDependencies("luascript");
         //加载assetBundleManifest文件    
         if (null != bundle)
         {   
-            obj2 = bundle.LoadAsset(fileNameEx);
+            obj2 = bundle.GetAsset(fileNameEx);
         }
         TextAsset text2 = (TextAsset)obj2;
         if (null != text2)
