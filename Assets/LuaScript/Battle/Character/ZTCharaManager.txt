@@ -236,7 +236,7 @@ function ZTCharaManager:_OnStartGame(playerList,ownerId)
 			local data = GBattleEvent:GetBattleData(v.battleId,1,v.pos,v.camp,v.attritList)
 			self:_OnAddCharacter(data)
 		else
-			chara:SetData(v)
+			 self.m_tCharaList[v.battleId]:SetData(v)
 		end
 	end
 	self.m_tCharaTeamList = nil
