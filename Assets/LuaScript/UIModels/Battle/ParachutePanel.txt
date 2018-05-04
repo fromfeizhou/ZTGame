@@ -1,0 +1,65 @@
+--ParachutePanel.txt
+--@breif lua入口
+--@data 2018/3/5
+
+
+--@brief c#引用
+local CSGameObject = CS.UnityEngine.GameObject
+local CSTransform = CS.UnityEngine.Transform
+local CSVector3 = CS.UnityEngine.Vector3
+local CSRenderTexture = CS.UnityEngine.RenderTexture
+local CSColor = CS.UnityEngine.Color
+ParachutePanel = {
+}
+
+setmetatable( ParachutePanel, { __index = UIBasePanel})
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+--*******************************************************Public Begin*************************************************************
+--————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+
+function ParachutePanel:GetName()
+	return "ParachutePanel"
+end
+
+--@brief 面板资源相对模块路径
+function BattleMainPanel:GetRelativePath()
+	return "Panel/"
+end
+
+--@brief 面板被创建
+function ParachutePanel:onCreatePanel()	
+end
+
+
+--@brief 面板初始化
+function ParachutePanel:onInitPanel()
+end
+
+--@brief 面板每帧更新
+function ParachutePanel:onTick(deltaTime)
+end
+
+--@brief 销毁登录面板
+function ParachutePanel:onDestroy()
+end
+
+--@brief 添加事件监听
+function ParachutePanel:_AddEvents()
+end
+
+--@brief 移除事件监听
+function ParachutePanel:_RemoveEvents()
+end
+
+--@brief 注册网络门户
+function ParachutePanel:_RegNetFacade()
+end
+
+--@brief 注销网络门户
+function ParachutePanel:_UnRegNetFacade()
+end
+	
+
+function ParachutePanel:onShow()
+end
+

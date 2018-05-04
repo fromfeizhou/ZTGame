@@ -32,6 +32,7 @@ CITY_TYPE = {
 --@战斗面板类型
 BATTLE_TYPE = {
 	MAIN  		= 4001,	--全局控制面板
+	PARACHUTE 	= 4002, --跳伞
 	MATCH		= 4005, --匹配界面
 	BATTLEEND	= 4006,
 }

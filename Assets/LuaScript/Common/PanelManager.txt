@@ -72,6 +72,7 @@ end
 function PanelManager:_RegGamePanel()
 	self.m_panelDefine[CITY_TYPE.MAIN] 			= CityMainPanel
 	self.m_panelDefine[BATTLE_TYPE.MAIN] 		= BattleMainPanel
+	self.m_panelDefine[BATTLE_TYPE.PARACHUTE]	= ParachutePanel
 	self.m_panelDefine[BATTLE_TYPE.MATCH]       = MatchPanel
 	self.m_panelDefine[BATTLE_TYPE.BATTLEEND]	= BattleEndPanel
 end
