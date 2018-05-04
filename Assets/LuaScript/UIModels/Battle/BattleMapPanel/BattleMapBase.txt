@@ -53,36 +53,48 @@ local PlayerCenterScale = true
 
 
 
-
+local pivot = CSVector2()
 function BattleMapBase:SetScale( scale )
 	if scale and scale ~= self.m_scale and scale > 0 then
 		if PlayerCenterScale then 
-			self:_SetScale_PlayerCenter(scale)
+			self:_SetScale_PlayerCenter()
+			self.m_rectTransform.pivot = pivot
 		else
-			self:_SetScale_ViewPortCenter(scale)
+			self:_SetScale_ViewPortCenter()
+			self.m_rectTransform.pivot = pivot
 		end
+
+
+		self.m_scale = scale
+		self.m_rectTransform.sizeDelta = CSVector2.one * self.m_pixel * self.m_scale
 	end
 end
 
-function BattleMapBase:_SetScale_PlayerCenter( scale )
-	local centerPivot = CSVector2.zero
-		local chara = GlobalBattleCtrl:GetOwnerChara()
-		if chara then
-			local worldPos = chara:GetPos()
-			local playerPos = CSVector2(worldPos.x,worldPos.z)
-			centerPivot.x = playerPos.x/self.m_meter
-			centerPivot.y = playerPos.y/self.m_meter
-		end
-		self.m_rectTransform.pivot = centerPivot
-
-	self.m_scale = scale
-	self.m_rectTransform.sizeDelta = CSVector2.one * self.m_pixel * self.m_scale
+function BattleMapBase:_SetScale_PlayerCenter(  )
+	local chara = GlobalBattleCtrl:GetOwnerChara()
+	if chara then
+		local worldPos = chara:GetPos()
+		local playerPos = CSVector2(worldPos.x,worldPos.z)
+		pivot.x = playerPos.x/self.m_meter
+		pivot.y = playerPos.y/self.m_meter
+	end
 end
 
-function BattleMapBase:_SetScale_ViewPortCenter( scale )
-	-- body
+function BattleMapBase:_SetScale_ViewPortCenter(  )
+	
 end
 
+function BattleMapBase:UpdatePivot()
+	local tmpValue = CSVector2 ()
+	tmpValue.x = self.m_rectTransform.anchoredPosition.x - self.m_rectTransform.sizeDelta.x * self.m_rectTransform.pivot.x
+	tmpValue.y = self.m_rectTransform.anchoredPosition.y - self.m_rectTransform.sizeDelta.y * self.m_rectTransform.pivot.y
+	tmpValue = CSVector2.one * 400 - tmpValue;
+
+	pivot.x = tmpValue.x / self.m_rectTransform.sizeDelta.x
+	pivot.y = tmpValue.y / self.m_rectTransform.sizeDelta.y
+	--LogError("BattleMapBase:UpdatePivot",pivot.x .. ":" .. pivot.y)
+
+end
 
 
 
@@ -326,6 +338,6 @@ end
 function BattleMapBase:_SetCircle(circle, circleInfo)
 	if circleInfo and circleInfo.pos and circleInfo.radius then 
 		circle:SetPos(self:GetViewPortPos(circleInfo.pos))
-		circle.Radius =self:GetViewPortPos(circleInfo.radius)
+		circle.Radius = self:GetViewPortPos(circleInfo.radius)
 	end
 end

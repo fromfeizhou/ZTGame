@@ -10,7 +10,7 @@ local CSVector3 = CS.UnityEngine.Vector3
 local CSVector2 = CS.UnityEngine.Vector2
 local CSColor = CS.UnityEngine.Color
 local CSQuaternion = CS.UnityEngine.Quaternion
-local CSScrollRect = CS.UnityEngine.UI.ScrollRect
+local CSScrollRect = CS.ScrollRect
 local CSGetScreenPosToParentPos = CS.GameTool.GetScreenPosToParentPos
 
 
@@ -46,8 +46,9 @@ end
 --@brief 面板被创建
 function ScrollPanel:onCreatePanel()
 	PanelWidget:GetButton(self.m_transform,"btnClose",function() self:Hide() end)
-	self.m_scrollView = self.m_transform:Find("Scroll View"):GetComponent(typeof(CSScrollRect))
+	self.m_scrollView = PanelWidget:GetZTScrollRect(self.m_transform,"Scroll View")
 	self.m_scrollView.content = self.m_battleMapBase.m_transform
+	self.m_scrollView.onEndDrag = function ( eventData ) self:onEndDrag(eventData) end
 
 	self.m_mapImg = self.m_scrollView.content:GetComponent("ZTImage")
 	self.m_mapImg.onClickImg = function (eventData) self:onClickMapScroll(eventData.pressPosition) end
@@ -63,6 +64,9 @@ function ScrollPanel:onCreatePanel()
 	slider.value = slider.minValue
 end
 
+function ScrollPanel:onEndDrag(eventData)
+	self.m_battleMapBase:UpdatePivot()
+end
 
 --@brief 面板初始化
 function ScrollPanel:onInitPanel()
