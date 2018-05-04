@@ -49,12 +49,42 @@ function BattleMapBase:GetScale()
 	return self.m_scale
 end
  
+local PlayerCenterScale = true
+
+
+
+
 function BattleMapBase:SetScale( scale )
 	if scale and scale ~= self.m_scale and scale > 0 then
-		self.m_scale = scale
-		self.m_rectTransform.sizeDelta = CSVector2.one * self.m_pixel * self.m_scale
+		if PlayerCenterScale then 
+			self:_SetScale_PlayerCenter(scale)
+		else
+			self:_SetScale_ViewPortCenter(scale)
+		end
 	end
 end
+
+function BattleMapBase:_SetScale_PlayerCenter( scale )
+	local centerPivot = CSVector2.zero
+		local chara = GlobalBattleCtrl:GetOwnerChara()
+		if chara then
+			local worldPos = chara:GetPos()
+			local playerPos = CSVector2(worldPos.x,worldPos.z)
+			centerPivot.x = playerPos.x/self.m_meter
+			centerPivot.y = playerPos.y/self.m_meter
+		end
+		self.m_rectTransform.pivot = centerPivot
+
+	self.m_scale = scale
+	self.m_rectTransform.sizeDelta = CSVector2.one * self.m_pixel * self.m_scale
+end
+
+function BattleMapBase:_SetScale_ViewPortCenter( scale )
+	-- body
+end
+
+
+
 
 function BattleMapBase:GetViewPortPos(realPos)
 	return realPos * self.m_ratio * self.m_scale
@@ -150,9 +180,6 @@ end
 
 function BattleMapBase:SetMapBasePos(pos)
 	self.m_rectTransform.anchoredPosition = pos
-	if checkClamped then 
-		self:CheckViewPortClamped()
-	end
 end
 
 function BattleMapBase:CheckViewPortClamped( viewPortSize )
@@ -196,8 +223,6 @@ function BattleMapBase:_UpdateCity()
 end
 
 
-
-
 --@brief 在地图上创建一个玩家标识
 function BattleMapBase:_CreatePlayer( playerId )
 	local playTransform = CSTransform.Instantiate(self.m_prePlayerItem,self.m_playerItemParent)
@@ -220,6 +245,7 @@ function BattleMapBase:_UpdatePlayer()
 		self.m_playerList[playerId].localEulerAngles = v:GetFaceAngle() * CSVector3.forward
 	end
 end
+
 --@brief 在地图上创建一个坐标标识
 function BattleMapBase:_CreateMapFlag( playerId )
 	local flagTransform = CSTransform.Instantiate(self.m_preMapFlagItem,self.m_mapFlagItemParent)

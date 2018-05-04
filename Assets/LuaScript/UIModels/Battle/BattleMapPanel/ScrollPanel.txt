@@ -59,7 +59,10 @@ function ScrollPanel:onCreatePanel()
 	local slider = PanelWidget:GetZTSlider(self.m_transform,"ZTSlider",function(value) self:_onValueChanged(value) end)
 	slider.minValue = self.m_rectTransform.sizeDelta.x / self.m_battleMapBase:GetPixel()
 	slider.maxValue = MAP_VIEWPORT_SCALE
+
+	slider.value = slider.minValue
 end
+
 
 --@brief 面板初始化
 function ScrollPanel:onInitPanel()
@@ -103,7 +106,6 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 function ScrollPanel:_onValueChanged(value)
 	self.m_battleMapBase:SetScale(value)
-	self.m_battleMapBase:CheckViewPortClamped(self.m_transform.sizeDelta)
 	self.m_battleMapBase:_UpdateCity()
 end
 
