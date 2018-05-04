@@ -98,13 +98,13 @@ function BattleMapBase:onCreatePanel()
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleCur")
 	self.m_ztCircleCur.thickness = 3
-	self.m_ztCircleCur.QuarterSegNum = 10
+	self.m_ztCircleCur.QuarterSegNum = 15
 	self.m_ztCircleCur.color = CSColor.red
 
 
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleDest")
 	self.m_ztCircleDest.thickness = 3
-	self.m_ztCircleDest.QuarterSegNum = 10
+	self.m_ztCircleDest.QuarterSegNum = 15
 	self.m_ztCircleDest.color = CSColor.green
 
 
