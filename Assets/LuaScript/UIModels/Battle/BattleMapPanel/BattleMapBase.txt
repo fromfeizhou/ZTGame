@@ -97,14 +97,15 @@ function BattleMapBase:onCreatePanel()
 	self.m_ztLine:SetLineWidth(8)
 	--毒圈相关
 	self.m_ztCircleCur = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleCur")
-	self.m_ztCircleCur:Init(80,true,0)
-	self.m_ztCircleCur:SetLineWidth(4)
-	self.m_ztCircleCur:SetColor(CSColor.red)
+	self.m_ztCircleCur.thickness = 3
+	self.m_ztCircleCur.QuarterSegNum = 10
+	self.m_ztCircleCur.color = CSColor.red
+
 
 	self.m_ztCircleDest = PanelWidget:GetZTCircle(self.m_transform,"Circles/ZTCircleDest")
-	self.m_ztCircleDest:Init(80,true,0)
-	self.m_ztCircleDest:SetLineWidth(4)
-	self.m_ztCircleDest:SetColor(CSColor.green)
+	self.m_ztCircleDest.thickness = 3
+	self.m_ztCircleDest.QuarterSegNum = 10
+	self.m_ztCircleDest.color = CSColor.green
 
 
 	--地图，城市
@@ -272,10 +273,10 @@ function BattleMapBase:_UpdatePlayerLine()
 			local playerPos = CSVector2(worldPos.x,worldPos.z)
 			local playerViewPortPos = self:GetViewPortPos(playerPos)
 			local circleViewPortPos = self.m_ztCircleDest:GetPos()
-			local circleRadius = self.m_ztCircleDest:GetRadius()
+			local circleRadius = self.m_ztCircleDest.Radius
 			if MapCircleManager.m_isWait then
 				circleViewPortPos = self.m_ztCircleCur:GetPos()
-				circleRadius = self.m_ztCircleCur:GetRadius()
+				circleRadius = self.m_ztCircleCur.Radius
 			end
 
 			local distance = CSVector2.Distance(playerViewPortPos,circleViewPortPos)
@@ -298,8 +299,7 @@ end
 --@brief 设置毒圈参数
 function BattleMapBase:_SetCircle(circle, circleInfo)
 	if circleInfo and circleInfo.pos and circleInfo.radius then 
-		local viewPortPos = self:GetViewPortPos(circleInfo.pos)
-		local viewPortRadius = self:GetViewPortPos(circleInfo.radius)
-		circle:SetCircle(viewPortPos,viewPortRadius)
+		circle:SetPos(self:GetViewPortPos(circleInfo.pos))
+		circle.Radius =self:GetViewPortPos(circleInfo.radius)
 	end
 end
