@@ -1,131 +1,148 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Sprites;
+using UnityEngine.Serialization;
+using System;
 using XLua;
 
 [LuaCallCSharp]
-public class ZTCircle : MonoBehaviour {
+public class ZTCircle : MaskableGraphic,ISerializationCallbackReceiver, ILayoutElement {
+   
 
-	/** 计算优化，周长基数，周长：2 * PI * R */
-	private const float BasePerimeter = 2.0f * Mathf.PI * 1.0025f;
-	/** 计算优化，边长优化*/
-	private float _lineLenBase;
+	[FormerlySerializedAs("m_Frame")]
+	[SerializeField]
+	private Sprite m_Sprite;
+	public Sprite sprite 
+	{ 
+		get 
+		{ 
+			return m_Sprite; 
+		} 
+		set
+		{
+			if (!m_Sprite.Equals (value)) {
+				m_Sprite = value;
+				SetAllDirty();
+			}
+		}
+	}
 
-	private List<RectTransform> rectLineList = new List<RectTransform> ();
+	[NonSerialized]
+	private Sprite m_OverrideSprite;
+	public Sprite overrideSprite 
+	{
+		get 
+		{ 
+			return m_OverrideSprite == null ? sprite : m_OverrideSprite; 
+		} 
+		set
+		{ 
+			if (!m_OverrideSprite.Equals (value)) {
+				m_OverrideSprite = value;
+				SetAllDirty();
+			}
+		} 
+	}
 
-	private float _lineWidth = 1.5f;
 
-	private float _angle;
+	public override Texture mainTexture
+	{
+		get
+		{
+			return overrideSprite == null ? s_WhiteTexture : overrideSprite.texture;
+		}
+	}
 
+	public float pixelsPerUnit
+	{
+		get
+		{
+			float spritePixelsPerUnit = 100;
+			if (sprite)
+				spritePixelsPerUnit = sprite.pixelsPerUnit;
+
+			float referencePixelsPerUnit = 100;
+			if (canvas)
+				referencePixelsPerUnit = canvas.referencePixelsPerUnit;
+
+			return spritePixelsPerUnit / referencePixelsPerUnit;
+		}
+	}
+
+	public void OnAfterDeserialize()
+	{
+	}
+
+	public void OnBeforeSerialize()
+	{
+	}
+
+	public virtual void CalculateLayoutInputHorizontal() { }
+	public virtual void CalculateLayoutInputVertical() { }
+
+	public virtual float minWidth { get { return 0; } }
+
+	public virtual float preferredWidth
+	{
+		get
+		{
+			if (overrideSprite == null)
+				return 0;
+			return overrideSprite.rect.size.x / pixelsPerUnit;
+		}
+	}
+
+	public virtual float flexibleWidth { get { return -1; } }
+
+	public virtual float minHeight { get { return 0; } }
+
+	public virtual float preferredHeight
+	{
+		get
+		{
+			if (overrideSprite == null)
+				return 0;
+			return overrideSprite.rect.size.y / pixelsPerUnit;
+		}
+	}
+
+	public virtual float flexibleHeight { get { return -1; } }
+
+	public virtual int layoutPriority { get { return 0; } }
+
+    public float thickness = 5;
+	[Range(1,20)]
+	public int QuarterSegNum = 1;
 	private float _radius;
-
-	private bool _show = false;
-	public Color color;
-	private RectTransform rectTransform;
-	public Sprite lineSprite;
-
-	/** 初始化 */
-	public void Init(int lineCnt, bool awakeShow = false, float radius = 20)
-	{
-		rectTransform = transform as RectTransform;
-		_show = awakeShow;
-		SetLineNum (lineCnt);
-		SetRadius (radius);
-		SetColor (color);
+	public float Radius{
+		get{ 
+			return _radius;
+		}
+		set{ 
+			if (_radius != value) {
+				_radius = value;
+				rectTransform.sizeDelta = Vector2.one * _radius;
+			}
+		}
 	}
-
-	/** 设置颜色 */
-	public void SetColor(Color color)
-	{
-		Image[] imgLine = transform.GetComponentsInChildren<Image> (true);
-		for (int i = 0; i < imgLine.Length; i++) {
-			imgLine [i].color = color;
+	private int segement{
+		get{ 
+			return QuarterSegNum * 4;
+		}
+	}
+	private UIVertex[] _verArray;
+	private UIVertex[] verArray{
+		get{
+			if(_verArray == null || segement * 2 != _verArray.Length)
+				_verArray = new UIVertex[segement * 2];
+			return _verArray;
 		}
 	}
 
-	/** 设置线宽度 */
-	public void SetLineWidth(float lineWidth){
-		if (_lineWidth == lineWidth)
-			return;
-		
-		_lineWidth = lineWidth;
-		for (int i = 0; i < rectLineList.Count; i++) {
-			float width = _lineWidth;
-			float hight = rectLineList [i].sizeDelta.y;
-			rectLineList [i].sizeDelta = new Vector2 (width,hight);
-		}
-	}
-
-	/** 设置线段数 */
-	public void SetLineNum(int lineCnt)
-	{
-		if (lineCnt == rectLineList.Count)
-			return;
-		
-		int divCnt = lineCnt - rectLineList.Count;
-		bool isAdd = divCnt > 0;
-		for (int i = 0; i < Mathf.Abs(divCnt); i++) {
-			if (isAdd) {
-				GameObject go = new GameObject ("Line_" + i.ToString());
-				RectTransform lineRect = go.AddComponent<RectTransform> ();
-				Image lineImg = go.AddComponent<Image> ();
-				if (lineSprite != null)
-					lineImg.sprite = lineSprite;
-				lineImg.raycastTarget = false;
-				lineRect.SetParent (transform);
-				lineRect.localPosition = Vector3.zero;
-				lineRect.localScale = Vector3.one;
-				rectLineList.Add (lineRect);
-				go.SetActive (_show);
-			}
-			else{
-				RectTransform lineRect = rectLineList [0];
-				GameObject.Destroy (lineRect.gameObject);
-				rectLineList.RemoveAt (0);
-			}
-		}
-
-		_angle = 360f / rectLineList.Count;
-		_lineLenBase = BasePerimeter / rectLineList.Count;
-	}
-
-
-	public float GetRadius(){
-		return _radius;
-	}
-
-	/** 设置半径 */
-	public void SetRadius(float radius)
-	{
-		if (radius <= 0) {
-			Hide ();
-			return;
-		}
-		
-		if (_radius == radius)
-			return;
-
-		if (!_show)
-			Show ();
-
-		_radius = radius;
-
-		float len = _lineLenBase * _radius;
-		for (int i = 0; i < rectLineList.Count; i++) {
-			Vector2 pos = Vector2.zero;
-			pos.x = Mathf.Cos (i * _angle * Mathf.Deg2Rad) * _radius;
-			pos.y = Mathf.Sin (i * _angle * Mathf.Deg2Rad) * _radius;
-			rectLineList [i].anchoredPosition = pos;
-			rectLineList [i].sizeDelta = new Vector2 (_lineWidth,len);
-			if (i == 0) 
-			{
-				rectLineList [i].localEulerAngles = Vector3.zero;
-			}
-			else
-			{
-				rectLineList [i].localEulerAngles = Vector3.forward * i * _angle;
-			}
+	float degreeDelta{
+		get{ 
+			return (float)(2 * Mathf.PI / segement);
 		}
 	}
 
@@ -137,32 +154,63 @@ public class ZTCircle : MonoBehaviour {
 		rectTransform.anchoredPosition = pos;
 	}
 
-	public void SetCircle(Vector2 pos, float radius){
-		SetPos (pos);
-		SetRadius (radius);
-	}
+    protected override void OnPopulateMesh(VertexHelper vh)
+    {
+        vh.Clear();
 
-	public void Switch(bool isShow)
-	{
-		if (isShow)
-			Show ();
-		else
-			Hide ();
-	}
+		float outerRadius = _radius + thickness * 0.5f;
+		float innerRadius = _radius - thickness * 0.5f;
 
-	public void Show(){
-		if (_show)
-			return;
-		for (int i = 0; i < rectLineList.Count; i++)
-			rectLineList [i].gameObject.SetActive (true);
-		_show = true;
-	}
+        Vector4 uv = overrideSprite != null ? DataUtility.GetOuterUV(overrideSprite) : Vector4.zero;
 
-	public void Hide(){
-		if (!_show)
-			return;
-		for (int i = 0; i < rectLineList.Count; i++)
-			rectLineList [i].gameObject.SetActive (false);
-		_show = false;
+        float uvCenterX = (uv.x + uv.z) * 0.5f;
+        float uvCenterY = (uv.y + uv.w) * 0.5f;
+
+        float curDegree = 0;
+		for (int i = 0; i < QuarterSegNum; i++)
+		{
+			float cosA = Mathf.Cos(curDegree);
+			float sinA = Mathf.Sin(curDegree);
+
+			float inPosX = cosA * innerRadius;
+			float inPosY = sinA * innerRadius;
+			float outPosX = cosA * outerRadius;
+			float outPosY = sinA * outerRadius;
+
+			int inIdx  = i * 2;
+			int outIdx = inIdx + 1;
+
+			verArray[inIdx ].position.Set (inPosX,  inPosY,  0);
+			verArray[outIdx].position.Set (outPosX, outPosY, 0);
+
+			verArray[inIdx  + QuarterSegNum * 2 ].position.Set (-inPosY,  inPosX,  0);
+			verArray[outIdx + QuarterSegNum * 2 ].position.Set (-outPosY, outPosX, 0);
+
+			verArray[inIdx  + QuarterSegNum * 4 ].position.Set (-inPosX,  -inPosY,  0);
+			verArray[outIdx + QuarterSegNum * 4 ].position.Set (-outPosX, -outPosY, 0);
+
+			verArray[inIdx  + QuarterSegNum * 6 ].position.Set (inPosY,  -inPosX,  0);
+			verArray[outIdx + QuarterSegNum * 6 ].position.Set (outPosY, -outPosX, 0);
+
+			curDegree += degreeDelta;
+
+		}
+
+		for (int i = 0; i < verArray.Length; i++) {
+			verArray [i].color = color;
+			verArray [i].uv2.Set (verArray [i].position.x + uvCenterX, verArray [i].position.y + uvCenterY);
+			vh.AddVert (verArray [i]);
+		}
+
+		int triangleCount = segement*3*2 - 6;
+		for (int i = 0, vIdx = 0; i < triangleCount; i += 6, vIdx += 2)
+		{
+			vh.AddTriangle(vIdx+1, vIdx, vIdx+3);
+			vh.AddTriangle(vIdx, vIdx + 2, vIdx + 3);
+		}
+    	
+		//首尾顶点相连
+		vh.AddTriangle(segement*2 - 1, segement*2 - 2, 1);
+		vh.AddTriangle(segement*2 - 2, 0, 1);
 	}
 }
