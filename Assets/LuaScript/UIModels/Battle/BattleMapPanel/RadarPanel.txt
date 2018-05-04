@@ -13,7 +13,6 @@ local CSQuaternion = CS.UnityEngine.Quaternion
 
 RadarPanel = {
 	m_battleMapBase = nil,
-	m_viewPort = nil,
 	m_mapPosOffSet = nil,
 	m_delegeteShowMapScroll = nil,
 
@@ -40,16 +39,15 @@ end
 --————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 --@brief 面板被创建
 function RadarPanel:onCreatePanel()	
-	self.m_viewPort = self.m_transform:Find("ViewPort"):GetComponent(typeof(CSRectTransform))
-	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_viewPort,"ztTxt_WaitTime")
-	self.m_ztTxt_PlayerPos = PanelWidget:GetZTText(self.m_viewPort,"PlayerPos/ztTxtPlayerPos")
+	self.m_ztTxt_waitTime = PanelWidget:GetZTText(self.m_rectTransform,"ztTxt_WaitTime")
+	self.m_ztTxt_PlayerPos = PanelWidget:GetZTText(self.m_rectTransform,"PlayerPos/ztTxtPlayerPos")
 
 
 	pixel = 2048
 	meter = 1024
-	self.m_battleMapBase:InitMapBase(self.m_viewPort:Find("Mask"), pixel, meter)
+	self.m_battleMapBase:InitMapBase(self.m_rectTransform:Find("Mask"), pixel, meter)
 
-	PanelWidget:GetZTButton(self.m_viewPort,"ZTButton",function () 
+	PanelWidget:GetZTButton(self.m_rectTransform,"ZTButton",function () 
 		if self.m_delegeteShowMapScroll then
 			self.m_delegeteShowMapScroll()
 		end
@@ -59,7 +57,7 @@ end
 
 --@brief 面板初始化
 function RadarPanel:onInitPanel()
-	self.m_mapPosOffSet = self.m_viewPort.sizeDelta * 0.5
+	self.m_mapPosOffSet = self.m_rectTransform.sizeDelta * 0.5
 end
 
 --@brief 面板每帧更新
