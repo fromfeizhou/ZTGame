@@ -2,7 +2,12 @@ PanelWidget = {
 	
 }
 
---@brief »ñÈ¡°´Å¥
+function PanelWidget:GetInputField(panel,path,onEndEdit)
+	local transform = panel:Find(path)
+	local inputField = transform:GetComponent("InputField")
+	inputField.onEndEdit:AddListener(onEndEdit)
+	return inputField
+end
 function PanelWidget:GetButton(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("Button")
@@ -11,14 +16,31 @@ function PanelWidget:GetButton(panel,path,onClick)
 	return button
 end
 
---@brief »ñÈ¡zt°´Å¥
+function PanelWidget:GetText(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("Text");
+end
+
+function PanelWidget:GetScrollView(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ScrollRect");
+end
+
+function PanelWidget:GetChild(panel,path)
+	return panel:Find(path)
+end
+
+
+
+
+
 function PanelWidget:GetZTButton(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("ZTButton")
 	button.onClick:AddListener(onClick)
 	return button
 end
---@brief »ñÈ¡zt°´Å¥
+
 function PanelWidget:GetZTButtonImg(panel,path,onClick)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("ZTButtonImg")
@@ -26,7 +48,6 @@ function PanelWidget:GetZTButtonImg(panel,path,onClick)
 	return button
 end
 
---@brief 获取ztButtonLongPress
 function PanelWidget:GetZTButtonL(panel,path,onClickDown,onClickUp)
 	local transform = panel:Find(path)
 	local button = transform:GetComponent("ZTButtonLongPress")
@@ -36,43 +57,17 @@ function PanelWidget:GetZTButtonL(panel,path,onClickDown,onClickUp)
 end
 
 
---@brief 获取Ztimage
 function PanelWidget:GetZTImage(panel,path)
 	local transform = panel:Find(path)
 	local image = transform:GetComponent("ZTImage")
 	return image
 end
 
---@brief »ñÈ¡ÊäÈë¿ò
-function PanelWidget:GetInputField(panel,path,onEndEdit)
-	local transform = panel:Find(path)
-	local inputField = transform:GetComponent("InputField")
-	inputField.onEndEdit:AddListener(onEndEdit)
-	return inputField
-end
-
---@brief »ñÈ¡ÎÄ±¾
-function PanelWidget:GetText(panel,path)
-	local transform = panel:Find(path)
-	return transform:GetComponent("Text");
-end
---@brief »ñÈ¡ÎÄ±¾
 function PanelWidget:GetZTText(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTText");
 end
 
---@brief »ñÈ¡×ÓÎïÌå
-function PanelWidget:GetChild(panel,path)
-	return panel:Find(path)
-end
-
-function PanelWidget:GetScrollView(panel,path)
-	local transform = panel:Find(path)
-	return transform:GetComponent("ScrollRect");
-end
-
---@brief »ñÈ¡»¬¶¯Ìõ
 function PanelWidget:GetZTSlider(panel,path,onValueChanged)
 	local transform = panel:Find(path)
 	local slider = transform:GetComponent("ZTSlider")
@@ -82,11 +77,11 @@ function PanelWidget:GetZTSlider(panel,path,onValueChanged)
 	return slider
 end
 
---@brief »ñÈ¡»¬¶¯Ìõ
 function PanelWidget:GetZTCircle(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTCircle");
 end
+
 function PanelWidget:GetZTLine(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTLine");
