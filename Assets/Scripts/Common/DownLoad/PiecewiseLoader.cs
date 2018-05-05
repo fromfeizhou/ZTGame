@@ -7,7 +7,8 @@ public class PiecewiseLoader
     System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
 
     private float intervalTime;
-    private List<Action> callbackList=new List<Action>();
+    private int waitTime;
+    private List<Func<bool>> callbackList=new List<Func<bool>>();
 
     /// <summary>
     /// 单位 秒 s
@@ -16,11 +17,12 @@ public class PiecewiseLoader
     /// <param name="loadTime"></param>
     public PiecewiseLoader(float intervalTime)
     {
-        this.intervalTime = 1 / 45f;//intervalTime;45帧
+        this.intervalTime = 0.028f;//intervalTime;45帧
+        this.waitTime = 0;
         PiecewiseLoaderMgr.GetInstance().AddLoaders(this);
     }
 
-    public void PushCallBack(Action callback)
+    public void PushCallBack(Func<bool> callback)
     {
         callbackList.Add(callback);
     }
@@ -32,13 +34,20 @@ public class PiecewiseLoader
 
     public void UpdateLoader(float time)
     {
-        if (time > intervalTime)
-            return;
-        if ( callbackList.Count > 0)
+        if (waitTime > 0)
         {
-            Action callback = callbackList[0];
-            callback();
+            waitTime--;
+            return;
+        }
+        waitTime = Mathf.RoundToInt(time / intervalTime);
+        while ( callbackList.Count > 0)
+        {
+            bool isEnd = callbackList[0]();
             callbackList.RemoveAt(0);
+            if (isEnd)
+            {
+                break;
+            }
         }
     }
     public void Clear()

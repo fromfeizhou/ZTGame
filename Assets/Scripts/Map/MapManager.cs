@@ -124,13 +124,15 @@ public class MapManager : Singleton<MapManager>
     private List<string> assetPaths;
     private List<UnityAction<Object, string>> assetCallbackList;
 
-    private MapElementView mapView;
+   // private MapElementView mapView;
     private MapTileViewMgr mapTilesViewMgr;
     private byte[] ColliderDatas;
     private byte[] hideDatas;
     private byte[] heightDatas;
     private Dictionary<string, MapBlockData> mapBlockDataDic;
     private Dictionary<string, MapBlockData> mapHeightBlockData;
+
+    private MapElementViewMgr mapElementViewMgr=new MapElementViewMgr();
 
     private List<string> LoadTipsText = new List<string>()
     {
@@ -139,7 +141,6 @@ public class MapManager : Singleton<MapManager>
         "加载地图高度数据...",
         "加载地图预设数据...",
     };
-
     private List<string> LoadFinishTipsText = new List<string>()
     {
         "加载地图碰撞数据完成",
@@ -147,8 +148,6 @@ public class MapManager : Singleton<MapManager>
         "加载地图高度数据完成",
         "加载地图预设数据完成",
     };
-
-
     private Vector3 tempPos;
     public void InitMap(Action<string, float, float> mapUpdateProcess, Vector3 pos = default(Vector3))
     {
@@ -157,8 +156,8 @@ public class MapManager : Singleton<MapManager>
         mapBlockDataDic = new Dictionary<string, MapBlockData>();
         mapHeightBlockData=new Dictionary<string, MapBlockData>();
         Debug.Log("MapManager:Init");
-        mapView = new MapElementView();
-        mapView.SetBigMapKey(tempPos);
+       // mapView = new MapElementView();
+       // mapView.SetBigMapKey(tempPos);
         mapTilesViewMgr =new MapTileViewMgr();
         mapTilesViewMgr.SetBigMapKey(tempPos);
         _mapUpdateProces = mapUpdateProcess;
@@ -170,6 +169,8 @@ public class MapManager : Singleton<MapManager>
         assetPaths.Add(MapDefine.MapHeightBlockDataSavePath);
         assetPaths.Add(String.Format(MapDefine.MapTilesAssetFilePath, currentBigMapIndex, currentBigMapIndex));
         assetPaths.Add(String.Format(MapDefine.MapAssetFilePath, currentBigMapIndex, currentBigMapIndex));
+        //assetPaths.Add(String.Format(MapDefine.MapLittleElementFilePath, currentBigMapIndex, currentBigMapIndex));
+
 
         assetCallbackList = new List<UnityAction<Object, string>>();
         assetCallbackList.Add(LoadColliderBlockData);
@@ -177,9 +178,9 @@ public class MapManager : Singleton<MapManager>
         assetCallbackList.Add(LoadHeightBlockData);
         assetCallbackList.Add(LoadMapTilesAsset);
         assetCallbackList.Add(LoadMapAsset);
+        //assetCallbackList.Add(LoadMaplittleElementAsset);
         assetCallbackList.Add((x, y) =>
         {
-           // Debug.LogError("C#>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             SetMapCenterPos(tempPos);
         });
         LoadNextAsset();
@@ -215,7 +216,14 @@ public class MapManager : Singleton<MapManager>
     //加载地图预设数据资源列表
     private void LoadMapAsset(Object target, string path)
     {
-        mapView.InitMapElementView(target as MapAsset);
+      //  mapView.InitMapElementView(target as MapAsset);
+        mapElementViewMgr.InitData(target as MapAsset, Vector3.one);
+    }
+
+    //加载地图小预设数据资源列表
+    private void LoadMaplittleElementAsset(Object target, string path)
+    {
+       // mapView.InitMapLittleElementView(target as MapAsset);
     }
 
     //加载地图瓦片预设数据资源列表
@@ -366,201 +374,10 @@ public class MapManager : Singleton<MapManager>
 
             mapTilesViewMgr.UpdateTilesView(pos, _mapTilePosCenter.Row, _mapTilePosCenter.Column);
         }
+        //mapView.UpdateElementView(pos, 0, 0);
+        //mapView.UpdateRoleRay(pos);
 
-        int tempX = Mathf.FloorToInt(pos.x / MapDefine.MapElementSize);
-        int tempY = Mathf.FloorToInt(pos.z / MapDefine.MapElementSize);
-        if ( Mathf.Abs(currElementGrid.x - tempX) >= 1 || Mathf.Abs(currElementGrid.y - tempY) >= 1)
-        {
-            currElementGrid.x = tempX;
-            currElementGrid.y = tempY;
-            mapView.UpdateElementView(pos, tempX, tempY);
-        }
+        mapElementViewMgr.SetPos(pos);
 
-       
-        mapView.UpdateRoleRay(pos);
     }
-
-
-    //初始化地图块
-    //private void InitMapView()
-    //{
-    //    if (null == _sceneLayer)
-    //    {
-    //        return;
-    //    }
-    //    if (null == _mapViewList)
-    //    {
-    //        _mapViewList = new List<MapTileView>();
-    //        for (int i = 0; i < MapDefine.MaxViewRowNum * MapDefine.MaxViewColumnNum; i++)
-    //        {
-    //            GameObject gameObject = GameObject.Instantiate(_floorPrefab);
-    //            gameObject.transform.localPosition = new Vector3((i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth, 0, Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight);
-    //            //gameObject.transform.localPosition = new Vector3(Mathf.Floor(i / MapDefine.MaxViewColumnNum) * MapDefine.MapHeight, 0, (i % MapDefine.MaxViewColumnNum) * MapDefine.MapWidth);
-    //            gameObject.transform.parent = _sceneLayer.transform;
-    //            MapTileView tempTileView = gameObject.GetComponent<MapTileView>();
-    //            _mapViewList.Add(tempTileView);
-    //        }
-    //    }
-    //    _isInit = true;
-
-    //  //  UpdateMapView();
-    //}
-
-    //private void UpdateTilesView(Vector3 pos)
-    //{
-    //    if (_isInit == false)
-    //        return;
-    //    Dictionary<string, MapElement> elementDic = new Dictionary<string, MapElement>();
-    //    int bigMapX = (int)pos.x / MapDefine.MAPITEMTOTALSIZE;
-    //    int bigMapY = (int)pos.z / MapDefine.MAPITEMTOTALSIZE;
-    //    string bigMapKey = bigMapX + "" + bigMapY;
-    //    int beginX = (int)currElementGrid.x - 1;
-    //    int beginY = (int)currElementGrid.y - 1;
-    //    int endX = (int)currElementGrid.x + 1;
-    //    int endY = (int)currElementGrid.y + 1;
-    //    for (int i = beginX; i <= endX; i++)
-    //    {
-    //        if (i < 0) continue;
-    //        for (int j = beginY; j <= endY; j++)
-    //        {
-    //            if (j < 0) continue;
-    //            string gridKey = i + "_" + j;
-    //            Dictionary<string, MapElementGrid> tempGridDataDic;
-    //            if (AllMapElementGridDic.TryGetValue(bigMapKey, out tempGridDataDic))
-    //            {
-    //                MapElementGrid tempGridData;
-    //                if (tempGridDataDic.TryGetValue(gridKey, out tempGridData))
-    //                {
-    //                    List<string> tempElementKeyList = tempGridData.elementKeyList;
-    //                    for (int index = 0; index < tempElementKeyList.Count; index++)
-    //                    {
-    //                        MapElement element;
-    //                        Dictionary<string, MapElement> tempElementDic;
-    //                        if (AllMapElementDic.TryGetValue(bigMapKey, out tempElementDic))
-    //                            if (tempElementDic.TryGetValue(tempElementKeyList[index], out element))
-    //                            {
-    //                                if (!elementDic.ContainsKey(element.elementKey))
-    //                                    elementDic[element.elementKey] = element;
-    //                            }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //    var needClearElementDic = visionElementDic.Keys.Except(elementDic.Keys);
-    //    var needLoadElementDic = elementDic.Keys.Except(visionElementDic.Keys);
-    //    foreach (var key in needLoadElementDic)
-    //    {
-    //        MapElement elementData = elementDic[key];
-    //        MapElementInfo elementInfo = elementData.elementInfo;
-    //        string elementAssetPath = string.Format(MapDefine.MapElementPath, elementData.elementType);
-    //        AssetManager.LoadAsset(elementAssetPath, (obj, str) =>
-    //        {
-    //            if (obj != null)
-    //            {
-    //                GameObject assetTree = obj as GameObject;
-    //                Transform element = GameObject.Instantiate(assetTree).transform;
-    //                element.SetParent(_mapElementRoot.transform);
-    //                element.position = elementInfo.Pos;
-    //                element.eulerAngles = elementInfo.Angle;
-    //                element.localScale = elementInfo.Scale;
-    //                BuildingZTCollider tempcollider = element.GetComponent<BuildingZTCollider>();
-    //                //if (tempcollider != null)
-    //                //{
-    //                //    ICharaBattle tempBattle = ZTBattleSceneManager.GetInstance().GetCharaById(PlayerModule.GetInstance().RoleID) as ICharaBattle;
-    //                //    if (tempBattle != null)
-    //                //        tempcollider.SetTarget(tempBattle.Collider);
-    //                //}
-    //                loadedObj[elementData.elementKey] = element.gameObject;
-    //            }
-    //        });
-    //    }
-    //    foreach (var key in needClearElementDic)
-    //    {
-    //        if (loadedObj.ContainsKey(key))
-    //        {
-    //            GameObject tempObj = loadedObj[key];
-    //            GameObject.Destroy(tempObj);
-    //            loadedObj.Remove(key);
-    //        }
-    //    }
-    //    visionElementDic = elementDic;
-
-    //}
-
-    //刷新地图
-    //private void UpdateMapView()
-    //{
-    //    if (_isInit == false)
-    //    {
-    //        return;
-    //    }
-    //    MapTilePos tmpTilePos = GetCurMapPosData();
-
-
-    //    int beginX = tmpTilePos.Row - 1;
-    //    int beginY = tmpTilePos.Column - 1;
-    //    int endX = tmpTilePos.Row + 1;
-    //    int endY = tmpTilePos.Column + 1;
-    //    List<MapTileView> tempTileViews = new List<MapTileView>();
-    //    for (int k = 0; k < _mapViewList.Count; k++)
-    //    {
-    //        MapTileView floor = _mapViewList[k];
-    //        if (floor.IsNeedClear(beginX, endX, beginY, endY))
-    //            tempTileViews.Add(floor);
-    //    }
-    //    int tempIndex = 0;
-    //    for (int index = beginX; index <= endX; index++)
-    //    {
-    //        if (index < 0) continue;
-    //        for (int j = beginY; j <= endY; j++)
-    //        {
-    //            if (j < 0) continue;
-    //            bool isShow = false;
-    //            for (int k = 0; k < _mapViewList.Count; k++)
-    //            {
-    //                MapTileView tileView = _mapViewList[k];
-    //                MapTileData data = tileView.GetMapData();
-    //                if (data != null && tileView.IsLoad && data.Column == j && data.Row == index)
-    //                {
-    //                    isShow = true;
-    //                    break;
-    //                }
-    //            }
-    //            if (isShow) continue;
-    //            if (tempIndex < tempTileViews.Count)
-    //            {
-    //                MapTileData targetTileData = _mapDataDic[index][j];
-    //                tempTileViews[tempIndex].setMapData(targetTileData);
-    //                tempTileViews[tempIndex].transform.position = new Vector3(MapDefine.MapWidth * j, 0, MapDefine.MapWidth * index);
-    //                tempIndex++;
-    //                continue;
-    //            }
-    //        }
-    //    }
-    //    _mapTilePos = tmpTilePos;
-
-    //}
-
-    //获得起始方块(自动过滤最大值 以防数据溢出)
-    //private MapTilePos GetCurMapPosData()
-    //{
-
-    //    //x移动 列位移
-    //    int column = _mapTilePosCenter.Column;
-    //    int columnMax = _maxDataColumn - MapDefine.MaxViewColumnNum + 1;
-
-    //    int row = _mapTilePosCenter.Row;
-    //    int rowMax = _maxDataRow - MapDefine.MaxViewRowNum + 1;
-
-    //    column = column >= 0 ? column : 0;
-    //    column = column >= columnMax ? columnMax : column;
-    //    row = row >= 0 ? row : 0;
-    //    row = row >= rowMax ? rowMax : row;
-    //    return new MapTilePos(row, column);
-    //}
-
-
-
-
 }

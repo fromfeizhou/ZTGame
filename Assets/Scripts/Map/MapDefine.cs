@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class MapDefine
 {
-    public const string MapAssetFileName = "/MapAsset{0}.asset";
+    public const string MapElementFileName = "/MapElement{0}.asset";
+    public const string MapLittleElementFileName = "/MapLittleElement{0}.asset";
     public const string MapAssetFolderPath = "Assets/Map/Prefabs/MapData/MapAsset{0}";
     public const string MapTilesAssetFileName = "/MapTilesAsset{0}.asset";
     public const string MapTilesAssetFolderPath = "Assets/Map/Prefabs/MapData/MapTilesAsset{0}";
-    public const string MapAssetFilePath = "Assets/Map/Prefabs/MapData/MapAsset{0}/MapAsset{1}.asset";
+    public const string MapAssetFilePath = "Assets/Map/Prefabs/MapData/MapAsset{0}/MapElement{1}.asset";
+    public const string MapLittleElementFilePath = "Assets/Map/Prefabs/MapData/MapAsset{0}/MapLittleElement{1}.asset";
+
     public const string MapTilesAssetFilePath = "Assets/Map/Prefabs/MapData/MapTilesAsset{0}/MapTilesAsset{1}.asset";
     public const string TERRAIN_ASSET_PATH = "Assets/Map/Model/TerrainRes/";
     public const string TERRAIN_PREFAB_PATH = "Assets/Map/Prefabs/MapItem/";
@@ -38,6 +41,7 @@ public class MapDefine
     public const int MAPITEMSIZE = 256;//地图切割大小
 
     public const int MapElementSize = 16;//预设格子大小
+    public const int MapLittleElementSize = 8;//预设格子大小
 
     public const float MapBlockSize = 0.2f;
 

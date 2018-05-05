@@ -8,13 +8,16 @@ using UnityEngine;
 
 public class MapByteFileCreateEditor
 {
+
+    #region 地图二进制文件创建
     enum MapByteDataType
     {
-        Collider=1,
-        Hide=2,
-        Height=3,
-        All=4,
+        Collider = 1,
+        Hide = 2,
+        Height = 3,
+        All = 4,
     }
+
     private static Dictionary<string, MapBlockData> MapHeightBlockDataDic = new Dictionary<string, MapBlockData>();
     private static Dictionary<string, MapBlockData> MapHideBlockDataDic = new Dictionary<string, MapBlockData>();
     private static byte[] blockBytesData;
@@ -99,7 +102,7 @@ public class MapByteFileCreateEditor
                     string[] datas = root.name.Split('_');
                     if (!Enum.IsDefined(typeof(eMapBlockType), datas[0])) continue;
                     eMapBlockType blockType = (eMapBlockType)Enum.Parse(typeof(eMapBlockType), datas[0]);
-                    if ((int) fileData != (int) blockType && fileData != MapByteDataType.All) continue;
+                    if ((int)fileData != (int)blockType && fileData != MapByteDataType.All) continue;
 
                     string blockParam = datas.Length > 1 ? datas[1] : "";
                     Renderer[] colliderRenderers = root.GetComponentsInChildren<Renderer>(true);
@@ -234,7 +237,6 @@ public class MapByteFileCreateEditor
         //    MapHideBlockDataDic[key] = new MapBlockData { row = int.Parse(datas[0]), col = int.Parse(datas[1]), type = mapBlockType, paramValue = paramValue };
         //}
     }
-
     public static void SaveMapBytesFile(byte[] clolliderdata, Dictionary<string, MapBlockData> hideData, Dictionary<string, MapBlockData> heightData)
     {
         System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -285,5 +287,129 @@ public class MapByteFileCreateEditor
             Debug.Log("生成高度隐藏文件 用时：" + timespan.TotalMilliseconds + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         }
     }
+
+    #endregion
+
+    #region 生成地图预制件
+
+    //public static int ElementIndex = 0;
+    //[MenuItem("ZTTool/MapTool/生成碰撞文件")]
+    //public static void CreateElementPrefab()
+    //{
+    //    ElementIndex = 0;
+    //    MapAsset mapAsset = new MapAsset();
+    //    string bigMapIndex = "0_0";// 大地图坐标 后续通过读取场景名字获取
+
+    //    string[] bigMapIndexs = bigMapIndex.Split('_');
+    //    if (bigMapIndexs.Length != 2)
+    //    {
+    //        Debug.LogError("Map Data is Error!!!");
+    //        return;
+    //    }
+    //    int bigMapX = int.Parse(bigMapIndexs[0]);
+    //    int bigMapY = int.Parse(bigMapIndexs[1]);
+    //    string bigMapKey = bigMapX + "" + bigMapY;
+    //    GameObject mapElementRoot = GameObject.Find("MapElement");
+    //    if (mapElementRoot == null) return;
+    //    CreateElement(mapElementRoot.transform, bigMapIndex, ref mapAsset);
+    //    string tempPth = string.Format(MapDefine.MapAssetFolderPath, bigMapKey);
+    //    if (!Directory.Exists(tempPth))
+    //        Directory.CreateDirectory(tempPth);
+    //    tempPth += string.Format(MapDefine.MapElementFileName, bigMapKey);
+    //    AssetDatabase.CreateAsset(mapAsset, tempPth);
+    //}
+
+    //private static void CreateElement(Transform go, string bigMapIndex, ref MapAsset mapAsset)
+    //{
+    //    if (go == null) return;
+    //    string[] bigMapIndexs = bigMapIndex.Split('_');
+
+    //    int bigMapX = int.Parse(bigMapIndexs[0]);
+    //    int bigMapY = int.Parse(bigMapIndexs[1]);
+    //    //基于大地图偏移
+    //    int offsetX = bigMapX * MapDefine.MAPITEMTOTALSIZE;
+    //    int offsetY = bigMapY * MapDefine.MAPITEMTOTALSIZE;
+    //    string bigMapKey = bigMapX + "" + bigMapY;
+
+    //    for (int index = 0; index < go.childCount; index++)
+    //    {
+    //        Transform element = go.GetChild(index);
+    //        if (element.name.Contains("Ele_"))
+    //        {
+    //            Transform foorRoot = element.Find("Box_Collider");
+    //            if (foorRoot != null)
+    //                foorRoot.gameObject.layer = LayerMask.NameToLayer("Roof");
+
+    //            string prefabPath = MapDefine.MapElementFilePath + element.name + ".prefab";
+    //            if (!System.IO.File.Exists(Application.dataPath + prefabPath))
+    //            {
+    //                Transform tempColliderRoot = element.Find("ColliderRoot");
+    //                if (tempColliderRoot != null)
+    //                    tempColliderRoot.SetParent(null);
+    //                PrefabUtility.CreatePrefab("Assets" + prefabPath, element.gameObject);
+    //                if (tempColliderRoot != null)
+    //                    tempColliderRoot.SetParent(element.transform);
+    //            }
+    //            int col = (int)(element.position.x + offsetX) / MapDefine.MapElementSize;
+    //            int row = (int)(element.position.z + offsetY) / MapDefine.MapElementSize;
+    //            string elementGridKey = col + "" + row;
+    //            string elementKey = bigMapKey + ElementIndex;
+    //            ElementIndex++;
+
+    //            //bound
+    //            Vector3 postion = element.position;
+    //            Vector3 scale = element.localScale;
+    //            element.position = Vector3.zero;
+    //            //  element.localScale = Vector3.one;
+    //            Vector3 center = Vector3.zero;
+    //            Renderer[] renders = element.GetComponentsInChildren<Renderer>();
+    //            foreach (Renderer child in renders)
+    //                center += child.bounds.center;
+    //            center /= renders.Length;
+    //            Bounds bounds = new Bounds(center, Vector3.zero);
+    //            foreach (Renderer child in renders)
+    //                bounds.Encapsulate(child.bounds);
+    //            Vector3 centralPoint = bounds.center;
+    //            element.position = postion;
+    //            // element.localScale = scale;
+
+    //            centralPoint += element.position;
+    //            int starX = (int)(centralPoint.x - bounds.size.x * 0.5f + offsetX) / MapDefine.MapElementSize;
+    //            int endX = (int)(centralPoint.x + bounds.size.x * 0.5f + offsetX) / MapDefine.MapElementSize;
+    //            int starZ = (int)(centralPoint.z - bounds.size.z * 0.5f + offsetY) / MapDefine.MapElementSize;
+    //            int endZ = (int)(centralPoint.z + bounds.size.z * 0.5f + offsetY) / MapDefine.MapElementSize;
+    //            for (int k = starX; k <= endX; k++)
+    //            {
+    //                for (int j = starZ; j <= endZ; j++)
+    //                {
+    //                    string gridKey = k + "_" + j;
+    //                    MapElementInfo elementInfo = new MapElementInfo()
+    //                    {
+    //                        Pos = element.position,
+    //                        Angle = element.eulerAngles,
+    //                        Scale = element.lossyScale,
+    //                    };
+    //                    MapElement mapElement = new MapElement();
+    //                    mapElement.elementKey = elementKey;
+    //                    mapElement.elementType = element.name;
+    //                    mapElement.elementInfo = elementInfo;
+    //                    mapAsset.AddMapElement(mapElement);
+    //                    mapAsset.AddMapElementGridItem(gridKey, elementKey);
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            CreateElement(element, bigMapIndex, ref mapAsset);
+    //        }
+    //    }
+    //}
+
+
+
+    #endregion
+
+
+
 }
 
