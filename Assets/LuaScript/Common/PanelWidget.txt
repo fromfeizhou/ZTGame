@@ -82,6 +82,11 @@ function PanelWidget:GetZTCircle(panel,path)
 	return transform:GetComponent("ZTCircle");
 end
 
+function PanelWidget:GetZTScrollRect(panel,path)
+	local transform = panel:Find(path)
+	return transform:GetComponent("ZTScrollRect");
+end
+
 function PanelWidget:GetZTLine(panel,path)
 	local transform = panel:Find(path)
 	return transform:GetComponent("ZTLine");
